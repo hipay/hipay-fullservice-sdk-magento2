@@ -1,0 +1,11 @@
+{
+   "github-oauth": {
+     "github.com": "<Type here you github token (allow to pull public repo)>"
+   },
+   "http-basic": {
+      "repo.magento.com": {
+         "username": "<Type here your magento public key (Generated in your magento account)>",
+         "password": "<Type here your magento private key (Generated in your magento account)>"
+      }
+   }
+}

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * Hipay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - Hipay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<payment>
+			<hipay_hosted>
+				<model>Hipay\Fullservice\Model\HostedMethod</model>
+                <title>Credit Card</title>
+                <payment_action>authorize_capture</payment_action>
+                <active>0</active>
+                <cctypes>AE,VI,MC,DI,JCB</cctypes>
+                <useccv>1</useccv>
+                <verify_3dsecure>0</verify_3dsecure>
+                <order_status>processing</order_status>
+                <allowspecific>0</allowspecific>
+                <debug>0</debug>
+			</hipay_hosted>
+		</payment>
+	</default>
+</config>
