@@ -42,9 +42,10 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
 		echo " 					'--admin-user=$MAGE_ADMIN_USER'  \\"
 		echo " 					'--admin-password=$MAGE_ADMIN_PWD'  \\"
 		echo " 					'--use-rewrites=$MAGE_USE_REWRITES'  \\"
+		echo " 					'--backend-frontname=$MAGE_BACKEND_FRONTNAME'  \\"
 		echo " 					'$MAGE_CLEANUP_DATABASE_CMD' \\ "
 		echo " 					'$MAGE_INSTALL_SAMPLE_DTA_CMD'  "
-		su magento2 -c  'bin/magento setup:install  --db-host=$MAGE_DB_HOST --db-name=$MAGE_DB_NAME  --db-user=$MAGE_DB_USER  --db-password=$MAGE_DB_PASSWORD  --base-url=$MAGE_BASE_URL --admin-firstname=$MAGE_ADMIN_FIRSTNAME --admin-lastname=$MAGE_ADMIN_LASTNAME --admin-email=$MAGE_ADMIN_EMAIL --admin-user=$MAGE_ADMIN_USER --admin-password=$MAGE_ADMIN_PWD  --use-rewrites=$MAGE_USE_REWRITES $MAGE_CLEANUP_DATABASE_CMD $MAGE_INSTALL_SAMPLE_DTA_CMD' 
+		su magento2 -c  'bin/magento setup:install  --db-host=$MAGE_DB_HOST --db-name=$MAGE_DB_NAME  --db-user=$MAGE_DB_USER  --db-password=$MAGE_DB_PASSWORD  --base-url=$MAGE_BASE_URL --backend-frontname=$MAGE_BACKEND_FRONTNAME --admin-firstname=$MAGE_ADMIN_FIRSTNAME --admin-lastname=$MAGE_ADMIN_LASTNAME --admin-email=$MAGE_ADMIN_EMAIL --admin-user=$MAGE_ADMIN_USER --admin-password=$MAGE_ADMIN_PWD  --use-rewrites=$MAGE_USE_REWRITES $MAGE_CLEANUP_DATABASE_CMD $MAGE_INSTALL_SAMPLE_DTA_CMD' 
 		
 		echo "\n* Reindex all indexes ..."
 		su magento2 -c 'bin/magento indexer:reindex'
@@ -70,7 +71,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	su magento2 -c 'bin/magento setup:upgrade'
 	
 	echo "\n* Apply patch before Deploy static content ..."
-	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Copy.php vendor/magento/framework/App/View/Asset/MaterializationStrategy/Copy.php'
+	# su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Copy.php vendor/magento/framework/App/View/Asset/MaterializationStrategy/Copy.php'
 	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
