@@ -1,0 +1,4 @@
+docker/ export-ignore
+.docker*
+Vagrantfile
+Dockerfile

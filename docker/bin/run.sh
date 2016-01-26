@@ -65,8 +65,8 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	composer require hipay/hipay-fullservice-sdk-magento2
 	composer config --unset repositories.1
 	
-	echo "\n* Enable Module Hipay Fullservice ..."
-	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_Fullservice'
+	echo "\n* Enable Module Hipay FSM2 ..."
+	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FSM2'
 	echo "\n* Run setup:upgrade ..."
 	su magento2 -c 'bin/magento setup:upgrade'
 	

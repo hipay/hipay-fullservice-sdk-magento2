@@ -1,0 +1,33 @@
+{
+    "name":"hipay/hipay-fullservice-sdk-magento2",
+    "description":"Hipay fullservice Magento2 module",
+    "type":"magento2-module",
+    "version":"1.0.0",
+    "license":[
+        "MIT"
+    ],
+    "require":{
+        "php":"~5.5.0|~5.6.0|~7.0.0",
+        "magento/magento-composer-installer": "*",
+        "magento/module-config": "100.0.*",
+        "magento/module-store": "100.0.*",
+        "magento/module-checkout": "100.0.*",
+        "magento/module-catalog": "100.0.*",
+        "magento/module-sales": "100.0.*",
+        "magento/module-customer": "100.0.*",
+        "magento/module-payment": "100.0.*",
+        "magento/module-quote": "100.0.*",
+        "magento/module-backend": "100.0.*",
+        "magento/module-directory": "100.0.*",
+        "magento/module-theme": "100.0.*",
+        "magento/framework": "100.0.*"
+    },
+    "extra": {
+       "map": [
+		        [
+		         "src/*",
+		         "Hipay/FSM2"
+		        ]
+              ]
+     }
+}

@@ -19,7 +19,7 @@
 	<system>
 		<section id="payment">
 			<group id="hipay_hosted" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>Hipya Fullservice Hosted</label>
+				<label>Hipya FSM2 Hosted</label>
 				<comment></comment>
 				<field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Enabled</label>

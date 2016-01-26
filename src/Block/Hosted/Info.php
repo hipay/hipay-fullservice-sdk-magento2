@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\Fullservice\Block\Hosted;
+namespace Hipay\FSM2\Block\Hosted;
 
 /**
  *

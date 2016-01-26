@@ -16,7 +16,7 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Hipay_Fullservice',
+    'Hipay_FSM2',
 	//Test is link for vagrant sandbox
     is_link('/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2') ? '/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2' : __DIR__
 );

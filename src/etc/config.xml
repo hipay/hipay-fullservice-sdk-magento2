@@ -19,7 +19,7 @@
 	<default>
 		<payment>
 			<hipay_hosted>
-				<model>Hipay\Fullservice\Model\HostedMethod</model>
+				<model>Hipay\FSM2\Model\HostedMethod</model>
                 <title>Credit Card</title>
                 <payment_action>authorize_capture</payment_action>
                 <active>0</active>
