@@ -61,9 +61,8 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	# And set it to requires
 	# Finally, remove path repository (mysterious conflic with repo magento)
 	#================================
-	composer config repositories.1 path /home/magento2/hipay-fullservice-sdk-magento2/src
-	composer require hipay/hipay-fullservice-sdk-magento2
-	composer config --unset repositories.1
+	composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git
+	composer require hipay/hipay-fullservice-sdk-magento2 dev-develop
 	
 	echo "\n* Enable Module Hipay FSM2 ..."
 	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FSM2'
@@ -74,7 +73,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	# su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Copy.php vendor/magento/framework/App/View/Asset/MaterializationStrategy/Copy.php'
 	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
 	echo "\n* Deploy static content ..."
-	su magento2 -c 'bin/magento setup:static-content:deploy'
+	#su magento2 -c 'bin/magento setup:static-content:deploy'
 	
 fi
 
