@@ -57,9 +57,7 @@ fi
 if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 
 	#================================
-	# Add Module repository to composer
-	# And set it to requires
-	# Finally, remove path repository (mysterious conflic with repo magento)
+	echo "\n* Add Module repository to composer and set it to requires ..."
 	#================================
 	composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git
 	composer require hipay/hipay-fullservice-sdk-magento2 dev-develop
