@@ -29,5 +29,8 @@
 		         "Hipay/FSM2"
 		        ]
               ]
+     },
+     "archive":{
+         "exclude": ["/*","!/src"]
      }
 }
