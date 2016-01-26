@@ -6,8 +6,15 @@
     "license":[
         "MIT"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:hipay/hipay-fullservice-sdk-php.git"
+        }
+    ],
     "require":{
         "php":"~5.5.0|~5.6.0|~7.0.0",
+        "hipay/hipay-fullservice-sdk-php":"dev-develop",
         "magento/magento-composer-installer": "*",
         "magento/module-config": "100.0.*",
         "magento/module-store": "100.0.*",
