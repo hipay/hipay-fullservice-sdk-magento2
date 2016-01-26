@@ -64,6 +64,10 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git
 	composer require hipay/hipay-fullservice-sdk-magento2 dev-develop
 	
+	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FSM2/ ..."
+	rm -r app/code/Hipay/FSM2
+	ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FSM2
+	
 	echo "\n* Enable Module Hipay FSM2 ..."
 	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FSM2'
 	echo "\n* Run setup:upgrade ..."
