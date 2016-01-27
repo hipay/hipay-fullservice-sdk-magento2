@@ -12,6 +12,7 @@ class Form extends \Magento\Payment\Block\Form {
 	 * @var string
 	 */
 	protected $_template = 'Hipay_Fullservice::form/hosted.phtml';
+
 	
 	/**
 	 * Payment config model

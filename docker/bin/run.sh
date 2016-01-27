@@ -67,6 +67,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	# Because now, we call composer with magento2 user
 	# We must copy auth.json to magento2 user home directory
 	echo "Copy /root/.composer/auth.json to /home/magento2/.composer/"
+
 	if [ ! -d /home/magento/.composer ]; then
 		echo "Create .composer directory in home directory"
 		mkdir /home/magento2/.composer
@@ -87,6 +88,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	
 	echo "\n* Enable Module Hipay Magento ..."
 	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_Fullservice'
+
 	echo "\n* Run setup:upgrade ..."
 	su magento2 -c 'bin/magento setup:upgrade'
 	echo "\n* Disable all cache types"
@@ -99,6 +101,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/Fullservice/ ..."
 	su magento2 -c "rm -r app/code/Hipay/Magento"
 	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/Fullservice"
+
 fi
 
 # We need to remove the pid file or Apache won't start after being stopped

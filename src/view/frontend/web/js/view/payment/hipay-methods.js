@@ -30,7 +30,11 @@ define(
             }/*,
             {
                 type: 'hipay_api',
+<<<<<<< HEAD
                 component: 'Hipay_Fullservice/js/view/payment/method-renderer/hipay-api'
+=======
+                component: 'Hipay_FSMagento/js/view/payment/method-renderer/hipay-api'
+>>>>>>> branch 'develop' of git@github.com:hipay/hipay-fullservice-sdk-magento2.git
             }*/
         );
         /** Add view logic here if needed */
