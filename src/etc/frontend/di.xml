@@ -9,7 +9,7 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="hipay_hosted_config_provider" xsi:type="object">Hipay\FSM2\Model\HostedConfigProvider</item>
+                <item name="hipay_hosted_config_provider" xsi:type="object">Hipay\Fullservice\Magento\Model\HostedConfigProvider</item>
             </argument>
         </arguments>
     </type>

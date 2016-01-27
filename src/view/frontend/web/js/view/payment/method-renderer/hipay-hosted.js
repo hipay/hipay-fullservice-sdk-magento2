@@ -22,7 +22,7 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'Hipay_FSM2/payment/hipay-hosted'
+                template: 'Hipay_Fullservice/payment/hipay-hosted'
             },
 	
 	        getCode: function() {

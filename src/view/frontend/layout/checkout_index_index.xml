@@ -34,7 +34,7 @@
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
                                                                 <item name="hipay-payments" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Hipay_FSM2/js/view/payment/hipay-methods</item>
+                                                                    <item name="component" xsi:type="string">Hipay_Fullservice/js/view/payment/hipay-methods</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="hipay_hosted" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
