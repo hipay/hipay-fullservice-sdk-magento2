@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 if [ $MAGE_DB_HOST = "localhost" ] || [ $MAGE_DB_HOST = "127.0.0.1" ]; then
 	echo "\n-- Start Local MySQL server ...";
@@ -56,28 +57,47 @@ fi
 
 if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 
-	#================================
-	echo "\n* Add Module repository to composer and set it to requires ..."
-	#================================
-	composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git
-	composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
-	composer require hipay/hipay-fullservice-sdk-magento2 dev-develop
 	
-	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FSM2/ ..."
-	rm -r app/code/Hipay/FSM2
-	ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FSM2
+	echo "\n* Set minimum-statility to 'dev' in composer.json "
+	su magento2 -c 'sed -i -e"s/\"minimum-stability\": \"alpha\"/\"minimum-stability\": \"dev\"/g" composer.json'
 	
-	echo "\n* Enable Module Hipay FSM2 ..."
-	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FSM2'
+	echo "\n* Set Developer mode in .htaccess file "
+	su magento2 -c 'sed -i -e"s/#   SetEnv MAGE_MODE developer/   SetEnv MAGE_MODE developer/g" .htaccess'
+	
+	# Because now, we call composer with magento2 user
+	# We must copy auth.json to magento2 user home directory
+	echo "Copy /root/.composer/auth.json to /home/magento2/.composer/"
+	if [ -f /home/magento/.composer ]; then
+		mkdir /home/magento2/.composer
+	fi
+	cp /root/.composer/auth.json /home/magento2/.composer/
+	chown -R magento2:magento2 /home/magento2/.composer
+	chmod -R 770 /home/magento2/.composer
+	
+	echo "\n * Add modules repositories to composer";
+	echo "composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git"
+	su magento2 -c "composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git"
+	echo "composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git"
+	su magento2 -c "composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git"
+	
+	echo "\n* Run composer require"
+	echo "composer require hipay/hipay-fullservice-sdk-magento2 dev-develop"
+	su magento2 -c "composer require hipay/hipay-fullservice-sdk-magento2 dev-develop"
+	
+	echo "\n* Enable Module Hipay Magento ..."
+	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FSMagento'
 	echo "\n* Run setup:upgrade ..."
 	su magento2 -c 'bin/magento setup:upgrade'
-	
-	echo "\n* Apply patch before Deploy static content ..."
-	# su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Copy.php vendor/magento/framework/App/View/Asset/MaterializationStrategy/Copy.php'
+	echo "\n* Disable all cache types"
+	su magento2 -c 'bin/magento cache:disable'
+	echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
 	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
 	echo "\n* Deploy static content ..."
-	#su magento2 -c 'bin/magento setup:static-content:deploy'
+	su magento2 -c 'bin/magento setup:static-content:deploy'
 	
+	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/Magento/ ..."
+	su magento2 -c "rm -r app/code/Hipay/Magento"
+	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/Magento"
 fi
 
 # We need to remove the pid file or Apache won't start after being stopped

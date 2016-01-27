@@ -20,7 +20,7 @@
        "map": [
 		        [
 		         "src/*",
-		         "Hipay/FSM2"
+		         "Hipay/Fullservice/Magento"
 		        ]
               ]
      },

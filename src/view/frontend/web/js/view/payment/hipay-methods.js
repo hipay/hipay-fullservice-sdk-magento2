@@ -26,11 +26,11 @@ define(
         rendererList.push(
             {
                 type: 'hipay_hosted',
-                component: 'Hipay_FSM2/js/view/payment/method-renderer/hipay-hosted'
+                component: 'Hipay_FSMagento/js/view/payment/method-renderer/hipay-hosted'
             }/*,
             {
                 type: 'hipay_api',
-                component: 'Hipay_FSM2/js/view/payment/method-renderer/hipay-api'
+                component: 'Hipay_FSMagento/js/view/payment/method-renderer/hipay-api'
             }*/
         );
         /** Add view logic here if needed */

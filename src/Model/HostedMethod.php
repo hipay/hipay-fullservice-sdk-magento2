@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FSM2\Model;
+namespace Hipay\Fullservice\Magento\Model;
 
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -23,7 +23,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
 
 /**
  * Class PaymentMethod
- * @package Hipay\FSM2\Model
+ * @package Hipay\Fullservice\Magento\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -35,12 +35,12 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	/**
 	 * @var string
 	 */
-	protected $_formBlockType = 'Hipay\FSM2\Block\Hosted\Form';
+	protected $_formBlockType = 'Hipay\Fullservice\Magento\Block\Hosted\Form';
 	
 	/**
 	 * @var string
 	 */
-	protected $_infoBlockType = 'Hipay\FSM2\Block\Hosted\Info';
+	protected $_infoBlockType = 'Hipay\Fullservice\Magento\Block\Hosted\Info';
 	
 	/**
 	 * @var string
@@ -112,6 +112,8 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	 * @see \Magento\Payment\Model\Method\Online\GatewayInterface::postRequest()
 	 */
 	public function postRequest(DataObject $request, ConfigInterface $config) {
-		// TODO Auto-generated method stub
+		$this->logger->debug($request->toArray());
+		$this->logger->debug(print_r($config,true));
+		die('foo');
 	}
 }

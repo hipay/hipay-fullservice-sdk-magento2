@@ -39,3 +39,7 @@ vendor/
 *.lock
 .vagrant
 docker/conf/auth.json
+
+# Custom dev tools#
+###################
+tools/
