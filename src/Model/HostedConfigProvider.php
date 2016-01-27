@@ -43,7 +43,9 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	public function getConfig() {
 		 return $this->method->isAvailable() ? [
             'payment' => [
-                'hipay_hosted' => [],
+                'hipay_hosted' => [
+                		'test'=>1
+                ],
             ],
         ] : [];
 	}

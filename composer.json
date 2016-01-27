@@ -24,6 +24,11 @@
 		        ]
               ]
      },
+     "autoload" : {
+		"psr-4" : {
+			"Hipay\\Fullservice\\Magento\\" : "src/"
+		}
+	},
      "archive":{
          "exclude": ["/*","!/src"]
      },
