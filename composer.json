@@ -26,5 +26,6 @@
      },
      "archive":{
          "exclude": ["/*","!/src"]
-     }
+     },
+     "minimum-stability": "alpha"
 }

@@ -60,6 +60,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	echo "\n* Add Module repository to composer and set it to requires ..."
 	#================================
 	composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git
+	composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
 	composer require hipay/hipay-fullservice-sdk-magento2 dev-develop
 	
 	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FSM2/ ..."
