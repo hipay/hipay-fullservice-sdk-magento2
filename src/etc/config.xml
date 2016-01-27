@@ -19,7 +19,7 @@
 	<default>
 		<payment>
 			<hipay_hosted>
-				<model>Hipay\Fullservice\Magento\Model\HostedMethod</model>
+				<model>Hipay\FullserviceMagento\Model\HostedMethod</model>
                 <title>Credit Card</title>
                 <payment_action>authorize_capture</payment_action>
                 <active>0</active>

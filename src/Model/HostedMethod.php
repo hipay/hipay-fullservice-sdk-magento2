@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\Fullservice\Magento\Model;
+namespace Hipay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -23,7 +23,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
 
 /**
  * Class PaymentMethod
- * @package Hipay\Fullservice\Magento\Model
+ * @package Hipay\FullserviceMagento\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -35,12 +35,12 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	/**
 	 * @var string
 	 */
-	protected $_formBlockType = 'Hipay\Fullservice\Magento\Block\Hosted\Form';
+	protected $_formBlockType = 'Hipay\FullserviceMagento\Block\Hosted\Form';
 	
 	/**
 	 * @var string
 	 */
-	protected $_infoBlockType = 'Hipay\Fullservice\Magento\Block\Hosted\Info';
+	protected $_infoBlockType = 'Hipay\FullserviceMagento\Block\Hosted\Info';
 	
 	/**
 	 * @var string

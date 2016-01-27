@@ -98,9 +98,9 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
 	
-	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/Fullservice/ ..."
-	su magento2 -c "rm -r app/code/Hipay/Fullservice"
-	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/Fullservice"
+	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
+	su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
+	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
 
 fi
 

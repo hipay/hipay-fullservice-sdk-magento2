@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\Fullservice\Magento\Model;
+namespace Hipay\FullserviceMagento\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
@@ -10,7 +10,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	/**
 	 * @var string[]
 	 */
-	protected $methodCode = \Hipay\Fullservice\Magento\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
+	protected $methodCode = \Hipay\FullserviceMagento\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
 	
 	/**
 	 * @var Checkmo
