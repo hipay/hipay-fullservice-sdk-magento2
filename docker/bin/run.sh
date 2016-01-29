@@ -93,14 +93,18 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	su magento2 -c 'bin/magento setup:upgrade'
 	echo "\n* Disable all cache types"
 	su magento2 -c 'bin/magento cache:disable'
-	echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
-	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
+	if [ -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php ]; then
+		echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
+		su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
+	fi
+	
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
-	
-	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
-	su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
-	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
+	if [ -f /home/magento2/hipay-fullservice-sdk-magento2/src ]; then
+		echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
+		su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
+		su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
+	fi
 
 fi
 

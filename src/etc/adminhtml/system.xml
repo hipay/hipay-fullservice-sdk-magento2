@@ -17,6 +17,43 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
 	<system>
+		<section id="hipay" translate="label" type="text" sortOrder="345" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>HiPay Fullservice</label>
+			<tab>sales</tab>
+			<resource>Hipay_Fullservice::hipay</resource>
+			<group id="hipay_credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>HiPay Fullservice credentials configuration</label>
+				<comment></comment>
+				<field id="api_username" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Api username (production account)</label>
+				</field>
+				<field id="api_password" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Api password (production account)</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+				</field>
+				<field id="secret_passphrase" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Secret passphrase (production account)</label>
+                    <comment>The same of your HiPay Fullservice production account</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+				</field>
+				<field id="api_username_test" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Api username (test account)</label>
+				</field>
+				<field id="api_password_test" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Api password (test account)</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+				</field>
+				<field id="secret_passphrase_test" translate="label comment" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Secret passphrase (test account)</label>
+                    <comment>The same of your HiPay Fullservice test account</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+				</field>
+			</group>
+		</section>
 		<section id="payment">
 			<group id="hipay_hosted" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>HiPay Magento Hosted</label>
@@ -28,6 +65,10 @@
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Credit card Hosted</label>
                 </field>
+                <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+	                <label>Payment Action</label>	           
+	                <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
+            	</field>
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
@@ -49,6 +90,10 @@
                  <field id="debug" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="env" translate="label" type="select" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Environment</label>
+                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
                 </field>
 			</group>
 		</section>

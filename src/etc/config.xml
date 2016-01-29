@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
- * Hipay fullservice SDK
+ * Hipay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -17,11 +17,19 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
 	<default>
+		<hipay>
+			<hipay_credentials>
+				<api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+				<api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+				<secret_passphrase backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+				<secret_passphrase_test backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+			</hipay_credentials>
+		</hipay>
 		<payment>
 			<hipay_hosted>
 				<model>Hipay\FullserviceMagento\Model\HostedMethod</model>
                 <title>Credit Card</title>
-                <payment_action>authorize_capture</payment_action>
+                <payment_action>Sale</payment_action>
                 <active>0</active>
                 <cctypes>AE,VI,MC,DI,JCB</cctypes>
                 <useccv>1</useccv>

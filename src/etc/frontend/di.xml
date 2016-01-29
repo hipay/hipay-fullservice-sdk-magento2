@@ -1,8 +1,18 @@
 <?xml version="1.0"?>
 <!--
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
+/*
+ * Hipay fullservice Magento2
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - Hipay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
@@ -11,6 +21,21 @@
             <argument name="configProviders" xsi:type="array">
                 <item name="hipay_hosted_config_provider" xsi:type="object">Hipay\FullserviceMagento\Model\HostedConfigProvider</item>
             </argument>
+        </arguments>
+    </type>
+     <virtualType name="Hipay\FullserviceMagento\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+        <arguments>
+            <argument name="namespace" xsi:type="string">hipay</argument>
+        </arguments>
+    </virtualType>
+     <virtualType name="Hipay\FullserviceMagento\Model\Session" type="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="storage" xsi:type="object">Hipay\FullserviceMagento\Model\Session\Storage</argument>
+        </arguments>
+    </virtualType>
+    <type name="Hipay\FullserviceMagento\Controller\Fullservice">
+        <arguments>
+            <argument name="hipaySession" xsi:type="object">Hipay\FullserviceMagento\Model\Session</argument>
         </arguments>
     </type>
 </config>
