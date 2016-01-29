@@ -6,9 +6,10 @@ if [ $MAGE_DB_HOST = "localhost" ] || [ $MAGE_DB_HOST = "127.0.0.1" ]; then
 	service mysql start
 	if [ $MAGE_DB_PASSWORD != "" ] && [ $MAGE_DB_NAME != "" ]  && [ $MAGE_DB_USER != "" ]; then
 		echo "\n* Create Database $MAGE_DB_NAME  ...";
-		mysql -h $MAGE_DB_HOST -u root --execute="CREATE DATABASE $MAGE_DB_NAME;";
+		mysql -h $MAGE_DB_HOST -u root --execute="CREATE DATABASE IF NOT EXISTS $MAGE_DB_NAME;";
+		
 		echo "\n* Create User $MAGE_DB_USER  and Grant ALL privileges on databse $MAGE_DB_NAME  ...";
-		mysql -h $MAGE_DB_HOST -u root --execute="CREATE USER '$MAGE_DB_USER'@'localhost' IDENTIFIED BY '$MAGE_DB_PASSWORD';";
+		# mysql -h $MAGE_DB_HOST -u root --execute="CREATE USER '$MAGE_DB_USER'@'localhost' IDENTIFIED BY '$MAGE_DB_PASSWORD';";
 		mysql -h $MAGE_DB_HOST -u root --execute="GRANT ALL ON $MAGE_DB_NAME.* to $MAGE_DB_USER@'localhost' IDENTIFIED BY '$MAGE_DB_PASSWORD'; ";
 		mysql -h $MAGE_DB_HOST -u root --execute="GRANT ALL ON $MAGE_DB_NAME.* to $MAGE_DB_USER@'%' IDENTIFIED BY '$MAGE_DB_PASSWORD'; ";
 		echo "\n* Flush privileges ...";
@@ -87,20 +88,24 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	su magento2 -c "composer require hipay/hipay-fullservice-sdk-magento2 dev-develop"
 	
 	echo "\n* Enable Module Hipay Magento ..."
-	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_Fullservice'
+	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FullserviceMagento'
 
 	echo "\n* Run setup:upgrade ..."
 	su magento2 -c 'bin/magento setup:upgrade'
 	echo "\n* Disable all cache types"
 	su magento2 -c 'bin/magento cache:disable'
-	echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
-	su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
+	if [ -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php ]; then
+		echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
+		su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
+	fi
+	
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
-	
-	echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
-	su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
-	su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
+	if [ -f /home/magento2/hipay-fullservice-sdk-magento2/src ]; then
+		echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
+		su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
+		su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
+	fi
 
 fi
 

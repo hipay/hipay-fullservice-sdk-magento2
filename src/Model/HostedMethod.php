@@ -116,4 +116,28 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 		$this->logger->debug(print_r($config,true));
 		die('foo');
 	}
+	
+	
+	/**
+	 * Check whether payment method can be used with the quote
+	 *
+	 * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+	 * @return bool
+	 */
+	public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+	{
+		return $this->isActive($quote ? $quote->getStoreId() : null);
+	}
+	
+	/**
+	 * Checkout redirect URL getter for onepage checkout (hardcode)
+	 *
+	 * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
+	 * @see Quote\Payment::getCheckoutRedirectUrl()
+	 * @return string
+	 */
+	public function getCheckoutRedirectUrl()
+	{
+		return $this->_urlBuilder->getUrl('hipay/hosted/start');
+	}
 }

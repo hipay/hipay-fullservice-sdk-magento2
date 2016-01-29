@@ -15,22 +15,31 @@
 
 define(
     [
+     	'jquery',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote'
     ],
-    function (Component, quote) {
+    function ($, Component, quote) {
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'Hipay_Fullservice/payment/hipay-hosted'
+                template: 'Hipay_FullserviceMagento/payment/hipay-hosted',
+                redirectAfterPlaceOrder: false
             },
+            /**
+             * After place order callback
+             */
+	        afterPlaceOrder: function () {
+	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.redirectUrl);
+	        }
+        	/*,
 	
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },
             isActive: function() {
                 return true;
-            }
+            }*/
         });
     }
 );

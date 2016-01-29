@@ -23,15 +23,24 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	protected $escaper;
 	
 	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
+	
+	/**
 	 * @param PaymentHelper $paymentHelper
 	 * @param Escaper $escaper
 	 */
 	public function __construct(
 			PaymentHelper $paymentHelper,
-			Escaper $escaper
+			Escaper $escaper,
+			\Magento\Framework\Url $urlBuilder
 			) {
 				$this->escaper = $escaper;
 				$this->method = $paymentHelper->getMethodInstance($this->methodCode);
+				$this->urlBuilder = $urlBuilder;
 	}
 	
 	/**
@@ -43,11 +52,12 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	public function getConfig() {
 		 return $this->method->isAvailable() ? [
             'payment' => [
-                'hipay_hosted' => [
-                		'test'=>1
+                'hipayHosted' => [
+                		'redirectUrl'=>$this->urlBuilder->getUrl('hipay/hosted/placeOrder'),
                 ],
             ],
         ] : [];
 	}
+	
 
 }

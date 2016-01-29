@@ -1,6 +1,7 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /*
- * Hipay fullservice SDK
+ * Hipay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -13,11 +14,11 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Hipay_FullserviceMagento',
-	__DIR__
-	//Test is link for vagrant sandbox
-   /* is_link('/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2') ? '/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2' : __DIR__*/
-);
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
+    <action name="hipay/hosted/placeOrder">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+</config>
