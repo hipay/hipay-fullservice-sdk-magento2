@@ -17,7 +17,7 @@ namespace Hipay\FullserviceMagento\Model\Request;
 
 use Hipay\FullserviceMagento\Model\Config as HipayConfig;
 
-class AbstractRequest /*implements RequestInterface */{
+abstract class AbstractRequest implements RequestInterface {
 	
 	/**
 	 * @var \Magento\Customer\Model\Session
@@ -98,12 +98,14 @@ class AbstractRequest /*implements RequestInterface */{
 		            && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 				
 		        $this->_customerId = $this->_customerSession->getCustomerId();
+
 		        
 		        if (isset($params['config']) && $params['config'] instanceof HipayConfig) {
 		        	$this->_config = $params['config'];
 		        } else {
 		        	throw new \Exception('Config instance is required.');
 		        }
+		       
 		
 	}
 	
@@ -120,7 +122,7 @@ class AbstractRequest /*implements RequestInterface */{
 	 * Popualte sdk request object and return it
 	 * @return \Hipay\Fullservice\Request\AbstractRequest
 	 */
-	//abstract protected function mapRequest();
+	abstract protected function mapRequest();
 	
 	
 	

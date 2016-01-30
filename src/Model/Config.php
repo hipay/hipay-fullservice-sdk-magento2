@@ -18,6 +18,7 @@ namespace Hipay\FullserviceMagento\Model;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Hipay;
+use Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection;
 
 
 /**
@@ -169,8 +170,59 @@ class Config implements ConfigInterface {
         $this->pathPattern = $pathPattern;
     }
 	
+    /**
+     * Templates type source getter
+     *
+     * @return array
+     */
+    public function getTemplates()
+    {
+    	return [
+    			\Hipay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
+    	];
 
+    }
+    
+    /**
+     * 
+     */
+    public function getPaymentProductsList(){
+    	
+    	$list = explode(",",$this->getValue('payment_products'));
+    	return $list;
+    }
+    
+    public function getPaymentProductCategoryList(){
+    	//Prepare Brand Categories
+    	$allPaymentProducts = PaymentProductCollection::getItems();
+    	$categories = [];
+    	 
+    	foreach ($allPaymentProducts as $pp) {
+    		if(in_array($pp->getProductCode(), $this->getPaymentProductsList()) && !in_array($pp->getCategory(),$categories)){
+    			$categories[] = $pp->getCategory();
+    		}
+    	}
+    	return $categories;
+    }
 	
+    /**
+     * Payment products source getter
+     *
+     * @return array
+     */
+    public function getPaymentProducts(){
+    	ini_set('display_errors', 1);
+    	error_reporting(E_ALL | E_STRICT);
+    	/* @var $collection \Hipay\Fullservice\Gateway\Model\PaymentProduct[] */
+    	$collection = \Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
+    	$list = [];
+    	foreach($collection as $paymentProduct){
+    		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
+    	}
+    	
+    	return $list;
+    }
+    
 	/**
 	 * Payment actions source getter
 	 *

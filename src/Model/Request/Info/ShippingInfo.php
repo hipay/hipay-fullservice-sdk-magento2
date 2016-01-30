@@ -13,10 +13,10 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request\Customer;
+namespace Hipay\FullserviceMagento\Model\Request\Info;
 
-use Hipay\FullserviceMagento\Model\Request\AbstractRequest;
 use Hipay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
+use Hipay\FullserviceMagento\Model\Request\Order;
 
 /**
  * Shipping info Request Object
@@ -27,18 +27,22 @@ use Hipay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class ShippingInfo extends AbstractRequest {
+class ShippingInfo extends Order {
 	
-	
-	public function getSdkRequestObject(){
-		
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+	 * @return \Hipay\FullserviceMagento\Model\Request\Info\ShippingInfo
+	 */
+	protected function mapRequest() {
 		$customerShippingInfo = new CustomerShippingInfoRequest();
+
 		
-		$customer = $this->_order->getCustomer();
-
-		$customerShippingInfo->shipto_firstname = $customer->getFirstname();
-		$customerShippingInfo->shipto_lastname = $customer->getLastname();
-
+		$customerShippingInfo->shipto_firstname = $this->_order->getCustomerFirstname();
+		$customerShippingInfo->shipto_lastname = $this->_order->getCustomerLastname();
+		
 		
 		$shippingAddress = $this->_order->getShippingAddress();
 		$customerShippingInfo->shipto_streetaddress = $shippingAddress->getStreetLine(1);
@@ -51,7 +55,7 @@ class ShippingInfo extends AbstractRequest {
 		$customerShippingInfo->shipto_recipientinfo = $shippingAddress->getCompany();
 		
 		return $customerShippingInfo;
-		
 	}
+	
 	
 }

@@ -65,10 +65,31 @@
 	                <label>Payment Action</label>	           
 	                <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
             	</field>
-            	 <field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+            	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
                 </field>
+               <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment products</label>
+                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
+                </field> 
+                <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Display card selector</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+   				 <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Use 3D Secure</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Custom CSS url</label>
+                    <comment>Important, HTTPS protocol is required</comment>
+                </field> 
+                 <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Template type</label>
+                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
+                </field>
+                
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment from Applicable Countries</label>
                     <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>

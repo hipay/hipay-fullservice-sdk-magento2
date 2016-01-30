@@ -13,10 +13,11 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request\Customer;
+namespace Hipay\FullserviceMagento\Model\Request\Info;
 
-use Hipay\FullserviceMagento\Model\Request\AbstractRequest;
+
 use Hipay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
+use Hipay\FullserviceMagento\Model\Request\Order;
 
 /**
  * Billing info Request Object
@@ -27,18 +28,22 @@ use Hipay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class BillingInfo extends AbstractRequest {
+class BillingInfo extends Order {
 	
-	
-	public function getSdkRequestObject(){
-		
+	/**
+	 *
+	 * {@inheritDoc}
+	 *
+	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+	 * @return \Hipay\FullserviceMagento\Model\Request\Info\BillingInfo
+	 */
+	protected function mapRequest() {
 		$customerBillingInfo = new CustomerBillingInfoRequest();
-		
-		$customer = $this->_order->getCustomer();
-		$customerBillingInfo->firstname = $customer->getFirstname();
-		$customerBillingInfo->lastname = $customer->getLastname();
-		$customerBillingInfo->email = $customer->getEmail();
-		$dob = $customer->getDob();
+
+		$customerBillingInfo->firstname = $this->_order->getCustomerFirstname();
+		$customerBillingInfo->lastname = $this->_order->getCustomerLastname();
+		$customerBillingInfo->email = $this->_order->getCustomerEmail();
+		$dob = $this->_order->getCustomerDob();
 		if(!is_null($dob)){
 			try {
 				
@@ -49,7 +54,7 @@ class BillingInfo extends AbstractRequest {
 			}
 		}
 		
-		$customerBillingInfo->gender = $customer->getGender(); //@TODO make mapping Value with \Hipay\Fullservice\Enum\Customer\Gender
+		$customerBillingInfo->gender =$this->_order->getCustomerGender(); //@TODO make mapping Value with \Hipay\Fullservice\Enum\Customer\Gender
 		
 		$billingAddress = $this->_order->getBillingAddress();
 		$customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);
@@ -62,7 +67,7 @@ class BillingInfo extends AbstractRequest {
 		$customerBillingInfo->recipientinfo = $billingAddress->getCompany();
 		
 		return $customerBillingInfo;
-		
 	}
+
 	
 }

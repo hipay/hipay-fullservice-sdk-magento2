@@ -19,6 +19,7 @@ namespace Hipay\FullserviceMagento\Controller\Hosted;
 use Hipay\Fullservice\HTTP\Configuration\Configuration;
 use Hipay\Fullservice\HTTP\GuzzleClient;
 use Hipay\Fullservice\Gateway\Client\GatewayClient;
+use Magento\Framework\Controller\ResultFactory;
 
 class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
 {
@@ -60,12 +61,16 @@ class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-
+    	ini_set('display_errors', 1);
+    	error_reporting(E_ALL | E_STRICT);
+    	//die(ini_get('memory_limit'));
         try {
+        	
+        	
         	
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 			
-            if(!$order->getId()){
+           if(!$order->getId()){
             	throw new \Magento\Framework\Exception\LocalizedException(
             			__('We can\'t place the order.')
             			);
@@ -75,12 +80,18 @@ class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
             $clientProvider = new GuzzleClient($configuration);
 
             $gateway = new GatewayClient($clientProvider);
-            $hpp = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage',['params' =>['order'=>$order,'config'=>$this->_config]])->getRequestObject();
+            $parameters = [
+            		'params' => [
+            				'order' => $order,
+            				'config' => $this->_config,
+            		],
+            ];
+            
+            $hpp = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage',$parameters)->getRequestObject();
+        	
             $hppModel = $gateway->requestHostedPaymentPage($hpp);
-            
             //@TODO catch sdk exception
-
-            
+            $this->logger->debug($hppModel->getForwardUrl());
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
 
