@@ -2,14 +2,14 @@
 
 namespace Hipay\FullserviceMagento\Model\Request;
 
-use Hipay\FullserviceMagento\Model\Request\AbstractRequest;
+use Hipay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use Hipay\Fullservice\Gateway\Request\Order\OrderRequest;
 
 /**
  * @author kassim
  *
  */
-class Order extends AbstractRequest{
+class Order extends BaseRequest{
 	
 	/**
 	 * Order
@@ -23,7 +23,6 @@ class Order extends AbstractRequest{
 	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
 	 */
 	public function __construct(
-			\Magento\Framework\App\Action\Context $context,
 			\Psr\Log\LoggerInterface $logger,
 			\Magento\Checkout\Helper\Data $checkoutData,
 			\Magento\Customer\Model\Session $customerSession,
@@ -35,7 +34,7 @@ class Order extends AbstractRequest{
 			)
 	{
 		
-		parent::__construct($context, $logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder);
+		parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$params);
 
 		
 		if (isset($params['order']) && $params['order'] instanceof \Magento\Quote\Model\Order) {
@@ -49,9 +48,9 @@ class Order extends AbstractRequest{
 	/**
 	 * @return \Hipay\Fullservice\Gateway\Request\Order\OrderRequest
 	 */
-	public function getRequestObject(){
+	protected function mapRequest(){
 		/* @var $httpRequest  \Magento\Framework\App\Request\Http */
-		$httpRequest = $this->_context->getRequest();
+		//$httpRequest = $this->_context->getRequest();
 		
 		$orderRequest = new OrderRequest();
 		$orderRequest->orderid = $this->_order->getIncrementId();
@@ -71,8 +70,8 @@ class Order extends AbstractRequest{
 		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('checkout/onepage/failure'); 
 		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('checkout/onepage/failure');
 		
-		$orderRequest->http_accept = $httpRequest->getHeader('Accept');
-		$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');
+		//$orderRequest->http_accept = $httpRequest->getHeader('Accept');
+		//$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');
 		
 		$orderRequest->device_fingerprint = "";
 		

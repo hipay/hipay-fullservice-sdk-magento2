@@ -63,9 +63,19 @@ class Config implements ConfigInterface {
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 */
 	public function __construct(
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+			 $params = []
 			) {
 				$this->_scopeConfig = $scopeConfig;
+				
+				if ($params) {
+					$method = array_shift($params);
+					$this->setMethod($method);
+					if ($params) {
+						$storeId = array_shift($params);
+						$this->setStoreId($storeId);
+					}
+				}
 	}
 	
 	/**
@@ -108,6 +118,22 @@ class Config implements ConfigInterface {
                 }
         }
         return null;
+    }
+    
+    /**
+     * Method code setter
+     *
+     * @param string|MethodInterface $method
+     * @return $this
+     */
+    public function setMethod($method)
+    {
+    	if ($method instanceof MethodInterface) {
+    		$this->_methodCode = $method->getCode();
+    	} elseif (is_string($method)) {
+    		$this->_methodCode = $method;
+    	}
+    	return $this;
     }
     
  /**

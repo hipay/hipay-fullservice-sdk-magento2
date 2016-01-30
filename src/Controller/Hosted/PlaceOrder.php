@@ -19,6 +19,7 @@ namespace Hipay\FullserviceMagento\Controller\Hosted;
 use Hipay\Fullservice\HTTP\Configuration\Configuration;
 use Hipay\Fullservice\HTTP\GuzzleClient;
 use Hipay\Fullservice\Gateway\Client\GatewayClient;
+
 class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
 {
 	
@@ -59,9 +60,7 @@ class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-    	
-    	//echo '<pre>';
-    	//die($this->_config->getPaymentAction());
+
         try {
         	
             $order = $this->_getCheckoutSession()->getLastRealOrder();
@@ -71,12 +70,13 @@ class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
             			__('We can\'t place the order.')
             			);
             }
-            
+           
             $configuration = new Configuration($this->_config->getApiUsername(), $this->_config->getApiPassword(),$this->_config->getValue('env'));
             $clientProvider = new GuzzleClient($configuration);
+
             $gateway = new GatewayClient($clientProvider);
-            
-            $hppModel = $gateway->requestHostedPaymentPage($this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage'),array('order'=>$order,'config'>$this->_con));
+            $hpp = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage',['params' =>['order'=>$order,'config'=>$this->_config]])->getRequestObject();
+            $hppModel = $gateway->requestHostedPaymentPage($hpp);
             
             //@TODO catch sdk exception
 

@@ -16,9 +16,8 @@
 namespace Hipay\FullserviceMagento\Model\Request;
 
 use Hipay\FullserviceMagento\Model\Config as HipayConfig;
-use Magento\Framework\App\Action\Context;
 
-class AbstractRequest {
+class AbstractRequest /*implements RequestInterface */{
 	
 	/**
 	 * @var \Magento\Customer\Model\Session
@@ -46,11 +45,7 @@ class AbstractRequest {
 	 * @var \Psr\Log\LoggerInterface
 	 */
 	protected $_logger;
-	
-	/**
-	 * @var \Magento\Framework\UrlInterface
-	 */
-	protected $_coreUrl;
+
 	/**
 	 * @var \Magento\Checkout\Model\Session
 	 */
@@ -69,11 +64,7 @@ class AbstractRequest {
 	 * @var \Magento\Framework\Url
 	 */
 	protected $_urlBuilder;
-	/**
-	 * 
-	 * @var Context
-	 */
-	protected $_context;
+
 	
 	/**
 	 * @var \Magento\Framework\Locale\ResolverInterface
@@ -87,7 +78,6 @@ class AbstractRequest {
 	protected $_requestFactory;
 	
 	public function __construct(
-			\Magento\Framework\App\Action\Context $context,
 			\Psr\Log\LoggerInterface $logger,
 			\Magento\Checkout\Helper\Data $checkoutData,
 			\Magento\Customer\Model\Session $customerSession,
@@ -96,8 +86,8 @@ class AbstractRequest {
 			\Hipay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
 			$params = []
-			){
-				$this->_context = $context;
+			)
+	{
 				$this->_logger = $logger;
 				$this->_checkoutData = $checkoutData;
 				$this->_checkoutSession = $checkoutSession;
@@ -118,9 +108,20 @@ class AbstractRequest {
 	}
 	
 	/**
-	 * Return sdk request object
-	 * @see \Hipay\Fullservice\Request\AbstractRequest
+	 * 
+	 * {@inheritDoc}
+	 * @see \Hipay\FullserviceMagento\Model\Request\RequestInterface::getRequestObject()
 	 */
-	public function getRequestObject();
+	public function getRequestObject(){
+		return $this->mapRequest();
+	}
+	
+	/**
+	 * Popualte sdk request object and return it
+	 * @return \Hipay\Fullservice\Request\AbstractRequest
+	 */
+	//abstract protected function mapRequest();
+	
+	
 	
 }

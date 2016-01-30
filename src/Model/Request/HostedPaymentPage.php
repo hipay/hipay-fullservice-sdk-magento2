@@ -17,12 +17,12 @@ class HostedPaymentPage extends Order{
 	 * @see \Hipay\FullserviceMagento\Model\Request\Order::getRequestObject()
 	 * @return \Hipay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
 	 */
-	public function getRequestObject(){
+	protected function mapRequest(){
 		
 		$hppRequest = new HostedPaymentPageRequest();
 		$orderRequest = parent::getRequestObject();
 		
-		foreach (get_class_vars($orderRequest) as $property=>$value) {
+		foreach (get_object_vars($orderRequest) as $property=>$value) {
 			$hppRequest->$property = $value;
 		}
 		

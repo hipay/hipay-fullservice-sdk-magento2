@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+set +e
 
 if [ $MAGE_DB_HOST = "localhost" ] || [ $MAGE_DB_HOST = "127.0.0.1" ]; then
 	echo "\n-- Start Local MySQL server ...";
@@ -101,7 +101,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 	
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
-	if [ -f /home/magento2/hipay-fullservice-sdk-magento2/src ]; then
+	if [ -d /home/magento2/hipay-fullservice-sdk-magento2/src ]; then
 		echo "\n* Remove module copied by composer and create symlink from shared volume to app/code/Hipay/FullserviceMagento/ ..."
 		su magento2 -c "rm -r app/code/Hipay/FullserviceMagento"
 		su magento2 -c "ln -s /home/magento2/hipay-fullservice-sdk-magento2/src app/code/Hipay/FullserviceMagento"
