@@ -64,6 +64,10 @@ class Index extends AppAction {
 	 */
 	protected $_request;
 	
+	/**
+	 * 
+	 * @var \Magento\Sales\Model\Order $_order
+	 */
 	protected $_order;
 	/**
 	 * 
@@ -107,6 +111,7 @@ class Index extends AppAction {
      					break;
      				case TransactionStatus::CAPTURE_REQUESTED:
      					$this->_createNotifyComment('Capture Requested.',true);
+     					$this->_order->save();
      					break;
      				case TransactionStatus::CAPTURED:
      					$this->_registerPaymentCapture();
@@ -115,12 +120,17 @@ class Index extends AppAction {
      			break;
      		case TransactionState::PENDING :
      			$this->_createNotifyComment('Trasaction Is in Pending.',true);
+     			$this->_order->getPayment()->setIsTransactionPending(true);
+     			$this->_order->save();
      			break;
      		case TransactionState::FORWARDING :
      			break;
      		case TransactionState::DECLINED :
+     			$this->_registerPaymentDenied();
      		break;
      		default:
+     			$this->_registerPaymentFailure();
+     			
      		
      	}
 
@@ -128,6 +138,34 @@ class Index extends AppAction {
      	//echo '<pre>';
      	//die(print_r($this->_transaction,true));
  		die('OK');
+	 }
+	 
+	 /**
+	  * Process denied payment notification
+	  *
+	  * @return void
+	  */
+	 protected function _registerPaymentDenied()
+	 {
+
+	 	$this->_order->getPayment()->setTransactionId(
+	 			$this->_transaction->getTransactionReference()
+	 			)->setNotificationResult(
+	 					true
+	 					)->setIsTransactionClosed(
+	 							true
+	 							)->deny(false);
+	 							$this->_order->save();
+	 }
+	 
+	 /**
+	  * Treat failed payment as order cancellation
+	  *
+	  * @return void
+	  */
+	 protected function _registerPaymentFailure()
+	 {
+	 	$this->_order->registerCancellation($this->_createNotifyComment(''))->save();
 	 }
 	 
 	 
@@ -184,9 +222,9 @@ class Index extends AppAction {
 	 	/*$payment->setParentTransactionId(
 	 			$parentTransactionId
 	 			);*/
-	 	$payment->setShouldCloseParentTransaction(
-	 			'Completed' === $this->getRequestData('auth_status')
-	 			);
+	 	/*$payment->setShouldCloseParentTransaction(
+	 			'Completed' === this->_transaction->getState()
+	 			);*/
 	 	$payment->setIsTransactionClosed(
 	 			0
 	 			);
