@@ -5,7 +5,7 @@ MAINTAINER Kassim Belghait <kassim@sirateck.com>
 #================================================
 # Customize sources for apt-get
 #================================================
-RUN  echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-5.6\n" > /etc/apt/sources.list.d/mysql.list
+RUN echo "deb http://repo.mysql.com/apt/debian/ jessie mysql-5.6\n" > /etc/apt/sources.list.d/mysql.list
 RUN apt-key adv --keyserver pgp.mit.edu --recv-keys 5072E1F5 
 
 #=======================

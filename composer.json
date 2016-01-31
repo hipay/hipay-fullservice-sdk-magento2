@@ -2,7 +2,7 @@
     "name":"hipay/hipay-fullservice-sdk-magento2",
     "description":"HiPay fullservice Magento2 module",
     "type":"magento2-module",
-    "version":"1.0.0",
+    "version":"1.0.1",
     "license":[
         "MIT"
     ],
