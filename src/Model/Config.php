@@ -211,8 +211,6 @@ class Config implements ConfigInterface {
      * @return array
      */
     public function getPaymentProducts(){
-    	ini_set('display_errors', 1);
-    	error_reporting(E_ALL | E_STRICT);
     	/* @var $collection \Hipay\Fullservice\Gateway\Model\PaymentProduct[] */
     	$collection = \Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
     	$list = [];
@@ -258,7 +256,7 @@ class Config implements ConfigInterface {
 	 *
 	 * @return string|null
 	 */
-	public function getPaymentAction()
+	public function getConfigPaymentAction()
 	{
 		switch ($this->getValue('paymentAction')) {
 			case self::PAYMENT_ACTION_AUTH:

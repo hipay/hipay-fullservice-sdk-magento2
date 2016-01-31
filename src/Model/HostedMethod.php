@@ -74,8 +74,7 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	 * @var bool
 	 */
 	protected $_canCapture = true;
-	
-	
+
 	/**
 	 * 
 	 * @param \Magento\Framework\Model\Context $context
@@ -102,6 +101,8 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
         array $data = []){
 		
 		parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
+		
+		$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
 	}
 	
 	

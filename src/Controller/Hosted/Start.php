@@ -47,7 +47,7 @@ class Start extends \Hipay\FullserviceMagento\Controller\Fullservice
 	protected $_configMethod = \Hipay\FullserviceMagento\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
 	
     /**
-     * Start Express Checkout by requesting initial token and dispatching customer to PayPal
+     * Start 
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
