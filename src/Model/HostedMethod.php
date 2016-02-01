@@ -74,6 +74,13 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	 * @var bool
 	 */
 	protected $_canCapture = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = true;
 
 	/**
 	 * 
