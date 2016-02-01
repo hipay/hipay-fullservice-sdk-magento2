@@ -16,41 +16,9 @@
 namespace Hipay\FullserviceMagento\Controller\Hosted;
 
 
-use Hipay\Fullservice\HTTP\Configuration\Configuration;
-use Hipay\Fullservice\HTTP\GuzzleClient;
-use Hipay\Fullservice\Gateway\Client\GatewayClient;
-use Magento\Framework\Controller\ResultFactory;
 
 class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
-{
-	
-	/**
-	 *
-	 * @var \Hipay\FullserviceMagento\Model\Checkout\Hosted\Checkout
-	 */
-	protected $_checkout;
-	
-	/**
-	 * Checkout mode type
-	 *
-	 * @var string
-	 */
-	protected $_checkoutType = 'Hipay\FullserviceMagento\Model\Checkout\Hosted\Checkout';
-	
-	
-	/**
-	 * Config mode type
-	 *
-	 * @var string
-	 */
-	protected $_configType = 'Hipay\FullserviceMagento\Model\Config';
-	
-	/**
-	 * Config method type
-	 *
-	 * @var string
-	 */
-	protected $_configMethod = \Hipay\FullserviceMagento\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
+{	
 
 
     /**
@@ -76,22 +44,12 @@ class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
             			);
             }
            
-            $configuration = new Configuration($this->_config->getApiUsername(), $this->_config->getApiPassword(),$this->_config->getValue('env'));
-            $clientProvider = new GuzzleClient($configuration);
-
-            $gateway = new GatewayClient($clientProvider);
-            $parameters = [
-            		'params' => [
-            				'order' => $order,
-            				'config' => $this->_config,
-            		],
-            ];
-            
-            $hpp = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage',$parameters)->getRequestObject();
+            $gateway = $this->_gatewayManagerFactory->create($order);
         	
-            $hppModel = $gateway->requestHostedPaymentPage($hpp);
+            $hppModel = $gateway->requestHostedPaymentPage();
+            
             //@TODO catch sdk exception
-            $this->logger->debug($hppModel->getForwardUrl());
+
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
 

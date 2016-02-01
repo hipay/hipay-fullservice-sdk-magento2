@@ -16,7 +16,6 @@
 namespace Hipay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\Method\ConfigInterface;
 
@@ -28,7 +27,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class HostedMethod extends AbstractMethod implements GatewayInterface {
+class HostedMethod extends FullserviceMethod implements GatewayInterface {
 	
 	const HIPAY_HOSTED_METHOD_CODE               = 'hipay_hosted';
 	
@@ -47,70 +46,6 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	 */
 	protected $_code = self::HIPAY_HOSTED_METHOD_CODE;
 	
-	/**
-	 * Fields that should be replaced in debug with '***'
-	 *
-	 * @var array
-	 */
-	protected $_debugReplacePrivateDataKeys = [];
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_isGateway = true;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canAuthorize = true;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canCapture = true;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_isInitializeNeeded = true;
-
-	/**
-	 * 
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-	 * @param \Magento\Payment\Helper\Data $paymentData
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param \Magento\Payment\Model\Method\Logger $logger
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-	 * @param array $data
-	 */
-	public function __construct( 
-		\Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []){
-		
-		parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
-		
-		$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
-	}
 	
 	
 	/**
@@ -120,40 +55,12 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	 * @see \Magento\Payment\Model\Method\Online\GatewayInterface::postRequest()
 	 */
 	public function postRequest(DataObject $request, ConfigInterface $config) {
-		$this->logger->debug($request->toArray());
+		$this->logger->debug("Post request called");
+		$this->logger->debug(print_r($request->toArray(),true));
 		$this->logger->debug(print_r($config,true));
 		die('foo');
 	}
 	
-	
-	/**
-	 * Check whether payment method can be used with the quote
-	 *
-	 * @param \Magento\Quote\Api\Data\CartInterface|null $quote
-	 * @return bool
-	 */
-	public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
-	{
-		return $this->isActive($quote ? $quote->getStoreId() : null);
-	}
-	
-	/**
-	 * Capture payment abstract method
-	 *
-	 * @param \Magento\Framework\DataObject|InfoInterface $payment
-	 * @param float $amount
-	 * @return $this
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 * @api
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 */
-	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
-	{
-		parent::capture($payment, $amount);
-		
-		
-	
-		return $this;
-	}
+
 	
 }

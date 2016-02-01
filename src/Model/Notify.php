@@ -88,30 +88,30 @@ class Notify {
 				switch ($this->_transaction->getStatus()){
 					case TransactionStatus::AUTHORIZED:
 		
-						$this->_registerPaymentAuthorization();
+						$this->_doPaymentAuthorization();
 		
 						break;
 					case TransactionStatus::CAPTURE_REQUESTED:
-						$this->_createNotifyComment('Capture Requested.',true);
+						$this->_generateComment('Capture Requested.',true);
 						$this->_order->save();
 						break;
 					case TransactionStatus::CAPTURED:
-						$this->_registerPaymentCapture();
+						$this->_doPaymentCapture();
 						break;
 				}
 				break;
 			case TransactionState::PENDING :
-				$this->_createNotifyComment('Transaction Is in Pending.',true);
+				$this->_generateComment('Transaction Is in Pending.',true);
 				$this->_order->getPayment()->setIsTransactionPending(true);
 				$this->_order->save();
 				break;
 			case TransactionState::FORWARDING :
 				break;
 			case TransactionState::DECLINED :
-				$this->_registerPaymentDenied();
+				$this->_doPaymentDenied();
 				break;
 			default:
-				$this->_registerPaymentFailure();
+				$this->_doPaymentFailure();
 		
 				 
 		}
@@ -124,7 +124,7 @@ class Notify {
 	 *
 	 * @return void
 	 */
-	protected function _registerPaymentDenied()
+	protected function _doPaymentDenied()
 	{
 	
 		$this->_order->getPayment()->setTransactionId(
@@ -142,9 +142,9 @@ class Notify {
 	 *
 	 * @return void
 	 */
-	protected function _registerPaymentFailure()
+	protected function _doPaymentFailure()
 	{
-		$this->_order->registerCancellation($this->_createNotifyComment(''))->save();
+		$this->_order->registerCancellation($this->_generateComment(''))->save();
 	}
 	
 	
@@ -152,13 +152,13 @@ class Notify {
 	 * Register authorized payment
 	 * @return void
 	 */
-	protected function _registerPaymentAuthorization()
+	protected function _doPaymentAuthorization()
 	{
 		/** @var $payment \Magento\Sales\Model\Order\Payment */
 		$payment = $this->_order->getPayment();
 	
 		$payment->setPreparedMessage(
-				$this->_createNotifyComment('')
+				$this->_generateComment('')
 				)->setTransactionId(
 						$this->_transaction->getTransactionReference() . "-authorization"
 						)/*->setParentTransactionId(
@@ -183,7 +183,7 @@ class Notify {
 	 * @param bool $skipFraudDetection
 	 * @return void
 	 */
-	protected function _registerPaymentCapture($skipFraudDetection = false)
+	protected function _doPaymentCapture($skipFraudDetection = false)
 	{
 		 
 		/* @var $payment \Magento\Sales\Model\Order\Payment */
@@ -199,7 +199,7 @@ class Notify {
 				$this->_transaction->getCurrency()
 				);
 		$payment->setPreparedMessage(
-				$this->_createNotifyComment('')
+				$this->_generateComment('')
 				);
 		$payment->setParentTransactionId(
 				$parentTransactionId
@@ -235,7 +235,7 @@ class Notify {
 	 * @param bool $addToHistory
 	 * @return string|\Magento\Sales\Model\Order\Status\History
 	 */
-	protected function _createNotifyComment($comment = '', $addToHistory = false)
+	protected function _generateComment($comment = '', $addToHistory = false)
 	{
 		$message = __('Notification "%1"', $this->_transaction->getState());
 		if ($comment) {

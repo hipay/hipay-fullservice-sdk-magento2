@@ -1,5 +1,18 @@
 <?php
-
+/*
+ * Hipay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - Hipay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
 namespace Hipay\FullserviceMagento\Controller;
 
 use Magento\Framework\App\Action\Action as AppAction;
@@ -23,58 +36,9 @@ abstract class Fullservice extends AppAction {
 	protected $_checkoutSession;
 	
 	/**
-	 * @var \Magento\Framework\Url\Helper
-	 */
-	protected $_urlHelper;
-	
-	/**
 	 * @var \Magento\Framework\Session\Generic
 	 */
 	protected $_hipaySession;
-	
-	/**
-	 * @var \Hipay\FullserviceMagento\Model\Checkout\Factory
-	 */
-	protected $_checkoutFactory;
-	
-
-	/**
-	 * @var \Hipay\FullserviceMagento\Model\Checkout\AbstractCheckout
-	 */
-	protected $_checkout;
-	
-	/**
-	 * Checkout mode type
-	 *
-	 * @var string
-	 */
-	protected $_checkoutType;
-	
-	/**
-	 * Internal cache of checkout models
-	 *
-	 * @var array
-	 */
-	protected $_checkoutTypes = [];
-	
-	/**
-     * @var \Hipay\FullserviceMagento\Model\Config
-     */
-    protected $_config;
-
-    /**
-     * Config mode type
-     *
-     * @var string
-     */
-    protected $_configType;
-
-    /**
-     * Config method type
-     *
-     * @var string
-     */
-    protected $_configMethod;
     
     /**
      * @var \Magento\Quote\Model\Quote
@@ -88,10 +52,11 @@ abstract class Fullservice extends AppAction {
     protected $logger;
     
     /**
-     *
-     * @var Factory
+     * 
+     * @var \Hipay\FullserviceMagento\Model\Gateway\Factory
      */
-    protected $_requestFactory;
+    protected $_gatewayManagerFactory;
+
     
 	
 	/**
@@ -112,60 +77,20 @@ abstract class Fullservice extends AppAction {
 			\Magento\Customer\Model\Session $customerSession,
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Framework\Session\Generic $hipaySession,
-			\Magento\Framework\Url\Helper\Data $urlHelper,
-			\Hipay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory,
-			Factory $requestfactory,
-			\Psr\Log\LoggerInterface $logger
+			\Psr\Log\LoggerInterface $logger,
+			\Hipay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
 	) {
 		$this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession; 
         $this->_hipaySession = $hipaySession;
-        $this->_urlHelper = $urlHelper;
-        $this->_checkoutFactory = $checkoutFactory;
-        $this->_requestFactory = $requestfactory;
+
         $this->logger = $logger;
+        $this->_gatewayManagerFactory = $gatewayManagerFactory;
 
         parent::__construct($context);
-        
-        $parameters = ['params' => [$this->_configMethod]];
-        $this->_config = $this->_objectManager->create($this->_configType, $parameters);
 
 	}
-	
-	/**
-	 * Instantiate order and checkout
-	 */
-	protected function _initOrder(){
-		
-	}
-	
-	/**
-     * Instantiate quote and checkout
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _initCheckout()
-    {
-        $quote = $this->_getQuote();
-        die("Quote ID: ".(int)$quote->getHasError());
-        $this->logger->debug($this->_checkoutSession->getLastOrderId());
-        if (!$quote->hasItems() || $quote->getHasError()) {
-            $this->getResponse()->setStatusHeader(403, '1.1', 'Forbidden');
-            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t initialize Hosted payment page.'));
-        }
-        if (!isset($this->_checkoutTypes[$this->_checkoutType])) {
-            $parameters = [
-                'params' => [
-                    'quote' => $quote,
-                    'config' => $this->_config,
-                ],
-            ];
-            $this->_checkoutTypes[$this->_checkoutType] = $this->_checkoutFactory
-                ->create($this->_checkoutType, $parameters);
-        }
-        $this->_checkout = $this->_checkoutTypes[$this->_checkoutType];
-    }
+
 	
 	 /**
      * Return checkout session object

@@ -13,10 +13,10 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Checkout;
+namespace Hipay\FullserviceMagento\Model\Gateway;
 
 /**
- * Factory class for \Hipay\FullserviceMagento\Model\Checkout\AbstractCheckout
+ * Factory class for Hipay\FullserviceMagento\Model\Gateway\Manager
  */
 class Factory
 {
@@ -38,14 +38,13 @@ class Factory
     }
 
     /**
-     * Create class instance with specified parameters
+     * Create class instance with order object
      *
-     * @param string $className
-     * @param array $data
-     * @return \Hipay\FullserviceMagento\Model\Checkout\AbstractCheckout
+     * @param \Magento\Sales\Model\Order $className
+     * @return \Hipay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function create($className, array $data = [])
+    public function create($order)
     {
-        return $this->_objectManager->create($className, $data);
+        return $this->_objectManager->create('\Hipay\FullserviceMagento\Model\Gateway\Manager',['params'=>['order'=>$order]]);
     }
 }

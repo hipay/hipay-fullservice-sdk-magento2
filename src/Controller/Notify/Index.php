@@ -60,16 +60,21 @@ class Index extends AppAction {
      	$params = $this->getRequest()->getPostValue();
      	
      	try {
+     		$this->_logger->info("Debug notification");
+     		$this->_logger->info(print_r($params,true));
+     		
      		/* @var $notify \Hipay\FullserviceMagento\Model\Notify */
      		$notify = $this->_objectManager->create('\Hipay\FullserviceMagento\Model\Notify',['params'=>['response'=>$params]]);
-     		
      		$notify->processTransaction();
+     		
+     		
      	} catch (\Exception $e) {
      		$this->_logger->error($e->getMessage());
-     		die($e->getMessage());
+     		$this->getResponse()->setStatusHeader(500, '1.1', $e->getMessage())->sendResponse();
      	}
 
- 		die('OK');
+     	$this->getResponse()->setBody('OK')->sendResponse();
+
 	 }
 	 
 	 

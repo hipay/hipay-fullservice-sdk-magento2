@@ -27,6 +27,8 @@ class Factory
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
+    
+    protected $_configClassName = '\Hipay\FullserviceMagento\Model\Config';
 
     /**
      * Factory constructor
@@ -45,8 +47,8 @@ class Factory
      * @param array $data
      * @return object
      */
-    public function create($className, array $data = [])
+    public function create(array $data = [])
     {
-        return $this->_objectManager->create($className, $data);
+        return $this->_objectManager->create($this->_configClassName, $data);
     }
 }
