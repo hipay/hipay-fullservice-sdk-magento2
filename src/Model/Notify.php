@@ -101,7 +101,7 @@ class Notify {
 				}
 				break;
 			case TransactionState::PENDING :
-				$this->_createNotifyComment('Trasaction Is in Pending.',true);
+				$this->_createNotifyComment('Transaction Is in Pending.',true);
 				$this->_order->getPayment()->setIsTransactionPending(true);
 				$this->_order->save();
 				break;
@@ -128,7 +128,7 @@ class Notify {
 	{
 	
 		$this->_order->getPayment()->setTransactionId(
-				$this->_transaction->getTransactionReference()
+				$this->_transaction->getTransactionReference(). "-denied"
 				)->setNotificationResult(
 						true
 						)->setIsTransactionClosed(
@@ -160,7 +160,7 @@ class Notify {
 		$payment->setPreparedMessage(
 				$this->_createNotifyComment('')
 				)->setTransactionId(
-						$this->_transaction->getTransactionReference()
+						$this->_transaction->getTransactionReference() . "-authorization"
 						)/*->setParentTransactionId(
 								null
 								)*/->setCurrencyCode(
@@ -193,7 +193,7 @@ class Notify {
 		$parentTransactionId = $payment->getLastTransId();
 		 
 		$payment->setTransactionId(
-				$this->_transaction->getTransactionReference()
+				$this->_transaction->getTransactionReference() . "-capture"
 				);
 		$payment->setCurrencyCode(
 				$this->_transaction->getCurrency()

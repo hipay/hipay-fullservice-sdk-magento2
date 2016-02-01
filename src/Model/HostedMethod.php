@@ -138,14 +138,22 @@ class HostedMethod extends AbstractMethod implements GatewayInterface {
 	}
 	
 	/**
-	 * Checkout redirect URL getter for onepage checkout (hardcode)
+	 * Capture payment abstract method
 	 *
-	 * @see \Magento\Checkout\Controller\Onepage::savePaymentAction()
-	 * @see Quote\Payment::getCheckoutRedirectUrl()
-	 * @return string
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function getCheckoutRedirectUrl()
+	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
 	{
-		return $this->_urlBuilder->getUrl('hipay/hosted/start');
+		parent::capture($payment, $amount);
+		
+		
+	
+		return $this;
 	}
+	
 }
