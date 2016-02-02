@@ -20,24 +20,34 @@ namespace Hipay\FullserviceMagento\Model\System\Config\Source;
  */
 class PaymentActions implements \Magento\Framework\Option\ArrayInterface
 {
-    /**
-     * @var Hipay\FullserviceMagento\Model\Config\Factory
-     */
-    protected $_configFactory;
 
-    /**
-     * @param \Hipay\FullserviceMagento\Model\Config\Factory $configFactory
-     */
-    public function __construct(\Hipay\FullserviceMagento\Model\Config\Factory $configFactory)
-    {
-        $this->_configFactory = $configFactory;
-    }
-
+	/**
+	 * Payment actions
+	 */
+	const PAYMENT_ACTION_SALE = 'Sale';
+	
+	const PAYMENT_ACTION_AUTH = 'Authorization';
+	
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create()->getPaymentActions();
+        return $this->getPaymentActions();
+    }
+    
+    /**
+     * Payment actions source getter
+     *
+     * @return array
+     */
+    public function getPaymentActions()
+    {
+    	$paymentActions = [
+    			self::PAYMENT_ACTION_AUTH => __('Authorization'),
+    			self::PAYMENT_ACTION_SALE => __('Sale'),
+    	];
+    
+    	return $paymentActions;
     }
 }

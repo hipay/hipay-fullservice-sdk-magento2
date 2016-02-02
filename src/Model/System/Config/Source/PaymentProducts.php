@@ -20,24 +20,28 @@ namespace Hipay\FullserviceMagento\Model\System\Config\Source;
  */
 class PaymentProducts implements \Magento\Framework\Option\ArrayInterface
 {
-    /**
-     * @var Hipay\FullserviceMagento\Model\Config\Factory
-     */
-    protected $_configFactory;
-
-    /**
-     * @param \Hipay\FullserviceMagento\Model\Config\Factory $configFactory
-     */
-    public function __construct(\Hipay\FullserviceMagento\Model\Config\Factory $configFactory)
-    {
-        $this->_configFactory = $configFactory;
-    }
 
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create()->getPaymentProducts();
+        return $this->getPaymentProducts();
+    }
+    
+    /**
+     * Payment products source getter
+     *
+     * @return array
+     */
+    public function getPaymentProducts(){
+    	/* @var $collection \Hipay\Fullservice\Gateway\Model\PaymentProduct[] */
+    	$collection = \Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
+    	$list = [];
+    	foreach($collection as $paymentProduct){
+    		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
+    	}
+    	 
+    	return $list;
     }
 }

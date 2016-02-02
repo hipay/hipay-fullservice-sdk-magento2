@@ -20,6 +20,10 @@ use Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection;
 use Hipay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 use Hipay\FullserviceMagento\Model\Config\AbstractConfig;
 use Hipay\Fullservice\HTTP\Configuration\ConfigurationInterface;
+use Hipay\FullserviceMagento\Model\System\Config\Source\Environments;
+use Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
+use Hipay\FullserviceMagento\Model\System\Config\Source\Templates;
+use Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts;
 
 
 /**
@@ -64,9 +68,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
      */
     public function getTemplates()
     {
-    	return [
-    			\Hipay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
-    	];
+    	return (new Templates())->getTemplates();
 
     }
     
@@ -98,14 +100,8 @@ class Config extends AbstractConfig implements ConfigurationInterface {
      * @return array
      */
     public function getPaymentProducts(){
-    	/* @var $collection \Hipay\Fullservice\Gateway\Model\PaymentProduct[] */
-    	$collection = \Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
-    	$list = [];
-    	foreach($collection as $paymentProduct){
-    		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
-    	}
     	
-    	return $list;
+    	return (new PaymentProducts())->getPaymentProducts();
     }
     
 	/**
@@ -115,12 +111,8 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	 */
 	public function getPaymentActions()
 	{
-		$paymentActions = [
-				self::PAYMENT_ACTION_AUTH => __('Authorization'),
-				self::PAYMENT_ACTION_SALE => __('Sale'),
-		];
-	
-		return $paymentActions;
+
+		return (new PaymentActions())->getPaymentActions();
 	}
 	
 	/**
@@ -130,12 +122,8 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	 */
 	public function getEnvironments()
 	{
-		$envs = [
-				ConfigSDK::API_ENV_STAGE => __('Stage'),
-				ConfigSDK::API_ENV_PRODUCTION => __('Production'),
-		];
 	
-		return $envs;
+		return (new Environments())->getEnvironments();
 	}
 	
 	/**
@@ -146,9 +134,9 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	public function getConfigPaymentAction()
 	{
 		switch ($this->getValue('paymentAction')) {
-			case self::PAYMENT_ACTION_AUTH:
+			case \Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
 				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
-			case self::PAYMENT_ACTION_SALE:
+			case \Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
 				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
 		}
 		return null;

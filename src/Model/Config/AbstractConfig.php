@@ -26,12 +26,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 abstract class AbstractConfig implements ConfigInterface {
 	
-	/**
-	 * Payment actions
-	 */
-	const PAYMENT_ACTION_SALE = 'Sale';
 	
-	const PAYMENT_ACTION_AUTH = 'Authorization';
 	
 
 	/**

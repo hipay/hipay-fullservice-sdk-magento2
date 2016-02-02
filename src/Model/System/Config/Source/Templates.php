@@ -20,24 +20,26 @@ namespace Hipay\FullserviceMagento\Model\System\Config\Source;
  */
 class Templates implements \Magento\Framework\Option\ArrayInterface
 {
-    /**
-     * @var Hipay\FullserviceMagento\Model\Config\Factory
-     */
-    protected $_configFactory;
-
-    /**
-     * @param \Hipay\FullserviceMagento\Model\Config\Factory $configFactory
-     */
-    public function __construct(\Hipay\FullserviceMagento\Model\Config\Factory $configFactory)
-    {
-        $this->_configFactory = $configFactory;
-    }
 
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create()->getTemplates();
+        return $this->getTemplates();
+    }
+    
+
+    /**
+     * Templates type source getter
+     *
+     * @return array
+     */
+    public function getTemplates()
+    {
+    	return [
+    			\Hipay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
+    	];
+    
     }
 }
