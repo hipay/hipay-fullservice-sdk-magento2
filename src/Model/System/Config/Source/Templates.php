@@ -38,6 +38,6 @@ class Templates implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create('\Hipay\FullserviceMagento\Model\Config')->getTemplates();
+        return $this->_configFactory->create()->getTemplates();
     }
 }

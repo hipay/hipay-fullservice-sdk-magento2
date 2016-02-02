@@ -38,6 +38,6 @@ class Environments implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create('\Hipay\FullserviceMagento\Model\Config')->getEnvironments();
+        return $this->_configFactory->create()->getEnvironments();
     }
 }

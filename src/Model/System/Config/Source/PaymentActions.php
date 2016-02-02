@@ -38,6 +38,6 @@ class PaymentActions implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create('\Hipay\FullserviceMagento\Model\Config')->getPaymentActions();
+        return $this->_configFactory->create()->getPaymentActions();
     }
 }

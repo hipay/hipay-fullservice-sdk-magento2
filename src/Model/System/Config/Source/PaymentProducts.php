@@ -38,6 +38,6 @@ class PaymentProducts implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        return $this->_configFactory->create('\Hipay\FullserviceMagento\Model\Config')->getPaymentProducts();
+        return $this->_configFactory->create()->getPaymentProducts();
     }
 }
