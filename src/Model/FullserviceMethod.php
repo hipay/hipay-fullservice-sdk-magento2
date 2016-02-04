@@ -59,7 +59,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 *
 	 * @var bool
 	 */
-	protected $_canReviewPayment = false;
+	protected $_canReviewPayment = true;
 	
 	/**
 	 * Fields that should be replaced in debug with '***'
