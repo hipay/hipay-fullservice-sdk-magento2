@@ -142,7 +142,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @api
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function refund($payment, $amount){
+	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
 		$this->_getManager($payment->getOrder())->requestOperationRefund($amount);
 		return $this;
@@ -173,7 +173,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @api
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function denyPayment($payment){
+	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
 		$this->_getManager($payment->getOrder())->requestOperationDenyChallenge();
 		return false;
