@@ -101,7 +101,6 @@ class Notify {
 				}
 				break;
 			case TransactionState::PENDING :
-				$this->_generateComment('Transaction Is in Payment review.',true);
 				$this->_order->getPayment()->setIsTransactionPending(true);
 				$this->_doPaymentAuthorization();
 				break;

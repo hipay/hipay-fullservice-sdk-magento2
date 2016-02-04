@@ -17,6 +17,7 @@ namespace Hipay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
 use \Hipay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
+use Magento\Payment\Model\InfoInterface;
 
 /**
  *
@@ -52,6 +53,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @var bool
 	 */
 	protected $_isInitializeNeeded = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canReviewPayment = false;
 	
 	/**
 	 * Fields that should be replaced in debug with '***'
@@ -126,6 +134,25 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
 		$manager->requestOperationCapture($amount);
 		return $this;
+	}
+	
+	/**
+	 * Attempt to accept a payment that us under review
+	 *
+	 * @param InfoInterface $payment
+	 * @return false
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function acceptPayment(InfoInterface $payment){
+		parent::acceptPayment($payment);
+	}
+	
+	public function denyPayment($payment){
+		parent::denyPayment($payment);
+		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
+		$manager->requestOperationDenyChallenge($amount);
 	}
 	
 }

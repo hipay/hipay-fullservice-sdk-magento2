@@ -35,6 +35,4 @@ class Form extends \Magento\Payment\Block\Form {
 				$this->_paymentConfig = $paymentConfig;
 	}
 	
-	
-	
 }

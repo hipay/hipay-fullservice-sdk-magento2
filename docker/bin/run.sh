@@ -7,7 +7,7 @@ if [ $MAGE_DB_HOST = "localhost" ] || [ $MAGE_DB_HOST = "127.0.0.1" ]; then
 	if [ $MAGE_DB_PASSWORD != "" ] && [ $MAGE_DB_NAME != "" ]  && [ $MAGE_DB_USER != "" ]; then
 		echo "\n* Create Database $MAGE_DB_NAME  ...";
 		mysql -h $MAGE_DB_HOST -u root --execute="CREATE DATABASE IF NOT EXISTS $MAGE_DB_NAME;";
-		
+
 		echo "\n* Create User $MAGE_DB_USER  and Grant ALL privileges on databse $MAGE_DB_NAME  ...";
 		# mysql -h $MAGE_DB_HOST -u root --execute="CREATE USER '$MAGE_DB_USER'@'localhost' IDENTIFIED BY '$MAGE_DB_PASSWORD';";
 		mysql -h $MAGE_DB_HOST -u root --execute="GRANT ALL ON $MAGE_DB_NAME.* to $MAGE_DB_USER@'localhost' IDENTIFIED BY '$MAGE_DB_PASSWORD'; ";
@@ -24,20 +24,22 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
 		MAGE_CLEANUP_DATABASE_CMD=""
 		MAGE_INSTALL_SAMPLE_DTA_CMD=""
 		if [ $MAGE_CLEANUP_DATABASE = 1 ];  then
-			MAGE_CLEANUP_DATABASE_CMD="--cleanup-databse "
+			MAGE_CLEANUP_DATABASE_CMD="--cleanup-database "
 		fi
-		
+
 		if [ $MAGE_INSTALL_SAMPLE_DATA = 1 ]; then
 			MAGE_INSTALL_SAMPLE_DTA_CMD="--use-sample-data "
 		fi
-		
+
 		echo "\n* Run install command: "
 		echo "\n 		su magento2 -c 'bin/magento setup:install'  \\ "
 		echo "					'--db-host=$MAGE_DB_HOST' \\ "
 		echo "					'--db-name=$MAGE_DB_NAME' \\"
 		echo "					'--db-user=$MAGE_DB_USER' \\"
 		echo "					'--db-passsword=$MAGE_DB_PASSWORD' \\"
+		echo "					'--db-prefix=$MAGE_DB_PREFIX' \\"
 		echo "					'--base-url=$MAGE_BASE_URL' \\"
+		echo "					'--base-url-secure=$MAGE_BASE_URL_SECURE' \\"
 		echo " 					'--admin-firstname=$MAGE_ADMIN_FIRSTNAME'  \\"
 		echo " 					'--admin-lastname=$MAGE_ADMIN_LASTNAME'  \\"
 		echo " 					'--admin-email=$MAGE_ADMIN_EMAIL'  \\"
@@ -45,10 +47,21 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
 		echo " 					'--admin-password=$MAGE_ADMIN_PWD'  \\"
 		echo " 					'--use-rewrites=$MAGE_USE_REWRITES'  \\"
 		echo " 					'--backend-frontname=$MAGE_BACKEND_FRONTNAME'  \\"
+		echo " 					'--language=$MAGE_LANGUAGE'  \\"
+		echo " 					'--currency=$MAGE_CURRENCY'  \\"
+		echo " 					'--timezone=$MAGE_TIMEZONE'  \\"
+		echo " 					'--use-secure=$MAGE_USE_SECURE'  \\"
+		echo " 					'--use-secure-admin=$MAGE_USE_SECURE_ADMIN'  \\"
+		echo " 					'--admin-use-security-key=$MAGE_ADMIN_USE_SECURITY_KEY'  \\"
+		echo " 					'--session-save=$MAGE_SESSION_SAVE'  \\"
+		echo " 					'--key=$MAGE_KEY'  \\"
+		echo " 					'--db-init-statements=\"$MAGE_DB_INIT_STATEMENTS\"'  \\"
+		echo " 					'--sales-order-increment-prefix=\"$MAGE_SALES_ORDER_INCREMENT_PREFIX\"'  \\"
 		echo " 					'$MAGE_CLEANUP_DATABASE_CMD' \\ "
 		echo " 					'$MAGE_INSTALL_SAMPLE_DTA_CMD'  "
-		su magento2 -c  'bin/magento setup:install  --db-host=$MAGE_DB_HOST --db-name=$MAGE_DB_NAME  --db-user=$MAGE_DB_USER  --db-password=$MAGE_DB_PASSWORD  --base-url=$MAGE_BASE_URL --backend-frontname=$MAGE_BACKEND_FRONTNAME --admin-firstname=$MAGE_ADMIN_FIRSTNAME --admin-lastname=$MAGE_ADMIN_LASTNAME --admin-email=$MAGE_ADMIN_EMAIL --admin-user=$MAGE_ADMIN_USER --admin-password=$MAGE_ADMIN_PWD  --use-rewrites=$MAGE_USE_REWRITES $MAGE_CLEANUP_DATABASE_CMD $MAGE_INSTALL_SAMPLE_DTA_CMD' 
-		
+
+		su magento2 -c  'bin/magento setup:install  --db-host=$MAGE_DB_HOST --db-name=$MAGE_DB_NAME  --db-user=$MAGE_DB_USER  --db-password=$MAGE_DB_PASSWORD --db-prefix=$MAGE_DB_PREFIX --language=$MAGE_LANGUAGE --currency=$MAGE_CURRENCY --timezone=$MAGE_TIMEZONE --use-secure=$MAGE_USE_SECURE --use-secure-admin=$MAGE_USE_SECURE_ADMIN --admin-use-security-key=$MAGE_ADMIN_USE_SECURITY_KEY --base-url=$MAGE_BASE_URL --base-url-secure=$MAGE_BASE_URL_SECURE --backend-frontname=$MAGE_BACKEND_FRONTNAME --admin-firstname=$MAGE_ADMIN_FIRSTNAME --admin-lastname=$MAGE_ADMIN_LASTNAME --admin-email=$MAGE_ADMIN_EMAIL --admin-user=$MAGE_ADMIN_USER --admin-password=$MAGE_ADMIN_PWD  --use-rewrites=$MAGE_USE_REWRITES --session-save=$MAGE_SESSION_SAVE --key=$MAGE_KEY --db-init-statements="$MAGE_DB_INIT_STATEMENTS" --sales-order-increment-prefix="$MAGE_SALES_ORDER_INCREMENT_PREFIX" $MAGE_CLEANUP_DATABASE_CMD $MAGE_INSTALL_SAMPLE_DTA_CMD'
+
 		echo "\n* Reindex all indexes ..."
 		su magento2 -c 'bin/magento indexer:reindex'
 	fi
@@ -58,35 +71,35 @@ fi
 
 if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 
-	
+
 	echo "\n* Set minimum-statility to 'dev' in composer.json "
 	su magento2 -c 'sed -i -e"s/\"minimum-stability\": \"alpha\"/\"minimum-stability\": \"dev\"/g" composer.json'
-	
+
 	echo "\n* Set Developer mode in .htaccess file "
 	su magento2 -c 'sed -i -e"s/#   SetEnv MAGE_MODE developer/   SetEnv MAGE_MODE developer/g" .htaccess'
-	
+
 	# Because now, we call composer with magento2 user
 	# We must copy auth.json to magento2 user home directory
 	echo "Copy /root/.composer/auth.json to /home/magento2/.composer/"
 
-	if [ ! -d /home/magento/.composer ]; then
+	if [ ! -d /home/magento/.composer/ ]; then
 		echo "Create .composer directory in home directory"
-		mkdir /home/magento2/.composer
+		mkdir /home/magento2/.composer/
 	fi
 	cp /root/.composer/auth.json /home/magento2/.composer/
 	chown -R magento2:magento2 /home/magento2/.composer/
 	chmod -R 770 /home/magento2/.composer/
-	
+
 	echo "\n * Add modules repositories to composer";
 	echo "composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git"
 	su magento2 -c "composer config repositories.1 vcs git@github.com:hipay/hipay-fullservice-sdk-magento2.git"
 	echo "composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git"
 	su magento2 -c "composer config repositories.2 vcs git@github.com:hipay/hipay-fullservice-sdk-php.git"
-	
+
 	echo "\n* Run composer require"
 	echo "composer require hipay/hipay-fullservice-sdk-magento2 dev-develop"
 	su magento2 -c "composer require hipay/hipay-fullservice-sdk-magento2 dev-develop"
-	
+
 	echo "\n* Enable Module Hipay Magento ..."
 	su magento2 -c 'bin/magento module:enable --clear-static-content Hipay_FullserviceMagento'
 
@@ -98,7 +111,7 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 		echo "\n* Apply patch to prevent bad path due to symlink when static content is deploying  ..."
 		su magento2 -c 'cp -f /home/magento2/hipay-fullservice-sdk-magento2/docker/patch/Read.php vendor/magento/framework/Filesystem/Directory/Read.php'
 	fi
-	
+
 	echo "\n* Deploy static content ..."
 	su magento2 -c 'bin/magento setup:static-content:deploy'
 	if [ -d /home/magento2/hipay-fullservice-sdk-magento2/src ]; then
@@ -109,6 +122,12 @@ if [ $HIPAY_INSTALL_MODULE = 1 ]; then
 
 fi
 
+echo "\n* Starting Xvfb to run firefox headless"
+/etc/init.d/xvfb restart
+
+echo "\n* Start selenium server"
+java -jar /$SELENIUM_JAR_FILE &
+
 # We need to remove the pid file or Apache won't start after being stopped
 if [ -f /var/run/apache2/apache2.pid  ]; then
     rm -f /var/run/apache2/apache2.pid
@@ -116,5 +135,3 @@ fi
 
 echo "\n* Start Apache in foreground";
 exec apache2 -DFOREGROUND
-
-
