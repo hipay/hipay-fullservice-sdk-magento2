@@ -114,11 +114,9 @@ abstract class FullserviceMethod extends AbstractMethod {
 	{
 		return $this->isActive($quote ? $quote->getStoreId() : null);
 	}
-	
-
 
 	/**
-	 * Capture payment abstract method
+	 * Capture payment method
 	 *
 	 * @param \Magento\Framework\DataObject|InfoInterface $payment
 	 * @param float $amount
@@ -130,9 +128,23 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
 	{
 		parent::capture($payment, $amount);
+		$this->_getManager($payment->getOrder())->requestOperationCapture($amount);
+		return $this;
+	}
 	
-		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
-		$manager->requestOperationCapture($amount);
+	/**
+	 * Refund specified amount for payment
+	 *
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function refund($payment, $amount){
+		parent::refund($payment, $amount);
+		$this->_getManager($payment->getOrder())->requestOperationRefund($amount);
 		return $this;
 	}
 	
@@ -147,12 +159,33 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
+		$this->_getManager($payment->getOrder())->requestOperationAcceptChallenge();
+		return false;
 	}
 	
+	
+	/**
+	 * Attempt to deny a payment that us under review
+	 *
+	 * @param InfoInterface $payment
+	 * @return false
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
 	public function denyPayment($payment){
 		parent::denyPayment($payment);
-		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
-		$manager->requestOperationDenyChallenge($amount);
+		$this->_getManager($payment->getOrder())->requestOperationDenyChallenge();
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param \Magento\Sales\Model\Order $order
+	 * @return \Hipay\FullserviceMagento\Model\GatewayManager
+	 */
+	protected function _getManager($order){
+		return $this->_gatewayManagerFactory->create($order);
 	}
 	
 }
