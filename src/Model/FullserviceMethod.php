@@ -97,10 +97,12 @@ abstract class FullserviceMethod extends AbstractMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+			ManagerFactory $gatewayManagerFactory,
 			array $data = []){
 	
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
-	
+				
+				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
 	}
 	
