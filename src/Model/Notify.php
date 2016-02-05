@@ -87,30 +87,35 @@ class Notify {
 			case TransactionState::COMPLETED :
 				switch ($this->_transaction->getStatus()){
 					case TransactionStatus::AUTHORIZED:
-		
-						$this->_doPaymentAuthorization();
-		
+						$this->_doTransactionAuthorization();
 						break;
 					case TransactionStatus::CAPTURE_REQUESTED:
-						$this->_generateComment('Capture Requested.',true);
-						$this->_order->save();
+						$this->_doTransactionCaptureRequested();
 						break;
 					case TransactionStatus::CAPTURED:
-						$this->_doPaymentCapture();
+						$this->_doTransactionCapture();
+						break;
+					case TransactionStatus::REFUND_REQUESTED:
+						$this->_doTransactionRefundRequested();
+						break;
+					case TransactionStatus::REFUNDED:
+							$this->_doTransactionRefund();
+						break;
+					case TransactionStatus::REFUND_REFUSED:
+						
 						break;
 				}
 				break;
 			case TransactionState::PENDING :
-				$this->_order->getPayment()->setIsTransactionPending(true);
-				$this->_doPaymentAuthorization();
+					$this->_doTransactionAuthorizedAndPending();
 				break;
 			case TransactionState::FORWARDING :
 				break;
 			case TransactionState::DECLINED :
-				$this->_doPaymentDenied();
+				$this->_doTransactionDenied();
 				break;
 			default:
-				$this->_doPaymentFailure();
+				$this->_doTransactionFailure();
 		
 				 
 		}
@@ -119,21 +124,101 @@ class Notify {
 	}
 	
 	/**
+	 * Process a refund
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionRefund()
+	{
+		
+		$isCompleteRefund = true;
+		$parentTransactionId = $this->_order->getPayment()->getLastTransId();
+		
+		$payment = $this->_order->getPayment()
+								->setPreparedMessage($this->_generateComment(''))
+								->setTransactionId($this->_transaction->getTransactionReference(). "-refund")
+								->setParentTransactionId($parentTransactionId)
+								->setIsTransactionClosed($isCompleteRefund)
+								->registerRefundNotification(-1 * $this->_transaction->getRefundedAmount());
+		$this->_order->save();
+
+		$creditMemo = $payment->getCreatedCreditmemo();
+		if ($creditMemo) {
+			$this->creditmemoSender->send($creditMemo);
+			$this->_order->addStatusHistoryComment(__('You notified customer about creditmemo #%1.', $creditMemo->getIncrementId()))
+							->setIsCustomerNotified(true)
+							->save();
+		}
+	}
+	
+	/**
+	 * Process authorized and pending payment notification
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionAuthorizedAndPending()
+	{
+	
+		$this->_order->getPayment()->setIsTransactionPending(true);
+		$this->_doTransactionAuthorization();
+	}
+
+	
+
+	/**
+	 * Process capture requested payment notification
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionCaptureRequested()
+	{
+	
+		$this->_generateComment('Capture Requested.',true);
+		$this->_order->setStatus(Config::STATUS_CAPTURE_REQUESTED);
+		$this->_order->save();
+	}
+	
+	/**
+	 * Process refund requested payment notification
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionRefundRequested()
+	{
+	
+		$this->_generateComment('Refund Requested.',true);
+		$this->_order->setStatus(Config::STATUS_REFUND_REQUESTED);
+		$this->_order->save();
+	}
+	
+	/**
+	 * Process refund refused payment notification
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionRefundRefused()
+	{
+	
+		$this->_generateComment('Refund Refused.',true);
+		$this->_order->save();
+	}
+	
+	
+	/**
 	 * Process denied payment notification
 	 *
 	 * @return void
 	 */
-	protected function _doPaymentDenied()
+	protected function _doTransactionDenied()
 	{
 	
-		$this->_order->getPayment()->setTransactionId(
-				$this->_transaction->getTransactionReference(). "-denied"
-				)->setNotificationResult(
-						true
-						)->setIsTransactionClosed(
-								true
-								)->deny(false);
-								$this->_order->save();
+		$this->_order->getPayment()
+						->setTransactionId($this->_transaction->getTransactionReference(). "-denied")
+						->setNotificationResult(true)
+						->setIsTransactionClosed(true)
+						->deny(false);
+		
+		$this->_order->save();
 	}
 	
 	/**
@@ -141,7 +226,7 @@ class Notify {
 	 *
 	 * @return void
 	 */
-	protected function _doPaymentFailure()
+	protected function _doTransactionFailure()
 	{
 		$this->_order->registerCancellation($this->_generateComment(''))->save();
 	}
@@ -151,29 +236,26 @@ class Notify {
 	 * Register authorized payment
 	 * @return void
 	 */
-	protected function _doPaymentAuthorization()
+	protected function _doTransactionAuthorization()
 	{
 		/** @var $payment \Magento\Sales\Model\Order\Payment */
 		$payment = $this->_order->getPayment();
 	
-		$payment->setPreparedMessage(
-				$this->_generateComment('')
-				)->setTransactionId(
-						$this->_transaction->getTransactionReference() . "-authorization"
-						)/*->setParentTransactionId(
-								null
-								)*/->setCurrencyCode(
-										$this->_transaction->getCurrency()
-										)->setIsTransactionClosed(
-												0
-												)->registerAuthorizationNotification(
-														(float)$this->_transaction->getAuthorizedAmount()
-														);
+		$payment->setPreparedMessage($this->_generateComment(''))
+				->setTransactionId($this->_transaction->getTransactionReference() . "-authorization")
+				/*->setParentTransactionId(null)*/
+				->setCurrencyCode($this->_transaction->getCurrency())
+				->setIsTransactionClosed(0)
+				->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
 												 
-												if (!$this->_order->getEmailSent()) {
-													$this->orderSender->send($this->_order);
-												}
-												$this->_order->save();
+		if (!$this->_order->getEmailSent()) {
+			$this->orderSender->send($this->_order);
+		}
+		
+		//Set custom status
+		$this->_order->setStatus(Config::STATUS_AUTHORIZED);
+		
+		$this->_order->save();
 	}
 	
 	/**
@@ -182,7 +264,7 @@ class Notify {
 	 * @param bool $skipFraudDetection
 	 * @return void
 	 */
-	protected function _doPaymentCapture($skipFraudDetection = false)
+	protected function _doTransactionCapture($skipFraudDetection = false)
 	{
 		 
 		/* @var $payment \Magento\Sales\Model\Order\Payment */
