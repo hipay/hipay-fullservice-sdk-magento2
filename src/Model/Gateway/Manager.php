@@ -102,25 +102,25 @@ class Manager {
 		return $hppModel;
 	}
 	
-	public function requestOperationCapture($amount){
+	public function requestOperationCapture($amount=null){
 		
 		return $this->_requestOperation(Operation::CAPTURE, $amount);
 	}
 	
-	public function requestOperationRefund($amount){
+	public function requestOperationRefund($amount=null){
 		
 		return $this->_requestOperation(Operation::REFUND, $amount);
 	}
 	
-	public function requestOperationAcceptChallenge($amount){
+	public function requestOperationAcceptChallenge(){
 	
-		return $this->_requestOperation(Operation::ACCEPT_CHALLENGE, $amount);;
+		return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);;
 	}
 	
 
-	public function requestOperationDenyChallenge($amount){
+	public function requestOperationDenyChallenge(){
 	
-		return $this->_requestOperation(Operation::DENY_CHALLENGE, $amount);
+		return $this->_requestOperation(Operation::DENY_CHALLENGE);
 	}
 	
 	private function cleanTransactionValue($transactionReference){
@@ -145,7 +145,7 @@ class Manager {
 		];	
 	}
 	
-	protected function _requestOperation($operationType,$amount,$operationId=null){
+	protected function _requestOperation($operationType,$amount=null,$operationId=null){
 		
 		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getLastTransId());
 		if(is_null($operationId)){			

@@ -87,8 +87,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 *
 	 * @var bool
 	 */
-	protected $_canReviewPayment = false;
-	
+	protected $_canReviewPayment = true;
+
 	
 	/**
 	 * Fields that should be replaced in debug with '***'
@@ -120,18 +120,20 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
-			\Magento\Framework\Registry $registry,
-			\Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-			\Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-			\Magento\Payment\Helper\Data $paymentData,
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-			\Magento\Payment\Model\Method\Logger $logger,
-			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+	        \Magento\Framework\Registry $registry,
+	        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+	        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+	        \Magento\Payment\Helper\Data $paymentData,
+	        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+	        \Magento\Payment\Model\Method\Logger $logger,
+			ManagerFactory $gatewayManagerFactory,
+	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
 	
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
-	
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger,$resource,$resourceCollection,$data);
+				
+				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
 	}
 	
@@ -145,11 +147,9 @@ abstract class FullserviceMethod extends AbstractMethod {
 	{
 		return $this->isActive($quote ? $quote->getStoreId() : null);
 	}
-	
-
 
 	/**
-	 * Capture payment abstract method
+	 * Capture payment method
 	 *
 	 * @param \Magento\Framework\DataObject|InfoInterface $payment
 	 * @param float $amount
@@ -161,9 +161,23 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
 	{
 		parent::capture($payment, $amount);
+		$this->_getManager($payment->getOrder())->requestOperationCapture($amount);
+		return $this;
+	}
 	
-		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
-		$manager->requestOperationCapture($amount);
+	/**
+	 * Refund specified amount for payment
+	 *
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
+		parent::refund($payment, $amount);
+		$this->_getManager($payment->getOrder())->requestOperationRefund($amount);
 		return $this;
 	}
 	
@@ -178,12 +192,33 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
+		$this->_getManager($payment->getOrder())->requestOperationAcceptChallenge();
+		return false;
 	}
 	
-	public function denyPayment($payment){
+	
+	/**
+	 * Attempt to deny a payment that us under review
+	 *
+	 * @param InfoInterface $payment
+	 * @return false
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
-		$manager = $this->_gatewayManagerFactory->create($payment->getOrder());
-		$manager->requestOperationDenyChallenge($amount);
+		$this->_getManager($payment->getOrder())->requestOperationDenyChallenge();
+		return false;
+	}
+	
+	/**
+	 * 
+	 * @param \Magento\Sales\Model\Order $order
+	 * @return \Hipay\FullserviceMagento\Model\GatewayManager
+	 */
+	protected function _getManager($order){
+		return $this->_gatewayManagerFactory->create($order);
 	}
 	
 }
