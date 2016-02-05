@@ -151,7 +151,7 @@ class Manager {
 		if(is_null($operationId)){			
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}
-		$opModel = $this->_gateway->requestMaintenanceOperation($operationType, $amount, $transactionReference,$operationId);
+		$opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount,$operationId);
 		return$opModel;
 	}
 

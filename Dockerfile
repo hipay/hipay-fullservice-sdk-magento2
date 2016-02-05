@@ -26,7 +26,6 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN echo mysql-server-5.6 mysql-server/root_password password $DB_ROOT_PASSWD | debconf-set-selections
 RUN echo mysql-server-5.6 mysql-server/root_password_again password $DB_ROOT_PASSWD | debconf-set-selections
 
-ENV SELENIUM_JAR_FILE selenium-server-standalone-2.50.1.jar
 
 #======================
 # Install packages needed by php's extensions
@@ -55,10 +54,14 @@ RUN apt-get update \
     && docker-php-ext-configure zip --enable-zip \
     && docker-php-ext-install mcrypt gd intl mbstring soap xsl zip pdo_mysql  \
 		&& rm -rf /var/lib/apt/lists/* \
-		&& curl -sS https://getcomposer.org/installer | php -- --filename=composer -- --install-dir=/usr/local/bin \
-		&& curl -sSO http://selenium-release.storage.googleapis.com/2.50/$SELENIUM_JAR_FILE
+		&& curl -sS https://getcomposer.org/installer | php -- --filename=composer -- --install-dir=/usr/local/bin
 
-
+#===================
+# Download selenium standalone server
+#==================		
+ENV SELENIUM_JAR_FILE selenium-server-standalone-2.50.1.jar
+ADD http://selenium-release.storage.googleapis.com/2.50/$SELENIUM_JAR_FILE /var/www/html/magento2/
+		
 #===============
 # PHP configuration
 #===============

@@ -126,7 +126,7 @@ echo "\n* Starting Xvfb to run firefox headless"
 /etc/init.d/xvfb restart
 
 echo "\n* Start selenium server"
-java -jar /$SELENIUM_JAR_FILE &
+java -jar $SELENIUM_JAR_FILE &
 
 # We need to remove the pid file or Apache won't start after being stopped
 if [ -f /var/run/apache2/apache2.pid  ]; then
