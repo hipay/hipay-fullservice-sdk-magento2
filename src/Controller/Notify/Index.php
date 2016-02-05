@@ -55,9 +55,10 @@ class Index extends AppAction {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
      public function execute(){
-     	//ini_set('display_errors',1);
-     	//error_reporting(E_ALL);
-     	$params = $this->getRequest()->getPostValue();
+     	ini_set('display_errors',1);
+     	error_reporting(E_ALL);
+     	
+     	$params = $this->getRequest()->getParams();
      	
      	try {
      		$this->_logger->info("Debug notification");
@@ -70,7 +71,7 @@ class Index extends AppAction {
      		
      	} catch (\Exception $e) {
      		$this->_logger->error($e->getMessage());
-     		$this->getResponse()->setStatusHeader(500, '1.1', $e->getMessage())->sendResponse();
+     		$this->getResponse()->setStatusHeader(400, '1.1', $e->getMessage())->sendResponse();
      	}
 
      	$this->getResponse()->setBody('OK')->sendResponse();

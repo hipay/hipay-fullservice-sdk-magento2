@@ -89,18 +89,18 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
-			\Magento\Framework\Registry $registry,
-			\Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-			\Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-			\Magento\Payment\Helper\Data $paymentData,
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-			\Magento\Payment\Model\Method\Logger $logger,
-			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+	        \Magento\Framework\Registry $registry,
+	        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+	        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+	        \Magento\Payment\Helper\Data $paymentData,
+	        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+	        \Magento\Payment\Model\Method\Logger $logger,
 			ManagerFactory $gatewayManagerFactory,
+	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
 	
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger,$resource,$resourceCollection,$data);
 				
 				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
