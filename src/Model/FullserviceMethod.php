@@ -52,6 +52,34 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 *
 	 * @var bool
 	 */
+	protected $_canCapturePartial = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canCaptureOnce = false;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canRefund = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canRefundInvoicePartial = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
 	protected $_isInitializeNeeded = true;
 	
 	/**
@@ -60,6 +88,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @var bool
 	 */
 	protected $_canReviewPayment = false;
+	
 	
 	/**
 	 * Fields that should be replaced in debug with '***'
@@ -73,6 +102,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @var ManagerFactory $_gatewayManagerFactory
 	 */
 	protected $_gatewayManagerFactory;
+	
+	
 	
 	/**
 	 *
