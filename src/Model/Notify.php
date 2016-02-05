@@ -93,9 +93,11 @@ class Notify {
 						$this->_doTransactionCaptureRequested();
 						break;
 					case TransactionStatus::CAPTURED:
+					case TransactionStatus::PARTIALLY_CAPTURED:
 						$this->_doTransactionCapture();
 						break;
 					case TransactionStatus::REFUND_REQUESTED:
+					case TransactionStatus::PARTIALLY_REFUNDED:
 						$this->_doTransactionRefundRequested();
 						break;
 					case TransactionStatus::REFUNDED:
