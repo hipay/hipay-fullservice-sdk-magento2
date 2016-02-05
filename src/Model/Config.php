@@ -32,7 +32,16 @@ use Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts;
  *        
  */
 class Config extends AbstractConfig implements ConfigurationInterface {
-
+	
+	const STATUS_AUTHORIZED = 'hipay_authorized';
+	const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
+	const STATUS_AUTHORIZED_PENDING = "hipay_authorized_pending";
+	const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
+	const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
+	const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
+	const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
+	const STATUS_EXPIRED = 'hipay_expired';
+	const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
 	
 	/**
 	 * 
