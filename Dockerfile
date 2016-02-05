@@ -82,6 +82,8 @@ RUN a2enmod rewrite
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
 EXPOSE 3306
 
+WORKDIR /var/www/html/magento2
+
 #=========================
 # Selenimum and Xvfb config
 #=========================
@@ -92,7 +94,6 @@ RUN sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:
 	&& update-rc.d xvfb defaults
 EXPOSE 4444
 
-WORKDIR /var/www/html/magento2
 
 #===========================
 # Copy composer config
