@@ -43,3 +43,8 @@ docker/conf/auth.json
 # Custom dev tools#
 ###################
 tools/
+
+# Env vars #
+############
+auth.env
+*.env
