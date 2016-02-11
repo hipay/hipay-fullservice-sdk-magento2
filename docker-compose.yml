@@ -1,14 +1,14 @@
 magento2:
-  build: .
+  image: sirateck/devops-magento2
   ports:
     - "8080:80"
   links:
     - db
     - selenium
   env_file:
-  - ./auth.env
-  - ./module.env
-  - ./mage.env
+    - env/auth.env
+    - env/mage.env
+    - env/module.env
 db:
   image: mysql:5.6
   environment:
