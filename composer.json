@@ -27,6 +27,9 @@
      "scripts": {
         "post-package-install": [
             "cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/"
+        ],
+        "post-package-update":[
+             "cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/"
         ]
     },
      "autoload": {
