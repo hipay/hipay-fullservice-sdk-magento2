@@ -9,6 +9,9 @@ magento2:
     - env/auth.env
     - env/mage.env
     - env/module.env
+  volumes:
+    - ./src:/home/magento2/Hipay_Fullservice
+    - ./tests:/home/magento2/tests
 db:
   image: mysql:5.6
   environment:

@@ -21,9 +21,18 @@
 		        [
 		         "src/*",
 		         "Hipay/FullserviceMagento"
+		        ],
+		        [
+		         "tests/functional/tests/app/*",
+		         "dev/tests/functional/test/app/"
 		        ]
               ]
      },
+     "autoload": {
+        "psr-4": {
+            "HiPay\\": "tests/functional/tests/app/HiPay/"
+        }
+    },
      "archive":{
          "exclude": ["/*","!/src"]
      },
