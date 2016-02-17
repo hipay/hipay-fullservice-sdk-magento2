@@ -21,10 +21,6 @@
 		        [
 		         "src/*",
 		         "Hipay/FullserviceMagento"
-		        ],
-		        [
-		         "tests/functional/tests/app/*",
-		         "dev/tests/functional/test/app/"
 		        ]
               ]
      },
