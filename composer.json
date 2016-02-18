@@ -24,6 +24,16 @@
 		        ]
               ]
      },
+     "scripts": {
+        "post-install-cmd": [
+            "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
+        ]
+    },
+     "autoload": {
+        "psr-4": {
+            "HiPay\\": "tests/functional/tests/app/HiPay/"
+        }
+    },
      "archive":{
          "exclude": ["/*","!/src"]
      },
