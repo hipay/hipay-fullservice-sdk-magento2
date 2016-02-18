@@ -3,5 +3,5 @@ machine:
     version: 5.5.0
     
 dependencies:
-  override:
-    - composer install -g github-oauth.github.com $GITHUB_API_TOKEN --prefer-source --no-interaction 
+  pre:
+    - composer config -g github-oauth.github.com $GITHUB_API_TOKEN
