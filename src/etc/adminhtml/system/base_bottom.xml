@@ -24,6 +24,6 @@
                 </field>
                 <field id="env" translate="label" type="select" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Environment</label>
-                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
                 </field>
 </include>

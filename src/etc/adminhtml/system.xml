@@ -51,8 +51,8 @@
 			</group>
 		</section>
 		<section id="payment">
-			<include path="Hipay_FullserviceMagento::system/hosted.xml"/>
-			<include path="Hipay_FullserviceMagento::system/cc.xml"/>		
+			<include path="HiPay_FullserviceMagento::system/hosted.xml"/>
+			<include path="HiPay_FullserviceMagento::system/cc.xml"/>		
 		</section>
 	</system>
 </config>

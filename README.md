@@ -1,1 +1,1 @@
-# Hipay Fullservice Module Magento2
+# HiPay Fullservice Module Magento2

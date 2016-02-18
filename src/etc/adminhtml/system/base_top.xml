@@ -9,7 +9,7 @@
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
 	                <label>Payment Action</label>	           
-	                <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
+	                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
             	</field>
             	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>New Order Status</label>
@@ -17,6 +17,6 @@
                 </field>
                <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment products</label>
-                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
                 </field> 
 </include>
