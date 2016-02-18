@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_hosted" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Magento Hosted</label>
+				<label>HiPay Fullservice Hosted Page</label>
 				<comment></comment>
 				<include path="Hipay_FullserviceMagento::system/base_top.xml"/>
                 <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
