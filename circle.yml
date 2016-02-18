@@ -1,7 +1,7 @@
 machine:
   php:
-    version: 5.5
+    version: 5.5.0
     
 dependencies:
   override:
-    - composer install --prefer-source --no-interaction -g github-oauth.github.com $GITHUB_API_TOKEN
+    - composer install -g github-oauth.github.com $GITHUB_API_TOKEN --prefer-source --no-interaction 
