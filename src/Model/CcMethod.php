@@ -15,7 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model;
 
-
+use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 
 /**
  * Class API PaymentMethod
@@ -66,6 +66,7 @@ class CcMethod extends FullserviceMethod {
 	 * @param \Magento\Payment\Helper\Data $paymentData
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 * @param Logger $logger
+	 * @param GatewayManagerFactory $gatewayManagerFactory,
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -81,25 +82,14 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Payment\Helper\Data $paymentData,
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 			\Magento\Payment\Model\Method\Logger $logger,
-			ManagerFactory $gatewayManagerFactory,
+			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct(
-						$context,
-						$registry,
-						$extensionFactory,
-						$customAttributeFactory,
-						$paymentData,
-						$scopeConfig,
-						$logger,
-						$resource,
-						$resourceCollection,
-						$data
-						);
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory);
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
 	}

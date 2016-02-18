@@ -48,6 +48,7 @@
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
                 <payment_products>american-express,visa,mastercard</payment_products>
+                <authentication_indicator>0</authentication_indicator>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
                 <env>stage</env>
