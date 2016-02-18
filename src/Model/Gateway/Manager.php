@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,19 +9,19 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Gateway;
+namespace HiPay\FullserviceMagento\Model\Gateway;
 
 
-use Hipay\Fullservice\HTTP\Configuration\ConfigurationInterface;
-use Hipay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
-use Hipay\FullserviceMagento\Model\Config\Factory as ConfigFactory; 
-use Hipay\Fullservice\HTTP\GuzzleClient;
-use Hipay\Fullservice\Gateway\Client\GatewayClient;
-use Hipay\Fullservice\Enum\Transaction\Operation;
+use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
+use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory; 
+use HiPay\Fullservice\HTTP\GuzzleClient;
+use HiPay\Fullservice\Gateway\Client\GatewayClient;
+use HiPay\Fullservice\Enum\Transaction\Operation;
 
 class Manager {
 	
@@ -34,13 +34,13 @@ class Manager {
 	
 	/**
 	 * 
-	 * @var \Hipay\Fullservice\Gateway\Client\GatewayClient $_gateway
+	 * @var \HiPay\Fullservice\Gateway\Client\GatewayClient $_gateway
 	 */
 	protected $_gateway;
 	
 	/**
 	 * 
-	 * @var Hipay\FullserviceMagento\Model\Config $_config
+	 * @var HiPay\FullserviceMagento\Model\Config $_config
 	 */
 	protected $_config;
 	
@@ -78,7 +78,7 @@ class Manager {
 	}
 	
 	/**
-	 * @return \Hipay\Fullservice\HTTP\ClientProvider
+	 * @return \HiPay\Fullservice\HTTP\ClientProvider
 	 */
 	public function getClientProvider(){
 		return $this->_gateway->getClientProvider();
@@ -95,7 +95,7 @@ class Manager {
 	
 	public function requestHostedPaymentPage(){
 		
-		$hpp = $this->_getRequestObject('\Hipay\FullserviceMagento\Model\Request\HostedPaymentPage');
+		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage');
 		 
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
 		

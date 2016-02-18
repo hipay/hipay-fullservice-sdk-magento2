@@ -1,9 +1,9 @@
 <?php
 
-namespace Hipay\FullserviceMagento\Model\Request;
+namespace HiPay\FullserviceMagento\Model\Request;
 
 
-use Hipay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
+use HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
 /**
  * @author kassim
  *
@@ -14,8 +14,8 @@ class HostedPaymentPage extends Order{
 	/**
 	 * 
 	 * {@inheritDoc}
-	 * @see \Hipay\FullserviceMagento\Model\Request\Order::getRequestObject()
-	 * @return \Hipay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
+	 * @see \HiPay\FullserviceMagento\Model\Request\Order::getRequestObject()
+	 * @return \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
 	 */
 	protected function mapRequest(){
 		

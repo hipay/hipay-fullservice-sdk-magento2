@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice Magento2
+ * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -9,15 +9,15 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Controller\Hosted;
+namespace HiPay\FullserviceMagento\Controller\Hosted;
 
 
 
-class PlaceOrder extends \Hipay\FullserviceMagento\Controller\Fullservice
+class PlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {	
 
 

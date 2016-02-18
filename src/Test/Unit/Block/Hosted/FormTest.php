@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\FullserviceMagento\Test\Unit\Block\Hosted;
+namespace HiPay\FullserviceMagento\Test\Unit\Block\Hosted;
 
 class FormTest extends \PHPUnit_Framework_TestCase {
 	
@@ -15,7 +15,7 @@ class FormTest extends \PHPUnit_Framework_TestCase {
 	protected $contextMock;
 	
 	/**
-	 * @var \Hipay\FullserviceMagento\Block\Hosted\Form
+	 * @var \HiPay\FullserviceMagento\Block\Hosted\Form
 	 */
 	protected $form;
 	
@@ -32,7 +32,7 @@ class FormTest extends \PHPUnit_Framework_TestCase {
 		
 		$this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 		$this->form = $this->objectManagerHelper->getObject(
-				'Hipay\FullserviceMagento\Block\Hosted\Form',
+				'HiPay\FullserviceMagento\Block\Hosted\Form',
 				[
 						'context' => $this->contextMock,
 						'paymentConfig' => $this->paymentConfigMock
@@ -41,7 +41,7 @@ class FormTest extends \PHPUnit_Framework_TestCase {
 	}
 	
 	/**
-	 * @cover \Hipay\FullserviceMagento\Block\Hosted\Form::_getTemplateFile
+	 * @cover \HiPay\FullserviceMagento\Block\Hosted\Form::_getTemplateFile
 	 */
 	public function testTemplateFileCanBeRetrieve(){
 	

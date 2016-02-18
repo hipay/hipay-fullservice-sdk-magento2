@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice Magento2
+ * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -9,22 +9,22 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request\Info;
+namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 
-use Hipay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
-use Hipay\FullserviceMagento\Model\Request\Order;
+use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
+use HiPay\FullserviceMagento\Model\Request\Order;
 
 /**
  * Billing info Request Object
  * 
- * @package Hipay\FullserviceMagento
+ * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - Hipay
+ * @copyright Copyright (c) 2016 - HiPay
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
@@ -34,8 +34,8 @@ class BillingInfo extends Order {
 	 *
 	 * {@inheritDoc}
 	 *
-	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
-	 * @return \Hipay\FullserviceMagento\Model\Request\Info\BillingInfo
+	 * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+	 * @return \HiPay\FullserviceMagento\Model\Request\Info\BillingInfo
 	 */
 	protected function mapRequest() {
 		$customerBillingInfo = new CustomerBillingInfoRequest();
@@ -54,7 +54,7 @@ class BillingInfo extends Order {
 			}
 		}
 		
-		$customerBillingInfo->gender =$this->_order->getCustomerGender(); //@TODO make mapping Value with \Hipay\Fullservice\Enum\Customer\Gender
+		$customerBillingInfo->gender =$this->_order->getCustomerGender(); //@TODO make mapping Value with \HiPay\Fullservice\Enum\Customer\Gender
 		
 		$billingAddress = $this->_order->getBillingAddress();
 		$customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);

@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice Magento2
+ * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -9,21 +9,21 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request\Info;
+namespace HiPay\FullserviceMagento\Model\Request\Info;
 
-use Hipay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
-use Hipay\FullserviceMagento\Model\Request\Order;
+use HiPay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
+use HiPay\FullserviceMagento\Model\Request\Order;
 
 /**
  * Shipping info Request Object
  * 
- * @package Hipay\FullserviceMagento
+ * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - Hipay
+ * @copyright Copyright (c) 2016 - HiPay
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
@@ -33,8 +33,8 @@ class ShippingInfo extends Order {
 	 *
 	 * {@inheritDoc}
 	 *
-	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
-	 * @return \Hipay\FullserviceMagento\Model\Request\Info\ShippingInfo
+	 * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+	 * @return \HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo
 	 */
 	protected function mapRequest() {
 		$customerShippingInfo = new CustomerShippingInfoRequest();

@@ -42,6 +42,7 @@ vendor/
 # Custom dev tools#
 ###################
 tools/
+docker-compose.yml
 
 # Env vars #
 ############

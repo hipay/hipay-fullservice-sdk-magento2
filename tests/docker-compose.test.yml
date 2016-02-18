@@ -6,12 +6,8 @@ magento2:
     - db
     - selenium
   env_file:
-    - env/auth.env
-    - env/mage.env
-    - env/module.env
-  volumes:
-    - ../src:/home/magento2/HiPay_Fullservice
-    - ../tests:/home/magento2/tests
+    - env/mage.env.sample
+    - env/module.env.sample
 db:
   image: mysql:5.6
   environment:

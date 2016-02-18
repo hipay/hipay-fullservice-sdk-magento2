@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,14 +9,14 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use \Hipay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
+use \HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use Magento\Payment\Model\InfoInterface;
 
 /**
@@ -215,7 +215,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	/**
 	 * 
 	 * @param \Magento\Sales\Model\Order $order
-	 * @return \Hipay\FullserviceMagento\Model\GatewayManager
+	 * @return \HiPay\FullserviceMagento\Model\GatewayManager
 	 */
 	protected function _getManager($order){
 		return $this->_gatewayManagerFactory->create($order);

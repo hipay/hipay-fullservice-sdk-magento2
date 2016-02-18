@@ -1,12 +1,12 @@
 <?php
 
-namespace Hipay\FullserviceMagento\Model\Request;
+namespace HiPay\FullserviceMagento\Model\Request;
 
 interface RequestInterface {
 	
 	/**
 	 * Return sdk request object
-	 * @see \Hipay\Fullservice\Request\AbstractRequest
+	 * @see \HiPay\Fullservice\Request\AbstractRequest
 	 */
 	public function getRequestObject();
 }

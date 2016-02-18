@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/pages.xsd">
-    <page name="FullserviceNotify" mca="hipay/notify/index" module="Hipay_FullserviceMagento">
+    <page name="FullserviceNotify" mca="hipay/notify/index" module="HiPay_FullserviceMagento">
 
     </page>
 </config>

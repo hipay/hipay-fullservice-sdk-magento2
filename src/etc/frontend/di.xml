@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /*
- * Hipay fullservice Magento2
+ * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -19,23 +19,23 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="hipay_hosted_config_provider" xsi:type="object">Hipay\FullserviceMagento\Model\HostedConfigProvider</item>
+                <item name="hipay_hosted_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\HostedConfigProvider</item>
             </argument>
         </arguments>
     </type>
-     <virtualType name="Hipay\FullserviceMagento\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+     <virtualType name="HiPay\FullserviceMagento\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">hipay</argument>
         </arguments>
     </virtualType>
-     <virtualType name="Hipay\FullserviceMagento\Model\Session" type="Magento\Framework\Session\Generic">
+     <virtualType name="HiPay\FullserviceMagento\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
-            <argument name="storage" xsi:type="object">Hipay\FullserviceMagento\Model\Session\Storage</argument>
+            <argument name="storage" xsi:type="object">HiPay\FullserviceMagento\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
-    <type name="Hipay\FullserviceMagento\Controller\Fullservice">
+    <type name="HiPay\FullserviceMagento\Controller\Fullservice">
         <arguments>
-            <argument name="hipaySession" xsi:type="object">Hipay\FullserviceMagento\Model\Session</argument>
+            <argument name="hipaySession" xsi:type="object">HiPay\FullserviceMagento\Model\Session</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
