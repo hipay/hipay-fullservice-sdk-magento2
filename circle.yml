@@ -4,4 +4,4 @@ machine:
     
 dependencies:
   override:
-    composer install --prefer-source --no-interaction -g github-oauth.github.com $GITHUB_API_TOKEN
+    - composer install --prefer-source --no-interaction -g github-oauth.github.com $GITHUB_API_TOKEN
