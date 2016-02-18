@@ -42,6 +42,7 @@
                 <env>STAGE</env>
 			</hipay_hosted>
 			<hipay_hosted>
+				<model>HiPay\FullserviceMagento\Model\CcMethod</model>
                 <active>0</active>
                 <title>Credit Card</title>
                 <payment_action>Sale</payment_action>

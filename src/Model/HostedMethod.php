@@ -29,7 +29,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
  */
 class HostedMethod extends FullserviceMethod implements GatewayInterface {
 	
-	const HIPAY_HOSTED_METHOD_CODE               = 'hipay_hosted';
+	const HIPAY_METHOD_CODE               = 'hipay_hosted';
 	
 	/**
 	 * @var string
@@ -44,7 +44,7 @@ class HostedMethod extends FullserviceMethod implements GatewayInterface {
 	/**
 	 * @var string
 	 */
-	protected $_code = self::HIPAY_HOSTED_METHOD_CODE;
+	protected $_code = self::HIPAY_METHOD_CODE;
 	
 	
 	
