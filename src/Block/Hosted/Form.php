@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\FullserviceMagento\Block\Hosted;
+namespace HiPay\FullserviceMagento\Block\Hosted;
 
 /**
  *
@@ -11,7 +11,7 @@ class Form extends \Magento\Payment\Block\Form {
 	/**
 	 * @var string
 	 */
-	protected $_template = 'Hipay_FullserviceMagento::form/hosted.phtml';
+	protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
 
 	
 	/**

@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,11 +9,11 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\System\Config\Source;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 /**
  * Source model for available payment products
@@ -35,8 +35,8 @@ class PaymentProducts implements \Magento\Framework\Option\ArrayInterface
      * @return array
      */
     public function getPaymentProducts(){
-    	/* @var $collection \Hipay\Fullservice\Gateway\Model\PaymentProduct[] */
-    	$collection = \Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
+    	/* @var $collection \HiPay\Fullservice\Gateway\Model\PaymentProduct[] */
+    	$collection = \HiPay\Fullservice\Gateway\Model\Collection\PaymentProductCollection::getItems();
     	$list = [];
     	foreach($collection as $paymentProduct){
     		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];

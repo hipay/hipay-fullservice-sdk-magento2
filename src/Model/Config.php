@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,21 +9,21 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model;
 
 
-use Hipay\Fullservice\Gateway\Model\Collection\PaymentProductCollection;
-use Hipay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
-use Hipay\FullserviceMagento\Model\Config\AbstractConfig;
-use Hipay\Fullservice\HTTP\Configuration\ConfigurationInterface;
-use Hipay\FullserviceMagento\Model\System\Config\Source\Environments;
-use Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
-use Hipay\FullserviceMagento\Model\System\Config\Source\Templates;
-use Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts;
+use HiPay\Fullservice\Gateway\Model\Collection\PaymentProductCollection;
+use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
+use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
+use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
+use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
+use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
+use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
+use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts;
 
 
 /**
@@ -136,16 +136,16 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	}
 	
 	/**
-	 * Mapper from Hipay-specific payment actions to Magento payment actions
+	 * Mapper from HiPay-specific payment actions to Magento payment actions
 	 *
 	 * @return string|null
 	 */
 	public function getConfigPaymentAction()
 	{
 		switch ($this->getValue('paymentAction')) {
-			case \Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
 				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
-			case \Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
 				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
 		}
 		return null;

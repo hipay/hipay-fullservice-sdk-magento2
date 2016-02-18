@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,18 +9,18 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Hipay\Fullservice\Gateway\Model\Transaction;
-use Hipay\Fullservice\Gateway\Mapper\TransactionMapper;
-use Hipay\Fullservice\Enum\Transaction\TransactionState;
-use Hipay\Fullservice\Enum\Transaction\TransactionStatus;
+use HiPay\Fullservice\Gateway\Model\Transaction;
+use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 
 class Notify {
 	

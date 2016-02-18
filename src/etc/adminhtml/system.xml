@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -20,7 +20,7 @@
 		<section id="hipay" translate="label" type="text" sortOrder="345" showInDefault="1" showInWebsite="1" showInStore="1">
 			<label>HiPay Fullservice</label>
 			<tab>sales</tab>
-			<resource>Hipay_FullserviceMagento::hipay</resource>
+			<resource>HiPay_FullserviceMagento::hipay</resource>
 			<group id="hipay_credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>HiPay Fullservice credentials configuration</label>
 				<comment></comment>
@@ -63,7 +63,7 @@
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
 	                <label>Payment Action</label>	           
-	                <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
+	                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
             	</field>
             	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>New Order Status</label>
@@ -71,7 +71,7 @@
                 </field>
                <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment products</label>
-                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
                 </field> 
                 <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Display card selector</label>
@@ -87,7 +87,7 @@
                 </field> 
                  <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Template type</label>
-                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
                 </field>
                 
                 <field id="allowspecific" translate="label" type="allowspecific" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -114,7 +114,7 @@
                 </field>
                 <field id="env" translate="label" type="select" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Environment</label>
-                    <source_model>Hipay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
                 </field>
 			</group>
 		</section>

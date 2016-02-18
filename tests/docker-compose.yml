@@ -10,7 +10,7 @@ magento2:
     - env/mage.env
     - env/module.env
   volumes:
-    - ./src:/home/magento2/Hipay_Fullservice
+    - ./src:/home/magento2/HiPay_Fullservice
     - ./tests:/home/magento2/tests
 db:
   image: mysql:5.6

@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,14 +9,14 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Controller;
+namespace HiPay\FullserviceMagento\Controller;
 
 use Magento\Framework\App\Action\Action as AppAction;
-use Hipay\FullserviceMagento\Model\Request\Type\Factory;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 
 /**
  *
@@ -53,7 +53,7 @@ abstract class Fullservice extends AppAction {
     
     /**
      * 
-     * @var \Hipay\FullserviceMagento\Model\Gateway\Factory
+     * @var \HiPay\FullserviceMagento\Model\Gateway\Factory
      */
     protected $_gatewayManagerFactory;
 
@@ -65,7 +65,7 @@ abstract class Fullservice extends AppAction {
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * $param \Magento\Framework\Session\Generic $hipaySession,
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Hipay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory
+     * @param \HiPay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory
      * @param Factory $requestfactory,
      * @param \Psr\Log\LoggerInterface $logger
 	 * {@inheritDoc}
@@ -78,7 +78,7 @@ abstract class Fullservice extends AppAction {
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Framework\Session\Generic $hipaySession,
 			\Psr\Log\LoggerInterface $logger,
-			\Hipay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+			\HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
 	) {
 		$this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession; 
@@ -116,7 +116,7 @@ abstract class Fullservice extends AppAction {
     }
     
     /**
-     * Hipay session instance getter
+     * HiPay session instance getter
      *
      * @return \Magento\Framework\Session\Generic
      */

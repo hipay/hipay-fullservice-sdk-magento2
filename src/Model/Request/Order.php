@@ -1,10 +1,10 @@
 <?php
 
-namespace Hipay\FullserviceMagento\Model\Request;
+namespace HiPay\FullserviceMagento\Model\Request;
 
-use Hipay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
-use Hipay\Fullservice\Gateway\Request\Order\OrderRequest;
-use Hipay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
+use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
+use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
 
 /**
  * @author kassim
@@ -21,7 +21,7 @@ class Order extends BaseRequest{
 
 	/**
 	 * {@inheritDoc}
-	 * @see \Hipay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+	 * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
 	 */
 	public function __construct(
 			\Psr\Log\LoggerInterface $logger,
@@ -29,7 +29,7 @@ class Order extends BaseRequest{
 			\Magento\Customer\Model\Session $customerSession,
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Framework\Locale\ResolverInterface $localeResolver,
-			\Hipay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
+			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
 			$params = []
 			)
@@ -48,7 +48,7 @@ class Order extends BaseRequest{
 
 	
 	/**
-	 * @return \Hipay\Fullservice\Gateway\Request\Order\OrderRequest
+	 * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
 	 */
 	protected function mapRequest(){
 		/* @var $httpRequest  \Magento\Framework\App\Request\Http */
@@ -85,8 +85,8 @@ class Order extends BaseRequest{
 		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
 		$orderRequest->paymentMethod = $cardTokenPaymentMethod;
 		
-		$orderRequest->customerBillingInfo = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\Info\BillingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
-		$orderRequest->customerShippingInfo = $this->_requestFactory->create('\Hipay\FullserviceMagento\Model\Request\Info\ShippingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
+		$orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
+		$orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
 		
 		return $orderRequest;
 		

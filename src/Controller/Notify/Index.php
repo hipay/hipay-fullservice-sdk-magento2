@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,11 +9,11 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Controller\Notify;
+namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
@@ -64,8 +64,8 @@ class Index extends AppAction {
      		$this->_logger->info("Debug notification");
      		$this->_logger->info(print_r($params,true));
      		
-     		/* @var $notify \Hipay\FullserviceMagento\Model\Notify */
-     		$notify = $this->_objectManager->create('\Hipay\FullserviceMagento\Model\Notify',['params'=>['response'=>$params]]);
+     		/* @var $notify \HiPay\FullserviceMagento\Model\Notify */
+     		$notify = $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Notify',['params'=>['response'=>$params]]);
      		$notify->processTransaction();
      		
      		

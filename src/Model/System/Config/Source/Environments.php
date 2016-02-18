@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,13 +9,13 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\System\Config\Source;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-use Hipay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
+use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 
 /**
  * Source model for available environments

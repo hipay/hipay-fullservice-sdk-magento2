@@ -1,5 +1,5 @@
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -8,7 +8,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -23,7 +23,7 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'Hipay_FullserviceMagento/payment/hipay-hosted',
+                template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
                 redirectAfterPlaceOrder: false
             },
             /**

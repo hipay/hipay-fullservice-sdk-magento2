@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,11 +9,11 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Framework\DataObject;
@@ -22,7 +22,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
 
 /**
  * Class PaymentMethod
- * @package Hipay\FullserviceMagento\Model
+ * @package HiPay\FullserviceMagento\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -34,12 +34,12 @@ class HostedMethod extends FullserviceMethod implements GatewayInterface {
 	/**
 	 * @var string
 	 */
-	protected $_formBlockType = 'Hipay\FullserviceMagento\Block\Hosted\Form';
+	protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Form';
 	
 	/**
 	 * @var string
 	 */
-	protected $_infoBlockType = 'Hipay\FullserviceMagento\Block\Hosted\Info';
+	protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Info';
 	
 	/**
 	 * @var string

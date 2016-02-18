@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,13 +9,13 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request;
+namespace HiPay\FullserviceMagento\Model\Request;
 
-use Hipay\FullserviceMagento\Model\Config as HipayConfig;
+use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
 
 abstract class AbstractRequest implements RequestInterface {
 	
@@ -54,7 +54,7 @@ abstract class AbstractRequest implements RequestInterface {
 	/**
 	 * Config instance
 	 *
-	 * @var HipayConfig
+	 * @var HiPayConfig
 	 */
 	protected $_config;
 	
@@ -73,7 +73,7 @@ abstract class AbstractRequest implements RequestInterface {
 	
 	/**
 	 * 
-	 * @var \Hipay\FullserviceMagento\Model\Request\Type\Factory
+	 * @var \HiPay\FullserviceMagento\Model\Request\Type\Factory
 	 */
 	protected $_requestFactory;
 	
@@ -83,7 +83,7 @@ abstract class AbstractRequest implements RequestInterface {
 			\Magento\Customer\Model\Session $customerSession,
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Framework\Locale\ResolverInterface $localeResolver,
-			\Hipay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
+			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
 			$params = []
 			)
@@ -100,7 +100,7 @@ abstract class AbstractRequest implements RequestInterface {
 		        $this->_customerId = $this->_customerSession->getCustomerId();
 
 		        
-		        if (isset($params['config']) && $params['config'] instanceof HipayConfig) {
+		        if (isset($params['config']) && $params['config'] instanceof HiPayConfig) {
 		        	$this->_config = $params['config'];
 		        } else {
 		        	throw new \Exception('Config instance is required.');
@@ -112,7 +112,7 @@ abstract class AbstractRequest implements RequestInterface {
 	/**
 	 * 
 	 * {@inheritDoc}
-	 * @see \Hipay\FullserviceMagento\Model\Request\RequestInterface::getRequestObject()
+	 * @see \HiPay\FullserviceMagento\Model\Request\RequestInterface::getRequestObject()
 	 */
 	public function getRequestObject(){
 		return $this->mapRequest();
@@ -120,7 +120,7 @@ abstract class AbstractRequest implements RequestInterface {
 	
 	/**
 	 * Popualte sdk request object and return it
-	 * @return \Hipay\Fullservice\Request\AbstractRequest
+	 * @return \HiPay\Fullservice\Request\AbstractRequest
 	 */
 	abstract protected function mapRequest();
 	

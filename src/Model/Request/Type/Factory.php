@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,14 +9,14 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\FullserviceMagento\Model\Request\Type;
+namespace HiPay\FullserviceMagento\Model\Request\Type;
 
 /**
- * Factory class for Hipay\FullserviceMagento\Model\Request\AbstractRequest
+ * Factory class for HiPay\FullserviceMagento\Model\Request\AbstractRequest
  */
 class Factory
 {
@@ -42,7 +42,7 @@ class Factory
      *
      * @param string $className
      * @param array $data
-     * @return \Hipay\FullserviceMagento\Model\Request\AbstractRequest
+     * @return \HiPay\FullserviceMagento\Model\Request\AbstractRequest
      */
     public function create($className, array $data = [])
     {

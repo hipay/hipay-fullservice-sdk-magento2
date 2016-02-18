@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
- * Hipay fullservice Magento2
+ * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -27,7 +27,7 @@
 		</hipay>
 		<payment>
 			<hipay_hosted>
-				<model>Hipay\FullserviceMagento\Model\HostedMethod</model>
+				<model>HiPay\FullserviceMagento\Model\HostedMethod</model>
                 <active>0</active>
                 <title>Credit Card</title>
                 <payment_action>Sale</payment_action>

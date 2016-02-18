@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -10,7 +10,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -34,7 +34,7 @@
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
                                                                 <item name="hipay-payments" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Hipay_FullserviceMagento/js/view/payment/hipay-methods</item>
+                                                                    <item name="component" xsi:type="string">HiPay_FullserviceMagento/js/view/payment/hipay-methods</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="hipay_hosted" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
