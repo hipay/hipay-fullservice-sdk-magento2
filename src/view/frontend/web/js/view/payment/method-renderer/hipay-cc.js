@@ -20,6 +20,12 @@ define(
     function (Component) {
         'use strict';
         return Component.extend({
+        	/**
+             * @returns {Boolean}
+             */
+            isActive: function () {
+                return true;
+            },
             defaults: {
                 template: 'HiPay_FullserviceMagento/payment/hipay-cc'
             }
