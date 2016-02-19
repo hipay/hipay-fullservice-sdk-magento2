@@ -6,7 +6,7 @@ use Magento\Payment\Model\CcConfig;
 use Magento\Payment\Helper\Data as PaymentHelper;
 
 
-class CcConfigProvider implements CcGenericConfigProvider {
+class CcConfigProvider extends CcGenericConfigProvider {
 
 	/**
 	 * @var string[]

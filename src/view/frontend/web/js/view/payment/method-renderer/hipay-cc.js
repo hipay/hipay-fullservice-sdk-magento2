@@ -21,9 +21,8 @@ define(
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-                redirectAfterPlaceOrder: false
-            },
+                template: 'HiPay_FullserviceMagento/payment/hipay-cc'
+            }
             
         });
     }
