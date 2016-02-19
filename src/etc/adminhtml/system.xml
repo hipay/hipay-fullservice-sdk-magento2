@@ -51,72 +51,8 @@
 			</group>
 		</section>
 		<section id="payment">
-			<group id="hipay_hosted" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Magento Hosted</label>
-				<comment></comment>
-				<field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Credit card Hosted</label>
-                </field>
-                <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
-	                <label>Payment Action</label>	           
-	                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
-            	</field>
-            	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>New Order Status</label>
-                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
-                </field>
-               <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment products</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
-                </field> 
-                <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Display card selector</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-   				 <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Use 3D Secure</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                 <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Custom CSS url</label>
-                    <comment>Important, HTTPS protocol is required</comment>
-                </field> 
-                 <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Template type</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
-                </field>
-                
-                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Applicable Countries</label>
-                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="101" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                </field>
-                <field id="min_order_total" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Minimum Order Total</label>
-                </field>
-                <field id="max_order_total" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Maximum Order Total</label>
-                    <comment>Leave empty to disable limit</comment>
-                </field>
-                 <field id="sort_order" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Sort Order</label>
-                </field>
-                 <field id="debug" translate="label" type="select" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Debug</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="env" translate="label" type="select" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Environment</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Environments</source_model>
-                </field>
-			</group>
+			<include path="HiPay_FullserviceMagento::system/hosted.xml"/>
+			<include path="HiPay_FullserviceMagento::system/cc.xml"/>		
 		</section>
 	</system>
 </config>
