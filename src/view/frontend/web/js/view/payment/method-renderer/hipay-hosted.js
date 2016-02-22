@@ -31,15 +31,13 @@ define(
              */
 	        afterPlaceOrder: function () {
 	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.redirectUrl);
-	        }
-        	/*,
-	
+	        },
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },
             isActive: function() {
                 return true;
-            }*/
+            }
         });
     }
 );

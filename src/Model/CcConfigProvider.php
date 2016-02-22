@@ -16,6 +16,13 @@ class CcConfigProvider extends CcGenericConfigProvider {
 	];
 	
 	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
+	
+	/**
 	 * @param CcConfig $ccConfig
 	 * @param PaymentHelper $paymentHelper
 	 * @param array $methodCodes
@@ -23,12 +30,15 @@ class CcConfigProvider extends CcGenericConfigProvider {
 	public function __construct(
 			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
+			\Magento\Framework\Url $urlBuilder,
 			array $methodCodes = []
 			) {
-				$this->ccConfig = $ccConfig;
+				/*$this->ccConfig = $ccConfig;
 				foreach ($methodCodes as $code) {
 					$this->methods[$code] = $paymentHelper->getMethodInstance($code);
-				}
+				}*/
+				parent::__construct($ccConfig, $paymentHelper);
+			$this->urlBuilder = $urlBuilder;
 	}
 	
 	/**
@@ -36,6 +46,11 @@ class CcConfigProvider extends CcGenericConfigProvider {
 	 */
 	public function getConfig()
 	{
-		return parent::getConfig();
+		$config =  parent::getConfig();
+		$config['payment']['hipayCc'] =[
+                		'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/cc/tokenize',['_secure' => true]),
+        ];
+		
+		return $config;
 	}
 }

@@ -19,7 +19,7 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory; 
-use HiPay\Fullservice\HTTP\GuzzleClient;
+use HiPay\Fullservice\HTTP\SimpleHTTPClient;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 
@@ -73,7 +73,7 @@ class Manager {
 		$methodCode = $this->_order->getPayment()->getMethod();
 		$storeId = $this->_order->getStoreId();
 		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
-		$clientProvider = new GuzzleClient($this->_config);
+		$clientProvider = new SimpleHTTPClient($this->_config);
 		$this->_gateway = new GatewayClient($clientProvider);
 	}
 	

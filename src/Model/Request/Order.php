@@ -67,11 +67,11 @@ class Order extends BaseRequest{
 		$orderRequest->cid = $this->_customerId;
 		$orderRequest->ipaddr = $this->_order->getRemoteIp();
 		
-		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept');
-		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending');
-		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline');
-		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel'); 
-		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception');
+		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept',['_secure' => true]);
+		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending',['_secure' => true]);
+		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',['_secure' => true]);
+		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',['_secure' => true]); 
+		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',['_secure' => true]);
 		
 		//$orderRequest->http_accept = $httpRequest->getHeader('Accept');
 		//$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');

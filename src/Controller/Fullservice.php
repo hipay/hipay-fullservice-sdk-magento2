@@ -56,6 +56,12 @@ abstract class Fullservice extends AppAction {
      * @var \HiPay\FullserviceMagento\Model\Gateway\Factory
      */
     protected $_gatewayManagerFactory;
+    
+    /**
+     * 
+     * @var  \HiPay\FullserviceMagento\Model\SecureVault\Factory
+     */
+    protected $_vaultManagerFactory;
 
     
 	
@@ -63,11 +69,13 @@ abstract class Fullservice extends AppAction {
 	 * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * $param \Magento\Framework\Session\Generic $hipaySession,
+     * @param \Magento\Framework\Session\Generic $hipaySession,
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \HiPay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory
      * @param Factory $requestfactory,
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
 	 * {@inheritDoc}
 	 *
 	 * @see \Magento\Backend\App\AbstractAction::__construct()
@@ -78,7 +86,8 @@ abstract class Fullservice extends AppAction {
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Framework\Session\Generic $hipaySession,
 			\Psr\Log\LoggerInterface $logger,
-			\HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+			\HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+			\HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
 	) {
 		$this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession; 
@@ -86,6 +95,7 @@ abstract class Fullservice extends AppAction {
 
         $this->logger = $logger;
         $this->_gatewayManagerFactory = $gatewayManagerFactory;
+        $this->_vaultManagerFactory = $vaultManagerFactory;
 
         parent::__construct($context);
 
@@ -123,6 +133,26 @@ abstract class Fullservice extends AppAction {
     protected function _getSession()
     {
     	return $this->_hipaySession;
+    }
+    
+    /**
+     * Retrieve request object
+     *
+     * @return \Magento\Framework\App\Request\Http
+     */
+    public function getRequest()
+    {
+    	return $this->_request;
+    }
+    
+    /**
+     * Retrieve response object
+     *
+     * @return \Magento\Framework\App\Response\Http
+     */
+    public function getResponse()
+    {
+    	return $this->_response;
     }
     
     /**

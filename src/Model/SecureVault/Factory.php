@@ -13,10 +13,10 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Model\Gateway;
+namespace HiPay\FullserviceMagento\Model\SecureVault;
 
 /**
- * Factory class for HiPay\FullserviceMagento\Model\Gateway\Manager
+ * Factory class for HiPay\FullserviceMagento\Model\SecureVault\Manager
  */
 class Factory
 {
@@ -38,13 +38,15 @@ class Factory
     }
 
     /**
-     * Create class instance with order object
+     * Create class instance with methodCode
+     * Method code is used to defined Env mode (Stage or prod)
      *
-     * @param \Magento\Sales\Model\Order $order
-     * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
+     * @param string $methodCode
+     * @param int|null $storeId
+     * @return \HiPay\FullserviceMagento\Model\SecureVault\Manager
      */
-    public function create($order)
+    public function create($methodCode,$storeId=null)
     {
-        return $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Gateway\Manager',['params'=>['order'=>$order]]);
+        return $this->_objectManager->create('\HiPay\FullserviceMagento\Model\SecureVault\Manager',['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
     }
 }

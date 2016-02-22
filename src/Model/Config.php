@@ -67,7 +67,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 					}
 				}
 
-				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv());
+				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv(),'application/json');
 	}
     
     /**
@@ -193,6 +193,18 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	
 	public function getApiEndpointStage(){
 		return $this->_configSDK->getApiEndpointStage();
+	}
+	
+	public function getSecureVaultEndpointProd(){
+		return $this->_configSDK->getSecureVaultEndpointProd();
+	}
+	
+	public function getSecureVaultEndpointStage(){
+		return $this->_configSDK->getSecureVaultEndpointStage();
+	}
+	
+	public function getSecureVaultEndpoint(){
+		return $this->_configSDK->getSecureVaultEndpoint();
 	}
 	
 	public function getApiEnv(){
