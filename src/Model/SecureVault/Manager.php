@@ -99,13 +99,13 @@ class Manager {
 	public function requestGenerateToken($cardNumber,$cardExpiryMonth,$cardExpiryYear,$cvc="",$cardHolder="",$multiUse=false){
 		
 		$generateTokenRequest = new GenerateTokenRequest();
-		$generateTokenRequest->cardNumber= $cardNumber;
-		$generateTokenRequest->cardExpiryMonth = $cardExpiryMonth;
-		$generateTokenRequest->cardExpiryYear = $cardExpiryYear;
-		$generateTokenRequest->cardHolder = $cardHolder;
+		$generateTokenRequest->card_number= $cardNumber;
+		$generateTokenRequest->card_expiry_month = $cardExpiryMonth;
+		$generateTokenRequest->card_expiry_year = $cardExpiryYear;
+		$generateTokenRequest->card_holder = $cardHolder;
 		$generateTokenRequest->cvc = $cvc;
 		
-		$generateTokenRequest->multiUse = (int)$multiUse;
+		$generateTokenRequest->multi_use = (int)$multiUse;
 		
 		$paymentCardToken = $this->_vault->requestGenerateToken($generateTokenRequest);
 		
