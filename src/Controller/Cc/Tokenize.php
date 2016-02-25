@@ -37,12 +37,13 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
         	$data = json_decode($this->getRequest()->getContent());
         	if($data){
         		$methodCode = $data->method;
+        		$cardInfo = $data->additional_data;
 	        	$vaultManager = $this->_vaultManagerFactory->create($methodCode);
-	        	$ccNumber = isset($data->cc_number) ? $data->cc_number : "";
-	        	$ccExpMonth = isset($data->cc_exp_month) ? $data->cc_exp_month : "";
-	        	$ccExpYear = isset($data->cc_exp_year) ? $data->cc_exp_year : "";
-	        	$ccCid = isset($data->cc_cid) ?$data->cc_cid : "";
-	        	$ccCardHolder = isset($data->cc_card_holder) ? $data->cc_card_holder : "";
+	        	$ccNumber = isset($cardInfo->cc_number) ? $cardInfo->cc_number : "";
+	        	$ccExpMonth = isset($cardInfo->cc_exp_month) ? $cardInfo->cc_exp_month : "";
+	        	$ccExpYear = isset($cardInfo->cc_exp_year) ? $cardInfo->cc_exp_year : "";
+	        	$ccCid = isset($cardInfo->cc_cid) ?$cardInfo->cc_cid : "";
+	        	$ccCardHolder = isset($cardInfo->cc_card_holder) ? $cardInfo->cc_card_holder : "";
 	        	
 	        	$tokenModel = $vaultManager->requestGenerateToken($ccNumber,$ccExpMonth, $ccExpYear,$ccCid,$ccCardHolder);
 	        	
