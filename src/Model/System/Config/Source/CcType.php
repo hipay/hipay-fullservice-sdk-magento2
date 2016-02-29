@@ -8,9 +8,9 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
 	/**
 	 * Fullservice config model
 	 *
-	 * @var \HiPay\FullserviceMagento\Model\Config
+	 * @var \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct
 	 */
-	protected $_fullserviceConfig;
+	protected $_paymentProductSource;
 	
 	/**
 	 * Config
@@ -19,11 +19,11 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
 	 */
 	public function __construct(
 			\Magento\Payment\Model\Config $paymentConfig,
-			\HiPay\FullserviceMagento\Model\Config $fullserviceConfig
+			\HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct $paymentProductSource
 			)
 	{
 		$this->_paymentConfig = $paymentConfig;
-		$this->_fullserviceConfig = $fullserviceConfig;
+		$this->_paymentProductSource = $paymentProductSource;
 	}
 	
     /**
@@ -57,10 +57,9 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
     	}
     	
     	//populate options with allowed fullservice payment methods
-    	//populate options with allowed natives cc types
-    	foreach ($this->_fullserviceConfig->getPaymentProducts() as $code => $name) {
-    		if (in_array($code, $allowed) || !count($allowed)) {
-    			$options[] = ['value' => $code, 'label' => $name];
+    	foreach ($this->_paymentProductSource->toOptionArray() as $option) {
+    		if (in_array($option['value'], $allowed) || !count($allowed)) {
+    			$options[] = $option;
     		}
     	}
     	 
