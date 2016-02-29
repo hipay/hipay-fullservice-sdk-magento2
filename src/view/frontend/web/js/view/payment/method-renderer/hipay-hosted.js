@@ -30,7 +30,7 @@ define(
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.redirectUrl);
+	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.afterPlaceOrderUrl);
 	        },
 	        getCode: function() {
 	            return 'hipay_hosted';

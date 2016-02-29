@@ -17,7 +17,7 @@ namespace HiPay\FullserviceMagento\Controller\Cc;
 
 
 
-class PlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
+class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {	
 
 
@@ -43,14 +43,17 @@ class PlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             			__('We can\'t place the order.')
             			);
             }
-           
-            $gateway = $this->_gatewayManagerFactory->create($order);
-        	
-            $hppModel = $gateway->requestHostedPaymentPage();
             
-            //@TODO catch sdk exception
+            $payment = $order->getPayment();
+            if(($redirectUrl = $payment->getAdditionalInformation('redirectUrl')) != ""){
+            	$this->getResponse()->setRedirect($redirectUrl);
+            }
+            else{
+            	$this->getResponse()->setRedirect('checkout/cart');
+            }
+            
 
-            $this->getResponse()->setRedirect($hppModel->getForwardUrl());
+            
             return;
 
 

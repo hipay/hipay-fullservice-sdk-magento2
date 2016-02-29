@@ -27,6 +27,7 @@ define(
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
         		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
+        		creditCardToken: null,
         		redirectAfterPlaceOrder: false
         	},
             placeOrderHandler: null,
@@ -86,6 +87,21 @@ define(
             getCode: function () {
                 return 'hipay_cc';
             },
+            getData: function() {
+                return {
+                    'method': this.item.method,
+                    'additional_data': {
+                        'cc_cid': this.creditCardVerificationNumber(),
+                        'cc_ss_start_month': this.creditCardSsStartMonth(),
+                        'cc_ss_start_year': this.creditCardSsStartYear(),
+                        'cc_type': this.creditCardType(),
+                        'cc_exp_year': this.creditCardExpYear(),
+                        'cc_exp_month': this.creditCardExpMonth(),
+                        'cc_number': this.creditCardNumber(),
+                        'cc_token': this.creditCardToken
+                    }
+                };
+            },
             /**
              * Display error message
              * @param {*} error - error message
@@ -99,6 +115,12 @@ define(
                     });
                 }
             },
+            /**
+             * After place order callback
+             */
+	        afterPlaceOrder: function () {
+	        	 $.mage.redirect(window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl);
+	        },
             generateToken: function (){
             	var self = this,
             	isPaymentProcessing = null;
@@ -108,28 +130,27 @@ define(
 	            	 isPaymentProcessing = $.Deferred();
 	                    $.when(isPaymentProcessing).done(
 	                        function () {
-	                            self.placeOrder();
+	                            self.placeOrder(this.getData());
 	                        }
 	                    ).fail(
 	                        function (error) {
 	                            self.addError(error);
 	                        }
 	                    );
-	                    console.log(this.tokenizeUrl);
-	                    console.log(JSON.stringify(this.getData()));
+
 	                    storage.post(
+	                    		fullScreenLoader.startLoader();
 	                            this.tokenizeUrl, JSON.stringify(this.getData())
 	                        ).done(
 	                            function (response) {
 	                            	console.log("response");
 	                            	console.log(response);
+	                            	this.creditCardToken = response.reponseText.token;
 	                            	isPaymentProcessing.resolve();
 	                            }
 	                        ).fail(
 	                            function (response) {
 	                            	var error = JSON.parse(response.responseText);
-	                                console.log('error');
-	                                console.log(error);
 	                                isPaymentProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();
 	                            }

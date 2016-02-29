@@ -53,7 +53,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 		 return $this->method->isAvailable() ? [
             'payment' => [
                 'hipayHosted' => [
-                		'redirectUrl'=>$this->urlBuilder->getUrl('hipay/hosted/placeOrder',['_secure' => true]),
+                		'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/hosted/afterPlaceOrder',['_secure' => true]),
                 ],
             ],
         ] : [];

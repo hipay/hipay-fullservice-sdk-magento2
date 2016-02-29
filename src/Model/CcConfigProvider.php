@@ -49,6 +49,7 @@ class CcConfigProvider extends CcGenericConfigProvider {
 		$config =  parent::getConfig();
 		$config['payment']['hipayCc'] =[
                 		'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/cc/tokenize',['_secure' => true]),
+						'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/cc/afterPlaceOrder',['_secure' => true]),
         ];
 		
 		return $config;

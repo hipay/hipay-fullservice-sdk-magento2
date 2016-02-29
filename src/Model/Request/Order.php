@@ -18,6 +18,20 @@ class Order extends BaseRequest{
 	 * @var \Magento\Sales\Model\Order
 	 */
 	protected $_order;
+	
+	/**
+	 * Payment Method
+	 *
+	 * @var \HiPay\Fullservice\Request\AbstractRequest
+	 */
+	protected $_paymentMethod;
+	
+	protected $_ccTypes = array(
+			'VI'=>'visa',
+			'AE'=>'american-express',
+			'MC'=>'mastercard',
+			'SM'=>'maestro'
+	);
 
 	/**
 	 * {@inheritDoc}
@@ -44,6 +58,20 @@ class Order extends BaseRequest{
 			throw new \Exception('Order instance is required.');
 		}
 		
+		if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
+			$this->_paymentMethod = $params['paymentMethod'];
+		} else {
+			throw new \Exception('Object Request PaymentMethod instance is required.');
+		}
+		
+	}
+	
+	protected function getCcTypeHipay($mageCcType){
+		$hipayCcType = $mageCcType;
+		if(in_array($mageCcType,array_keys($this->_ccTypes))){
+			$hipayCcType = $this->_ccTypes[$mageCcType];
+		}
+		return $hipayCcType;
 	}
 
 	
@@ -57,7 +85,7 @@ class Order extends BaseRequest{
 		$orderRequest = new OrderRequest();
 		$orderRequest->orderid = $this->_order->getIncrementId();
 		$orderRequest->operation = $this->_config->getValue('paymentAction');
-		$orderRequest->payment_product = "cb"; //@TODO maybe display a payment product selection on frontend form ?
+		$orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: "cb"; 
 		$orderRequest->description = sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
 		$orderRequest->long_description = "";
 		$orderRequest->currency = $this->_order->getBaseCurrencyCode();
@@ -80,10 +108,7 @@ class Order extends BaseRequest{
 		
 		$orderRequest->language = $this->_localeResolver->getLocale();
 		
-		//@TODO use payment method based on current payment method
-		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
-		$orderRequest->paymentMethod = $cardTokenPaymentMethod;
+		$orderRequest->paymentMethod = $this->_paymentMethod;
 		
 		$orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
 		$orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();

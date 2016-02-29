@@ -16,6 +16,8 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class API PaymentMethod
@@ -59,6 +61,13 @@ class CcMethod extends FullserviceMethod {
 	protected $_localeDate;
 	
 	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
+	
+	/**
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -83,13 +92,14 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
+			\Magento\Framework\Url $urlBuilder,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory);
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory,$urlBuilder);
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
 	}
@@ -107,28 +117,110 @@ class CcMethod extends FullserviceMethod {
 			$data = new \Magento\Framework\DataObject($data);
 		}
 		$info = $this->getInfoInstance();
-		$info->setCcType(
-				$data->getCcType()
-				)->setCcOwner(
-						$data->getCcOwner()
-						)->setCcLast4(
-								substr($data->getCcNumber(), -4)
-								)->setCcNumber(
-										$data->getCcNumber()
-										)->setCcCid(
-												$data->getCcCid()
-												)->setCcExpMonth(
-														$data->getCcExpMonth()
-														)->setCcExpYear(
-																$data->getCcExpYear()
-																)->setCcSsIssue(
-																		$data->getCcSsIssue()
-																		)->setCcSsStartMonth(
-																				$data->getCcSsStartMonth()
-																				)->setCcSsStartYear(
-																						$data->getCcSsStartYear()
-																						);
-																				return $this;
+		$info->setCcType ( $data->getCcType () )
+			->setCcOwner ( $data->getCcOwner () )
+			->setCcLast4 ( substr ( $data->getCcNumber (), - 4 ) )
+			->setCcNumber ( $data->getCcNumber () )
+			->setCcCid ( $data->getCcCid () )
+			->setCcExpMonth ( $data->getCcExpMonth () )
+			->setCcExpYear ( $data->getCcExpYear () )
+			->setCcSsIssue ( $data->getCcSsIssue () )
+			->setCcSsStartMonth ( $data->getCcSsStartMonth () )
+			->setCcSsStartYear ( $data->getCcSsStartYear () )
+			->setAdditionalInformation('cc_token',$data->getCcToken());
+		
+		return $this;
+	}
+	
+	/**
+	 * Authorize payment abstract method
+	 *
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
+	{
+		parent::authorize($payment, $amount);
+		$this->place($payment);
+		return $this;
+	}
+	
+	
+	/**
+	 * Capture payment method
+	 *
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+	{
+		parent::capture($payment, $amount);
+		try {
+			/** @var \Magento\Sales\Model\Order\Payment $payment */
+			if ($payment->getCcTransId()) {  //Is not the first transaction
+				// As we alredy hav a transaction reference, we can request a capture operation.
+				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+	
+			} else { //Ok, it's the first transaction, so we request a new order
+				$this->place($payment);
+	
+			}
+				
+				
+		} catch (\Exception $e) {
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
+		}
+	
+	
+		return $this;
+	}
+	
+	public function place(\Magento\Payment\Model\InfoInterface $payment){
+	
+		try {
+				
+			$response = $this->_getGatewayManager($payment->getOrder())->requestPaymentCardToken();
+			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
+			$pendingUrl = $successUrl;
+			$forwardUrl = $response->getForwardUrl();;
+			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
+			$redirectUrl = $successUrl;
+			switch($response->getState()){
+				case TransactionState::COMPLETED:
+					//redirectUrl is success by default
+					break;
+				case TransactionState::PENDING:
+					$redirectUrl = $pendingUrl;
+					break;
+				case TransactionState::FORWARDING:
+					$redirectUrl = $forwardUrl;
+					break;
+				case TransactionState::DECLINED:
+					$redirectUrl = $failUrl;
+					break;
+				case TransactionState::ERROR:
+					throw new LocalizedException(__('There was an error request new transaction: %1.', $response->getReason()));
+				default:
+					$redirectUrl = $failUrl;
+			}
+	
+			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
+	
+		} catch (\Exception $e) {
+				
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error request new transaction: %1.', $e->getMessage()));
+		}
+		return $this;
 	}
 	
 	/**

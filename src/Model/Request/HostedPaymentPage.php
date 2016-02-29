@@ -25,6 +25,8 @@ class HostedPaymentPage extends Order{
 		foreach (get_object_vars($orderRequest) as $property=>$value) {
 			$hppRequest->$property = $value;
 		}
+		//Inherit from parent class Order but no used in this pbject request
+		unset($hppRequest->payment_product);
 		
 		$hppRequest->css = $this->_config->getValue('css_url');
 		$hppRequest->template = $this->_config->getValue('template');

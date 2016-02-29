@@ -48,7 +48,7 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
 	        	$tokenModel = $vaultManager->requestGenerateToken($ccNumber,$ccExpMonth, $ccExpYear,$ccCid,$ccCardHolder);
 	        	
 	        	$this->getResponse()->representJson(json_encode($tokenModel));
-	        	//$this->getResponse()->sendResponse();
+	        	
         		
         	}
 
@@ -59,14 +59,10 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
         	$this->getResponse()->setStatusHeader(400, '1.1');
 
         } catch (\Exception $e) {
-        	$this->getResponse()->representJson(json_encode(array("code"=>$e->getCode(), "message"=>$e->getMessage()/*__('We can\'t place the order.')*/)));
+        	$this->getResponse()->representJson(json_encode(array("code"=>$e->getCode(), "message"=>__('We can\'t place the order.'))));
         	$this->getResponse()->setStatusHeader(400, '1.1');
         	$this->logger->addDebug($e->getMessage());
-        	//$this->messageManager->addErrorMessage($e->getMessage());
-            /*$this->messageManager->addExceptionMessage(
-                $e,
-                __('We can\'t place the order.')
-            );*/
+        
           
         }
 

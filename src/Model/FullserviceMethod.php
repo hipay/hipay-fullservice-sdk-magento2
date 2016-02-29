@@ -19,6 +19,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use Magento\Payment\Model\InfoInterface;
 
+
 /**
  *
  * @author kassim
@@ -103,6 +104,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_gatewayManagerFactory;
 	
+	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
+	
 	
 	
 	/**
@@ -127,6 +135,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 	        \Magento\Payment\Model\Method\Logger $logger,
 			ManagerFactory $gatewayManagerFactory,
+			\Magento\Framework\Url $urlBuilder,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -135,6 +144,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 				
 				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
+				$this->urlBuilder = $urlBuilder;
 	}
 	
 	/**
@@ -147,23 +157,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	{
 		return $this->isActive($quote ? $quote->getStoreId() : null);
 	}
-
-	/**
-	 * Capture payment method
-	 *
-	 * @param \Magento\Framework\DataObject|InfoInterface $payment
-	 * @param float $amount
-	 * @return $this
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 * @api
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 */
-	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
-	{
-		parent::capture($payment, $amount);
-		$this->_getManager($payment->getOrder())->requestOperationCapture($amount);
-		return $this;
-	}
+	
+	
 	
 	/**
 	 * Refund specified amount for payment
@@ -177,7 +172,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
-		$this->_getManager($payment->getOrder())->requestOperationRefund($amount);
+		$this->_getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
 		return $this;
 	}
 	
@@ -192,7 +187,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
-		$this->_getManager($payment->getOrder())->requestOperationAcceptChallenge();
+		$this->_getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
 		return false;
 	}
 	
@@ -208,16 +203,16 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
-		$this->_getManager($payment->getOrder())->requestOperationDenyChallenge();
+		$this->_getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
 		return false;
 	}
 	
 	/**
 	 * 
 	 * @param \Magento\Sales\Model\Order $order
-	 * @return \HiPay\FullserviceMagento\Model\GatewayManager
+	 * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
 	 */
-	protected function _getManager($order){
+	protected function _getGatewayManager($order){
 		return $this->_gatewayManagerFactory->create($order);
 	}
 	

@@ -4,6 +4,10 @@
 				<label>HiPay Fullservice Credit Card</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+				 <field id="cctypes" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment products</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\CcType</source_model>
+                </field> 
 				 <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Use 3D Secure</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

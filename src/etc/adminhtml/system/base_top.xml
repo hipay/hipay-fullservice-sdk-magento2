@@ -15,8 +15,5 @@
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
                 </field>
-               <field id="cctypes" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment products</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\CcType</source_model>
-                </field> 
+              
 </include>

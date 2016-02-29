@@ -15,9 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 
 /**
@@ -27,7 +26,7 @@ use Magento\Payment\Model\Method\ConfigInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class HostedMethod extends FullserviceMethod implements GatewayInterface {
+class HostedMethod extends FullserviceMethod {
 	
 	const HIPAY_METHOD_CODE               = 'hipay_hosted';
 	
@@ -46,20 +45,38 @@ class HostedMethod extends FullserviceMethod implements GatewayInterface {
 	 */
 	protected $_code = self::HIPAY_METHOD_CODE;
 	
-	
-	
+
 	/**
+	 * Capture payment method
 	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \Magento\Payment\Model\Method\Online\GatewayInterface::postRequest()
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	public function postRequest(DataObject $request, ConfigInterface $config) {
-		$this->logger->debug("Post request called");
-		$this->logger->debug(print_r($request->toArray(),true));
-		$this->logger->debug(print_r($config,true));
-		die('foo');
+	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+	{
+		parent::capture($payment, $amount);
+		try {
+			/** @var \Magento\Sales\Model\Order\Payment $payment */
+			if ($payment->getCcTransId()) {  //Is not the first transaction
+				// As we alredy hav a transaction reference, we can request a capture operation.
+				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+	
+			} 
+	
+	
+		} catch (\Exception $e) {
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
+		}
+	
+	
+		return $this;
 	}
+	
 	
 
 	
