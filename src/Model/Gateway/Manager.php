@@ -99,7 +99,18 @@ class Manager {
 	 */
 	public function requestHostedPaymentPage(){
 		
-		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage');
+		
+		//Init cardTokenPaymentMethod request
+		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
+		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
+		$cardTokenPaymentMethod->cardtoken = "";
+		$cardTokenPaymentMethod->eci = 7;
+		
+		//Merge params
+		$params = $this->_getRequestParameters();
+		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		
+		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
 		 
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
 		
