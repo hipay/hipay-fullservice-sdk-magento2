@@ -48,6 +48,7 @@ class InstallData implements InstallDataInterface
             Config::STATUS_CAPTURE_REQUESTED  =>["label"=>__('Capture requested'),'state'=>Order::STATE_PROCESSING] ,
         	Config::STATUS_PARTIALLY_CAPTURED  => ["label"=>__('Partially captured'),'state'=>Order::STATE_PROCESSING]  ,
         	Config::STATUS_REFUND_REQUESTED  =>["label"=>__('Refund requested'),'state'=>Order::STATE_PROCESSING] ,
+        	Config::STATUS_REFUND_REFUSED  =>["label"=>__('Refund refused'),'state'=>Order::STATE_PROCESSING],
         	Config::STATUS_PARTIALLY_REFUNDED  =>["label"=>__('Partially refunded'),'state'=>Order::STATE_PROCESSING] ,
         	Config::STATUS_AUTHENTICATION_REQUESTED  => ["label"=>__('Authentication requested'),'state'=>Order::STATE_PENDING_PAYMENT] ,
         	Config::STATUS_EXPIRED  => ["label"=> __('Authorization Expired'),'state'=>Order::STATE_HOLDED],

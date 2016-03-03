@@ -39,6 +39,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
 	const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
 	const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
+	const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
 	const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
 	const STATUS_EXPIRED = 'hipay_expired';
 	const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';

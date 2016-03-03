@@ -92,6 +92,8 @@ class Notify {
 				break;
 			case TransactionStatus::REFUSED: //113
 			case TransactionStatus::CANCELLED: //115 Cancel order and transaction
+			case TransactionStatus::AUTHORIZATION_REFUSED: //163
+			case TransactionStatus::CAPTURE_REFUSED: //173
 				$this->_doTransactionFailure();
 				break;
 			case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
@@ -108,21 +110,15 @@ class Notify {
 				$this->_doTransactionCapture();
 				break;
 			case TransactionStatus::REFUND_REQUESTED: //124
-			case TransactionStatus::PARTIALLY_REFUNDED: //126
 				$this->_doTransactionRefundRequested();
 				break;
 			case TransactionStatus::REFUNDED: //125
+			case TransactionStatus::PARTIALLY_REFUNDED: //126
 				$this->_doTransactionRefund();
 				break;
-			case TransactionStatus::AUTHORIZATION_REFUSED: //163
-				$this->_doTransactionFailure();
-				break;
 			case TransactionStatus::REFUND_REFUSED: //165
-					break;
-			case TransactionStatus::CAPTURE_REFUSED: //173
-				$this->_doTransactionFailure();
-				break;
-
+				$this->_order->setStatus(Config::STATUS_REFUND_REFUSED);
+				$this->_order->save();
 			case TransactionStatus::CREATED: //101
 			case TransactionStatus::CARD_HOLDER_ENROLLED: //103
 			case TransactionStatus::CARD_HOLDER_NOT_ENROLLED: //104
