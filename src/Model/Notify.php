@@ -15,11 +15,9 @@
  */
 namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use HiPay\Fullservice\Gateway\Model\Transaction;
 use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
-use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 
 class Notify {
@@ -82,48 +80,93 @@ class Notify {
 	
 	
 	public function processTransaction(){
-
-		switch ($this->_transaction->getState()){
-			case TransactionState::COMPLETED :
-				switch ($this->_transaction->getStatus()){
-					case TransactionStatus::AUTHORIZED:
-						$this->_doTransactionAuthorization();
-						break;
-					case TransactionStatus::CAPTURE_REQUESTED:
-						$this->_doTransactionCaptureRequested();
-						break;
-					case TransactionStatus::CAPTURED:
-					case TransactionStatus::PARTIALLY_CAPTURED:
-						$this->_doTransactionCapture();
-						break;
-					case TransactionStatus::REFUND_REQUESTED:
-					case TransactionStatus::PARTIALLY_REFUNDED:
-						$this->_doTransactionRefundRequested();
-						break;
-					case TransactionStatus::REFUNDED:
-							$this->_doTransactionRefund();
-						break;
-					case TransactionStatus::REFUND_REFUSED:
-						
-						break;
-				}
-				break;
-			case TransactionState::PENDING :
-					$this->_doTransactionAuthorizedAndPending();
-				break;
-			case TransactionState::FORWARDING :
-				break;
-			case TransactionState::DECLINED :
+		
+		switch ($this->_transaction->getStatus()){
+			case TransactionStatus::BLOCKED: //110
+			case TransactionStatus::DENIED: //111
 				$this->_doTransactionDenied();
 				break;
-			default:
+			case TransactionStatus::AUTHORIZED_AND_PENDING: //112
+			case TransactionStatus::PENDING_PAYMENT: //200
+				$this->_doTransactionAuthorizedAndPending();
+				break;
+			case TransactionStatus::REFUSED: //113
+			case TransactionStatus::CANCELLED: //115 Cancel order and transaction
 				$this->_doTransactionFailure();
-		
-				 
+				break;
+			case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
+				$this->_doTransactionVoid();
+				break;
+			case TransactionStatus::AUTHORIZED: //116
+				$this->_doTransactionAuthorization();
+				break;
+			case TransactionStatus::CAPTURE_REQUESTED: //117
+				$this->_doTransactionCaptureRequested();
+				break;
+			case TransactionStatus::CAPTURED: //118
+			case TransactionStatus::PARTIALLY_CAPTURED: //119
+				$this->_doTransactionCapture();
+				break;
+			case TransactionStatus::REFUND_REQUESTED: //124
+			case TransactionStatus::PARTIALLY_REFUNDED: //126
+				$this->_doTransactionRefundRequested();
+				break;
+			case TransactionStatus::REFUNDED: //125
+				$this->_doTransactionRefund();
+				break;
+			case TransactionStatus::AUTHORIZATION_REFUSED: //163
+				$this->_doTransactionFailure();
+				break;
+			case TransactionStatus::REFUND_REFUSED: //165
+					break;
+			case TransactionStatus::CAPTURE_REFUSED: //173
+				$this->_doTransactionFailure();
+				break;
+
+			case TransactionStatus::CREATED: //101
+			case TransactionStatus::CARD_HOLDER_ENROLLED: //103
+			case TransactionStatus::CARD_HOLDER_NOT_ENROLLED: //104
+			case TransactionStatus::UNABLE_TO_AUTHENTICATE: //105
+			case TransactionStatus::CARD_HOLDER_AUTHENTICATED: //106
+			case TransactionStatus::AUTHENTICATION_ATTEMPTED: //107
+			case TransactionStatus::COULD_NOT_AUTHENTICATE: //108
+			case TransactionStatus::AUTHENTICATION_FAILED: //109
+			case TransactionStatus::COLLECTED: //120
+			case TransactionStatus::PARTIALLY_COLLECTED: //121
+			case TransactionStatus::SETTLED: //122
+			case TransactionStatus::PARTIALLY_SETTLED: //123
+			case TransactionStatus::CHARGED_BACK: //129
+			case TransactionStatus::DEBITED: //131
+			case TransactionStatus::PARTIALLY_DEBITED: //132
+			case TransactionStatus::AUTHENTICATION_REQUESTED: //140
+			case TransactionStatus::AUTHENTICATED: //141
+			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
+			case TransactionStatus::ACQUIRER_FOUND: //150
+			case TransactionStatus::ACQUIRER_NOT_FOUND: //151
+			case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN: //160
+			case TransactionStatus::RISK_ACCEPTED: //161
+				$this->_doTransactionMessage();
+				break;
 		}
 		
 		return $this;
 	}
+	
+	/**
+	 * Add status to order history
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionMessage($message = "")
+	{
+		if($this->_transaction->getReason() != ""){
+			$message .= __(" Reason: %1",$this->_transaction->getReason());
+		}
+		$this->_generateComment($message,true);
+		$this->_order->save();
+	}
+	
+	
 	
 	/**
 	 * Process a refund
@@ -309,6 +352,24 @@ class Notify {
 							true
 							)->save();
 		}
+	}
+	
+	/**
+	 * Process voided authorization
+	 *
+	 * @return void
+	 */
+	protected function _doTransactionVoid()
+	{
+	
+		$parentTransactionId = $payment->getLastTransId();
+	
+		$this->_order->getPayment()
+		->setPreparedMessage($this->_generateComment(''))
+		->setParentTransactionId($parentTransactionId)
+		->registerVoidNotification();
+	
+		$this->_order->save();
 	}
 	
 	/**
