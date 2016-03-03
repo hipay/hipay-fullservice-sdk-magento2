@@ -138,22 +138,6 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	
 		return (new Environments())->getEnvironments();
 	}
-	
-	/**
-	 * Mapper from HiPay-specific payment actions to Magento payment actions
-	 *
-	 * @return string|null
-	 */
-	public function getConfigPaymentAction()
-	{
-		switch ($this->getValue('paymentAction')) {
-			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
-				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
-			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
-				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
-		}
-		return null;
-	}
 
 	
 	public function isStageMode(){

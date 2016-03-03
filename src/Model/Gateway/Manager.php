@@ -127,7 +127,7 @@ class Manager {
 		$params = $this->_getRequestParameters();
 		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
 		
-		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order');
+		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
 		

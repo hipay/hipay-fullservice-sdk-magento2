@@ -81,6 +81,9 @@ define(
             context: function() {
                 return this;
             },
+            hasSsCardType: function() {
+                return false;
+            },
             /**
              * @override
              */
@@ -130,22 +133,22 @@ define(
 	            	 isPaymentProcessing = $.Deferred();
 	                    $.when(isPaymentProcessing).done(
 	                        function () {
-	                            self.placeOrder(this.getData());
+	                            self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
 	                        }
 	                    ).fail(
 	                        function (error) {
 	                            self.addError(error);
 	                        }
 	                    );
-
+	                    fullScreenLoader.startLoader();
 	                    storage.post(
-	                    		fullScreenLoader.startLoader();
+	                    		
 	                            this.tokenizeUrl, JSON.stringify(this.getData())
 	                        ).done(
 	                            function (response) {
 	                            	console.log("response");
 	                            	console.log(response);
-	                            	this.creditCardToken = response.reponseText.token;
+	                            	self.creditCardToken = response.token;
 	                            	isPaymentProcessing.resolve();
 	                            }
 	                        ).fail(

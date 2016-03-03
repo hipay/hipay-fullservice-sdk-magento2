@@ -34,4 +34,19 @@ class Form extends \Magento\Payment\Block\Form\Cc {
 				$this->_paymentConfig = $paymentConfig;
 	}
 	
+	/**
+	 * Whether switch/solo card type available
+	 *
+	 * @return bool
+	 */
+	public function hasSsCardType()
+	{
+		$availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes'));
+		$ssPresenations = array_intersect(['SS', 'SO'], $availableTypes);
+		if ($availableTypes && count($ssPresenations) > 0) {
+			return true;
+		}
+		return false;
+	}
+	
 }

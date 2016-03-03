@@ -154,14 +154,6 @@ abstract class Fullservice extends AppAction {
     {
     	return $this->_response;
     }
-    
-    /**
-     * Returns action name which requires redirect
-     * @return string
-     */
-    public function getRedirectActionName()
-    {
-    	return 'placeOrder';
-    }
+   
 
 }

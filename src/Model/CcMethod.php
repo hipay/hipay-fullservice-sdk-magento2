@@ -31,6 +31,14 @@ class CcMethod extends FullserviceMethod {
 	const HIPAY_METHOD_CODE               = 'hipay_cc';
 	
 	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = false;
+	
+	
+	/**
 	 * @var string
 	 */
 	protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Cc\Form';
@@ -189,6 +197,7 @@ class CcMethod extends FullserviceMethod {
 		try {
 				
 			$response = $this->_getGatewayManager($payment->getOrder())->requestPaymentCardToken();
+			
 			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
 			$pendingUrl = $successUrl;
 			$forwardUrl = $response->getForwardUrl();;
@@ -212,7 +221,10 @@ class CcMethod extends FullserviceMethod {
 				default:
 					$redirectUrl = $failUrl;
 			}
-	
+			
+			//always in pending, because only notificaiton can change order/transaction statues
+			$payment->setIsTransactionPending(true);
+			
 			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
 	
 		} catch (\Exception $e) {

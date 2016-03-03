@@ -158,6 +158,23 @@ abstract class FullserviceMethod extends AbstractMethod {
 		return $this->isActive($quote ? $quote->getStoreId() : null);
 	}
 	
+	/**
+	 * Mapper from HiPay-specific payment actions to Magento payment actions
+	 *
+	 * @return string|null
+	 */
+	public function getConfigPaymentAction()
+	{
+		$action = $this->getConfigData('payment_action');
+		switch ($action) {
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
+				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
+				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
+		}
+		return $action;
+	}
+	
 	
 	
 	/**

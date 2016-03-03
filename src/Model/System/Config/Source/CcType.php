@@ -34,8 +34,6 @@ class CcType extends \Magento\Payment\Model\Source\Cctype
     public function getAllowedTypes()
     {
         return ['VI', 'MC', 'AE','SM','cb','bcmc'];
-        //FAIRE que du payment product en configuration, puis surchargé la config getCcType pour retourner le code Magento ou le cas échant le code Hipay
-        //Comme cela magento gère avec les cctypes et l'API Hipay gère directement ses propres code payment products
     }
     
     /**

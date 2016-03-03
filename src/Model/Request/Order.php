@@ -4,7 +4,6 @@ namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
-use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
 
 /**
  * @author kassim
@@ -84,7 +83,7 @@ class Order extends BaseRequest{
 		
 		$orderRequest = new OrderRequest();
 		$orderRequest->orderid = $this->_order->getIncrementId();
-		$orderRequest->operation = $this->_config->getValue('paymentAction');
+		$orderRequest->operation = $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
 		$orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: "cb"; 
 		$orderRequest->description = sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
 		$orderRequest->long_description = "";

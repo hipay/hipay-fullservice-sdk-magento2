@@ -49,10 +49,8 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             	$this->getResponse()->setRedirect($redirectUrl);
             }
             else{
-            	$this->getResponse()->setRedirect('checkout/cart');
+            	$this->_redirect('checkout/cart');
             }
-            
-
             
             return;
 

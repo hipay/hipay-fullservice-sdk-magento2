@@ -30,13 +30,8 @@ class CcConfigProvider extends CcGenericConfigProvider {
 	public function __construct(
 			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
-			\Magento\Framework\Url $urlBuilder,
-			array $methodCodes = []
+			\Magento\Framework\Url $urlBuilder
 			) {
-				/*$this->ccConfig = $ccConfig;
-				foreach ($methodCodes as $code) {
-					$this->methods[$code] = $paymentHelper->getMethodInstance($code);
-				}*/
 				parent::__construct($ccConfig, $paymentHelper);
 			$this->urlBuilder = $urlBuilder;
 	}
@@ -46,12 +41,30 @@ class CcConfigProvider extends CcGenericConfigProvider {
 	 */
 	public function getConfig()
 	{
-		$config =  parent::getConfig();
+		$config = parent::getConfig();
 		$config['payment']['hipayCc'] =[
                 		'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/cc/tokenize',['_secure' => true]),
 						'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/cc/afterPlaceOrder',['_secure' => true]),
         ];
 		
 		return $config;
+	}
+	
+	/**
+	 * Whether switch/solo card type available
+	 *
+	 * @param string $methodCode
+	 * @return bool
+	 */
+	protected function hasSsCardType($methodCode)
+	{
+		return false;
+		$result = false;
+		$availableTypes = explode(',', $this->methods[$methodCode]->getConfigData('cctypes'));
+		$ssPresentations = array_intersect(['SS', 'SO'], $availableTypes);
+		if ($availableTypes && count($ssPresentations) > 0) {
+			$result = true;
+		}
+		return $result;
 	}
 }
