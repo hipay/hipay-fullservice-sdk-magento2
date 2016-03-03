@@ -16,14 +16,14 @@
 namespace HiPay\FullserviceMagento\Model;
 
 
-use HiPay\Fullservice\Gateway\Model\Collection\PaymentProductCollection;
 use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
-use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts;
+use HiPay\Fullservice\Data\PaymentProduct\Collection;
+use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
 
 
 /**
@@ -39,6 +39,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
 	const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
 	const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
+	const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
 	const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
 	const STATUS_EXPIRED = 'hipay_expired';
 	const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
@@ -67,7 +68,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 					}
 				}
 
-				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv());
+				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv(),'application/json');
 	}
     
     /**
@@ -91,16 +92,15 @@ class Config extends AbstractConfig implements ConfigurationInterface {
     }
     
     public function getPaymentProductCategoryList(){
-    	//Prepare Brand Categories
-    	$allPaymentProducts = PaymentProductCollection::getItems();
-    	$categories = [];
-    	 
-    	foreach ($allPaymentProducts as $pp) {
-    		if(in_array($pp->getProductCode(), $this->getPaymentProductsList()) && !in_array($pp->getCategory(),$categories)){
-    			$categories[] = $pp->getCategory();
-    		}
+    	return $this->getAllowedPaymentProductCategories();
+    }
+    
+    public function getPaymentProductsToOptionArray(){
+    	$list = [];
+    	foreach($this->getPaymentProducts() as $paymentProduct){
+    		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
     	}
-    	return $categories;
+    	return $list;
     }
 	
     /**
@@ -109,8 +109,13 @@ class Config extends AbstractConfig implements ConfigurationInterface {
      * @return array
      */
     public function getPaymentProducts(){
+    	$pp = (new PaymentProduct())->getPaymentProducts($this->getAllowedPaymentProductCategories());
+    	return $pp;
     	
-    	return (new PaymentProducts())->getPaymentProducts();
+    }
+    
+    public function getAllowedPaymentProductCategories(){
+    	return array('credit-card','debit-card');
     }
     
 	/**
@@ -133,22 +138,6 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	{
 	
 		return (new Environments())->getEnvironments();
-	}
-	
-	/**
-	 * Mapper from HiPay-specific payment actions to Magento payment actions
-	 *
-	 * @return string|null
-	 */
-	public function getConfigPaymentAction()
-	{
-		switch ($this->getValue('paymentAction')) {
-			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
-				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
-			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
-				return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
-		}
-		return null;
 	}
 
 	
@@ -193,6 +182,18 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	
 	public function getApiEndpointStage(){
 		return $this->_configSDK->getApiEndpointStage();
+	}
+	
+	public function getSecureVaultEndpointProd(){
+		return $this->_configSDK->getSecureVaultEndpointProd();
+	}
+	
+	public function getSecureVaultEndpointStage(){
+		return $this->_configSDK->getSecureVaultEndpointStage();
+	}
+	
+	public function getSecureVaultEndpoint(){
+		return $this->_configSDK->getSecureVaultEndpoint();
 	}
 	
 	public function getApiEnv(){

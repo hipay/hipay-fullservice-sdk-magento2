@@ -17,7 +17,6 @@ namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
-use HiPay\FullserviceMagento\Model\Request\Order;
 
 /**
  * Billing info Request Object
@@ -28,7 +27,7 @@ use HiPay\FullserviceMagento\Model\Request\Order;
  * @license http://opensource.org/licenses/mit-license.php MIT License
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class BillingInfo extends Order {
+class BillingInfo extends AbstractInfoRequest {
 	
 	/**
 	 *

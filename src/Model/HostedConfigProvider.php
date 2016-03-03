@@ -10,7 +10,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	/**
 	 * @var string[]
 	 */
-	protected $methodCode = \HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
+	protected $methodCode = \HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_METHOD_CODE;
 	
 	/**
 	 * @var Checkmo
@@ -53,7 +53,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 		 return $this->method->isAvailable() ? [
             'payment' => [
                 'hipayHosted' => [
-                		'redirectUrl'=>$this->urlBuilder->getUrl('hipay/hosted/placeOrder'),
+                		'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/hosted/afterPlaceOrder',['_secure' => true]),
                 ],
             ],
         ] : [];

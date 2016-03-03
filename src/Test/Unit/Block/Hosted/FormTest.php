@@ -8,11 +8,20 @@ class FormTest extends \PHPUnit_Framework_TestCase {
 	 */
 	protected $paymentConfigMock;
 	
-
 	/**
 	 * @var \PHPUnit_Framework_MockObject_MockObject
 	 */
 	protected $contextMock;
+	
+	/**
+	 * @var \PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected $appStateMock;
+	
+	/**
+	 * @var \PHPUnit_Framework_MockObject_MockObject $resolverMock
+	 */
+	protected $resolverMock;
 	
 	/**
 	 * @var \HiPay\FullserviceMagento\Block\Hosted\Form
@@ -22,30 +31,24 @@ class FormTest extends \PHPUnit_Framework_TestCase {
 	public function setUp()
 	{
 		
-		$this->contextMock->expects($this->once())
-		->method('getAppState')
-		->willReturn($this->appStateMock);
-		
-		$this->paymentConfigMock = $this->getMockBuilder('\Magento\Payment\Model\Config')
+		$this->paymentConfigMock = $this->getMockBuilder('\HiPay\FullserviceMagento\Model\Config')
 		->disableOriginalConstructor()
 		->getMock();
-		
+
 		$this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 		$this->form = $this->objectManagerHelper->getObject(
 				'HiPay\FullserviceMagento\Block\Hosted\Form',
 				[
-						'context' => $this->contextMock,
-						'paymentConfig' => $this->paymentConfigMock
+					'paymentConfig' => $this->paymentConfigMock
 				]
 				);
 	}
 	
 	/**
-	 * @cover \HiPay\FullserviceMagento\Block\Hosted\Form::_getTemplateFile
+	 * @cover \HiPay\FullserviceMagento\Block\Hosted\Form::getTemplateFile()
 	 */
 	public function testTemplateFileCanBeRetrieve(){
-	
-		$this->assertNotEmpty($this->form->getTemplateFile());
+		$this->assertNotNull($this->form->getTemplate());
 	
 	}
 	

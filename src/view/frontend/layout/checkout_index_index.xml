@@ -39,9 +39,9 @@
                                                                         <item name="hipay_hosted" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                       <!--  <item name="hipay_api" xsi:type="array">
+                                                                       <item name="hipay_cc" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
-                                                                        </item> -->
+                                                                        </item>
                                                                     </item>
                                                                 </item>
                                                             </item>

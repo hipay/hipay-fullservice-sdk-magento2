@@ -5,7 +5,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Credit card Hosted</label>
+                    <label>Title</label>
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
 	                <label>Payment Action</label>	           
@@ -15,8 +15,5 @@
                     <label>New Order Status</label>
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
                 </field>
-               <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment products</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProducts</source_model>
-                </field> 
+              
 </include>
