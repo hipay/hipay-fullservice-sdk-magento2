@@ -84,6 +84,9 @@ define(
             hasSsCardType: function() {
                 return false;
             },
+            getCcAvailableTypes: function() {
+                return window.checkoutConfig.payment.hipayCc.availableTypes;
+            },
             /**
              * @override
              */
@@ -146,8 +149,6 @@ define(
 	                            this.tokenizeUrl, JSON.stringify(this.getData())
 	                        ).done(
 	                            function (response) {
-	                            	console.log("response");
-	                            	console.log(response);
 	                            	self.creditCardToken = response.token;
 	                            	isPaymentProcessing.resolve();
 	                            }

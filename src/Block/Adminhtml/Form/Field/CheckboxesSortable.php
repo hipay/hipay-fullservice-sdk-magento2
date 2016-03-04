@@ -30,10 +30,22 @@ class CheckboxesSortable extends Field
 	{
 		 $javaScript = '
             <script type="text/javascript">
-			 	require(["jquery"], function($){
-				         $(function() {
-					    	$( "#row_payment_fr_hipay_cc_cctypes td.value div.nested" ).sortable();
-					  	 });
+			 	require(["jquery","jquery/ui"], function($){
+				    
+		 		var options = $("#row_'.$element->getHtmlId().' td.value div.nested div");
+		 		options.each(function(){
+		 				var input = $(this).find("input").first();
+		 				var nameArray = input.attr("name") + \'[]\';
+		 				input.attr("name",nameArray);
+		 				
+		 				var label = $(this).find("label").first();
+		 				label.css("cursor","move");
+		 				label.attr("for",false);
+	
+				});
+		 		
+					$( "#row_'.$element->getHtmlId().' td.value div.nested" ).sortable();
+					  	 
 				});
             </script>';
 		$element->setData('after_element_html',$javaScript.$element->getAfterElementHtml());
