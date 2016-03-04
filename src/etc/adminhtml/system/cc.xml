@@ -4,8 +4,9 @@
 				<label>HiPay Fullservice Credit Card</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
-				 <field id="cctypes" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+				 <field id="cctypes" translate="label" type="checkboxes" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment products</label>
+                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\CheckboxesSortable</frontend_model>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\CcType</source_model>
                 </field> 
 				 <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
