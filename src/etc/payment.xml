@@ -24,5 +24,9 @@
         <method name="hipay_cc">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <!-- Local method -->
+        <method name="hipay_sisal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

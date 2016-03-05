@@ -221,6 +221,25 @@ And include this configuration file in payment section of [system.xml](src/etc/a
 </section>
 ``` 
 
+For gloab declaration of your payment method, you should add a node in [payment.xml](src/etc/payment.xml):
+
+```xml
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <methods>
+        <method name="hipay_hosted">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_cc">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <!-- Local method -->
+        <method name="hipay_sisal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+    </methods>
+</payment>
+```
 
 Finally, enter method's default configuration node in [config.xml](src/etc/config.xml):
 
@@ -253,3 +272,93 @@ If the local method need some custom configurations, you can report it here.
 For example, Sisal do not allow a transaction more than 1000 euro.  
 So we have enter `max_order_total` and `allowed_currencies` tags with custom data.
 
+3. Add javascript client template
+
+Magento2 provide a javascript templating engine based on knockout.js.
+To display the local payment method for this type of template, you need to declare you payment method in render list in [hipay-methods.js](src/view/frontend/web/js/view/payment/hipay-methods.js).
+
+```javascript
+define(
+    [
+        'uiComponent',
+        'Magento_Checkout/js/model/payment/renderer-list'
+    ],
+    function (
+        Component,
+        rendererList
+    ) {
+        'use strict';
+        rendererList.push(
+            {
+                type: 'hipay_hosted',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
+            },
+            {
+                type: 'hipay_cc',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+            },
+            {
+            	// New local method with hosted template
+                type: 'hipay_sisal',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
+            }
+        );
+        /** Add view logic here if needed */
+        return Component.extend({});
+    }
+);
+```
+
+
+In your declaration, you must to enter a component name, you can override hipay-hosted like [hipay-sisal.js](src/view/frontend/web/js/view/payment/method-renderer/hipay-sisal.js):
+
+```javascript
+
+define(
+    [
+        'HiPay_fullserviceMagentp/js/view/payment/method-renderer/hipay-hosted', //@override hipay-hosted
+    ],
+    function (Component) {
+        'use strict';
+        return Component.extend({
+            defaults: {
+                template: 'HiPay_FullserviceMagento/payment/hipay-hosted', //template file
+                redirectAfterPlaceOrder: false
+            },
+	        getCode: function() {
+	            return 'hipay_sisal'; /:Declare your method code
+	        },
+            isActive: function() {
+                return true;
+            }
+        });
+    }
+);
+```
+
+If you want to create your custom template, put its name in default value template and create your file in `src/view/frontend/web/template/payment/` .
+
+Finally, enter a node in [checkout_index_index.xml](src/view/frontend/layout/checkout_index_index.xml) to merge your method render.
+
+```xml
+...
+<!-- merge payment method renders here -->
+<item name="children" xsi:type="array">
+    <item name="hipay-payments" xsi:type="array">
+        <item name="component" xsi:type="string">HiPay_FullserviceMagento/js/view/payment/hipay-methods</item>
+        <item name="methods" xsi:type="array">
+            <item name="hipay_hosted" xsi:type="array">
+                <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+            </item>
+           <item name="hipay_cc" xsi:type="array">
+                <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+            </item>
+            <!-- Local method -->
+            <item name="hipay_sisal" xsi:type="array">
+                <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+            </item>
+        </item>
+    </item>
+</item>
+...
+```

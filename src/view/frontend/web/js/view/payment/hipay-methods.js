@@ -31,6 +31,11 @@ define(
             {
                 type: 'hipay_cc',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+            },
+            {
+            	// New local method with hosted template
+                type: 'hipay_sisal',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
             }
         );
         /** Add view logic here if needed */

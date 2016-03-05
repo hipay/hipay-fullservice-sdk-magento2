@@ -58,9 +58,16 @@ class Manager {
 	 */
 	protected $_requestFactory;
 	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod $_methodInstance
+	 */
+	protected $_methodInstance;
+	
 	public function __construct(
 			RequestFactory $requestfactory,
 			ConfigFactory $configFactory,
+		    \Magento\Payment\Helper\Data $paymentHelper,
 			$params = []
 			
 			){
@@ -73,6 +80,9 @@ class Manager {
 			throw new \Exception('Order instance is required.');
 		}
 		$methodCode = $this->_order->getPayment()->getMethod();
+		
+		$this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
+		
 		$storeId = $this->_order->getStoreId();
 		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
 		$clientProvider = new SimpleHTTPClient($this->_config);
@@ -110,9 +120,13 @@ class Manager {
 		$params = $this->_getRequestParameters();
 		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
 		
+		/** @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest  */
 		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
-		 
+		$this->_debug($hpp);
+		
+		/** @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage */
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
+		$this->_debug($hppModel->toArray());
 		
 		return $hppModel;
 	}
@@ -139,8 +153,11 @@ class Manager {
 		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
 		
 		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
+		$this->_debug($orderRequest);
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
+		$this->_debug($transaction->toArray());
+		
 		
 		return $transaction;
 	}
@@ -171,6 +188,10 @@ class Manager {
 		return $tr;
 	}
 	
+	protected function _debug($debugData){
+		$this->_methodInstance->debugData($debugData);
+	}
+	
 	protected function _getPayment(){
 		return $this->_order->getPayment();
 	}
@@ -197,6 +218,7 @@ class Manager {
 		if(is_null($operationId)){			
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}
+		
 		$opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount,$operationId);
 		return$opModel;
 	}
