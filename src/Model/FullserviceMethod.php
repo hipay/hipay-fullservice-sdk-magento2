@@ -148,6 +148,21 @@ abstract class FullserviceMethod extends AbstractMethod {
 	}
 	
 	/**
+	 * Check method for processing with base currency
+	 *
+	 * @param string $currencyCode
+	 * @return bool
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function canUseForCurrency($currencyCode)
+	{
+		if($this->getConfigData('allowed_currencies') != ""){
+			return in_array($currencyCode,explode(",",$this->getConfigData('allowed_currencies')));
+		}
+		return true;
+	}
+	
+	/**
 	 * Check whether payment method can be used with the quote
 	 *
 	 * @param \Magento\Quote\Api\Data\CartInterface|null $quote

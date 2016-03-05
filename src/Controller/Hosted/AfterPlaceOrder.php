@@ -31,12 +31,12 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
     {
     	ini_set('display_errors', 1);
     	error_reporting(E_ALL | E_STRICT);
-    	//die(ini_get('memory_limit'));
+    	
         try {
         	
         	
-        	
-            $order = $this->_getCheckoutSession()->getLastRealOrder();
+           //Retieve last order increment id
+           $order = $this->_getCheckoutSession()->getLastRealOrder();
 			
            if(!$order->getId()){
             	throw new \Magento\Framework\Exception\LocalizedException(
@@ -44,12 +44,13 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             			);
             }
            
+            //Create gateway manage with order data
             $gateway = $this->_gatewayManagerFactory->create($order);
         	
+            //Call fullservice api to get hosted page url
             $hppModel = $gateway->requestHostedPaymentPage();
-            
-            //@TODO catch sdk exception
-
+			
+            //Redirect to hosted page
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
 

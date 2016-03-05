@@ -232,15 +232,24 @@ Finally, enter method's default configuration node in [config.xml](src/etc/confi
     <title>Sisal</title>
     <payment_action>Sale</payment_action>
     <order_status>pending</order_status>
+    <payment_products>sisal</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
     <display_selector>0</display_selector>
-    <authentication_indicator>0</authentication_indicator>
+    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
     <template>basic-js</template>
     <css></css>
     <allowspecific>0</allowspecific>
+    <max_order_total>1000</max_order_total> <!-- Custom local configuration -->
+    <allowed_currencies>EUR</allowed_currencies> <!-- Custom local configuration -->
     <debug>0</debug>
     <env>STAGE</env>
 </hipay_sisal>
 ```
 
-You need to report the method model created previously in `model` tag.
+You need to report the method model created previously in `model` tag.  
+The `payment_products` tag is used to display payment methods in payment form. In our *Sisal* example, we limit to `sisal` product code.  
+`display_selector` is alose disabled with zero value.  
+
+If the local method need some custom configurations, you can report it here.  
+For example, Sisal do not allow a transaction more than 1000 euro.  
+So we have enter `max_order_total` and `allowed_currencies` tags with custom data.
 
