@@ -24,6 +24,7 @@ use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
 use Magento\Framework\Exception\LocalizedException;
+use HiPay\Fullservice\Request\RequestSerializer;
 
 class Manager {
 	
@@ -63,6 +64,7 @@ class Manager {
 	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod $_methodInstance
 	 */
 	protected $_methodInstance;
+
 	
 	public function __construct(
 			RequestFactory $requestfactory,
@@ -79,6 +81,7 @@ class Manager {
 		} else {
 			throw new \Exception('Order instance is required.');
 		}
+		
 		$methodCode = $this->_order->getPayment()->getMethod();
 		
 		$this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
@@ -122,7 +125,7 @@ class Manager {
 		
 		/** @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest  */
 		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
-		$this->_debug($hpp);
+		$this->_debug($this->_requestToArray($hpp));
 		
 		/** @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage */
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
@@ -153,7 +156,8 @@ class Manager {
 		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
 		
 		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
-		$this->_debug($orderRequest);
+		$this->_debug($this->_requestToArray($orderRequest));
+		
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
 		$this->_debug($transaction->toArray());
@@ -186,6 +190,16 @@ class Manager {
 	private function cleanTransactionValue($transactionReference){
 		list($tr,) = explode("-", $transactionReference);
 		return $tr;
+	}
+	
+	/**
+	 * 
+	 * @param \HiPay\Fullservice\Request\RequestInterface $request
+	 * @return []
+	 */
+	protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request){
+		
+		return (new RequestSerializer($request))->toArray();
 	}
 	
 	protected function _debug($debugData){

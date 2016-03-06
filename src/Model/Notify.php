@@ -24,12 +24,6 @@ class Notify {
 	
 	/**
 	 *
-	 * @var  \Psr\Log\LoggerInterface $_logger
-	 */
-	protected $_logger;
-	
-	/**
-	 *
 	 * @var \Magento\Sales\Model\OrderFactory $_orderFactory
 	 */
 	protected $_orderFactory;
@@ -50,15 +44,20 @@ class Notify {
 	 */
 	protected $_transaction;
 	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod $_methodInstance
+	 */
+	protected $_methodInstance;
+	
 	
 	public function __construct(
-			\Psr\Log\LoggerInterface $_logger,
 			\Magento\Sales\Model\OrderFactory $orderFactory,
 			OrderSender $orderSender,
+			\Magento\Payment\Helper\Data $paymentHelper,
 			$params = []
 			){
-		
-			$this->_logger = $_logger;
+
 			$this->_orderFactory = $orderFactory;
 			$this->orderSender = $orderSender;
 	
@@ -69,6 +68,12 @@ class Notify {
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
 				}
+				
+				//Retieve method model
+				$this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
+				
+				//Debug transaction notification if debug enabled
+				$this->_methodInstance->debugData($this->_transaction->toArray());
 				
 			} else {
 				throw new \Exception('Posted data response as array is required.');
