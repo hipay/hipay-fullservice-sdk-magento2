@@ -37,6 +37,12 @@ define(
                 type: 'hipay_sisal',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
             }
+            ,
+            {
+            	// New local method with hosted template
+                type: 'hipay_qiwiwallet',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-qiwiwallet'
+            }
         );
         /** Add view logic here if needed */
         return Component.extend({});

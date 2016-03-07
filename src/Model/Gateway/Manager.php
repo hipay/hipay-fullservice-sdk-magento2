@@ -121,7 +121,7 @@ class Manager {
 		
 		//Merge params
 		$params = $this->_getRequestParameters();
-		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		$params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
 		
 		/** @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest  */
 		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
@@ -137,23 +137,11 @@ class Manager {
 	/**
 	 * 
 	 */
-	public function requestPaymentCardToken(){
-		
-		//Check if token is present
-		$token = $this->_order->getPayment()->getAdditionalInformation('cc_token');
-		if(empty($token)){
-			throw new LocalizedException(__('Secure Vault token is empty'));
-		}
-
-		//Init cardTokenPaymentMethod request
-		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
-		$cardTokenPaymentMethod->cardtoken = $token;
-		$cardTokenPaymentMethod->eci = 7;
+	public function requestNewOrder(){
 		
 		//Merge params
 		$params = $this->_getRequestParameters();
-		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		$params['params']['paymentMethod'] =  $this->_getPaymentMethodRequest();;
 		
 		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
 		$this->_debug($this->_requestToArray($orderRequest));
@@ -190,6 +178,14 @@ class Manager {
 	private function cleanTransactionValue($transactionReference){
 		list($tr,) = explode("-", $transactionReference);
 		return $tr;
+	}
+	
+	
+	protected function _getPaymentMethodRequest(){
+		$className = $this->_methodInstance->getConfigData('payment_method');
+		if(!empty($className)){
+			return $this->_getRequestObject($className);
+		}
 	}
 	
 	/**

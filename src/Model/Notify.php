@@ -95,6 +95,9 @@ class Notify {
 			case TransactionStatus::PENDING_PAYMENT: //200
 				$this->_doTransactionAuthorizedAndPending();
 				break;
+			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
+				$this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
+				break;
 			case TransactionStatus::REFUSED: //113
 			case TransactionStatus::CANCELLED: //115 Cancel order and transaction
 			case TransactionStatus::AUTHORIZATION_REFUSED: //163
@@ -141,7 +144,6 @@ class Notify {
 			case TransactionStatus::PARTIALLY_DEBITED: //132
 			case TransactionStatus::AUTHENTICATION_REQUESTED: //140
 			case TransactionStatus::AUTHENTICATED: //141
-			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
 			case TransactionStatus::ACQUIRER_FOUND: //150
 			case TransactionStatus::ACQUIRER_NOT_FOUND: //151
 			case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN: //160
@@ -151,6 +153,13 @@ class Notify {
 		}
 		
 		return $this;
+	}
+	
+	protected function _changeStatus($status,$comment = "",$addToHistory = true,$save=true){
+		$this->_generateComment($comment,$addToHistory);
+		$this->_order->setStatus($status);
+		
+		if($save)$this->_order->save();
 	}
 	
 	/**
@@ -218,10 +227,7 @@ class Notify {
 	 */
 	protected function _doTransactionCaptureRequested()
 	{
-	
-		$this->_generateComment('Capture Requested.',true);
-		$this->_order->setStatus(Config::STATUS_CAPTURE_REQUESTED);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_CAPTURE_REQUESTED,'Capture Requested.');
 	}
 	
 	/**
@@ -231,10 +237,7 @@ class Notify {
 	 */
 	protected function _doTransactionRefundRequested()
 	{
-	
-		$this->_generateComment('Refund Requested.',true);
-		$this->_order->setStatus(Config::STATUS_REFUND_REQUESTED);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_REFUND_REQUESTED,'Refund Requested.');
 	}
 	
 	/**
@@ -244,9 +247,7 @@ class Notify {
 	 */
 	protected function _doTransactionRefundRefused()
 	{
-	
-		$this->_generateComment('Refund Refused.',true);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_REFUND_REFUSED,'Refund Refused.');
 	}
 	
 	

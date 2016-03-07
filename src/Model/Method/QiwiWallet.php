@@ -15,11 +15,11 @@
  */
 namespace Hipay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
+use HiPay\FullserviceMagento\Model\FullserviceMethod;
 
-class Sisal extends HostedMethod{
+class QiwiWallet extends FullserviceMethod{
 	
-	const HIPAY_METHOD_CODE               = 'hipay_sisal';
+	const HIPAY_METHOD_CODE               = 'hipay_qiwiwallet';
 	
 	/**
 	 * @var string
@@ -39,6 +39,11 @@ class Sisal extends HostedMethod{
 	 * @var bool
 	 */
 	protected $_canRefundInvoicePartial = false;
+	
+	/**
+	 * @var string[] keys to import in payment additionnal informations
+	 */
+	protected $_additionalInformationKeys = ['qiwiuser'];
 	
 	
 	

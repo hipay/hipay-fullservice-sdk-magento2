@@ -21,7 +21,7 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
-    <action name="hipay/cc/afterPlaceOrder">
+    <action name="hipay/payment/afterPlaceOrder">
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
