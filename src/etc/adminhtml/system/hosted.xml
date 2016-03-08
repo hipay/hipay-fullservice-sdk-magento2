@@ -24,6 +24,10 @@
                     <label>Template type</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
                 </field>
+                 <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Display hosted page in Iframe</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <include path="HiPay_FullserviceMagento::system/base_bottom.xml"/>
                 
 			</group>

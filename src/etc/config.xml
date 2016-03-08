@@ -46,6 +46,7 @@
                 <title>Credit Card</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
+                <iframe_mode>1</iframe_mode>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -63,6 +64,7 @@
 			    <title>Sisal</title>
 			    <payment_action>Sale</payment_action>
 			    <order_status>pending</order_status>
+			    <iframe_mode>1</iframe_mode>
 			    <payment_products>sisal</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>realtime-banking</payment_products_categories>
 			    <display_selector>0</display_selector>

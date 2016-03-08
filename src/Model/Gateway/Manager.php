@@ -112,13 +112,6 @@ class Manager {
 	 */
 	public function requestHostedPaymentPage(){
 		
-		
-		//Init cardTokenPaymentMethod request
-		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
-		$cardTokenPaymentMethod->cardtoken = "";
-		$cardTokenPaymentMethod->eci = 7;
-		
 		//Merge params
 		$params = $this->_getRequestParameters();
 		$params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();

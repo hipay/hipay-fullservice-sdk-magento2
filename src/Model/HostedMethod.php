@@ -52,7 +52,42 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	protected $_isInitializeNeeded = true;
 	
+	
+	/**
+	 * Instantiate state and set it to state object
+	 *
+	 * @param string $paymentAction
+	 * @param \Magento\Framework\DataObject $stateObject
+	 * @return void
+	 */
+	public function initialize($paymentAction, $stateObject)
+	{
 
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
+		$order->setCanSendNewEmailFlag(false);
+		$payment->setAmountAuthorized($order->getTotalDue());
+		$payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+		
+		$this->_setHostedUrl($order);
+		
+		$stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+		$stateObject->setStatus('pending_payment');
+		$stateObject->setIsNotified(false);
+
+	}
+	
+	protected function _setHostedUrl(\Magento\Sales\Model\Order $order){
+
+		//Create gateway manage with order data
+		$gateway = $this->_gatewayManagerFactory->create($order);
+			
+		//Call fullservice api to get hosted page url
+		$hppModel = $gateway->requestHostedPaymentPage();
+		$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
+
+	}
+	
 	/**
 	 * Capture payment method
 	 *
