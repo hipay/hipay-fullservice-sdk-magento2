@@ -24,6 +24,11 @@
 				<secret_passphrase backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
 				<secret_passphrase_test backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
 			</hipay_credentials>
+			<fraud_payment_template>
+                <template>hipay_fraud_payment_template</template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </fraud_payment_template>
 		</hipay>
 		<payment>
 			<hipay_cc>

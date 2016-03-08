@@ -8,7 +8,7 @@
 					base_top.xml contain configuration fields will be appear on top
 					like enabled, title, order statues etc ...
 				-->
-				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
                 
                  <!-- no custom fields needed -->
                 
@@ -18,7 +18,7 @@
 					base_bottom.xml contain configuration fields will be appear on bottom
 					like test mode, debug, sort order etc ..
 				-->
-                <include path="HiPay_FullserviceMagento::system/base_bottom.xml"/>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
                 
 			</group>
 </include>
