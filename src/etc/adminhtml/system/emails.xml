@@ -1,23 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-		<group id="fraud_payment" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+		<group id="fraud_payment_review" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
 			<label>Fraud Payment Review Email</label>
 			<comment>This email is sended to customer, if his payment is in fraud state</comment>
-               <field id="identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                   <label>Payment Fraud Email Sender</label>
-                   <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
-               </field>
-               <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                   <label>Payment Fraud Template</label>
-                   <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
-               </field>
-               <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
-                   <label>Send Payment Fraud Email Copy To</label>
-                   <comment>Separate by ",".</comment>
-               </field>
-               <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                   <label>Send Payment Fraud Email Copy Method</label>
-                   <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
-               </field>
+			<field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            	<label>Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+            <field id="identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Fraud Email Sender</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+            </field>
+            <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Fraud Template</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+            </field>
+            <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Fraud Email Copy To</label>
+                <comment>Separate by ",".</comment>
+            </field>
+            <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Fraud Email Copy Method</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+            </field>
+		</group>
+		<group id="fraud_payment_deny" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Fraud Payment Deny Email</label>
+			<comment>This email is sended to customer, if his payment is denied by merchant</comment>
+			<field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            	<label>Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+            <field id="identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Fraud Email Sender</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+            </field>
+            <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Fraud Template</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+            </field>
+            <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Fraud Email Copy To</label>
+                <comment>Separate by ",".</comment>
+            </field>
+            <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Fraud Email Copy Method</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+            </field>
 		</group>
 </include>
