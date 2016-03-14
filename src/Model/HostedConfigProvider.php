@@ -13,7 +13,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	protected $methodCode = \HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_METHOD_CODE;
 	
 	/**
-	 * @var Checkmo
+	 * @var HostedMethod
 	 */
 	protected $method;
 	

@@ -18,8 +18,9 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * Source model for available payment products
  */
-class PaymentProduct implements \Magento\Framework\Option\ArrayInterface
+class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
+	const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
 
 	
 	/**
@@ -30,13 +31,24 @@ class PaymentProduct implements \Magento\Framework\Option\ArrayInterface
 	protected $_paymentConfig;
 	
 	/**
+	 * Core store config
+	 *
+	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
+	 */
+	protected $_scopeConfig;
+	
+	/**
 	 * Config
 	 *
 	 * @param \Magento\Payment\Model\Config $paymentConfig
 	 */
-	public function __construct(\Magento\Payment\Model\Config $paymentConfig)
+	public function __construct(
+			\Magento\Payment\Model\Config $paymentConfig,
+			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+			)
 	{
 		$this->_paymentConfig = $paymentConfig;
+		$this->_scopeConfig = $scopeConfig;
 	}
 	
     /**
@@ -44,9 +56,23 @@ class PaymentProduct implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
+
+    	$categories = null;
+    	
+    	if($this->getPath()){
+    		
+	    	list($section_locale,$method) = explode("/", $this->getPath());
+	    	list($section) = explode("_",$section_locale);
+	    	
+	    	$categories = $this->_scopeConfig->getValue(implode('/',[$section,$method,self::PAYMENT_PRODUCT_FIELD])) ?: null;
+
+	    	if(!empty($categories)){
+	    		$categories = explode(',',$categories);
+	    	}
+    	}
     	
     	$list = [];
-    	foreach($this->getPaymentProducts() as $paymentProduct){
+    	foreach($this->getPaymentProducts($categories) as $paymentProduct){
     		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
     	}
     	

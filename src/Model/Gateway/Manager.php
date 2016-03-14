@@ -24,6 +24,7 @@ use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
 use Magento\Framework\Exception\LocalizedException;
+use HiPay\Fullservice\Request\RequestSerializer;
 
 class Manager {
 	
@@ -58,9 +59,17 @@ class Manager {
 	 */
 	protected $_requestFactory;
 	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod $_methodInstance
+	 */
+	protected $_methodInstance;
+
+	
 	public function __construct(
 			RequestFactory $requestfactory,
 			ConfigFactory $configFactory,
+		    \Magento\Payment\Helper\Data $paymentHelper,
 			$params = []
 			
 			){
@@ -72,7 +81,11 @@ class Manager {
 		} else {
 			throw new \Exception('Order instance is required.');
 		}
+		
 		$methodCode = $this->_order->getPayment()->getMethod();
+		
+		$this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
+		
 		$storeId = $this->_order->getStoreId();
 		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
 		$clientProvider = new SimpleHTTPClient($this->_config);
@@ -108,11 +121,15 @@ class Manager {
 		
 		//Merge params
 		$params = $this->_getRequestParameters();
-		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		$params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
 		
+		/** @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest  */
 		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
-		 
+		$this->_debug($this->_requestToArray($hpp));
+		
+		/** @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage */
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
+		$this->_debug($hppModel->toArray());
 		
 		return $hppModel;
 	}
@@ -120,27 +137,19 @@ class Manager {
 	/**
 	 * 
 	 */
-	public function requestPaymentCardToken(){
-		
-		//Check if token is present
-		$token = $this->_order->getPayment()->getAdditionalInformation('cc_token');
-		if(empty($token)){
-			throw new LocalizedException(__('Secure Vault token is empty'));
-		}
-
-		//Init cardTokenPaymentMethod request
-		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
-		$cardTokenPaymentMethod->cardtoken = $token;
-		$cardTokenPaymentMethod->eci = 7;
+	public function requestNewOrder(){
 		
 		//Merge params
 		$params = $this->_getRequestParameters();
-		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		$params['params']['paymentMethod'] =  $this->_getPaymentMethodRequest();;
 		
 		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
+		$this->_debug($this->_requestToArray($orderRequest));
+		
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
+		$this->_debug($transaction->toArray());
+		
 		
 		return $transaction;
 	}
@@ -171,6 +180,28 @@ class Manager {
 		return $tr;
 	}
 	
+	
+	protected function _getPaymentMethodRequest(){
+		$className = $this->_methodInstance->getConfigData('payment_method');
+		if(!empty($className)){
+			return $this->_getRequestObject($className);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param \HiPay\Fullservice\Request\RequestInterface $request
+	 * @return []
+	 */
+	protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request){
+		
+		return (new RequestSerializer($request))->toArray();
+	}
+	
+	protected function _debug($debugData){
+		$this->_methodInstance->debugData($debugData);
+	}
+	
 	protected function _getPayment(){
 		return $this->_order->getPayment();
 	}
@@ -197,6 +228,7 @@ class Manager {
 		if(is_null($operationId)){			
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}
+		
 		$opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount,$operationId);
 		return$opModel;
 	}

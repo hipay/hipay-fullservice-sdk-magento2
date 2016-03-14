@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Hosted;
+namespace HiPay\FullserviceMagento\Controller\Payment;
 
 
 
@@ -31,27 +31,27 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
     {
     	ini_set('display_errors', 1);
     	error_reporting(E_ALL | E_STRICT);
-    	
+    	//die(ini_get('memory_limit'));
         try {
         	
         	
-           //Retieve last order increment id
-           $order = $this->_getCheckoutSession()->getLastRealOrder();
+        	
+            $order = $this->_getCheckoutSession()->getLastRealOrder();
 			
            if(!$order->getId()){
             	throw new \Magento\Framework\Exception\LocalizedException(
             			__('We can\'t place the order.')
             			);
             }
-           
-            //Create gateway manage with order data
-            $gateway = $this->_gatewayManagerFactory->create($order);
-        	
-            //Call fullservice api to get hosted page url
-            $hppModel = $gateway->requestHostedPaymentPage();
-			
-            //Redirect to hosted page
-            $this->getResponse()->setRedirect($hppModel->getForwardUrl());
+            
+            $payment = $order->getPayment();
+            if(($redirectUrl = $payment->getAdditionalInformation('redirectUrl')) != ""){
+            	$this->getResponse()->setRedirect($redirectUrl);
+            }
+            else{
+            	$this->_redirect('checkout/cart');
+            }
+            
             return;
 
 

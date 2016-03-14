@@ -45,6 +45,13 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	protected $_code = self::HIPAY_METHOD_CODE;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = true;
+	
 
 	/**
 	 * Capture payment method

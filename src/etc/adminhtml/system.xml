@@ -52,7 +52,9 @@
 		</section>
 		<section id="payment">
 			<include path="HiPay_FullserviceMagento::system/hosted.xml"/>
-			<include path="HiPay_FullserviceMagento::system/cc.xml"/>		
+			<include path="HiPay_FullserviceMagento::system/cc.xml"/>
+			<include path="HiPay_FullserviceMagento::system/sisal.xml"/>	
+			<include path="HiPay_FullserviceMagento::system/qiwi-wallet.xml"/>		
 		</section>
 	</system>
 </config>

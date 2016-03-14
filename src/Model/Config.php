@@ -115,7 +115,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
     }
     
     public function getAllowedPaymentProductCategories(){
-    	return array('credit-card','debit-card');
+    	return explode(",",$this->getValue('payment_products_categories'));
     }
     
 	/**

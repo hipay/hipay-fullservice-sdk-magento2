@@ -16,8 +16,10 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use \HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use Magento\Payment\Model\InfoInterface;
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use Magento\Framework\Exception\LocalizedException;
 
 
 /**
@@ -81,7 +83,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 *
 	 * @var bool
 	 */
-	protected $_isInitializeNeeded = true;
+	protected $_isInitializeNeeded = false;
 	
 	/**
 	 * Payment Method feature
@@ -111,6 +113,10 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $urlBuilder;
 	
+	/**
+	 * @var string[] keys to import in payment additionnal informations
+	 */
+	protected $_additionalInformationKeys = [];
 	
 	
 	/**
@@ -148,6 +154,52 @@ abstract class FullserviceMethod extends AbstractMethod {
 	}
 	
 	/**
+	 * Assign data to info model instance
+	 *
+	 * @param array|\Magento\Framework\DataObject $data
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 */
+	public function assignData(\Magento\Framework\DataObject $data)
+	{
+		if (!$data instanceof \Magento\Framework\DataObject) {
+			$data = new \Magento\Framework\DataObject($data);
+		}
+
+		$this->getInfoInstance()->addData($data->getData());
+		
+		$this->_assignAdditionalInformation($data);
+		
+		return $this;
+	}
+	
+	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
+		
+		$info = $this->getInfoInstance();
+		foreach ($this->_additionalInformationKeys as $key) {			
+			$info->setAdditionalInformation($key,$data->getData($key));
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * Check method for processing with base currency
+	 *
+	 * @param string $currencyCode
+	 * @return bool
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function canUseForCurrency($currencyCode)
+	{
+		if($this->getConfigData('allowed_currencies') != ""){
+			return in_array($currencyCode,explode(",",$this->getConfigData('allowed_currencies')));
+		}
+		return true;
+	}
+	
+	/**
 	 * Check whether payment method can be used with the quote
 	 *
 	 * @param \Magento\Quote\Api\Data\CartInterface|null $quote
@@ -175,6 +227,85 @@ abstract class FullserviceMethod extends AbstractMethod {
 		return $action;
 	}
 	
+	public function place(\Magento\Payment\Model\InfoInterface $payment){
+	
+		try {
+	
+			$response = $this->_getGatewayManager($payment->getOrder())->requestNewOrder();
+				
+			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
+			$pendingUrl = $successUrl;
+			$forwardUrl = $response->getForwardUrl();;
+			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
+			$redirectUrl = $successUrl;
+			switch($response->getState()){
+				case TransactionState::COMPLETED:
+					//redirectUrl is success by default
+					break;
+				case TransactionState::PENDING:
+					$redirectUrl = $pendingUrl;
+					break;
+				case TransactionState::FORWARDING:
+					$redirectUrl = $forwardUrl;
+					break;
+				case TransactionState::DECLINED:
+					$redirectUrl = $failUrl;
+					break;
+				case TransactionState::ERROR:
+					throw new LocalizedException(__('There was an error request new transaction: %1.', $response->getReason()));
+				default:
+					$redirectUrl = $failUrl;
+			}
+				
+			//always in pending, because only notification can change order/transaction statues
+			$payment->setIsTransactionPending(true);
+				
+			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
+	
+		} catch (\Exception $e) {
+	
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error request new transaction: %1.', $e->getMessage()));
+		}
+		return $this;
+	}
+	
+	
+	/**
+	 * Capture payment method
+	 *
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+	 */
+	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+	{
+		parent::capture($payment, $amount);
+		try {
+			/** @var \Magento\Sales\Model\Order\Payment $payment */
+			if ($payment->getCcTransId()) {  //Is not the first transaction
+				// As we alredy hav a transaction reference, we can request a capture operation.
+				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+	
+			} else { //Ok, it's the first transaction, so we request a new order
+				$this->place($payment);
+	
+			}
+	
+		} catch (LocalizedException $e) {
+			throw $e;
+		}
+		catch (\Exception $e) {
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
+		}
+	
+	
+		return $this;
+	}
 	
 	
 	/**

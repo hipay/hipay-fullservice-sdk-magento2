@@ -26,6 +26,7 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
+           		<item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\GenericConfigProvider</item>
                 <item name="hipay_hosted_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\HostedConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\CcConfigProvider</item>
             </argument>

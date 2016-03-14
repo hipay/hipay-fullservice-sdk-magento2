@@ -28,7 +28,8 @@ define(
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
         		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
         		creditCardToken: null,
-        		redirectAfterPlaceOrder: false
+        		redirectAfterPlaceOrder: false,
+        		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -58,26 +59,6 @@ define(
             isShowLegend: function () {
                 return true;
             },
-            /**
-             * @returns {*}
-             */
-            getSource: function () {
-                return window.checkoutConfig.payment.iframe.source[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getControllerName: function () {
-                return window.checkoutConfig.payment.iframe.controllerName[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getPlaceOrderUrl: function () {
-                return window.checkoutConfig.payment.iframe.placeOrderUrl[this.getCode()];
-            },
             context: function() {
                 return this;
             },
@@ -104,7 +85,7 @@ define(
                         'cc_exp_year': this.creditCardExpYear(),
                         'cc_exp_month': this.creditCardExpMonth(),
                         'cc_number': this.creditCardNumber(),
-                        'cc_token': this.creditCardToken
+                        'card_token': this.creditCardToken
                     }
                 };
             },
@@ -125,16 +106,22 @@ define(
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl);
+	        	 $.mage.redirect(this.afterPlaceOrderUrl);
 	        },
-            generateToken: function (){
+            generateToken: function (data,event){
             	var self = this,
-            	isPaymentProcessing = null;
+            	isTokenizeProcessing = null;
+            	
 
-	            if (this.validateHandler()) {
+                if (event) {
+                    event.preventDefault();
+                }
+            	
+            	
+	            if(this.validateHandler()){
 	            	
-	            	 isPaymentProcessing = $.Deferred();
-	                    $.when(isPaymentProcessing).done(
+	            	 isTokenizeProcessing = $.Deferred();
+	                    $.when(isTokenizeProcessing).done(
 	                        function () {
 	                            self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
 	                        }
@@ -143,24 +130,33 @@ define(
 	                            self.addError(error);
 	                        }
 	                    );
+	                    
 	                    fullScreenLoader.startLoader();
 	                    storage.post(
 	                    		
 	                            this.tokenizeUrl, JSON.stringify(this.getData())
 	                        ).done(
 	                            function (response) {
+	                            	if(response.token){
+	                            		
 	                            	self.creditCardToken = response.token;
-	                            	isPaymentProcessing.resolve();
+	                            	isTokenizeProcessing.resolve();
+	                            	}
+	                            	else{
+	                            		var error = response;
+		                                isTokenizeProcessing.reject(error);
+	                            	}
+	                            	fullScreenLoader.stopLoader();
 	                            }
 	                        ).fail(
 	                            function (response) {
 	                            	var error = JSON.parse(response.responseText);
-	                                isPaymentProcessing.reject(error);
+	                            	isTokenizeProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();
 	                            }
 	                        );
-	            	
 	            }
+
             }
             
         });

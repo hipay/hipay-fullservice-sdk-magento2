@@ -24,12 +24,6 @@ class Notify {
 	
 	/**
 	 *
-	 * @var  \Psr\Log\LoggerInterface $_logger
-	 */
-	protected $_logger;
-	
-	/**
-	 *
 	 * @var \Magento\Sales\Model\OrderFactory $_orderFactory
 	 */
 	protected $_orderFactory;
@@ -50,15 +44,20 @@ class Notify {
 	 */
 	protected $_transaction;
 	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod $_methodInstance
+	 */
+	protected $_methodInstance;
+	
 	
 	public function __construct(
-			\Psr\Log\LoggerInterface $_logger,
 			\Magento\Sales\Model\OrderFactory $orderFactory,
 			OrderSender $orderSender,
+			\Magento\Payment\Helper\Data $paymentHelper,
 			$params = []
 			){
-		
-			$this->_logger = $_logger;
+
 			$this->_orderFactory = $orderFactory;
 			$this->orderSender = $orderSender;
 	
@@ -69,6 +68,12 @@ class Notify {
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
 				}
+				
+				//Retieve method model
+				$this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
+				
+				//Debug transaction notification if debug enabled
+				$this->_methodInstance->debugData($this->_transaction->toArray());
 				
 			} else {
 				throw new \Exception('Posted data response as array is required.');
@@ -89,6 +94,9 @@ class Notify {
 			case TransactionStatus::AUTHORIZED_AND_PENDING: //112
 			case TransactionStatus::PENDING_PAYMENT: //200
 				$this->_doTransactionAuthorizedAndPending();
+				break;
+			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
+				$this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
 				break;
 			case TransactionStatus::REFUSED: //113
 			case TransactionStatus::CANCELLED: //115 Cancel order and transaction
@@ -136,7 +144,6 @@ class Notify {
 			case TransactionStatus::PARTIALLY_DEBITED: //132
 			case TransactionStatus::AUTHENTICATION_REQUESTED: //140
 			case TransactionStatus::AUTHENTICATED: //141
-			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
 			case TransactionStatus::ACQUIRER_FOUND: //150
 			case TransactionStatus::ACQUIRER_NOT_FOUND: //151
 			case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN: //160
@@ -146,6 +153,13 @@ class Notify {
 		}
 		
 		return $this;
+	}
+	
+	protected function _changeStatus($status,$comment = "",$addToHistory = true,$save=true){
+		$this->_generateComment($comment,$addToHistory);
+		$this->_order->setStatus($status);
+		
+		if($save)$this->_order->save();
 	}
 	
 	/**
@@ -213,10 +227,7 @@ class Notify {
 	 */
 	protected function _doTransactionCaptureRequested()
 	{
-	
-		$this->_generateComment('Capture Requested.',true);
-		$this->_order->setStatus(Config::STATUS_CAPTURE_REQUESTED);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_CAPTURE_REQUESTED,'Capture Requested.');
 	}
 	
 	/**
@@ -226,10 +237,7 @@ class Notify {
 	 */
 	protected function _doTransactionRefundRequested()
 	{
-	
-		$this->_generateComment('Refund Requested.',true);
-		$this->_order->setStatus(Config::STATUS_REFUND_REQUESTED);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_REFUND_REQUESTED,'Refund Requested.');
 	}
 	
 	/**
@@ -239,9 +247,7 @@ class Notify {
 	 */
 	protected function _doTransactionRefundRefused()
 	{
-	
-		$this->_generateComment('Refund Refused.',true);
-		$this->_order->save();
+		$this->_changeStatus(Config::STATUS_REFUND_REFUSED,'Refund Refused.');
 	}
 	
 	

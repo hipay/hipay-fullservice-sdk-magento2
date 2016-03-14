@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+<group id="hipay_qiwiwallet" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>HiPay Fullservice Qiwi Wallet API</label>
+				<comment></comment>
+				<!-- 
+					Include tag import configuration from another file.
+					base_top.xml contain configuration fields will be appear on top
+					like enabled, title, order statues etc ...
+				-->
+				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+                
+                 <!-- no custom fields needed -->
+                
+                
+                <!-- 
+					Include tag import configuration from another file.
+					base_bottom.xml contain configuration fields will be appear on bottom
+					like test mode, debug, sort order etc ..
+				-->
+                <include path="HiPay_FullserviceMagento::system/base_bottom.xml"/>
+                
+			</group>
+</include>

@@ -16,7 +16,6 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
-use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -29,13 +28,6 @@ use Magento\Framework\Exception\LocalizedException;
 class CcMethod extends FullserviceMethod {
 	
 	const HIPAY_METHOD_CODE               = 'hipay_cc';
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_isInitializeNeeded = false;
 	
 	
 	/**
@@ -74,6 +66,11 @@ class CcMethod extends FullserviceMethod {
 	 * @var \Magento\Framework\Url
 	 */
 	protected $urlBuilder;
+	
+	/**
+	 * @var string[] keys to import in payment additionnal informations
+	 */
+	protected $_additionalInformationKeys = ['card_token'];
 	
 	/**
 	 * @param \Magento\Framework\Model\Context $context
@@ -134,8 +131,9 @@ class CcMethod extends FullserviceMethod {
 			->setCcExpYear ( $data->getCcExpYear () )
 			->setCcSsIssue ( $data->getCcSsIssue () )
 			->setCcSsStartMonth ( $data->getCcSsStartMonth () )
-			->setCcSsStartYear ( $data->getCcSsStartYear () )
-			->setAdditionalInformation('cc_token',$data->getCcToken());
+			->setCcSsStartYear ( $data->getCcSsStartYear () );
+		
+		$this->_assignAdditionalInformation($data);
 		
 		return $this;
 	}
@@ -157,83 +155,6 @@ class CcMethod extends FullserviceMethod {
 		return $this;
 	}
 	
-	
-	/**
-	 * Capture payment method
-	 *
-	 * @param \Magento\Framework\DataObject|InfoInterface $payment
-	 * @param float $amount
-	 * @return $this
-	 * @throws \Magento\Framework\Exception\LocalizedException
-	 * @api
-	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-	 */
-	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
-	{
-		parent::capture($payment, $amount);
-		try {
-			/** @var \Magento\Sales\Model\Order\Payment $payment */
-			if ($payment->getCcTransId()) {  //Is not the first transaction
-				// As we alredy hav a transaction reference, we can request a capture operation.
-				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-	
-			} else { //Ok, it's the first transaction, so we request a new order
-				$this->place($payment);
-	
-			}
-				
-				
-		} catch (\Exception $e) {
-			$this->_logger->critical($e);
-			throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
-		}
-	
-	
-		return $this;
-	}
-	
-	public function place(\Magento\Payment\Model\InfoInterface $payment){
-	
-		try {
-				
-			$response = $this->_getGatewayManager($payment->getOrder())->requestPaymentCardToken();
-			
-			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
-			$pendingUrl = $successUrl;
-			$forwardUrl = $response->getForwardUrl();;
-			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
-			$redirectUrl = $successUrl;
-			switch($response->getState()){
-				case TransactionState::COMPLETED:
-					//redirectUrl is success by default
-					break;
-				case TransactionState::PENDING:
-					$redirectUrl = $pendingUrl;
-					break;
-				case TransactionState::FORWARDING:
-					$redirectUrl = $forwardUrl;
-					break;
-				case TransactionState::DECLINED:
-					$redirectUrl = $failUrl;
-					break;
-				case TransactionState::ERROR:
-					throw new LocalizedException(__('There was an error request new transaction: %1.', $response->getReason()));
-				default:
-					$redirectUrl = $failUrl;
-			}
-			
-			//always in pending, because only notificaiton can change order/transaction statues
-			$payment->setIsTransactionPending(true);
-			
-			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
-	
-		} catch (\Exception $e) {
-				
-			$this->_logger->critical($e);
-			throw new LocalizedException(__('There was an error request new transaction: %1.', $e->getMessage()));
-		}
-		return $this;
-	}
 	
 	/**
 	 * Validate payment method information object
