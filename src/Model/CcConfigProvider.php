@@ -32,7 +32,7 @@ class CcConfigProvider extends CcGenericConfigProvider {
 			PaymentHelper $paymentHelper,
 			\Magento\Framework\Url $urlBuilder
 			) {
-				parent::__construct($ccConfig, $paymentHelper);
+				parent::__construct($ccConfig, $paymentHelper,$this->methodCodes);
 			$this->urlBuilder = $urlBuilder;
 	}
 	
@@ -45,9 +45,33 @@ class CcConfigProvider extends CcGenericConfigProvider {
 		$config['payment']['hipayCc'] =[
                 		'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/cc/tokenize',['_secure' => true]),
 						'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/cc/afterPlaceOrder',['_secure' => true]),
+						'availableTypes'=>$this->getCcAvailableTypesOrdered()
         ];
 		
 		return $config;
+	}
+	
+	/**
+	 * Retrieve availables credit card types and preserve saved order
+	 *
+	 * @param string $methodCode
+	 * @return array
+	 */
+	protected function getCcAvailableTypesOrdered($methodCode = 'hipay_cc')
+	{
+		$types = $this->ccConfig->getCcAvailableTypes();
+		$availableTypes = $this->methods[$methodCode]->getConfigData('cctypes');
+		if(!is_array($availableTypes)){
+			$availableTypes = explode(",", $availableTypes);
+		}
+		$ordered = [];
+		foreach($availableTypes as $key) {
+			if(array_key_exists($key,$types)) {
+				$ordered[$key] = $types[$key];
+			}
+		}
+		
+		return $ordered;
 	}
 	
 	/**

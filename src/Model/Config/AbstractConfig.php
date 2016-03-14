@@ -53,6 +53,13 @@ abstract class AbstractConfig implements ConfigInterface {
 	 */
 	protected $pathPattern;
 	
+	/**
+	 * Core store config
+	 *
+	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
+	 */
+	protected $_scopeConfig;
+	
 
 	
 	/**
