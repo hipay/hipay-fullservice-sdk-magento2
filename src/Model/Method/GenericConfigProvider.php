@@ -16,11 +16,20 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-
+use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Payment\Model\CcConfig;
 
 class GenericConfigProvider implements ConfigProviderInterface {
 
+	/**
+	 * @var CcConfig
+	 */
+	protected $ccConfig;
 	
+	/**
+	 * @var MethodInterface[]
+	 */
+	protected $methods = [];
 	
 	
 	/**
@@ -34,9 +43,16 @@ class GenericConfigProvider implements ConfigProviderInterface {
 	/**
 	 */
 	public function __construct(
-			\Magento\Framework\Url $urlBuilder
+			CcConfig $ccConfig,
+			PaymentHelper $paymentHelper,
+			\Magento\Framework\Url $urlBuilder,
+			array $methodCodes = []
 			) {
-
+		
+			$this->ccConfig = $ccConfig;
+			foreach ($methodCodes as $code) {
+				$this->methods[$code] = $paymentHelper->getMethodInstance($code);
+			}
 			$this->urlBuilder = $urlBuilder;
 
 	}
@@ -46,14 +62,29 @@ class GenericConfigProvider implements ConfigProviderInterface {
 	 */
 	public function getConfig()
 	{
-		return  [
-		'payment'=>[
-			'hiPayFullservice'=>[
-				'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])
-        		],
-			],
-		] ;
+		
+		$config = [];
+		foreach ($this->methods as $methodCode => $method) {
+			if ($method->isAvailable()) {
+				$config = array_merge_recursive($config, [
+						'payment' => [
+								'hiPayFullservice' => [
+										'afterPlaceOrderUrl' => [$methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])],
+										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)]
+								]
+						]
+				]);
+			}
+		}
+		
+		return $config;
 
+	}
+	
+	protected function isIframeMode($methodCode){
+		
+		return (bool) $this->methods[$methodCode]->getConfigData('iframe_mode');
+		
 	}
 
 }

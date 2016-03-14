@@ -16,27 +16,78 @@
 define(
     [
      	'jquery',
+     	'ko',
         'Magento_Checkout/js/view/payment/default',
-        'Magento_Checkout/js/model/quote'
+        'HiPay_FullserviceMagento/js/model/iframe',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($, Component, quote) {
+    function ($, ko, Component,iframe, fullScreenLoader) {
         'use strict';
         return Component.extend({
             defaults: {
                 template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-                redirectAfterPlaceOrder: false
+                afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
+                paymentReady: false
+            },
+            redirectAfterPlaceOrder: false,
+            isInAction: iframe.isInAction,
+            initObservable: function () {
+                this._super()
+                    .observe('paymentReady');
+
+                return this;
+            },
+            /**
+             * Used in template to load iframe content
+             */
+            isPaymentReady: function () {
+                return this.paymentReady();
             },
             /**
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.afterPlaceOrderUrl);
+	        	 var self = this;
+	        	if(this.isIframeMode()){
+	        		self.paymentReady(true);
+	        	}
+	        	else{
+	        		
+	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
+	        	}
+	        },
+	        getAfterPlaceOrderUrl: function(){
+	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },
             isActive: function() {
                 return true;
+            },
+            isIframeMode: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.isIframeMode[this.getCode()];
+            },
+            getIFrameUrl: function(){
+            	return this.isInAction() ? this.getAfterPlaceOrderUrl() : '';
+            },
+            /**
+             * Places order in pending payment status.
+             */
+            placePendingPaymentOrder: function () {
+                var self = this;
+                if (this.placeOrder()) {
+                    this.isInAction(true);
+                    // capture all click events
+                    document.addEventListener('click', iframe.stopEventPropagation, true);
+                }
+            },
+            /**
+             * Hide loader when iframe is fully loaded.
+             * @returns {void}
+             */
+            iframeLoaded: function() {
+                fullScreenLoader.stopLoader();
             }
         });
     }

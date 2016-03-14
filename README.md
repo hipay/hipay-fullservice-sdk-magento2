@@ -188,7 +188,7 @@ Example for Sisal method with a minimum configuration:
 					base_top.xml contain configuration fields will be appear on top
 					like enabled, title, order statues etc ...
 				-->
-				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
                 
                  <!-- custom fields or override of hosted/Cc -->
                  <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -199,13 +199,16 @@ Example for Sisal method with a minimum configuration:
                     <label>Template type</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
                 </field>
-                
+                <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Display hosted page in Iframe</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <!-- 
 					Include tag import configuration from another file.
 					base_bottom.xml contain configuration fields will be appear on bottom
 					like test mode, debug, sort order etc ..
 				-->
-                <include path="HiPay_FullserviceMagento::system/base_bottom.xml"/>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
                 
 			</group>
 </include>
@@ -215,10 +218,10 @@ And include this configuration file in payment section of [system.xml](src/etc/a
 
 ```xml
 <section id="payment">
-	<include path="HiPay_FullserviceMagento::system/hosted.xml"/>
-	<include path="HiPay_FullserviceMagento::system/cc.xml"/>
+	<include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>
+	<include path="HiPay_FullserviceMagento::system/method/cc.xml"/>
 	<!-- Sisal file configuration -->
-	<include path="HiPay_FullserviceMagento::system/sisal.xml"/>			
+	<include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>		
 </section>
 ``` 
 
@@ -253,6 +256,7 @@ Finally, enter method's default configuration node in [config.xml](src/etc/confi
     <title>Sisal</title>
     <payment_action>Sale</payment_action>
     <order_status>pending</order_status>
+    <iframe_mode>1</iframe_mode>
     <payment_products>sisal</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
     <payment_products_categories>realtime-banking</payment_products_categories>
     <display_selector>0</display_selector>
@@ -460,7 +464,7 @@ Change `id` in qiwi-wallet.xml.  In this case, we no need custom fields:
 					base_top.xml contain configuration fields will be appear on top
 					like enabled, title, order statues etc ...
 				-->
-				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
                 
                  <!-- no custom fields needed -->
                 
@@ -470,13 +474,13 @@ Change `id` in qiwi-wallet.xml.  In this case, we no need custom fields:
 					base_bottom.xml contain configuration fields will be appear on bottom
 					like test mode, debug, sort order etc ..
 				-->
-                <include path="HiPay_FullserviceMagento::system/base_bottom.xml"/>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
                 
 			</group>
 </include>
 ```
 
-Don't forget to add your method in [payment.xml](src/etc/payment.xml) and include [qiwi-wallet.xml](src/etc/adminhtml/system/qiwi-wallet.xml) file in [system.xml](src/etc/adminhtml/system.xml).
+Don't forget to add your method in [payment.xml](src/etc/payment.xml) and include [qiwi-wallet.xml](src/etc/adminhtml/system/method/qiwi-wallet.xml) file in [system.xml](src/etc/adminhtml/system.xml).
 
 
 ##### Add javascript client template

@@ -15,10 +15,13 @@
  */
 namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+
 use HiPay\Fullservice\Gateway\Model\Transaction;
 use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
+use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
+use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 class Notify {
 	
@@ -29,7 +32,18 @@ class Notify {
 	protected $_orderFactory;
 	
 	/**
-	 * @var OrderSender
+	 * @var FraudReviewSender
+	 */
+	protected $fraudReviewSender;
+	
+	/**
+	 * @var FraudDenySender
+	 */
+	protected $fraudDenySender;
+	
+	/**
+	 * 
+	 * @var OrderSender $orderSender
 	 */
 	protected $orderSender;
 	
@@ -40,7 +54,7 @@ class Notify {
 	
 	/**
 	 * 
-	 * @var Transaction $_transaction
+	 * @var Transaction $_transaction Response Model Transaction
 	 */
 	protected $_transaction;
 	
@@ -54,12 +68,16 @@ class Notify {
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
 			OrderSender $orderSender,
+			FraudReviewSender $fraudReviewSender,
+			FraudDenySender $fraudDenySender,
 			\Magento\Payment\Helper\Data $paymentHelper,
 			$params = []
 			){
 
 			$this->_orderFactory = $orderFactory;
 			$this->orderSender = $orderSender;
+			$this->fraudReviewSender = $fraudReviewSender;
+			$this->fraudDenySender = $fraudDenySender;
 	
 			if (isset($params['response']) && is_array($params['response'])) {
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
@@ -88,11 +106,13 @@ class Notify {
 		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110
+				$this->_setFraudDetected();
 			case TransactionStatus::DENIED: //111
 				$this->_doTransactionDenied();
 				break;
 			case TransactionStatus::AUTHORIZED_AND_PENDING: //112
 			case TransactionStatus::PENDING_PAYMENT: //200
+				$this->_setFraudDetected();
 				$this->_doTransactionAuthorizedAndPending();
 				break;
 			case TransactionStatus::AUTHORIZATION_REQUESTED: //142
@@ -153,6 +173,34 @@ class Notify {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * Check Fraud Screenig result for fraud detection
+	 */
+	protected function _setFraudDetected()
+	{
+	
+		if(!is_null($fraudSreening = $this->_transaction->getFraudScreening())){
+			if($fraudSreening->getResult() && $fraudSreening->getScoring()){
+				$payment = $this->_order->getPayment();
+				$payment->setIsFraudDetected(true);
+				
+				$payment->setAdditionalInformation('fraud_type',$fraudSreening->getResult() );
+				$payment->setAdditionalInformation('fraud_score',$fraudSreening->getScoring());
+				$payment->setAdditionalInformation('fraud_review',$fraudSreening->getReview());
+				
+				$isDeny = ($fraudSreening->getResult()  != 'challenged' || $this->_transaction->getState() == self::STATE_DECLINED);
+				
+				if(!$isDeny){
+					$this->fraudReviewSender->send($this->_order);
+				}
+				else{
+					$this->fraudDenySender->send($this->_order);
+				}
+
+			}
+		}
 	}
 	
 	protected function _changeStatus($status,$comment = "",$addToHistory = true,$save=true){

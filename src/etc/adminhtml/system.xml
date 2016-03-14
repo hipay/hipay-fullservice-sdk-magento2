@@ -21,40 +21,14 @@
 			<label>HiPay Fullservice</label>
 			<tab>sales</tab>
 			<resource>HiPay_FullserviceMagento::hipay</resource>
-			<group id="hipay_credentials" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Fullservice credentials configuration</label>
-				<comment></comment>
-				<field id="api_username" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Api username (production account)</label>
-				</field>
-				<field id="api_password" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Api password (production account)</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-				</field>
-				<field id="secret_passphrase" translate="label comment" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Secret passphrase (production account)</label>
-                    <comment>The same of your HiPay Fullservice production account</comment>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-				</field>
-				<field id="api_username_test" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Api username (test account)</label>
-				</field>
-				<field id="api_password_test" translate="label" type="obscure" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Api password (test account)</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-				</field>
-				<field id="secret_passphrase_test" translate="label comment" type="obscure" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-					<label>Secret passphrase (test account)</label>
-                    <comment>The same of your HiPay Fullservice test account</comment>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>                   
-				</field>
-			</group>
+			<include path="HiPay_FullserviceMagento::system/credentials.xml"/>
+			<include path="HiPay_FullserviceMagento::system/emails.xml"/>
 		</section>
 		<section id="payment">
-			<include path="HiPay_FullserviceMagento::system/hosted.xml"/>
-			<include path="HiPay_FullserviceMagento::system/cc.xml"/>
-			<include path="HiPay_FullserviceMagento::system/sisal.xml"/>	
-			<include path="HiPay_FullserviceMagento::system/qiwi-wallet.xml"/>		
+			<include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>
+			<include path="HiPay_FullserviceMagento::system/method/cc.xml"/>
+			<include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>	
+			<include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>		
 		</section>
 	</system>
 </config>
