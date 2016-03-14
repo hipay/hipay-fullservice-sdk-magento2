@@ -17,7 +17,7 @@ namespace HiPay\FullserviceMagento\Controller\Hosted;
 
 
 
-class PlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
+class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {	
 
 

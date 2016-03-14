@@ -17,7 +17,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
-    <action name="hipay/hosted/placeOrder">
+    <action name="hipay/hosted/afterPlaceOrder">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+    <action name="hipay/cc/afterPlaceOrder">
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>

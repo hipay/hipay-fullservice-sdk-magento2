@@ -19,9 +19,11 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory; 
-use HiPay\Fullservice\HTTP\GuzzleClient;
+use HiPay\Fullservice\HTTP\SimpleHTTPClient;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
+use Magento\Framework\Exception\LocalizedException;
 
 class Manager {
 	
@@ -73,7 +75,7 @@ class Manager {
 		$methodCode = $this->_order->getPayment()->getMethod();
 		$storeId = $this->_order->getStoreId();
 		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
-		$clientProvider = new GuzzleClient($this->_config);
+		$clientProvider = new SimpleHTTPClient($this->_config);
 		$this->_gateway = new GatewayClient($clientProvider);
 	}
 	
@@ -92,14 +94,55 @@ class Manager {
 	}
 	
 	
-	
+	/**
+	 * 
+	 */
 	public function requestHostedPaymentPage(){
 		
-		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage');
+		
+		//Init cardTokenPaymentMethod request
+		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
+		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
+		$cardTokenPaymentMethod->cardtoken = "";
+		$cardTokenPaymentMethod->eci = 7;
+		
+		//Merge params
+		$params = $this->_getRequestParameters();
+		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		
+		$hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage',$params);
 		 
 		$hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
 		
 		return $hppModel;
+	}
+	
+	/**
+	 * 
+	 */
+	public function requestPaymentCardToken(){
+		
+		//Check if token is present
+		$token = $this->_order->getPayment()->getAdditionalInformation('cc_token');
+		if(empty($token)){
+			throw new LocalizedException(__('Secure Vault token is empty'));
+		}
+
+		//Init cardTokenPaymentMethod request
+		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
+		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
+		$cardTokenPaymentMethod->cardtoken = $token;
+		$cardTokenPaymentMethod->eci = 7;
+		
+		//Merge params
+		$params = $this->_getRequestParameters();
+		$params['params']['paymentMethod'] = $cardTokenPaymentMethod;
+		
+		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
+		//Request new order transaction
+		$transaction = $this->_gateway->requestNewOrder($orderRequest);
+		
+		return $transaction;
 	}
 	
 	public function requestOperationCapture($amount=null){
@@ -132,8 +175,11 @@ class Manager {
 		return $this->_order->getPayment();
 	}
 	
-	protected function _getRequestObject($requestClassName){
-		return $this->_requestFactory->create($requestClassName,$this->_getRequestParameters())->getRequestObject();	
+	protected function _getRequestObject($requestClassName,array $params=null){
+		if(is_null($params)){
+			$params = $this->_getRequestParameters();
+		}
+		return $this->_requestFactory->create($requestClassName,$params)->getRequestObject();	
 	}
 	
 	protected function _getRequestParameters(){

@@ -4,6 +4,10 @@
 				<label>HiPay Fullservice Hosted Page</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/base_top.xml"/>
+				 <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment products</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct</source_model>
+                </field> 
                 <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Display card selector</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

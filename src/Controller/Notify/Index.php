@@ -58,7 +58,7 @@ class Index extends AppAction {
      	ini_set('display_errors',1);
      	error_reporting(E_ALL);
      	
-     	$params = $this->getRequest()->getParams();
+     	$params = $this->getRequest()->getPost()->toArray();
      	
      	try {
      		$this->_logger->info("Debug notification");
@@ -76,6 +76,26 @@ class Index extends AppAction {
 
      	$this->getResponse()->setBody('OK')->sendResponse();
 
+	 }
+	 
+	 /**
+	  * Retrieve request object
+	  *
+	  * @return \Magento\Framework\App\Request\Http
+	  */
+	 public function getRequest()
+	 {
+	 	return $this->_request;
+	 }
+	 
+	 /**
+	  * Retrieve response object
+	  *
+	  * @return \Magento\Framework\App\Response\Http
+	  */
+	 public function getResponse()
+	 {
+	 	return $this->_response;
 	 }
 	 
 	 
