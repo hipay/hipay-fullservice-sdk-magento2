@@ -1,0 +1,7 @@
+machine:
+  php:
+    version: 5.5.0
+    
+dependencies:
+  pre:
+    - composer config -g github-oauth.github.com $GITHUB_API_TOKEN

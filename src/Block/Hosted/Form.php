@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\Fullservice\Block\Hosted;
+namespace HiPay\FullserviceMagento\Block\Hosted;
 
 /**
  *
@@ -11,7 +11,8 @@ class Form extends \Magento\Payment\Block\Form {
 	/**
 	 * @var string
 	 */
-	protected $_template = 'Hipay_Fullservice::form/hosted.phtml';
+	protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
+
 	
 	/**
 	 * Payment config model
@@ -33,7 +34,5 @@ class Form extends \Magento\Payment\Block\Form {
 				parent::__construct($context, $data);
 				$this->_paymentConfig = $paymentConfig;
 	}
-	
-	
 	
 }

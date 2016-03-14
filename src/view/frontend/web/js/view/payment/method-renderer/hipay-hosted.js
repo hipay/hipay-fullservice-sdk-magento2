@@ -1,5 +1,5 @@
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -8,23 +8,30 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
 
 define(
     [
+     	'jquery',
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote'
     ],
-    function (Component, quote) {
+    function ($, Component, quote) {
         'use strict';
         return Component.extend({
             defaults: {
-                template: 'Hipay_Fullservice/payment/hipay-hosted'
+                template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+                redirectAfterPlaceOrder: false
             },
-	
+            /**
+             * After place order callback
+             */
+	        afterPlaceOrder: function () {
+	        	 $.mage.redirect(window.checkoutConfig.payment.hipayHosted.afterPlaceOrderUrl);
+	        },
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },

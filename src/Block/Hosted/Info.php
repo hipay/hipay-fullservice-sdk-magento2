@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\Fullservice\Block\Hosted;
+namespace HiPay\FullserviceMagento\Block\Hosted;
 
 /**
  *

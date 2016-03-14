@@ -1,6 +1,6 @@
 <?php
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -9,109 +9,75 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace Hipay\Fullservice\Model;
+namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Payment\Model\Method\Online\GatewayInterface;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\DataObject;
-use Magento\Payment\Model\Method\ConfigInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 
 /**
  * Class PaymentMethod
- * @package Hipay\Fullservice\Model
+ * @package HiPay\FullserviceMagento\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class HostedMethod extends AbstractMethod implements GatewayInterface {
+class HostedMethod extends FullserviceMethod {
 	
-	const HIPAY_HOSTED_METHOD_CODE               = 'hipay_hosted';
-	
-	/**
-	 * @var string
-	 */
-	protected $_formBlockType = 'Hipay\Fullservice\Block\Hosted\Form';
+	const HIPAY_METHOD_CODE               = 'hipay_hosted';
 	
 	/**
 	 * @var string
 	 */
-	protected $_infoBlockType = 'Hipay\Fullservice\Block\Hosted\Info';
+	protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Form';
 	
 	/**
 	 * @var string
 	 */
-	protected $_code = self::HIPAY_HOSTED_METHOD_CODE;
+	protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Info';
 	
 	/**
-	 * Fields that should be replaced in debug with '***'
+	 * @var string
+	 */
+	protected $_code = self::HIPAY_METHOD_CODE;
+	
+
+	/**
+	 * Capture payment method
 	 *
-	 * @var array
+	 * @param \Magento\Framework\DataObject|InfoInterface $payment
+	 * @param float $amount
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	protected $_debugReplacePrivateDataKeys = [];
+	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+	{
+		parent::capture($payment, $amount);
+		try {
+			/** @var \Magento\Sales\Model\Order\Payment $payment */
+			if ($payment->getCcTransId()) {  //Is not the first transaction
+				// As we alredy hav a transaction reference, we can request a capture operation.
+				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_isGateway = true;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canAuthorize = true;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canCapture = true;
+			} 
 	
 	
-	/**
-	 * 
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-	 * @param \Magento\Payment\Helper\Data $paymentData
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param \Magento\Payment\Model\Method\Logger $logger
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-	 * @param array $data
-	 */
-	public function __construct( 
-		\Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Payment\Model\Method\Logger $logger,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []){
-		
-		parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger);
+		} catch (\Exception $e) {
+			$this->_logger->critical($e);
+			throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
+		}
+	
+	
+		return $this;
 	}
 	
 	
-	/**
-	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \Magento\Payment\Model\Method\Online\GatewayInterface::postRequest()
-	 */
-	public function postRequest(DataObject $request, ConfigInterface $config) {
-		// TODO Auto-generated method stub
-	}
+
+	
 }

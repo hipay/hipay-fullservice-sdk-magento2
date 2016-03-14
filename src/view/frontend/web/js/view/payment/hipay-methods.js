@@ -1,5 +1,5 @@
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -8,7 +8,7 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
@@ -26,12 +26,12 @@ define(
         rendererList.push(
             {
                 type: 'hipay_hosted',
-                component: 'Hipay_Fullservice/js/view/payment/method-renderer/hipay-hosted'
-            }/*,
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
+            },
             {
-                type: 'hipay_api',
-                component: 'Hipay_Fullservice/js/view/payment/method-renderer/hipay-api'
-            }*/
+                type: 'hipay_cc',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+            }
         );
         /** Add view logic here if needed */
         return Component.extend({});

@@ -1,5 +1,5 @@
 <?php
-namespace Hipay\Fullservice\Model;
+namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
@@ -10,7 +10,7 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	/**
 	 * @var string[]
 	 */
-	protected $methodCode = \Hipay\Fullservice\Model\HostedMethod::HIPAY_HOSTED_METHOD_CODE;
+	protected $methodCode = \HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_METHOD_CODE;
 	
 	/**
 	 * @var Checkmo
@@ -23,15 +23,24 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	protected $escaper;
 	
 	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
+	
+	/**
 	 * @param PaymentHelper $paymentHelper
 	 * @param Escaper $escaper
 	 */
 	public function __construct(
 			PaymentHelper $paymentHelper,
-			Escaper $escaper
+			Escaper $escaper,
+			\Magento\Framework\Url $urlBuilder
 			) {
 				$this->escaper = $escaper;
 				$this->method = $paymentHelper->getMethodInstance($this->methodCode);
+				$this->urlBuilder = $urlBuilder;
 	}
 	
 	/**
@@ -43,9 +52,12 @@ class HostedConfigProvider implements ConfigProviderInterface {
 	public function getConfig() {
 		 return $this->method->isAvailable() ? [
             'payment' => [
-                'checkmo' => [],
+                'hipayHosted' => [
+                		'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/hosted/afterPlaceOrder',['_secure' => true]),
+                ],
             ],
         ] : [];
 	}
+	
 
 }

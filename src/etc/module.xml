@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /*
- * Hipay fullservice SDK
+ * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -10,13 +10,13 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - Hipay
+ * @copyright      Copyright (c) 2016 - HiPay
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-  <module name="Hipay_Fullservice" setup_version="2.0.0">
+  <module name="HiPay_FullserviceMagento" setup_version="2.0.0">
   		<sequence>
             <module name="Magento_Checkout"/>
             <module name="Magento_Sales"/>
