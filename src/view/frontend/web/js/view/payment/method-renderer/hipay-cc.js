@@ -21,7 +21,7 @@ define(
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($,Component,hiPayToken,storage,fullScreenLoader) {
+    function ($,Component,TPP,storage,fullScreenLoader) {
         'use strict';
         return Component.extend({
             
@@ -30,7 +30,7 @@ define(
         		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
         		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
-        		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
+        		afterPlaceOrderUrl: window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -134,8 +134,8 @@ define(
 	                    
 	                    fullScreenLoader.startLoader();
 	                    
-	                    hiPayToken.TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
-	                    hiPayToken.TPP.setCredentials(window.checkoutConfig.payment.hipayCc.apiUsername, window.checkoutConfig.payment.hipayCc.apiPassword);
+	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
+	                    TPP.setCredentials(window.checkoutConfig.payment.hipayCc.apiUsername, window.checkoutConfig.payment.hipayCc.apiPassword);
 	                    
 	                    TPP.create({
 	                        card_number:  this.creditCardNumber(),
