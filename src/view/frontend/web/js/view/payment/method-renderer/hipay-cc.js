@@ -17,7 +17,7 @@ define(
     [
      	'jquery',
      	'Magento_Payment/js/view/payment/cc-form',
-     	'hiPayJS'
+     	'hipay-token',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],

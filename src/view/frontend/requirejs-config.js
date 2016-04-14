@@ -17,7 +17,7 @@ var config = {
     map: {
         '*': {
             transparent: 'Magento_Payment/transparent',
-            hiPayJS: 'HiPay_FullserviceMagento/token'
+            hipay-token: 'HiPay_FullserviceMagento/hipay-token'
         }
     }
 };

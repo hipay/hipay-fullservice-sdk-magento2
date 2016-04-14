@@ -209,3 +209,9 @@ var TPP = {
     	}
     }
 };
+
+if ( typeof define === "function" && define.amd ) {
+	define( "hipay-token", [], function() {
+		return TPP;
+	});
+}
