@@ -146,7 +146,6 @@ define(
 	                        multi_use: '0'
 	                      },
 		                      function (response) {
-	                    	  console.log(response);
 		                          	if(response.token){
 		                          		
 		                          		self.creditCardToken = response.token;
