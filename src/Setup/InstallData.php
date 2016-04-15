@@ -59,6 +59,7 @@ class InstallData implements InstallDataInterface
                         'status' => $code,
                         'state' =>  $info['state'],
                         'is_default' => isset($info['default']) ? 1 : 0,
+            			'visible_on_front' => 1
                     ];
         }
         //Insert new statues
