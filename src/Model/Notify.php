@@ -100,9 +100,49 @@ class Notify {
 	}
 	
 	
+	protected function canProcessTransaction(){
+		
+		switch ($this->_transaction->getStatus()){
+			case TransactionStatus::EXPIRED: //114
+				
+				if(in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZED))){
+					return true;
+				}
+				
+				break;
+			case  TransactionStatus::AUTHORIZED: //116
+				if($this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
+					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
+					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
+					in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZATION_REQUESTED))){
+					return true;
+				}
+				break;
+			case TransactionStatus::CAPTURE_REQUESTED: //117
+				if(!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal())
+				{
+					return true;
+				}
+				break;
+			default:
+				return true;
+		}
+		
+		return false;
+		
+	}
+	
+	
 	
 	
 	public function processTransaction(){
+		
+		if(!$this->canProcessTransaction()){
+			return $this;
+		}
+		
+		//Write about notification in order history
+		$this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110
