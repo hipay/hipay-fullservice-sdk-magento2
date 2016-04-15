@@ -29,7 +29,7 @@ define(
         		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
         		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
-        		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
+        		afterPlaceOrderUrl: window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl
         	},
             placeOrderHandler: null,
             validateHandler: null,
