@@ -24,31 +24,36 @@ class ThreeDsRule extends Field
 	 * Check if columns are defined, set template
 	 *
 	 */
-	public function __construct()
+	public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
 	{
 		/*if (!$this->_addButtonLabel) {
 			$this->_addButtonLabel = Mage::helper('adminhtml')->__('Add');
 		}*/
-		parent::__construct();
+		parent::__construct($context, $data);
 		if (!$this->getTemplate()) {
 			$this->setTemplate('HiPay_FullserviceMagento::system/config/form/field/rules.phtml');
 		}
 	}
 	
 	public function getNewChildUrl(){
-		return Mage::helper("adminhtml")->getUrl('*/rule/newConditionHtml',array('form'=>'rule_conditions_fieldset'));
+		return $this->getUrl('hipay_rule/rule/newConditionHtml/form/rule_conditions_fieldset');
 	}
 	
 	/**
-	 * Enter description here...
-	 *
-	 * @param Varien_Data_Form_Element_Abstract $element
-	 * @return string
-	 */
-	protected function _getElementHtml(Varien_Data_Form_Element_Abstract $element)
+     * Retrieve element HTML markup
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     */
+	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
+		
+		if ($element->getRule() && $element->getRule()->getConditions()) {
+			return $element->getRule()->getConditions()->asHtmlRecursive();
+		}
+		return '';
 
-		$partsId = explode("_", $element->getId());
+/*		$partsId = explode("_", $element->getId());
 		$method_code = $partsId[1]. "_" . $partsId[2];
 		$rule = Mage::getModel('hipay/rule');
 		$rule->setMethodCode($method_code);
@@ -62,6 +67,6 @@ class ThreeDsRule extends Field
 		$element->setRule($rule);
 		
 		$this->setElement($element);
-		return $this->_toHtml();
+		return $this->_toHtml();*/
 	}
 }
