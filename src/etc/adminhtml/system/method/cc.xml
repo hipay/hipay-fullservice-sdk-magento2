@@ -14,7 +14,10 @@
                     <label>Use 3D Secure</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-                
+                 <field id="config_3ds_rules" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Rules 3D Secure</label>
+                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ThreeDsRule</frontend_model>
+                </field>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>               
 			</group>
 </include>
