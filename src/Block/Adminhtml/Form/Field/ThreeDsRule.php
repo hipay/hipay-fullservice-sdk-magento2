@@ -30,13 +30,13 @@ class ThreeDsRule extends Field
 	 * Check if columns are defined, set template
 	 *
 	 */
-	public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
+	public function __construct(
+			\Magento\Backend\Block\Template\Context $context,
+			\Magento\Framework\ObjectManagerInterface $objectManager,
+			array $data = [])
 	{
-		/*if (!$this->_addButtonLabel) {
-			$this->_addButtonLabel = Mage::helper('adminhtml')->__('Add');
-		}*/
 		
-		$this->_objectManager = $context->getObjectManager();
+		$this->_objectManager = $objectManager;
 		
 		parent::__construct($context, $data);
 		
@@ -57,40 +57,22 @@ class ThreeDsRule extends Field
      */
 	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
-		$rule = $this->_objectManager->create('HiPay\fullserviceMagento\Model\Rule');
-		$partsId = explode("_", $element->getId());
-		$method_code = $partsId[1]. "_" . $partsId[2];
-		$rule->setMethodCode($method_code);
-		
-		if($element->getValue()){			
-			$rule->load($element->getValue());
-		}
-		
-		if($rule->getConfigPath() == ""){		
-			$rule->setConfigPath($element->getId());
-		}
-		
-		$element->setRule($rule);
-		
-		if ($element->getRule() && $element->getRule()->getConditions()) {
-			return $element->getRule()->getConditions()->asHtmlRecursive();
-		}
-		return '';
-
-/*		$partsId = explode("_", $element->getId());
-		$method_code = $partsId[1]. "_" . $partsId[2];
-		$rule = Mage::getModel('hipay/rule');
-		$rule->setMethodCode($method_code);
-		
-		if($element->getValue())
-			$rule->load($element->getValue());
-		
-		if($rule->getConfigPath() == "")
-			$rule->setConfigPath($element->getId());
-
-		$element->setRule($rule);
-		
-		$this->setElement($element);
-		return $this->_toHtml();*/
+		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+        $partsId = explode("_", $element->getId());
+        $method_code = $partsId[1]. "_" . $partsId[2];
+        $rule->setMethodCode($method_code);                                                                                                                                                                                                           
+                                                                                                                                                                                                                                                              
+        if($element->getValue()){                                                                                                                                                                                                                     
+        	$rule->load($element->getValue());                                                                                                                                                                                                    
+        }                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                              
+        if($rule->getConfigPath() == ""){                                                                                                                                                                                                             
+            $rule->setConfigPath($element->getId());                                                                                                                                                                                              
+        }                                                                                                                                                                                                                                             
+                                                                                                                                                                                                                                                              
+        $element->setRule($rule);                                                                                                                                                                                                                     
+		$this->setElement($element);                                                                                                                                                                                                                                  
+        
+		return $this->_toHtml();   
 	}
 }

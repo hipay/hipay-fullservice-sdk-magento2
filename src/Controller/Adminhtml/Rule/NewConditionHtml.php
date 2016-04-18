@@ -39,7 +39,7 @@ class NewConditionHtml extends \Magento\Backend\App\Action {
         )->setType(
             $type
         )->setRule(
-            $this->_objectManager->create('Magento\CatalogRule\Model\Rule')
+            $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')
         )->setPrefix(
             'conditions'
         );
