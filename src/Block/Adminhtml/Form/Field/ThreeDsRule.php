@@ -21,6 +21,12 @@ class ThreeDsRule extends Field
 {
 	
 	/**
+	 * @var \Magento\Framework\ObjectManagerInterface
+	 */
+	protected $_objectManager;
+	
+	
+	/**
 	 * Check if columns are defined, set template
 	 *
 	 */
@@ -29,7 +35,11 @@ class ThreeDsRule extends Field
 		/*if (!$this->_addButtonLabel) {
 			$this->_addButtonLabel = Mage::helper('adminhtml')->__('Add');
 		}*/
+		
+		$this->_objectManager = $context->getObjectManager();
+		
 		parent::__construct($context, $data);
+		
 		if (!$this->getTemplate()) {
 			$this->setTemplate('HiPay_FullserviceMagento::system/config/form/field/rules.phtml');
 		}
@@ -47,6 +57,20 @@ class ThreeDsRule extends Field
      */
 	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
+		$rule = $this->_objectManager->create('HiPay\fullserviceMagento\Model\Rule');
+		$partsId = explode("_", $element->getId());
+		$method_code = $partsId[1]. "_" . $partsId[2];
+		$rule->setMethodCode($method_code);
+		
+		if($element->getValue()){			
+			$rule->load($element->getValue());
+		}
+		
+		if($rule->getConfigPath() == ""){		
+			$rule->setConfigPath($element->getId());
+		}
+		
+		$element->setRule($rule);
 		
 		if ($element->getRule() && $element->getRule()->getConditions()) {
 			return $element->getRule()->getConditions()->asHtmlRecursive();
