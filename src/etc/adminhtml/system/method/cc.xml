@@ -17,6 +17,7 @@
                  <field id="config_3ds_rules" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Rules 3D Secure</label>
                     <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ThreeDsRule</frontend_model>
+                    <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
                 </field>
                 <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>               
 			</group>

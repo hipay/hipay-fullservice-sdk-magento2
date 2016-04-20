@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Rule;
 
 
+use Magento\Rule\Model\Condition\AbstractCondition;
 /**
  *
  * @author kassim

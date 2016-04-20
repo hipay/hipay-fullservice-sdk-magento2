@@ -59,7 +59,7 @@ class ThreeDsRule extends Field
 	{
 		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
         $partsId = explode("_", $element->getId());
-        $method_code = $partsId[1]. "_" . $partsId[2];
+        $method_code = $partsId[2]. "_" . $partsId[3];
         $rule->setMethodCode($method_code);                                                                                                                                                                                                           
                                                                                                                                                                                                                                                               
         if($element->getValue()){                                                                                                                                                                                                                     

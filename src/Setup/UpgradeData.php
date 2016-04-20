@@ -32,9 +32,9 @@ class UpgradeData implements UpgradeDataInterface
 	 */
 	public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context){
 		
-		$installer =  $setup->createMigrationSetup();
 		$setup->startSetup();
-		if (version_compare($context->getVersion(), '2.0.1', '<')) {
+		if (version_compare($context->getVersion(), '2.0.1') < 0) {
+			$installer =  $setup->createMigrationSetup();
 			$installer->appendClassAliasReplace(
 					'hipay_rule',
 					'conditions_serialized',

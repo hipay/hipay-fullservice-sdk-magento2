@@ -27,7 +27,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 	 */
 	protected function _construct()
 	{
-		$this->_init('hipayrule', 'rule_id');
+		$this->_init('hipay_rule', 'rule_id');
 	}
 	
   

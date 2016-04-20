@@ -15,65 +15,88 @@
  */
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 
-class Combine extends \Magento\Rule\Model\Condition\Combine
+class Combine extends AbstractCombine
 {
-    /**
-     * @var \Magento\CatalogRule\Model\Rule\Condition\ProductFactory
+/**
+     * Core event manager proxy
+     *
+     * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_productFactory;
+    protected $_eventManager = null;
+
+    /**
+     * @var \Magento\SalesRule\Model\Rule\Condition\Address
+     */
+    protected $_conditionAddress;
+    
+    protected $methodCode = null;
 
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress
      * @param array $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
-        \Magento\CatalogRule\Model\Rule\Condition\ProductFactory $conditionFactory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\SalesRule\Model\Rule\Condition\Address $conditionAddress,
         array $data = []
     ) {
-        $this->_productFactory = $conditionFactory;
+        $this->_eventManager = $eventManager;
+        $this->_conditionAddress = $conditionAddress;
         parent::__construct($context, $data);
-        $this->setType('Magento\CatalogRule\Model\Rule\Condition\Combine');
+        $this->setType('HiPay\FullserviceMagento\Model\Rule\Condition\Combine');
+        
     }
+    
+   
 
     /**
+     * Get new child select options
+     *
      * @return array
      */
     public function getNewChildSelectOptions()
     {
-        $productAttributes = $this->_productFactory->create()->loadAttributeOptions()->getAttributeOption();
+        $addressAttributes = $this->_conditionAddress->loadAttributeOptions()->getAttributeOption();
         $attributes = [];
-        foreach ($productAttributes as $code => $label) {
+        foreach ($addressAttributes as $code => $label) {
             $attributes[] = [
-                'value' => 'Magento\CatalogRule\Model\Rule\Condition\Product|' . $code,
+                'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Address|' . $code,
                 'label' => $label,
             ];
         }
+
         $conditions = parent::getNewChildSelectOptions();
         $conditions = array_merge_recursive(
             $conditions,
             [
                 [
-                    'value' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',
-                    'label' => __('Conditions Combination'),
+                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Product\Found',
+                    'label' => __('Product attribute combination'),
                 ],
-                ['label' => __('Product Attribute'), 'value' => $attributes]
+                [
+                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Product\Subselect',
+                    'label' => __('Products subselection')
+                ],
+                [
+                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Combine',
+                    'label' => __('Conditions combination')
+                ],
+                ['label' => __('Cart Attribute'), 'value' => $attributes]
             ]
         );
+
+        $additional = new \Magento\Framework\DataObject();
+        $this->_eventManager->dispatch('hipayrule_rule_condition_combine', ['additional' => $additional]);
+        $additionalConditions = $additional->getConditions();
+        if ($additionalConditions) {
+            $conditions = array_merge_recursive($conditions, $additionalConditions);
+        }
+
         return $conditions;
     }
-
-    /**
-     * @param array $productCollection
-     * @return $this
-     */
-    public function collectValidatedAttributes($productCollection)
-    {
-        foreach ($this->getConditions() as $condition) {
-            /** @var Product|Combine $condition */
-            $condition->collectValidatedAttributes($productCollection);
-        }
-        return $this;
-    }
+    
+   
 }

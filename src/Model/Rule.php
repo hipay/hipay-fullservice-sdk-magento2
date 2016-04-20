@@ -39,23 +39,25 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 {
 	
 	/**
-	 * @var \Magento\CatalogRule\Model\Rule\Condition\CombineFactory
-	 */
-	protected $_combineFactory;
-	
-	/**
-	 * @var \Magento\CatalogRule\Model\Rule\Action\CollectionFactory
-	 */
-	protected $_actionCollectionFactory;
+     * @var \Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     */
+    protected $_condCombineFactory;
+
+    /**
+     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
+     */
+    protected $_condProdCombineF;
 
 	
 	/**
-	 * Constructor
-	 *
+	 * Constructor 
+	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Data\FormFactory $formFactory
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+	 * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
+	 * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
@@ -65,16 +67,16 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 			\Magento\Framework\Registry $registry,
 			\Magento\Framework\Data\FormFactory $formFactory,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-			\Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
-			\Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
+			\HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory,
+        	\Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct($context, $registry,$formFactory,$localeDate, $resource, $resourceCollection, $data);
 				
-				$this->_combineFactory = $combineFactory;
-				$this->_actionCollectionFactory = $actionCollectionFactory;
+				$this->_condCombineFactory = $condCombineFactory;
+        		$this->_condProdCombineF = $condProdCombineF;
+				parent::__construct($context, $registry,$formFactory,$localeDate, $resource, $resourceCollection, $data);
 	}
 	
 	
@@ -89,27 +91,29 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     }
 
     /**
-     * Getter for rule conditions collection
+     * Get rule condition combine model instance
      *
-     * @return \Magento\Rule\Model\Condition\Combine
+     * @return \Magento\SalesRule\Model\Rule\Condition\Combine
      */
     public function getConditionsInstance()
     {
-        return $this->_combineFactory->create();
+        return $this->_condCombineFactory->create()
+        			->setMethodCode($this->getMethodCode())
+        			->setConfigPath($this->_getHtmlId());
     }
 
     /**
-     * Getter for rule actions collection
+     * Get rule condition product combine model instance
      *
-     * @return \Magento\CatalogRule\Model\Rule\Action\Collection
+     * @return \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      */
     public function getActionsInstance()
     {
-        return $this->_actionCollectionFactory->create();
+        return $this->_condProdCombineF->create();
     }
 
     
-    protected function _getPaymentMethodCode()
+    protected function _getHtmlId()
     {
     	return str_replace("/", "_", $this->getConfigPath());
     }
