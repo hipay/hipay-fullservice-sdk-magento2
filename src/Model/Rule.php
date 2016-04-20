@@ -39,12 +39,12 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 {
 	
 	/**
-     * @var \Magento\SalesRule\Model\Rule\Condition\CombineFactory
+     * @var \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory
      */
     protected $_condCombineFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory
+     * @var \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory
      */
     protected $_condProdCombineF;
 
@@ -56,8 +56,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Data\FormFactory $formFactory
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-	 * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
-	 * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
+	 * @param \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory
+	 * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
@@ -68,7 +68,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
 			\Magento\Framework\Data\FormFactory $formFactory,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory,
-        	\Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
+        	\HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
