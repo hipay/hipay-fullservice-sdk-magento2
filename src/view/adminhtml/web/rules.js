@@ -3,7 +3,7 @@ define([
         "Magento_Rule/rules"
 ], function(jQuery,VarienRulesForm){
 
-    VarienRulesForm.addRuleNewChild = function (elem) {
+    VarienRulesForm.prototype.addRuleNewChild = function (elem) {
             var parent_id = elem.id.replace(/^.*__(.*)__.*$/, '$1');
             var children_ul = $(elem.id.replace(/__/g, ':').replace(/[^:]*$/, 'children').replace(/:/g, '__'));
             var max_id = 0, i;

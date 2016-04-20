@@ -32,6 +32,10 @@ class NewConditionHtml extends \Magento\Backend\App\Action {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
+        list(,$section,$m1,$m2) = explode('_',$id);
+        $methodCode = $m1 . '_' . $m2;
+        $field = substr($id, (strpos($id, $m2 . '_') + strlen($m2 . '_')));
+        $configPath = implode('/',array($section,$methodCode,$field));
 
         $model = $this->_objectManager->create(
             $type
@@ -43,7 +47,10 @@ class NewConditionHtml extends \Magento\Backend\App\Action {
             $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')
         )->setPrefix(
             'conditions'
-        );
+        )
+        ->setMethodCode($methodCode)
+        ->setconfigPath($configPath);
+        ;
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }

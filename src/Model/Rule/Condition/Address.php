@@ -15,7 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 
-class Address extends \HiPay\FullserviceMagento\Model\Rule\AbstractCondition
+class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 {
     /**
      * @var \Magento\Directory\Model\Config\Source\Country
@@ -36,6 +36,8 @@ class Address extends \HiPay\FullserviceMagento\Model\Rule\AbstractCondition
      * @var \Magento\Payment\Model\Config\Source\Allmethods
      */
     protected $_paymentAllmethods;
+    
+    protected $methodCode = null;
 
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
@@ -82,18 +84,6 @@ class Address extends \HiPay\FullserviceMagento\Model\Rule\AbstractCondition
         $this->setAttributeOption($attributes);
 
         return $this;
-    }
-
-    /**
-     * Get attribute element
-     *
-     * @return $this
-     */
-    public function getAttributeElement()
-    {
-        $element = parent::getAttributeElement();
-        $element->setShowAsText(true);
-        return $element;
     }
 
     /**
@@ -191,4 +181,123 @@ class Address extends \HiPay\FullserviceMagento\Model\Rule\AbstractCondition
 
         return parent::validate($address);
     }
+    
+    public function setMethodCode($methodCode){
+    	$this->methodCode = $methodCode;
+    	$this->setData('method_code',$this->methodCode);
+    	return $this;
+    }
+    
+    public function setConfigPath($configPath){
+    	$this->elementName = 'rule_' . $configPath;
+    	$this->setData('config_path',$configPath);
+    	return $this;
+    }
+    
+    /**
+     * @return AbstractElement
+     */
+    public function getTypeElement()
+    {
+    	return $this->getForm()->addField(
+    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__type',
+    			'hidden',
+    			[
+    					'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
+    					'value' => $this->getType(),
+    					'no_span' => true,
+    					'class' => 'hidden'
+    			]
+    			);
+    }
+    
+    /**
+     * @return $this
+     */
+    public function getAttributeElement()
+    {
+    	if (null === $this->getAttribute()) {
+    		foreach (array_keys($this->getAttributeOption()) as $option) {
+    			$this->setAttribute($option);
+    			break;
+    		}
+    	}
+    	$elt = $this->getForm()->addField(
+    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__attribute',
+    			'select',
+    			[
+    					'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
+    					'values' => $this->getAttributeSelectOptions(),
+    					'value' => $this->getAttribute(),
+    					'value_name' => $this->getAttributeName()
+    			]
+    			)->setRenderer(
+    					$this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+    					);
+    	$elt->setShowAsText(true);
+    	return $elt;
+    }
+    
+    
+    /**
+     * Retrieve Condition Operator element Instance
+     * If the operator value is empty - define first available operator value as default
+     *
+     * @return \Magento\Framework\Data\Form\Element\Select
+     */
+    public function getOperatorElement()
+    {
+    	$options = $this->getOperatorSelectOptions();
+    	if ($this->getOperator() === null) {
+    		foreach ($options as $option) {
+    			$this->setOperator($option['value']);
+    			break;
+    		}
+    	}
+    
+    	$elementId = sprintf('%s__%s__operator', $this->getPrefix(), $this->getId() . '_' . $this->getConfigPath());
+    	$elementName = sprintf($this->elementName . '[%s][%s][operator]', $this->getPrefix(), $this->getId());
+    	$element = $this->getForm()->addField(
+    			$elementId,
+    			'select',
+    			[
+    					'name' => $elementName,
+    					'values' => $options,
+    					'value' => $this->getOperator(),
+    					'value_name' => $this->getOperatorName()
+    			]
+    			);
+    	$element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+    
+    	return $element;
+    }
+    
+    /**
+     * @return $this
+     */
+    public function getValueElement()
+    {
+    	$elementParams = [
+    			'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][value]',
+    			'value' => $this->getValue(),
+    			'values' => $this->getValueSelectOptions(),
+    			'value_name' => $this->getValueName(),
+    			'after_element_html' => $this->getValueAfterElementHtml(),
+    			'explicit_apply' => $this->getExplicitApply(),
+    	];
+    	if ($this->getInputType() == 'date') {
+    		// date format intentionally hard-coded
+    		$elementParams['input_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+    		$elementParams['date_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+    	}
+    	return $this->getForm()->addField(
+    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__value',
+    			$this->getValueElementType(),
+    			$elementParams
+    			)->setRenderer(
+    					$this->getValueElementRenderer()
+    					);
+    }
+    
+    
 }

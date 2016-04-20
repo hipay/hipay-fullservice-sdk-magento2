@@ -69,7 +69,8 @@ class Rule extends \Magento\Framework\App\Config\Value {
 	public function beforeSave()
 	{
 		/* @var $rule \HiPay\FullserviceMagento\Model\Rule */
-		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')->load($this->getValue());
+		
 		if( $errors = $rule->validateData(new DataObject($this->_getRuleData()) ) !== true){
             $exception = new \Magento\Framework\Validator\Exception(
                 new Phrase(implode(PHP_EOL, $errors))
@@ -94,10 +95,25 @@ class Rule extends \Magento\Framework\App\Config\Value {
 	
 	protected function _afterload()
 	{
-		/*if(!is_array($this->getValue())){			
-			$this->setValue(explode(",", $this->getValue()));
-		}*/
-		return parent::_afterload();
+		
+		parent::_afterload();
+		
+		/* @var $rule \HiPay\FullserviceMagento\Model\Rule */
+		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+		
+		if($this->getValue()){			
+			$rule->load($this->getValue());
+			if(!$rule->getId()){
+				$rule->setMethodCode($this->_getMethodCode());
+				if($rule->getConfigPath() == ""){
+					$rule->setConfigPath($this->_getConfigPath());
+				}
+			}
+		}
+		
+		$this->setRule($rule);
+		
+		return $this;
 	}
 	
 	protected function _getMethodCode()

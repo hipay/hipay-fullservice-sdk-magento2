@@ -58,16 +58,21 @@ class ThreeDsRule extends Field
 	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
 		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
-        $partsId = explode("_", $element->getId());
-        $method_code = $partsId[2]. "_" . $partsId[3];
-        $rule->setMethodCode($method_code);                                                                                                                                                                                                           
+       // $partsId = explode("_", $element->getId());
+       // $method_code = $partsId[2]. "_" . $partsId[3];
+       
+		$field = $element->getFieldConfig()['id'];
+		list(,$methodCode) = explode('/',$element->getFieldConfig()['path']);
+		$configPath = 'payment/' . $methodCode . '/' . $field;
+		
+        $rule->setMethodCode($methodCode);                                                                                                                                                                                                           
                                                                                                                                                                                                                                                               
         if($element->getValue()){                                                                                                                                                                                                                     
         	$rule->load($element->getValue());                                                                                                                                                                                                    
         }                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                               
         if($rule->getConfigPath() == ""){                                                                                                                                                                                                             
-            $rule->setConfigPath($element->getId());                                                                                                                                                                                              
+            $rule->setConfigPath($configPath);                                                                                                                                                                                              
         }                                                                                                                                                                                                                                             
                                                                                                                                                                                                                                                               
         $element->setRule($rule);                                                                                                                                                                                                                     
