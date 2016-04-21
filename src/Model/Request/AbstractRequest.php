@@ -98,7 +98,6 @@ abstract class AbstractRequest implements RequestInterface {
 			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Helper\Data $helper,
-			\Magento\Quote\Model\QuoteFactory $quoteFactory,
 			$params = []
 			)
 	{

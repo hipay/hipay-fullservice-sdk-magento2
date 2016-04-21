@@ -32,6 +32,12 @@ abstract class AbstractPaymentMethod extends AbstractRequest{
 	 */
 	protected $_quote;
 	
+	/**
+	 * 
+	 * @var \Magento\Quote\Model\QuoteFactory $_quoteFactory
+	 */
+	protected $_quoteFactory;
+	
 	public function __construct(
 			\Psr\Log\LoggerInterface $logger,
 			\Magento\Checkout\Helper\Data $checkoutData,
@@ -47,8 +53,10 @@ abstract class AbstractPaymentMethod extends AbstractRequest{
 			)
 	{
 	
-		parent::__construct( $logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper,$quoteFactory ,$params);
-	
+		parent::__construct( $logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper ,$params);
+		
+		$this->_quoteFactory = $quoteFactory;
+		
 		if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
 			$this->_order = $params['order'];
 			if(is_null($this->_order->getQuote())){

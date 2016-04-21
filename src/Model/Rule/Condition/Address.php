@@ -211,28 +211,32 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     {
         $address = $model;
         if (!$address instanceof \Magento\Quote\Model\Quote\Address) {
-            if ($model->getQuote()->isVirtual()) {
-                $address = $model->getQuote()->getBillingAddress();
+            if ($model->isVirtual()) {
+                $address = $model->getBillingAddress();
             } else {
-                $address = $model->getQuote()->getShippingAddress();
+                $address = $model->getShippingAddress();
             }
         }
 
         if ('payment_method' == $this->getAttribute() && !$address->hasPaymentMethod()) {
-            $address->setPaymentMethod($model->getQuote()->getPayment()->getMethod());
+            $address->setPaymentMethod($model->getPayment()->getMethod());
         }
         
         //add custom validation
-        $address->setBillingPostcode($address->getBillingAddress()->getPostcode());
-        $address->setBillingRegion($address->getBillingAddress()->getRegion());
-        $address->setBillingRegionId($address->getBillingAddress()->getRegionId());
-        $address->setBillingCountryId($address->getBillingAddress()->getCountryId());
+        $address->setBillingPostcode($model->getBillingAddress()->getPostcode());
+        $address->setBillingRegion($model->getBillingAddress()->getRegion());
+        $address->setBillingRegionId($model->getBillingAddress()->getRegionId());
+        $address->setBillingCountryId($model->getBillingAddress()->getCountryId());
         
-        $address->setBaseCurrencyCode($model->getQuote()->getBaseCurrencyCode());
+        $address->setBaseCurrencyCode($model->getBaseCurrencyCode());
         
-        $address->setCreatedAt($this->_getFormatCreatedAt($model->getQuote()));
+        $address->setCreatedAt($this->_getFormatCreatedAt($model));
         
-        if(!$model->getQuote()->isVirtual()){//Get infos from shipping address
+        if(!$model->isVirtual()){//Get infos from shipping address
+        	$address->setShippingPostcode($model->getShippingAddress()->getPostcode());
+        	$address->setShippingRegion($model->getShippingAddress()->getRegion());
+        	$address->setShippingRegionId($model->getShippingAddress()->getRegionId());
+        	$address->setShippingCountryId($model->getShippingAddress()->getCountryId());
         	$address->setWeight($address->getWeight());
 			$address->setShippingMethod($address->getShippingMethod());
         }
