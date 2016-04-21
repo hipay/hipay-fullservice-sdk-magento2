@@ -23,6 +23,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      * @var \Magento\SalesRule\Model\Rule\Condition\Product
      */
     protected $_ruleConditionProd;
+    
+    protected $methodCode = null;
 
     /**
      * @param \Magento\Rule\Model\Condition\Context $context
@@ -31,7 +33,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -52,12 +54,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         foreach ($productAttributes as $code => $label) {
             if (strpos($code, 'quote_item_') === 0) {
                 $iAttributes[] = [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product|' . $code,
+                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Product|' . $code,
                     'label' => $label,
                 ];
             } else {
                 $pAttributes[] = [
-                    'value' => 'Magento\SalesRule\Model\Rule\Condition\Product|' . $code,
+                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Product|' . $code,
                     'label' => $label,
                 ];
             }

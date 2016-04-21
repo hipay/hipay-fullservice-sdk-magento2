@@ -24,7 +24,7 @@ class Subselect extends Combine
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
-        \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct,
+        \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $ruleConditionProduct, $data);

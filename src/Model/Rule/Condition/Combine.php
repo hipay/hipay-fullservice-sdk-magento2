@@ -29,6 +29,11 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     protected $_conditionAddress;
     
+    /**
+     * @var \Magento\SalesRule\Model\Rule\Condition\Customer
+     */
+    protected $_conditionCustomer;
+    
     protected $methodCode = null;
 
     /**
@@ -41,10 +46,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         \Magento\Rule\Model\Condition\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \HiPay\FullserviceMagento\Model\Rule\Condition\Address $conditionAddress,
+    	\HiPay\FullserviceMagento\Model\Rule\Condition\Customer $conditionCustomer,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
         $this->_conditionAddress = $conditionAddress;
+        $this->_conditionCustomer = $conditionCustomer;
         parent::__construct($context, $data);
         $this->setType('HiPay\FullserviceMagento\Model\Rule\Condition\Combine');
         
@@ -67,6 +74,16 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 'label' => $label,
             ];
         }
+        
+        $customerAttributes = $this->_conditionCustomer->loadAttributeOptions()->getAttributeOption();
+        $cAttributes = [];
+        foreach ($customerAttributes as $code=>$label) {
+        	$cAttributes[] = [
+        			'value'=>'HiPay\FullserviceMagento\Model\Rule\Condition\Customer|'.$code,
+        			'label'=>$label
+        			
+        	];
+        }
 
         $conditions = parent::getNewChildSelectOptions();
         $conditions = array_merge_recursive(
@@ -84,7 +101,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                     'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Combine',
                     'label' => __('Conditions combination')
                 ],
-                ['label' => __('Cart Attribute'), 'value' => $attributes]
+                ['label' => __('Cart Attribute'), 'value' => $attributes],
+            	['label' => __('Customer Attribute'), 'value' => $cAttributes]
             ]
         );
 

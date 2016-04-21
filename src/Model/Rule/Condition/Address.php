@@ -37,6 +37,17 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     protected $_paymentAllmethods;
     
+    /**
+     * 
+     * @var \Magento\Config\Model\Config\Source\Locale\Currency
+     */
+    protected $_currencies;
+    
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    protected $_localeDate;
+    
     protected $methodCode = null;
 
     /**
@@ -53,13 +64,16 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion,
         \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods,
         \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods,
-        array $data = []
+    	\Magento\Config\Model\Config\Source\Locale\Currency $currencies,
+    	array $data = []
     ) {
         parent::__construct($context, $data);
+        $this->_localeDate = $context->getLocaleDate();
         $this->_directoryCountry = $directoryCountry;
         $this->_directoryAllregion = $directoryAllregion;
         $this->_shippingAllmethods = $shippingAllmethods;
         $this->_paymentAllmethods = $paymentAllmethods;
+        $this->_currencies = $currencies;
     }
 
     /**
@@ -71,14 +85,22 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     {
         $attributes = [
             'base_subtotal' => __('Subtotal'),
+        	'base_grand_total' => __('Grand Total'),
+        	'base_currency_code' => __('Currency'),
             'total_qty' => __('Total Items Quantity'),
             'weight' => __('Total Weight'),
+       		'created_at' => __("Order's time"),
             'payment_method' => __('Payment Method'),
+       		'billing_postcode' => __('Billing Postcode'),
+       		'billing_region' => __('Billing Region'),
+        	'billing_region_id' => __('Billing State/Province'),
+        	'billing_country_id' => __('Billing Country'),
             'shipping_method' => __('Shipping Method'),
             'postcode' => __('Shipping Postcode'),
             'region' => __('Shipping Region'),
             'region_id' => __('Shipping State/Province'),
             'country_id' => __('Shipping Country'),
+        	
         ];
 
         $this->setAttributeOption($attributes);
@@ -97,13 +119,19 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             case 'base_subtotal':
             case 'weight':
             case 'total_qty':
+            case 'base_grand_total':
                 return 'numeric';
 
             case 'shipping_method':
             case 'payment_method':
             case 'country_id':
             case 'region_id':
+            case 'billing_country_id': 
+            case 'billing_region_id': 
+            case 'base_currency_code':
                 return 'select';
+            case 'created_at':
+            	return 'boolean' ;
         }
         return 'string';
     }
@@ -120,6 +148,10 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             case 'payment_method':
             case 'country_id':
             case 'region_id':
+            case 'billing_country_id': 
+            case 'billing_region_id': 
+            case 'base_currency_code': 
+            case 'created_at':
                 return 'select';
         }
         return 'text';
@@ -135,10 +167,12 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         if (!$this->hasData('value_select_options')) {
             switch ($this->getAttribute()) {
                 case 'country_id':
+                case 'billing_country_id':
                     $options = $this->_directoryCountry->toOptionArray();
                     break;
 
                 case 'region_id':
+                case 'billing_region_id':
                     $options = $this->_directoryAllregion->toOptionArray();
                     break;
 
@@ -149,7 +183,16 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                 case 'payment_method':
                     $options = $this->_paymentAllmethods->toOptionArray();
                     break;
-
+                case 'base_currency_code':
+                	$options = $this->_currencies->toOptionArray(false);
+                case 'created_at':
+                	$options = [
+                		["value"=>"00::8","label"=>__("Midnight - 8:00 a.m.")],
+                		["value"=>"8::15","label"=>__("8:00 a.m. - 3:00 p.m.")],
+                		["value"=>"15::20","label"=>__("3:00 pm. - 8:00 p.m.")],
+                		["value"=>"20::23","label"=>__("8:00 p.m. - 11:59 p.m.")],
+                	];
+                		break;
                 default:
                     $options = [];
             }
@@ -178,8 +221,49 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         if ('payment_method' == $this->getAttribute() && !$address->hasPaymentMethod()) {
             $address->setPaymentMethod($model->getQuote()->getPayment()->getMethod());
         }
+        
+        //add custom validation
+        $address->setBillingPostcode($address->getBillingAddress()->getPostcode());
+        $address->setBillingRegion($address->getBillingAddress()->getRegion());
+        $address->setBillingRegionId($address->getBillingAddress()->getRegionId());
+        $address->setBillingCountryId($address->getBillingAddress()->getCountryId());
+        
+        $address->setBaseCurrencyCode($model->getQuote()->getBaseCurrencyCode());
+        
+        $address->setCreatedAt($this->_getFormatCreatedAt($model->getQuote()));
+        
+        if(!$model->getQuote()->isVirtual()){//Get infos from shipping address
+        	$address->setWeight($address->getWeight());
+			$address->setShippingMethod($address->getShippingMethod());
+        }
 
         return parent::validate($address);
+    }
+    
+    protected function _getFormatCreatedAt($object)
+    {
+    	$created_at = $object->getCreatedAt();
+    
+    	if(!$created_at instanceof \DateTime)
+    	{    		
+    		$created_at = $this->_localeDate->scopeDate($object->getStoreId(), $created_at, true);
+    	}
+    
+    		$hour = (int)$created_at->format("HH");
+    
+    		switch (true) {
+    			case ($hour >= 0 && $hour <= 8):
+    				return '00::8';
+    			case ($hour > 8 && $hour <= 15):
+    				return '8::15';
+    			case ($hour > 15 && $hour <= 20):
+    				return '15::20';
+    			case ($hour > 20 && $hour <= 23):
+    				return '20::23';
+    
+    		}
+    
+    		return '';
     }
     
     public function setMethodCode($methodCode){
