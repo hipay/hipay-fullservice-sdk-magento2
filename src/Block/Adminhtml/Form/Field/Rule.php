@@ -17,7 +17,7 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field;
 
-class ThreeDsRule extends Field
+class Rule extends Field
 {
 	
 	/**
@@ -58,8 +58,6 @@ class ThreeDsRule extends Field
 	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
 	{
 		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
-       // $partsId = explode("_", $element->getId());
-       // $method_code = $partsId[2]. "_" . $partsId[3];
        
 		$field = $element->getFieldConfig()['id'];
 		list(,$methodCode) = explode('/',$element->getFieldConfig()['path']);

@@ -26,6 +26,12 @@ abstract class AbstractPaymentMethod extends AbstractRequest{
 	 */
 	protected $_order;
 	
+	/**
+	 * 
+	 * @var \Magento\Quote\Model\Quote
+	 */
+	protected $_quote;
+	
 	public function __construct(
 			\Psr\Log\LoggerInterface $logger,
 			\Magento\Checkout\Helper\Data $checkoutData,
@@ -34,18 +40,30 @@ abstract class AbstractPaymentMethod extends AbstractRequest{
 			\Magento\Framework\Locale\ResolverInterface $localeResolver,
 			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Helper\Data $helper,
+			\Magento\Quote\Model\QuoteFactory $quoteFactory,
 			$params = []
 	
 			)
 	{
 	
-		parent::__construct( $logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder, $params);
+		parent::__construct( $logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper,$quoteFactory ,$params);
 	
 		if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
 			$this->_order = $params['order'];
+			if(is_null($this->_order->getQuote())){
+				$this->_quote = $this->_quoteFactory->create()->load($this->_order->getQuoteId());
+			}
 		} else {
 			throw new \Exception('Order instance is required.');
 		}
+	}
+	
+	/**
+	 * @return \Magento\Quote\Model\Quote
+	 */
+	protected function getQuote(){
+		return $this->_quote;
 	}
 	
 }
