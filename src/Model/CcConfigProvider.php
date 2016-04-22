@@ -48,6 +48,12 @@ class CcConfigProvider implements ConfigProviderInterface {
 	protected $_cctypeSource;
 	
 	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+	 */
+	protected $_hipayConfig;
+	
+	/**
 	 * @param CcConfig $ccConfig
 	 * @param PaymentHelper $paymentHelper
 	 * @param array $methodCodes
@@ -56,11 +62,15 @@ class CcConfigProvider implements ConfigProviderInterface {
 			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
 			\Magento\Framework\Url $urlBuilder,
-			\HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
+			\HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
+			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 			) {
 			$this->method = $paymentHelper->getMethodInstance($this->methodCode);
 			$this->urlBuilder = $urlBuilder;
 			$this->_cctypeSource = $cctypeSource;
+			
+			$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->methodCode]]);
+			
 	}
 	
 	/**
@@ -73,7 +83,10 @@ class CcConfigProvider implements ConfigProviderInterface {
 			'hipayCc'=>[
 				'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/payment/tokenize',['_secure' => true]),
 				'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true]),
-				'availableTypes'=>$this->getCcAvailableTypesOrdered()
+				'availableTypes'=>$this->getCcAvailableTypesOrdered(),
+				'env'=>$this->_hipayConfig->getApiEnv(),
+				'apiUsername'=>$this->_hipayConfig->getApiUsername(),
+				'apiPassword'=>$this->_hipayConfig->getApiPassword()
         		],
 			],
 		] : [] ;

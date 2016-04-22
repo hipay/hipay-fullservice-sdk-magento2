@@ -17,10 +17,11 @@ define(
     [
      	'jquery',
      	'Magento_Payment/js/view/payment/cc-form',
+     	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($,Component,storage,fullScreenLoader) {
+    function ($,Component,TPP,storage,fullScreenLoader) {
         'use strict';
         return Component.extend({
             
@@ -132,29 +133,39 @@ define(
 	                    );
 	                    
 	                    fullScreenLoader.startLoader();
-	                    storage.post(
-	                    		
-	                            this.tokenizeUrl, JSON.stringify(this.getData())
-	                        ).done(
-	                            function (response) {
-	                            	if(response.token){
-	                            		
-	                            	self.creditCardToken = response.token;
-	                            	isTokenizeProcessing.resolve();
-	                            	}
-	                            	else{
-	                            		var error = response;
-		                                isTokenizeProcessing.reject(error);
-	                            	}
-	                            	fullScreenLoader.stopLoader();
-	                            }
-	                        ).fail(
-	                            function (response) {
-	                            	var error = JSON.parse(response.responseText);
+	                    
+	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
+	                    TPP.setCredentials(window.checkoutConfig.payment.hipayCc.apiUsername, window.checkoutConfig.payment.hipayCc.apiPassword);
+	                    
+	                    TPP.create({
+	                        card_number:  this.creditCardNumber(),
+	                        cvc: this.creditCardVerificationNumber(),
+	                        card_expiry_month:this.creditCardExpMonth(),
+	                        card_expiry_year: this.creditCardExpYear(),
+	                        card_holder: '',
+	                        multi_use: '0'
+	                      },
+		                      function (response) {
+		                          	if(response.token){
+		                          		
+		                          		self.creditCardToken = response.token;
+		                          		isTokenizeProcessing.resolve();
+		                          	}
+		                          	else{
+		                          		var error = response;
+			                                isTokenizeProcessing.reject(error);
+		                          	}
+		                          	fullScreenLoader.stopLoader();
+	                          },
+	                          function (response) {
+	                        	  console.log('error');
+	                        	  console.log(response);
+	                            	var error = response;
 	                            	isTokenizeProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();
 	                            }
-	                        );
+	                      );
+	                    
 	            }
 
             }
