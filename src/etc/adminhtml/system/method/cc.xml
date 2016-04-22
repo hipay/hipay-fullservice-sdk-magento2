@@ -12,9 +12,13 @@
                 </field> 
 				 <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Use 3D Secure</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ThreeDs</source_model>
                 </field>
-                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-                
+                 <field id="config_3ds_rules" translate="label comment" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Rules 3D Secure</label>
+                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
+                    <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
+                </field>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>               
 			</group>
 </include>

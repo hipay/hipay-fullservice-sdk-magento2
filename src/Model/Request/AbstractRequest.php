@@ -20,7 +20,7 @@ use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
 abstract class AbstractRequest implements RequestInterface {
 	
 	/**
-	 * @var \Magento\Customer\Model\Session
+	 * @var \Magento\Customer\Model\Session $_customerSession
 	 */
 	protected $_customerSession;
 	
@@ -28,7 +28,7 @@ abstract class AbstractRequest implements RequestInterface {
 	/**
 	 * Customer ID
 	 *
-	 * @var int
+	 * @var int $_customerId
 	 */
 	protected $_customerId;
 	
@@ -36,46 +36,58 @@ abstract class AbstractRequest implements RequestInterface {
 	/**
 	 * Checkout data
 	 *
-	 * @var \Magento\Checkout\Helper\Data
+	 * @var \Magento\Checkout\Helper\Data $_checkoutData
 	 */
 	protected $_checkoutData;
 	
 	
 	/**
-	 * @var \Psr\Log\LoggerInterface
+	 * @var \Psr\Log\LoggerInterface $_logger
 	 */
 	protected $_logger;
 
 	/**
-	 * @var \Magento\Checkout\Model\Session
+	 * @var \Magento\Checkout\Model\Session $_checkoutSession
 	 */
 	protected $_checkoutSession;
 	
 	/**
 	 * Config instance
 	 *
-	 * @var HiPayConfig
+	 * @var HiPayConfig $_config
 	 */
 	protected $_config;
 	
 	/**
 	 * Url Builder
 	 *
-	 * @var \Magento\Framework\Url
+	 * @var \Magento\Framework\Url $_urlBuilder
 	 */
 	protected $_urlBuilder;
 
 	
 	/**
-	 * @var \Magento\Framework\Locale\ResolverInterface
+	 * @var \Magento\Framework\Locale\ResolverInterface $_localeResolver
 	 */
 	protected $_localeResolver;
 	
 	/**
 	 * 
-	 * @var \HiPay\FullserviceMagento\Model\Request\Type\Factory
+	 * @var \HiPay\FullserviceMagento\Model\Request\Type\Factory $_requestFactory
 	 */
 	protected $_requestFactory;
+	
+	/**
+	 *
+	 * @var \Magento\Quote\Model\QuoteFactory $_quoteFactory
+	 */
+	protected $_quoteFactory;
+	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Helper\Data $_helper
+	 */
+	protected $_helper;
 	
 	public function __construct(
 			\Psr\Log\LoggerInterface $logger,
@@ -85,6 +97,7 @@ abstract class AbstractRequest implements RequestInterface {
 			\Magento\Framework\Locale\ResolverInterface $localeResolver,
 			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Helper\Data $helper,
 			$params = []
 			)
 	{
@@ -94,11 +107,13 @@ abstract class AbstractRequest implements RequestInterface {
 				$this->_localeResolver = $localeResolver;
 				$this->_requestFactory =  $requestFactory;
 				$this->_urlBuilder = $urlBuilder;
+				$this->_helper = $helper;
+				
 				$this->_customerSession = isset($params['session'])
 		            && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 				
 		        $this->_customerId = $this->_customerSession->getCustomerId();
-
+				
 		        
 		        if (isset($params['config']) && $params['config'] instanceof HiPayConfig) {
 		        	$this->_config = $params['config'];

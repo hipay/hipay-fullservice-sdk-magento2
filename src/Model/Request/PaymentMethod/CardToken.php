@@ -20,19 +20,14 @@ use Magento\Framework\Exception\LocalizedException;
 
 class CardToken extends AbstractPaymentMethod{
 
-	
-
 
 	protected function mapRequest() {
 		
 		//Token can be empty
 		$cardtoken = $this->_order->getPayment()->getAdditionalInformation('card_token');
-		/*if(empty($cardtoken)){
-			throw new LocalizedException(__('Card token is empty'));
-		}*/
 		
 		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $this->_config->getValue('authentication_indicator');
+		$cardTokenPaymentMethod->authentication_indicator = $this->_helper->is3dSecure($this->_config->getValue('authentication_indicator'), $this->_config->getValue('config_3ds_rules'),$this->getQuote());
 		$cardTokenPaymentMethod->cardtoken = $cardtoken;
 		$cardTokenPaymentMethod->eci = 7;
 		

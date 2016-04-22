@@ -27,11 +27,12 @@ abstract class AbstractInfoRequest extends BaseRequest{
 			\Magento\Framework\Locale\ResolverInterface $localeResolver,
 			\HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Helper\Data $helper,
 			$params = []
 			)
 	{
 	
-		parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$params);
+		parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper,$params);
 	
 	
 		if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
