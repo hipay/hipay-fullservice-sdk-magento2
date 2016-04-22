@@ -55,10 +55,11 @@ class InstallData implements InstallDataInterface
         ];
         foreach ($statuses as $code => $info) {
             $statuesData[] = ['status' => $code, 'label' => $info['label']];
-            $statuesToStateData =  [
+            $statuesToStateData[] =  [
                         'status' => $code,
                         'state' =>  $info['state'],
                         'is_default' => isset($info['default']) ? 1 : 0,
+            			'visible_on_front' => 1
                     ];
         }
         //Insert new statues
