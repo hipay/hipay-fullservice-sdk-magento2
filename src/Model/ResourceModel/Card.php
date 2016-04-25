@@ -13,14 +13,22 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Block\Cc;
+namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-/**
- *
- * @author kassim
- *        
- */
-class Info extends \Magento\Payment\Block\Info\Cc {
 
+class Card extends \Magento\Rule\Model\ResourceModel\AbstractResource
+{
 	
+	/**
+	 * Initialize main table and table id field
+	 *
+	 * @return void
+	 * @codeCoverageIgnore
+	 */
+	protected function _construct()
+	{
+		$this->_init('hipay_customer_card', 'rcard_id');
+	}
+	
+  
 }
