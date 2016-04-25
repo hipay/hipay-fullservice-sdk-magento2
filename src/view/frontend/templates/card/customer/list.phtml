@@ -1,0 +1,71 @@
+<?php
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+
+// @codingStandardsIgnoreFile
+/** @var \HiPay\FullserviceMagento\Block\Card\Customerr\ListCard $block */
+?>
+<?php if ($block->getCards() && count($block->getCards())): ?>
+    <div class="table-wrapper cards">
+        <table class="data table table-cards" id="my-cards-table">
+            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Credit cards') ?></caption>
+            <thead>
+                <tr>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card name') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card type') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Exp. Month') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Exp. Year') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card Number') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card Status') ?></th>
+                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Is default') ?></th>
+                    <th scope="col" class="col actions">&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<?php /** @var $_card \HiPay\FullserviceMagento\Model\Card */  ?>
+                <?php foreach ($block->getCards() as $_card): ?>
+                <tr>
+                    <td data-th="<?php echo $block->escapeHtml(__('Card name')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getName()) ?></td>
+                    <td data-th="<?php echo $block->escapeHtml(__('Card type')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcType()) ?></td>
+  					<td data-th="<?php echo $block->escapeHtml(__('Exp. Month')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcExpMonth()) ?></td>
+					<td data-th="<?php echo $block->escapeHtml(__('Exp. Year')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcExpYear()) ?></td>
+					<td data-th="<?php echo $block->escapeHtml(__('Card Number')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcNumberEnc()) ?></td>
+					<td data-th="<?php echo $block->escapeHtml(__('Card Status')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $_card->getCcStatus() == \HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED ? __('Enabled') : __('Disabled') ?></td>
+					<td data-th="<?php echo $block->escapeHtml(__('Is Default')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $_card->getIsDefault() == 1 ? __('Yes') : __('No') ?></td>
+                    <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
+                        <a href="<?php /* @escapeNotVerified */ echo $block->getCardLink() ?>id/<?php /* @escapeNotVerified */ echo $_card->getCardId() ?>" class="action more">
+                            <span><?php /* @escapeNotVerified */ echo __('See Details') ?></span>
+                        </a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php if ($block->getToolbarHtml()): ?>
+        <div class="toolbar products-cards-toolbar bottom">
+            <?php echo $block->getToolbarHtml() ?>
+        </div>
+    <?php endif; ?>
+<?php else: ?>
+    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have recorded no cards.') ?></span></div>
+<?php endif; ?>
+<div class="actions-toolbar">
+    <div class="secondary">
+        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>">
+            <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+        </a>
+    </div>
+</div>
