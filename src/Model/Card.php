@@ -48,7 +48,7 @@ namespace HiPay\FullserviceMagento\Model;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Card extends \Magento\Rule\Model\AbstractModel
+class Card extends \Magento\Framework\Model\AbstractModel
 {
 
 	const STATUS_DISABLED = 0;

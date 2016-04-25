@@ -32,7 +32,7 @@ class Index extends CustomerController
         if ($navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('hipay/card');
         }
-        if ($block = $resultPage->getLayout()->getBlock('review_customer_list')) {
+        if ($block = $resultPage->getLayout()->getBlock('card_customer_list')) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
         $resultPage->getConfig()->getTitle()->set(__('My Credit Cards'));
