@@ -38,6 +38,18 @@ class GenericConfigProvider implements ConfigProviderInterface {
 	 * @var \Magento\Framework\Url
 	 */
 	protected $urlBuilder;
+	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+	 */
+	protected $hipayHelper;
+	
+	/**
+	 * 
+	 * @var \Magento\Checkout\Model\Session $checkoutSession
+	 */
+	protected $checkoutSession;
 
 	
 	/**
@@ -46,6 +58,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Helper\Data $hipayHelper,
+			\Magento\Checkout\Model\Session $checkoutSession,
 			array $methodCodes = []
 			) {
 		
@@ -54,6 +68,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 				$this->methods[$code] = $paymentHelper->getMethodInstance($code);
 			}
 			$this->urlBuilder = $urlBuilder;
+			$this->hipayHelper = $hipayHelper;
+			$this->checkoutSession = $checkoutSession;
 
 	}
 	
@@ -70,7 +86,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 						'payment' => [
 								'hiPayFullservice' => [
 										'afterPlaceOrderUrl' => [$methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])],
-										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)]
+										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
+										'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
 								]
 						]
 				]);
@@ -79,6 +96,16 @@ class GenericConfigProvider implements ConfigProviderInterface {
 		
 		return $config;
 
+	}
+	
+	protected function useOneclick($methodCode){
+	
+		$allowUseOneclick = $this->methods[$methodCode]->getConfigData('allow_use_oneclick');
+		$filterOneclick = $this->methods[$methodCode]->getConfigData('filter_oneclick');
+		$quote = $this->checkoutSession->getQuote();
+		
+		return (bool)  $this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
+	
 	}
 	
 	protected function isIframeMode($methodCode){

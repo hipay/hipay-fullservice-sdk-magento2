@@ -27,6 +27,7 @@ define(
         		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
+        		useOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick[this.getCode()],
         		selectedCard: {}
         	},
         	getAfterPlaceOrderUrl: function(){
@@ -46,7 +47,7 @@ define(
             	return [];
             },
             useOneclick: function(){
-            	return true;
+            	return this.useOneclick;
             },
             
             customerHasCard: function(){

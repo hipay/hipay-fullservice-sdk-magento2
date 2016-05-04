@@ -38,7 +38,7 @@ class Data extends AbstractHelper{
 	/**
 	 * 
 	 * @param bool $use3dSecure
-	 * @param string $config3dsRules
+	 * @param int $config3dsRules
 	 * @param \Magento\Quote\Model\Quote $quote
 	 */
 	public function is3dSecure($use3dSecure, $config3dsRules, $quote = null)
@@ -53,8 +53,7 @@ class Data extends AbstractHelper{
 					break;
 				case 2:
 				case 3:
-					/* @var $rule Allopass_Hipay_Model_Rule */
-					
+					/* @var $rule Allopass_Hipay_Model_Rule */				
 					$rule = $this->_ruleFactory->create()->load($config3dsRules);
 					if($rule->getId() && $rule->validate($quote) )
 					{
@@ -70,6 +69,26 @@ class Data extends AbstractHelper{
 			}
 		}
 		return $params;
+	}
+	/**
+	 * 
+	 * @param bool $allowUseOneclick Method config Data
+	 * @param int $filterOneclick Rule's id in configuration
+	 * @param \Magento\Quote\Model\Quote $quote
+	 */
+	public function useOneclick($allowUseOneclick,$filterOneclick,$quote){
+		switch ((int)$allowUseOneclick) {
+			case 0:
+				return false; 
+			case 1:
+				/* @var $rule Allopass_Hipay_Model_Rule */	 
+				$rule = $this->_ruleFactory->create()->load($filterOneclick);
+				if($rule->getId())
+				{
+					return (int)$rule->validate($quote);
+				}
+				return true;		 
+		}	
 	}
 	
 }
