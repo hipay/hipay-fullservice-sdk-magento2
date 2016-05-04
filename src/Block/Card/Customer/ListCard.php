@@ -119,6 +119,7 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
             $this->_collection = $this->_collectionFactory->create();
             $this->_collection
                 ->filterByCustomerId($customerId);
+
         }
         return $this->_collection;
     }

@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
 
+
 class Card extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
 	
