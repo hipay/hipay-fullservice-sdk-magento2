@@ -27,8 +27,9 @@ define(
         		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
-        		useOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick[this.getCode()],
-        		selectedCard: {}
+        		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
+        		selectedCard: {},
+        		createOneclick: false
         	},
         	getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
@@ -37,6 +38,7 @@ define(
                 this._super()
                     .observe([
                         'selectedCard',
+                        'createOneclick'
                     ]);
                 return this;
             },
@@ -47,12 +49,21 @@ define(
             	return [];
             },
             useOneclick: function(){
-            	return this.useOneclick;
+            	return this.allowOneclick[this.getCode()];
             },
             
             customerHasCard: function(){
             	return this.getCustomerCards().length > 0;
-            }	
+            },
+            ,
+            getData: function() {
+                return {
+                    'method': this.item.method,
+                    'additional_data': {
+                        'create_oneclick': this.createOneclick()
+                    }
+                };
+            },
         });
     }
 );

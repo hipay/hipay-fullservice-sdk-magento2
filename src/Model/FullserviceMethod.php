@@ -116,7 +116,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	/**
 	 * @var string[] keys to import in payment additionnal informations
 	 */
-	protected $_additionalInformationKeys = [];
+	protected $_additionalInformationKeys = ['card_token','create_oneclick'];
 	
 	
 	/**

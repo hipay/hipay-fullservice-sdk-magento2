@@ -51,13 +51,14 @@ define(
              * @override
              */
             initObservable: function () {
+            	var self = this;
                 this._super();
                 
                 this.showCcForm = ko.computed(function () {
 
-                    return !(this.useOneclick() && this.customerHasCard()) ||
-                        this.selectedCard() === undefined ||
-                        this.selectedCard() === '';
+                    return !(self.useOneclick() && self.customerHasCard()) ||
+                    		self.selectedCard() === undefined ||
+                    		self.selectedCard() === '';
                 }, this);
 
               
