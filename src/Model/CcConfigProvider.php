@@ -81,8 +81,6 @@ class CcConfigProvider implements ConfigProviderInterface {
 		return $this->method->isAvailable() ? [
 		'payment'=>[
 			'hipayCc'=>[
-				'tokenizeUrl'=>$this->urlBuilder->getUrl('hipay/payment/tokenize',['_secure' => true]),
-				//'afterPlaceOrderUrl'=>$this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true]),
 				'availableTypes'=>$this->getCcAvailableTypesOrdered(),
 				'env'=>$this->_hipayConfig->getApiEnv(),
 				'apiUsername'=>$this->_hipayConfig->getApiUsername(),

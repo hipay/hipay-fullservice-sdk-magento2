@@ -17,7 +17,7 @@ define(
     [
      	'ko',
      	'jquery',
-     	'Magento_Payment/js/view/payment/cc-form',
+     	'HiPay_FullserviceMagento/js/view/payment/cc-form',
      	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
@@ -29,11 +29,6 @@ define(
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-        		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
-        		creditCardToken: null,
-        		redirectAfterPlaceOrder: false,
-        		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
-        		selectedCard: {},
         		showCcForm: true
         	},
             placeOrderHandler: null,
@@ -56,11 +51,7 @@ define(
              * @override
              */
             initObservable: function () {
-                var self = this;
-                this._super()
-                    .observe([
-                        'selectedCard',
-                    ]);
+                this._super();
                 
                 this.showCcForm = ko.computed(function () {
 
@@ -126,28 +117,12 @@ define(
                         message: error
                     });
                 }
-            },
-            /**
-             * @returns Array
-             */
-            getCustomerCards: function(){
-            	return [];
-            },
-            useOneclick: function(){
-            	return true;
-            },
-            
-            customerHasCard: function(){
-            	return this.getCustomerCards().length > 0;
-            },
+            },          
             /**
              * After place order callback
              */
 	        afterPlaceOrder: function () {
 	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
-	        },
-	        getAfterPlaceOrderUrl: function(){
-	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
             generateToken: function (data,event){
             	var self = this,
