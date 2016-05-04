@@ -26,6 +26,7 @@
      <type name="HiPay\FullserviceMagento\Model\Method\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
+            	<item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\CcMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted" xsi:type="const">HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_qiwiwallet" xsi:type="const">HiPay\FullserviceMagento\Model\Method\QiwiWallet::HIPAY_METHOD_CODE</item>

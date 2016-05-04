@@ -15,13 +15,15 @@
 
 define(
     [
+     	'ko',
      	'jquery',
-     	'Magento_Payment/js/view/payment/cc-form',
+     	' ',
      	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
     function ($,Component,TPP,storage,fullScreenLoader) {
+
         'use strict';
         return Component.extend({
             
@@ -30,7 +32,9 @@ define(
         		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
         		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
-        		afterPlaceOrderUrl: window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl
+        		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
+        		selectedCard: {},
+        		showCcForm: true
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -47,6 +51,26 @@ define(
              */
             setValidateHandler: function (handler) {
                 this.validateHandler = handler;
+            },
+            /**
+             * @override
+             */
+            initObservable: function () {
+                var self = this;
+                this._super()
+                    .observe([
+                        'selectedCard',
+                    ]);
+                
+                this.showCcForm = ko.computed(function () {
+
+                    return !(this.useOneclick() && this.customerHasCard()) ||
+                        this.selectedCard() === undefined ||
+                        this.selectedCard() === '';
+                }, this);
+
+              
+                return this;
             },
         	/**
              * @returns {Boolean}
@@ -104,10 +128,26 @@ define(
                 }
             },
             /**
+             * @returns Array
+             */
+            getCustomerCards: function(){
+            	return [];
+            },
+            useOneclick: function(){
+            	return true;
+            },
+            
+            customerHasCard: function(){
+            	return this.getCustomerCards().length > 0;
+            },
+            /**
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(this.afterPlaceOrderUrl);
+	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
+	        },
+	        getAfterPlaceOrderUrl: function(){
+	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
             generateToken: function (data,event){
             	var self = this,

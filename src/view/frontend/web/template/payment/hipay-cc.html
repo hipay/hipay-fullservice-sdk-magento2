@@ -39,40 +39,64 @@
             }, 'validation':[]}">
 		
 			<fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
-			    <!-- ko if: (isShowLegend())-->
+				 <!-- ko if: (isShowLegend())-->
 			    <legend class="legend">
 			        <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
 			    </legend><br />
 			    <!-- /ko -->
-			    <div class="field type">
-			        <div class="control">
-			            <ul class="credit-card-types">
-			                <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
-			                <li class="item" data-bind="css: {
-			                                                 _active: $parent.selectedCardType() == item.value,
-			                                                 _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value
-			                                                 } ">
-			                    <!--ko if: $parent.getIcons(item.value) -->
-			                    <img data-bind="attr: {
-			                        'src': $parent.getIcons(item.value).url,
-			                        'alt': item.type,
-			                        'width': $parent.getIcons(item.value).width,
-			                        'height': $parent.getIcons(item.value).height
-			                        }">
-			                    <!--/ko-->
-			                </li>
-			                <!--/ko-->
-			            </ul>
-			            <input type="hidden"
-			                   name="payment[cc_type]"
-			                   class="input-text"
-			                   value=""
-			                   data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'},
-			                   value: creditCardType
-			                   ">
-			        </div>
+			    
+				 <!-- ko if: (useOneclick() && customerHasCard()) -->
+                <div>
+                    <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
+                        <span><!-- ko i18n: 'Payment Information'--><!-- /ko --></span>
+                    </label>
+                    <div class="control">
+                        <select name="payment[cc_token]" class="select"
+                                data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
+                                            mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
+                                            enable: true,
+                                            options: getCustomerCards(),
+                                            optionsValue: 'cardId',
+                                            optionsText: 'ccNumberEnc',
+                                            optionsCaption: $t('Add new card'),
+                                            value: selectedCard">
+                        </select>
+                    </div>
+                </div>
+                <div>&nbsp;</div>
+                <!-- /ko -->
+			
+			  <div data-bind="visible: showCcForm">		  
+			    	<div class="field type">
+				        <div class="control">
+				            <ul class="credit-card-types">
+				                <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
+				                <li class="item" data-bind="css: {
+				                                                 _active: $parent.selectedCardType() == item.value,
+				                                                 _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value
+				                                                 } ">
+				                    <!--ko if: $parent.getIcons(item.value) -->
+				                    <img data-bind="attr: {
+				                        'src': $parent.getIcons(item.value).url,
+				                        'alt': item.type,
+				                        'width': $parent.getIcons(item.value).width,
+				                        'height': $parent.getIcons(item.value).height
+				                        }">
+				                    <!--/ko-->
+				                </li>
+				                <!--/ko-->
+				            </ul>
+				            <input type="hidden"
+				                   name="payment[cc_type]"
+				                   class="input-text"
+				                   value=""
+				                   data-bind="attr: {id: getCode() + '_cc_type', 'data-container': getCode() + '-cc-type'},
+				                   value: creditCardType
+				                   ">
+				        </div>
+			    	</div>
 			    </div>
-			    <div class="field number required">
+			    <div class="field number required" data-bind="visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
 			            <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
 			        </label>
@@ -89,7 +113,7 @@
 			                              valueUpdate: 'keyup' "/>
 			        </div>
 			    </div>
-			    <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'}">
+			    <div class="field date required" data-bind="attr: {id: getCode() + '_cc_type_exp_div'},visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_expiration'}" class="label">
 			            <span><!-- ko i18n: 'Expiration Date'--><!-- /ko --></span>
 			        </label>
@@ -127,7 +151,7 @@
 			        </div>
 			    </div>
 			    <!-- ko if: (hasVerification())-->
-			    <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'}">
+			    <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'},visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
 			            <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
 			        </label>
@@ -158,7 +182,7 @@
 			    </div>
 			    <!-- /ko -->
 			    <!-- ko if: (hasSsCardType())-->
-			    <div class="field switch solo required" data-bind="attr: {id: getCode() + '_cc_type_ss_div'}">
+			    <div class="field switch solo required" data-bind="attr: {id: getCode() + '_cc_type_ss_div'},visible: showCcForm">
 			        <div class="nested">
 			            <div class="field switch-solo required">
 			                <label data-bind="attr: {for: getCode() + '_cc_issue'}" class="label">
@@ -219,6 +243,24 @@
 			        </div>
 			    </div>
 			    <!-- /ko -->
+			     <!-- ko if: (useOneclick())-->
+                <div class="field" data-bind="visible: showCcForm">
+                    <label class="label">
+                        <span></span>
+                    </label>
+                    <div class="control">
+                        <input type="checkbox"
+                               name="payment[create_oneclick]"
+                               value="1"
+                               checked="checked"
+                               class="checkbox"
+                               data-bind="checked: false,attr: {id:  getCode() + '_create_oneclick'}"/>
+                        <label class="label" for="create_oneclick">
+                            <span><!-- ko i18n: 'Save this card for future use'--><!-- /ko --></span>
+                        </label>
+                    </div>
+                </div>
+                <!-- /ko -->
 			</fieldset>
 	</form>
 		
