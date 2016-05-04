@@ -17,12 +17,12 @@ define(
     [
      	'ko',
      	'jquery',
-     	' ',
+     	'Magento_Payment/js/view/payment/cc-form',
      	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($,Component,TPP,storage,fullScreenLoader) {
+    function (ko, $,Component,TPP,storage,fullScreenLoader) {
 
         'use strict';
         return Component.extend({
@@ -198,8 +198,6 @@ define(
 		                          	fullScreenLoader.stopLoader();
 	                          },
 	                          function (response) {
-	                        	  console.log('error');
-	                        	  console.log(response);
 	                            	var error = response;
 	                            	isTokenizeProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();
