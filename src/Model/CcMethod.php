@@ -67,10 +67,6 @@ class CcMethod extends FullserviceMethod {
 	 */
 	protected $urlBuilder;
 	
-	/**
-	 * @var string[] keys to import in payment additionnal informations
-	 */
-	protected $_additionalInformationKeys = [];
 	
 	/**
 	 * @param \Magento\Framework\Model\Context $context
