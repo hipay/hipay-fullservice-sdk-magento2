@@ -55,7 +55,6 @@ define(
             customerHasCard: function(){
             	return this.getCustomerCards().length > 0;
             },
-            ,
             getData: function() {
                 return {
                     'method': this.item.method,
