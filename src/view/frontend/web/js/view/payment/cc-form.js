@@ -45,7 +45,9 @@ define(
                         'creditCardVerificationNumber',
                         'creditCardSsStartMonth',
                         'creditCardSsStartYear',
-                        'selectedCardType'
+                        'selectedCardType',
+                        'selectedCard',
+                        'createOneclick'
                     ]);
                 return this;
             },

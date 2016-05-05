@@ -102,7 +102,8 @@ define(
                         'cc_exp_year': this.creditCardExpYear(),
                         'cc_exp_month': this.creditCardExpMonth(),
                         'cc_number': this.creditCardNumber(),
-                        'card_token': this.creditCardToken
+                        'card_token': this.creditCardToken,
+                        'create_oneclick': this.createOneclick()
                     }
                 };
             },

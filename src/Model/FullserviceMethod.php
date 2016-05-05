@@ -177,8 +177,10 @@ abstract class FullserviceMethod extends AbstractMethod {
 	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
 		
 		$info = $this->getInfoInstance();
-		foreach ($this->_additionalInformationKeys as $key) {			
-			$info->setAdditionalInformation($key,$data->getData($key));
+		foreach ($this->_additionalInformationKeys as $key) {	
+			if(!is_null($data->getData($key))){			
+				$info->setAdditionalInformation($key,$data->getData($key));
+			}
 		}
 		
 		return $this;
