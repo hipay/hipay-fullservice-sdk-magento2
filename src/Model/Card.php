@@ -35,7 +35,7 @@ namespace HiPay\FullserviceMagento\Model;
  * @method string getCcOwner()
  * @method \HiPay\FullserviceMagento\Model\Card setCcOwner((string $ccOwner)
  * @method string getCcType()
- * @method \HiPay\FullserviceMagento\Model\Card setType(string $ccType)
+ * @method \HiPay\FullserviceMagento\Model\Card setCcType(string $ccType)
  * @method string getCcNumberEnc()
  * @method \HiPay\FullserviceMagento\Model\Card setCcNumberEnc(string $ccNumberEnc)
  * @method int getCcStatus()
@@ -68,14 +68,12 @@ class Card extends \Magento\Framework\Model\AbstractModel
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
 			\Magento\Framework\Registry $registry,
-			\Magento\Framework\Data\FormFactory $formFactory,
-			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
 
-				parent::__construct($context, $registry,$formFactory,$localeDate, $resource, $resourceCollection, $data);
+				parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 	}
 	
 	

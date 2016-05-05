@@ -125,13 +125,13 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
     }
 
     /**
-     * Get card link
+     * Get delete card link
      *
      * @return string
      */
-    public function getCardLink()
+    public function getDeleteCardLink()
     {
-        return $this->getUrl('hipay/card/view/');
+        return $this->getUrl('hipay/card/delete/');
     }
 
     /**

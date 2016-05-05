@@ -145,23 +145,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
         	->addColumn(
         		'cc_exp_year',
         		\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-        		2,
+        		4,
         		['nullable' => false],
         		'Card expiration year'
-        	)
-        	->addColumn(
-        		'cc_secure_verify',
-        		\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-        		10,
-        		[],
-        		'Card secure verify'
-        	)
-        	->addColumn(
-        		'cc_last4',
-        		\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-        		4,
-        		[],
-        		'Card last 4 digits'
         	)
         	->addColumn(
         		'cc_owner',
@@ -190,14 +176,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         		'2M',
         		['nullable' => false],
         		'HiPay token'
-        	)
-        	->addColumn(
-        		'is_default',
-        		\Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-        		1,
-        		['nullable' => false,'default'=>'0'],
-        		'Card by default'
-        	)
+        	)      	
         	;
         
         															 

@@ -184,8 +184,7 @@ class Notify {
 	}
 	
 	protected function _canSaveCc(){
-		$ccCategories = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItems('credit-card');
-		return (bool)in_array($this->_transaction->getPaymentProduct()->getProductCode(),$ccCategories) 
+		return (bool)in_array($this->_transaction->getPaymentProduct(),['visa','american-express','mastercard','cb']) 
 					&& $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
 	}
 	
@@ -209,9 +208,9 @@ class Notify {
 				$card->setCcExpMonth($paymentMethod->getCardExpiryMonth());
 				$card->setCcExpYear($paymentMethod->getCardExpiryYear());
 				$card->setCcNumberEnc($paymentMethod->getPan());
-				$card->setType($paymentProduct);
+				$card->setCcType($paymentMethod->getBrand());
 				$card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
-				$card->setName(__('Card %s - %s',$paymentProduct,$paymentMethod->getPan()));
+				$card->setName(sprintf(__('Card %s - %s'),$paymentProduct,$paymentMethod->getPan()));
 				
 
 				try {
@@ -448,6 +447,11 @@ class Notify {
 				$this->_transaction->getCapturedAmount(),
 				$skipFraudDetection && $parentTransactionId
 				);
+		/**
+		 * save token and credit card informations encryted
+		 */
+		$this->_saveCc();
+		
 		$this->_order->save();
 	
 		// notify customer
@@ -461,10 +465,6 @@ class Notify {
 							)->save();
 		}
 		
-		/**
-		 * save token and credit card informations encryted
-		 */
-		$this->_saveCc();
 	}
 	
 	/**
