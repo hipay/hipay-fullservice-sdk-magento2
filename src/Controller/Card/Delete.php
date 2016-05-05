@@ -1,14 +1,23 @@
 <?php
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
  */
-namespace Magento\Review\Controller\Customer;
+namespace HiPay\FullserviceMagento\Controller\Card;
 
-use Magento\Review\Controller\Customer as CustomerController;
 use Magento\Framework\App\Action\Context;
+use HiPay\FullserviceMagento\Controller\Card\Customer as CustomerController;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Review\Model\ReviewFactory;
 use Magento\Framework\Controller\ResultFactory;
 
 class Delete extends CustomerController

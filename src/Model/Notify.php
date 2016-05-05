@@ -144,6 +144,10 @@ class Notify {
 			case TransactionStatus::CAPTURED: //118
 			case TransactionStatus::PARTIALLY_CAPTURED: //119				
 				$this->_doTransactionCapture();
+				/**
+				 * save token and credit card informations encryted
+				 */
+				$this->_saveCc();
 				break;
 			case TransactionStatus::REFUND_REQUESTED: //124
 				$this->_doTransactionRefundRequested();
@@ -447,10 +451,6 @@ class Notify {
 				$this->_transaction->getCapturedAmount(),
 				$skipFraudDetection && $parentTransactionId
 				);
-		/**
-		 * save token and credit card informations encryted
-		 */
-		$this->_saveCc();
 		
 		$this->_order->save();
 	

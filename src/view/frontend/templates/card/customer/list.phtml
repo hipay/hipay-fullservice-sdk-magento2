@@ -38,7 +38,7 @@
   					<td data-th="<?php echo $block->escapeHtml(__('Exp. Date')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcExpMonth()) . "/" . $block->escapeHtml($_card->getCcExpYear())  ?></td>
 					<td data-th="<?php echo $block->escapeHtml(__('Card Number')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcNumberEnc()) ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                        <a href="<?php /* @escapeNotVerified */ echo $block->getDeleteCardLink() ?>id/<?php /* @escapeNotVerified */ echo $_card->getCardId() ?>" class="action delete remove">
+                        <a class="action delete remove" role="delete-card" href="#" data-card="<?php /* @escapeNotVerified */ echo $_card->getCardId() ?>" >
                             <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
                         </a>
                     </td>
@@ -62,3 +62,13 @@
         </a>
     </div>
 </div>
+<script type="text/x-magento-init">
+    {
+        ".page-main": {
+            "card": {
+                "deleteCard": "table.table-cards a[role='delete-card']",
+                "deleteUrlPrefix": "<?php /* @escapeNotVerified */ echo $block->getDeleteCardLink() ?>id/"
+            }
+        }
+    }
+</script>
