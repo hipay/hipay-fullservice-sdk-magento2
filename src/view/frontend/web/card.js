@@ -57,7 +57,13 @@ define([
                 content: this.options.deleteConfirmMessage,
                 actions: {
                     confirm: function() {
-                            window.location = self.options.deleteUrlPrefix + $(e.target).data('card');  
+                    	if (typeof $(e.target).parent().data('card') !== 'undefined') {
+                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('card');
+                        }
+                        else {
+                            window.location = self.options.deleteUrlPrefix + $(e.target).data('card');
+                        }
+   
                     }
                 }
             });

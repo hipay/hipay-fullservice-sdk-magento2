@@ -50,6 +50,26 @@ class GenericConfigProvider implements ConfigProviderInterface {
 	 * @var \Magento\Checkout\Model\Session $checkoutSession
 	 */
 	protected $checkoutSession;
+	
+	/**
+	 *
+	 * @var \Magento\Customer\Model\Session $customerSession
+	 */
+	protected $customerSession;
+	
+	/**
+	 * Card resource model
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory
+	 */
+	protected $_collectionFactory;
+	
+	/**
+	 * Cards collection
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection
+	 */
+	protected $_collection;
 
 	
 	/**
@@ -60,6 +80,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Helper\Data $hipayHelper,
 			\Magento\Checkout\Model\Session $checkoutSession,
+			\Magento\Customer\Model\Session $customerSession,
+			\HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
 			array $methodCodes = []
 			) {
 		
@@ -70,6 +92,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			$this->urlBuilder = $urlBuilder;
 			$this->hipayHelper = $hipayHelper;
 			$this->checkoutSession = $checkoutSession;
+			$this->_collectionFactory = $collectionFactory;
+			$this->customerSession = $customerSession;
 
 	}
 	
@@ -88,6 +112,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 										'afterPlaceOrderUrl' => [$methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])],
 										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
 										'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
+										'customerCards' => $this->getCustomerCards(),
 								]
 						]
 				]);
@@ -96,6 +121,27 @@ class GenericConfigProvider implements ConfigProviderInterface {
 		
 		return $config;
 
+	}
+	
+	
+	/**
+	 * Get cards
+	 *
+	 * @return bool|\HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection
+	 */
+	protected function getCustomerCards()
+	{
+		if (!($customerId = $this->customerSession->getCustomerId())) {
+			return false;
+		}
+		if (!$this->_collection) {
+			$this->_collection = $this->_collectionFactory->create();
+			$this->_collection
+			->filterByCustomerId($customerId)
+			->onlyValid();
+	
+		}
+		return $this->_collection;
 	}
 	
 	protected function useOneclick($methodCode){

@@ -28,7 +28,8 @@ define(
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
-        		selectedCard: {},
+        		selectedCard:  {},
+        		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false
         	},
         	getAfterPlaceOrderUrl: function(){
@@ -46,7 +47,7 @@ define(
              * @returns Array
              */
             getCustomerCards: function(){
-            	return [];
+            	return this.customerCards;
             },
             useOneclick: function(){
             	return this.allowOneclick[this.getCode()];

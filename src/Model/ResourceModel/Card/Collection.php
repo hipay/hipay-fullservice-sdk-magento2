@@ -31,11 +31,31 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * Filter collection by customer id
      *
      * @param int $customerId
-     * @return $this
+     * @return \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection $this
      */
     public function filterByCustomerId($customerId)
     {
         $this->addFieldToFilter('customer_id', $customerId);
         return $this;
+    }
+    
+    /**
+     * Return only valid cards
+     * @return \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection $this
+     */
+    public function onlyValid(){
+    	$today = new \DateTime();
+    	$currentYear = (int)$today->format('Y') ;
+    	$currentMonth = (int)$today->format('m');
+    	$this->addFieldToFilter('cc_exp_year', array("gteq"=>$currentYear));
+    	
+    	/** @var $card \HiPay\FullserviceMagento\Model\Card */
+    	foreach ($this->getItems() as $card)
+    	{
+    		if($card->getCcExpYear() == $currentYear && $currentMonth < $card->getCcExpMonth())
+    			$this->removeItemByKey($card->getId());
+    	}
+    	
+    	return $this;
     }
 }

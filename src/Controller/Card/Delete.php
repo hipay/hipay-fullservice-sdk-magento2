@@ -64,7 +64,7 @@ class Delete extends CustomerController
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
         	$this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-        	$this->messageManager->addException($e, __('Something went wrong  deleteing the credit card.'));
+        	$this->messageManager->addException($e, __('Something went wrong deleting the credit card.'));
         }
         
        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

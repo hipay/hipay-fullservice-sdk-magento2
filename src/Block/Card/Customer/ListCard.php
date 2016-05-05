@@ -118,7 +118,8 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
         if (!$this->_collection) {
             $this->_collection = $this->_collectionFactory->create();
             $this->_collection
-                ->filterByCustomerId($customerId);
+                ->filterByCustomerId($customerId)
+            	->onlyValid();
 
         }
         return $this->_collection;

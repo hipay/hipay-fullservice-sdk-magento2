@@ -28,7 +28,7 @@ class Card extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 	 */
 	protected function _construct()
 	{
-		$this->_init('hipay_customer_card', 'rcard_id');
+		$this->_init('hipay_customer_card', 'card_id');
 	}
 	
   
