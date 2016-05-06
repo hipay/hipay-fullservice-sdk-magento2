@@ -53,7 +53,7 @@ define(
                     		self.selectedCard() === undefined ||
                     		self.selectedCard() === '';
                 }, this);
-                console.log(this.showForm());
+                
                 return this;
             },
             initialize: function(){
