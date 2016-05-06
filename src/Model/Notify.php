@@ -22,6 +22,7 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
 class Notify {
 	
@@ -71,6 +72,7 @@ class Notify {
 			FraudReviewSender $fraudReviewSender,
 			FraudDenySender $fraudDenySender,
 			\Magento\Payment\Helper\Data $paymentHelper,
+			ResourceOrder $orderResource,
 			$params = []
 			){
 
@@ -82,7 +84,20 @@ class Notify {
 			if (isset($params['response']) && is_array($params['response'])) {
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 				
-				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
+				/**
+				 * Begin transaction to lock this order record during update
+				 */
+				$orderResource->getConnection()->beginTransaction();
+				
+				$selectForupdate = $orderResource->getConnection()->select()
+							->from($orderResource->getMainTable(),array($orderResource->getIdFieldName()))->where('increment_id' . '=?', $this->_transaction->getOrder()->getId())
+							->forUpdate(true);
+				
+				$orderId = $orderResource->getConnection()->fetchOne($selectForupdate);
+							
+				
+				$this->_order = $this->_orderFactory->create()->load($orderId);
+				
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
 				}
@@ -92,6 +107,9 @@ class Notify {
 				
 				//Debug transaction notification if debug enabled
 				$this->_methodInstance->debugData($this->_transaction->toArray());
+				
+				//Send commit to unlock order table
+				$orderResource->getConnection()->commit();
 				
 			} else {
 				throw new \Exception('Posted data response as array is required.');
