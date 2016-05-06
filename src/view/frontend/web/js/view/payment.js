@@ -28,7 +28,7 @@ define(
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
-        		selectedCard:  {},
+        		selectedCard:  window.checkoutConfig.payment.hiPayFullservice.selectedCard,
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',

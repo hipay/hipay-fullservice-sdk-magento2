@@ -131,6 +131,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 				'payment' => [
 						'hiPayFullservice' => [
 								'customerCards' => $cards,
+								'selectedCard'	=> count($cards) ? current($cards)['ccToken'] : null
 						]
 				]
 		]);
@@ -155,6 +156,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			$this->_collection = $this->_collectionFactory->create();
 			$this->_collection
 			->filterByCustomerId($customerId)
+			->addOrder('card_id','desc')
 			->onlyValid();
 	
 		}
