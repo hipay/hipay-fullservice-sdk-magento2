@@ -65,6 +65,11 @@ class Notify {
 	 */
 	protected $_methodInstance;
 	
+	/**
+	 * 
+	 * @var ResourceOrder $orderResource
+	 */
+	protected $orderResource;
 	
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
@@ -80,36 +85,22 @@ class Notify {
 			$this->orderSender = $orderSender;
 			$this->fraudReviewSender = $fraudReviewSender;
 			$this->fraudDenySender = $fraudDenySender;
+			$this->orderResource = $orderResource;
 	
 			if (isset($params['response']) && is_array($params['response'])) {
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
-				
-				/**
-				 * Begin transaction to lock this order record during update
-				 */
-				$orderResource->getConnection()->beginTransaction();
-				
-				$selectForupdate = $orderResource->getConnection()->select()
-							->from($orderResource->getMainTable(),array($orderResource->getIdFieldName()))->where('increment_id' . '=?', $this->_transaction->getOrder()->getId())
-							->forUpdate(true);
-				
-				$orderId = $orderResource->getConnection()->fetchOne($selectForupdate);
-							
-				
-				$this->_order = $this->_orderFactory->create()->load($orderId);
+
+				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
 				
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
 				}
-				
+								
 				//Retieve method model
 				$this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
 				
 				//Debug transaction notification if debug enabled
 				$this->_methodInstance->debugData($this->_transaction->toArray());
-				
-				//Send commit to unlock order table
-				$orderResource->getConnection()->commit();
 				
 			} else {
 				throw new \Exception('Posted data response as array is required.');
@@ -158,6 +149,19 @@ class Notify {
 		if(!$this->canProcessTransaction()){
 			return $this;
 		}
+		
+		/**
+		 * Begin transaction to lock this order record during update
+		 */
+		$this->orderResource->getConnection()->beginTransaction();
+		
+		$selectForupdate = $this->orderResource->getConnection()->select()
+		->from($this->orderResource->getMainTable())->where($this->orderResource->getIdFieldName() . '=?', $this->_order->getId())
+		->forUpdate(true);
+		
+		//Execute for update query
+		$this->orderResource->getConnection()->fetchOne($selectForupdate);
+		
 		
 		//Write about notification in order history
 		$this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
@@ -229,6 +233,9 @@ class Notify {
 				$this->_doTransactionMessage();
 				break;
 		}
+		
+		//Send commit to unlock order table
+		$this->orderResource->getConnection()->commit();
 		
 		return $this;
 	}
