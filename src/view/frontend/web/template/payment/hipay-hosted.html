@@ -39,7 +39,7 @@
          <!-- ko if: (useOneclick() && customerHasCard()) -->
          <div>
              <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
-                 <span><!-- ko i18n: 'Payment Information'--><!-- /ko --></span>
+                 <span><!-- ko i18n: 'Your credit cards'--><!-- /ko --></span>
              </label>
              <div class="control">
                  <select name="payment[cc_token]" class="select"
@@ -75,9 +75,6 @@
                 </div>
                 <!-- /ko -->
          </form>
-        <!-- ko if: !isIframeMode() -->
-        	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
-		<!-- /ko -->
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
@@ -99,7 +96,9 @@
                 </button>
             </div>
         </div>
-        
+         <!-- ko if: !isIframeMode() -->
+        	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
+		<!-- /ko -->
         <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
             <div class="primary">
                 <button data-role="review-save"
