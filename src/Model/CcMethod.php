@@ -168,6 +168,11 @@ class CcMethod extends FullserviceMethod {
 		parent::validate();
 	
 		$info = $this->getInfoInstance();
+		
+		if($info->getAdditionalInformation('card_token')){
+			return $this;
+		}
+		
 		$errorMsg = false;
 		$availableTypes = explode(',', $this->getConfigData('cctypes'));
 	

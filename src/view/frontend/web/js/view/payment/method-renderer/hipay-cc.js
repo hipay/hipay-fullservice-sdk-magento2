@@ -134,9 +134,16 @@ define(
                 if (event) {
                     event.preventDefault();
                 }
+                
+               
             	
             	
 	            if(this.validateHandler()){
+	            	
+	            	 if(this.creditCardToken){
+	            		 	self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
+	            		 	return;
+	                 }
 	            	
 	            	 isTokenizeProcessing = $.Deferred();
 	                    $.when(isTokenizeProcessing).done(

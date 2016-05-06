@@ -43,6 +43,14 @@ define(
                     ]);
                 return this;
             },
+            initialize: function(){
+            	var self = this;
+            	this._super();
+            	//Set selected card token
+                this.selectedCard.subscribe(function(value) {
+                	self.creditCardToken = value;
+                });
+            },
             /**
              * @returns Array
              */

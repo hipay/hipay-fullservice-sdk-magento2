@@ -112,12 +112,28 @@ class GenericConfigProvider implements ConfigProviderInterface {
 										'afterPlaceOrderUrl' => [$methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])],
 										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
 										'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
-										'customerCards' => $this->getCustomerCards(),
 								]
 						]
 				]);
 			}
 		}
+		/** @var $card \HiPay\FullserviceMagento\Model\Card */
+		$cards = [];	
+		foreach($this->getCustomerCards() as $card){
+			$cards[] = [
+					'name'=>$card->getName(),
+					'ccToken'=>$card->getCcToken(),
+			];
+		}
+		
+		$config = array_merge_recursive($config, [
+				'payment' => [
+						'hiPayFullservice' => [
+								'customerCards' => $cards,
+						]
+				]
+		]);
+		
 		
 		return $config;
 
