@@ -15,6 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Payment;
 
+use Magento\Framework\Controller\ResultFactory;
 /**
  *
  * @author kassim
@@ -30,7 +31,7 @@ class Profile extends \Magento\Backend\App\Action {
 	 */
     public function execute()
     {
-    	$resultPage = $this->resultPageFactory->create();
+    	$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
     	$resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_payment_profile');
     	$resultPage->addBreadcrumb(__('HiPay'), __('HiPay'));
     	$resultPage->addBreadcrumb(__('Payment Profiles'), __('Payment Profiles'));
