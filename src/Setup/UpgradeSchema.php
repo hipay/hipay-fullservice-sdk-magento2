@@ -176,10 +176,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
         		'2M',
         		['nullable' => false],
         		'HiPay token'
-        	)      	
-        	;
+        	);
         	
-        	if (version_compare($context->getVersion(), '2.0.3', '<')) {
+        	$setup->getConnection()->createTable($table);
+        }
+        
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
         		
         		/**
         		 * Create table 'hipay_payment_profile'
@@ -231,7 +233,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         				)
         				;
         		
-        				
+        		$setup->getConnection()->createTable($table);
         				
         				/**
         				 * Create table 'hipay_split_payment'
@@ -317,12 +319,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         					'Attempts'
         				)
         				;
+        				
+        				$setup->getConnection()->createTable($table);
         								
-        	}
-        
-        															 
-			$setup->getConnection()->createTable($table);
-        }
+        	}	
 
         $setup->endSetup();
     }
