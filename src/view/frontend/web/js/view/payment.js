@@ -24,7 +24,7 @@ define(
         return Component.extend({
         	
         	defaults: {
-        		creditCardToken: null,
+        		creditCardToken: window.checkoutConfig.payment.hiPayFullservice.selectedCard != "" ? window.checkoutConfig.payment.hiPayFullservice.selectedCard : null,
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
