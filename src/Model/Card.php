@@ -59,8 +59,6 @@ class Card extends \Magento\Framework\Model\AbstractModel
 	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Data\FormFactory $formFactory
-	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
