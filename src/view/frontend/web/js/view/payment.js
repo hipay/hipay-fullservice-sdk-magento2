@@ -32,7 +32,8 @@ define(
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',
-        		eci: 9
+        		eci: 9,
+        		showForm: true
         	},
         	getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
@@ -44,6 +45,13 @@ define(
                         'createOneclick',
                         'creditCardType'
                     ]);
+                
+                this.showForm = ko.computed(function () {
+
+                    return !(self.useOneclick() && self.customerHasCard()) ||
+                    		self.selectedCard() === undefined ||
+                    		self.selectedCard() === '';
+                }, this);
                 return this;
             },
             initialize: function(){

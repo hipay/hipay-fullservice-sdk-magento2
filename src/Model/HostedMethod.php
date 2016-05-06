@@ -79,12 +79,17 @@ class HostedMethod extends FullserviceMethod {
 	
 	protected function _setHostedUrl(\Magento\Sales\Model\Order $order){
 
-		//Create gateway manage with order data
-		$gateway = $this->_gatewayManagerFactory->create($order);
-			
-		//Call fullservice api to get hosted page url
-		$hppModel = $gateway->requestHostedPaymentPage();
-		$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
+		
+		if(($token = $order->getPayment()->getAdditionalInformation('card_token')) != ""){
+			$this->place($order->getPayment());
+		}
+		else{
+			//Create gateway manage with order data
+			$gateway = $this->_gatewayManagerFactory->create($order);
+			//Call fullservice api to get hosted page url
+			$hppModel = $gateway->requestHostedPaymentPage();
+			$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
+		}
 
 	}
 	

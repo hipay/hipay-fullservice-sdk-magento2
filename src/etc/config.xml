@@ -83,6 +83,7 @@
 			    <payment_products_categories>realtime-banking</payment_products_categories>
 			    <display_selector>0</display_selector>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+			    <allow_use_oneclick>0</allow_use_oneclick>
 			    <template>basic-js</template>
 			    <css></css>
 			    <allowspecific>0</allowspecific>
@@ -101,6 +102,7 @@
 			    <payment_products>qiwi-wallet</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>ewallet</payment_products_categories>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+			    <allow_use_oneclick>0</allow_use_oneclick>
 			    <allowspecific>0</allowspecific>
 			    <allowed_currencies>RUB</allowed_currencies> <!-- Custom local configuration -->
 			    <debug>0</debug>

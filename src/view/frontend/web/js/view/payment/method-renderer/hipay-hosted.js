@@ -17,7 +17,7 @@ define(
     [
      	'jquery',
      	'ko',
-        'Magento_Checkout/js/view/payment/default',
+        'HiPay_FullserviceMagento/js/view/payment',
         'HiPay_FullserviceMagento/js/model/iframe',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
@@ -48,7 +48,7 @@ define(
              */
 	        afterPlaceOrder: function () {
 	        	 var self = this;
-	        	if(this.isIframeMode()){
+	        	if(this.isIframeMode() && !this.creditCardToken){
 	        		self.paymentReady(true);
 	        	}
 	        	else{
