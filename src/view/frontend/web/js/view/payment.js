@@ -30,7 +30,9 @@ define(
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
         		selectedCard:  {},
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
-        		createOneclick: false
+        		createOneclick: false,
+        		creditCardType: '',
+        		eci: 9
         	},
         	getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
@@ -39,7 +41,8 @@ define(
                 this._super()
                     .observe([
                         'selectedCard',
-                        'createOneclick'
+                        'createOneclick',
+                        'creditCardType'
                     ]);
                 return this;
             },
@@ -49,6 +52,7 @@ define(
             	//Set selected card token
                 this.selectedCard.subscribe(function(value) {
                 	self.creditCardToken = value;
+                	self.creditCardType(self.getCustomerCardByToken(value).ccType);
                 });
             },
             /**
@@ -56,6 +60,14 @@ define(
              */
             getCustomerCards: function(){
             	return this.customerCards;
+            },
+            getCustomerCardByToken: function(token){
+            	 for (var i = 0; i < this.customerCards.length; i++) {
+            		 if(this.customerCards[i].ccToken == token){
+            			 return this.customerCards[i];
+            		 }
+            	 }
+            	 return {};
             },
             useOneclick: function(){
             	return this.allowOneclick[this.getCode()];
@@ -68,7 +80,8 @@ define(
                 return {
                     'method': this.item.method,
                     'additional_data': {
-                        'create_oneclick': this.createOneclick()
+                        'create_oneclick': this.createOneclick(),
+                        'eci': this.eci
                     }
                 };
             },

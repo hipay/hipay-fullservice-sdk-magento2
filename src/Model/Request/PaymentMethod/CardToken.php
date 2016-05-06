@@ -25,11 +25,12 @@ class CardToken extends AbstractPaymentMethod{
 		
 		//Token can be empty
 		$cardtoken = $this->_order->getPayment()->getAdditionalInformation('card_token');
+		$eci = $this->_order->getPayment()->getAdditionalInformation('eci');
 		
 		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
 		$cardTokenPaymentMethod->authentication_indicator = $this->_helper->is3dSecure($this->_config->getValue('authentication_indicator'), $this->_config->getValue('config_3ds_rules'),$this->getQuote());
 		$cardTokenPaymentMethod->cardtoken = $cardtoken;
-		$cardTokenPaymentMethod->eci = 7;
+		$cardTokenPaymentMethod->eci = $eci ?: 7;
 		
 		return $cardTokenPaymentMethod;
 	}

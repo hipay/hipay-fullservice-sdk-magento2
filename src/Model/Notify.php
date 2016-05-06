@@ -212,9 +212,9 @@ class Notify {
 				$card->setCcExpMonth($paymentMethod->getCardExpiryMonth());
 				$card->setCcExpYear($paymentMethod->getCardExpiryYear());
 				$card->setCcNumberEnc($paymentMethod->getPan());
-				$card->setCcType($paymentMethod->getBrand());
+				$card->setCcType($paymentProduct);
 				$card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
-				$card->setName(sprintf(__('Card %s - %s'),$paymentProduct,$paymentMethod->getPan()));
+				$card->setName(sprintf(__('Card %s - %s'),$paymentMethod->getBrand(),$paymentMethod->getPan()));
 				
 
 				try {

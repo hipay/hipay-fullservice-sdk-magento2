@@ -123,6 +123,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			$cards[] = [
 					'name'=>$card->getName(),
 					'ccToken'=>$card->getCcToken(),
+					'ccType' => $card->getCcType()
 			];
 		}
 		
