@@ -39,6 +39,7 @@ define(
 	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
             initObservable: function () {
+            	var self = this;
                 this._super()
                     .observe([
                         'selectedCard',
@@ -52,6 +53,7 @@ define(
                     		self.selectedCard() === undefined ||
                     		self.selectedCard() === '';
                 }, this);
+                console.log(this.showForm());
                 return this;
             },
             initialize: function(){
@@ -89,7 +91,9 @@ define(
                     'method': this.item.method,
                     'additional_data': {
                         'create_oneclick': this.createOneclick(),
-                        'eci': this.eci
+                        'card_token': this.creditCardToken,
+                        'eci': this.eci,
+                        'cc_type': this.creditCardType()
                     }
                 };
             },

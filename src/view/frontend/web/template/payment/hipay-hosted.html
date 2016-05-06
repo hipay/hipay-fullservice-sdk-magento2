@@ -56,16 +56,35 @@
          </div>
          <div>&nbsp;</div>
          <!-- /ko -->
+         <!-- ko if: (useOneclick())-->
+                <div class="field" data-bind="visible: showForm()">
+                    <label class="label">
+                        <span></span>
+                    </label>
+                    <div class="control">
+                        <input type="checkbox"
+                               name="payment[create_oneclick]"
+                               value="1"
+                               checked="checked"
+                               class="checkbox"
+                               data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}"/>
+                        <label class="label" for="create_oneclick">
+                            <span><!-- ko i18n: 'Save this card for future use'--><!-- /ko --></span>
+                        </label>
+                    </div>
+                </div>
+                <!-- /ko -->
          </form>
         <!-- ko if: !isIframeMode() -->
-        	<div data-bind="visible: showForm"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
+        	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
 		<!-- /ko -->
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div class="actions-toolbar" data-bind="visible: !isIframeMode() || showForm">
+        
+        <div class="actions-toolbar" data-bind="visible: !isIframeMode() || !showForm()">
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
@@ -81,7 +100,7 @@
             </div>
         </div>
         
-        <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && !useOneclick()">
+        <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
             <div class="primary">
                 <button data-role="review-save"
                         type="submit"

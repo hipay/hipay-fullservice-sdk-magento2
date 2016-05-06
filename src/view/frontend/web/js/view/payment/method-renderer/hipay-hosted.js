@@ -31,6 +31,22 @@ define(
             },
             redirectAfterPlaceOrder: false,
             isInAction: iframe.isInAction,
+            placeOrderHandler: null,
+            validateHandler: null,
+            
+            /**
+             * @param {Function} handler
+             */
+            setPlaceOrderHandler: function (handler) {
+                this.placeOrderHandler = handler;
+            },
+
+            /**
+             * @param {Function} handler
+             */
+            setValidateHandler: function (handler) {
+                this.validateHandler = handler;
+            },
             initObservable: function () {
                 this._super()
                     .observe('paymentReady');
@@ -59,6 +75,9 @@ define(
 	        getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
+	        context: function() {
+                return this;
+            },
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },
