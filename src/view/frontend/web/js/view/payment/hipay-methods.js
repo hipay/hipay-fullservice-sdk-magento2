@@ -33,6 +33,10 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
             },
             {
+                type: 'hipay_ccsplit',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc-split'
+            },
+            {
             	// New local method with hosted template
                 type: 'hipay_sisal',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
