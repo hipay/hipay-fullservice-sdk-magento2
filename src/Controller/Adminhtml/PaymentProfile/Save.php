@@ -41,6 +41,9 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
+        	
+        	$data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
+        	
             $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
 
             $id = $this->getRequest()->getParam('profile_id');

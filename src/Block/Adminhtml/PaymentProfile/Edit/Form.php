@@ -63,6 +63,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			);
     	
     	$fieldset->addField(
+    			'period_frequency',
+    			'text',
+    			[
+    					'name' => 'period_frequency',
+    					'label' => __('Periode Frequency'),
+    					'title' => __('Periode Frequency')
+    			]
+    			);
+    	
+    	$fieldset->addField(
     			'period_max_cycles',
     			'text',
     			[

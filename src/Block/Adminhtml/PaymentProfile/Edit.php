@@ -50,7 +50,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $this->_objectId = 'profile_id';
         $this->_blockGroup = 'HiPay_FullserviceMagento';
-        $this->_controller = 'adminhtml_paymentprofile';
+        $this->_controller = 'adminhtml_paymentProfile';
 
         parent::_construct();
 
