@@ -24,9 +24,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 	
 	/**
 	 * 
-	 * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory  $ppFactory
+	 * @var \HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit  $periodUnitSource
 	 */
-    protected $ppFactory;
+    protected $periodUnitSource;
 	
 	/**
 	 * @param \Magento\Backend\Block\Template\Context $context
@@ -38,12 +38,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 			\Magento\Backend\Block\Template\Context $context,
 			\Magento\Framework\Registry $registry,
 			\Magento\Framework\Data\FormFactory $formFactory,
-			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
+			\HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit $periodUnitSource,
 			array $data = []
 			) {
 
 				parent::__construct($context,$registry,$formFactory, $data);
-				$this->ppFactory = $ppFactory;
+				$this->periodUnitSource = $periodUnitSource;
 	}
 	
     /**

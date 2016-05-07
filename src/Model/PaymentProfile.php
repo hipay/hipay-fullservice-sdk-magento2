@@ -113,49 +113,6 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     }
     
     /**
-     * Getter for available period units
-     *
-     * @param bool $withLabels
-     * @return array
-     */
-    public function getAllPeriodUnits($withLabels = true)
-    {
-    	$units = [
-    			self::PERIOD_UNIT_DAY,
-    			self::PERIOD_UNIT_WEEK,
-    			self::PERIOD_UNIT_SEMI_MONTH,
-    			self::PERIOD_UNIT_MONTH,
-    			self::PERIOD_UNIT_YEAR
-    	];
-    
-    	if ($withLabels) {
-    		$result = [];
-    		foreach ($units as $unit) {
-    			$result[$unit] = $this->getPeriodUnitLabel($unit);
-    		}
-    		return $result;
-    	}
-    	return $units;
-    }
-    
-    /**
-     * Render label for specified period unit
-     *
-     * @param string $unit
-     */
-    public function getPeriodUnitLabel($unit)
-    {
-    	switch ($unit) {
-    		case self::PERIOD_UNIT_DAY:  return __('Day');
-    		case self::PERIOD_UNIT_WEEK: return __('Week');
-    		case self::PERIOD_UNIT_SEMI_MONTH: return __('Two Weeks');
-    		case self::PERIOD_UNIT_MONTH: return __('Month');
-    		case self::PERIOD_UNIT_YEAR:  return __('Year');
-    	}
-    	return $unit;
-    }
-    
-    /**
      * Getter for field label
      *
      * @param string $field
