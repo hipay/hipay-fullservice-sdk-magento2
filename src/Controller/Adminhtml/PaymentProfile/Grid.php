@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Adminhtml\Payment\Profile;
+namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
 use Magento\Framework\Controller\ResultFactory;
 class Grid extends \Magento\Backend\App\Action

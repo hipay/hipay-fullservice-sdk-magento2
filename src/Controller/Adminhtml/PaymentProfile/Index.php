@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Adminhtml\Payment;
+namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
 use Magento\Framework\Controller\ResultFactory;
 /**
@@ -21,7 +21,7 @@ use Magento\Framework\Controller\ResultFactory;
  * @author kassim
  *        
  */
-class Profile extends \Magento\Backend\App\Action {
+class Index extends \Magento\Backend\App\Action {
 	
 	/**
 	 * Payment profiles Grid

@@ -19,7 +19,7 @@
 	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="hipay_payment_profile_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Grid\Collection</item>
+                <item name="hipay_paymentprofile_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Grid\Collection</item>
             </argument>
         </arguments>
     </type>

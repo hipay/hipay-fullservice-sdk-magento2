@@ -9,7 +9,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="hipay_payment_profile_grid"/>
+            <uiComponent name="hipay_paymentprofile_grid"/>
         </referenceContainer>
     </body>
 </page>
