@@ -16,7 +16,7 @@
 namespace HiPay\FullserviceMagento\Ui\Component\Listing\Column;
 
 use Magento\Framework\Data\OptionSourceInterface;
-
+use HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit as PUSource;
 
 /**
  * Class PeriodUnit
@@ -29,18 +29,18 @@ class PeriodUnit implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory;
+     * @var PUSource $periodUnitFactory;
      */
-    protected $ppFactory;
+    protected $periodUnitFactory;
 
     /**
      * Constructor
      *
-     * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory;
+     * @param PUSource $ppFactory;
      */
-    public function __construct(\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory)
+    public function __construct(PUSource $periodUnitFactory)
     {
-        $this->ppFactory = $ppFactory;
+        $this->periodUnitFactory = $periodUnitFactory;
     }
 
     /**
@@ -51,7 +51,7 @@ class PeriodUnit implements OptionSourceInterface
     public function toOptionArray()
     {
         if ($this->options === null) {
-            $this->options = $this->ppFactory->create()->getAllPeriodUnits();
+            $this->options = $this->periodUnitFactory->create()->toOptionArray();
         }
         return $this->options;
     }

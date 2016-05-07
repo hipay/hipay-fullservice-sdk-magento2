@@ -165,7 +165,7 @@
         </column>
         <column name="period_unit">
             <argument name="data" xsi:type="array">
-           		 <item name="options" xsi:type="object">HiPay\FullserviceMagento\Ui\Component\Listing\Column\PeriodUnit</item>
+           		 <item name="options" xsi:type="object">HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit</item>
                  <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
