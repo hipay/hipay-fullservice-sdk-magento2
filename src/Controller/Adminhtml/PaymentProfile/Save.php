@@ -55,7 +55,7 @@ class Save extends \Magento\Backend\App\Action
 
             $this->_eventManager->dispatch(
                 'hipay_paymentprofile_prepare_save',
-                ['page' => $model, 'request' => $this->getRequest()]
+                ['paymentprofile' => $model, 'request' => $this->getRequest()]
             );
 
 

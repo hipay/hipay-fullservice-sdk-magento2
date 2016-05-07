@@ -114,7 +114,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			);
     
     	$this->_eventManager->dispatch('adminhtml_hipay_paymentprofile_edit_prepare_form', ['form' => $form]);
-    
+
+    	if ($model->getProfileId() !== null) {
+    		// If edit add id
+    		$form->addField('profile_id', 'hidden', ['name' => 'profile_id', 'value' => $model->getProfileId()]);
+    	}
+    	
     	$form->setValues($model->getData());
     	$form->setUseContainer(true);
     	$this->setForm($form);
