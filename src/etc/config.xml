@@ -52,6 +52,20 @@
                 <debug>0</debug>
                 <env>stage</env>
 			</hipay_cc>
+			<hipay_ccsplit>
+				<model>HiPay\FullserviceMagento\Model\Method\CcSplitMethod</model>
+				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Credit Card Split payment</title>
+                <payment_action>Sale</payment_action>
+                <order_status>pending</order_status>
+                <cctypes>AE,VI,MC</cctypes>
+                <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <allowspecific>0</allowspecific>
+                <debug>0</debug>
+                <env>stage</env>
+			</hipay_ccsplit>
 			<hipay_hosted>
 				<model>HiPay\FullserviceMagento\Model\HostedMethod</model>
 				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>

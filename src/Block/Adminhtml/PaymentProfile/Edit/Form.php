@@ -78,7 +78,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			]
     			);
     	
-    	$options = $this->ppFactory->create()->getAllPeriodUnits();
+    	$options = $this->periodUnitSource->getAllPeriodUnits();
     	$fieldset->addField(
     			'period_unit',
     			'select',

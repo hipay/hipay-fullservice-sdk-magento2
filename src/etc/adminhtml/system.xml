@@ -27,6 +27,7 @@
 		<section id="payment">
 			<include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>
 			<include path="HiPay_FullserviceMagento::system/method/cc.xml"/>
+			<include path="HiPay_FullserviceMagento::system/method/cc-split.xml"/>
 			<include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>	
 			<include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>		
 		</section>
