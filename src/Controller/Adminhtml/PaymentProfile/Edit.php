@@ -73,7 +73,7 @@ class Edit extends \Magento\Backend\App\Action
     public function execute()
     {
         // 1. Get ID and create model
-        $id = $this->getRequest()->getParam('page_id');
+        $id = $this->getRequest()->getParam('profile_id');
         $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
 
         // 2. Initial checking
@@ -95,18 +95,18 @@ class Edit extends \Magento\Backend\App\Action
         }
 
         // 4. Register model to use later in blocks
-        $this->_coreRegistry->register('cms_page', $model);
+        $this->_coreRegistry->register('payment_profile', $model);
 
         // 5. Build edit form
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
-            $id ? __('Edit Page') : __('New Page'),
-            $id ? __('Edit Page') : __('New Page')
+            $id ? __('Edit Payment Profile') : __('New Payment Profile'),
+            $id ? __('Edit Payment Profile') : __('New Payment Profile')
         );
-        $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Payment Profiles'));
         $resultPage->getConfig()->getTitle()
-            ->prepend($model->getId() ? $model->getTitle() : __('New Page'));
+            ->prepend($model->getId() ? $model->getTitle() : __('New Payment Profile'));
 
         return $resultPage;
     }
