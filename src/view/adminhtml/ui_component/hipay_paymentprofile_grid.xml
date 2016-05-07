@@ -111,8 +111,6 @@
                 </item>
             </argument>
         </filters>
-        <massaction name="listing_massaction">
-        </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -192,7 +190,7 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
+        <actionsColumn name="actions" class="HiPay\FullserviceMagento\Ui\Component\Listing\Column\PaymentProfileActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">profile_id</item>

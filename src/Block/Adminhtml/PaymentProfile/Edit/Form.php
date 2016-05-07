@@ -73,11 +73,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			[
     					'name' => 'name',
     					'label' => __('Name'),
-    					'title' => __('Name')
+    					'title' => __('Name'),
+    					'required'=>true
     			]
     			);
     	
-    	$options = $this->ppFactory->create()->getAllPaymentTypes();
+    	$options = $this->ppFactory->create()->getAllPeriodUnits();
     	$fieldset->addField(
     			'period_unit',
     			'select',
@@ -85,7 +86,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     					'name' => 'period_unit',
     					'label' => __('Periode Unit'),
     					'title' => __('Periode Unit'),
-    					'values'=>$options
+    					'values'=>$options,
+    					'required'=>true
     			]
     			);
     	
@@ -95,7 +97,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			[
     					'name' => 'period_frequency',
     					'label' => __('Periode Frequency'),
-    					'title' => __('Periode Frequency')
+    					'title' => __('Periode Frequency'),
+    					'required'=>true
     			]
     			);
     	
@@ -105,7 +108,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     			[
     					'name' => 'period_max_cycles',
     					'label' => __('Periode Max Cycles'),
-    					'title' => __('Periode Max Cycles')
+    					'title' => __('Periode Max Cycles'),
+    					'required'=>true
     			]
     			);
     
