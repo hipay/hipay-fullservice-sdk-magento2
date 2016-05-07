@@ -21,7 +21,31 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\PaymentProfile\Edit;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    
+	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory  $ppFactory
+	 */
+    protected $ppFactory;
+	
+	/**
+	 * @param \Magento\Backend\Block\Template\Context $context
+	 * @param \Magento\Framework\Registry $registry
+	 * @param \Magento\Framework\Data\FormFactory $formFactory
+	 * @param array $data
+	 */
+	public function __construct(
+			\Magento\Backend\Block\Template\Context $context,
+			\Magento\Framework\Registry $registry,
+			\Magento\Framework\Data\FormFactory $formFactory,
+			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
+			array $data = []
+			) {
+
+				parent::__construct($context,$registry,$formFactory, $data);
+				$this->ppFactory = $ppFactory;
+	}
+	
     /**
      * Prepare form
      *
@@ -29,9 +53,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-    
     	/** @var \Magento\Framework\Data\Form $form */
-    	$form = $this->_formFactory->create();
+    	$form = $this->_formFactory->create(
+    			['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
+    			);
     
     	$form->setHtmlIdPrefix('paymentprofile_');
     
@@ -51,14 +76,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     					'title' => __('Name')
     			]
     			);
-    
+    	
+    	$options = $this->ppFactory->create()->getAllPaymentTypes();
     	$fieldset->addField(
     			'period_unit',
-    			'text',
+    			'select',
     			[
     					'name' => 'period_unit',
     					'label' => __('Periode Unit'),
-    					'title' => __('Periode Unit')
+    					'title' => __('Periode Unit'),
+    					'values'=>$options
     			]
     			);
     	
@@ -85,7 +112,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     	$this->_eventManager->dispatch('adminhtml_hipay_paymentprofile_edit_prepare_form', ['form' => $form]);
     
     	$form->setValues($model->getData());
-    
+    	$form->setUseContainer(true);
     	$this->setForm($form);
     
     	return parent::_prepareForm();
