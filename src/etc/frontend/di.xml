@@ -24,6 +24,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\CcSplitConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
      <type name="HiPay\FullserviceMagento\Model\Method\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -39,8 +46,8 @@
         <arguments>
             <argument name="configProviders" xsi:type="array">
            		<item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\GenericConfigProvider</item>
-                <item name="hipay_hosted_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\HostedConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\CcConfigProvider</item>
+                <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\CcSplitConfigProvider</item>
             </argument>
         </arguments>
     </type>

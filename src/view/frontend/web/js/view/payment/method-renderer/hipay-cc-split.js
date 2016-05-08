@@ -53,6 +53,18 @@ define(
              */
             getCode: function () {
                 return 'hipay_ccsplit';
+            },
+            getPaymentProfiles(){
+            	return window.checkoutConfig.payment.hipayCcSplit.paymentProfiles[this.getCode()];
+            },
+            hasPaymentProfiles(){
+            	return this.getPaymentProfiles().length > 0;
+            },
+            getFirstPaymentProfile(){
+            	var pp= this.getPaymentProfiles();
+            	for(var i=0;i<pp.length;i++){
+            		return pp[i];
+            	}
             }
             
         });
