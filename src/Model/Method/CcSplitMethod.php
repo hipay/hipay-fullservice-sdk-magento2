@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Mode\Method;
+namespace HiPay\FullserviceMagento\Model\Method;
 
 
 use HiPay\FullserviceMagento\Model\CcMethod;
@@ -28,6 +28,11 @@ use HiPay\FullserviceMagento\Model\CcMethod;
 class CcSplitMethod extends CcMethod {
 	
 	const HIPAY_METHOD_CODE               = 'hipay_ccsplit';
+	
+	/**
+	 * @var string
+	 */
+	protected $_code = self::HIPAY_METHOD_CODE;
 	
 
 	
