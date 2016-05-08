@@ -155,8 +155,8 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 			$amountToPay = $i == 0 ? ($part + $fmod) : $part;
 
 			$paymentsSplit [] = [ 
-					'date_to_pay' => $dateToPay,
-					'amount_to_pay' => $amountToPay 
+					'dateToPay' => $dateToPay,
+					'amountToPay' => $amountToPay 
 			];
 		}
 		

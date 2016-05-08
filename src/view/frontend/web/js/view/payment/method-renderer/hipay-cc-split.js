@@ -15,29 +15,47 @@
 
 define(
     [
+     	'jquery',
      	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
     ],
-    function (Component) {
+    function ($,Component) {
 
         'use strict';
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
+        		selectedPaymentProfile: '',
+        		splitAmounts: []
         	},
             /**
              * @override
              */
             initObservable: function () {
+            	var self = this;
             	
-                this._super();
+                this._super().
+                observe([
+                       'selectedPaymentProfile',
+                       'splitAmounts'
+                   ]);
+                
+              //Set expiration year to credit card data object
+                this.selectedPaymentProfile.subscribe(function(value) {
+                    self.splitAmounts(value.splitAmounts);
+                });
+                
+                if(this.hasPaymentProfiles()){
+                	this.selectedPaymentProfile(this.getFirstPaymentProfile());
+                }
+                
                 return this;
             },
         	/**
              * @returns {Boolean}
              */
             isActive: function () {
-                return true;
+                return this.hasPaymentProfiles();
             },
             /**
              * @returns {Boolean}
@@ -48,6 +66,17 @@ define(
             context: function() {
                 return this;
             },
+            getData: function(){
+            	
+            	var parent = this._super();           
+            	var additionalData = {
+            			'additional_data':{            				
+            				'profile_id': this.selectedPaymentProfile()
+            			}
+            	}
+            	
+            	return $.extend(true, parent, additionalData);
+            },
             /**
              * @override
              */
@@ -55,6 +84,7 @@ define(
                 return 'hipay_ccsplit';
             },
             getPaymentProfiles(){
+            	console.log(window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()]);
             	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
             },
             hasPaymentProfiles(){

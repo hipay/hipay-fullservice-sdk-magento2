@@ -100,7 +100,7 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory,$urlBuilder);
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory,$urlBuilder,$resource,$resourceCollection);
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
 	}

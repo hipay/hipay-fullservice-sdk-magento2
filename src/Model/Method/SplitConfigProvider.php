@@ -50,6 +50,12 @@ class SplitConfigProvider implements ConfigProviderInterface {
 	 * @var \Magento\Checkout\Model\Session $checkoutSession
 	 */
 	protected $checkoutSession;
+	
+	/**
+	 * 
+	 * @var \Magento\Checkout\Helper\Data $checkoutHelper
+	 */
+	protected $checkoutHelper;
 
 
 	
@@ -60,6 +66,7 @@ class SplitConfigProvider implements ConfigProviderInterface {
 			PaymentHelper $paymentHelper,
 			\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
 			\Magento\Checkout\Model\Session $checkoutSession,
+			\Magento\Checkout\Helper\Data $checkoutHelper,
 			array $methodCodes = []
 			) {
 		
@@ -68,6 +75,7 @@ class SplitConfigProvider implements ConfigProviderInterface {
 			}
 			$this->ppCollectionFactory = $ppCollectionFactory;
 			$this->checkoutSession = $checkoutSession;
+			$this->checkoutHelper = $checkoutHelper;
 			
 	}
 	
@@ -83,7 +91,7 @@ class SplitConfigProvider implements ConfigProviderInterface {
 				$config = array_merge_recursive($config, [
 						'payment' => [
 								'hipaySplit' => [
-										'paymentProfiles' => [$methodCode => $this->getPaymentProfiles($methodCode)]
+										'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)]
 								]
 						]
 				]);
@@ -126,10 +134,19 @@ class SplitConfigProvider implements ConfigProviderInterface {
 		
 		/** @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile */
 		foreach ($this->getPaymentProfiles($methodCode) as $pp){
+			
+			$splitAmounts = $pp->splitAmount($this->checkoutSession->getQuote()->getBaseGrandTotal());
+			
+			foreach($splitAmounts as $index=>$split){
+				$date = new \DateTime($split['dateToPay']);
+				$splitAmounts[$index]['dateToPayFormatted'] = $date->format('d/m/Y'); 
+				$splitAmounts[$index]['amountToPayFormatted'] =  $this->checkoutHelper->formatPrice($split['amountToPay']);
+			}
+			
 			$pProfiles[] = [
 					'name'=>$pp->getName(),
 					'profileId'=>$pp->getProfileId(),
-					'splitAmounts'=>$pp->splitAmount($this->checkoutSession->getQuote()->getBaseGrandTotal())
+					'splitAmounts'=>$splitAmounts
 					
 			];
 		}

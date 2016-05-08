@@ -177,13 +177,17 @@ abstract class FullserviceMethod extends AbstractMethod {
 	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
 		
 		$info = $this->getInfoInstance();
-		foreach ($this->_additionalInformationKeys as $key) {	
+		foreach ($this->getAddtionalInformationKeys() as $key) {	
 			if(!is_null($data->getData($key))){			
 				$info->setAdditionalInformation($key,$data->getData($key));
 			}
 		}
 		
 		return $this;
+	}
+	
+	protected function getAddtionalInformationKeys(){
+		return $this->_additionalInformationKeys;
 	}
 	
 	/**
@@ -289,7 +293,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
 			if ($payment->getCcTransId()) {  //Is not the first transaction
-				// As we alredy hav a transaction reference, we can request a capture operation.
+				// As we already have a transaction reference, we can request a capture operation.
 				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 	
 			} else { //Ok, it's the first transaction, so we request a new order
