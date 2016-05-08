@@ -42,6 +42,14 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
         	
+        	if((int)$data['period_max_cycles'] < 1){
+        		throw new \Magento\Framework\Exception\LocalizedException(__("Period max cycles is equals zero or negative "));
+        	}
+        	
+        	if((int)$data['period_frequency'] < 1){
+        		throw new \Magento\Framework\Exception\LocalizedException(__("Period frequency is equals zero or negative for Payment Profile ID: %s"));
+        	}
+        	
         	$data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
         	
             $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');

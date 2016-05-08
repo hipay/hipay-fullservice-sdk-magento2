@@ -20,7 +20,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
 
-class CcSplitConfigProvider implements ConfigProviderInterface {
+class SplitConfigProvider implements ConfigProviderInterface {
 
 	
 	/**
@@ -41,9 +41,15 @@ class CcSplitConfigProvider implements ConfigProviderInterface {
 	
 	/**
 	 * 
-	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Collection $paymentProfiles
+	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Collection[] $paymentProfiles
 	 */
-	protected $paymentProfiles;
+	protected $paymentProfiles = [];
+	
+	/**
+	 *
+	 * @var \Magento\Checkout\Model\Session $checkoutSession
+	 */
+	protected $checkoutSession;
 
 
 	
@@ -53,6 +59,7 @@ class CcSplitConfigProvider implements ConfigProviderInterface {
 	public function __construct(
 			PaymentHelper $paymentHelper,
 			\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
+			\Magento\Checkout\Model\Session $checkoutSession,
 			array $methodCodes = []
 			) {
 		
@@ -60,6 +67,7 @@ class CcSplitConfigProvider implements ConfigProviderInterface {
 				$this->methods[$code] = $paymentHelper->getMethodInstance($code);
 			}
 			$this->ppCollectionFactory = $ppCollectionFactory;
+			$this->checkoutSession = $checkoutSession;
 			
 	}
 	
@@ -74,7 +82,7 @@ class CcSplitConfigProvider implements ConfigProviderInterface {
 			if ($method->isAvailable()) {
 				$config = array_merge_recursive($config, [
 						'payment' => [
-								'hipayCcSplit' => [
+								'hipaySplit' => [
 										'paymentProfiles' => [$methodCode => $this->getPaymentProfiles($methodCode)]
 								]
 						]
@@ -91,24 +99,37 @@ class CcSplitConfigProvider implements ConfigProviderInterface {
 	/**
 	 * 
 	 * @param string $methodCode
-	 * @return []
+	 * @return \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Collection
 	 */
 	protected function getPaymentProfiles($methodCode){
-
-			
-		$ppIds = $this->methods[$methodCode]->getConfigData('split_payments');
-		if(!is_array($ppIds)){
-			$ppIds = explode(',',$ppIds);
-		}
-		$this->paymentProfiles = $this->ppCollectionFactory->create();
-		$this->paymentProfiles->addFieldToFilter('profile_id',array('IN'=>$ppIds));
 		
+		if(!isset($this->paymentProfiles[$methodCode])){
+				
+			$ppIds = $this->methods[$methodCode]->getConfigData('split_payments');
+			if(!is_array($ppIds)){
+				$ppIds = explode(',',$ppIds);
+			}
+			$this->paymentProfiles[$methodCode] = $this->ppCollectionFactory->create();
+			$this->paymentProfiles[$methodCode]->addFieldToFilter('profile_id',array('IN'=>$ppIds));
+		}
+		
+		return $this->paymentProfiles[$methodCode];
+	}
+	
+	/**
+	 * 
+	 * @param string $methodCode
+	 * @return []
+	 */
+	protected function getPaymentProfilesAsArray($methodCode){
 		$pProfiles = [];
 		
-		foreach ($this->paymentProfiles as $pp){
+		/** @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile */
+		foreach ($this->getPaymentProfiles($methodCode) as $pp){
 			$pProfiles[] = [
 					'name'=>$pp->getName(),
-					'profileId'=>$pp->getProfileId()
+					'profileId'=>$pp->getProfileId(),
+					'splitAmounts'=>$pp->splitAmount($this->checkoutSession->getQuote()->getBaseGrandTotal())
 					
 			];
 		}

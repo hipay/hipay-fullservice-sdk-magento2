@@ -55,7 +55,7 @@ define(
                 return 'hipay_ccsplit';
             },
             getPaymentProfiles(){
-            	return window.checkoutConfig.payment.hipayCcSplit.paymentProfiles[this.getCode()];
+            	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
             },
             hasPaymentProfiles(){
             	return this.getPaymentProfiles().length > 0;

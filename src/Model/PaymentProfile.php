@@ -51,8 +51,14 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 	/**
 	 * Payment types
 	 */
-	const PAYMENT_TYPE_SPLIT = 'split_payment';
+	const PAYMENT_TYPE_SPLIT = '\HiPay\FullserviceMagento\Model\SplitPayment';
 	const PAYMENT_TYPE_RECURRING = 'recurring_payment';
+	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Type\Factory $typeFactory
+	 */
+	protected $typeFactory;
 	
 	/**
 	 * Constructor 
@@ -66,12 +72,15 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
 			\Magento\Framework\Registry $registry,
+			\HiPay\FullserviceMagento\Model\PaymentProfile\Type\Factory $typeFactory,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
-			) {
+			) 
+	{
 
-				parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+			parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+			$this->typeFactory = $typeFactory;
 	}
 	
 	
@@ -83,6 +92,76 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         parent::_construct();
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile');
         $this->setIdFieldName('profile_id');
+    }
+    
+    /**
+     * Split an amount by profile data
+     * @param float $amount
+     * @return []
+     */
+    public function splitAmount($amount)
+    {
+    	$paymentsSplit = array ();
+		
+		$maxCycles = ( int ) $this->getPeriodMaxCycles ();
+		
+		$periodFrequency = ( int ) $this->getPeriodFrequency ();
+		$periodUnit = $this->getPeriodUnit ();
+		
+		$todayDate = new \DateTime ();
+		
+		$part = ( int ) ($amount / $maxCycles);
+		$fmod = fmod ( $amount, $maxCycles );
+		
+		for($i = 0; $i <= ($maxCycles - 1); $i ++) {
+			$j = $i - 1;
+			$todayClone = clone $todayDate;
+			$frequencyValue = $periodFrequency + $j;
+			switch ($periodUnit) {
+				case self::PERIOD_UNIT_MONTH :
+					{
+						$interval = new \DateInterval ( "P{$frequencyValue}M" );
+						$dateToPay = $todayClone->add ( $interval )->format ( "Y-m-d" );
+						break;
+					}
+				case self::PERIOD_UNIT_DAY :
+					{
+						$interval = new \DateInterval ( "P{$frequencyValue}D" );
+						$dateToPay = $todayClone->add ( $interval )->format ( "Y-m-d" );
+						break;
+					}
+				case self::PERIOD_UNIT_SEMI_MONTH : 
+					{
+						$semiMonthFreq = 15 + $frequencyValue;
+						$interval = new \DateInterval ( "P{$semiMonthFreq}D" );
+						$dateToPay = $todayClone->add ( $interval )->format ( "Y-m-d" );
+						break;
+					}
+				case self::PERIOD_UNIT_WEEK :
+					{
+						$week = 7 + $frequencyValue;
+						$interval = new \DateInterval ( "P{$week}D" );
+						$dateToPay = $todayClone->add ( $interval )->format ( "Y-m-d" );
+						break;
+					}
+				case self::PERIOD_UNIT_YEAR :
+					{
+						$interval = new \DateInterval ( "P{$frequencyValue}Y" );
+						$dateToPay = $todayClone->add ( $interval )->format ( "Y-m-d" );
+						break;
+					}
+			}
+			
+			$amountToPay = $i == 0 ? ($part + $fmod) : $part;
+
+			$paymentsSplit [] = [ 
+					'date_to_pay' => $dateToPay,
+					'amount_to_pay' => $amountToPay 
+			];
+		}
+		
+		return $paymentsSplit;
+    
     }
     
     public function getAllPaymentTypes($withLabels = true)
@@ -111,60 +190,5 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     	}
     	return $paymentType;
     }
-    
-    /**
-     * Getter for field label
-     *
-     * @param string $field
-     * @return string|null
-     */
-    public function getFieldLabel($field)
-    {
-    	switch ($field) {
-    		case 'subscriber_name':
-    			return __('Subscriber Name');
-    		case 'start_datetime':
-    			return __('Start Date');
-    		case 'internal_reference_id':
-    			return __('Internal Reference ID');
-    		case 'schedule_description':
-    			return __('Schedule Description');
-    		case 'suspension_threshold':
-    			return __('Maximum Payment Failures');
-    		case 'bill_failed_later':
-    			return __('Auto Bill on Next Cycle');
-    		case 'period_unit':
-    			return __('Billing Period Unit');
-    		case 'period_frequency':
-    			return __('Billing Frequency');
-    		case 'period_max_cycles':
-    			return __('Maximum Billing Cycles');
-    		case 'billing_amount':
-    			return __('Billing Amount');
-    		case 'trial_period_unit':
-    			return __('Trial Billing Period Unit');
-    		case 'trial_period_frequency':
-    			return __('Trial Billing Frequency');
-    		case 'trial_period_max_cycles':
-    			return __('Maximum Trial Billing Cycles');
-    		case 'trial_billing_amount':
-    			return __('Trial Billing Amount');
-    		case 'currency_code':
-    			return __('Currency');
-    		case 'shipping_amount':
-    			return __('Shipping Amount');
-    		case 'tax_amount':
-    			return __('Tax Amount');
-    		case 'init_amount':
-    			return __('Initial Fee');
-    		case 'init_may_fail':
-    			return __('Allow Initial Fee Failure');
-    		case 'method_code':
-    			return __('Payment Method');
-    		case 'reference_id':
-    			return __('Payment Reference ID');
-    	}
-    }
-    
 	
 }

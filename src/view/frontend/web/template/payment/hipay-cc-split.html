@@ -59,13 +59,9 @@
                		 </div>
                		 
                		 <div data-bind="visible: getPaymentProfiles().length == 1">
-	                    <label data-bind="attr: {for: getCode() + '_cc_payment_profile'}" class="label">
-	                        <span><!-- ko i18n: getFirstPaymentProfile().name --><!-- /ko --></span>
-	                    </label>
-	                    <div class="control">
+	                    <h3><!-- ko i18n: getFirstPaymentProfile().name --><!-- /ko --></h3>
 	                    <input type="hidden" data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'},
 	                    							value: getFirstPaymentProfile().profileId"  name="payment[cc_payment_profile]" />
-	                    </div>
                		 </div>
 
 				 
