@@ -26,5 +26,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init('HiPay\FullserviceMagento\Model\PaymentProfile', 'HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile');
     }
+    
+    /**
+     * Get collection data as options array
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+    	return $this->_toOptionArray('profile_id');
+    }
+    
+    /**
+     * Get collection data as options hash
+     *
+     * @return array
+     */
+    public function toOptionHash()
+    {
+    	return $this->_toOptionHash('profile_id');
+    }
+    
 
 }
