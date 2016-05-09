@@ -20,6 +20,7 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="hipay_paymentprofile_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Grid\Collection</item>
+                <item name="hipay_splitpayment_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -27,6 +28,12 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">hipay_payment_profile</argument>
             <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hipay_split_payment</argument>
+            <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment</argument>
         </arguments>
     </virtualType>
 </config>
