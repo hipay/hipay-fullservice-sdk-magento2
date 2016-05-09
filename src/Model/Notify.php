@@ -169,7 +169,9 @@ class Notify {
 				/**
 				 * save split payments
 				 */
-				$this->insertSplitPayment();
+				if(!$this->orderAlreadySplit()){				
+					$this->insertSplitPayment();
+				}
 				
 				break;
 			case TransactionStatus::REFUND_REQUESTED: //124
@@ -208,6 +210,15 @@ class Notify {
 		}
 		
 		return $this;
+	}
+	
+	protected function orderAlreadySplit(){
+		/** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
+		$splitPayments = $this->spFactory->create()->getCollection()->addFieldToFilter('order_id',$this->_order->getId());
+		if($splitPayments->count()){
+			return true;
+		}
+		return false;
 	}
 	
 	protected function insertSplitPayment(){

@@ -83,7 +83,7 @@ class SplitPaymentActions extends Column
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::PROFILE_URL_PATH_DELETE, ['split_payment_id' => $item['split_payment_id']]),
+                        'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_DELETE, ['split_payment_id' => $item['split_payment_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete ${ $.$data.name }'),
@@ -91,7 +91,7 @@ class SplitPaymentActions extends Column
                         ]
                     ];
                     $item[$name]['pay'] = [
-                    		'href' => $this->urlBuilder->getUrl(self::PROFILE_URL_PATH_PAY, ['split_payment_id' => $item['split_payment_id']]),
+                    		'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_PAY, ['split_payment_id' => $item['split_payment_id']]),
                     		'label' => __('Pay'),
                     		'confirm' => [
                     				'title' => __('Pay ${ $.$data.amount_to_pay }'),
