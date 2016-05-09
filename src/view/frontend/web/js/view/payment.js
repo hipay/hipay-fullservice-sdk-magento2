@@ -24,7 +24,7 @@ define(
         return Component.extend({
         	
         	defaults: {
-        		creditCardToken: window.checkoutConfig.payment.hiPayFullservice.selectedCard != "" ? window.checkoutConfig.payment.hiPayFullservice.selectedCard : null,
+        		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
@@ -44,7 +44,8 @@ define(
                     .observe([
                         'selectedCard',
                         'createOneclick',
-                        'creditCardType'
+                        'creditCardType',
+                        'creditCardToken'
                     ]);
                 
                 this.showForm = ko.computed(function () {
@@ -59,11 +60,17 @@ define(
             initialize: function(){
             	var self = this;
             	this._super();
+            	
+                if(this.useOneclick()){
+            		this.creditCardToken(this.selectedCard());
+            	}
+            	
             	//Set selected card token
                 this.selectedCard.subscribe(function(value) {
-                	self.creditCardToken = value;
+                	self.creditCardToken(value);
                 	self.creditCardType(self.getCustomerCardByToken(value).ccType);
                 });
+            	
             },
             /**
              * @returns Array
@@ -91,7 +98,7 @@ define(
                     'method': this.item.method,
                     'additional_data': {
                         'create_oneclick': this.createOneclick(),
-                        'card_token': this.creditCardToken,
+                        'card_token': this.creditCardToken(),
                         'eci': this.eci,
                         'cc_type': this.creditCardType()
                     }

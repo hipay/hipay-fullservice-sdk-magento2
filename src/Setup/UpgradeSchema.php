@@ -257,8 +257,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
         				)
         				->addColumn(
         					'real_order_id',
-        					\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-        					null,
+        					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+        					10,
         					['unsigned' => true, 'nullable' => false, ],
         					'RealOrder Id'
         				)

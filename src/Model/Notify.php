@@ -70,6 +70,18 @@ class Notify {
 	 */
 	protected $_cardFactory;
 	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory
+	 */
+	protected $ppFactory;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
+	 */
+	protected $spFactory;
+	
 	
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
@@ -78,6 +90,8 @@ class Notify {
 			FraudReviewSender $fraudReviewSender,
 			FraudDenySender $fraudDenySender,
 			\Magento\Payment\Helper\Data $paymentHelper,
+			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
+			\HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
 			$params = []
 			){
 
@@ -86,6 +100,8 @@ class Notify {
 			$this->orderSender = $orderSender;
 			$this->fraudReviewSender = $fraudReviewSender;
 			$this->fraudDenySender = $fraudDenySender;
+			$this->ppFactory = $ppFactory;
+			$this->spFactory = $spFactory;
 	
 			if (isset($params['response']) && is_array($params['response'])) {
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
@@ -140,6 +156,7 @@ class Notify {
 				break;
 			case TransactionStatus::CAPTURE_REQUESTED: //117
 				$this->_doTransactionCaptureRequested();
+				
 				break;
 			case TransactionStatus::CAPTURED: //118
 			case TransactionStatus::PARTIALLY_CAPTURED: //119				
@@ -148,6 +165,12 @@ class Notify {
 				 * save token and credit card informations encryted
 				 */
 				$this->_saveCc();
+				
+				/**
+				 * save split payments
+				 */
+				$this->insertSplitPayment();
+				
 				break;
 			case TransactionStatus::REFUND_REQUESTED: //124
 				$this->_doTransactionRefundRequested();
@@ -185,6 +208,53 @@ class Notify {
 		}
 		
 		return $this;
+	}
+	
+	protected function insertSplitPayment(){
+		//Check if it is split payment and insert it
+		$profileId=0;
+		if(($profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id')))
+		{
+			
+			$profile = $this->ppFactory->create()->load($profileId);
+			if($profile->getId()){
+				
+				$splitAmounts = $profile->splitAmount($this->_order->getBaseGrandTotal());
+				
+				/** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
+				for ($i=0;$i<count($splitAmounts);$i++){
+					
+					$splitPayment = $this->spFactory->create();
+					
+					$splitPayment->setAmountToPay($splitAmounts[$i]['amountToPay']);
+					$splitPayment->setAttempts($i==0 ? 1 : 0);
+					$splitPayment->setCardToken($this->_transaction->getPaymentMethod()->getToken());
+					$splitPayment->setCustomerId($this->_order->getCustomerId());
+					$splitPayment->setDateToPay($splitAmounts[$i]['dateToPay']);
+					$splitPayment->setMethodCode($this->_order->getPayment()->getMethod());
+					$splitPayment->setRealOrderId($this->_order->getIncrementId());
+					$splitPayment->setOrderId($this->_order->getId());
+					$splitPayment->setStatus($i==0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE : SplitPayment::SPLIT_PAYMENT_STATUS_PENDING );
+					$splitPayment->setTotalAmount($this->_order->getBaseGrandTotal());
+					
+					try {
+						$splitPayment->save();
+					} catch (Exception $e) {
+						if($this->_order->canHold()){
+							$this->_order->hold();
+						}
+						$this->_doTransactionMessage($e->getMessage());
+					}
+				}
+
+			}
+			else{
+				if($this->_order->canHold()){
+					$this->_order->hold();
+				}
+				$this->_doTransactionMessage(__('Order holded because split payments was not saved!'));
+			}
+		}
 	}
 	
 	protected function _canSaveCc(){

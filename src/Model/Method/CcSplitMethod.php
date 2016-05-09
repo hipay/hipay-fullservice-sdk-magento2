@@ -18,7 +18,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\FullserviceMagento\Model\CcMethod;
 use Magento\Framework\Exception\LocalizedException;
-
+use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 /**
  * Class Cc Split Payment  PaymentMethod
  * @package HiPay\FullserviceMagento\Model
@@ -79,7 +79,7 @@ class CcSplitMethod extends CcMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$moduleList,$localeDate,$resource,$resourceCollection);
+									$urlBuilder,$moduleList,$localeDate,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 
@@ -102,11 +102,11 @@ class CcSplitMethod extends CcMethod {
 		}
 		
 		$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
-		if(!count($splitAmounts)){
+		if(!is_array($splitAmounts) || !count($splitAmounts)){
 			throw new LocalizedException(__('Impossible to split the amount.'));
 		}
 		$firstSplit = current($splitAmounts);
-		$payment->getOrder()->setBaseGrandTotal((float)$firstSplit['amountToPay']);
+		$payment->getOrder()->setForcedAmount((float)$firstSplit['amountToPay']);
 		
 		return parent::place($payment);
 		

@@ -61,7 +61,6 @@ define(
                     		self.selectedCard() === '';
                 }, this);
 
-              
                 return this;
             },
         	/**
@@ -122,12 +121,9 @@ define(
                     event.preventDefault();
                 }
                 
-               
-            	
-            	
 	            if(this.validateHandler()){
-	            	
-	            	 if(this.creditCardToken){
+	            	console.log("1.5: "+this.creditCardToken());
+	            	 if(this.creditCardToken()){
 	            		 	self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
 	            		 	return;
 	                 }
@@ -135,6 +131,7 @@ define(
 	            	 isTokenizeProcessing = $.Deferred();
 	                    $.when(isTokenizeProcessing).done(
 	                        function () {
+	                        	console.log(self.getData());
 	                            self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
 	                        }
 	                    ).fail(
@@ -158,8 +155,8 @@ define(
 	                      },
 		                      function (response) {
 		                          	if(response.token){
-		                          		
-		                          		self.creditCardToken = response.token;
+		                          		console.log("Response Token: " + response.token);
+		                          		self.creditCardToken(response.token);
 		                          		isTokenizeProcessing.resolve();
 		                          	}
 		                          	else{

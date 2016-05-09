@@ -16,13 +16,13 @@
 /*global define*/
 define(
     [
-        'underscore',
+        'jquery',
         'HiPay_FullserviceMagento/js/view/payment',
         'Magento_Payment/js/model/credit-card-validation/credit-card-data',
         'Magento_Payment/js/model/credit-card-validation/credit-card-number-validator',
         'mage/translate'
     ],
-    function (_, Component, creditCardData, cardNumberValidator, $t) {
+    function ($, Component, creditCardData, cardNumberValidator, $t) {
         return Component.extend({
             defaults: {
                 creditCardType: '',
@@ -111,7 +111,6 @@ define(
                             'cc_number': this.creditCardNumber(),
             			}
             	}
-            	
             	return $.extend(true, parent, additionalData);
 
             },

@@ -16,18 +16,30 @@
 define(
     [
      	'jquery',
-     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+     	'ko',
+     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc',
+     	'Magento_Checkout/js/model/totals',
     ],
-    function ($,Component) {
+    function ($,ko,Component,totals) {
 
         'use strict';
+        
+       
+        
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
         		selectedPaymentProfile: '',
-        		splitAmounts: []
+        		splitAmounts: [],
+        		grandTotal: totals.totals().grand_total
         	},
+        	initialize: function(){
+        		this._super();
+        	},
+        	getPureValue: function() {
+        		return totals.totals().grand_total;
+            },
             /**
              * @override
              */
@@ -37,9 +49,17 @@ define(
                 this._super().
                 observe([
                        'selectedPaymentProfile',
-                       'splitAmounts'
+                       'splitAmounts',
+                       'grandTotal'
                    ]);
-                
+
+               // totals.totals.extend({ rateLimit: 5000 });
+                totals.totals.subscribe(function(newValue){
+                	  //@TODO add ajax call to update splitAmounts         		
+                	//self.reloadSplitAmounts(newValue.grand_total);
+                	
+                });
+
               //Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
                     self.splitAmounts(value.splitAmounts);
@@ -71,10 +91,10 @@ define(
             	var parent = this._super();           
             	var additionalData = {
             			'additional_data':{            				
-            				'profile_id': this.selectedPaymentProfile()
+            				'profile_id': this.selectedPaymentProfile().profileId
             			}
             	}
-            	
+
             	return $.extend(true, parent, additionalData);
             },
             /**
@@ -83,8 +103,12 @@ define(
             getCode: function () {
                 return 'hipay_ccsplit';
             },
+            reloadSplitAmounts: function(grand_total){
+
+            	console.log("Grand Total = " + grand_total);
+
+            },
             getPaymentProfiles(){
-            	console.log(window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()]);
             	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
             },
             hasPaymentProfiles(){

@@ -89,7 +89,7 @@ class Order extends BaseRequest{
 		$orderRequest->description = sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
 		$orderRequest->long_description = "";
 		$orderRequest->currency = $this->_order->getBaseCurrencyCode();
-		$orderRequest->amount = (float)$this->_order->getBaseGrandTotal();
+		$orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
 		$orderRequest->shipping = (float)$this->_order->getShippingAmount();
 		$orderRequest->tax = (float)$this->_order->getTaxAmount();
 		$orderRequest->cid = $this->_customerId;
