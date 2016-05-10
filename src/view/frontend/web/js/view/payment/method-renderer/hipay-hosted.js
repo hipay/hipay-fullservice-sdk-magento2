@@ -100,8 +100,6 @@ define(
             placePendingPaymentOrder: function () {
                 var self = this;
                 if (this.placeOrder()) {
-                	console.log('after placeOrder');
-                	console.log(this.isIframeMode());
                     this.isInAction(true);
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);

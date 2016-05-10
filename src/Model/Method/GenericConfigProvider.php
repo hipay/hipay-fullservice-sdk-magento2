@@ -133,7 +133,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 						'hiPayFullservice' => [
 								'customerCards' => $cards,
 								'selectedCard'	=> count($cards) ? current($cards)['ccToken'] : null,
-								'defaultEci' => ECI::SECURE_ECOMMERCE
+								'defaultEci' => ECI::SECURE_ECOMMERCE,
+								'recurringEci' => ECI::RECURRING_ECOMMERCE
 						]
 				]
 		]);

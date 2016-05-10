@@ -32,6 +32,8 @@ define(
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',
+        		defaultEci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
+        		recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
         		eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
         		showForm: true
         	},
@@ -45,7 +47,8 @@ define(
                         'selectedCard',
                         'createOneclick',
                         'creditCardType',
-                        'creditCardToken'
+                        'creditCardToken',
+                        'eci'
                     ]);
                 
                 this.showForm = ko.computed(function () {
@@ -61,12 +64,20 @@ define(
             	var self = this;
             	this._super();
             	
-                if(this.useOneclick()){
+            	if(this.selectedCard() && this.useOneclick()){
+            		this.eci(this.recurringEci);
             		this.creditCardToken(this.selectedCard());
             	}
             	
             	//Set selected card token
                 this.selectedCard.subscribe(function(value) {
+                	if(value){
+                		self.eci(self.recurringEci);           
+                	}
+                	else{
+                		self.eci(self.defaultEci);
+                	}
+
                 	self.creditCardToken(value);
                 	self.creditCardType(self.getCustomerCardByToken(value).ccType);
                 });
@@ -99,7 +110,7 @@ define(
                     'additional_data': {
                         'create_oneclick': this.createOneclick(),
                         'card_token': this.creditCardToken(),
-                        'eci': this.eci,
+                        'eci': this.eci(),
                         'cc_type': this.creditCardType()
                     }
                 };
