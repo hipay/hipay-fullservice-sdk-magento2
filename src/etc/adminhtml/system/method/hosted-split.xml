@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-<group id="hipay_ccsplit" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Fullservice Credit Card Split Payment</label>
+<group id="hipay_hosted" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>HiPay Fullservice Hosted Page</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-				<include path="HiPay_FullserviceMagento::system/method/cc.xml"/>
-                <field id="split_payments" translate="label comment" type="multiselect" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
+				<include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>
+				 <field id="split_payments" translate="label comment" type="multiselect" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="0">
                 	<label>Split payments</label>
                 	<comment>Select active split payments</comment>
                 	<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProfile</source_model>
                 </field>
-                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>               
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+                
 			</group>
 </include>
