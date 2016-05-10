@@ -270,6 +270,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
         					'Customer Id'
         				)
         				->addColumn(
+        						'profile_id',
+        						\Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+        						null,
+        						['unsigned' => true, 'nullable' => false, ],
+        						'Profile Id'
+        						)
+        				->addColumn(
         					'card_token',
         					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         					200,

@@ -41,5 +41,15 @@ class Index extends \Magento\Backend\App\Action {
     	
     	return $resultPage;
     }
+    
+    /**
+     * Check the permission to run it
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_split_payment');
+    }
 	
 }

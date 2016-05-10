@@ -26,6 +26,8 @@ namespace HiPay\FullserviceMagento\Model;
  * @method \HiPay\FullserviceMagento\Model\SplitPayment setRealOrderId(int $realOrderId)
  * @method int getCustomerId()
  * @method \HiPay\FullserviceMagento\Model\SplitPayment setCustomerId(int $customerId)
+ * @method int getProfileId()
+ * @method \HiPay\FullserviceMagento\Model\SplitPayment setProfileId(int $profileId)
  * @method string getCardToken()
  * @method \HiPay\FullserviceMagento\Model\SplitPayment setCardToken(int $cardToken)
  * @method float getBaseGrandTotal()

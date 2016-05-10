@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
+namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -44,5 +44,15 @@ class NewAction extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('edit');
+    }
+    
+    /**
+     * Check the permission to run it
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
     }
 }
