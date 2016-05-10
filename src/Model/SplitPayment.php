@@ -84,6 +84,12 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 	protected $checkoutHelper;
 	
 	/**
+	 *
+	 * @var PaymentHelper $paymentHelper
+	 */
+	protected $paymentHelper;
+	
+	/**
 	 * Constructor 
 	 * 
 	 * @param \Magento\Framework\Model\Context $context
@@ -105,10 +111,13 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 
 			parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 			
-			$this->method = $paymentHelper->getMethodInstance($this->getMethodCode());
+			$this->paymentHelper = $paymentHelper;
 			$this->orderF = $orderF;
 			$this->checkoutHelper = $checkoutHelper;
+			
 	}
+	
+	
 	
 	
   /**
@@ -121,14 +130,19 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         $this->setIdFieldName('split_payment_id');
     }
     
-    static function getStatues()
-    {
-    	$statues = array(self::SPLIT_PAYMENT_STATUS_PENDING=>__('Pending'),
-    			self::SPLIT_PAYMENT_STATUS_FAILED=>__('Failed'),
-    			self::SPLIT_PAYMENT_STATUS_COMPLETE=>__('Complete')
-    	);
+
     
-    	return $statues;
+    /**
+     * Processing object after load data
+     *
+     * @return $this
+     */
+    protected function _afterLoad()
+    {
+		if($this->getId()){
+			$this->method = $this->paymentHelper->getMethodInstance($this->getMethodCode());
+		}
+    	return parent::_afterLoad();
     }
     
     public function getOrder(){

@@ -57,6 +57,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->_isAllowedAction('HiPay_FullserviceMagento::split_save')) {
 
             $this->buttonList->update('save', 'label', __('Save Split Payment'));
+            $this->buttonList->update('save', 'class', 'save secondary');
             $this->buttonList->add(
                 'saveandcontinue',
                 [
@@ -81,19 +82,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         	$this->buttonList->remove('delete');
         }
         
-        if($this->_isAllowedAction('HiPay_FullserviceMagento::split_pay')){
+        if($this->_isAllowedAction('HiPay_FullserviceMagento::split_pay') && $this->_coreRegistry->registry('split_payment')->canPay()){
         	$this->buttonList->add(
         			'pay',
         			[
         					'label' => __('Pay'),
-        					'class' => 'run',
+        					'class' => 'run primary',
         					'data_attribute' => [
         							'mage-init' => [
         									'button' => ['event' => 'pay', 'target' => '#edit_form'],
         							],
-        					]
+        					],
+        					'onclick' => 'confirm(\'' . __(
+        							'Are you sure you want to do this?'
+        							) . '\', \'' . $this->getDeleteUrl() . '\')'
         			],
-        			-100
+        			1
         			);
         }
         else{
@@ -126,6 +130,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _isAllowedAction($resourceId)
     {
         return $this->_authorization->isAllowed($resourceId);
+    }
+    
+    /**
+     * @return string
+     */
+    public function getPayUrl()
+    {
+    	return $this->getUrl('*/*/delete', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
     }
 
     /**
