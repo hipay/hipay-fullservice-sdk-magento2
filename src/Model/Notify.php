@@ -150,7 +150,7 @@ class Notify {
 	}
 	
 	public function processSplitPayment(){
-		$amount = $this->_order->formatPrice($this->splitPayment->getAmountToPay());
+		$amount = $this->_order->getOrderCurrency()->formatPrecision($this->splitPayment->getAmountToPay(), 2,[],false);
 		$this->_doTransactionMessage(__('Split Payment #%1. %2 %3.',$this->splitPayment->getId(),$amount,$this->_transaction->getMessage()));
 		return $this;
 	}

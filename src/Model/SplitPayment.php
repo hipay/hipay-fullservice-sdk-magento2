@@ -129,20 +129,15 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment');
         $this->setIdFieldName('split_payment_id');
     }
+   
     
-
-    
-    /**
-     * Processing object after load data
-     *
-     * @return $this
-     */
-    protected function _afterLoad()
-    {
-		if($this->getId()){
-			$this->method = $this->paymentHelper->getMethodInstance($this->getMethodCode());
-		}
-    	return parent::_afterLoad();
+    protected function getMethodInstance(){
+    	
+    	if(is_null($this->method)){
+    		$this->method = $this->paymentHelper->getMethodInstance($this->getMethodCode());
+    	}
+    	
+    	return$this->method;
     }
     
     public function getOrder(){
@@ -182,7 +177,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     	try {
     		
     		//Call TPP api
-	    	$op = $this->method->getGatewayManager($this->getOrder())->requestNewOrder();
+	    	$op = $this->getMethodInstance()->getGatewayManager($this->getOrder())->requestNewOrder();
 	    	$state = $op->getState();
 	    	
 	    	switch ($state)
