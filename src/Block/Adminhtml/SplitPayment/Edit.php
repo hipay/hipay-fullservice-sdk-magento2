@@ -88,14 +88,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         			[
         					'label' => __('Pay'),
         					'class' => 'run primary',
-        					'data_attribute' => [
-        							'mage-init' => [
-        									'button' => ['event' => 'pay', 'target' => '#edit_form'],
-        							],
-        					],
-        					'onclick' => 'confirm(\'' . __(
+        					'onclick' => 'confirmSetLocation(\'' . __(
         							'Are you sure you want to do this?'
-        							) . '\', \'' . $this->getDeleteUrl() . '\')'
+        							) . '\', \'' . $this->getPayUrl() . '\')'
         			],
         			1
         			);
@@ -137,7 +132,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getPayUrl()
     {
-    	return $this->getUrl('*/*/delete', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
+    	return $this->getUrl('*/*/pay', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
     }
 
     /**

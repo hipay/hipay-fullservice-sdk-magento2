@@ -151,12 +151,14 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     		$this->_order = $this->orderF->create()->load($this->getOrderId());
     		
     		//set custom data before call api
-    		$this->_order->getPayment()->setForcedAmount($this->getAmountToPay());
-    		$this->_order->getPayment()->setForcedId($this->_order->getIncrementId() . "-split-" . $this->getId());//added because if the same order_id tpp respond "Max Attempts exceed!");
-    		$this->_order->getPayment()->setForcedDescription(__("Order SPLIT %s by %1",$this->_order->getIncrementId(),$this->_order->getCustomerEmail()));
-    		$this->_order->getPayment()->setForcedEci(ECI::RECURRING_ECOMMERCE);
-    		$this->_order->getPayment()->setForcedOperation(\HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE);
-    		$this->_order->getPayment()->setForcedCardToken($this->getCardToken());
+    		$desc = sprintf(__("Order SPLIT #%s by %s"),$this->_order->getIncrementId(),$this->_order->getCustomerEmail());
+    		$this->_order->setForcedDescription($desc);
+    		$this->_order->setForcedAmount($this->getAmountToPay());
+    		$this->_order->setForcedOrderId($this->_order->getIncrementId() . "-split-" . $this->getId());//added because if the same order_id TPP response "Max Attempts exceed!"
+    		$this->_order->setForcedEci(ECI::RECURRING_ECOMMERCE);
+    		$this->_order->setForcedOperation(\HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE);
+    		$this->_order->setForcedCardToken($this->getCardToken());
+    
     	}
     	
     	return $this->_order;
@@ -178,7 +180,6 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     	}
     	
     	try {
-    		
     		
     		//Call TPP api
 	    	$op = $this->method->getGatewayManager($this->getOrder())->requestNewOrder();

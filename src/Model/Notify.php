@@ -82,6 +82,18 @@ class Notify {
 	 */
 	protected $spFactory;
 	
+	/**
+	 * 
+	 * @var bool $isSplitPayment
+	 */
+	protected $isSplitPayment = false;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\SplitPayment $splitPayment
+	 */
+	protected $splitPayment;
+	
 	
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
@@ -104,6 +116,20 @@ class Notify {
 			$this->spFactory = $spFactory;
 	
 			if (isset($params['response']) && is_array($params['response'])) {
+				
+				$incrementId = $params['response']['order']['id'];
+				if(strpos($incrementId,'-split-') !== false){
+					list($realIncrementId,,$splitPaymentId) = explode("-",$incrementId);
+					$params['response']['order']['id']= $realIncrementId;
+					$this->isSplitPayment = true;
+					$this->splitPayment = $this->spFactory->create()->load((int)$splitPaymentId);
+					
+					if(!$this->splitPayment->getId()){
+						throw new \Exception(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId));
+					}
+					
+				}
+				
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 				
 				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
@@ -123,10 +149,19 @@ class Notify {
 		
 	}
 	
-	
+	public function processSplitPayment(){
+		$amount = $this->_order->formatPrice($this->splitPayment->getAmountToPay());
+		$this->_doTransactionMessage(__('Split Payment #%1. %2 %3.',$this->splitPayment->getId(),$amount,$this->_transaction->getMessage()));
+		return $this;
+	}
 	
 	
 	public function processTransaction(){
+		
+		if($this->isSplitPayment){
+			$this->processSplitPayment();
+			return $this;
+		}
 		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110

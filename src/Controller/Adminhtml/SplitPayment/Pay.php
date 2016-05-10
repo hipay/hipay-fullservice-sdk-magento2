@@ -15,7 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
-class Delete extends \Magento\Backend\App\Action
+class Pay extends \Magento\Backend\App\Action
 {
 
 	/**
@@ -61,7 +61,7 @@ class Delete extends \Magento\Backend\App\Action
                     ['id' => $id, 'status' => 'fail']
                 );
                 // display error message
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage() . " ({$e->getCode()})");
                 // go back to edit form
                 return $resultRedirect->setPath('*/*/edit', ['split_payment_id' => $id]);
             }
