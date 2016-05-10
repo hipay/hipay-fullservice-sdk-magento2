@@ -64,7 +64,8 @@ define(
              */
 	        afterPlaceOrder: function () {
 	        	 var self = this;
-	        	if(this.isIframeMode() && !this.creditCardToken){
+
+	        	if(this.isIframeMode() && !this.creditCardToken()){
 	        		self.paymentReady(true);
 	        	}
 	        	else{
@@ -72,6 +73,9 @@ define(
 	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
 	        	}
 	        },
+	        getData: function(){
+            	return this._super(); 
+            },
 	        getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
@@ -96,6 +100,8 @@ define(
             placePendingPaymentOrder: function () {
                 var self = this;
                 if (this.placeOrder()) {
+                	console.log('after placeOrder');
+                	console.log(this.isIframeMode());
                     this.isInAction(true);
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);

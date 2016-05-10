@@ -46,13 +46,12 @@
 		                    </label>
 		                    <div class="control">
 		                        <select name="payment[cc_payment_profile]" class="select"
-		                                data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'},
+		                                data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'}
 		                                            enable: true,
 		                                            options: getPaymentProfiles(),
 		                                            optionsValue: 'profileId',
 		                                            optionsText: 'name',
-		                                            optionsCaption: $t('Select a split payment profile'),
-		                                            value: selectedPaymentProfile()">
+		                                            value: selectedPaymentProfile">
 		                        </select>
 		                    </div>
 	               		 </div>
@@ -60,9 +59,9 @@
                		
                		<!-- ko if: (getPaymentProfiles().length == 1) -->
 	               		 <div>
-		                    <h3><!-- ko i18n: selectedPaymentProfile().name --><!-- /ko --></h3>
+		                    <h3><!-- ko i18n: getFirstPaymentProfile().name --><!-- /ko --></h3>
 		                    <input type="hidden" data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'},
-		                    							value: selectedPaymentProfile()"  name="payment[cc_payment_profile]" />
+		                    							value: selectedPaymentProfile"  name="payment[cc_payment_profile]" />
 	               		 </div>
                		<!-- /ko -->
 					<div class="field type">

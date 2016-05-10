@@ -17,10 +17,10 @@ define(
     [
      	'jquery',
      	'ko',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split',
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
         'Magento_Checkout/js/model/totals'
     ],
-    function ($, ko, Component,totalq) {
+    function ($, ko, Component,totals) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -51,11 +51,17 @@ define(
 
               //Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
-                    self.splitAmounts(value.splitAmounts);
+
+                	if(value){
+                		self.splitAmounts(self.getSplitAmountByProfile(value));
+                	}
+                	else{
+                		self.splitAmounts([]);
+                	}
                 });
                 
                 if(this.hasPaymentProfiles()){
-                	this.selectedPaymentProfile(this.getFirstPaymentProfile());
+                	this.selectedPaymentProfile(this.getFirstPaymentProfileId());
                 }
                 
                 return this;
@@ -71,13 +77,15 @@ define(
             },
             getData: function(){
             	
-            	var parent = this._super();           
+            	var parent = this._super();  
+            	
             	var additionalData = {
             			'additional_data':{            				
-            				'profile_id': this.selectedPaymentProfile().profileId
+            				'profile_id': this.selectedPaymentProfile()
             			}
             	}
 
+            	
             	return $.extend(true, parent, additionalData);
             },
             reloadSplitAmounts: function(grand_total){
@@ -96,6 +104,19 @@ define(
             	for(var i=0;i<pp.length;i++){
             		return pp[i];
             	}
+            },
+            getFirstPaymentProfileId(){
+            	return this.getFirstPaymentProfile().profileId;
+            },
+            getSplitAmountByProfile(profileId){
+            	var ppArr = this.getPaymentProfiles();
+            	for(var i=0;i<ppArr.length;i++){
+            		if(ppArr[i].profileId == profileId){
+            			return ppArr[i].splitAmounts;
+            		}
+            	}
+            	
+            	return [];
             }
         });
     }

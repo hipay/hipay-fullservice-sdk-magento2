@@ -56,11 +56,16 @@ define(
 
               //Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
-                    self.splitAmounts(value.splitAmounts);
+                	if(value){
+                		self.splitAmounts(self.getSplitAmountByProfile(value));
+                	}
+                	else{
+                		self.splitAmounts([]);
+                	}
                 });
                 
                 if(this.hasPaymentProfiles()){
-                	this.selectedPaymentProfile(this.getFirstPaymentProfile());
+                	this.selectedPaymentProfile(this.getFirstPaymentProfileId());
                 }
                 
                 return this;
@@ -85,7 +90,7 @@ define(
             	var parent = this._super();           
             	var additionalData = {
             			'additional_data':{            				
-            				'profile_id': this.selectedPaymentProfile().profileId
+            				'profile_id': this.selectedPaymentProfile()
             			}
             	}
 
@@ -113,6 +118,19 @@ define(
             	for(var i=0;i<pp.length;i++){
             		return pp[i];
             	}
+            },
+            getFirstPaymentProfileId(){
+            	return this.getFirstPaymentProfile().profileId;
+            },
+            getSplitAmountByProfile(profileId){
+            	var ppArr = this.getPaymentProfiles();
+            	for(var i=0;i<ppArr.length;i++){
+            		if(ppArr[i].profileId == profileId){
+            			return ppArr[i].splitAmounts;
+            		}
+            	}
+            	
+            	return [];
             }
             
         });
