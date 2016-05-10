@@ -246,7 +246,8 @@ class Notify {
 					$splitPayment->setRealOrderId($this->_order->getIncrementId());
 					$splitPayment->setOrderId($this->_order->getId());
 					$splitPayment->setStatus($i==0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE : SplitPayment::SPLIT_PAYMENT_STATUS_PENDING );
-					$splitPayment->setTotalAmount($this->_order->getBaseGrandTotal());
+					$splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
+					$splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
 					
 					try {
 						$splitPayment->save();

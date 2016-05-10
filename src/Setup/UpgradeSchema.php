@@ -277,11 +277,18 @@ class UpgradeSchema implements UpgradeSchemaInterface
         					'Card Token'
         				)
         				->addColumn(
-        					'total_amount',
+        					'base_grand_total',
         					\Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
         					'12,4',
         					['nullable' => false],
-        					'Total Amount'
+        					'Base Grand Total'
+        				)
+        				->addColumn(
+        					'base_currency_code',
+        					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+        					3,
+        					[],
+        					'Base Currency Code'
         				)
         				->addColumn(
         					'amount_to_pay',
