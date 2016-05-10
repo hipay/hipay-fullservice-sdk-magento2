@@ -29,6 +29,10 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
             },
             {
+                type: 'hipay_hostedsplit',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
+            },
+            {
                 type: 'hipay_cc',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
             },

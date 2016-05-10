@@ -16,19 +16,19 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 
-use HiPay\FullserviceMagento\Model\CcMethod;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+use HiPay\FullserviceMagento\Model\HostedMethod;
 /**
- * Class Cc Split Payment Method
+ * Class Hosted Split Payment Method
  * @package HiPay\FullserviceMagento\Model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class CcSplitMethod extends CcMethod {
+class HostedSplitMethod extends HostedMethod {
 	
-	const HIPAY_METHOD_CODE               = 'hipay_ccsplit';
+	const HIPAY_METHOD_CODE               = 'hipay_hostedsplit';
 	
 	/**
 	 * @var string
@@ -52,8 +52,6 @@ class CcSplitMethod extends CcMethod {
 	 * @param \Magento\Payment\Model\Method\Logger $logger
 	 * @param GatewayManagerFactory $gatewayManagerFactory
 	 * @param \Magento\Framework\Url $urlBuilder
-	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profilefactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -70,8 +68,6 @@ class CcSplitMethod extends CcMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
-			\Magento\Framework\Module\ModuleListInterface $moduleList,
-			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -79,7 +75,7 @@ class CcSplitMethod extends CcMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$moduleList,$localeDate,$resource,$resourceCollection,$data);
+									$urlBuilder,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 
@@ -90,26 +86,40 @@ class CcSplitMethod extends CcMethod {
 		return array_merge(['profile_id'],$this->_additionalInformationKeys);
 	}
 	
-	public function place(\Magento\Payment\Model\InfoInterface $payment){
+	protected function _setHostedUrl(\Magento\Sales\Model\Order $order){
+	
+		$payment = $order->getPayment();
 		$profileId = $payment->getAdditionalInformation('profile_id');
 		
 		if(empty($profileId)){
 			throw new LocalizedException(__('Payment Profile not found.'));
 		}
+		
 		$profile = $this->profileFactory->create()->load($profileId);
 		if(!$profile->getId()){
 			throw new LocalizedException(__('Payment Profile not found.'));
 		}
 		
 		$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
+		
 		if(!is_array($splitAmounts) || !count($splitAmounts)){
 			throw new LocalizedException(__('Impossible to split the amount.'));
 		}
 		$firstSplit = current($splitAmounts);
 		$payment->getOrder()->setForcedAmount((float)$firstSplit['amountToPay']);
 		
-		return parent::place($payment);
-		
+		if($payment->getAdditionalInformation('card_token') != ""){
+			$this->place($order->getPayment());
+		}
+		else{
+			//Create gateway manager with order data
+			$gateway = $this->_gatewayManagerFactory->create($order);
+			//Call fullservice api to get hosted page url
+			$hppModel = $gateway->requestHostedPaymentPage();
+			$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
+		}
+	
 	}
+
 	
 }

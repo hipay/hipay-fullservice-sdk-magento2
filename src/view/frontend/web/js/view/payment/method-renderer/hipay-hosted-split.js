@@ -17,23 +17,18 @@ define(
     [
      	'jquery',
      	'ko',
-     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc',
-     	'Magento_Checkout/js/model/totals',
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split',
+        'Magento_Checkout/js/model/totals'
     ],
-    function ($,ko,Component,totals) {
+    function ($, ko, Component,totalq) {
         'use strict';
-
         return Component.extend({
-            
-        	defaults: {
-        		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
-        		selectedPaymentProfile: '',
+            defaults: {
+                template: 'HiPay_FullserviceMagento/payment/hipay-hosted-split',
+                selectedPaymentProfile: '',
         		splitAmounts: [],
         		grandTotal: totals.totals().grand_total
-        	},
-        	initialize: function(){
-        		this._super();
-        	},
+            },
             /**
              * @override
              */
@@ -65,20 +60,14 @@ define(
                 
                 return this;
             },
-        	/**
-             * @returns {Boolean}
-             */
-            isActive: function () {
-                return this.hasPaymentProfiles();
-            },
-            /**
-             * @returns {Boolean}
-             */
-            isShowLegend: function () {
-                return true;
-            },
-            context: function() {
+	        context: function() {
                 return this;
+            },
+	        getCode: function() {
+	            return 'hipay_hostedsplit';
+	        },
+            isActive: function() {
+                return this.hasPaymentProfiles();
             },
             getData: function(){
             	
@@ -90,12 +79,6 @@ define(
             	}
 
             	return $.extend(true, parent, additionalData);
-            },
-            /**
-             * @override
-             */
-            getCode: function () {
-                return 'hipay_ccsplit';
             },
             reloadSplitAmounts: function(grand_total){
 
@@ -114,7 +97,6 @@ define(
             		return pp[i];
             	}
             }
-            
         });
     }
 );
