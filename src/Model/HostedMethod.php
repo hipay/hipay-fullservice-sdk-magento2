@@ -52,6 +52,13 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	protected $_isInitializeNeeded = true;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = true;
+	
 	
 	/**
 	 * Instantiate state and set it to state object

@@ -27,13 +27,7 @@ class Form extends \Magento\Payment\Block\Form {
 	 */
 	protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
 
-	
-	/**
-	 * Payment config model
-	 *
-	 * @var \Magento\Payment\Model\Config
-	 */
-	protected $_paymentConfig;
+
 	
 	/**
 	 * @param \Magento\Framework\View\Element\Template\Context $context
@@ -45,8 +39,7 @@ class Form extends \Magento\Payment\Block\Form {
 			\Magento\Payment\Model\Config $paymentConfig,
 			array $data = []
 			) {
-				parent::__construct($context, $data);
-				$this->_paymentConfig = $paymentConfig;
+				parent::__construct($context,$paymentConfig, $data);
 	}
 	
 }
