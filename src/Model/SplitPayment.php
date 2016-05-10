@@ -15,6 +15,11 @@
  */
 namespace HiPay\FullserviceMagento\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Helper\Data as PaymentHelper;
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use HiPay\Fullservice\Enum\Transaction\ECI;
+
 /**
  * Hipay Split Payment data model
  * 
@@ -56,6 +61,29 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 	const SPLIT_PAYMENT_STATUS_COMPLETE = 'complete';
 	
 	/**
+	 * @var \HiPay\FullserviceMagento\Model\FullserviceMethod
+	 */
+	protected $method;
+	
+	/**
+	 * 
+	 * @var \Magento\Sales\Model\Order $_order
+	 */
+	protected $_order;
+	
+	/**
+	 *
+	 * @var \Magento\Sales\Model\OrderFactory $orderF
+	 */
+	protected $orderF;
+	
+	/**
+	 *
+	 * @var \Magento\Checkout\Helper\Data $checkoutHelper
+	 */
+	protected $checkoutHelper;
+	
+	/**
 	 * Constructor 
 	 * 
 	 * @param \Magento\Framework\Model\Context $context
@@ -67,12 +95,19 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
 			\Magento\Framework\Registry $registry,
+			PaymentHelper $paymentHelper,
+			\Magento\Sales\Model\OrderFactory $orderF,
+			\Magento\Checkout\Helper\Data $checkoutHelper,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
 
-				parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+			parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+			
+			$this->method = $paymentHelper->getMethodInstance($this->getMethodCode());
+			$this->orderF = $orderF;
+			$this->checkoutHelper = $checkoutHelper;
 	}
 	
 	
@@ -96,71 +131,81 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     	return $statues;
     }
     
-    /**
-     *
-     * @return boolean|string
-     */
-    /*public function pay()
-    {
-    
-    	if(!$this->canPay())
-    		Mage::throwException("This split payment is already paid!");
-    
-    		if(!$this->getId())
-    		{
-    			Mage::throwException("Split Payment not found!");
-    		}
-    
-    		$state = $this->getMethodInstance()->paySplitPayment($this);
-    
-    		switch ($state)
-    		{
-    			case Allopass_Hipay_Model_Method_Abstract::STATE_COMPLETED:
-    			case Allopass_Hipay_Model_Method_Abstract::STATE_FORWARDING:
-    			case Allopass_Hipay_Model_Method_Abstract::STATE_PENDING:
-    				$this->setStatus(self::SPLIT_PAYMENT_STATUS_COMPLETE);
-    				break;
-    			case Allopass_Hipay_Model_Method_Abstract::STATE_DECLINED:
-    			case Allopass_Hipay_Model_Method_Abstract::STATE_ERROR:
-    			default:
-    				$this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
-    				$this->sendErrorEmail();
-    				break;
-    					
-    		}
-    
-    		$this->setAttempts($this->getAttempts() + 1);
-    		$this->save();
-    		return $this;
-    
-    }
-    
-    public function sendErrorEmail()
-    {
+    public function getOrder(){
     	
-    	$helperCheckout = Mage::helper('checkout');
-    	$order = Mage::getModel('sales/order')->load($this->getOrderId());
-    	$message = Mage::helper('hipay')->__("Error on request split Payment HIPAY. Split Payment Id: ".$this->getSplitPaymentId());
-    	$helperCheckout->sendPaymentFailedEmail($order, $message,'Split Payment Hipay');
-    }*/
-    
-    /**
-     * @return Allopass_Hipay_Model_Method_Abstract
-     */
-  /*  public function getMethodInstance()
-    {
-    	list($moduleName,$methodClass) = explode("_",$this->getMethodCode());
-    	//Fix bug due to upper letter in class name
-    	if(strpos($methodClass,'xtimes') !== false)
-    	{
-    		$methodClass = str_replace("x","X",$methodClass);
+    	if(is_null($this->_order)){
+    		$this->_order = $this->orderF->create()->load($this->getOrderId());
+    		
+    		//set custom data before call api
+    		$this->_order->getPayment()->setForcedAmount($this->getAmountToPay());
+    		$this->_order->getPayment()->setForcedId($this->_order->getIncrementId() . "-split-" . $this->getId());//added because if the same order_id tpp respond "Max Attempts exceed!");
+    		$this->_order->getPayment()->setForcedDescription(__("Order SPLIT %s by %1",$this->_order->getIncrementId(),$this->_order->getCustomerEmail()));
+    		$this->_order->getPayment()->setForcedEci(ECI::RECURRING_ECOMMERCE);
+    		$this->_order->getPayment()->setForcedOperation(\HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE);
+    		$this->_order->getPayment()->setForcedCardToken($this->getCardToken());
     	}
-    	return Mage::getSingleton($moduleName . "/method_" . $methodClass );
+    	
+    	return $this->_order;
     }
     
     public function canPay()
     {
     	return $this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED || $this->getStatus() == self::SPLIT_PAYMENT_STATUS_PENDING;
     }
-	*/
+    
+    public function pay(){
+    	
+    	if(!$this->canPay()){
+    		throw new LocalizedException(__('This split payment is already paid!'));	
+    	}
+    	
+    	if(!$this->getId()){
+    		throw new LocalizedException(__('Split Payment not found!'));
+    	}
+    	
+    	try {
+    		
+    		
+    		//Call TPP api
+	    	$op = $this->method->getGatewayManager($this->getOrder())->requestNewOrder();
+	    	$state = $op->getState();
+	    	
+	    	switch ($state)
+	    	{
+	    		case TransactionState::COMPLETED;
+	    		case TransactionState::STATE_FORWARDING:
+	    		case TransactionState::STATE_PENDING:
+	    			$this->setStatus(self::SPLIT_PAYMENT_STATUS_COMPLETE);
+	    			break;
+	    		case TransactionState::STATE_DECLINED:
+	    		case TransactionState::STATE_ERROR:
+	    		default:
+	    			$this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
+	    			$this->sendErrorEmail();
+	    			break;
+	    				
+	    	}
+    		
+    	} catch (Exception $e) {
+    		
+    		$this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
+    		$this->sendErrorEmail();
+    		
+    	}
+    	$this->setAttempts($this->getAttempts() + 1);
+    	
+    	$this->save();
+    	
+    	return $this;
+    	
+    }
+
+    
+    public function sendErrorEmail()
+    {
+    	$message = __("Error on request split Payment HIPAY. Split Payment Id: ".$this->getId());
+    	$this->checkoutHelper->sendPaymentFailedEmail($this->getOrder(), $message,__('Split Payment Hipay'));
+    }
+    
+	
 }

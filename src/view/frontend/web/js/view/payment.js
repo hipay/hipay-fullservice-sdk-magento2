@@ -32,7 +32,7 @@ define(
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',
-        		eci: 9,
+        		eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
         		showForm: true
         	},
         	getAfterPlaceOrderUrl: function(){

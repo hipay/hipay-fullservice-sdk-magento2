@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
+use HiPay\Fullservice\Enum\Transaction\ECI;
 
 class GenericConfigProvider implements ConfigProviderInterface {
 
@@ -131,7 +132,8 @@ class GenericConfigProvider implements ConfigProviderInterface {
 				'payment' => [
 						'hiPayFullservice' => [
 								'customerCards' => $cards,
-								'selectedCard'	=> count($cards) ? current($cards)['ccToken'] : null
+								'selectedCard'	=> count($cards) ? current($cards)['ccToken'] : null,
+								'defaultEci' => ECI::SECURE_ECOMMERCE
 						]
 				]
 		]);

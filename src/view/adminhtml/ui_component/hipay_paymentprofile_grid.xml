@@ -154,11 +154,19 @@
                 </item>
             </argument>
         </selectionsColumn>
-        <column name="name">
+        <column name="split_payment_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">Split ID</item>
+                </item>
+            </argument>
+        </column>
+        <column name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
                 </item>
             </argument>
@@ -178,7 +186,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">Period Frequency</item>
                 </item>
             </argument>
@@ -187,7 +194,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">Period Max Cycles</item>
                 </item>
             </argument>

@@ -147,22 +147,37 @@ class Manager {
 		return $transaction;
 	}
 	
+	/**
+	 *
+	 * @return \HiPay\Fullservice\Gateway\Model\Operation
+	 */
 	public function requestOperationCapture($amount=null){
 		
 		return $this->_requestOperation(Operation::CAPTURE, $amount);
 	}
 	
+	/**
+	 *
+	 * @return \HiPay\Fullservice\Gateway\Model\Operation
+	 */
 	public function requestOperationRefund($amount=null){
 		
 		return $this->_requestOperation(Operation::REFUND, $amount);
 	}
 	
+	/**
+	 *
+	 * @return \HiPay\Fullservice\Gateway\Model\Operation
+	 */
 	public function requestOperationAcceptChallenge(){
 	
 		return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);;
 	}
 	
-
+	/**
+	 *
+	 * @return \HiPay\Fullservice\Gateway\Model\Operation
+	 */
 	public function requestOperationDenyChallenge(){
 	
 		return $this->_requestOperation(Operation::DENY_CHALLENGE);
@@ -215,6 +230,13 @@ class Manager {
 		];	
 	}
 	
+	/**
+	 * 
+	 * @param string $operationType
+	 * @param float|null $amount
+	 * @param string|null $operationId
+	 * @return \HiPay\Fullservice\Gateway\Model\Operation
+	 */
 	protected function _requestOperation($operationType,$amount=null,$operationId=null){
 		
 		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getLastTransId());
