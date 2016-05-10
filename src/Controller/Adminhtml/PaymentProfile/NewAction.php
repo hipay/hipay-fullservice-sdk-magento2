@@ -13,7 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
+namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -53,6 +53,6 @@ class NewAction extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
+    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_payment_profile');
     }
 }
