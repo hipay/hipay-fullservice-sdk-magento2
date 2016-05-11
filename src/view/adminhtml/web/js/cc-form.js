@@ -46,9 +46,10 @@ define([
         },
         
         prepare : function(event, method) {
-            if (method.indexOf('hipay') > -1) {
+            if (method.indexOf('hipay_cc') > -1) {
                 this.preparePayment();
             }
+
         },
         preparePayment: function() {
             $('#edit_form').off('submitOrder').on('submitOrder', this.submitAdminOrder.bind(this));
@@ -65,14 +66,7 @@ define([
                 
                 TPP.setTarget(this.options.env);
                 TPP.setCredentials(this.options.apiUsername, this.options.apiPassword);
-                console.log({
-                    card_number:  ccNumber,
-                    cvc: cvc,
-                    card_expiry_month:ccExprMo,
-                    card_expiry_year: ccExprYr,
-                    card_holder: '',
-                    multi_use: '0'
-                  });
+
                 TPP.create({
                     card_number:  ccNumber,
                     cvc: cvc,
@@ -100,10 +94,12 @@ define([
                         	$('#edit_form').trigger('processStop');
                         }
                   );
-                
 
-                
             } 
+            else{
+            	this._processErrors("Cc Number is empty!");
+            	$('#edit_form').trigger('processStop');
+            }
         },
         /**
          * Processing errors
