@@ -35,7 +35,6 @@ class HostedPaymentPage extends Order{
 
 		$hppRequest->payment_product_category_list = implode(",", $this->_config->getPaymentProductCategoryList());
 		
-		
 		return $hppRequest;
 		
 	}

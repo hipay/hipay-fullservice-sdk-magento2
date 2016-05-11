@@ -57,15 +57,23 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	protected $_storeManager;
 	
 	/**
+	 * 
+	 * @var \Magento\Framework\App\State $appState
+	 */
+	protected $appState;
+	
+	/**
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 */
 	public function __construct(
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 			\Magento\Store\Model\StoreManagerInterface $storeManager,
+			\Magento\Framework\App\State $appState,
 			 $params = []
 			) {
 				parent::__construct($scopeConfig);
 				$this->_storeManager = $storeManager;
+				$this->appState = $appState;
 				
 				if ($params) {
 					$method = array_shift($params);
@@ -93,7 +101,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	 * @return bool
 	 */
 	public function isAdminArea(){
-		return $this->_storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+		return $this->appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
 	}
     /**
      * Templates type source getter
