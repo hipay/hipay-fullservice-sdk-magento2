@@ -16,9 +16,8 @@
 namespace HiPay\FullserviceMagento\Model\Email\Container;
 
 use Magento\Sales\Model\Order\Email\Container\Container;
-use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 
-class FraudReviewIdentity extends Container implements IdentityInterface
+class FraudReviewIdentity extends Container
 {
     /**
      * Configuration paths

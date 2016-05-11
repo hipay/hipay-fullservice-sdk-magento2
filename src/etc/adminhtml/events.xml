@@ -1,4 +1,5 @@
-<?php
+<?xml version="1.0"?>
+<!--
 /*
  * HiPay fullservice SDK
  *
@@ -13,27 +14,9 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
-namespace HiPay\FullserviceMagento\Block;
-
-/**
- *
- * @author kassim
- *
- */
-class AbstractForm extends \Magento\Payment\Block\Form\Cc {
-	
-	
-	
-	public function getEnv(){
-		
-	}
-	
-	public function getApiUsername(){
-		
-	}
-	
-	public function getApiPassword(){
-		
-	}
-
-}
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="send_hosted_payment_link" instance="HiPay\FullserviceMagento\Observer\SendHostedPaymentLinkObserver"/>
+    </event>
+</config>

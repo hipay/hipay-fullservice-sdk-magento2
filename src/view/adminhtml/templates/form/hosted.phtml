@@ -23,6 +23,6 @@ $code = $block->escapeHtml($block->getMethodCode());
 <fieldset class="fieldset payment items <?php /* @noEscape */ echo $code; ?>"
           id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display: none;">
           
-          <?php echo $block->escapeHtml( __('You will be redirect to payment page after submit order.')) ?>
+          <?php echo $block->escapeHtml( __('An email with a payment link will be sent to the customer.')) ?>
           
 </fieldset>
