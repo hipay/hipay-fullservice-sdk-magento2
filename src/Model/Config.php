@@ -55,6 +55,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	 */
 	public function __construct(
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+			\Magento\Store\Model\StoreManagerInterface $storeManager,
 			 $params = []
 			) {
 				parent::__construct($scopeConfig);
@@ -67,8 +68,17 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 						$this->setStoreId($storeId);
 					}
 				}
+				
+				$apiUsername = $this->getApiUsername();
+				$apiPassword =  $this->getApiPassword();
+				
+				//If is Admin store, we use MO/TO credentials
+				if($storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE){
+					$apiUsername = $this->getApiUsernameMoto();
+					$apiPassword = $this->getApiPasswordMoto();
+				}
 
-				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv(),'application/json');
+				$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
 	}
     
     /**
@@ -171,6 +181,35 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		
 		return  $this->getGeneraleValue($key);
 	}
+	
+	public function getApiUsernameMoto(){
+		$key = "api_username";
+		if($this->isStageMode()){
+			$key = "api_username_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	public function getApiPasswordMoto(){
+		$key = "api_password";
+		if($this->isStageMode()){
+			$key = "api_password_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	public function getSecretPassphraseMoto(){
+		$key = "secret_passphrase";
+		if($this->isStageMode()){
+			$key = "secret_passphrase";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	
 	
 	public function getApiEndpoint(){
 		return $this->_configSDK->getApiEndpoint();

@@ -38,6 +38,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
           style="display:none" data-mage-init='{"fullserviceCcForm":<?php /* @noEscape */ echo $serializedFormData; ?>}'>
           
           <input type="hidden" name="payment[card_token]" id="<?php /* @noEscape */ echo $code; ?>_card_token" value="" />
+          <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */ echo $code; ?>_eci" value="1" />
           
     <div class="field-type admin__field _required">
         <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_type">

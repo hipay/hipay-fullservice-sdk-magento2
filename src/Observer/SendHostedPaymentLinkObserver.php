@@ -52,7 +52,7 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
         $order = $observer->getEvent()->getData('order');
         $url = $order->getPayment()->getAdditionalInformation('redirectUrl');
         
-		if($url){
+		if($url && (strpos($order->getPayment()->getMethod(),'hipay_hosted') !== false)){
 			$this->paymenLinkSender->send($order);
 		}
 		
