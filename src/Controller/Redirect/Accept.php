@@ -28,7 +28,13 @@ class Accept extends Fullservice {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
 	public function execute(){
+		//MO/TO case
+		if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {
 			
+			$this->messageManager->addSuccess(__('Thank you for your order. You will receveive a confirmation email soon.'));
+			return $this->resultRedirectFactory->create()->setPath('checkout/cart');
+		}
+		
 		$this->_redirect('checkout/onepage/success');
 
 	}

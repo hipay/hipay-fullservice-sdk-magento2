@@ -51,6 +51,12 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	protected $_configSDK;
 	
 	/**
+	 * 
+	 * @var \Magento\Store\Model\StoreManagerInterface $_storeManager
+	 */
+	protected $_storeManager;
+	
+	/**
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 */
 	public function __construct(
@@ -59,6 +65,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 			 $params = []
 			) {
 				parent::__construct($scopeConfig);
+				$this->_storeManager = $storeManager;
 				
 				if ($params) {
 					$method = array_shift($params);
@@ -73,7 +80,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 				$apiPassword =  $this->getApiPassword();
 				
 				//If is Admin store, we use MO/TO credentials
-				if($storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE){
+				if($this->isAdminArea()){
 					$apiUsername = $this->getApiUsernameMoto();
 					$apiPassword = $this->getApiPasswordMoto();
 				}
@@ -81,6 +88,13 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 				$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
 	}
     
+	/**
+	 * Return if current store is admin
+	 * @return bool
+	 */
+	public function isAdminArea(){
+		return $this->_storeManager->getStore()->getCode() == \Magento\Store\Model\Store::ADMIN_CODE;
+	}
     /**
      * Templates type source getter
      *
