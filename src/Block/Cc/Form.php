@@ -61,7 +61,7 @@ class Form extends \Magento\Payment\Block\Form\Cc {
 	 */
 	public function getConfig(){
 		if(is_null($this->_hipayConfig)){
-			$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->getMethodCode()]]);
+			$this->_hipayConfig = $this->configFactory->create(['params'=>['methodCode'=>$this->getMethodCode()]]);
 		}
 		
 		return $this->_hipayConfig;
