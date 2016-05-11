@@ -22,6 +22,7 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 
 class Notify {
 	
@@ -70,6 +71,11 @@ class Notify {
 	 */
 	protected $_cardFactory;
 	
+	/**
+	 * @var ResourceOrder $orderResource
+	 */
+	protected $orderResource;
+
 	
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
@@ -78,6 +84,7 @@ class Notify {
 			FraudReviewSender $fraudReviewSender,
 			FraudDenySender $fraudDenySender,
 			\Magento\Payment\Helper\Data $paymentHelper,
+			ResourceOrder $orderResource,
 			$params = []
 			){
 
@@ -86,15 +93,17 @@ class Notify {
 			$this->orderSender = $orderSender;
 			$this->fraudReviewSender = $fraudReviewSender;
 			$this->fraudDenySender = $fraudDenySender;
+			$this->orderResource = $orderResource;
 	
 			if (isset($params['response']) && is_array($params['response'])) {
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
-				
+
 				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
+				
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
 				}
-				
+								
 				//Retieve method model
 				$this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
 				
@@ -108,9 +117,62 @@ class Notify {
 	}
 	
 	
+	protected function canProcessTransaction(){
+		
+		switch ($this->_transaction->getStatus()){
+			case TransactionStatus::EXPIRED: //114
+				
+				if(in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZED))){
+					return true;
+				}
+				
+				break;
+			case  TransactionStatus::AUTHORIZED: //116
+				if($this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
+					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
+					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
+					in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZATION_REQUESTED))){
+					return true;
+				}
+				break;
+			case TransactionStatus::CAPTURE_REQUESTED: //117
+				if(!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal())
+				{
+					return true;
+				}
+				break;
+			default:
+				return true;
+		}
+		
+		return false;
+		
+	}
+	
+	
 	
 	
 	public function processTransaction(){
+		
+		if(!$this->canProcessTransaction()){
+			return $this;
+		}
+		
+		/**
+		 * Begin transaction to lock this order record during update
+		 */
+		$this->orderResource->getConnection()->beginTransaction();
+		
+		$selectForupdate = $this->orderResource->getConnection()->select()
+		->from($this->orderResource->getMainTable())->where($this->orderResource->getIdFieldName() . '=?', $this->_order->getId())
+		->forUpdate(true);
+		
+		//Execute for update query
+		$this->orderResource->getConnection()->fetchOne($selectForupdate);
+		
+		
+		//Write about notification in order history
+		$this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110
@@ -183,6 +245,9 @@ class Notify {
 				$this->_doTransactionMessage();
 				break;
 		}
+		
+		//Send commit to unlock order table
+		$this->orderResource->getConnection()->commit();
 		
 		return $this;
 	}
