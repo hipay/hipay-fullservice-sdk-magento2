@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="hipay_paymentprofile_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Grid\Collection</item>
+                <item name="hipay_splitpayment_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hipay_payment_profile</argument>
+            <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hipay_split_payment</argument>
+            <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment</argument>
+        </arguments>
+    </virtualType>
+</config>

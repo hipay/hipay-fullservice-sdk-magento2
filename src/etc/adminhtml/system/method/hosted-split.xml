@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+<group id="hipay_hostedsplit" translate="label" type="text" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="1">
+				<label>HiPay Fullservice Hosted Page Split Payment</label>
+				<comment></comment>
+				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+
+				 <field id="split_payments" translate="label comment" type="multiselect" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
+                	<label>Split Payment Profile</label>
+                	<comment>Select active split payments profiles</comment>
+                	<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProfile</source_model>
+                </field>
+                <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment products</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct</source_model>
+                </field> 
+                <field id="display_selector" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Display card selector</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+   				  <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Use 3D Secure</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ThreeDs</source_model>
+                </field>
+                 <field id="config_3ds_rules" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Rules 3D Secure</label>
+                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
+                    <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
+                </field>
+                 <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Custom CSS url</label>
+                    <comment>Important, HTTPS protocol is required</comment>
+                </field> 
+                 <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Template type</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
+                </field>
+                 <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Display hosted page in Iframe</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="allow_use_oneclick" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Use Oneclick</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+ 				<field id="filter_oneclick" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Rules Oneclick</label>
+                    <comment>Configure Rules to activate oneclick</comment>
+                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
+                    <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
+                </field>
+                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+                
+			</group>
+</include>

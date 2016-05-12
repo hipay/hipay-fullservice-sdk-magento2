@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * HiPay fullservice Magento2
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="HiPay\FullserviceMagento\Block\Adminhtml\PaymentProfile\Edit" name="paymentprofile_edit"/>
+        </referenceContainer>
+    </body>
+</page>

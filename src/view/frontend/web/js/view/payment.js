@@ -24,7 +24,7 @@ define(
         return Component.extend({
         	
         	defaults: {
-        		creditCardToken: window.checkoutConfig.payment.hiPayFullservice.selectedCard != "" ? window.checkoutConfig.payment.hiPayFullservice.selectedCard : null,
+        		creditCardToken: null,
         		redirectAfterPlaceOrder: false,
         		afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
         		allowOneclick: window.checkoutConfig.payment.hiPayFullservice.useOneclick,
@@ -32,7 +32,9 @@ define(
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',
-        		eci: 9,
+        		defaultEci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
+        		recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
+        		eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
         		showForm: true
         	},
         	getAfterPlaceOrderUrl: function(){
@@ -44,7 +46,9 @@ define(
                     .observe([
                         'selectedCard',
                         'createOneclick',
-                        'creditCardType'
+                        'creditCardType',
+                        'creditCardToken',
+                        'eci'
                     ]);
                 
                 this.showForm = ko.computed(function () {
@@ -59,11 +63,25 @@ define(
             initialize: function(){
             	var self = this;
             	this._super();
+            	
+            	if(this.selectedCard() && this.useOneclick()){
+            		this.eci(this.recurringEci);
+            		this.creditCardToken(this.selectedCard());
+            	}
+            	
             	//Set selected card token
                 this.selectedCard.subscribe(function(value) {
-                	self.creditCardToken = value;
+                	if(value){
+                		self.eci(self.recurringEci);           
+                	}
+                	else{
+                		self.eci(self.defaultEci);
+                	}
+
+                	self.creditCardToken(value);
                 	self.creditCardType(self.getCustomerCardByToken(value).ccType);
                 });
+            	
             },
             /**
              * @returns Array
@@ -91,8 +109,8 @@ define(
                     'method': this.item.method,
                     'additional_data': {
                         'create_oneclick': this.createOneclick(),
-                        'card_token': this.creditCardToken,
-                        'eci': this.eci,
+                        'card_token': this.creditCardToken(),
+                        'eci': this.eci(),
                         'cc_type': this.creditCardType()
                     }
                 };

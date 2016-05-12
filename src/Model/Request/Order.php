@@ -83,13 +83,13 @@ class Order extends BaseRequest{
 		//$httpRequest = $this->_context->getRequest();
 		
 		$orderRequest = new OrderRequest();
-		$orderRequest->orderid = $this->_order->getIncrementId();
-		$orderRequest->operation = $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
+		$orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
+		$orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
 		$orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: "cb"; 
-		$orderRequest->description = sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
+		$orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
 		$orderRequest->long_description = "";
 		$orderRequest->currency = $this->_order->getBaseCurrencyCode();
-		$orderRequest->amount = (float)$this->_order->getBaseGrandTotal();
+		$orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
 		$orderRequest->shipping = (float)$this->_order->getShippingAmount();
 		$orderRequest->tax = (float)$this->_order->getTaxAmount();
 		$orderRequest->cid = $this->_customerId;

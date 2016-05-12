@@ -64,7 +64,8 @@ define(
              */
 	        afterPlaceOrder: function () {
 	        	 var self = this;
-	        	if(this.isIframeMode() && !this.creditCardToken){
+
+	        	if(this.isIframeMode() && !this.creditCardToken()){
 	        		self.paymentReady(true);
 	        	}
 	        	else{
@@ -72,6 +73,9 @@ define(
 	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
 	        	}
 	        },
+	        getData: function(){
+            	return this._super(); 
+            },
 	        getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },

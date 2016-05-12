@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Fullservice" module="HiPay_FullserviceMagento" sortOrder="20" parent="Magento_Sales::sales" resource="HiPay_FullserviceMagento::hipay_payment" />
+        <add id="HiPay_FullserviceMagento::hipay_payment_profile" title="Payment Profile" module="HiPay_FullserviceMagento" sortOrder="10" parent="HiPay_FullserviceMagento::hipay_payment" action="hipay/paymentprofile" resource="HiPay_FullserviceMagento::hipay_payment_profile"/>
+        <add id="HiPay_FullserviceMagento::hipay_split_payment" title="Split Payment" module="HiPay_FullserviceMagento" sortOrder="20" parent="HiPay_FullserviceMagento::hipay_payment" action="hipay/splitpayment" resource="HiPay_FullserviceMagento::hipay_split_payment"/>
+    </menu>
+</config>

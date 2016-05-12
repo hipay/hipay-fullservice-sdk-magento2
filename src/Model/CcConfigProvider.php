@@ -56,7 +56,9 @@ class CcConfigProvider implements ConfigProviderInterface {
 	/**
 	 * @param CcConfig $ccConfig
 	 * @param PaymentHelper $paymentHelper
-	 * @param array $methodCodes
+	 * @param \Magento\Framework\Url $urlBuilder
+	 * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
+	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 	 */
 	public function __construct(
 			CcConfig $ccConfig,

@@ -80,7 +80,7 @@ class HostedMethod extends FullserviceMethod {
 	protected function _setHostedUrl(\Magento\Sales\Model\Order $order){
 
 		
-		if(($token = $order->getPayment()->getAdditionalInformation('card_token')) != ""){
+		if($order->getPayment()->getAdditionalInformation('card_token') != ""){
 			$this->place($order->getPayment());
 		}
 		else{
@@ -105,12 +105,15 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
 	{
-		parent::capture($payment, $amount);
+	 	if (!$this->canCapture()) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The capture action is not available.'));
+        }
+        
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
 			if ($payment->getCcTransId()) {  //Is not the first transaction
 				// As we alredy hav a transaction reference, we can request a capture operation.
-				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 	
 			} 
 	

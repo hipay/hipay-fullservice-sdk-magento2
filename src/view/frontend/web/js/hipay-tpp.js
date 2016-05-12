@@ -122,7 +122,6 @@ var TPP = {
 			errors.code = 408;
 			var message = 'unallowed parameters: {'
 			for (var key in unallowedParams) {
-				console.log(unallowedParams[key]);
 				message += unallowedParams[key] + ' ';
 			}
 			message += '}';

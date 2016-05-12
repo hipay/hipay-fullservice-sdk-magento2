@@ -177,13 +177,17 @@ abstract class FullserviceMethod extends AbstractMethod {
 	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
 		
 		$info = $this->getInfoInstance();
-		foreach ($this->_additionalInformationKeys as $key) {	
+		foreach ($this->getAddtionalInformationKeys() as $key) {	
 			if(!is_null($data->getData($key))){			
 				$info->setAdditionalInformation($key,$data->getData($key));
 			}
 		}
 		
 		return $this;
+	}
+	
+	protected function getAddtionalInformationKeys(){
+		return $this->_additionalInformationKeys;
 	}
 	
 	/**
@@ -233,7 +237,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	
 		try {
 	
-			$response = $this->_getGatewayManager($payment->getOrder())->requestNewOrder();
+			$response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
 				
 			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
 			$pendingUrl = $successUrl;
@@ -289,8 +293,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
 			if ($payment->getCcTransId()) {  //Is not the first transaction
-				// As we alredy hav a transaction reference, we can request a capture operation.
-				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+				// As we already have a transaction reference, we can request a capture operation.
+				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 	
 			} else { //Ok, it's the first transaction, so we request a new order
 				$this->place($payment);
@@ -322,7 +326,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
-		$this->_getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
+		$this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
 		return $this;
 	}
 	
@@ -337,7 +341,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
-		$this->_getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
+		$this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
 		return false;
 	}
 	
@@ -353,7 +357,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
-		$this->_getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
+		$this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
 		return false;
 	}
 	
@@ -362,8 +366,9 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @param \Magento\Sales\Model\Order $order
 	 * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
 	 */
-	protected function _getGatewayManager($order){
+	public function getGatewayManager($order){
 		return $this->_gatewayManagerFactory->create($order);
 	}
+	
 	
 }
