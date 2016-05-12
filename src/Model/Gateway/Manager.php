@@ -184,7 +184,7 @@ class Manager {
 	}
 	
 	private function cleanTransactionValue($transactionReference){
-		list($tr,) = explode("-", $transactionReference);
+		list($tr) = explode("-", $transactionReference);
 		return $tr;
 	}
 	
@@ -239,7 +239,7 @@ class Manager {
 	 */
 	protected function _requestOperation($operationType,$amount=null,$operationId=null){
 		
-		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getLastTransId());
+		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
 		if(is_null($operationId)){			
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}

@@ -494,6 +494,7 @@ class Notify {
 		$payment = $this->_order->getPayment()
 								->setPreparedMessage($this->_generateComment(''))
 								->setTransactionId($this->_transaction->getTransactionReference(). "-refund")
+								->setCcTransId($this->_transaction->getTransactionReference())
 								->setParentTransactionId($parentTransactionId)
 								->setIsTransactionClosed($isCompleteRefund)
 								->registerRefundNotification(-1 * $this->_transaction->getRefundedAmount());
@@ -517,19 +518,18 @@ class Notify {
 	{
 	
 		$this->_order->getPayment()->setIsTransactionPending(true);
+		
+		$this->_order->getPayment()->setPreparedMessage($this->_generateComment(''))
+		->setTransactionId($this->_transaction->getTransactionReference() . "-authorization-pending")
+		->setCcTransId($this->_transaction->getTransactionReference())
+		->setCurrencyCode($this->_transaction->getCurrency())
+		->setIsTransactionClosed(0)
+		->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
+		
 		$this->_order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
 		$this->_doTransactionMessage("Transaction is fraud challenged. Waiting for accept or deny action.");
 		$this->_order->save();
 
-		/*$payment->setPreparedMessage($this->_generateComment(''))
-		->setTransactionId($this->_transaction->getTransactionReference() . "-authorization")
-		->setCurrencyCode($this->_transaction->getCurrency())
-		->setIsTransactionClosed(0)
-		->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
-			
-		if (!$this->_order->getEmailSent()) {
-			$this->orderSender->send($this->_order);
-		}*/
 		
 
 	}
@@ -577,6 +577,7 @@ class Notify {
 	
 		$this->_order->getPayment()
 						->setTransactionId($this->_transaction->getTransactionReference(). "-denied")
+						->setCcTransId($this->_transaction->getTransactionReference())
 						->setNotificationResult(true)
 						->setIsTransactionClosed(true)
 						->deny(false);
@@ -606,6 +607,7 @@ class Notify {
 	
 		$payment->setPreparedMessage($this->_generateComment(''))
 				->setTransactionId($this->_transaction->getTransactionReference() . "-authorization")
+				->setCcTransId($this->_transaction->getTransactionReference())
 				/*->setParentTransactionId(null)*/
 				->setCurrencyCode($this->_transaction->getCurrency())
 				->setIsTransactionClosed(0)
@@ -639,6 +641,7 @@ class Notify {
 		$payment->setTransactionId(
 				$this->_transaction->getTransactionReference() . "-capture"
 				);
+		$payment->setCcTransId($this->_transaction->getTransactionReference());
 		$payment->setCurrencyCode(
 				$this->_transaction->getCurrency()
 				);

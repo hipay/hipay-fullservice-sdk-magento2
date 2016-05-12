@@ -137,6 +137,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $fraudDenySender;
 	
+	const SLEEP_TIME = 5;
+	
 	/**
 	 *
 	 * @param \Magento\Framework\Model\Context $context
@@ -194,6 +196,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->_assignAdditionalInformation($data);
 		
 		return $this;
+	}
+	
+	/**
+	 * Wait for notification
+	 */
+	protected function sleep(){
+		sleep(self::SLEEP_TIME);
 	}
 	
 	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
@@ -349,6 +358,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
 		$this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return $this;
 	}
 	
@@ -365,6 +376,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 		parent::acceptPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
 		$this->fraudAcceptSender->send($payment->getOrder());
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return false;
 	}
 	
@@ -382,6 +395,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 		parent::denyPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
 		$this->fraudDenySender->send($payment->getOrder());
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return false;
 	}
 	
