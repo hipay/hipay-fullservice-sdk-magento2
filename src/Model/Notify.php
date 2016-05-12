@@ -67,27 +67,81 @@ class Notify {
 	
 	/**
 	 * 
+	 * @var \HiPay\FullserviceMagento\Model\CardFactory $_cardFactory
+	 */
+	protected $_cardFactory;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory
+	 */
+	protected $ppFactory;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
+	 */
+	protected $spFactory;
+	
+	/**
+	 * 
+	 * @var bool $isSplitPayment
+	 */
+	protected $isSplitPayment = false;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\SplitPayment $splitPayment
+	 */
+	protected $splitPayment;
+	
+	/**
 	 * @var ResourceOrder $orderResource
 	 */
 	protected $orderResource;
+
 	
 	public function __construct(
 			\Magento\Sales\Model\OrderFactory $orderFactory,
+			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
 			OrderSender $orderSender,
 			FraudReviewSender $fraudReviewSender,
 			FraudDenySender $fraudDenySender,
 			\Magento\Payment\Helper\Data $paymentHelper,
+			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
+			\HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
 			ResourceOrder $orderResource,
+
 			$params = []
 			){
 
 			$this->_orderFactory = $orderFactory;
+			$this->_cardFactory = $cardFactory;
 			$this->orderSender = $orderSender;
 			$this->fraudReviewSender = $fraudReviewSender;
 			$this->fraudDenySender = $fraudDenySender;
+
+			$this->ppFactory = $ppFactory;
+			$this->spFactory = $spFactory;
+
 			$this->orderResource = $orderResource;
+
 	
 			if (isset($params['response']) && is_array($params['response'])) {
+				
+				$incrementId = $params['response']['order']['id'];
+				if(strpos($incrementId,'-split-') !== false){
+					list($realIncrementId,,$splitPaymentId) = explode("-",$incrementId);
+					$params['response']['order']['id']= $realIncrementId;
+					$this->isSplitPayment = true;
+					$this->splitPayment = $this->spFactory->create()->load((int)$splitPaymentId);
+					
+					if(!$this->splitPayment->getId()){
+						throw new \Exception(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId));
+					}
+					
+				}
+				
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 
 				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
@@ -108,6 +162,13 @@ class Notify {
 		
 	}
 	
+
+	public function processSplitPayment(){
+		$amount = $this->_order->getOrderCurrency()->formatPrecision($this->splitPayment->getAmountToPay(), 2,[],false);
+		$this->_doTransactionMessage(__('Split Payment #%1. %2 %3.',$this->splitPayment->getId(),$amount,$this->_transaction->getMessage()));
+		return $this;
+	}
+
 	
 	protected function canProcessTransaction(){
 		
@@ -142,10 +203,17 @@ class Notify {
 	}
 	
 	
-	
+
 	
 	public function processTransaction(){
 		
+
+		if($this->isSplitPayment){
+			$this->processSplitPayment();
+			return $this;
+		}
+		
+
 		if(!$this->canProcessTransaction()){
 			return $this;
 		}
@@ -166,6 +234,7 @@ class Notify {
 		//Write about notification in order history
 		$this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 		
+
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110
 				$this->_setFraudDetected();
@@ -194,10 +263,23 @@ class Notify {
 				break;
 			case TransactionStatus::CAPTURE_REQUESTED: //117
 				$this->_doTransactionCaptureRequested();
+				
 				break;
 			case TransactionStatus::CAPTURED: //118
-			case TransactionStatus::PARTIALLY_CAPTURED: //119
+			case TransactionStatus::PARTIALLY_CAPTURED: //119				
 				$this->_doTransactionCapture();
+				/**
+				 * save token and credit card informations encryted
+				 */
+				$this->_saveCc();
+				
+				/**
+				 * save split payments
+				 */
+				if(!$this->orderAlreadySplit()){				
+					$this->insertSplitPayment();
+				}
+				
 				break;
 			case TransactionStatus::REFUND_REQUESTED: //124
 				$this->_doTransactionRefundRequested();
@@ -238,6 +320,113 @@ class Notify {
 		$this->orderResource->getConnection()->commit();
 		
 		return $this;
+	}
+	
+	protected function orderAlreadySplit(){
+		/** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
+		$splitPayments = $this->spFactory->create()->getCollection()->addFieldToFilter('order_id',$this->_order->getId());
+		if($splitPayments->count()){
+			return true;
+		}
+		return false;
+	}
+	
+	protected function insertSplitPayment(){
+		//Check if it is split payment and insert it
+		$profileId=0;
+		if(($profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id')))
+		{
+			
+			$profile = $this->ppFactory->create()->load($profileId);
+			if($profile->getId()){
+				
+				$splitAmounts = $profile->splitAmount($this->_order->getBaseGrandTotal());
+				
+				/** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
+				for ($i=0;$i<count($splitAmounts);$i++){
+					
+					$splitPayment = $this->spFactory->create();
+					
+					$splitPayment->setAmountToPay($splitAmounts[$i]['amountToPay']);
+					$splitPayment->setAttempts($i==0 ? 1 : 0);
+					$splitPayment->setCardToken($this->_transaction->getPaymentMethod()->getToken());
+					$splitPayment->setCustomerId($this->_order->getCustomerId());
+					$splitPayment->setDateToPay($splitAmounts[$i]['dateToPay']);
+					$splitPayment->setMethodCode($this->_order->getPayment()->getMethod());
+					$splitPayment->setRealOrderId($this->_order->getIncrementId());
+					$splitPayment->setOrderId($this->_order->getId());
+					$splitPayment->setStatus($i==0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE : SplitPayment::SPLIT_PAYMENT_STATUS_PENDING );
+					$splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
+					$splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
+					$splitPayment->setProfileId($profileId);
+					
+					try {
+						$splitPayment->save();
+					} catch (Exception $e) {
+						if($this->_order->canHold()){
+							$this->_order->hold();
+						}
+						$this->_doTransactionMessage($e->getMessage());
+					}
+				}
+
+			}
+			else{
+				if($this->_order->canHold()){
+					$this->_order->hold();
+				}
+				$this->_doTransactionMessage(__('Order holded because split payments was not saved!'));
+			}
+		}
+	}
+	
+	protected function _canSaveCc(){
+		return (bool)in_array($this->_transaction->getPaymentProduct(),['visa','american-express','mastercard','cb']) 
+					&& $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+	}
+	
+	/**
+	 * @return bool|\HiPay\FullserviceMagento\Model\Card 
+	 */
+	protected function _saveCc(){
+		
+		if($this->_canSaveCc())
+		{
+			$token = $this->_transaction->getPaymentMethod()->getToken();
+			if(!$this->_cardTokenExist($token))
+			{
+				/** @var $card \HiPay\FullserviceMagento\Model\Card */
+				$card = $this->_cardFactory->create();
+				/** @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod */
+				$paymentMethod = $this->_transaction->getPaymentMethod();
+				$paymentProduct = $this->_transaction->getPaymentProduct();
+				$card->setCcToken($token);
+				$card->setCustomerId($this->_order->getCustomerId());
+				$card->setCcExpMonth($paymentMethod->getCardExpiryMonth());
+				$card->setCcExpYear($paymentMethod->getCardExpiryYear());
+				$card->setCcNumberEnc($paymentMethod->getPan());
+				$card->setCcType($paymentProduct);
+				$card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
+				$card->setName(sprintf(__('Card %s - %s'),$paymentMethod->getBrand(),$paymentMethod->getPan()));
+				
+
+				try {
+					
+					return $card->save();
+				} 
+				catch (\Exception $e) {
+					$this->_generateComment(__("Card not registered! Due to: %s",$e->getMessage()),true);
+				}
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	protected function _cardTokenExist($token)
+	{
+		return (bool)$this->_cardFactory->create()->load($token,'cc_token')->getId();
 	}
 	
 	/**
@@ -455,6 +644,7 @@ class Notify {
 				$this->_transaction->getCapturedAmount(),
 				$skipFraudDetection && $parentTransactionId
 				);
+		
 		$this->_order->save();
 	
 		// notify customer
@@ -467,6 +657,7 @@ class Notify {
 							true
 							)->save();
 		}
+		
 	}
 	
 	/**

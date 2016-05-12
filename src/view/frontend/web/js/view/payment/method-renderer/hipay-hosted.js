@@ -17,7 +17,7 @@ define(
     [
      	'jquery',
      	'ko',
-        'Magento_Checkout/js/view/payment/default',
+        'HiPay_FullserviceMagento/js/view/payment',
         'HiPay_FullserviceMagento/js/model/iframe',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
@@ -31,6 +31,22 @@ define(
             },
             redirectAfterPlaceOrder: false,
             isInAction: iframe.isInAction,
+            placeOrderHandler: null,
+            validateHandler: null,
+            
+            /**
+             * @param {Function} handler
+             */
+            setPlaceOrderHandler: function (handler) {
+                this.placeOrderHandler = handler;
+            },
+
+            /**
+             * @param {Function} handler
+             */
+            setValidateHandler: function (handler) {
+                this.validateHandler = handler;
+            },
             initObservable: function () {
                 this._super()
                     .observe('paymentReady');
@@ -48,7 +64,8 @@ define(
              */
 	        afterPlaceOrder: function () {
 	        	 var self = this;
-	        	if(this.isIframeMode()){
+
+	        	if(this.isIframeMode() && !this.creditCardToken()){
 	        		self.paymentReady(true);
 	        	}
 	        	else{
@@ -56,9 +73,15 @@ define(
 	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
 	        	}
 	        },
+	        getData: function(){
+            	return this._super(); 
+            },
 	        getAfterPlaceOrderUrl: function(){
 	        	return this.afterPlaceOrderUrl[this.getCode()];
 	        },
+	        context: function() {
+                return this;
+            },
 	        getCode: function() {
 	            return 'hipay_hosted';
 	        },

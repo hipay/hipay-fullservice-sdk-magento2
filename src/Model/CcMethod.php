@@ -67,10 +67,6 @@ class CcMethod extends FullserviceMethod {
 	 */
 	protected $urlBuilder;
 	
-	/**
-	 * @var string[] keys to import in payment additionnal informations
-	 */
-	protected $_additionalInformationKeys = ['card_token'];
 	
 	/**
 	 * @param \Magento\Framework\Model\Context $context
@@ -104,7 +100,10 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger, $gatewayManagerFactory,$urlBuilder);
+				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
+						$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
+						$urlBuilder,$resource,$resourceCollection,$data);
+				
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
 	}
@@ -172,6 +171,11 @@ class CcMethod extends FullserviceMethod {
 		parent::validate();
 	
 		$info = $this->getInfoInstance();
+		
+		if($info->getAdditionalInformation('card_token')){
+			return $this;
+		}
+		
 		$errorMsg = false;
 		$availableTypes = explode(',', $this->getConfigData('cctypes'));
 	

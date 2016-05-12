@@ -15,22 +15,21 @@
 
 define(
     [
+     	'ko',
      	'jquery',
-     	'Magento_Payment/js/view/payment/cc-form',
+     	'HiPay_FullserviceMagento/js/view/payment/cc-form',
      	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($,Component,TPP,storage,fullScreenLoader) {
+    function (ko, $,Component,TPP,storage,fullScreenLoader) {
+
         'use strict';
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-        		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
-        		creditCardToken: null,
-        		redirectAfterPlaceOrder: false,
-        		afterPlaceOrderUrl: window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl
+        		showCcForm: true
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -47,6 +46,22 @@ define(
              */
             setValidateHandler: function (handler) {
                 this.validateHandler = handler;
+            },
+            /**
+             * @override
+             */
+            initObservable: function () {
+            	var self = this;
+                this._super();
+                
+                this.showCcForm = ko.computed(function () {
+
+                    return !(self.useOneclick() && self.customerHasCard()) ||
+                    		self.selectedCard() === undefined ||
+                    		self.selectedCard() === '';
+                }, this);
+
+                return this;
             },
         	/**
              * @returns {Boolean}
@@ -76,19 +91,7 @@ define(
                 return 'hipay_cc';
             },
             getData: function() {
-                return {
-                    'method': this.item.method,
-                    'additional_data': {
-                        'cc_cid': this.creditCardVerificationNumber(),
-                        'cc_ss_start_month': this.creditCardSsStartMonth(),
-                        'cc_ss_start_year': this.creditCardSsStartYear(),
-                        'cc_type': this.creditCardType(),
-                        'cc_exp_year': this.creditCardExpYear(),
-                        'cc_exp_month': this.creditCardExpMonth(),
-                        'cc_number': this.creditCardNumber(),
-                        'card_token': this.creditCardToken
-                    }
-                };
+                return this._super();
             },
             /**
              * Display error message
@@ -102,12 +105,12 @@ define(
                         message: error
                     });
                 }
-            },
+            },          
             /**
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(this.afterPlaceOrderUrl);
+	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
 	        },
             generateToken: function (data,event){
             	var self = this,
@@ -117,9 +120,13 @@ define(
                 if (event) {
                     event.preventDefault();
                 }
-            	
-            	
+                
 	            if(this.validateHandler()){
+
+	            	 if(this.creditCardToken()){
+	            		 	self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
+	            		 	return;
+	                 }
 	            	
 	            	 isTokenizeProcessing = $.Deferred();
 	                    $.when(isTokenizeProcessing).done(
@@ -147,8 +154,7 @@ define(
 	                      },
 		                      function (response) {
 		                          	if(response.token){
-		                          		
-		                          		self.creditCardToken = response.token;
+		                          		self.creditCardToken(response.token);
 		                          		isTokenizeProcessing.resolve();
 		                          	}
 		                          	else{
@@ -158,8 +164,6 @@ define(
 		                          	fullScreenLoader.stopLoader();
 	                          },
 	                          function (response) {
-	                        	  console.log('error');
-	                        	  console.log(response);
 	                            	var error = response;
 	                            	isTokenizeProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();

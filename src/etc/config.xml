@@ -47,10 +47,25 @@
                 <order_status>pending</order_status>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
                 <env>stage</env>
 			</hipay_cc>
+			<hipay_ccsplit>
+				<model>HiPay\FullserviceMagento\Model\Method\CcSplitMethod</model>
+				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Credit Card Split payment</title>
+                <payment_action>Sale</payment_action>
+                <order_status>pending</order_status>
+                <cctypes>AE,VI,MC</cctypes>
+                <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <allowspecific>0</allowspecific>
+                <debug>0</debug>
+                <env>stage</env>
+			</hipay_ccsplit>
 			<hipay_hosted>
 				<model>HiPay\FullserviceMagento\Model\HostedMethod</model>
 				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
@@ -63,12 +78,32 @@
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
                 <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
                 <env>STAGE</env>
 			</hipay_hosted>
+			<hipay_hostedsplit>
+				<model>HiPay\FullserviceMagento\Model\Method\HostedSplitMethod</model>
+				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Credit Card Split payment</title>
+                <payment_action>Sale</payment_action>
+                <order_status>pending</order_status>
+                <iframe_mode>1</iframe_mode>
+                <payment_products>american-express,visa,mastercard</payment_products>
+                <payment_products_categories></payment_products_categories>
+                <display_selector>1</display_selector>
+                <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <template>basic-js</template>
+                <css></css>
+                <allowspecific>0</allowspecific>
+                <debug>0</debug>
+                <env>STAGE</env>
+			</hipay_hostedsplit>
 			<hipay_sisal>
 				<model>HiPay\FullserviceMagento\Model\Method\Sisal</model>
 				<payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
@@ -81,6 +116,7 @@
 			    <payment_products_categories>realtime-banking</payment_products_categories>
 			    <display_selector>0</display_selector>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+			    <allow_use_oneclick>0</allow_use_oneclick>
 			    <template>basic-js</template>
 			    <css></css>
 			    <allowspecific>0</allowspecific>
@@ -99,6 +135,7 @@
 			    <payment_products>qiwi-wallet</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>ewallet</payment_products_categories>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+			    <allow_use_oneclick>0</allow_use_oneclick>
 			    <allowspecific>0</allowspecific>
 			    <allowed_currencies>RUB</allowed_currencies> <!-- Custom local configuration -->
 			    <debug>0</debug>

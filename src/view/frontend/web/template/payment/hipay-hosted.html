@@ -31,15 +31,57 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <!-- ko if: !isIframeMode() -->
-        	<div><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
-		<!-- /ko -->
+        <form class="form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
+            'transparent':{
+                'context': context(),
+                'gateway': getCode(),
+            }, 'validation':[]}">
+         <!-- ko if: (useOneclick() && customerHasCard()) -->
+         <div>
+             <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
+                 <span><!-- ko i18n: 'Your credit cards'--><!-- /ko --></span>
+             </label>
+             <div class="control">
+                 <select name="payment[cc_token]" class="select"
+                         data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
+                                     mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
+                                     enable: true,
+                                     options: getCustomerCards(),
+                                     optionsValue: 'ccToken',
+                                     optionsText: 'name',
+                                     optionsCaption: $t('Pay with a new card'),
+                                     value: selectedCard">
+                 </select>
+             </div>
+         </div>
+         <div>&nbsp;</div>
+         <!-- /ko -->
+         <!-- ko if: (useOneclick())-->
+                <div class="field" data-bind="visible: showForm()">
+                    <label class="label">
+                        <span></span>
+                    </label>
+                    <div class="control">
+                        <input type="checkbox"
+                               name="payment[create_oneclick]"
+                               value="1"
+                               checked="checked"
+                               class="checkbox"
+                               data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}"/>
+                        <label class="label" for="create_oneclick">
+                            <span><!-- ko i18n: 'Save this card for future use'--><!-- /ko --></span>
+                        </label>
+                    </div>
+                </div>
+                <!-- /ko -->
+         </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div class="actions-toolbar" data-bind="visible: !isIframeMode()">
+        
+        <div class="actions-toolbar" data-bind="visible: !isIframeMode() || !showForm()">
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
@@ -54,8 +96,10 @@
                 </button>
             </div>
         </div>
-        
-        <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction()">
+         <!-- ko if: !isIframeMode() -->
+        	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
+		<!-- /ko -->
+        <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
             <div class="primary">
                 <button data-role="review-save"
                         type="submit"

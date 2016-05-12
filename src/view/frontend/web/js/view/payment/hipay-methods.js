@@ -29,8 +29,16 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
             },
             {
+                type: 'hipay_hostedsplit',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
+            },
+            {
                 type: 'hipay_cc',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+            },
+            {
+                type: 'hipay_ccsplit',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc-split'
             },
             {
             	// New local method with hosted template
@@ -39,7 +47,6 @@ define(
             }
             ,
             {
-            	// New local method with hosted template
                 type: 'hipay_qiwiwallet',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-qiwiwallet'
             }
