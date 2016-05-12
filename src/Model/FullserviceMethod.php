@@ -125,6 +125,17 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_additionalInformationKeys = ['card_token','create_oneclick','eci','cc_type'];
 	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+	 */
+	protected $fraudAcceptSender;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 */
+	protected $fraudDenySender;
 	
 	/**
 	 *
@@ -149,6 +160,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	        \Magento\Payment\Model\Method\Logger $logger,
 			ManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -158,6 +171,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
 				$this->urlBuilder = $urlBuilder;
+				$this->fraudAcceptSender = $fraudAcceptSender;
+				$this->fraudDenySender = $fraudDenySender;
 	}
 	
 	/**
@@ -349,6 +364,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
+		$this->fraudAcceptSender->send($payment->getOrder());
 		return false;
 	}
 	
@@ -365,6 +381,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
+		$this->fraudDenySender->send($payment->getOrder());
 		return false;
 	}
 	

@@ -48,4 +48,28 @@
                 <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
             </field>
 		</group>
+		<group id="fraud_payment_accept" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Fraud Payment Accept Email</label>
+			<comment>This email is sended to customer, if his payment is approved by merchant</comment>
+			<field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            	<label>Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+            <field id="identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Accept Email Sender</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+            </field>
+            <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Payment Accept Template</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+            </field>
+            <field id="copy_to" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Accept Email Copy To</label>
+                <comment>Separate by ",".</comment>
+            </field>
+            <field id="copy_method" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Payment Accept Email Copy Method</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+            </field>
+		</group>
 </include>

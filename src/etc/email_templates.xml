@@ -18,5 +18,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
     <template id="hipay_fraud_payment_review_template" label="Fraud Payment Review" file="hipay_fraud_payment_review.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
     <template id="hipay_fraud_payment_deny_template" label="Fraud Payment Deny" file="hipay_fraud_payment_deny.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+    <template id="hipay_fraud_payment_accept_template" label="Fraud Payment Accepted" file="hipay_fraud_payment_accept.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
     <template id="hipay_hosted_payment_link_template" label="Hosted payment link" file="hipay_hosted_payment_link.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
 </config>

@@ -47,6 +47,7 @@ class HostedSplitMethod extends HostedMethod {
 	 * @var bool
 	 */
 	protected $_canUseInternal = false;
+
 	
 	/**
 	 * 
@@ -59,11 +60,13 @@ class HostedSplitMethod extends HostedMethod {
 	 * @param \Magento\Payment\Model\Method\Logger $logger
 	 * @param GatewayManagerFactory $gatewayManagerFactory
 	 * @param \Magento\Framework\Url $urlBuilder
-	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profilefactory
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
-	 *  @SuppressWarnings(PHPMD.ExcessiveParameterList)
+	 * @SuppressWarnings(PHPMD.ExcessiveParameterList)
 	 */
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
@@ -75,6 +78,8 @@ class HostedSplitMethod extends HostedMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -82,7 +87,7 @@ class HostedSplitMethod extends HostedMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$resource,$resourceCollection,$data);
+									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 

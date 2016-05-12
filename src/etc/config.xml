@@ -36,6 +36,12 @@
                 <identity>sales</identity>
                 <copy_method>bcc</copy_method>
             </fraud_payment_deny>
+            <fraud_payment_accept>
+				<enabled>0</enabled>
+                <template>hipay_fraud_payment_accept_template</template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </fraud_payment_accept>
             <hosted_payment_link>
 				<enabled>1</enabled>
                 <template>hipay_hosted_payment_link_template</template>

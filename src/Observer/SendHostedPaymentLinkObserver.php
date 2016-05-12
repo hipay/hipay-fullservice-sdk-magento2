@@ -19,7 +19,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 
 /**
- * PayPal module observer
+ * HiPay module observer
  */
 class SendHostedPaymentLinkObserver implements ObserverInterface
 {

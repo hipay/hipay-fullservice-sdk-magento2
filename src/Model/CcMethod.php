@@ -76,14 +76,18 @@ class CcMethod extends FullserviceMethod {
 	
 	
 	/**
+	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
 	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
 	 * @param \Magento\Payment\Helper\Data $paymentData
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param Logger $logger
-	 * @param GatewayManagerFactory $gatewayManagerFactory,
+	 * @param \Magento\Payment\Model\Method\Logger $logger
+	 * @param GatewayManagerFactory $gatewayManagerFactory
+	 * @param \Magento\Framework\Url $urlBuilder
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -101,6 +105,8 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -109,7 +115,7 @@ class CcMethod extends FullserviceMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 						$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-						$urlBuilder,$resource,$resourceCollection,$data);
+						$urlBuilder,$fraudDenySender,$fraudAcceptSender,$resource,$resourceCollection,$data);
 				
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
