@@ -202,18 +202,17 @@ class Notify {
 	}
 	
 	
-
-	
-	
 	public function processTransaction(){
 
-		
-		if(!$this->canProcessTransaction()){
+
+
+		if($this->isSplitPayment){
+			$this->processSplitPayment();
 			return $this;
 		}
 		
-		if($this->isSplitPayment){
-			$this->processSplitPayment();
+
+		if(!$this->canProcessTransaction()){
 			return $this;
 		}
 
@@ -234,6 +233,7 @@ class Notify {
 		//Write about notification in order history
 		$this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 		
+
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::BLOCKED: //110
 				$this->_setFraudDetected();
