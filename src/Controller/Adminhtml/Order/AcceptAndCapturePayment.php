@@ -49,36 +49,6 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $message = __('The payment has been authorized.');
                 $this->messageManager->addSuccess($message);
                 
-                
-                /**
-                 * Check invoice create availability
-                 */
-                /*if (!$order->canInvoice()) {
-                	 $this->messageManager->addError(__('The order does not allow creating an invoice.'));
-                	 $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
-                	return $resultRedirect;
-                }
-                //Now, capture the payment
-                $invoice = $order->prepareInvoice();
-                if (!$invoice->getTotalQty()) {
-                	throw new LocalizedException($this->__('Cannot create an invoice without products.'));
-                }
-                
-                $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-                	
-                $invoice->register();
-                $invoice->getOrder()->setIsInProcess(true);
-                
-                $transactionSave = $this->_objectManager->create(
-                		'Magento\Framework\DB\Transaction'
-                		)->addObject(
-                				$invoice
-                				)->addObject(
-                						$invoice->getOrder()
-                						);
-                
-                $transactionSave->save();*/
-                
                 $order->getPayment()->getMethodInstance()->capture($order->getPayment(),$order->getBaseTotalDue());
                 
                 $message = __('The payment has been captured too.');
