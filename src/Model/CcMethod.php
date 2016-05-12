@@ -74,6 +74,13 @@ class CcMethod extends FullserviceMethod {
 	 */
 	protected $urlBuilder;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = true;
+	
 	
 	/**
 	 * 
@@ -148,6 +155,57 @@ class CcMethod extends FullserviceMethod {
 		$this->_assignAdditionalInformation($data);
 		
 		return $this;
+	}
+	
+
+	/**
+	 * Instantiate state and set it to state object
+	 *
+	 * @param string $paymentAction
+	 * @param \Magento\Framework\DataObject $stateObject
+	 * @return void
+	 */
+	public function initialize($paymentAction, $stateObject)
+	{
+	
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
+		$order->setCanSendNewEmailFlag(false);
+		$payment->setAmountAuthorized($order->getTotalDue());
+		$payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+	
+		$this->processAction($paymentAction, $payment);
+	
+		$stateObject->setIsNotified(false);
+	
+	}
+	
+	/**
+	 * Perform actions based on passed action name
+	 *
+	 * @param string $action
+	 * @param Magento\Payment\Model\InfoInterface $payment
+	 * @return void
+	 */
+	protected function processAction($action, $payment)
+	{
+		$totalDue = $payment->getOrder()->getTotalDue();
+		$baseTotalDue = $payment->getOrder()->getBaseTotalDue();
+	
+		switch ($action) {
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
+				$this->authorize($payment, $baseTotalDue);
+				// base amount will be set inside
+				$payment->setAmountAuthorized($totalDue);
+				break;
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
+				$payment->setAmountAuthorized($totalDue);
+				$payment->setBaseAmountAuthorized($baseTotalDue);
+				$this->capture($payment, $payment->getOrder()->getBaseGrandTotal());
+				break;
+			default:
+				break;
+		}
 	}
 	
 	/**

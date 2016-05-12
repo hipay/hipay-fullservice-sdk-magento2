@@ -183,12 +183,12 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 	    	switch ($state)
 	    	{
 	    		case TransactionState::COMPLETED;
-	    		case TransactionState::STATE_FORWARDING:
-	    		case TransactionState::STATE_PENDING:
+	    		case TransactionState::FORWARDING:
+	    		case TransactionState::PENDING:
 	    			$this->setStatus(self::SPLIT_PAYMENT_STATUS_COMPLETE);
 	    			break;
-	    		case TransactionState::STATE_DECLINED:
-	    		case TransactionState::STATE_ERROR:
+	    		case TransactionState::DECLINED:
+	    		case TransactionState::ERROR:
 	    		default:
 	    			$this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
 	    			$this->sendErrorEmail();

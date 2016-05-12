@@ -36,11 +36,13 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
  				
             	//1. Authorize the payment
                 $order->getPayment()->accept();
-                $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
-                $order->setStatus(\HiPay\FullserviceMagento\Model\Config::STATUS_AUTHORIZED);
-                $message = __('The payment has been authorized.');
-                       
+                /* @var $orderService \Magento\Sales\Model\Service\OrderService */
+                $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
+                $orderService->setState($order, \Magento\Sales\Model\Order::STATE_PROCESSING,\HiPay\FullserviceMagento\Model\Config::STATUS_AUTHORIZED);
+
                 $this->orderRepository->save($order);
+                       
+                $message = __('The payment has been authorized.');
                 $this->messageManager->addSuccess($message);
                 
                 

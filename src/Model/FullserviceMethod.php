@@ -262,7 +262,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 			$response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
 				
 			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
-			$pendingUrl = $successUrl;
+			$pendingUrl = $this->urlBuilder->getUrl('checkout/cart',['_secure'=>true]);;
 			$forwardUrl = $response->getForwardUrl();;
 			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
 			$redirectUrl = $successUrl;
@@ -286,8 +286,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 			}
 				
 			//always in pending, because only notification can change order/transaction statues
-			$payment->setIsTransactionPending(true);
-				
+			$payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
+			$payment->getOrder()->setStatus($this->getConfigData('order_status'));
 			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
 	
 		} catch (\Exception $e) {
