@@ -22,8 +22,6 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
-use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
-use Magento\Framework\Exception\LocalizedException;
 use HiPay\Fullservice\Request\RequestSerializer;
 
 class Manager {

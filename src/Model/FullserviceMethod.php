@@ -326,6 +326,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 			if ($payment->getCcTransId()) {  //Is not the first transaction
 				// As we already have a transaction reference, we can request a capture operation.
 				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+				//wait for notification to set correct data to order
+				$this->sleep();
 	
 			} else { //Ok, it's the first transaction, so we request a new order
 				$this->place($payment);

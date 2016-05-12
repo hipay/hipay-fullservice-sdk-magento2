@@ -53,7 +53,7 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                 /**
                  * Check invoice create availability
                  */
-                if (!$order->canInvoice()) {
+                /*if (!$order->canInvoice()) {
                 	 $this->messageManager->addError(__('The order does not allow creating an invoice.'));
                 	 $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);
                 	return $resultRedirect;
@@ -77,7 +77,9 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                 						$invoice->getOrder()
                 						);
                 
-                $transactionSave->save();
+                $transactionSave->save();*/
+                
+                $order->getPayment()->getMethodInstance()->capture($order->getPayment(),$order->getBaseTotalDue());
                 
                 $message = __('The payment has been captured too.');
                 $this->messageManager->addSuccess($message);
