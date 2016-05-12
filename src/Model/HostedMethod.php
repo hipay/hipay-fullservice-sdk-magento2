@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
@@ -51,6 +51,13 @@ class HostedMethod extends FullserviceMethod {
 	 * @var bool
 	 */
 	protected $_isInitializeNeeded = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = true;
 	
 	
 	/**

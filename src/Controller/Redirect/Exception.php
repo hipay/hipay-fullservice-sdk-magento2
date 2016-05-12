@@ -30,7 +30,7 @@ class Exception extends Fullservice {
 	public function execute(){
 		
 		$this->messageManager->addErrorMessage(__('An error was occured.'));
-		$this->_redirect('checkout/onepage/failure');
+		$this->_redirect('checkoutcart');
 
 	}
 	

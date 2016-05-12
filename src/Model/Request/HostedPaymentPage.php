@@ -29,12 +29,11 @@ class HostedPaymentPage extends Order{
 		unset($hppRequest->payment_product);
 		
 		$hppRequest->css = $this->_config->getValue('css_url');
-		$hppRequest->template = (bool)$this->_config->getValue('iframe_mode') ? 'iframe' : $this->_config->getValue('template');
+		$hppRequest->template = ((bool)$this->_config->getValue('iframe_mode') && !$this->_config->isAdminArea()) ? 'iframe' : $this->_config->getValue('template');
 		
 		$hppRequest->payment_product_list = implode(",",$this->_config->getPaymentProductsList());
 
 		$hppRequest->payment_product_category_list = implode(",", $this->_config->getPaymentProductCategoryList());
-		
 		
 		return $hppRequest;
 		

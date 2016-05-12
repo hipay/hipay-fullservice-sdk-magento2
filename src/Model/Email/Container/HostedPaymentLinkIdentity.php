@@ -17,16 +17,16 @@ namespace HiPay\FullserviceMagento\Model\Email\Container;
 
 use Magento\Sales\Model\Order\Email\Container\Container;
 
-class FraudDenyIdentity extends Container
+class HostedPaymentLinkIdentity extends Container
 {
     /**
      * Configuration paths
      */
-    const XML_PATH_EMAIL_COPY_METHOD = 'hipay/fraud_payment_deny/copy_method';
-    const XML_PATH_EMAIL_COPY_TO = 'hipay/fraud_payment_deny/copy_to';
-    const XML_PATH_EMAIL_IDENTITY = 'hipay/fraud_payment_deny/identity';
-    const XML_PATH_EMAIL_TEMPLATE = 'hipay/fraud_payment_deny/template';
-    const XML_PATH_EMAIL_ENABLED = 'hipay/fraud_payment_deny/enabled';
+    const XML_PATH_EMAIL_COPY_METHOD = 'hipay/hosted_payment_link/copy_method';
+    const XML_PATH_EMAIL_COPY_TO = 'hipay/hosted_payment_link/copy_to';
+    const XML_PATH_EMAIL_IDENTITY = 'hipay/hosted_payment_link/identity';
+    const XML_PATH_EMAIL_TEMPLATE = 'hipay/hosted_payment_link/template';
+    const XML_PATH_EMAIL_ENABLED = 'hipay/hosted_payment_link/enabled';
 
     /**
      * @return bool

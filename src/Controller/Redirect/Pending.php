@@ -31,7 +31,7 @@ class Pending extends Fullservice {
 		
 		$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
 		
-		$this->_redirect('checkout/onepage/failure');
+		$this->_redirect('checkout/cart');
 
 	}
 	

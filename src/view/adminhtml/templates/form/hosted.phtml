@@ -1,0 +1,29 @@
+<?php 
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://opensource.org/licenses/mit-license.php MIT License
+ *
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \HiPay\FullserviceMagento\Block\Cc\Hosted $block
+ */
+$code = $block->escapeHtml($block->getMethodCode());
+?>
+<fieldset class="fieldset payment items <?php /* @noEscape */ echo $code; ?>"
+          id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display: none;">
+          <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */ echo $code; ?>_eci" value="1" />
+          
+          <?php echo $block->escapeHtml( __('An email with a payment link will be sent to the customer.')) ?>
+          
+</fieldset>

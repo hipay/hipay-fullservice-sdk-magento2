@@ -28,11 +28,17 @@ class Form extends \Magento\Payment\Block\Form\Cc {
 	protected $_template = 'HiPay_FullserviceMagento::form/cc.phtml';
 	
 	/**
-	 * Payment config model
 	 *
-	 * @var \Magento\Payment\Model\Config
+	 * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
 	 */
-	protected $_paymentConfig;
+	protected $_hipayConfig;
+	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+	 */
+	protected $configFactory;
+
 	
 	/**
 	 * @param \Magento\Framework\View\Element\Template\Context $context
@@ -42,10 +48,23 @@ class Form extends \Magento\Payment\Block\Form\Cc {
 	public function __construct(
 			\Magento\Framework\View\Element\Template\Context $context,
 			\Magento\Payment\Model\Config $paymentConfig,
+			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 			array $data = []
 			) {
-				parent::__construct($context, $data);
-				$this->_paymentConfig = $paymentConfig;
+				parent::__construct($context,$paymentConfig, $data);
+				$this->configFactory = $configFactory;
+				
+	}
+	
+	/**
+	 * @return \HiPay\FullserviceMagento\Model\Config
+	 */
+	public function getConfig(){
+		if(is_null($this->_hipayConfig)){
+			$this->_hipayConfig = $this->configFactory->create(['params'=>['methodCode'=>$this->getMethodCode()]]);
+		}
+		
+		return $this->_hipayConfig;
 	}
 	
 	/**
@@ -61,6 +80,19 @@ class Form extends \Magento\Payment\Block\Form\Cc {
 			return true;
 		}
 		return false;
+	}
+	
+
+	public function getEnv(){
+		return $this->getConfig()->getApiEnv();
+	}
+	
+	public function getApiUsername(){
+		return $this->getConfig()->getApiUsername();
+	}
+	
+	public function getApiPassword(){
+		return $this->getConfig()->getApiPassword();
 	}
 	
 }

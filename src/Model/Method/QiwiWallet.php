@@ -41,6 +41,13 @@ class QiwiWallet extends FullserviceMethod{
 	protected $_canRefundInvoicePartial = false;
 	
 	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = false;
+	
+	/**
 	 * @var string[] keys to import in payment additionnal informations
 	 */
 	protected $_additionalInformationKeys = ['qiwiuser'];

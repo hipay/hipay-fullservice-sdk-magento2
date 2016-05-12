@@ -111,7 +111,6 @@ class Notify {
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
 			\HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
 			ResourceOrder $orderResource,
-
 			$params = []
 			){
 
@@ -203,10 +202,9 @@ class Notify {
 	}
 	
 	
-
-	
 	public function processTransaction(){
-		
+
+
 
 		if($this->isSplitPayment){
 			$this->processSplitPayment();
@@ -217,6 +215,7 @@ class Notify {
 		if(!$this->canProcessTransaction()){
 			return $this;
 		}
+
 		
 		/**
 		 * Begin transaction to lock this order record during update

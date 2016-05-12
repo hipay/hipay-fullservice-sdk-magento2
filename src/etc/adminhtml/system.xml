@@ -22,6 +22,7 @@
 			<tab>sales</tab>
 			<resource>HiPay_FullserviceMagento::hipay</resource>
 			<include path="HiPay_FullserviceMagento::system/credentials.xml"/>
+			<include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
 			<include path="HiPay_FullserviceMagento::system/emails.xml"/>
 		</section>
 		<section id="payment">

@@ -216,7 +216,7 @@ abstract class AbstractConfig implements ConfigInterface {
      * @param string $fieldName
      * @return string|null
      */
-    protected function _mapGeneralFieldset($fieldName)
+    protected function _mapGeneralFieldset($fieldName,$group = 'hipay_credentials')
     {
         switch ($fieldName) {
             case 'api_username':
@@ -225,7 +225,7 @@ abstract class AbstractConfig implements ConfigInterface {
             case 'api_username_test':
             case 'api_password_test':
             case 'secret_passphrase_test':
-            	return "hipay/hipay_credentials/{$fieldName}";
+            	return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
         }

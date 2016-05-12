@@ -51,13 +51,29 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	protected $_configSDK;
 	
 	/**
+	 * 
+	 * @var \Magento\Store\Model\StoreManagerInterface $_storeManager
+	 */
+	protected $_storeManager;
+	
+	/**
+	 * 
+	 * @var \Magento\Framework\App\State $appState
+	 */
+	protected $appState;
+	
+	/**
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 */
 	public function __construct(
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+			\Magento\Store\Model\StoreManagerInterface $storeManager,
+			\Magento\Framework\App\State $appState,
 			 $params = []
 			) {
 				parent::__construct($scopeConfig);
+				$this->_storeManager = $storeManager;
+				$this->appState = $appState;
 				
 				if ($params) {
 					$method = array_shift($params);
@@ -67,10 +83,26 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 						$this->setStoreId($storeId);
 					}
 				}
+				
+				$apiUsername = $this->getApiUsername();
+				$apiPassword =  $this->getApiPassword();
+				
+				//If is Admin store, we use MO/TO credentials
+				if($this->isAdminArea()){
+					$apiUsername = $this->getApiUsernameMoto();
+					$apiPassword = $this->getApiPasswordMoto();
+				}
 
-				$this->_configSDK = new ConfigSDK($this->getApiUsername(), $this->getApiPassword(),$this->getApiEnv(),'application/json');
+				$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
 	}
     
+	/**
+	 * Return if current store is admin
+	 * @return bool
+	 */
+	public function isAdminArea(){
+		return $this->appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+	}
     /**
      * Templates type source getter
      *
@@ -171,6 +203,35 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		
 		return  $this->getGeneraleValue($key);
 	}
+	
+	public function getApiUsernameMoto(){
+		$key = "api_username";
+		if($this->isStageMode()){
+			$key = "api_username_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	public function getApiPasswordMoto(){
+		$key = "api_password";
+		if($this->isStageMode()){
+			$key = "api_password_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	public function getSecretPassphraseMoto(){
+		$key = "secret_passphrase";
+		if($this->isStageMode()){
+			$key = "secret_passphrase";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	
 	
 	public function getApiEndpoint(){
 		return $this->_configSDK->getApiEndpoint();

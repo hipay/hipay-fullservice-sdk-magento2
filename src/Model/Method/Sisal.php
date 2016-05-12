@@ -40,6 +40,13 @@ class Sisal extends HostedMethod{
 	 */
 	protected $_canRefundInvoicePartial = false;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = false;
+	
 	
 	
 }

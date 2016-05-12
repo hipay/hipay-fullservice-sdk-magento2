@@ -91,6 +91,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @var bool
 	 */
 	protected $_canReviewPayment = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = false;
 
 	
 	/**

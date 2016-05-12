@@ -51,6 +51,13 @@ class CcMethod extends FullserviceMethod {
 	protected $_canSaveCc = false;
 	
 	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = true;
+	
+	/**
 	 * @var \Magento\Framework\Module\ModuleListInterface
 	 */
 	protected $_moduleList;

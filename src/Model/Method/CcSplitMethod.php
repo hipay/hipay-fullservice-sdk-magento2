@@ -36,6 +36,13 @@ class CcSplitMethod extends CcMethod {
 	protected $_code = self::HIPAY_METHOD_CODE;	
 	
 	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = false;
+	
+	/**
 	 * 
 	 * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profilefactory
 	 */

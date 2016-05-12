@@ -42,6 +42,13 @@ class HostedSplitMethod extends HostedMethod {
 	protected $profileFactory;
 	
 	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = false;
+	
+	/**
 	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
