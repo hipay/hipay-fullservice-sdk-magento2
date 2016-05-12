@@ -34,10 +34,10 @@ class CheckHttpSignatureObserver implements ObserverInterface
 	];
 	
 	/**
-	 * 
-	 * @var \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
+	 *
+	 * @var \Magento\Sales\Model\OrderFactory $_orderFactory
 	 */
-	protected $orderRepository;
+	protected $_orderFactory;
 	
 	/**
 	 * 
@@ -50,10 +50,10 @@ class CheckHttpSignatureObserver implements ObserverInterface
      *
      */
     public function __construct(
-			\Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
+			 \Magento\Sales\Model\OrderFactory $orderFactory,
     		ConfigFactory $configFactory
     ) {
-		$this->orderRepository = $orderRepository;
+		$this->_orderFactory = $orderFactory;
 		$this->_configFactory = $configFactory;
     }
 
@@ -72,17 +72,22 @@ class CheckHttpSignatureObserver implements ObserverInterface
     	
     	if(in_array($request->getFullActionName(),$this->_actionsToCheck)){
     		try {
-    			
-	    		$order = $this->orderRepository->get($this->getOrderId($request));
+    			$orderId = $this->getOrderId($request);
+	    		$order = $this->_orderFactory->create()->loadByIncrementId($orderId);
+	    		if(!$order->getId()){
+	    			throw new \Exception("Order not found for id: " . $orderId);
+	    		}
 	    		/** @var $config \HiPay\FullserviceMagento\Model\Config */
 	    		$config = $this->_configFactory->create(['params'=>['methodCode'=>$order->getPayment()->getMethod(),'storeId'=>$order->getStoreId()]]);
 	    		$secretPassphrase = $config->getSecretPassphrase();
 	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase)){
-		    		$request->setDispatched(false);			
+		    		$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+		    		$controller->getResponse()->setBody("Wrong Secret Signature!");
 	    		}
 
-    		} catch (Exception $e) {
-    			$request->setDispatched(false);
+    		} catch (\Exception $e) {
+    			$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+    			$controller->getResponse()->setBody("Exception during check signature.");
     		}
     	}
     	
