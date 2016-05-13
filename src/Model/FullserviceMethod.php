@@ -125,6 +125,19 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_additionalInformationKeys = ['card_token','create_oneclick','eci','cc_type'];
 	
+	/**
+	 * 
+	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+	 */
+	protected $fraudAcceptSender;
+	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 */
+	protected $fraudDenySender;
+	
+	const SLEEP_TIME = 5;
 	
 	/**
 	 *
@@ -149,6 +162,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	        \Magento\Payment\Model\Method\Logger $logger,
 			ManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -158,6 +173,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 				$this->_gatewayManagerFactory = $gatewayManagerFactory;
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
 				$this->urlBuilder = $urlBuilder;
+				$this->fraudAcceptSender = $fraudAcceptSender;
+				$this->fraudDenySender = $fraudDenySender;
 	}
 	
 	/**
@@ -179,6 +196,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->_assignAdditionalInformation($data);
 		
 		return $this;
+	}
+	
+	/**
+	 * Wait for notification
+	 */
+	protected function sleep(){
+		sleep(self::SLEEP_TIME);
 	}
 	
 	protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data){
@@ -247,7 +271,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 			$response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
 				
 			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
-			$pendingUrl = $successUrl;
+			$pendingUrl = $this->urlBuilder->getUrl('checkout/cart',['_secure'=>true]);;
 			$forwardUrl = $response->getForwardUrl();;
 			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
 			$redirectUrl = $successUrl;
@@ -271,8 +295,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 			}
 				
 			//always in pending, because only notification can change order/transaction statues
-			$payment->setIsTransactionPending(true);
-				
+			$payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
+			$payment->getOrder()->setStatus($this->getConfigData('order_status'));
 			$payment->setAdditionalInformation('redirectUrl',$redirectUrl);
 	
 		} catch (\Exception $e) {
@@ -302,6 +326,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 			if ($payment->getCcTransId()) {  //Is not the first transaction
 				// As we already have a transaction reference, we can request a capture operation.
 				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+				//wait for notification to set correct data to order
+				$this->sleep();
 	
 			} else { //Ok, it's the first transaction, so we request a new order
 				$this->place($payment);
@@ -334,6 +360,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
 		$this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return $this;
 	}
 	
@@ -349,6 +377,9 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function acceptPayment(InfoInterface $payment){
 		parent::acceptPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
+		$this->fraudAcceptSender->send($payment->getOrder());
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return false;
 	}
 	
@@ -365,6 +396,9 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function denyPayment(InfoInterface $payment){
 		parent::denyPayment($payment);
 		$this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
+		$this->fraudDenySender->send($payment->getOrder());
+		//wait for notification to set correct data to order
+		$this->sleep();
 		return false;
 	}
 	

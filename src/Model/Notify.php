@@ -23,6 +23,7 @@ use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
 
 class Notify {
 	
@@ -443,7 +444,7 @@ class Notify {
 				$payment->setAdditionalInformation('fraud_score',$fraudSreening->getScoring());
 				$payment->setAdditionalInformation('fraud_review',$fraudSreening->getReview());
 				
-				$isDeny = ($fraudSreening->getResult()  != 'challenged' || $this->_transaction->getState() == self::STATE_DECLINED);
+				$isDeny = ($fraudSreening->getResult()  != 'challenged' || $this->_transaction->getState() == TransactionState::DECLINED);
 				
 				if(!$isDeny){
 					$this->fraudReviewSender->send($this->_order);
@@ -493,6 +494,7 @@ class Notify {
 		$payment = $this->_order->getPayment()
 								->setPreparedMessage($this->_generateComment(''))
 								->setTransactionId($this->_transaction->getTransactionReference(). "-refund")
+								->setCcTransId($this->_transaction->getTransactionReference())
 								->setParentTransactionId($parentTransactionId)
 								->setIsTransactionClosed($isCompleteRefund)
 								->registerRefundNotification(-1 * $this->_transaction->getRefundedAmount());
@@ -516,7 +518,20 @@ class Notify {
 	{
 	
 		$this->_order->getPayment()->setIsTransactionPending(true);
-		$this->_doTransactionAuthorization();
+		
+		$this->_order->getPayment()->setPreparedMessage($this->_generateComment(''))
+		->setTransactionId($this->_transaction->getTransactionReference() . "-authorization-pending")
+		->setCcTransId($this->_transaction->getTransactionReference())
+		->setCurrencyCode($this->_transaction->getCurrency())
+		->setIsTransactionClosed(0)
+		->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
+		
+		$this->_order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
+		$this->_doTransactionMessage("Transaction is fraud challenged. Waiting for accept or deny action.");
+		$this->_order->save();
+
+		
+
 	}
 
 	
@@ -562,6 +577,7 @@ class Notify {
 	
 		$this->_order->getPayment()
 						->setTransactionId($this->_transaction->getTransactionReference(). "-denied")
+						->setCcTransId($this->_transaction->getTransactionReference())
 						->setNotificationResult(true)
 						->setIsTransactionClosed(true)
 						->deny(false);
@@ -591,6 +607,7 @@ class Notify {
 	
 		$payment->setPreparedMessage($this->_generateComment(''))
 				->setTransactionId($this->_transaction->getTransactionReference() . "-authorization")
+				->setCcTransId($this->_transaction->getTransactionReference())
 				/*->setParentTransactionId(null)*/
 				->setCurrencyCode($this->_transaction->getCurrency())
 				->setIsTransactionClosed(0)
@@ -624,6 +641,7 @@ class Notify {
 		$payment->setTransactionId(
 				$this->_transaction->getTransactionReference() . "-capture"
 				);
+		$payment->setCcTransId($this->_transaction->getTransactionReference());
 		$payment->setCurrencyCode(
 				$this->_transaction->getCurrency()
 				);

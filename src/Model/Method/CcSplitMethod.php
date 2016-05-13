@@ -59,13 +59,15 @@ class CcSplitMethod extends CcMethod {
 	 * @param \Magento\Payment\Model\Method\Logger $logger
 	 * @param GatewayManagerFactory $gatewayManagerFactory
 	 * @param \Magento\Framework\Url $urlBuilder
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profilefactory
+	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
-	 *  @SuppressWarnings(PHPMD.ExcessiveParameterList)
+	 * @SuppressWarnings(PHPMD.ExcessiveParameterList)
 	 */
 	public function __construct(
 			\Magento\Framework\Model\Context $context,
@@ -77,6 +79,8 @@ class CcSplitMethod extends CcMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
@@ -86,7 +90,7 @@ class CcSplitMethod extends CcMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$moduleList,$localeDate,$resource,$resourceCollection,$data);
+									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$moduleList,$localeDate,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 

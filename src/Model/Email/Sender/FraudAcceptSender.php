@@ -23,10 +23,10 @@ use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order as OrderResource;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
-use HiPay\FullserviceMagento\Model\Email\Container\FraudReviewIdentity;
+use HiPay\FullserviceMagento\Model\Email\Container\FraudAcceptIdentity;
 
 
-class FraudReviewSender extends Sender
+class FraudAcceptSender extends Sender
 {
     /**
      * @var PaymentHelper
@@ -60,7 +60,7 @@ class FraudReviewSender extends Sender
 	/**
 	 * 
 	 * @param Template $templateContainer
-	 * @param FraudReviewIdentity $identityContainer
+	 * @param FraudAcceptIdentity $identityContainer
 	 * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
 	 * @param \Psr\Log\LoggerInterface $logger
 	 * @param Renderer $addressRenderer
@@ -71,7 +71,7 @@ class FraudReviewSender extends Sender
 	 */
     public function __construct(
         Template $templateContainer,
-        FraudReviewIdentity $identityContainer,
+        FraudAcceptIdentity $identityContainer,
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,

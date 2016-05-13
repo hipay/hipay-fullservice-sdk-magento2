@@ -22,8 +22,6 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
-use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
-use Magento\Framework\Exception\LocalizedException;
 use HiPay\Fullservice\Request\RequestSerializer;
 
 class Manager {
@@ -184,7 +182,7 @@ class Manager {
 	}
 	
 	private function cleanTransactionValue($transactionReference){
-		list($tr,) = explode("-", $transactionReference);
+		list($tr) = explode("-", $transactionReference);
 		return $tr;
 	}
 	
@@ -239,7 +237,7 @@ class Manager {
 	 */
 	protected function _requestOperation($operationType,$amount=null,$operationId=null){
 		
-		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getLastTransId());
+		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
 		if(is_null($operationId)){			
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}

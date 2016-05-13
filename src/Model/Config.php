@@ -198,7 +198,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	public function getSecretPassphrase(){
 		$key = "secret_passphrase";
 		if($this->isStageMode()){
-			$key = "secret_passphrase";
+			$key = "secret_passphrase_test";
 		}
 		
 		return  $this->getGeneraleValue($key);
@@ -225,7 +225,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	public function getSecretPassphraseMoto(){
 		$key = "secret_passphrase";
 		if($this->isStageMode()){
-			$key = "secret_passphrase";
+			$key = "secret_passphrase_test";
 		}
 	
 		return  $this->getGeneraleValue($key,'hipay_credentials_moto');

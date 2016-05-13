@@ -74,16 +74,27 @@ class CcMethod extends FullserviceMethod {
 	 */
 	protected $urlBuilder;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = true;
+	
 	
 	/**
+	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
 	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
 	 * @param \Magento\Payment\Helper\Data $paymentData
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param Logger $logger
-	 * @param GatewayManagerFactory $gatewayManagerFactory,
+	 * @param \Magento\Payment\Model\Method\Logger $logger
+	 * @param GatewayManagerFactory $gatewayManagerFactory
+	 * @param \Magento\Framework\Url $urlBuilder
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -101,6 +112,8 @@ class CcMethod extends FullserviceMethod {
 			\Magento\Payment\Model\Method\Logger $logger,
 			GatewayManagerFactory $gatewayManagerFactory,
 			\Magento\Framework\Url $urlBuilder,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
+			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -109,7 +122,7 @@ class CcMethod extends FullserviceMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 						$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-						$urlBuilder,$resource,$resourceCollection,$data);
+						$urlBuilder,$fraudDenySender,$fraudAcceptSender,$resource,$resourceCollection,$data);
 				
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
@@ -142,6 +155,57 @@ class CcMethod extends FullserviceMethod {
 		$this->_assignAdditionalInformation($data);
 		
 		return $this;
+	}
+	
+
+	/**
+	 * Instantiate state and set it to state object
+	 *
+	 * @param string $paymentAction
+	 * @param \Magento\Framework\DataObject $stateObject
+	 * @return void
+	 */
+	public function initialize($paymentAction, $stateObject)
+	{
+	
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
+		$order->setCanSendNewEmailFlag(false);
+		$payment->setAmountAuthorized($order->getTotalDue());
+		$payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+	
+		$this->processAction($paymentAction, $payment);
+	
+		$stateObject->setIsNotified(false);
+	
+	}
+	
+	/**
+	 * Perform actions based on passed action name
+	 *
+	 * @param string $action
+	 * @param Magento\Payment\Model\InfoInterface $payment
+	 * @return void
+	 */
+	protected function processAction($action, $payment)
+	{
+		$totalDue = $payment->getOrder()->getTotalDue();
+		$baseTotalDue = $payment->getOrder()->getBaseTotalDue();
+	
+		switch ($action) {
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_AUTH:
+				$this->authorize($payment, $baseTotalDue);
+				// base amount will be set inside
+				$payment->setAmountAuthorized($totalDue);
+				break;
+			case \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE:
+				$payment->setAmountAuthorized($totalDue);
+				$payment->setBaseAmountAuthorized($baseTotalDue);
+				$this->capture($payment, $payment->getOrder()->getBaseGrandTotal());
+				break;
+			default:
+				break;
+		}
 	}
 	
 	/**
