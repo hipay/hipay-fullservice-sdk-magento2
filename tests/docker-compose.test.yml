@@ -1,4 +1,5 @@
 magento2:
+  container_name: hipay_fullservice_m2
   image: sirateck/devops-magento2
   ports:
     - "8080:80"
