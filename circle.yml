@@ -1,7 +1,23 @@
 machine:
-  php:
-    version: 5.5.0
+  services:
+    - docker
     
 dependencies:
   pre:
-    - composer config -g github-oauth.github.com $GITHUB_API_TOKEN
+    - sudo rm /usr/local/bin/docker-compose
+    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+    - chmod +x docker-compose
+    - sudo mv docker-compose /usr/local/bin
+  cache_directories:
+    - "~/docker"
+  override:
+    - cd tests/
+    - if [[ -e ~/docker/m2.tar ]]; then docker load --input ~/docker/m2.tar; fi
+    - docker-compose pull magento2
+    - mkdir -p ~/docker; docker save magento2 > ~/docker/m2.tar
+    
+test:
+  pre:
+    - cd test/ 
+  override:
+    - docker-compose run -rm -e magento2 magento dev:test:unit
