@@ -1,7 +1,7 @@
 machine:
   services:
     - docker
-    
+
 dependencies:
   pre:
     - sudo rm /usr/local/bin/docker-compose
@@ -12,12 +12,12 @@ dependencies:
     - "~/docker"
   override:
     - cd tests/
-    - if [[ -e ~/docker/m2.tar ]]; then docker load --input ~/docker/m2.tar; fi
-    - docker-compose pull magento2
-    - mkdir -p ~/docker; docker save magento2 > ~/docker/m2.tar
+    - if [[ -e ~/docker/compose-images.tar ]]; then docker load --input ~/docker/compose-images; fi
+    - docker-compose -f docker-compose.test.yml pull
+    - mkdir -p ~/docker; docker save sirateck/devops-magento2 mysql:5.6 selenium/standalone-firefox  > ~/docker/compose-images.tar
     
 test:
   pre:
     - cd test/ 
   override:
-    - docker-compose run -rm -e magento2 magento dev:test:unit
+    - docker-compose -f docker-compose.test.yml -p magento2 run -rm -e GITHUB_API_TOKEN -e MAGE_ACCOUNT_PRIVATE_KEY -e MAGE_ACCOUNT_PUBLIC_KEY  magento2 php vendor/bin/phpunit -c vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
