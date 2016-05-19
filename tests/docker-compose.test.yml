@@ -1,5 +1,5 @@
 magento2:
-  container_name: hipay_fullservice_m2
+  container_name: magento2
   image: sirateck/devops-magento2
   ports:
     - "8080:80"
@@ -7,8 +7,8 @@ magento2:
     - db
     - selenium
   env_file:
-    - env/mage.env.sample
-    - env/module.env.sample
+    - env/mage.env.test
+    - env/module.env.test
 db:
   image: mysql:5.6
   environment:
