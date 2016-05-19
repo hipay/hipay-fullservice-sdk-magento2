@@ -137,10 +137,16 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $fraudDenySender;
 	
+	/**
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+	 */
+	protected $_hipayConfig;
+	
 	const SLEEP_TIME = 5;
 	
 	/**
-	 *
+	 * 
 	 * @param \Magento\Framework\Model\Context $context
 	 * @param \Magento\Framework\Registry $registry
 	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -148,6 +154,11 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @param \Magento\Payment\Helper\Data $paymentData
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
 	 * @param \Magento\Payment\Model\Method\Logger $logger
+	 * @param ManagerFactory $gatewayManagerFactory
+	 * @param \Magento\Framework\Url $urlBuilder
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
@@ -164,6 +175,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
+			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -175,6 +187,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 				$this->urlBuilder = $urlBuilder;
 				$this->fraudAcceptSender = $fraudAcceptSender;
 				$this->fraudDenySender = $fraudDenySender;
+				
+				$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->getCode()]]);
 	}
 	
 	/**
@@ -236,16 +250,18 @@ abstract class FullserviceMethod extends AbstractMethod {
 		return true;
 	}
 	
-	/**
-	 * Check whether payment method can be used with the quote
-	 *
-	 * @param \Magento\Quote\Api\Data\CartInterface|null $quote
-	 * @return bool
-	 */
-	public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
-	{
-		return $this->isActive($quote ? $quote->getStoreId() : null);
-	}
+	 /**
+     * Is active
+     *
+     * @param int|null $storeId
+     * @return bool
+     */
+    public function isActive($storeId = null)
+    {
+        return (bool)(int)$this->getConfigData('active', $storeId) && $this->_hipayConfig->hasCredentials();
+    }
+    
+   
 	
 	/**
 	 * Mapper from HiPay-specific payment actions to Magento payment actions
