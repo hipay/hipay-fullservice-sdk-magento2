@@ -153,7 +153,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 	protected function getCustomerCards()
 	{
 		if (!($customerId = $this->customerSession->getCustomerId())) {
-			return false;
+			return [];
 		}
 		if (!$this->_collection) {
 			$this->_collection = $this->_collectionFactory->create();
@@ -163,7 +163,7 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			->onlyValid();
 	
 		}
-		return $this->_collection->count() > 0 ? $this->_collection : [] ;
+		return $this->_collection;
 	}
 	
 	protected function useOneclick($methodCode){
