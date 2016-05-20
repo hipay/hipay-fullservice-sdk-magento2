@@ -92,8 +92,14 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 					$apiUsername = $this->getApiUsernameMoto();
 					$apiPassword = $this->getApiPasswordMoto();
 				}
-
-				$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
+				
+				//@TODO Find a better way for verification of api username and api password
+				try {					
+					$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
+				} catch (\Exception $e) {
+					$this->_configSDK = null;
+				}
+				
 	}
     
 	/**
@@ -177,6 +183,28 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE;
 	}
 	
+	public function hasCredentials(){
+		
+		//default api username, password, secret passphrase
+		$apiUsername = $this->getApiUsername();
+		$apiPassword = $this->getApiPassword();
+		$secretKey = $this->getSecretPassphrase();
+		
+		//check if is admin are and change values if needed
+		if($this->isAdminArea()){
+			$apiUsername = $this->getApiUsernameMoto();
+			$apiPassword = $this->getApiPasswordMoto();
+			$secretKey = $this->getSecretPassphraseMoto();
+		}
+		
+		//return false if one of them if empty
+		if(empty($apiUsername) || empty($apiPassword) || empty($secretKey)){
+			return false;
+		}
+		
+		 return true;
+	}
+	
 	public function getApiUsername(){
 		$key = "api_username";
 		if($this->isStageMode()){
@@ -234,27 +262,27 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	
 	
 	public function getApiEndpoint(){
-		return $this->_configSDK->getApiEndpoint();
+		return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpoint() : '';
 	}
 	
 	public function getApiEndpointProd(){
-		return $this->_configSDK->getApiEndpointProd();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getApiEndpointProd() : '';
 	}
 	
 	public function getApiEndpointStage(){
-		return $this->_configSDK->getApiEndpointStage();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getApiEndpointStage() : '';
 	}
 	
 	public function getSecureVaultEndpointProd(){
-		return $this->_configSDK->getSecureVaultEndpointProd();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getSecureVaultEndpointProd() : '';
 	}
 	
 	public function getSecureVaultEndpointStage(){
-		return $this->_configSDK->getSecureVaultEndpointStage();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getSecureVaultEndpointStage() : '';
 	}
 	
 	public function getSecureVaultEndpoint(){
-		return $this->_configSDK->getSecureVaultEndpoint();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getSecureVaultEndpoint() : '';
 	}
 	
 	public function getApiEnv(){

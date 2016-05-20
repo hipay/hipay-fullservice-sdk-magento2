@@ -62,6 +62,7 @@ class HostedSplitMethod extends HostedMethod {
 	 * @param \Magento\Framework\Url $urlBuilder
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -80,6 +81,7 @@ class HostedSplitMethod extends HostedMethod {
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
+			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -87,7 +89,7 @@ class HostedSplitMethod extends HostedMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$resource,$resourceCollection,$data);
+									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 
