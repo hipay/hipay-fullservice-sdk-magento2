@@ -15,7 +15,7 @@ dependencies:
   cache_directories:
     - "~/docker"
   override:
-    - if [[ -e ~/docker/compose-images.tar ]]; then docker load --input ~/docker/compose-images; fi
+    - if [[ -e ~/docker/compose-images.tar ]]; then docker load --input ~/docker/compose-images.tar; fi
     - docker-compose -f tests/docker-compose.test.yml pull
     - mkdir -p ~/docker; docker save sirateck/devops-magento2 mysql:5.6 selenium/standalone-firefox  > ~/docker/compose-images.tar
     
@@ -23,4 +23,4 @@ test:
   pre:
     - docker-compose -f tests/docker-compose.test.yml up -d db selenium
   override:
-    - docker-compose -f tests/docker-compose.test.yml run --rm -e GITHUB_API_TOKEN -e MAGE_ACCOUNT_PRIVATE_KEY -e MAGE_ACCOUNT_PUBLIC_KEY -e MAGE_INSTALL_SAMPLE_DATA='' CUSTOM_PACKAGES=hipay/hipay-fullservice-sdk-magento2=dev-$CIRCLE_BRANCH  magento2 phpunit -c ../../../vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
+    - docker-compose -f tests/docker-compose.test.yml run --rm -e GITHUB_API_TOKEN=$GITHUB_API_TOKEN -e MAGE_ACCOUNT_PRIVATE_KEY=$MAGE_ACCOUNT_PRIVATE_KEY -e MAGE_ACCOUNT_PUBLIC_KEY=$MAGE_ACCOUNT_PUBLIC_KEY -e MAGE_INSTALL_SAMPLE_DATA='' -e CUSTOM_PACKAGES=hipay/hipay-fullservice-sdk-magento2=dev-$CIRCLE_BRANCH  magento2 phpunit -c ../../../vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
