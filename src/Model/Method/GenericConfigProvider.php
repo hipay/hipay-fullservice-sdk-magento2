@@ -95,14 +95,6 @@ class GenericConfigProvider implements ConfigProviderInterface {
 			$this->checkoutSession = $checkoutSession;
 			$this->_collectionFactory = $collectionFactory;
 			$this->customerSession = $customerSession;
-			
-			$this->_collection = $this->_collectionFactory->create();
-			
-				
-			$this->_collection
-			->filterByCustomerId($this->customerSession->getCustomerId())
-			->addOrder('card_id','desc')
-			->onlyValid();
 
 	}
 	
@@ -163,8 +155,15 @@ class GenericConfigProvider implements ConfigProviderInterface {
 		if (!($customerId = $this->customerSession->getCustomerId())) {
 			return false;
 		}
-		
-		return $this->_collection;
+		if (!$this->_collection) {
+			$this->_collection = $this->_collectionFactory->create();
+			$this->_collection
+			->filterByCustomerId($customerId)
+			->addOrder('card_id','desc')
+			->onlyValid();
+	
+		}
+		return $this->_collection->count() > 0 ? $this->_collection : [] ;
 	}
 	
 	protected function useOneclick($methodCode){
