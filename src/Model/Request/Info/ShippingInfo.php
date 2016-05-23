@@ -38,7 +38,9 @@ class ShippingInfo extends AbstractInfoRequest {
 	 */
 	protected function mapRequest() {
 		$customerShippingInfo = new CustomerShippingInfoRequest();
-
+		if($this->_order->getIsVirtual()){
+			return $customerShippingInfo;
+		}
 		
 		$customerShippingInfo->shipto_firstname = $this->_order->getCustomerFirstname();
 		$customerShippingInfo->shipto_lastname = $this->_order->getCustomerLastname();
