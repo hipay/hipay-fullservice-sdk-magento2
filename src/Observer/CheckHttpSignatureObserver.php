@@ -26,10 +26,10 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 class CheckHttpSignatureObserver implements ObserverInterface
 {
 	protected $_actionsToCheck = [
-			'hipay_redirect_accept',
+			/*'hipay_redirect_accept',
 			'hipay_redirect_cancel',
 			'hipay_redirect_decline',
-			'hipay_redirect_exception',
+			'hipay_redirect_exception',*/
 			'hipay_notify_index'
 	];
 	
