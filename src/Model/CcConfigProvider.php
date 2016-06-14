@@ -142,7 +142,7 @@ class CcConfigProvider implements ConfigProviderInterface {
 		$types = $this->getCcAvailableTypesOrdered();
 		foreach (array_keys($types) as $code) {
 			if (!array_key_exists($code, $icons)) {
-				$asset = $this->ccConfig->createAsset('HiPay_fullserviceMagento::images/cc/' . strtolower($code) . '.png');
+				$asset = $this->ccConfig->createAsset('HiPay_FullserviceMagento::images/cc/' . strtolower($code) . '.png');
 				$placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
 				if ($placeholder) {
 					list($width, $height) = getimagesize($asset->getSourceFile());
