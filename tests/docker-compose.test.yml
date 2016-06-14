@@ -3,9 +3,9 @@ magento2:
   image: sirateck/devops-magento2
   ports:
     - "8080:80"
+    - "4444"
   links:
     - db
-    - selenium
   env_file:
     - env/mage.env.test
     - env/module.env.test
@@ -15,3 +15,5 @@ db:
     - MYSQL_ROOT_PASSWORD=magento2
 selenium:
   image: selenium/standalone-firefox
+  ports:
+    - "4444:4444"
