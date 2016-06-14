@@ -261,3 +261,5 @@
 "Your order was canceled.","Your order was canceled."
 "Your order was declined.","Your order was declined."
 "Your payment is accepted.","Your payment is accepted."
+"HiPay Fullservice credentials Token JS configuration","HiPay Fullservice credentials Token JS configuration"
+"Generated in your HiPay BO (Integration => security settings => api credentials public).","Generated in your HiPay BO (Integration => security settings => api credentials public)."

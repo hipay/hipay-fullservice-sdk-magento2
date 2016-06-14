@@ -457,6 +457,17 @@ class CcMethod extends FullserviceMethod {
 		return $this->getConfigData('cctypes', $quote ? $quote->getStoreId() : null) && parent::isAvailable($quote);
 	}
 	
+	/**
+	 * Is active
+	 *
+	 * @param int|null $storeId
+	 * @return bool
+	 */
+	public function isActive($storeId = null)
+	{
+		return (bool)(int)$this->getConfigData('active', $storeId) && $this->_hipayConfig->hasCredentials(true);
+	}
+	
 	
 
 	

@@ -183,16 +183,25 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE;
 	}
 	
-	public function hasCredentials(){
+	public function hasCredentials($withTokenJs = false){
+		
+		if($withTokenJs){
+				
+			//token JS credential
+			$apiUsernameTokenJs = $this->getApiUsernameTokenJs();
+			$apiPasswordTokenJs = $this->getApiPasswordTokenJs();
+		
+			if(empty($apiUsernameTokenJs) || empty($apiPasswordTokenJs)){
+				return false;
+			}
+		
+		}
 		
 		//default api username, password, secret passphrase
 		$apiUsername = $this->getApiUsername();
 		$apiPassword = $this->getApiPassword();
 		$secretKey = $this->getSecretPassphrase();
 		
-		//token JS credential
-		$apiUsernameTokenJs = $this->getApiUsernameTokenJs();
-		$apiPasswordTokenJs = $this->getApiPasswordTokenJs();
 		
 		//check if is admin are and change values if needed
 		if($this->isAdminArea()){
@@ -202,8 +211,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		}
 		
 		//return false if one of them if empty
-		if(empty($apiUsername) || empty($apiPassword) || empty($secretKey) 
-				|| empty($apiUsernameTokenJs) || empty($apiPasswordTokenJs)){
+		if(empty($apiUsername) || empty($apiPassword) || empty($secretKey)){
 			return false;
 		}
 		
