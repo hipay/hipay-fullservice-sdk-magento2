@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Model;
 use Magento\Payment\Model\CcConfig;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\View\Asset\Source;
 
 
 class CcConfigProvider implements ConfigProviderInterface {
@@ -54,22 +55,28 @@ class CcConfigProvider implements ConfigProviderInterface {
 	protected $_hipayConfig;
 	
 	/**
-	 * @param CcConfig $ccConfig
+	 * @var \Magento\Framework\View\Asset\Source
+	 */
+	protected $assetSource;
+	
+	/**
 	 * @param PaymentHelper $paymentHelper
 	 * @param \Magento\Framework\Url $urlBuilder
 	 * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+	 * @param \Magento\Framework\View\Asset\Source $assetSource
 	 */
 	public function __construct(
-			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
-			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
+			Source $assetSource
 			) {
 			$this->method = $paymentHelper->getMethodInstance($this->methodCode);
 			$this->urlBuilder = $urlBuilder;
 			$this->_cctypeSource = $cctypeSource;
+			$this->assetSource = $assetSource;
 			
 			$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->methodCode]]);
 			
@@ -86,7 +93,8 @@ class CcConfigProvider implements ConfigProviderInterface {
 				'availableTypes'=>$this->getCcAvailableTypesOrdered(),
 				'env'=>$this->_hipayConfig->getApiEnv(),
 				'apiUsernameTokenJs'=>$this->_hipayConfig->getApiUsernameTokenJs(),
-				'apiPasswordTokenJs'=>$this->_hipayConfig->getApiPasswordTokenJs()
+				'apiPasswordTokenJs'=>$this->_hipayConfig->getApiPasswordTokenJs(),
+				'icons' => $this->getIcons()
         		],
 			],
 		] : [] ;
@@ -114,6 +122,32 @@ class CcConfigProvider implements ConfigProviderInterface {
 		}
 		
 		return $ordered;
+	}
+	
+	/**
+	 * Get icons for available payment methods
+	 *
+	 * @return array
+	 */
+	protected function getIcons()
+	{
+		$icons = [];
+		$types = $this->getCcAvailableTypesOrdered();
+		foreach (array_keys($types) as $code) {
+			if (!array_key_exists($code, $icons)) {
+				$asset = $this->ccConfig->createAsset('HiPay_fullserviceMagento::images/cc/' . strtolower($code) . '.png');
+				$placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
+				if ($placeholder) {
+					list($width, $height) = getimagesize($asset->getSourceFile());
+					$icons[$code] = [
+							'url' => $asset->getUrl(),
+							'width' => $width,
+							'height' => $height
+					];
+				}
+			}
+		}
+		return $icons;
 	}
 
 }

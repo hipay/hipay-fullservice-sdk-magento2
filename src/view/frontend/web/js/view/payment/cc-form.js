@@ -118,8 +118,8 @@ define(
                 return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
             },
             getIcons: function (type) {
-                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type)
-                    ? window.checkoutConfig.payment.ccform.icons[type]
+                return window.checkoutConfig.payment.hipayCc.icons.hasOwnProperty(type)
+                    ? window.checkoutConfig.payment.hipayCc.icons[type]
                     : false
             },
             getCcMonths: function() {
