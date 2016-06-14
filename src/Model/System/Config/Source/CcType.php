@@ -34,6 +34,8 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 	 */
 	protected $_scopeConfig;
 	
+	protected $_codeToLabel = ['VI' => 'Visa/Carte bleue', 'SM' => 'Maestro/Bancontact'];
+	
 	/**
 	 * Config
 	 *
@@ -49,7 +51,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 		$this->_paymentProductSource = $paymentProductSource;
 		$this->_scopeConfig = $scopeConfig;
 		
-		$this->_allowedTypes = ['VI', 'MC', 'AE','SM','cb','bcmc'];
+		$this->_allowedTypes = ['VI', 'MC', 'AE','SM'];
 	}
 	
 	/**
@@ -90,16 +92,21 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
     	//populate options with allowed natives cc types
     	foreach ($this->_paymentConfig->getCcTypes() as $code => $name) {
     		if (in_array($code, $allowed) || !count($allowed)) {
+    			if(isset($this->_codeToLabel[$code])){
+    				$name = $this->_codeToLabel[$code];
+    			}
     			$options[$code] = ['value' => $code, 'label' => $name];
     		}
     	}
     	
     	//populate options with allowed fullservice payment methods
     	foreach ($this->_paymentProductSource->toOptionArray() as $option) {
-    		if (in_array($option['value'], $allowed) || !count($allowed)) {
+    		if (in_array($option['value'], $allowed) || !count($allowed)) {    			
     			$options[$option['value']] = $option;
     		}
     	}
+    	
+    	
     	
     	$ordered = array();
     	
