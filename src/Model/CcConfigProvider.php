@@ -34,6 +34,11 @@ class CcConfigProvider implements ConfigProviderInterface {
 	 */
 	protected $method;
 	
+	/**
+	 * @var CcConfig
+	 */
+	protected $ccConfig;
+	
 	
 	/**
 	 * Url Builder
@@ -60,13 +65,14 @@ class CcConfigProvider implements ConfigProviderInterface {
 	protected $assetSource;
 	
 	/**
+	 * @param CcConfig $ccConfig
 	 * @param PaymentHelper $paymentHelper
 	 * @param \Magento\Framework\Url $urlBuilder
 	 * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-	 * @param \Magento\Framework\View\Asset\Source $assetSource
 	 */
 	public function __construct(
+			CcConfig $ccConfig,
 			PaymentHelper $paymentHelper,
 			\Magento\Framework\Url $urlBuilder,
 			\HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
@@ -76,6 +82,7 @@ class CcConfigProvider implements ConfigProviderInterface {
 			$this->method = $paymentHelper->getMethodInstance($this->methodCode);
 			$this->urlBuilder = $urlBuilder;
 			$this->_cctypeSource = $cctypeSource;
+			$this->ccConfig = $ccConfig;
 			$this->assetSource = $assetSource;
 			
 			$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->methodCode]]);
