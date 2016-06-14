@@ -34,7 +34,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 	 */
 	protected $_scopeConfig;
 	
-	protected $_codeToLabel = ['VI' => 'Visa/Carte bleue', 'SM' => 'Maestro/Bancontact'];
+	protected $_codeToLabel = ['VI' => 'Visa/Carte bleue', 'MI' => 'Maestro/Bancontact'];
 	
 	/**
 	 * Config
@@ -51,7 +51,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 		$this->_paymentProductSource = $paymentProductSource;
 		$this->_scopeConfig = $scopeConfig;
 		
-		$this->_allowedTypes = ['VI', 'MC', 'AE','SM'];
+		$this->_allowedTypes = ['VI', 'MC', 'AE','MI'];
 	}
 	
 	/**
@@ -76,14 +76,9 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 		return $this;
 	}
 	
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function toOptionArray()
-    {
-    	
-    	/**
+	public function toKeyValue($withCustomLabel=false){
+		
+		/**
     	 * making filter by allowed cards
     	 */
     	$allowed = $this->getAllowedTypes();
@@ -92,8 +87,11 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
     	//populate options with allowed natives cc types
     	foreach ($this->_paymentConfig->getCcTypes() as $code => $name) {
     		if (in_array($code, $allowed) || !count($allowed)) {
-    			if(isset($this->_codeToLabel[$code])){
+    			if($withCustomLabel && isset($this->_codeToLabel[$code])){
     				$name = $this->_codeToLabel[$code];
+    			}
+    			elseif(strpos(strtolower($name),"maestro") !== false){ //Special case due to wrong comparison in magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36
+    				$name = "Maestro";
     			}
     			$options[$code] = ['value' => $code, 'label' => $name];
     		}
@@ -128,7 +126,17 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 		}
     		
     	return array_merge($ordered,$options);
-    	
+		
+		
+	}
+	
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function toOptionArray()
+    {
+    	return $this->toKeyValue(true);	
     }
     
 }

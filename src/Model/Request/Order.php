@@ -29,7 +29,7 @@ class Order extends BaseRequest{
 			'VI'=>'visa',
 			'AE'=>'american-express',
 			'MC'=>'mastercard',
-			'SM'=>'maestro'
+			'MI'=>'maestro'
 	);
 
 	/**

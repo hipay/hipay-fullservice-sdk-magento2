@@ -116,7 +116,7 @@ class CcConfigProvider implements ConfigProviderInterface {
 	 */
 	protected function getCcAvailableTypesOrdered()
 	{
-		$types = $this->_cctypeSource->toOptionArray();
+		$types = $this->_cctypeSource->toKeyValue();
 		$availableTypes = $this->method->getConfigData('cctypes');
 		if(!is_array($availableTypes)){
 			$availableTypes = explode(",", $availableTypes);
