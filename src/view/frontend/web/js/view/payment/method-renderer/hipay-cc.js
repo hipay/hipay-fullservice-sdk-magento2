@@ -145,7 +145,7 @@ define(
 	                    fullScreenLoader.startLoader();
 	                    
 	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
-	                    TPP.setCredentials(apiUsernameTokenJs,apiPasswordTokenJs);
+	                    TPP.setCredentials(this.apiUsernameTokenJs,this.apiPasswordTokenJs);
 	                    
 	                    TPP.create({
 	                        card_number:  this.creditCardNumber(),
