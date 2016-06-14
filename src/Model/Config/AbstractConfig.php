@@ -162,10 +162,10 @@ abstract class AbstractConfig implements ConfigInterface {
         $this->pathPattern = $pathPattern;
     }
 	
-	public function getGeneraleValue($key){
+	public function getGeneraleValue($key,$group = 'hipay_credentials'){
 
 		return  $this->_scopeConfig->getValue(
-				$this->_mapGeneralFieldset($key),
+				$this->_mapGeneralFieldset($key,$group),
 				\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
 				$this->_storeId
 				);
