@@ -190,6 +190,10 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		$apiPassword = $this->getApiPassword();
 		$secretKey = $this->getSecretPassphrase();
 		
+		//token JS credential
+		$apiUsernameTokenJs = $this->getApiUsernameTokenJs();
+		$apiPasswordTokenJs = $this->getApiPasswordTokenJs();
+		
 		//check if is admin are and change values if needed
 		if($this->isAdminArea()){
 			$apiUsername = $this->getApiUsernameMoto();
@@ -198,7 +202,8 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		}
 		
 		//return false if one of them if empty
-		if(empty($apiUsername) || empty($apiPassword) || empty($secretKey)){
+		if(empty($apiUsername) || empty($apiPassword) || empty($secretKey) 
+				|| empty($apiUsernameTokenJs) || empty($apiPasswordTokenJs)){
 			return false;
 		}
 		
@@ -257,6 +262,24 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		}
 	
 		return  $this->getGeneraleValue($key,'hipay_credentials_moto');
+	}
+	
+	public function getApiUsernameTokenJs(){
+		$key = "api_username";
+		if($this->isStageMode()){
+			$key = "api_username_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_tokenjs');
+	}
+	
+	public function getApiPasswordTokenJs(){
+		$key = "api_password";
+		if($this->isStageMode()){
+			$key = "api_password_test";
+		}
+	
+		return  $this->getGeneraleValue($key,'hipay_credentials_tokenjs');
 	}
 	
 	

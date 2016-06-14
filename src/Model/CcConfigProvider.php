@@ -85,8 +85,8 @@ class CcConfigProvider implements ConfigProviderInterface {
 			'hipayCc'=>[
 				'availableTypes'=>$this->getCcAvailableTypesOrdered(),
 				'env'=>$this->_hipayConfig->getApiEnv(),
-				'apiUsername'=>$this->_hipayConfig->getApiUsername(),
-				'apiPassword'=>$this->_hipayConfig->getApiPassword()
+				'apiUsernameTokenJs'=>$this->_hipayConfig->getApiUsernameTokenJs(),
+				'apiPasswordTokenJs'=>$this->_hipayConfig->getApiPasswordTokenJs()
         		],
 			],
 		] : [] ;

@@ -29,7 +29,10 @@ define(
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-        		showCcForm: true
+        		showCcForm: true,
+        		apiUsernameTokenJs: window.checkoutConfig.payment.hipayCc.apiUsernameTokenJs ,
+        		apiPasswordTokenJs: window.checkoutConfig.payment.hipayCc.apiPasswordTokenJs
+        		
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -142,7 +145,7 @@ define(
 	                    fullScreenLoader.startLoader();
 	                    
 	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
-	                    TPP.setCredentials(window.checkoutConfig.payment.hipayCc.apiUsername, window.checkoutConfig.payment.hipayCc.apiPassword);
+	                    TPP.setCredentials(apiUsernameTokenJs,apiPasswordTokenJs);
 	                    
 	                    TPP.create({
 	                        card_number:  this.creditCardNumber(),
