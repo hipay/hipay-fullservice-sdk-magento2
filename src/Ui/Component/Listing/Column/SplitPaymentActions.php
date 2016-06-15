@@ -86,16 +86,16 @@ class SplitPaymentActions extends Column
                         'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_DELETE, ['split_payment_id' => $item['split_payment_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete ${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a ${ $.$data.name } record?')
+                            'title' => __('Delete %1','${ $.$data.name }'),
+                            'message' => __('Are you sure you wan\'t to delete a %1 record?','${ $.$data.name }')
                         ]
                     ];
                     $item[$name]['pay'] = [
                     		'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_PAY, ['split_payment_id' => $item['split_payment_id']]),
                     		'label' => __('Pay'),
                     		'confirm' => [
-                    				'title' => __('Pay ${ $.$data.amount_to_pay }'),
-                    				'message' => __('Are you sure you wan\'t to pay ${ $.$data.amount_to_pay } ?')
+                    				'title' => __('Pay %1','${ $.$data.amount_to_pay }'),
+                    				'message' => __('Are you sure you wan\'t to pay %1 ?','${ $.$data.amount_to_pay }')
                     		]
                     ];
                 }
