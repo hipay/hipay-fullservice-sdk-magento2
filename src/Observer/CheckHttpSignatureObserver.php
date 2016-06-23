@@ -78,7 +78,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
 	    			throw new \Exception("Order not found for id: " . $orderId);
 	    		}
 	    		/** @var $config \HiPay\FullserviceMagento\Model\Config */
-	    		$config = $this->_configFactory->create(['params'=>['methodCode'=>$order->getPayment()->getMethod(),'storeId'=>$order->getStoreId()]]);
+	    		$config = $this->_configFactory->create(['params'=>['methodCode'=>$order->getPayment()->getMethod(),'storeId'=>$order->getStoreId(),'order'=>$order]]);
 	    		$secretPassphrase = $config->getSecretPassphrase();
 	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase)){
 		    		$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);

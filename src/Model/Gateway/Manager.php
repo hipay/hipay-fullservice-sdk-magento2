@@ -85,7 +85,9 @@ class Manager {
 		$this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
 		
 		$storeId = $this->_order->getStoreId();
-		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
+		
+		$this->_config = $this->_configFactory->create(['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId,'order'=>$this->_order]]);
+		
 		$clientProvider = new SimpleHTTPClient($this->_config);
 		$this->_gateway = new GatewayClient($clientProvider);
 	}
@@ -98,7 +100,7 @@ class Manager {
 	}
 	
 	/**
-	 * @return  ConfigurationInterface
+	 * @return  \HiPay\FullserviceMagento\Model\Config
 	 */
 	public function getConfiguration(){
 		return $this->_config;
@@ -140,6 +142,12 @@ class Manager {
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
 		$this->_debug($transaction->toArray());
+		
+		//If is admin area set mo/to value to payment additionnal informations
+		if($this->getConfiguration()->isAdminArea()){
+			$this->_order->getPayment()->setAdditionalInformation('is_moto',1);
+			$this->_order->save();
+		}
 		
 		
 		return $transaction;

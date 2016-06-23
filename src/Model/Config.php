@@ -63,43 +63,97 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	protected $appState;
 	
 	/**
+	 * @var \Psr\Log\LoggerInterface $logger
+	 */
+	protected $logger;
+	
+	/**
+	 * Order Needed for some configurations (Eg. MO/TO credentials ...)
+	 *
+	 * @var \Magento\Sales\Model\Order $_order
+	 */
+	protected $_order;
+	
+	/**
+	 * 
 	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+	 * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+	 * @param \Magento\Framework\App\State $appState
+	 * @param \Psr\Log\LoggerInterface $logger
+	 * @param array $params
 	 */
 	public function __construct(
 			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
 			\Magento\Store\Model\StoreManagerInterface $storeManager,
 			\Magento\Framework\App\State $appState,
+			\Psr\Log\LoggerInterface $logger,
 			 $params = []
 			) {
 				parent::__construct($scopeConfig);
 				$this->_storeManager = $storeManager;
 				$this->appState = $appState;
+				$this->logger = $logger;
 				
-				if ($params) {
-					$method = array_shift($params);
+				if ($params && isset($params['methodCode'])) {
+					$method = $params['methodCode'];
 					$this->setMethod($method);
-					if ($params) {
-						$storeId = array_shift($params);
+					if (isset($params['storeId'])) {
+						$storeId = $params['storeId'];
 						$this->setStoreId($storeId);
 					}
+					
+					if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
+						$this->setOrder($params['order']);
+					} 
+					
+					
 				}
 				
+				
+				//Default credentials
 				$apiUsername = $this->getApiUsername();
 				$apiPassword =  $this->getApiPassword();
 				
 				//If is Admin store, we use MO/TO credentials
-				if($this->isAdminArea()){
+				if($this->mustUseMotoCredentials()){
 					$apiUsername = $this->getApiUsernameMoto();
 					$apiPassword = $this->getApiPasswordMoto();
+					
 				}
 				
 				//@TODO Find a better way for verification of api username and api password
-				try {					
+				//@TODO Maybe create a new Config Object with arg order required, for check MO/TO action
+				try {
+					
 					$this->_configSDK = new ConfigSDK($apiUsername, $apiPassword,$this->getApiEnv(),'application/json');
+					
 				} catch (\Exception $e) {
+					$this->logger->critical($e->getMessage());
 					$this->_configSDK = null;
 				}
 				
+	}
+	
+	/**
+	 * Check if we must to use MO/TO credentials
+	 * Essentialy, Admin operations
+	 * @return bool
+	 */
+	public function mustUseMotoCredentials(){
+		
+		$hasOrder = !is_null($this->getOrder());
+		$hasLastTransId = false;
+		$isMoto = false;
+		
+		if($hasOrder){
+			$hasLastTransId = $this->getOrder()->getPayment()->getLastTransId() ? true : false;
+			$isMoto = (bool)$this->getOrder()->getPayment()->getAdditionalInformation('is_moto') ?: false;
+			
+		}
+		
+		return $this->isAdminArea() && $hasOrder 
+						&& (!$hasLastTransId || ($hasLastTransId && $isMoto));
+		
 	}
     
 	/**
@@ -204,7 +258,7 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 		
 		
 		//check if is admin are and change values if needed
-		if($this->isAdminArea()){
+		if($this->mustUseMotoCredentials()){
 			$apiUsername = $this->getApiUsernameMoto();
 			$apiPassword = $this->getApiPasswordMoto();
 			$secretKey = $this->getSecretPassphraseMoto();
@@ -321,7 +375,15 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	}
 	
 	public function getApiHTTPHeaderAccept(){
-		return $this->_configSDK->getApiHTTPHeaderAccept();
+		return !is_null($this->_configSDK) ?  $this->_configSDK->getApiHTTPHeaderAccept() : '';
+	}
+	
+	public function getOrder(){
+		return $this->_order;
+	}
+	
+	public function setOrder($order){
+		$this->_order = $order;
 	}
 
 }
