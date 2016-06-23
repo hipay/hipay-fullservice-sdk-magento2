@@ -339,7 +339,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		parent::capture($payment, $amount);
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
-			if ($payment->getCcTransId()) {  //Is not the first transaction
+			if ($payment->getLastTransId()) {  //Is not the first transaction
 				// As we already have a transaction reference, we can request a capture operation.
 				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 				//wait for notification to set correct data to order
