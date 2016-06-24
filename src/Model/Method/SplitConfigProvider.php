@@ -56,6 +56,13 @@ class SplitConfigProvider implements ConfigProviderInterface {
 	 * @var \Magento\Checkout\Helper\Data $checkoutHelper
 	 */
 	protected $checkoutHelper;
+	
+	/**
+	 * Url Builder
+	 *
+	 * @var \Magento\Framework\Url
+	 */
+	protected $urlBuilder;
 
 
 	
@@ -67,6 +74,7 @@ class SplitConfigProvider implements ConfigProviderInterface {
 			\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
 			\Magento\Checkout\Model\Session $checkoutSession,
 			\Magento\Checkout\Helper\Data $checkoutHelper,
+			\Magento\Framework\Url $urlBuilder,
 			array $methodCodes = []
 			) {
 		
@@ -76,6 +84,7 @@ class SplitConfigProvider implements ConfigProviderInterface {
 			$this->ppCollectionFactory = $ppCollectionFactory;
 			$this->checkoutSession = $checkoutSession;
 			$this->checkoutHelper = $checkoutHelper;
+			$this->urlBuilder = $urlBuilder;
 			
 	}
 	
@@ -91,12 +100,14 @@ class SplitConfigProvider implements ConfigProviderInterface {
 				$config = array_merge_recursive($config, [
 						'payment' => [
 								'hipaySplit' => [
-										'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)]
+										'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)],
 								]
 						]
 				]);
 			}
 		}
+		
+		$config['payment']['hipaySplit']['refreshConfigUrl'] =$this->urlBuilder->getUrl('hipay/payment/refreshCheckoutConfig');
 		
 		
 		

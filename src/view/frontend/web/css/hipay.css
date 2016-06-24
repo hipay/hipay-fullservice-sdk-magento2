@@ -44,3 +44,18 @@ display:none;
 .control.hipay-ccsplit-number{
 	padding-top:15px;
 }
+#payment_form_hipay_ccsplit .credit-card-types .item {
+display:none;
+}
+
+#payment_form_hipay_ccsplit .credit-card-types .item._active{
+display:inline-block;
+}
+
+#payment_form_hipay_ccsplit .credit-card-types .item._inactive{
+display:none;
+}
+
+.control.hipay-ccsplit-number{
+	padding-top:15px;
+}
