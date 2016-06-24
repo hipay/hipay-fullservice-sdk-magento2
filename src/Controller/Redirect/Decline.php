@@ -29,7 +29,7 @@ class Decline extends Fullservice {
 	 * */
 	public function execute(){
 		
-		$this->messageManager->addErrorMessage(__('Your order was declined.'));
+		$this->_checkoutSession->setErrorMessage(__('Your order was declined.'));
 		$this->_redirect('checkout/cart');
 
 	}
