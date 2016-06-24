@@ -28,9 +28,8 @@ class Exception extends Fullservice {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
 	public function execute(){
-		
-		$this->messageManager->addErrorMessage(__('An error was occured.'));
-		$this->_redirect('checkoutcart');
+		$this->_checkoutSession->setErrorMessage(__('An error was occured.'));
+		$this->_redirect('checkout/cart');
 
 	}
 	

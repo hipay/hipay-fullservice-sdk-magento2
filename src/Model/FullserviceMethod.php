@@ -143,6 +143,11 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_hipayConfig;
 	
+	/**
+	 * @var \Magento\Checkout\Model\Session
+	 */
+	protected $_checkoutSession;
+	
 	const SLEEP_TIME = 5;
 	
 	/**
@@ -159,6 +164,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+	 * @param \Magento\Checkout\Model\Session $checkoutSession,
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
@@ -176,6 +182,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
+			\Magento\Checkout\Model\Session $checkoutSession,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -189,6 +196,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 				$this->fraudDenySender = $fraudDenySender;
 				
 				$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->getCode()]]);
+				$this->_checkoutSession = $checkoutSession;
 	}
 	
 	/**
@@ -302,10 +310,14 @@ abstract class FullserviceMethod extends AbstractMethod {
 					$redirectUrl = $forwardUrl;
 					break;
 				case TransactionState::DECLINED:
+					$reason = $response->getReason();
+					$this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
 					$redirectUrl = $failUrl;
 					break;
 				case TransactionState::ERROR:
-					throw new LocalizedException(__('There was an error request new transaction: %1.', $response->getReason()));
+					$reason = $response->getReason();
+					$this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
+					throw new LocalizedException(__('There was an error request new transaction: %1.', $reason['message']));
 				default:
 					$redirectUrl = $failUrl;
 			}
