@@ -267,7 +267,10 @@ class Notify {
 				break;
 			case TransactionStatus::CAPTURED: //118
 			case TransactionStatus::PARTIALLY_CAPTURED: //119				
-				$this->_doTransactionCapture();
+				
+				//If is split payment case, grand total is different to captured amount
+				//So we skip fraud detection in this case
+				$this->_doTransactionCapture($this->isSplitPayment ?: false);
 				/**
 				 * save token and credit card informations encryted
 				 */
