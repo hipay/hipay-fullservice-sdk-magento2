@@ -271,3 +271,6 @@
 "Card Owner Name","Card Owner Name"
 "Cancel pending order","Cancel pending order"
 "Cancel orders stayed in pending because customer not validated payment","Cancel orders stayed in pending because customer not validated payment"
+"Hipay status to validate order","Hipay status to validate order"
+"No","No"
+"Yes","Yes"

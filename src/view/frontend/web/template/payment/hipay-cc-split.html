@@ -118,7 +118,7 @@
 			    </legend><br />
 			    <!-- /ko -->
 			    <!-- ko if: (getDisplayCardOwner())-->
-			    <div class="field card-owner required" data-bind="attr: {id: getCode() + '_cc_owner_div'},visible: showCcForm">
+			    <div class="field card-owner number required" data-bind="attr: {id: getCode() + '_cc_owner_div'},visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_owner'}" class="label">
 			            <span><!-- ko i18n: 'Card Owner Name'--><!-- /ko --></span>
 			        </label>
@@ -131,7 +131,7 @@
 			                   data-bind="attr: {id: getCode() + '_card_owner',
 			                        title: $t('Card Owner Name'),
 			                        'data-container': getCode() + '-cc-owner',
-			                        'data-validate': JSON.stringify({'required-text':true})},
+			                        'data-validate': JSON.stringify({'required':true})},
 			                        enable: isActive($parents),
 			                        value: creditCardOwner" />
 			        </div>

@@ -263,4 +263,7 @@
 "Card Owner Name","Nom du porteur de carte"
 "Cancel pending order","Annuler les commandes en attentes"
 "Cancel orders stayed in pending because customer not validated payment","Annule les commandes en attentes depuis 30 minutes."
+"Hipay status to validate order","Statut Hipay validant la commande"
+"No","Non"
+"Yes","Oui"
 

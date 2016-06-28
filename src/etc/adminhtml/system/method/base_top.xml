@@ -27,14 +27,14 @@
                     <label>Order status when payment refused</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Canceled</source_model>
                 </field>
-                <field id="cancel_pending_order" translate="label" type="select" sortOrder="48" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="hipay_status_validate_order" translate="label" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Hipay status to validate order</label>
+                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\StatusValidate</source_model>
+                </field>
+                <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Cancel pending order</label>
                     <comment>Cancel orders stayed in pending because customer not validated payment</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="hipay_status_validate_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Hipay status to validate order</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\StatusValidate</source_model>
                 </field>
               
 </include>
