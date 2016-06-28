@@ -255,3 +255,12 @@
 "Your payment is accepted.","Votre paiement est accepté"
 "HiPay Fullservice credentials Token JS configuration","HiPay Fullservice configuration des identifiants publics (Token JS)"
 "Generated in your HiPay BO (Integration => security settings => api credentials public).","Préalablement créés depuis votre compte HiPay (Intgration => Security Settings => Api credentials - Generate new credentials and select public type)."
+"Order status when payment accepted","Statut de la commande quand le paiement est accepté."
+"Order status when payment refused","Statut de la commande quand le paiement est refusé."
+"Order status when payment canceled","Statut de la commande quand le paiement est annulé par le client."
+"Display card owner","Afficher le porteur de carte"
+"Display card owner in card form","Affiche le champs de saisi pour le porteur de carte"
+"Card Owner Name","Nom du porteur de carte"
+"Cancel pending order","Annuler les commandes en attentes"
+"Cancel orders stayed in pending because customer not validated payment","Annule les commandes en attentes depuis 30 minutes."
+

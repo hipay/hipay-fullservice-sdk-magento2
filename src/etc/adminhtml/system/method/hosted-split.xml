@@ -39,6 +39,18 @@
                     <label>Display hosted page in Iframe</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                 <field id="iframe_width" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
+                	<label>iFrame Width</label>
+                </field>
+                <field id="iframe_height" translate="label" type="text" sortOrder="104" showInDefault="1" showInWebsite="1" showInStore="1">
+                	<label>iFrame Height</label>
+                </field>
+                <field id="iframe_style" translate="label" type="text" sortOrder="106" showInDefault="1" showInWebsite="1" showInStore="1">
+                	<label>iFrame Style</label>
+                </field>
+                <field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
+                	<label>Wrapper iFrame Style</label>
+                </field>
                 <field id="allow_use_oneclick" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Use Oneclick</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

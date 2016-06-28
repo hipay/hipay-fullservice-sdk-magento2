@@ -67,6 +67,12 @@
                 <title>Credit Card API</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <display_card_owner>0</display_card_owner>
+                <cancel_pending_order>0</cancel_pending_order>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -82,6 +88,12 @@
                 <title>Credit Card Split payment API</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <display_card_owner>0</display_card_owner>
+                <cancel_pending_order>0</cancel_pending_order>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -97,7 +109,16 @@
                 <title>Credit Card HOSTED</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
                 <iframe_mode>1</iframe_mode>
+                <iframe_width>80%</iframe_width>
+				<iframe_height>450px</iframe_height>
+				<iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+				<iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7; border-right: 1px solid #BEBCB7;</iframe_wrapper_style>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -117,7 +138,16 @@
                 <title>Credit Card Split payment HOSTED</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
                 <iframe_mode>1</iframe_mode>
+                <iframe_width>80%</iframe_width>
+				<iframe_height>450px</iframe_height>
+				<iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+				<iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7; border-right: 1px solid #BEBCB7;</iframe_wrapper_style>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -137,7 +167,16 @@
 			    <title>Sisal</title>
 			    <payment_action>Sale</payment_action>
 			    <order_status>pending</order_status>
+			    <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
 			    <iframe_mode>1</iframe_mode>
+			    <iframe_width>80%</iframe_width>
+				<iframe_height>450px</iframe_height>
+				<iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+				<iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7; border-right: 1px solid #BEBCB7;</iframe_wrapper_style>
 			    <payment_products>sisal</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>realtime-banking</payment_products_categories>
 			    <display_selector>0</display_selector>
@@ -159,6 +198,11 @@
 			    <title>Qiwi wallet</title>
 			    <payment_action>Sale</payment_action>
 			    <order_status>pending</order_status>
+			    <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
 			    <payment_products>qiwi-wallet</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>ewallet</payment_products_categories>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->

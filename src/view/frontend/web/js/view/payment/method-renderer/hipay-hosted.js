@@ -91,6 +91,19 @@ define(
             isIframeMode: function(){
             	return window.checkoutConfig.payment.hiPayFullservice.isIframeMode[this.getCode()];
             },
+            getIframeWidth: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.iFrameWidth[this.getCode()];
+            },
+            
+            getIframeHeight: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.iFrameHeight[this.getCode()];
+            },
+            getIframeStyle: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.iFrameStyle[this.getCode()];
+            },
+            getIframeWrapperStyle: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.iFrameWrapperStyle[this.getCode()];
+            },
             getIFrameUrl: function(){
             	return this.isInAction() ? this.getAfterPlaceOrderUrl() : '';
             },

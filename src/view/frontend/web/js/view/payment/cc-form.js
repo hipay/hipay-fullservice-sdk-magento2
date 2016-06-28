@@ -32,7 +32,8 @@ define(
                 creditCardSsStartMonth: '',
                 creditCardSsStartYear: '',
                 creditCardVerificationNumber: '',
-                selectedCardType: null
+                selectedCardType: null,
+                creditCardOwner: ''
             },
 
             initObservable: function () {
@@ -45,7 +46,8 @@ define(
                         'creditCardVerificationNumber',
                         'creditCardSsStartMonth',
                         'creditCardSsStartYear',
-                        'selectedCardType'
+                        'selectedCardType',
+                        'creditCardOwner'
                     ]);
                 return this;
             },
@@ -109,10 +111,14 @@ define(
                             'cc_exp_year': this.creditCardExpYear(),
                             'cc_exp_month': this.creditCardExpMonth(),
                             'cc_number': this.creditCardNumber(),
+                            'cc_owner': this.creditCardOwner()
             			}
             	}
             	return $.extend(true, parent, additionalData);
 
+            },
+            getDisplayCardOwner: function(){
+            	return window.checkoutConfig.payment.hiPayFullservice.displayCardOwner[this.getCode()];
             },
             getCcAvailableTypes: function() {
                 return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
