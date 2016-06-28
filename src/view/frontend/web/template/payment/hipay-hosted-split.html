@@ -74,14 +74,11 @@
 			                    	<th scope="col" class="col amount"><!-- ko i18n: 'Amount' --><!-- /ko --></th>
 				                </tr>
 				            </thead>
-            				<tbody>
-            				 <!-- ko foreach: {data: splitAmounts(), as: 'item'} -->
+            				<tbody data-bind="foreach: splitAmounts()">	 
             				 	<tr>
-            				 		<td data-bind="text: item.dateToPayFormatted" data-th="<!-- ko i18n: 'Date to pay' --><!-- /ko -->" class="col date"></td>
-            				 		<td data-bind="html: item.amountToPayFormatted" data-th="<!-- ko i18n: 'Amount' --><!-- /ko -->" class="col amount"></td>
+            				 		<td data-bind="text: dateToPayFormatted" data-th="<!-- ko i18n: 'Date to pay' --><!-- /ko -->" class="col date"></td>
+            				 		<td data-bind="html: amountToPayFormatted" data-th="<!-- ko i18n: 'Amount' --><!-- /ko -->" class="col amount"></td>
             				 	</tr>
-				             <!-- /ko -->
-                        
             				</tbody>
         				</table>
    					</div>

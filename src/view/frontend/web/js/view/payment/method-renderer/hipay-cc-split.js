@@ -18,20 +18,20 @@ define(
      	'jquery',
      	'ko',
      	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc',
-     	'Magento_Checkout/js/model/totals',
-     	'mage/storage'
+     	'Magento_Checkout/js/model/totals'
     ],
-    function ($,ko,Component,totals,storage) {
+    function ($,ko,Component,totals) {
         'use strict';
-
+        var splitAmounts = ko.observableArray();
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
         		selectedPaymentProfile: '',
-        		splitAmounts: [],
-        		refreshConfigUrl: window.checkoutConfig.payment.hipaySplit.refreshConfigUrl 
+        		splitAmounts: splitAmounts,
+        		refreshConfigUrl: window.checkoutConfig.payment.hipaySplit.refreshConfigUrl,
         	},
+        	isLoading: ko.observable(false),
         	initialize: function(){
         		this._super();
         	},
@@ -44,10 +44,7 @@ define(
                 this._super().
                 observe([
                        'selectedPaymentProfile',
-                       'splitAmounts',
                    ]);
-
-              // this.reloadPaymentProfiles();
                
                 totals.totals.subscribe(function(newValue){
                 	
@@ -58,16 +55,16 @@ define(
 
               //Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
+                	self.splitAmounts.removeAll()
                 	if(value){
-                		self.splitAmounts(self.getSplitAmountByProfile(value));
-                	}
-                	else{
-                		self.splitAmounts([]);
+                		
+                		$.each(self.getSplitAmountByProfile(value), function(index,split){
+                			self.splitAmounts.push(split);
+                		});
                 	}
                 });
                 
                 if(this.hasPaymentProfiles()){
-                	//this.splitAmounts = ko.observableArray(this.getSplitAmountByProfile(this.getFirstPaymentProfileId()));
                 	this.selectedPaymentProfile(this.getFirstPaymentProfileId());
                 }
                 
@@ -107,16 +104,17 @@ define(
             },
             reloadPaymentProfiles: function(){
             	var self = this;
-            	storage.get(
-                		
-                        this.refreshConfigUrl
-                    ).done(
+            	this.isLoading(true);
+            	$.ajax({
+                    url: this.refreshConfigUrl,
+                    type: 'GET',
+                    global: true,
+                    contentType: 'application/json',
+                    showLoader: true
+                }).done(
                         function (response) {
                         	if(response.payment){
-                        		console.log(response);
-                        		
-	                        	self.updateSplitAmounts(response.payment);
-                        	
+	                        	self.updateSplitAmounts(response.payment);                   	
                         	}
                         	else{
                         		console.log(response);
@@ -129,28 +127,22 @@ define(
                         	console.log(response);
                         }
                     );
-            	
-
+            	this.isLoading(false);
             },
             updateSplitAmounts: function(payment){
+            	var self = this;
             	//Merge with current checkoutConfig
         		$.extend(true,window.checkoutConfig.payment,payment);
-        	
-            	//Reload split amounts
-        		/*if(this.hasPaymentProfiles()){
-                	this.selectedPaymentProfile(this.getFirstPaymentProfileId());
-                }*/
-        		//console.log('New Splitamounts');
-        		//console.log(this.splitAmounts());
-            	this.splitAmounts(this.getSplitAmountByProfile(this.selectedPaymentProfile()));
-            	
-            	//Force refresh binding
-            	this.splitAmounts.valueHasMutated();
-            	console.log(this.splitAmounts());
-            	
+        		
+        		this.splitAmounts.removeAll();
+        		
+        		$.each(this.getSplitAmountByProfile(this.selectedPaymentProfile()), function(index,split){
+        			self.splitAmounts.push(split);
+        		});
+
             },
             getSplitAmounts: function (){
-            	return this.splitAmounts();
+            	return this.splitAmounts;
             },
             getPaymentProfiles: function(){
             	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
