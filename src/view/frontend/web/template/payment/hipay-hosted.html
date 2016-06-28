@@ -114,16 +114,13 @@
                 <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
             <!-- ko if: isPaymentReady() -->
-            <div style="text-align: center;">
-	            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl()}, event: {load: iframeLoaded}"
+            <div data-bind="attr:{style: getIframeWrapperStyle()}">
+	            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
 	                    data-container="hipay-hosted-iframe"
 	                    class="hipay_hosted iframe"
-	                    style="margin: 10px 0;"
 	                    scrolling="no"
 	                    frameborder="0"
 	                    border="0"
-	                    height="600px"
-	                    width="80%"
 	                    >
 	            </iframe>
             </div>

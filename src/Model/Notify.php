@@ -263,10 +263,20 @@ class Notify {
 				break;
 			case TransactionStatus::CAPTURE_REQUESTED: //117
 				$this->_doTransactionCaptureRequested();
-				
-				break;
+				//If status Capture Requested is not configured to validate the order, we break.
+				if(((int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == 117) === false )
+					break;
 			case TransactionStatus::CAPTURED: //118
 			case TransactionStatus::PARTIALLY_CAPTURED: //119				
+				
+				if(($this->_order->getStatus() == $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_accepted') ) ||
+						//If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
+						((int)$this->getConfigData('hipay_status_validate_order') == 117) === true 
+								&& (int)$this->_transaction->getStatus() == 118 
+								&& !in_array(strtolower($this->_order->getPayment()->getCcType()),array('amex','ae')))
+				{
+					break;
+				}
 				
 				//If is split payment case, grand total is different to captured amount
 				//So we skip fraud detection in this case
@@ -585,6 +595,9 @@ class Notify {
 						->setIsTransactionClosed(true)
 						->deny(false);
 		
+		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_refused');
+		$this->_order->setStatus($orderStatus);
+		
 		$this->_order->save();
 	}
 	
@@ -595,7 +608,13 @@ class Notify {
 	 */
 	protected function _doTransactionFailure()
 	{
-		$this->_order->registerCancellation($this->_generateComment(''))->save();
+		$this->_order->registerCancellation($this->_generateComment(''));
+		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_refused');
+		if($this->_transaction->getStatus() == TransactionStatus::CANCELLED){
+			$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_canceled');
+		}
+		$this->_order->setStatus($orderStatus);
+		$this->_order->save();
 	}
 	
 	
@@ -664,6 +683,9 @@ class Notify {
 				$this->_transaction->getCapturedAmount(),
 				$skipFraudDetection && $parentTransactionId
 				);
+		
+		$orderStatus = $payment->getMethodInstance()->getConfigData('order_status_accepted');
+		$this->_order->setStatus($orderStatus);
 		
 		$this->_order->save();
 	

@@ -113,6 +113,11 @@ class GenericConfigProvider implements ConfigProviderInterface {
 										'afterPlaceOrderUrl' => [$methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',['_secure' => true])],
 										'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
 										'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
+										'displayCardOwner' => [$methodCode => $this->displayCardOwner($methodCode)] ,
+										'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
+										'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode,'height')],
+										'iFrameStyle' => [$methodCode => $this->getIframeProp($methodCode,'style')],
+										'iFrameWrapperStyle' => [$methodCode => $this->getIframeProp($methodCode,'wrapper_style')],
 								]
 						]
 				]);
@@ -143,6 +148,10 @@ class GenericConfigProvider implements ConfigProviderInterface {
 		return $config;
 
 	}
+	
+	protected function displayCardOwner($methodCode){
+		return $this->methods[$methodCode]->getConfigData('display_card_owner');
+	}	
 	
 	
 	/**
@@ -180,6 +189,12 @@ class GenericConfigProvider implements ConfigProviderInterface {
 		
 		return (bool) $this->methods[$methodCode]->getConfigData('iframe_mode');
 		
+	}
+	
+	protected function getIframeProp($methodCode,$prop){
+	
+		return $this->methods[$methodCode]->getConfigData('iframe_' . $prop);
+	
 	}
 
 }

@@ -20,5 +20,8 @@
         <job name="hipay_pay_split_payment" instance="HiPay\FullserviceMagento\Cron\PaySplitPayment" method="execute">
             <schedule>0 1 * * *</schedule>
         </job>
+        <job name="hipay_clean_pending_orders" instance="HiPay\FullserviceMagento\Cron\CleanPendingOrders" method="execute">
+            <schedule>*/15 * * * *</schedule>
+        </job>
     </group>
 </config>
