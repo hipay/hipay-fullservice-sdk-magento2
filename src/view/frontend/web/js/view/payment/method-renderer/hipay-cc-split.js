@@ -18,19 +18,20 @@ define(
      	'jquery',
      	'ko',
      	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc',
-     	'Magento_Checkout/js/model/totals',
+     	'Magento_Checkout/js/model/totals'
     ],
     function ($,ko,Component,totals) {
         'use strict';
-
+        var splitAmounts = ko.observableArray();
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
         		selectedPaymentProfile: '',
-        		splitAmounts: [],
-        		grandTotal: totals.totals().grand_total
+        		splitAmounts: splitAmounts,
+        		refreshConfigUrl: window.checkoutConfig.payment.hipaySplit.refreshConfigUrl,
         	},
+        	isLoading: ko.observable(false),
         	initialize: function(){
         		this._super();
         	},
@@ -43,24 +44,23 @@ define(
                 this._super().
                 observe([
                        'selectedPaymentProfile',
-                       'splitAmounts',
-                       'grandTotal'
                    ]);
-
-               // totals.totals.extend({ rateLimit: 5000 });
+               
                 totals.totals.subscribe(function(newValue){
-                	  //@TODO add ajax call to update splitAmounts         		
-                	//self.reloadSplitAmounts(newValue.grand_total);
+                	
+                	//Ajax call to update splitAmounts         		
+                	self.reloadPaymentProfiles();
                 	
                 });
 
               //Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
+                	self.splitAmounts.removeAll()
                 	if(value){
-                		self.splitAmounts(self.getSplitAmountByProfile(value));
-                	}
-                	else{
-                		self.splitAmounts([]);
+                		
+                		$.each(self.getSplitAmountByProfile(value), function(index,split){
+                			self.splitAmounts.push(split);
+                		});
                 	}
                 });
                 
@@ -102,27 +102,64 @@ define(
             getCode: function () {
                 return 'hipay_ccsplit';
             },
-            reloadSplitAmounts: function(grand_total){
-
-            	console.log("Grand Total = " + grand_total);
+            reloadPaymentProfiles: function(){
+            	var self = this;
+            	this.isLoading(true);
+            	$.ajax({
+                    url: this.refreshConfigUrl,
+                    type: 'GET',
+                    global: true,
+                    contentType: 'application/json',
+                    showLoader: true
+                }).done(
+                        function (response) {
+                        	if(response.payment){
+	                        	self.updateSplitAmounts(response.payment);                   	
+                        	}
+                        	else{
+                        		console.log(response);
+                                
+                        	}
+                        	
+                        }
+                    ).fail(
+                        function (response) {
+                        	console.log(response);
+                        }
+                    );
+            	this.isLoading(false);
+            },
+            updateSplitAmounts: function(payment){
+            	var self = this;
+            	//Merge with current checkoutConfig
+        		$.extend(true,window.checkoutConfig.payment,payment);
+        		
+        		this.splitAmounts.removeAll();
+        		
+        		$.each(this.getSplitAmountByProfile(this.selectedPaymentProfile()), function(index,split){
+        			self.splitAmounts.push(split);
+        		});
 
             },
-            getPaymentProfiles(){
+            getSplitAmounts: function (){
+            	return this.splitAmounts;
+            },
+            getPaymentProfiles: function(){
             	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
             },
-            hasPaymentProfiles(){
+            hasPaymentProfiles: function(){
             	return this.getPaymentProfiles().length > 0;
             },
-            getFirstPaymentProfile(){
+            getFirstPaymentProfile: function(){
             	var pp= this.getPaymentProfiles();
             	for(var i=0;i<pp.length;i++){
             		return pp[i];
             	}
             },
-            getFirstPaymentProfileId(){
+            getFirstPaymentProfileId: function(){
             	return this.getFirstPaymentProfile().profileId;
             },
-            getSplitAmountByProfile(profileId){
+            getSplitAmountByProfile: function(profileId){
             	var ppArr = this.getPaymentProfiles();
             	for(var i=0;i<ppArr.length;i++){
             		if(ppArr[i].profileId == profileId){
