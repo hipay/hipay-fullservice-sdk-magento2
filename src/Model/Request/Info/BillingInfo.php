@@ -43,7 +43,7 @@ class BillingInfo extends AbstractInfoRequest {
 		$customerBillingInfo->lastname = $this->_order->getCustomerLastname();
 		$customerBillingInfo->email = $this->_order->getCustomerEmail();
 		$dob = $this->_order->getCustomerDob();
-		if(!is_null($dob)){
+		if(!is_null($dob) && !empty($dob)){
 			try {
 				
 			$dob = new \DateTime($dob);
