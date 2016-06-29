@@ -271,7 +271,7 @@ class Notify {
 				
 				if(($this->_order->getStatus() == $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_accepted') ) ||
 						//If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
-						((int)$this->getConfigData('hipay_status_validate_order') == 117) === true 
+						((int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == 117) === true 
 								&& (int)$this->_transaction->getStatus() == 118 
 								&& !in_array(strtolower($this->_order->getPayment()->getCcType()),array('amex','ae')))
 				{
