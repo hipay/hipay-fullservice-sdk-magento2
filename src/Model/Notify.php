@@ -595,7 +595,7 @@ class Notify {
 						->setIsTransactionClosed(true)
 						->deny(false);
 		
-		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_refused');
+		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
 		$this->_order->setStatus($orderStatus);
 		
 		$this->_order->save();
@@ -609,9 +609,9 @@ class Notify {
 	protected function _doTransactionFailure()
 	{
 		$this->_order->registerCancellation($this->_generateComment(''));
-		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_refused');
+		$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
 		if($this->_transaction->getStatus() == TransactionStatus::CANCELLED){
-			$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_canceled');
+			$orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_canceled');
 		}
 		$this->_order->setStatus($orderStatus);
 		$this->_order->save();
@@ -684,7 +684,7 @@ class Notify {
 				$skipFraudDetection && $parentTransactionId
 				);
 		
-		$orderStatus = $payment->getMethodInstance()->getConfigData('order_status_accepted');
+		$orderStatus = $payment->getMethodInstance()->getConfigData('order_status_payment_accepted');
 		$this->_order->setStatus($orderStatus);
 		
 		$this->_order->save();
