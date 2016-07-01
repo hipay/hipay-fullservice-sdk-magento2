@@ -73,6 +73,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -94,6 +95,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -114,6 +116,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
 				<iframe_height>450px</iframe_height>
@@ -143,6 +146,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
 				<iframe_height>450px</iframe_height>
@@ -172,6 +176,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
 			    <iframe_mode>1</iframe_mode>
 			    <iframe_width>80%</iframe_width>
 				<iframe_height>450px</iframe_height>
@@ -203,6 +208,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
 			    <payment_products>qiwi-wallet</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
 			    <payment_products_categories>ewallet</payment_products_categories>
 			    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->

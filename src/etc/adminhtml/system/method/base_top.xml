@@ -36,5 +36,9 @@
                     <comment>Cancel orders stayed in pending because customer not validated payment</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-              
+                <field id="re_add_to_cart" translate="label comment" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="0">
+        			<label>Add product to cart</label>
+                	<comment>Fill cart when payment canceled or refused</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
 </include>

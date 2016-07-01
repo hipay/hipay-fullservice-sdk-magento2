@@ -294,10 +294,10 @@ abstract class FullserviceMethod extends AbstractMethod {
 	
 			$response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
 				
-			$successUrl =  $this->urlBuilder->getUrl('checkout/onepage/success',['_secure'=>true]);
-			$pendingUrl = $this->urlBuilder->getUrl('checkout/cart',['_secure'=>true]);;
+			$successUrl =  $this->urlBuilder->getUrl('hipay/redirect/accept',['_secure'=>true]);
+			$pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending',['_secure'=>true]);;
 			$forwardUrl = $response->getForwardUrl();;
-			$failUrl = $this->urlBuilder->getUrl('checkout/onepage/failure',['_secure'=>true]);
+			$failUrl = $this->urlBuilder->getUrl('hipay/redirect/decline',['_secure'=>true]);
 			$redirectUrl = $successUrl;
 			switch($response->getState()){
 				case TransactionState::COMPLETED:
