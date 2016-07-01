@@ -105,8 +105,34 @@ class CcSplitMethod extends CcMethod {
 		return array_merge(['profile_id'],$this->_additionalInformationKeys);
 	}
 	
-	public function place(\Magento\Payment\Model\InfoInterface $payment){
-		$profileId = $payment->getAdditionalInformation('profile_id');
+	protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount){
+		//Check if it's split payment
+		//If true change captured amount
+		if($payment->getAdditionalInformation('profile_id')){
+			$profileId = $payment->getAdditionalInformation('profile_id');
+			$profile = $this->getProfile($profileId);
+			
+			$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
+			if(!is_array($splitAmounts) || !count($splitAmounts)){
+				throw new LocalizedException(__('Impossible to split the amount.'));
+			}
+			$firstSplit = current($splitAmounts);
+			$amount = (float)$firstSplit['amountToPay'];
+			
+		}
+		
+		return parent::manualCapture($payment, $amount);
+	
+		
+	}
+	
+	/**
+	 * 
+	 * @param int $profileId
+	 * @throws LocalizedException
+	 * @return \HiPay\FullserviceMagento\Model\PaymentProfile
+	 */
+	protected function getProfile($profileId){
 		
 		if(empty($profileId)){
 			throw new LocalizedException(__('Payment Profile not found.'));
@@ -115,6 +141,14 @@ class CcSplitMethod extends CcMethod {
 		if(!$profile->getId()){
 			throw new LocalizedException(__('Payment Profile not found.'));
 		}
+		
+		return $profile;
+	}
+	
+	public function place(\Magento\Payment\Model\InfoInterface $payment){
+		
+		$profileId = $payment->getAdditionalInformation('profile_id');
+		$profile = $this->getProfile($profileId);
 		
 		$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
 		if(!is_array($splitAmounts) || !count($splitAmounts)){

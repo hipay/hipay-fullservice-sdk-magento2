@@ -352,10 +352,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
 			if ($payment->getLastTransId()) {  //Is not the first transaction
-				// As we already have a transaction reference, we can request a capture operation.
-				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-				//wait for notification to set correct data to order
-				$this->sleep();
+				
+				$this->manualCapture($payment, $amount);
 	
 			} else { //Ok, it's the first transaction, so we request a new order
 				$this->place($payment);
@@ -372,6 +370,14 @@ abstract class FullserviceMethod extends AbstractMethod {
 	
 	
 		return $this;
+	}
+	
+	protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount){
+		
+		// As we already have a transaction reference, we can request a capture operation.
+		$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+		//wait for notification to set correct data to order
+		$this->sleep();
 	}
 	
 	

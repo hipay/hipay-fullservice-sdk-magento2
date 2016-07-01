@@ -106,24 +106,16 @@ class HostedSplitMethod extends HostedMethod {
 	
 		$payment = $order->getPayment();
 		$profileId = $payment->getAdditionalInformation('profile_id');
-		
-		if(empty($profileId)){
-			throw new LocalizedException(__('Payment Profile not found.'));
-		}
-		
-		$profile = $this->profileFactory->create()->load($profileId);
-		if(!$profile->getId()){
-			throw new LocalizedException(__('Payment Profile not found.'));
-		}
-		
+		$profile = $this->getProfile($profileId);
+	
 		$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
-		
+	
 		if(!is_array($splitAmounts) || !count($splitAmounts)){
 			throw new LocalizedException(__('Impossible to split the amount.'));
 		}
 		$firstSplit = current($splitAmounts);
 		$payment->getOrder()->setForcedAmount((float)$firstSplit['amountToPay']);
-		
+	
 		if($payment->getAdditionalInformation('card_token') != ""){
 			$this->place($order->getPayment());
 		}
@@ -135,6 +127,46 @@ class HostedSplitMethod extends HostedMethod {
 			$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
 		}
 	
+	}
+	
+	protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount){
+		//Check if it's split payment
+		//If true change captured amount
+		if($payment->getAdditionalInformation('profile_id')){
+			$profileId = $payment->getAdditionalInformation('profile_id');
+			$profile = $this->getProfile($profileId);
+	
+			$splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
+			if(!is_array($splitAmounts) || !count($splitAmounts)){
+				throw new LocalizedException(__('Impossible to split the amount.'));
+			}
+			$firstSplit = current($splitAmounts);
+			$amount = (float)$firstSplit['amountToPay'];
+	
+		}
+	
+		return parent::manualCapture($payment, $amount);
+	
+	
+	}
+	
+	/**
+	 *
+	 * @param int $profileId
+	 * @throws LocalizedException
+	 * @return \HiPay\FullserviceMagento\Model\PaymentProfile
+	 */
+	protected function getProfile($profileId){
+	
+		if(empty($profileId)){
+			throw new LocalizedException(__('Payment Profile not found.'));
+		}
+		$profile = $this->profileFactory->create()->load($profileId);
+		if(!$profile->getId()){
+			throw new LocalizedException(__('Payment Profile not found.'));
+		}
+	
+		return $profile;
 	}
 
 	
