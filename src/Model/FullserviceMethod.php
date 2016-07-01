@@ -500,7 +500,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 		
 		$info = $this->getInfoInstance();
 		$cardToken = $info->getAdditionalInformation('card_token');
-		if($cardToken){
+		$eci = $info->getAdditionalInformation('eci');
+		if($cardToken && $eci == 9){
 			//Check if current customer is owner of card token
 			$card = $this->_cardFactory->create()->load($cardToken,'cc_token');
 			
