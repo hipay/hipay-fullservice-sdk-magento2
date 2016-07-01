@@ -86,6 +86,9 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 		        									"class" => "primary"
 		        									]);
     		}
+    		else{
+    			$this->buttonList->remove('accept_capture_payment');
+    		}
     	}
     	
         return $this;
@@ -104,6 +107,9 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     		$id = $controller->getRequest()->getParam('order_id');
 	    	try {
 	    		$this->order = $this->orderRepository->get($id);
+	    		if($this->order->getId()){	    			
+	    			$this->_coreRegistry->register('hipay_current_order', $this->order);
+	    		}
 	    	} catch (NoSuchEntityException $e) {
 	    		return null;
 	    	} catch (InputException $e) {

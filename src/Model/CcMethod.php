@@ -96,6 +96,7 @@ class CcMethod extends FullserviceMethod {
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 	 * @param \Magento\Checkout\Model\Session $checkoutSession
+	 * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -117,6 +118,7 @@ class CcMethod extends FullserviceMethod {
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 			\Magento\Checkout\Model\Session $checkoutSession,
+			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -125,7 +127,7 @@ class CcMethod extends FullserviceMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 						$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-						$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$checkoutSession,$resource,$resourceCollection,$data);
+						$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$checkoutSession,$cardFactory,$resource,$resourceCollection,$data);
 				
 				$this->_moduleList = $moduleList;
 				$this->_localeDate = $localeDate;
