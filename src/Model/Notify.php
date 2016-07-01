@@ -172,6 +172,14 @@ class Notify {
 	
 	protected function canProcessTransaction(){
 		
+		
+		//Test if status is already processed
+		$savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+		if(is_array($savedStatues) && isset($savedStatues[$this->_transaction->getStatus()]))
+		{
+			return false;
+		}
+		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::EXPIRED: //114
 				
@@ -329,10 +337,43 @@ class Notify {
 				break;
 		}
 		
+		//Save status infos
+		$this->saveHiPayStatus();
+		
 		//Send commit to unlock order table
 		$this->orderResource->getConnection()->commit();
 		
 		return $this;
+	}
+	
+	/**
+	 * Save infos of statues processed 
+	 */
+	protected function saveHiPayStatus(){
+		
+		$lastStatus = $this->_transaction->getStatus();
+		$savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+		if(!is_array($savedStatues)){
+			$savedStatues = [];
+		}
+		
+		if(isset($savedStatues[$lastStatus])){
+			return;
+		}
+		
+		$savedStatues[$lastStatus] = [
+				'saved_at' => new \DateTime(),
+				'state'	   => $this->_transaction->getState(),
+				'status'   => $lastStatus
+		];
+		
+		//Save array of statues already processed
+		$this->_order->getPayment()->setAdditionalInformation('saved_statues',$savedStatues);
+		
+		//Save the last status
+		$this->_order->getPayment()->setAdditionalInformation('last_status',$lastStatus);
+		$this->_order->save();
+		
 	}
 	
 	protected function orderAlreadySplit(){
@@ -511,6 +552,15 @@ class Notify {
 								->setParentTransactionId($parentTransactionId)
 								->setIsTransactionClosed($isCompleteRefund)
 								->registerRefundNotification(-1 * $this->_transaction->getRefundedAmount());
+		
+		$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUND_REQUESTED;
+		
+		if($this->_transaction->getStatus() == TransactionStatus::PARTIALLY_REFUNDED){
+			$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
+		}
+		
+		$this->_order->setStatus($orderStatus);
+								
 		$this->_order->save();
 
 		$creditMemo = $payment->getCreatedCreditmemo();
@@ -556,6 +606,7 @@ class Notify {
 	 */
 	protected function _doTransactionCaptureRequested()
 	{
+		$this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
 		$this->_changeStatus(Config::STATUS_CAPTURE_REQUESTED,'Capture Requested.');
 	}
 	
@@ -685,6 +736,11 @@ class Notify {
 				);
 		
 		$orderStatus = $payment->getMethodInstance()->getConfigData('order_status_payment_accepted');
+		
+		if($this->_transaction->getStatus() == TransactionStatus::PARTIALLY_CAPTURED){
+			$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_CAPTURED;
+		}
+		
 		$this->_order->setStatus($orderStatus);
 		
 		$this->_order->save();
