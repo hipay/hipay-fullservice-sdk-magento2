@@ -20,6 +20,9 @@ use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use Magento\Payment\Model\InfoInterface;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Registry;
+use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
+use Magento\Sales\Model\Order\Creditmemo;
 
 
 /**
@@ -148,6 +151,14 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_checkoutSession;
 	
+	/**
+	 * Card  model Factory
+	 *
+	 * @var \HiPay\FullserviceMagento\Model\CardFactory
+	 */
+	protected $_cardFactory;
+	
+	
 	const SLEEP_TIME = 5;
 	
 	/**
@@ -164,7 +175,8 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-	 * @param \Magento\Checkout\Model\Session $checkoutSession,
+	 * @param \Magento\Checkout\Model\Session $checkoutSession
+	 * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
@@ -183,6 +195,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 			\Magento\Checkout\Model\Session $checkoutSession,
+			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
@@ -197,6 +210,10 @@ abstract class FullserviceMethod extends AbstractMethod {
 				
 				$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->getCode()]]);
 				$this->_checkoutSession = $checkoutSession;
+				$this->_cardFactory = $cardFactory;
+				
+				
+
 	}
 	
 	/**
@@ -256,6 +273,26 @@ abstract class FullserviceMethod extends AbstractMethod {
 			return in_array($currencyCode,explode(",",$this->getConfigData('allowed_currencies')));
 		}
 		return true;
+	}
+	
+	/**
+	 * Whether this method can accept or deny payment
+	 * @return bool
+	 * @api
+	 */
+	public function canReviewPayment()
+	{
+		
+		$orderCanReview = true;
+		/** @var $currentOrder \Magento\Sales\Model\Order */
+		$currentOrder = $this->_registry->registry('current_order') ?: $this->_registry->registry('hipay_current_order');
+		if($currentOrder){
+			if((int)$currentOrder->getPayment()->getAdditionalInformation('last_status') !== TransactionStatus::AUTHORIZED_AND_PENDING){
+				$orderCanReview = false;
+			}
+		}
+		
+		return $orderCanReview && $this->_canReviewPayment;
 	}
 	
 	 /**
@@ -354,8 +391,13 @@ abstract class FullserviceMethod extends AbstractMethod {
 			if ($payment->getLastTransId()) {  //Is not the first transaction
 				// As we already have a transaction reference, we can request a capture operation.
 				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+				
+				//set payment transaction in pending, validation must do by notifications.
+				$payment->setIsTransactionPending(true);
+				$payment->getOrder()->setStatus(\HiPay\FullserviceMagento\Model\Config::STATUS_CAPTURE_REQUESTED);
+				
 				//wait for notification to set correct data to order
-				$this->sleep();
+				//$this->sleep();
 	
 			} else { //Ok, it's the first transaction, so we request a new order
 				$this->place($payment);
@@ -388,8 +430,14 @@ abstract class FullserviceMethod extends AbstractMethod {
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
 		parent::refund($payment, $amount);
 		$this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
+		
+		if($payment->getCreditmemo()){
+			$payment->getCreditmemo()->setState(Creditmemo::STATE_OPEN);
+		}
+		
 		//wait for notification to set correct data to order
 		$this->sleep();
+		
 		return $this;
 	}
 	
@@ -437,6 +485,39 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function getGatewayManager($order){
 		return $this->_gatewayManagerFactory->create($order);
+	}
+	
+	/**
+	 * Validate payment method information object
+	 *
+	 * @return $this
+	 * @throws \Magento\Framework\Exception\LocalizedException
+	 * @api
+	 */
+	public function validate()
+	{
+		parent::validate();
+		
+		$info = $this->getInfoInstance();
+		$cardToken = $info->getAdditionalInformation('card_token');
+		if($cardToken){
+			//Check if current customer is owner of card token
+			$card = $this->_cardFactory->create()->load($cardToken,'cc_token');
+			
+			if(!$card->getId() || ($card->getCustomerId() != $this->_checkoutSession->getQuote()->getCustomerId())){
+				throw new \Magento\Framework\Exception\LocalizedException(__('Card does not exist!'));
+			}
+			
+			//Set Card data to payment info
+			$info->setCcType ( $card->getCcType())
+			->setCcOwner ( $card->getCcOwner () )
+			->setCcLast4 ( substr ( $card->getCcNumberEnc(), - 4 ) )
+			->setCcExpMonth ( $card->getCcExpMonth () )
+			->setCcExpYear ( $card->getCcExpYear () )
+			->setCcNumEnc($card->getCcNumberEnc());
+		}
+		
+		return $this;
 	}
 	
 	

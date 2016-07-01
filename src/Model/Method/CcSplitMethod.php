@@ -63,6 +63,7 @@ class CcSplitMethod extends CcMethod {
 	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
 	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
 	 * @param \Magento\Checkout\Model\Session $checkoutSession,
+	 * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
 	 * @param \Magento\Framework\Module\ModuleListInterface $moduleList
 	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
 	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
@@ -85,6 +86,7 @@ class CcSplitMethod extends CcMethod {
 			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
 			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
 			\Magento\Checkout\Model\Session $checkoutSession,
+			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
 			\Magento\Framework\Module\ModuleListInterface $moduleList,
 			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
@@ -94,7 +96,7 @@ class CcSplitMethod extends CcMethod {
 			) {
 				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
 									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$checkoutSession,$moduleList,$localeDate,$resource,$resourceCollection,$data);
+									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$checkoutSession,$cardFactory,$moduleList,$localeDate,$resource,$resourceCollection,$data);
 				
 			$this->profileFactory = $profileFactory;
 
