@@ -17,10 +17,9 @@ define(
     [
      	'jquery',
      	'ko',
-     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc',
-     	'Magento_Checkout/js/model/totals'
+     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
     ],
-    function ($,ko,Component,totals) {
+    function ($,ko,Component) {
         'use strict';
         var splitAmounts = ko.observableArray();
         return Component.extend({
@@ -46,14 +45,12 @@ define(
                        'selectedPaymentProfile',
                    ]);
                
-                totals.totals.subscribe(function(newValue){
-                	
-                	//Ajax call to update splitAmounts         		
-                	self.reloadPaymentProfiles();
-                	
-                });
+                
+                //Ajax call to update splitAmounts, when method view is loaded.        
+            	self.reloadPaymentProfiles();
+   
 
-              //Set expiration year to credit card data object
+            	//Set expiration year to credit card data object
                 this.selectedPaymentProfile.subscribe(function(value) {
                 	self.splitAmounts.removeAll()
                 	if(value){
