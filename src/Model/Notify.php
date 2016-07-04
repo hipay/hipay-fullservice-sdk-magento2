@@ -92,6 +92,12 @@ class Notify {
 	
 	/**
 	 *
+	 * @var bool $isFirstSplitPayment
+	 */
+	protected $isFirstSplitPayment = false;
+	
+	/**
+	 *
 	 * @var \HiPay\FullserviceMagento\Model\SplitPayment $splitPayment
 	 */
 	protected $splitPayment;
@@ -142,12 +148,17 @@ class Notify {
 					
 				}
 				
+				
 				$this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 
 				$this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
 				
 				if (!$this->_order->getId()) {
 					throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
+				}
+				
+				if($this->_order->getPayment()->getAdditionalInformation('profile_id') && !$this->isSplitPayment){
+					$this->isFirstSplitPayment = true;				
 				}
 								
 				//Retieve method model
@@ -288,7 +299,7 @@ class Notify {
 				
 				//If is split payment case, grand total is different to captured amount
 				//So we skip fraud detection in this case
-				$this->_doTransactionCapture($this->isSplitPayment ?: false);
+				$this->_doTransactionCapture(($this->isSplitPayment || $this->isFirstSplitPayment) ?: false);
 				/**
 				 * save token and credit card informations encryted
 				 */
@@ -685,6 +696,10 @@ class Notify {
 				->setCurrencyCode($this->_transaction->getCurrency())
 				->setIsTransactionClosed(0)
 				->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
+		
+		if(($this->isFirstSplitPayment || $this->isSplitPayment) && $payment->getIsFraudDetected()){
+			$payment->setIsFraudDetected(false);
+		}
 												 
 		if (!$this->_order->getEmailSent()) {
 			$this->orderSender->send($this->_order);
@@ -732,7 +747,7 @@ class Notify {
 				);
 		$payment->registerCaptureNotification(
 				$this->_transaction->getCapturedAmount(),
-				$skipFraudDetection && $parentTransactionId
+				$skipFraudDetection /*&& $parentTransactionId*/
 				);
 		
 		$orderStatus = $payment->getMethodInstance()->getConfigData('order_status_payment_accepted');
