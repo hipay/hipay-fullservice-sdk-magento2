@@ -55,14 +55,12 @@ class Index extends AppAction {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
      public function execute(){
-     	ini_set('display_errors',1);
-     	error_reporting(E_ALL);
+     	//ini_set('display_errors',1);
+     	//error_reporting(E_ALL);
      	
      	$params = $this->getRequest()->getPost()->toArray();
      	
      	try {
-     		$this->_logger->info("Debug notification");
-     		$this->_logger->info(print_r($params,true));
      		
      		/* @var $notify \HiPay\FullserviceMagento\Model\Notify */
      		$notify = $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Notify',['params'=>['response'=>$params]]);

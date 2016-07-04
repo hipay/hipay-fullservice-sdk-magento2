@@ -266,4 +266,6 @@
 "Hipay status to validate order","Statut Hipay validant la commande"
 "No","Non"
 "Yes","Oui"
+"Add product to cart","Mettre à jour le panier"
+"Fill cart when payment canceled or refused","Remet à jour le panier quand le paiement est annulé ou refusé."
 
