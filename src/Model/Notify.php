@@ -705,7 +705,23 @@ class Notify {
 			$this->orderSender->send($this->_order);
 		}
 		
-		//Set custom status
+		//Change last status history
+		$histories = $this->_order->getStatusHistories();
+		if(count($histories)){		
+			$history = $histories[count($histories) - 1];
+			$history->setStatus(Config::STATUS_AUTHORIZED);
+			
+			//Override message history
+
+			$formattedAmount = $this->_order->getBaseCurrency()->formatTxt($this->_transaction->getAuthorizedAmount());
+			$comment = __('Authorized amount of %1 online', $formattedAmount);
+			$comment = $payment->prependMessage($comment);
+			$comment .= __(' Transaction ID: %1',$this->_transaction->getTransactionReference() . '-authorization');
+			$history->setComment($comment);
+			
+		}
+		
+		//Set custom order status
 		$this->_order->setStatus(Config::STATUS_AUTHORIZED);
 		
 		$this->_order->save();
