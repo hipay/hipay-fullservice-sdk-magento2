@@ -15,13 +15,11 @@
  */
 namespace HiPay\FullserviceMagento\Cron;
 
-use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * HiPay module crontab
  */
-class CleanPendingOrders implements ObserverInterface
+class CleanPendingOrders
 {
 
 	/**
