@@ -414,7 +414,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		// As we already have a transaction reference, we can request a capture operation.
 		$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
 		//wait for notification to set correct data to order
-		$this->sleep();
+		//$this->sleep();
 	}
 	
 	

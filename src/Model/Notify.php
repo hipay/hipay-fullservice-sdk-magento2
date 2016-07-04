@@ -705,7 +705,14 @@ class Notify {
 			$this->orderSender->send($this->_order);
 		}
 		
-		//Set custom status
+		//Change last status history
+		$histories = $this->_order->getStatusHistories();
+		if(count($histories)){		
+			$history = $histories[count($histories) - 1];
+			$history->setStatus(Config::STATUS_AUTHORIZED);
+		}
+		
+		//Set custom order status
 		$this->_order->setStatus(Config::STATUS_AUTHORIZED);
 		
 		$this->_order->save();
