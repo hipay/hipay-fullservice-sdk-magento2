@@ -38,6 +38,12 @@ class CaptureCommandPlugin {
 		if(strpos($payment->getMethod(),'hipay') !== false){
 			
 			$status = Config::STATUS_CAPTURE_REQUESTED;
+			
+			//Change status to processing (default) if validation status is Capture Requested (117)
+			if((int)$payment->getMethodInstance()->getConfigData('hipay_status_validate_order') == 117){
+				$status = false;
+			}
+			
 			$state = SalesOrder::STATE_PROCESSING;
 			
 			$formattedAmount = $order->getBaseCurrency()->formatTxt($amount);

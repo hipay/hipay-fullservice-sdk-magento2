@@ -774,10 +774,20 @@ class Notify {
 		
 		$this->_order->setStatus($orderStatus);
 		
-		$this->_order->save();
-	
 		// notify customer
 		$invoice = $payment->getCreatedInvoice();
+		
+		if(!$invoice && $this->isFirstSplitPayment){
+			$invoice = $this->_order->prepareInvoice()->register();
+			$invoice->setOrder($this->_order);
+			$this->_order->addRelatedObject($invoice);
+			$payment->setCreatedInvoice($invoice);
+			$payment->setShouldCloseParentTransaction(true);
+		
+		}
+
+		$this->_order->save();
+		
 		if ($invoice && !$this->_order->getEmailSent()) {
 			$this->orderSender->send($this->_order);
 			$this->_order->addStatusHistoryComment(
@@ -786,6 +796,7 @@ class Notify {
 							true
 							)->save();
 		}
+		
 		
 	}
 	
