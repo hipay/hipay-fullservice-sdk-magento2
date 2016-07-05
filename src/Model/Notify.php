@@ -712,7 +712,6 @@ class Notify {
 			$history->setStatus(Config::STATUS_AUTHORIZED);
 			
 			//Override message history
-
 			$formattedAmount = $this->_order->getBaseCurrency()->formatTxt($this->_transaction->getAuthorizedAmount());
 			$comment = __('Authorized amount of %1 online', $formattedAmount);
 			$comment = $payment->prependMessage($comment);
