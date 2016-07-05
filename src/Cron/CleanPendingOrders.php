@@ -63,6 +63,7 @@ class CleanPendingOrders
     	$this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
         $this->logger = $logger;
+				$this->_scopeConfig = $scopeConfig;
     }
 
     /**
