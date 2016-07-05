@@ -8,7 +8,7 @@
                     <label>Title</label>
                 </field>
                 <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
-	                <label>Payment Action</label>	           
+	                <label>Payment Action</label>
 	                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
             	</field>
             	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -16,15 +16,15 @@
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
                 </field>
                 <field id="order_status_payment_accepted" translate="label" type="select" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment accepted</label>
+                    <label>Order status when payment is accepted</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Accepted</source_model>
                 </field>
                 <field id="order_status_payment_refused" translate="label" type="select" sortOrder="44" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment refused</label>
+                    <label>Order status when payment is refused</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Refused</source_model>
                 </field>
                  <field id="order_status_payment_canceled" translate="label" type="select" sortOrder="46" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment refused</label>
+                    <label>Order status when payment is cancelled</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Canceled</source_model>
                 </field>
                 <field id="hipay_status_validate_order" translate="label" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">

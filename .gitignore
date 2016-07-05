@@ -42,7 +42,7 @@ vendor/
 # Custom dev tools#
 ###################
 tools/
-docker-compose.yml
+#tests/docker-compose.yml
 
 # Env vars #
 ############
