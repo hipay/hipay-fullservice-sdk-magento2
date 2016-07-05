@@ -4,13 +4,13 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 namespace HiPay\FullserviceMagento\Controller\Notify;
@@ -55,14 +55,12 @@ class Index extends AppAction {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
      public function execute(){
-     	ini_set('display_errors',1);
-     	error_reporting(E_ALL);
+     	//ini_set('display_errors',1);
+     	//error_reporting(E_ALL);
      	
      	$params = $this->getRequest()->getPost()->toArray();
      	
      	try {
-     		$this->_logger->info("Debug notification");
-     		$this->_logger->info(print_r($params,true));
      		
      		/* @var $notify \HiPay\FullserviceMagento\Model\Notify */
      		$notify = $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Notify',['params'=>['response'=>$params]]);

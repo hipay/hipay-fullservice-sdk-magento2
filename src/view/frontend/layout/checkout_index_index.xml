@@ -5,17 +5,20 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+        <css src="HiPay_FullserviceMagento::css/hipay.css"/>
+    </head>
     <body>
         <referenceBlock name="checkout.root">
             <arguments>
@@ -39,7 +42,19 @@
                                                                         <item name="hipay_hosted" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
+                                                                        <item name="hipay_hostedsplit" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
                                                                        <item name="hipay_cc" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                         <item name="hipay_ccsplit" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                        <item name="hipay_sisal" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                        <item name="hipay_qiwiwallet" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>

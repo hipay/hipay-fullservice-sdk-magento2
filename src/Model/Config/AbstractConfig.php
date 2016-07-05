@@ -4,13 +4,13 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 namespace HiPay\FullserviceMagento\Model\Config;
@@ -52,6 +52,13 @@ abstract class AbstractConfig implements ConfigInterface {
 	 * @var string
 	 */
 	protected $pathPattern;
+	
+	/**
+	 * Core store config
+	 *
+	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
+	 */
+	protected $_scopeConfig;
 	
 
 	
@@ -155,10 +162,10 @@ abstract class AbstractConfig implements ConfigInterface {
         $this->pathPattern = $pathPattern;
     }
 	
-	public function getGeneraleValue($key){
+	public function getGeneraleValue($key,$group = 'hipay_credentials'){
 
 		return  $this->_scopeConfig->getValue(
-				$this->_mapGeneralFieldset($key),
+				$this->_mapGeneralFieldset($key,$group),
 				\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
 				$this->_storeId
 				);
@@ -209,7 +216,7 @@ abstract class AbstractConfig implements ConfigInterface {
      * @param string $fieldName
      * @return string|null
      */
-    protected function _mapGeneralFieldset($fieldName)
+    protected function _mapGeneralFieldset($fieldName,$group = 'hipay_credentials')
     {
         switch ($fieldName) {
             case 'api_username':
@@ -218,7 +225,7 @@ abstract class AbstractConfig implements ConfigInterface {
             case 'api_username_test':
             case 'api_password_test':
             case 'secret_passphrase_test':
-            	return "hipay/hipay_credentials/{$fieldName}";
+            	return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
         }

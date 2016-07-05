@@ -1,0 +1,36 @@
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+
+define(
+    [
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted', //@override hipay-hosted
+    ],
+    function (Component) {
+        'use strict';
+        return Component.extend({
+            defaults: {
+                template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+                redirectAfterPlaceOrder: false
+            },
+	        getCode: function() {
+	            return 'hipay_sisal';
+	        },
+            isActive: function() {
+                return true;
+            }
+        });
+    }
+);
+

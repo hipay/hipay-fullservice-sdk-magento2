@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Sales::sales">
+                    <resource id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Payment" sortOrder="10">
+                        <resource id="HiPay_FullserviceMagento::hipay_payment_profile"  title="Payment Profile" sortOrder="10" />
+                        <resource id="HiPay_FullserviceMagento::hipay_split_payment"  title="Split Payment" sortOrder="20" >
+                        	<resource id="HiPay_FullserviceMagento::split_save" title="Save split payment" sortOrder="10" />
+                        	<resource id="HiPay_FullserviceMagento::split_delete" title="Delete split payment" sortOrder="20" />
+                        	<resource id="HiPay_FullserviceMagento::split_pay" title="Pay split payment" sortOrder="30" />
+                        </resource>
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="HiPay_FullserviceMagento::hipay" title="HiPay configuration generale" sortOrder="60" />
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>

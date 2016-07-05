@@ -3,32 +3,36 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 
 define(
     [
+     	'ko',
      	'jquery',
-     	'Magento_Payment/js/view/payment/cc-form',
+     	'HiPay_FullserviceMagento/js/view/payment/cc-form',
+     	'hipay_tpp',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($,Component,storage,fullScreenLoader) {
+    function (ko, $,Component,TPP,storage,fullScreenLoader) {
+
         'use strict';
         return Component.extend({
             
         	defaults: {
         		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-        		tokenizeUrl: window.checkoutConfig.payment.hipayCc.tokenizeUrl,
-        		creditCardToken: null,
-        		redirectAfterPlaceOrder: false
+        		showCcForm: true,
+        		apiUsernameTokenJs: window.checkoutConfig.payment.hipayCc.apiUsernameTokenJs ,
+        		apiPasswordTokenJs: window.checkoutConfig.payment.hipayCc.apiPasswordTokenJs
+        		
         	},
             placeOrderHandler: null,
             validateHandler: null,
@@ -46,6 +50,22 @@ define(
             setValidateHandler: function (handler) {
                 this.validateHandler = handler;
             },
+            /**
+             * @override
+             */
+            initObservable: function () {
+            	var self = this;
+                this._super();
+                
+                this.showCcForm = ko.computed(function () {
+
+                    return !(self.useOneclick() && self.customerHasCard()) ||
+                    		self.selectedCard() === undefined ||
+                    		self.selectedCard() === '';
+                }, this);
+
+                return this;
+            },
         	/**
              * @returns {Boolean}
              */
@@ -58,31 +78,14 @@ define(
             isShowLegend: function () {
                 return true;
             },
-            /**
-             * @returns {*}
-             */
-            getSource: function () {
-                return window.checkoutConfig.payment.iframe.source[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getControllerName: function () {
-                return window.checkoutConfig.payment.iframe.controllerName[this.getCode()];
-            },
-
-            /**
-             * @returns {*}
-             */
-            getPlaceOrderUrl: function () {
-                return window.checkoutConfig.payment.iframe.placeOrderUrl[this.getCode()];
-            },
             context: function() {
                 return this;
             },
             hasSsCardType: function() {
                 return false;
+            },
+            getCcAvailableTypes: function() {
+                return window.checkoutConfig.payment.hipayCc.availableTypes;
             },
             /**
              * @override
@@ -91,19 +94,7 @@ define(
                 return 'hipay_cc';
             },
             getData: function() {
-                return {
-                    'method': this.item.method,
-                    'additional_data': {
-                        'cc_cid': this.creditCardVerificationNumber(),
-                        'cc_ss_start_month': this.creditCardSsStartMonth(),
-                        'cc_ss_start_year': this.creditCardSsStartYear(),
-                        'cc_type': this.creditCardType(),
-                        'cc_exp_year': this.creditCardExpYear(),
-                        'cc_exp_month': this.creditCardExpMonth(),
-                        'cc_number': this.creditCardNumber(),
-                        'cc_token': this.creditCardToken
-                    }
-                };
+                return this._super();
             },
             /**
              * Display error message
@@ -117,21 +108,31 @@ define(
                         message: error
                     });
                 }
-            },
+            },          
             /**
              * After place order callback
              */
 	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(window.checkoutConfig.payment.hipayCc.afterPlaceOrderUrl);
+	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
 	        },
-            generateToken: function (){
+            generateToken: function (data,event){
             	var self = this,
-            	isPaymentProcessing = null;
+            	isTokenizeProcessing = null;
+            	
 
-	            if (this.validateHandler()) {
+                if (event) {
+                    event.preventDefault();
+                }
+                
+	            if(this.validateHandler()){
+
+	            	 if(this.creditCardToken()){
+	            		 	self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
+	            		 	return;
+	                 }
 	            	
-	            	 isPaymentProcessing = $.Deferred();
-	                    $.when(isPaymentProcessing).done(
+	            	 isTokenizeProcessing = $.Deferred();
+	                    $.when(isTokenizeProcessing).done(
 	                        function () {
 	                            self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
 	                        }
@@ -140,26 +141,40 @@ define(
 	                            self.addError(error);
 	                        }
 	                    );
+	                    
 	                    fullScreenLoader.startLoader();
-	                    storage.post(
-	                    		
-	                            this.tokenizeUrl, JSON.stringify(this.getData())
-	                        ).done(
-	                            function (response) {
-	                            	console.log("response");
-	                            	console.log(response);
-	                            	self.creditCardToken = response.token;
-	                            	isPaymentProcessing.resolve();
-	                            }
-	                        ).fail(
-	                            function (response) {
-	                            	var error = JSON.parse(response.responseText);
-	                                isPaymentProcessing.reject(error);
+	                    
+	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
+	                    TPP.setCredentials(this.apiUsernameTokenJs,this.apiPasswordTokenJs);
+	                    
+	                    TPP.create({
+	                        card_number:  this.creditCardNumber(),
+	                        cvc: this.creditCardVerificationNumber(),
+	                        card_expiry_month:this.creditCardExpMonth(),
+	                        card_expiry_year: this.creditCardExpYear(),
+	                        card_holder: '',
+	                        multi_use: '0'
+	                      },
+		                      function (response) {
+		                          	if(response.token){
+		                          		self.creditCardToken(response.token);
+		                          		isTokenizeProcessing.resolve();
+		                          	}
+		                          	else{
+		                          		var error = response;
+			                                isTokenizeProcessing.reject(error);
+		                          	}
+		                          	fullScreenLoader.stopLoader();
+	                          },
+	                          function (response) {
+	                            	var error = response;
+	                            	isTokenizeProcessing.reject(error);
 	                                fullScreenLoader.stopLoader();
 	                            }
-	                        );
-	            	
+	                      );
+	                    
 	            }
+
             }
             
         });

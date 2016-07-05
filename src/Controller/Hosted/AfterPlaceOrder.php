@@ -1,16 +1,16 @@
 <?php
-/*
+/**
  * HiPay fullservice Magento2
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 namespace HiPay\FullserviceMagento\Controller\Hosted;
@@ -31,12 +31,12 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
     {
     	ini_set('display_errors', 1);
     	error_reporting(E_ALL | E_STRICT);
-    	//die(ini_get('memory_limit'));
+    	
         try {
         	
         	
-        	
-            $order = $this->_getCheckoutSession()->getLastRealOrder();
+           //Retieve last order increment id
+           $order = $this->_getCheckoutSession()->getLastRealOrder();
 			
            if(!$order->getId()){
             	throw new \Magento\Framework\Exception\LocalizedException(
@@ -44,12 +44,13 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             			);
             }
            
+            //Create gateway manage with order data
             $gateway = $this->_gatewayManagerFactory->create($order);
         	
+            //Call fullservice api to get hosted page url
             $hppModel = $gateway->requestHostedPaymentPage();
-            
-            //@TODO catch sdk exception
-
+			
+            //Redirect to hosted page
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
 

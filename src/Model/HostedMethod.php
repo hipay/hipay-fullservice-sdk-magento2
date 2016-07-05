@@ -1,16 +1,16 @@
 <?php
-/*
+/**
  * HiPay fullservice SDK
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 namespace HiPay\FullserviceMagento\Model;
@@ -45,7 +45,61 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	protected $_code = self::HIPAY_METHOD_CODE;
 	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_isInitializeNeeded = true;
+	
+	/**
+	 * Payment Method feature
+	 *
+	 * @var bool
+	 */
+	protected $_canUseInternal = true;
+	
+	
+	/**
+	 * Instantiate state and set it to state object
+	 *
+	 * @param string $paymentAction
+	 * @param \Magento\Framework\DataObject $stateObject
+	 * @return void
+	 */
+	public function initialize($paymentAction, $stateObject)
+	{
 
+		$payment = $this->getInfoInstance();
+		$order = $payment->getOrder();
+		$order->setCanSendNewEmailFlag(false);
+		$payment->setAmountAuthorized($order->getTotalDue());
+		$payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+		
+		$this->_setHostedUrl($order);
+		
+		$stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+		$stateObject->setStatus('pending_payment');
+		$stateObject->setIsNotified(false);
+
+	}
+	
+	protected function _setHostedUrl(\Magento\Sales\Model\Order $order){
+
+		
+		if($order->getPayment()->getAdditionalInformation('card_token') != ""){
+			$this->place($order->getPayment());
+		}
+		else{
+			//Create gateway manage with order data
+			$gateway = $this->_gatewayManagerFactory->create($order);
+			//Call fullservice api to get hosted page url
+			$hppModel = $gateway->requestHostedPaymentPage();
+			$order->getPayment()->setAdditionalInformation('redirectUrl',$hppModel->getForwardUrl());
+		}
+
+	}
+	
 	/**
 	 * Capture payment method
 	 *
@@ -58,13 +112,14 @@ class HostedMethod extends FullserviceMethod {
 	 */
 	public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
 	{
-		parent::capture($payment, $amount);
+	 	if (!$this->canCapture()) {
+            throw new \Magento\Framework\Exception\LocalizedException(__('The capture action is not available.'));
+        }
+        
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
-			if ($payment->getCcTransId()) {  //Is not the first transaction
-				// As we alredy hav a transaction reference, we can request a capture operation.
-				$this->_getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-	
+			if ($payment->getLastTransId()) {  //Is not the first transaction
+				$this->manualCapture($payment, $amount);
 			} 
 	
 	

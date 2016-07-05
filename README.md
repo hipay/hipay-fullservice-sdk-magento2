@@ -1,111 +1,43 @@
-# HiPay Fullservice Module Magento2
+# HiPay Fullservice Module for Magento 2.0
 
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/hipay/hipay-fullservice-sdk-magento2/master/LICENSE.md)
+[![CircleCI](https://circleci.com/gh/hipay/hipay-fullservice-sdk-magento2/tree/develop.svg?style=shield&circle-token=b6547a8c017bc8942a0bfc4121a9aaac0fff61e0)](https://circleci.com/gh/hipay/hipay-fullservice-sdk-magento2/tree/develop)
 
-### Payment Notifications
+The **HiPay Fullservice module for Magento 2.0** is a PHP module which allows you to accept payments in your Magento2 online store, offering innovative features to reduce shopping cart abandonment rates, optimize success rates and enhance the purchasing process on merchants’ sites to significantly increase business volumes without additional investments in the Magento2 e-commerce CMS solution.
 
-During payment workflow, order status is updated only with HiPay fullservice notifications.   
-The endpoint of notification is `http://yourawesomewebsite.com/hipay/notify/index`.  
-It is protected by a passphrase encrypted. So don't forget to enter it in your Magento and HiPay BO.  
+## Getting started
 
-For more informations, you can see the treatment in Model [Notify](src/Model/Notify.php).
+Read the **[project documentation][doc-home]** for comprehensive information about the requirements, general workflow and installation procedure.
 
-### Transaction statues
+## Resources
+- [Full project documentation][doc-home] — To have a comprehensive understanding of the workflow and get the installation procedure
+- [HiPay Support Center][hipay-help] — To get technical help from HiPay
+- [Issues][project-issues] — To report issues, submit pull requests and get involved (see [Apache 2.0 License][project-license])
+- [Change log][project-changelog] — To check the changes of the latest versions
+- [Contributing guidelines][project-contributing] — To contribute to our source code
 
-All HiPay fullservice transactions statues are processed but not all them interact with Magento order statues.  
-This treatment occure only when notification is received (see. Notification part).  
+## Features
 
-When a statut is processing we create a magento payment transaction.  
-Else we just add a new order history record with notifications informations.  
+- Compatibility with Magento2
+- 3-D Secure enabling/disabling
+- One-Click option configuration with custom rules
+- Management of multiple cards per customer for one-click payment
+- iFrame integration, hosted page and custom card API
+- Mail management for transactions pending fraud validation (challenged)
+- Manual and automatic capture
+- Capture and partial refund
+- Payment in x installments without fees
+- Subscription management (development in progress)
 
-HiPay fullservice statues interaction:
+## License
 
-- *BLOCKED* (`110`) and *DENIED* (`111`)  
-    Transaction type **"Denied"** is created:
-    - Transaction is closed
-    - If invoice in status *pending* exists, it's canceled
-    - The order is cancelled too
+The **HiPay Fullservice module for Magento 2.0** is available under the **Apache 2.0 License**. Check out the [license file][project-license] for more information.
 
+[doc-home]: https://github.com/hipay/hipay-fullservice-sdk-magento2/wiki
 
-- *AUTHORIZED AND PENDING* (`112`) and *PENDING PAYMENT* (`200`)  
-    Transaction type **"Authorization"** is created:
-    - Transaction is in *pending*
-    - Transaction isn't closed
-    - Order status change to `Pending Review`
-    - Invoice isn't created
+[hipay-help]: http://help.hipay.com
 
-
-- *REFUSED* (`113`), *CANCELLED* (`115`), *AUTHORIZATION_REFUSED* (`163`), *CAPTURE_REFUSED* (`163`)  
-     Transaction is *not created*:  
-     - The order is `cancelled`
-     - If invoice exists, it's canceled too
-     
-
-- *EXPIRED* (`114`)  
-  Transaction type **"Void"** is created if parent transaction authorization:  
-    - @TODO define the process
-    
-
-- *AUTHORIZED* (`116`)  
-  Transaction type **"Authorization"** is created:  
-  - Transaction is open
-  - Order status change to `Authorized`
-  - Invoice isn't created
-  
-
-- *CAPTURE REQUESTED* (`117`)  
-  Transaction is not created:  
-  - Order status change to `Capture requested`
-  - Notification details are added to order history
-  
-
-- *CAPTURED* (`118`) and **PARTIALLY CAPTURED** (`119`)  
-  Transaction type **"Capture"** is created:  
-  - Transaction still open
-  - Order status change to `Processing` or `Partially captured`
-  - Invoice complete/partial is created
-  
-
-- *REFUND_REQUESTED* (`124`)  
-  Transaction is not created:  
-  - Order status change to `Refund requested`
-  - Notification details are added to order history
-  
-
-- *REFUNDED* (`125`) and **PARTIALLY REFUNDED** (`126`)  
-  Transaction type **"Capture"** is created:  
-  - Transaction still open
-  - Order status change to `Processing` or `Partially captured`
-  - Invoice complete/partial is created
-  
-
-- *REFUND REFUSED* (`117`)  
-  Transaction is not created:  
-  - Order status change to `Refund refused`
-  - Notification details are added to order history
-  
-
-- *CREATED* (`101`)
-- *CARD HOLDER ENROLLED* (`103`)
-- *CARD HOLDER NOT ENROLLED* (`104`)
-- *UNABLE TO AUTHENTICATE* (`105`)
-- *CARD HOLDER AUTHENTICATED* (`106`)
-- *AUTHENTICATION ATTEMPTED* (`107`)
-- *COULD NOT AUTHENTICATE* (`108`)
-- *AUTHENTICATION FAILED* (`109`)
-- *COLLECTED* (`120`)
-- *PARTIALLY COLLECTED* (`121`)
-- *SETTLED* (`122`)
-- *PARTIALLY SETTLED* (`123`)
-- *CHARGED BACK* (`129`)
-- *DEBITED* (`131`)
-- *PARTIALLY DEBITED* (`132`)
-- *AUTHENTICATION REQUESTED* (`140`)
-- *AUTHENTICATED* (`141`)
-- *AUTHORIZATION REQUESTED* (`142`)
-- *ACQUIRER FOUND* (`150`)
-- *ACQUIRER NOT FOUND* (`151`)
-- *CARD HOLDER ENROLLMENT UNKNOWN* (`160`)
-- *RISK ACCEPTED* (`161`)  
-    Transaction is not created:  
-  - Orde status *don't change*
-  - Notification details are added to order history
+[project-issues]: https://github.com/hipay/hipay-fullservice-sdk-magento2/issues
+[project-license]: LICENSE.md
+[project-changelog]: CHANGELOG.md
+[project-contributing]: CONTRIBUTING.md

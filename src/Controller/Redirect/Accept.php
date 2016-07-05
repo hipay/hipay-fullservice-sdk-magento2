@@ -4,13 +4,13 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 namespace HiPay\FullserviceMagento\Controller\Redirect;
@@ -28,7 +28,13 @@ class Accept extends Fullservice {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
 	public function execute(){
+		//MO/TO case
+		if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {
 			
+			$this->messageManager->addSuccess(__('Thank you for your order. You will receveive a confirmation email soon.'));
+			return $this->_redirect('checkout/cart');
+		}
+		
 		$this->_redirect('checkout/onepage/success');
 
 	}

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="send_hosted_payment_link" instance="HiPay\FullserviceMagento\Observer\SendHostedPaymentLinkObserver"/>
+    </event>
+    <event name="controller_action_predispatch_sales_order_view">
+    	<observer name="add_accept_capture_button" instance="HiPay\FullserviceMagento\Observer\AddAcceptCaptureButtonObserver"/>
+    </event>
+     <event name="sales_order_load_after">
+    	<observer name="order_can_refund" instance="HiPay\FullserviceMagento\Observer\OrderCanRefundObserver"/>
+    </event>
+</config>

@@ -4,13 +4,13 @@
  *
  * NOTICE OF LICENSE
  *
- * This source file is subject to the MIT License
- * that is bundled with this package in the file LICENSE.txt.
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
  * It is also available through the world-wide-web at this URL:
- * http://opensource.org/licenses/mit-license.php
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
 
@@ -55,10 +55,11 @@ class InstallData implements InstallDataInterface
         ];
         foreach ($statuses as $code => $info) {
             $statuesData[] = ['status' => $code, 'label' => $info['label']];
-            $statuesToStateData =  [
+            $statuesToStateData[] =  [
                         'status' => $code,
                         'state' =>  $info['state'],
                         'is_default' => isset($info['default']) ? 1 : 0,
+            			'visible_on_front' => 1
                     ];
         }
         //Insert new statues
@@ -66,7 +67,7 @@ class InstallData implements InstallDataInterface
             ->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $statuesData);
         
 		//Assign new statues to states
-        $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'),['status', 'state', 'is_default'],$statuesToStateData);
+        $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'),['status', 'state', 'is_default','visible_on_front'],$statuesToStateData);
         
             
         /**

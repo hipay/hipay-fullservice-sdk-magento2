@@ -1,0 +1,32 @@
+<?php $_element = $block->getElement() ?>
+<input type="hidden" value="<?php echo $_element->getRule()->getId() ?>" name="<?php echo $_element->getName() ?>" />
+<div class="rule-tree">
+    <fieldset id="<?php echo $_element->getHtmlId() ?>" <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?> class="fieldset">
+        <legend class="legend"><span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span></legend>
+        <br>
+    <?php if ($_element->getComment()): ?>
+        <div class="messages">
+            <div class="message message-notice"><?php echo $block->escapeHtml($_element->getComment()) ?></div>
+        </div>
+    <?php endif; ?>
+    <div class="rule-tree-wrapper">
+        <?php //echo $_element->getChildrenHtml() ?>
+        <?php if ($_element->getRule() && $_element->getRule()->getConditions()): ?> 
+			<?php echo $_element->getRule()->getConditions()->asHtmlRecursive(); ?> 
+		<?php endif; ?>
+    </div>
+    </fieldset>
+</div>
+<script>
+require([
+    "HiPay_FullserviceMagento/js/rules",
+    "prototype"
+], function(VarienRulesForm){
+
+window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+<?php if ($_element->getReadonly()): ?>
+    <?php echo $_element->getHtmlId() ?>.setReadonly(true);
+<?php endif; ?>
+
+});
+</script>

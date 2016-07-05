@@ -5,6 +5,7 @@ magento2:
   links:
     - db
     - selenium
+    - smtp
   env_file:
     - env/auth.env
     - env/mage.env
@@ -12,9 +13,15 @@ magento2:
   volumes:
     - ../src:/home/magento2/HiPay_Fullservice
     - ../tests:/home/magento2/tests
+  command: bash -c "apt-get install -y ssmtp && echo \"sendmail_path = /usr/sbin/ssmtp -t\" > /usr/local/etc/php/conf.d/sendmail.ini && echo \"mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES\" > /etc/ssmtp/ssmtp.conf"
 db:
   image: mysql:5.6
   environment:
     - MYSQL_ROOT_PASSWORD=magento2
 selenium:
   image: selenium/standalone-firefox
+smtp:
+  image: schickling/mailcatcher
+  container_name: hipay-mg2tpp-smtp
+  ports:
+    - "1081:1080"

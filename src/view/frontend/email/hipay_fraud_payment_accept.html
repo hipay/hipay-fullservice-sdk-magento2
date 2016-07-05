@@ -1,0 +1,84 @@
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<!--@subject Payment transaction approved @-->
+<!--@vars
+{"var reason":"Transaction Acepted",
+"var checkoutType":"Checkout Type",
+"var customerEmail":"Customer Email",
+"var customer":"Customer Name",
+"var items":"Shopping Cart Items",
+"var total":"Total",
+"var billingAddress.format('html')":"Billing Address",
+"var shippingAddress.format('html')":"Shipping Address",
+"var shippingMethod":"Shipping Method",
+"var paymentMethod":"Payment Method",
+"var dateAndTime":"Date and Time of Transaction"}
+@-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <thead>
+    <tr>
+        <th>{{trans "Your payment is accepted." }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <p>
+                <b>{{trans "Reason" }}</b><br />
+                {{var reason}}
+            </p>
+            <p>
+                <b>{{trans "Customer" }}:</b><br />
+                <a href="mailto:{{var customerEmail}}">{{var customer}}</a> &lt;{{var customerEmail}}&gt;
+            </p>
+            <p>
+                <b>{{trans "Items" }}</b><br />
+                {{var items}}
+            </p>
+            <p>
+                <b>{{trans "Total" }}:</b><br />
+                {{var total}}
+            </p>
+            <p>
+                <b>{{trans "Billing Address" }}:</b><br />
+                {{var billingAddress.format('html')}}
+            </p>
+            <p>
+                <b>{{trans "Shipping Address" }}:</b><br />
+                {{var shippingAddress.format('html')}}
+            </p>
+            <p>
+                <b>{{trans "Shipping Method" }}:</b><br />
+                {{var shippingMethod}}
+            </p>
+            <p>
+                <b>{{trans "Payment Method" }}:</b><br />
+                {{var paymentMethod}}
+            </p>
+            <p>
+                <b>{{trans "Date & Time" }}:</b><br />
+                {{var dateAndTime}}
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+{{template config_path="design/email/footer_template"}}

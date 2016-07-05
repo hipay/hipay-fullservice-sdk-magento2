@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="hipay_fraud_payment_review_template" label="Fraud Payment Review" file="hipay_fraud_payment_review.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+    <template id="hipay_fraud_payment_deny_template" label="Fraud Payment Deny" file="hipay_fraud_payment_deny.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+    <template id="hipay_fraud_payment_accept_template" label="Fraud Payment Accepted" file="hipay_fraud_payment_accept.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+    <template id="hipay_hosted_payment_link_template" label="Hosted payment link" file="hipay_hosted_payment_link.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+</config>
