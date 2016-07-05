@@ -1,6 +1,6 @@
 <?php
 /**
- * HiPay fullservice Magento2
+ * HiPay fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -19,8 +19,14 @@ use HiPay\FullserviceMagento\Cron;
 use HiPay\FullserviceMagento\Model\SplitPayment;
 
 /**
- * FullserviceMagento event observer
- * Pay split payments in pending
+ * HiPay module crontab
+ * Used to pay all split payments in pending with day frequency
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class PaySplitPayment
 {

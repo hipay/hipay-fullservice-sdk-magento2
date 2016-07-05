@@ -1,6 +1,6 @@
 <?php
 /**
- * HiPay fullservice SDK
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *

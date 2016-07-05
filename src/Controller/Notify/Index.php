@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -18,6 +18,18 @@ namespace HiPay\FullserviceMagento\Controller\Notify;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
 
+/**
+ * Notification controller
+ * Manage order validation and modification
+ * 
+ * Is protected by secret passphare (See \HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver.php)
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class Index extends AppAction {
 	
 	/**
@@ -39,17 +51,7 @@ class Index extends AppAction {
 		$this->_logger = $_logger;
 		
 	}
-	
 
-	
-	protected function _validateSignature()
-	{
-	    $signature= $this->getRequest()->getServerValue('HTTP_X_ALLOPASS_SIGNATURE');
-		//@TODO check signature passphrase
-		
-		return true;
-	}
-	
 	/**
 	 * @return void
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)

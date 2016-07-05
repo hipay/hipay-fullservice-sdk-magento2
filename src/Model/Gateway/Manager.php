@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,7 +16,6 @@
 namespace HiPay\FullserviceMagento\Model\Gateway;
 
 
-use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory; 
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
@@ -24,6 +23,18 @@ use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Request\RequestSerializer;
 
+/**
+ * Gateway Manager Class
+ * 
+ * HiPay Fullservice SDK is used by the manager
+ * So, all api call are centralized here
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class Manager {
 	
 	/**

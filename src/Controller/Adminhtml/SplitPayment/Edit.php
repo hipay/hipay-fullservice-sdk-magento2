@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -17,6 +17,15 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
 use Magento\Backend\App\Action;
 
+/**
+ * Edit split payment
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class Edit extends \Magento\Backend\App\Action
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * HiPay fullservice SDK
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -18,6 +18,14 @@ namespace HiPay\FullserviceMagento\Cron;
 
 /**
  * HiPay module crontab
+ * 
+ * Used to clean orders in pending or pending review since more than 30 minutes
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CleanPendingOrders
 {
