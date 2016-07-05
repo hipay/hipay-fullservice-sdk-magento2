@@ -118,10 +118,8 @@ class HostedMethod extends FullserviceMethod {
         
 		try {
 			/** @var \Magento\Sales\Model\Order\Payment $payment */
-			if ($payment->getCcTransId()) {  //Is not the first transaction
-				// As we alredy hav a transaction reference, we can request a capture operation.
-				$this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-	
+			if ($payment->getLastTransId()) {  //Is not the first transaction
+				$this->manualCapture($payment, $amount);
 			} 
 	
 	
