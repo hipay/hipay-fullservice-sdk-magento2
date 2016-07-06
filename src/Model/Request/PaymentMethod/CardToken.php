@@ -16,9 +16,17 @@
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
-use Magento\Framework\Exception\LocalizedException;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 
+/**
+ * CardToken Payment Method Request Object
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class CardToken extends AbstractPaymentMethod{
 
 

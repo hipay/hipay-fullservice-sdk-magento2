@@ -22,6 +22,16 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 
 /**
  * HiPay module observer
+ * 
+ * Check http signature from TPP notification
+ * 
+ * Redirections haven't checked because http params can be not present (Depend of TPP config)
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CheckHttpSignatureObserver implements ObserverInterface
 {

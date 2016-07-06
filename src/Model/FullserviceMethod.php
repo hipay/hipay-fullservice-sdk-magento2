@@ -26,9 +26,18 @@ use Magento\Sales\Model\Order\Creditmemo;
 
 
 /**
+ * Anstract Payment Method Class
+ * All HiPay Fullservice payment methods inherit from her
  *
- * @author kassim
- *        
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * 
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class FullserviceMethod extends AbstractMethod {
 	

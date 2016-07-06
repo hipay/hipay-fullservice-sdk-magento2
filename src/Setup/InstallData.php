@@ -23,7 +23,15 @@ use HiPay\FullserviceMagento\Model\Config;
 use Magento\Sales\Model\Order;
 
 /**
+ * Install data class
+ * 
  * @codeCoverageIgnore
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class InstallData implements InstallDataInterface
 {
