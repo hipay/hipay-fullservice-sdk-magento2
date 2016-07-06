@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,15 @@ use Magento\Framework\App\Action\Action as AppAction;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 
 /**
+ * Abstract Fullservice controller
+ * 
+ * Abstract to all payment controllers
  *
- * @author kassim
- *        
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class Fullservice extends AppAction {
 	

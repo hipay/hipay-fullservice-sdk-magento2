@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -25,6 +25,18 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 
+/**
+ * Notify Class Model
+ *
+ * Proceed all notifications
+ * In construct method Order Model is loaded and Transation Model (SDK) is created
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class Notify {
 	
 	/**

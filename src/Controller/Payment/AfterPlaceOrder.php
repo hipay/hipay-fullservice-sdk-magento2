@@ -1,6 +1,6 @@
 <?php
 /**
- * HiPay fullservice Magento2
+ * HiPay fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,7 +16,17 @@
 namespace HiPay\FullserviceMagento\Controller\Payment;
 
 
-
+/**
+ * After place order controller
+ * 
+ * Redirect the customer after place payment
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {	
 
@@ -29,13 +39,8 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-    	ini_set('display_errors', 1);
-    	error_reporting(E_ALL | E_STRICT);
-    	//die(ini_get('memory_limit'));
         try {
-        	
-        	
-        	
+        	   	
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 			
            if(!$order->getId()){

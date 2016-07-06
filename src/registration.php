@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -9,8 +9,11 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
 
@@ -18,6 +21,4 @@
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
     'HiPay_FullserviceMagento',
 	__DIR__
-	//Test is link for vagrant sandbox
-   /* is_link('/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2') ? '/var/www/magento2/vendor/hipay/hipay-fullservice-sdk-magento2' : __DIR__*/
 );

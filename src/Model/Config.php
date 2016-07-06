@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -22,14 +22,18 @@ use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
-use HiPay\Fullservice\Data\PaymentProduct\Collection;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
 
 
 /**
+ * Main Config Class
+ * Retrieve general configuration and sources
  *
- * @author kassim
- *        
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Config extends AbstractConfig implements ConfigurationInterface {
 	

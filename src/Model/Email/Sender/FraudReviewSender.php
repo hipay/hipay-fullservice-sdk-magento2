@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -17,7 +17,6 @@ namespace HiPay\FullserviceMagento\Model\Email\Sender;
 
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order as OrderResource;
@@ -25,7 +24,15 @@ use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 use HiPay\FullserviceMagento\Model\Email\Container\FraudReviewIdentity;
 
-
+/**
+ * Class Sender for Revied fraud email
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class FraudReviewSender extends Sender
 {
     /**
