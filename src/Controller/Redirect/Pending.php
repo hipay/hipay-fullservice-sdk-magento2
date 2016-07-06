@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Pending controller
@@ -37,9 +38,13 @@ class Pending extends Fullservice {
 	 * */
 	public function execute(){
 		
-		$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
+		//$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
 		
-		$this->_redirect('checkout/cart');
+		$this->_checkoutSession->clearQuote();
+		
+		/** @var \Magento\Framework\View\Result\Page $resultPage */
+		$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+		return $resultPage;
 
 	}
 	
