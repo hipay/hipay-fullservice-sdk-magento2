@@ -446,7 +446,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		}
 		
 		//wait for notification to set correct data to order
-		$this->sleep();
+		//$this->sleep();
 		
 		return $this;
 	}
@@ -466,7 +466,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->fraudAcceptSender->send($payment->getOrder());
 		//wait for notification to set correct data to order
 		//$this->sleep();
-		return false;
+		return true;
 	}
 	
 	
@@ -485,7 +485,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->fraudDenySender->send($payment->getOrder());
 		//wait for notification to set correct data to order
 		//$this->sleep();
-		return false;
+		return true;
 	}
 	
 	/**

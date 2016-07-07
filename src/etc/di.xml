@@ -22,6 +22,9 @@
 	<type name="Magento\Sales\Model\Order\Payment\State\CaptureCommand">
         <plugin name="hipay_capture" type="\HiPay\FullserviceMagento\Plugin\CaptureCommandPlugin" sortOrder="100" disabled="false"/>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="hipay_payment_accept" type="\HiPay\FullserviceMagento\Plugin\OrderPaymentPlugin" sortOrder="100" disabled="false"/>
+    </type>
 	<type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
