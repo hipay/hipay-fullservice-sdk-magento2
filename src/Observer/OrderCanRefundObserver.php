@@ -52,7 +52,7 @@ class OrderCanRefundObserver implements ObserverInterface
 			$order->setForcedCanCreditmemo(false);
 		}
 		
-		if($order->getPayment() && strpos($order->getPayment()->getMethod(), 'hipay') !== false)
+		if($order->getPayment() && strpos($order->getPayment()->getMethod(), 'hipay') !== false && $order->hasInvoices())
 		{
 			
 			//If configuration validate order with status 117 (capture requested) and Notification 118 (Captured) is not received

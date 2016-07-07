@@ -34,7 +34,7 @@ class PaymentProfile implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var CollectionFactory
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -43,7 +43,7 @@ class PaymentProfile implements OptionSourceInterface
      *
      * @param CollectionFactory $collectionFactory
      */
-    public function __construct(CollectionFactory $collectionFactory)
+    public function __construct(\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $collectionFactory)
     {
         $this->collectionFactory = $collectionFactory;
     }

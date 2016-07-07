@@ -39,6 +39,7 @@ class Index extends AppAction {
 	protected $_logger;
 	
 	
+	
 	/**
 	 * @param Context $context
 	 */
@@ -51,6 +52,8 @@ class Index extends AppAction {
 		$this->_logger = $_logger;
 		
 	}
+	
+
 
 	/**
 	 * @return void
