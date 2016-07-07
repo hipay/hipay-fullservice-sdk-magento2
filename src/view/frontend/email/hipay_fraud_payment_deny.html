@@ -37,9 +37,9 @@
         <td>
             <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
-                <br /><b>{{trans "Payment of your order was refused."}}</b><br />
-                {depend reason}}
+                <b>{{trans 'Payment of your order <span class="no-link">#%increment_id</span> was refused.' increment_id=$order.increment_id |raw}}</b>
+                {{depend reason}}
+                	<br />
                 	{{trans 'Reason: %reason' reason=$reason}}
                 {{/depend}}
             </p>
