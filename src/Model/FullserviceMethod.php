@@ -465,7 +465,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
 		$this->fraudAcceptSender->send($payment->getOrder());
 		//wait for notification to set correct data to order
-		$this->sleep();
+		//$this->sleep();
 		return false;
 	}
 	
@@ -484,7 +484,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		$this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
 		$this->fraudDenySender->send($payment->getOrder());
 		//wait for notification to set correct data to order
-		$this->sleep();
+		//$this->sleep();
 		return false;
 	}
 	

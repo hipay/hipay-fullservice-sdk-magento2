@@ -96,28 +96,19 @@ class FraudAcceptSender extends Sender
     }
 
     /**
-     * Sends order email to the customer.
+     * Sends Accepted Fraud email to the customer.
      *
-     * Email will be sent immediately in two cases:
-     *
-     * - if asynchronous email sending is disabled in global settings
-     * - if $forceSyncMode parameter is set to TRUE
-     *
-     * Otherwise, email will be sent later during running of
-     * corresponding cron job.
+     * Email will be sent immediately 
      *
      * @param Order $order
-     * @param bool $forceSyncMode
      * @return bool
      */
-    public function send(Order $order, $forceSyncMode = false)
+    public function send(Order $order)
     {
 
-        if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
-            if ($this->checkAndSend($order)) {
-                return true;
-            }
-        }
+    	if ($this->checkAndSend($order)) {
+       		return true;
+       	}
 
         return false;
     }
