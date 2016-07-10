@@ -105,8 +105,7 @@ define(
             getData: function() {
             	
             	var parent = this._super();           
-            	var additionalData = {
-            			'additional_data':{            				
+            	var additionalData = {          				
             				'cc_cid': this.creditCardVerificationNumber(),
                             'cc_ss_start_month': this.creditCardSsStartMonth(),
                             'cc_ss_start_year': this.creditCardSsStartYear(),
@@ -115,7 +114,6 @@ define(
                             'cc_exp_month': this.creditCardExpMonth(),
                             'cc_number': this.creditCardNumber(),
                             'cc_owner': this.creditCardOwner()
-            			}
             	}
             	return $.extend(true, parent, additionalData);
 

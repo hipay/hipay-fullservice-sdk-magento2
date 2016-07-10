@@ -78,10 +78,8 @@ define(
             	
             	var parent = this._super();  
             	
-            	var additionalData = {
-            			'additional_data':{            				
+            	var additionalData = {         				
             				'profile_id': this.selectedPaymentProfile()
-            			}
             	}
 
             	
