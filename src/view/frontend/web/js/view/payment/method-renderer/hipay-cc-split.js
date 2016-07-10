@@ -88,10 +88,8 @@ define(
             getData: function(){
             	
             	var parent = this._super();           
-            	var additionalData = {
-            			'additional_data':{            				
+            	var additionalData = {        				
             				'profile_id': this.selectedPaymentProfile()
-            			}
             	}
 
             	return $.extend(true, parent, additionalData);

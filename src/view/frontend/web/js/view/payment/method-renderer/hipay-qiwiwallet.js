@@ -66,9 +66,7 @@ define(
             getData: function() {
                 return {
                     'method': this.item.method,
-                    'additional_data': {
-                        'qiwiuser': this.qiwiUserId(),
-                    }
+                    'qiwiuser': this.qiwiUserId()
                 };
             },
 	        getCode: function() {

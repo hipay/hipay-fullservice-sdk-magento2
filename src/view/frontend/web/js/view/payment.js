@@ -109,12 +109,10 @@ define(
             getData: function() {
                 return {
                     'method': this.item.method,
-                    'additional_data': {
-                        'create_oneclick': this.createOneclick(),
-                        'card_token': this.creditCardToken(),
-                        'eci': this.eci(),
-                        'cc_type': this.creditCardType()
-                    }
+                    'create_oneclick': this.createOneclick(),
+                    'card_token': this.creditCardToken(),
+                    'eci': this.eci(),
+                    'cc_type': this.creditCardType()
                 };
             },
         });
