@@ -17,6 +17,8 @@ namespace HiPay\FullserviceMagento\Model;
 
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Framework\DataObject;
 
 /**
  * Class API PaymentMethod
@@ -148,22 +150,31 @@ class CcMethod extends FullserviceMethod {
 	 */
 	public function assignData(\Magento\Framework\DataObject $data)
 	{
-		if (!$data instanceof \Magento\Framework\DataObject) {
-			$data = new \Magento\Framework\DataObject($data);
-		}
-		$info = $this->getInfoInstance();
-		$info->setCcType ( $data->getCcType () )
-			->setCcOwner ( $data->getCcOwner () )
-			->setCcLast4 ( substr ( $data->getCcNumber (), - 4 ) )
-			->setCcNumber ( $data->getCcNumber () )
-			->setCcCid ( $data->getCcCid () )
-			->setCcExpMonth ( $data->getCcExpMonth () )
-			->setCcExpYear ( $data->getCcExpYear () )
-			->setCcSsIssue ( $data->getCcSsIssue () )
-			->setCcSsStartMonth ( $data->getCcSsStartMonth () )
-			->setCcSsStartYear ( $data->getCcSsStartYear () );
 		
-		$this->_assignAdditionalInformation($data);
+		parent::assignData($data);
+		
+		$additionalData = $data;
+		if($data->hasData(PaymentInterface::KEY_ADDITIONAL_DATA)){
+			$additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+			if (!is_object($additionalData)) {
+				$additionalData = new DataObject($additionalData ?: []);
+			}
+		}
+		
+		$this->debugData($additionalData->debug());
+		$info = $this->getInfoInstance();
+		$info->setCcType ( $additionalData->getCcType () )
+			->setCcOwner ( $additionalData->getCcOwner () )
+			->setCcLast4 ( substr ( $additionalData->getCcNumber (), - 4 ) )
+			->setCcNumber ( $additionalData->getCcNumber () )
+			->setCcCid ( $additionalData->getCcCid () )
+			->setCcExpMonth ( $additionalData->getCcExpMonth () )
+			->setCcExpYear ( $additionalData->getCcExpYear () )
+			->setCcSsIssue ( $additionalData->getCcSsIssue () )
+			->setCcSsStartMonth ( $additionalData->getCcSsStartMonth () )
+			->setCcSsStartYear ( $additionalData->getCcSsStartYear () );
+		
+		//$this->_assignAdditionalInformation($data);
 		
 		return $this;
 	}

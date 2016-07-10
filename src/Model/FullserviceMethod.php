@@ -23,6 +23,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Framework\DataObject;
 
 
 /**
@@ -235,13 +237,19 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	public function assignData(\Magento\Framework\DataObject $data)
 	{
-		if (!$data instanceof \Magento\Framework\DataObject) {
-			$data = new \Magento\Framework\DataObject($data);
+		parent::assignData($data);
+		
+		$additionalData = $data;
+		if($data->hasData(PaymentInterface::KEY_ADDITIONAL_DATA)){
+			$additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+			if (!is_object($additionalData)) {
+				$additionalData = new DataObject($additionalData ?: []);
+			}
 		}
 
-		$this->getInfoInstance()->addData($data->getData());
+		//$this->getInfoInstance()->addData($data->getData());
 		
-		$this->_assignAdditionalInformation($data);
+		$this->_assignAdditionalInformation($additionalData);
 		
 		return $this;
 	}
