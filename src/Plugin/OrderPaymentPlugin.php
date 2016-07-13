@@ -87,36 +87,28 @@ class OrderPaymentPlugin {
 	 *
 	 * @return \Magento\Sales\Model\Order\Payment
 	 */
-	public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject,callable $proceed){
+	public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject,callable $proceed,$isOnline = true){
 	
 		if($this->isHipayMethod($subject->getMethod())){
-			$transactionId = $subject->getLastTransId();
+			//$transactionId = $isOnline ? $subject->getLastTransId() : $subject->getTransactionId();
+			
+			if ($isOnline) {
+				/** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+			
+				$method = $subject->getMethodInstance();
+				$method->setStore($subject->getOrder()->getStoreId());
+				$method->denyPayment($subject);
 				
-			// @var \Magento\Payment\Model\Method\AbstractMethod $method //
-			$method = $subject->getMethodInstance();
-			$method->setStore($subject->getOrder()->getStoreId());
-			if ($method->denyPayment($subject)) {
-				
-				//Do nothing let notification to change status order
-				
-				//Cancel order, if order status still un payment review
-				/*if($subject->getOrder()->getState() == Order::STATE_PAYMENT_REVIEW) {
-					if($subject->canCancel()){
-						$subject->cancel();
-					}
-						
-				}*/
-	
 			} else {
-				$message = $subject->_appendTransactionToMessage(
-						$transactionId,
-						$subject->prependMessage(__('There is no need to approve this payment.'))
-						);
-				$subject->setOrderStatePaymentReview($message, $transactionId);
+				$proceed($isOnline);
 			}
+			
+			
+			// @var \Magento\Payment\Model\Method\AbstractMethod $method //
+			
 		}
 		else{
-			$proceed();
+			$proceed($isOnline);
 		}
 	
 		return $subject;
