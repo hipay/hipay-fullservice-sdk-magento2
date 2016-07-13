@@ -513,7 +513,7 @@ class Notify {
 	{
 	
 		if(!is_null($fraudSreening = $this->_transaction->getFraudScreening())){
-			if($fraudSreening->getResult() && $fraudSreening->getScoring()){
+			if($fraudSreening->getResult()){
 				$payment = $this->_order->getPayment();
 				$payment->setIsFraudDetected(true);
 				
