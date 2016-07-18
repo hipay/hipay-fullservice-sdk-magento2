@@ -92,6 +92,20 @@ class Order extends BaseRequest{
 		return $hipayCcType;
 	}
 
+	/**
+	 * Check if requested ECI is MO/TO
+	 * @return bool 
+	 */
+	protected function isMOTO(){
+		$eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
+		
+		if($eci == \HiPay\Fullservice\Enum\Transaction\ECI::MOTO){
+			return true;
+		}
+		
+		return false;
+	}
+
 	
 	/**
 	 * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
@@ -113,11 +127,17 @@ class Order extends BaseRequest{
 		$orderRequest->cid = $this->_customerId;
 		$orderRequest->ipaddr = $this->_order->getRemoteIp();
 		
-		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept',['_secure' => true]);
-		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending',['_secure' => true]);
-		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',['_secure' => true]);
-		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',['_secure' => true]); 
-		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',['_secure' => true]);
+		$redirectParams = ['_secure' => true];
+		
+		if($this->isMOTO()){
+			$redirectParams['is_moto'] = true;
+		}
+		
+		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept',$redirectParams);
+		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending',$redirectParams);
+		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',$redirectParams);
+		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',$redirectParams); 
+		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',$redirectParams);
 		
 		//$orderRequest->http_accept = $httpRequest->getHeader('Accept');
 		//$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');
