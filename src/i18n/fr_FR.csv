@@ -269,3 +269,8 @@
 "Add product to cart","Mettre à jour le panier"
 "Fill cart when payment canceled or refused","Remet à jour le panier quand le paiement est annulé ou refusé."
 "Your payment is in pending.","Votre paiement est en attente de validation."
+"Thank you for your order. You will receveive a confirmation email soon.","Merci pour votre commande. Vous allez recevoir un email de confirmation prochainement."
+"You can check the status of your order by logging into your account.","Vous pouvez vérifier le status de votre commande en vous connectant à votre compte."
+"You can check the status of your order in your order history.","Vous pouvez vérifier le status de votre commande dans votre historique de commande."
+"Your transaction is declined.","Votre transaction est refusée."
+"You can retry your order with another credit card.","Vous pouvez réssayer avec une autre carte de crédit."

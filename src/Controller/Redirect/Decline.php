@@ -36,8 +36,8 @@ class Decline extends Fullservice {
 	 * */
 	public function execute(){
 		
-		ini_set('display_errors',1);
-		error_reporting(E_ALL);
+		//ini_set('display_errors',1);
+		//error_reporting(E_ALL);
 		
 		$lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
 		if($lastOrderId){
@@ -66,6 +66,12 @@ class Decline extends Fullservice {
 		
 				$cart->save();
 			}
+		}
+		//MO/TO case
+		if ($this->getRequest()->getParam('is_moto',false)) {
+			$this->_customerSession->setFromMoto(true);
+			$this->_customerSession->setDecline(true);
+			return $this->resultRedirectFactory->create()->setPath('customer/account');
 		}
 		
 		$this->_checkoutSession->setErrorMessage(__('Your order was declined.'));

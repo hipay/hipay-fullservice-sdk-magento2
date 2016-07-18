@@ -36,13 +36,12 @@ class Accept extends Fullservice {
 	 * */
 	public function execute(){
 		//MO/TO case
-		if (!$this->_objectManager->get('Magento\Checkout\Model\Session\SuccessValidator')->isValid()) {
-			
-			$this->messageManager->addSuccess(__('Thank you for your order. You will receveive a confirmation email soon.'));
-			return $this->_redirect('checkout/cart');
+		if ($this->getRequest()->getParam('is_moto',false)) {
+			$this->_customerSession->setFromMoto(true);
+			$this->_customerSession->setAccept(true);
+			return $this->resultRedirectFactory->create()->setPath('customer/account');
 		}
-		
-		$this->_redirect('checkout/onepage/success');
+		return $this->resultRedirectFactory->create()->setPath('checkout/onepage/success');
 
 	}
 	
