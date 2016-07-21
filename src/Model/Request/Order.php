@@ -1,13 +1,31 @@
 <?php
-
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 
 /**
- * @author kassim
+ * Order Request Object
  *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Order extends BaseRequest{
 	
@@ -74,6 +92,20 @@ class Order extends BaseRequest{
 		return $hipayCcType;
 	}
 
+	/**
+	 * Check if requested ECI is MO/TO
+	 * @return bool 
+	 */
+	protected function isMOTO(){
+		$eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
+		
+		if($eci == \HiPay\Fullservice\Enum\Transaction\ECI::MOTO){
+			return true;
+		}
+		
+		return false;
+	}
+
 	
 	/**
 	 * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
@@ -95,11 +127,17 @@ class Order extends BaseRequest{
 		$orderRequest->cid = $this->_customerId;
 		$orderRequest->ipaddr = $this->_order->getRemoteIp();
 		
-		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept',['_secure' => true]);
-		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending',['_secure' => true]);
-		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',['_secure' => true]);
-		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',['_secure' => true]); 
-		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',['_secure' => true]);
+		$redirectParams = ['_secure' => true];
+		
+		if($this->isMOTO()){
+			$redirectParams['is_moto'] = true;
+		}
+		
+		$orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept',$redirectParams);
+		$orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending',$redirectParams);
+		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',$redirectParams);
+		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',$redirectParams); 
+		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',$redirectParams);
 		
 		//$orderRequest->http_accept = $httpRequest->getHeader('Accept');
 		//$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');

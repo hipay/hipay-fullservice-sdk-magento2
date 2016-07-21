@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,10 +16,17 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+
 /**
+ * Decline controller
  *
- * @author kassim
- *        
+ * Used to redirect the customer when payment is declined
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Decline extends Fullservice {
 	
@@ -29,8 +36,8 @@ class Decline extends Fullservice {
 	 * */
 	public function execute(){
 		
-		ini_set('display_errors',1);
-		error_reporting(E_ALL);
+		//ini_set('display_errors',1);
+		//error_reporting(E_ALL);
 		
 		$lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
 		if($lastOrderId){
@@ -59,6 +66,12 @@ class Decline extends Fullservice {
 		
 				$cart->save();
 			}
+		}
+		//MO/TO case
+		if ($this->getRequest()->getParam('is_moto',false)) {
+			$this->_customerSession->setFromMoto(true);
+			$this->_customerSession->setDecline(true);
+			return $this->resultRedirectFactory->create()->setPath('customer/account');
 		}
 		
 		$this->_checkoutSession->setErrorMessage(__('Your order was declined.'));

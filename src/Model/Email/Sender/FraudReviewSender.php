@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -17,7 +17,6 @@ namespace HiPay\FullserviceMagento\Model\Email\Sender;
 
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\ResourceModel\Order as OrderResource;
@@ -25,7 +24,15 @@ use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 use HiPay\FullserviceMagento\Model\Email\Container\FraudReviewIdentity;
 
-
+/**
+ * Class Sender for Revied fraud email
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class FraudReviewSender extends Sender
 {
     /**
@@ -89,28 +96,19 @@ class FraudReviewSender extends Sender
     }
 
     /**
-     * Sends order email to the customer.
+     * Sends Reviewed Fraud email to the customer.
      *
-     * Email will be sent immediately in two cases:
-     *
-     * - if asynchronous email sending is disabled in global settings
-     * - if $forceSyncMode parameter is set to TRUE
-     *
-     * Otherwise, email will be sent later during running of
-     * corresponding cron job.
+     * Email will be sent immediately 
      *
      * @param Order $order
-     * @param bool $forceSyncMode
      * @return bool
      */
-    public function send(Order $order, $forceSyncMode = false)
+    public function send(Order $order)
     {
 
-        if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
-            if ($this->checkAndSend($order)) {
-                return true;
-            }
-        }
+    	if ($this->checkAndSend($order)) {
+       		return true;
+       	}
 
         return false;
     }

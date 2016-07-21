@@ -1,6 +1,6 @@
 <!--
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -9,8 +9,11 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
 -->
@@ -32,10 +35,12 @@
         <td>
             <p class="greeting">{{trans "%customer_name," customer_name=$order.getCustomerName()}}</p>
             <p>
-                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}
+                {{trans "Thank you for your order from %store_name." store_name=$store.getFrontendName()}}<br />
                 {{trans "To validate it, please click on link below. It redirect you on credit card form."}}
-                <b>{{trans '<a href="%redirect_url">I pay now!</a>.' redirect_url=$hostedRedirectUrl |raw}}</b>
                 
+            </p>
+            <p style="font-size:16px">
+            	 <b>{{trans '<a href="%redirect_url">I pay my order now!</a>.' redirect_url=$hostedRedirectUrl |raw}}</b>
             </p>
             <p>
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.

@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,10 +16,19 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use Magento\Framework\Controller\ResultFactory;
+
 /**
+ * Pending controller
  *
- * @author kassim
- *        
+ * Display pending reviex page
+ * Redirection on this page occur when payment is in pending review (Challenge transaction)
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Pending extends Fullservice {
 	
@@ -29,9 +38,13 @@ class Pending extends Fullservice {
 	 * */
 	public function execute(){
 		
-		$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
+		//$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
 		
-		$this->_redirect('checkout/cart');
+		$this->_checkoutSession->clearQuote();
+		
+		/** @var \Magento\Framework\View\Result\Page $resultPage */
+		$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+		return $resultPage;
 
 	}
 	

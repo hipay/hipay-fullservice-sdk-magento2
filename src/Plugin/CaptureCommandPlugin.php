@@ -1,6 +1,6 @@
 <?php
 /**
- * HiPay fullservice SDK
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -19,9 +19,21 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use HiPay\FullserviceMagento\Model\Config;
 use Magento\Sales\Model\Order as SalesOrder;
-use Magento\Sales\Model\Order\Payment\State\CommandInterface;
 
 
+/**
+ * HiPay Plugin
+ *
+ * Override execute Method in \Magento\Sales\Model\Order\Payment\State\CaptureCommand
+ * 
+ * Used to set custom state and status to the order
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class CaptureCommandPlugin {
 	
 	/**

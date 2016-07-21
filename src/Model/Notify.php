@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -25,6 +25,18 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 
+/**
+ * Notify Class Model
+ *
+ * Proceed all notifications
+ * In construct method Order Model is loaded and Transation Model (SDK) is created
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ */
 class Notify {
 	
 	/**
@@ -501,7 +513,7 @@ class Notify {
 	{
 	
 		if(!is_null($fraudSreening = $this->_transaction->getFraudScreening())){
-			if($fraudSreening->getResult() && $fraudSreening->getScoring()){
+			if($fraudSreening->getResult()){
 				$payment = $this->_order->getPayment();
 				$payment->setIsFraudDetected(true);
 				
@@ -712,7 +724,6 @@ class Notify {
 			$history->setStatus(Config::STATUS_AUTHORIZED);
 			
 			//Override message history
-
 			$formattedAmount = $this->_order->getBaseCurrency()->formatTxt($this->_transaction->getAuthorizedAmount());
 			$comment = __('Authorized amount of %1 online', $formattedAmount);
 			$comment = $payment->prependMessage($comment);

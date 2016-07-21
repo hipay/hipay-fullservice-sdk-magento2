@@ -1,6 +1,6 @@
 <?php
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice Magento
  *
  * NOTICE OF LICENSE
  *
@@ -16,10 +16,15 @@
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory;
 
 /**
- * Class Options
+ * Source model for payment profile
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class PaymentProfile implements OptionSourceInterface
 {
@@ -29,7 +34,7 @@ class PaymentProfile implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var CollectionFactory
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -38,7 +43,7 @@ class PaymentProfile implements OptionSourceInterface
      *
      * @param CollectionFactory $collectionFactory
      */
-    public function __construct(CollectionFactory $collectionFactory)
+    public function __construct(\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $collectionFactory)
     {
         $this->collectionFactory = $collectionFactory;
     }
