@@ -1,0 +1,68 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "fa057c20f0cb5810daf67804773b8c86",
+    "packages": [
+        {
+            "name": "hipay/hipay-fullservice-sdk-php",
+            "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hipay/hipay-fullservice-sdk-php.git",
+                "reference": "292f6e6f92984b0edc97281f519331315ce4666e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hipay/hipay-fullservice-sdk-php/zipball/292f6e6f92984b0edc97281f519331315ce4666e",
+                "reference": "292f6e6f92984b0edc97281f519331315ce4666e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpdocumentor/phpdocumentor": "^2.8",
+                "phpunit/phpunit": "4.8.x@stable"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "HiPay\\Fullservice\\": "lib/HiPay/Fullservice/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Kassim Belghait",
+                    "email": "kassim@sirateck.com",
+                    "homepage": "http://www.sirateck.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The HiPay Fullservice PHP SDK is a library for developers who want to integrate HiPay Fullservice payment methods to any PHP platform.",
+            "homepage": "http://www.hipayfullservice.com/",
+            "keywords": [
+                "hipay",
+                "payment",
+                "payment method"
+            ],
+            "time": "2016-09-08 14:18:33"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "alpha",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": "~5.5.0|~5.6.0|~7.0.0"
+    },
+    "platform-dev": []
+}
