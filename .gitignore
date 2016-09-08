@@ -36,7 +36,6 @@ Thumbs.db
 #Third party#
 #############
 vendor/
-*.lock
 .vagrant
 
 # Custom dev tools#
