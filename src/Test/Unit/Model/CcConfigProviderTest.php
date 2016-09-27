@@ -16,7 +16,7 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
-namespace HiPay\Fullservice\Test\Unit\Model;
+namespace HiPay\FullserviceMagento\Test\Unit\Model;
 
 use Magento\Payment\Helper\Data;
 use HiPay\FullserviceMagento\Model\Config as CcConfig;
