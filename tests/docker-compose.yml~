@@ -14,13 +14,12 @@ magento2:
     - ../src:/home/magento2/HiPay_Fullservice
     - ../tests:/home/magento2/tests
 db:
-  container_name: magento2-hipay-mysql
   image: mysql:5.6
   environment:
     - MYSQL_ROOT_PASSWORD=magento2
 smtp:
-  container_name: magento2-hipay-smtp
   image: schickling/mailcatcher
+  container_name: magento2-hipay-smtp
   ports:
     - "1081:1080"
 
