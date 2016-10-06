@@ -15,7 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-use HiPay\FullserviceMagento\Model\PaymentProfile;
+use HiPay\FullserviceMagento\Model\PaymentProfile as PaymentProfileModel;
 
 /**
  * Source model for period unit
@@ -54,11 +54,11 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     public function getAllPeriodUnits($withLabels = true)
     {
     	$units = [
-    			PaymentProfile::PERIOD_UNIT_DAY,
-    			PaymentProfile::PERIOD_UNIT_WEEK,
-    			PaymentProfile::PERIOD_UNIT_SEMI_MONTH,
-    			PaymentProfile::PERIOD_UNIT_MONTH,
-    			PaymentProfile::PERIOD_UNIT_YEAR
+    			PaymentProfileModel::PERIOD_UNIT_DAY,
+    			PaymentProfileModel::PERIOD_UNIT_WEEK,
+    			PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH,
+    			PaymentProfileModel::PERIOD_UNIT_MONTH,
+    			PaymentProfileModel::PERIOD_UNIT_YEAR
     	];
     
     	if ($withLabels) {
@@ -79,11 +79,11 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     public function getPeriodUnitLabel($unit)
     {
     	switch ($unit) {
-    		case PaymentProfile::PERIOD_UNIT_DAY:  return __('Day');
-    		case PaymentProfile::PERIOD_UNIT_WEEK: return __('Week');
-    		case PaymentProfile::PERIOD_UNIT_SEMI_MONTH: return __('Two Weeks');
-    		case PaymentProfile::PERIOD_UNIT_MONTH: return __('Month');
-    		case PaymentProfile::PERIOD_UNIT_YEAR:  return __('Year');
+    		case PaymentProfileModel::PERIOD_UNIT_DAY:  return __('Day');
+    		case PaymentProfileModel::PERIOD_UNIT_WEEK: return __('Week');
+    		case PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH: return __('Two Weeks');
+    		case PaymentProfileModel::PERIOD_UNIT_MONTH: return __('Month');
+    		case PaymentProfileModel::PERIOD_UNIT_YEAR:  return __('Year');
     	}
     	return $unit;
     }
