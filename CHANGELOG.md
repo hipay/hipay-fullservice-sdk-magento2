@@ -1,3 +1,7 @@
+# 1.0.4
+
+- Bugfix PeriodUnit method and Docker image
+
 # 1.0.3
 
 - Bugfix namespace in class Sisal, Qiwi Wallet and unit tests
