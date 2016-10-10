@@ -33,7 +33,7 @@ Read the **[project documentation][doc-home]** for comprehensive information abo
 
 The **HiPay Fullservice module for Magento 2** is available under the **Apache 2.0 License**. Check out the [license file][project-license] for more information.
 
-[doc-home]: https://github.com/hipay/hipay-fullservice-sdk-magento2/wiki
+[doc-home]: https://developer.hipay.com/doc/hipay-fullservice-sdk-magento2/
 
 [hipay-help]: http://help.hipay.com
 
