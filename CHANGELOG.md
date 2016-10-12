@@ -1,3 +1,7 @@
+# 1.0.5
+
+- Update documentation URL to the HiPay portal developer
+
 # 1.0.4
 
 - Bugfix PeriodUnit method and Docker image
