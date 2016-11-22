@@ -1,3 +1,7 @@
+# 1.0.7
+
+- Bugfix Add display selector value to TPP request
+
 # 1.0.6
 
 - Bugfix template iFrame send by the request new order
