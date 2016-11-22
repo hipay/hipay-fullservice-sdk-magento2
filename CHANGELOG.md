@@ -1,3 +1,7 @@
+# 1.0.6
+
+- Bugfix template iFrame send by the request new order
+
 # 1.0.5
 
 - Update documentation URL to the HiPay portal developer
