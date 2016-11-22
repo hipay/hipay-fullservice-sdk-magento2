@@ -54,6 +54,9 @@ class HostedPaymentPage extends Order{
 
 		$hppRequest->payment_product_category_list = implode(",", $this->_config->getPaymentProductCategoryList());
 		
+		//Add display selector value. #TPPMAG2-68
+		$hppRequest->display_selector = $this->_config->getValue('display_selector');
+		
 		return $hppRequest;
 		
 	}
