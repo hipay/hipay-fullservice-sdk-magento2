@@ -55,24 +55,10 @@ class HostedSplitMethod extends HostedMethod {
 	 * @var bool
 	 */
 	protected $_canUseInternal = false;
-
 	
 	/**
-	 * 
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-	 * @param \Magento\Payment\Helper\Data $paymentData
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param \Magento\Payment\Model\Method\Logger $logger
-	 * @param GatewayManagerFactory $gatewayManagerFactory
-	 * @param \Magento\Framework\Url $urlBuilder
-	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
-	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
-	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-	 * @param \Magento\Checkout\Model\Session $checkoutSession
-	 * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
+	 *
+	 * @param \HiPay\FullserviceMagento\Model\Method\Context $context
 	 * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -80,31 +66,15 @@ class HostedSplitMethod extends HostedMethod {
 	 * @SuppressWarnings(PHPMD.ExcessiveParameterList)
 	 */
 	public function __construct(
-			\Magento\Framework\Model\Context $context,
-			\Magento\Framework\Registry $registry,
-			\Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-			\Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-			\Magento\Payment\Helper\Data $paymentData,
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-			\Magento\Payment\Model\Method\Logger $logger,
-			GatewayManagerFactory $gatewayManagerFactory,
-			\Magento\Framework\Url $urlBuilder,
-			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
-			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
-			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-			\Magento\Checkout\Model\Session $checkoutSession,
-			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+			\HiPay\FullserviceMagento\Model\Method\Context $context,
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
 			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []
 			) {
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, 
-									$paymentData, $scopeConfig, $logger, $gatewayManagerFactory,
-									$urlBuilder,$fraudDenySender,$fraudAcceptSender,$configFactory,$checkoutSession,$cardFactory,$resource,$resourceCollection,$data);
-				
-			$this->profileFactory = $profileFactory;
-
+				parent::__construct($context, $resource,$resourceCollection,$data);
+	
+				$this->profileFactory = $profileFactory;
 	}
 	
 	
