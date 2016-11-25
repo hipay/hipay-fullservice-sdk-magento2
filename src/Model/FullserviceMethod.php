@@ -16,7 +16,6 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Payment\Model\Method\AbstractMethod;
-use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use Magento\Payment\Model\InfoInterface;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use Magento\Framework\Exception\LocalizedException;
@@ -121,35 +120,11 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 */
 	protected $_debugReplacePrivateDataKeys = [];
 	
-	/**
-	 * 
-	 * @var ManagerFactory $_gatewayManagerFactory
-	 */
-	protected $_gatewayManagerFactory;
-	
-	/**
-	 * Url Builder
-	 *
-	 * @var \Magento\Framework\Url
-	 */
-	protected $urlBuilder;
 	
 	/**
 	 * @var string[] keys to import in payment additionnal informations
 	 */
 	protected $_additionalInformationKeys = ['card_token','create_oneclick','eci','cc_type'];
-	
-	/**
-	 * 
-	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
-	 */
-	protected $fraudAcceptSender;
-	
-	/**
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
-	 */
-	protected $fraudDenySender;
 	
 	/**
 	 *
@@ -158,73 +133,49 @@ abstract class FullserviceMethod extends AbstractMethod {
 	protected $_hipayConfig;
 	
 	/**
-	 * @var \Magento\Checkout\Model\Session
+	 * @var \Magento\Framework\Pricing\PriceCurrencyInterface
 	 */
-	protected $_checkoutSession;
+	protected $priceCurrency;
 	
-	/**
-	 * Card  model Factory
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\CardFactory
-	 */
-	protected $_cardFactory;
 	
 	
 	const SLEEP_TIME = 5;
 	
 	/**
 	 * 
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-	 * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-	 * @param \Magento\Payment\Helper\Data $paymentData
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 * @param \Magento\Payment\Model\Method\Logger $logger
-	 * @param ManagerFactory $gatewayManagerFactory
-	 * @param \Magento\Framework\Url $urlBuilder
-	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
-	 * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
-	 * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-	 * @param \Magento\Checkout\Model\Session $checkoutSession
-	 * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
+	 * @param \HiPay\FullserviceMagento\Model\Method\Context $context
 	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
 	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
 	 * @param array $data
 	 */
 	public function __construct(
-			\Magento\Framework\Model\Context $context,
-	        \Magento\Framework\Registry $registry,
-	        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-	        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-	        \Magento\Payment\Helper\Data $paymentData,
-	        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-	        \Magento\Payment\Model\Method\Logger $logger,
-			ManagerFactory $gatewayManagerFactory,
-			\Magento\Framework\Url $urlBuilder,
-			\HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
-			\HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
-			\HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-			\Magento\Checkout\Model\Session $checkoutSession,
-			\HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+			\HiPay\FullserviceMagento\Model\Method\Context $context,
 	        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 	        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 			array $data = []){
-	
-				parent::__construct($context, $registry, $extensionFactory, $customAttributeFactory, $paymentData, $scopeConfig, $logger,$resource,$resourceCollection,$data);
 				
-				$this->_gatewayManagerFactory = $gatewayManagerFactory;
+				
+				parent::__construct($context->getModelContext(), 
+						$context->getRegistry(), 
+						$context->getExtensionFactory(), 
+						$context->getCustomAttributeFactor(), 
+						$context->getPaymentData(), 
+						$context->getScopeConfig(), 
+						$context->getLogger(),
+						$resource,
+						$resourceCollection,$data);
+				
+				$this->_gatewayManagerFactory = $context->getGatewayManagerFactory();
+				$this->urlBuilder = $context->getUrlBuilder();
+				$this->fraudAcceptSender = $context->getFraudAcceptSender();
+				$this->fraudDenySender = $context->getFraudDenySender();
+				$this->_hipayConfig = $context->getConfigFactory()->create(['params'=>['methodCode'=>$this->getCode()]]);
+				$this->_checkoutSession = $context->getCheckoutSession();
+				$this->_cardFactory = $context->getCardFactory();
+				$this->priceCurrency = $context->getPriceCurrency();
+				
 				$this->_debugReplacePrivateDataKeys = array('token','cardtoken','card_number','cvc');
-				$this->urlBuilder = $urlBuilder;
-				$this->fraudAcceptSender = $fraudAcceptSender;
-				$this->fraudDenySender = $fraudDenySender;
 				
-				$this->_hipayConfig = $configFactory->create(['params'=>['methodCode'=>$this->getCode()]]);
-				$this->_checkoutSession = $checkoutSession;
-				$this->_cardFactory = $cardFactory;
-				
-				
-
 	}
 	
 	/**
@@ -446,13 +397,29 @@ abstract class FullserviceMethod extends AbstractMethod {
 	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
 	public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount){
+		
 		parent::refund($payment, $amount);
+		
 		$this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
 		
-		if($payment->getCreditmemo()){
-			$payment->getCreditmemo()->setState(Creditmemo::STATE_OPEN);
-		}
+		//Set state to "OPEN" because we wait for notification with "REFUND" status
+		$payment->getCreditmemo()->setState(Creditmemo::STATE_OPEN);
 		
+		//Reset refund totals
+		$this->resetOrderRefund($payment->getCreditmemo());
+		$this->resetInvoiceRefund($payment->getCreditmemo());
+		$payment->getOrder()->save();
+		
+		/**
+		 * Fix for: TPPMAG2-64
+		 * Save creditmemo with a new state
+		 * Creditmemo repository object is not used because we want to save only the state
+		 * If we call Creditmemo repository save method, it's do a recall of process relation and potentially cause an infinite loop
+		 * @see https://github.com/magento/magento2/blob/2.1/app/code/Magento/Sales/Model/ResourceModel/Order/Creditmemo/Relation/Refund.php#L53
+		 */
+		$payment->getCreditmemo()->save();
+			 
+
 		//wait for notification to set correct data to order
 		//$this->sleep();
 		
@@ -537,6 +504,89 @@ abstract class FullserviceMethod extends AbstractMethod {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * Reset order data for refund
+	 * Creditmemo is in pending and wait for notification
+	 * So, we reset all totals refunded
+	 *
+	 * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+	 * @return void
+	 */
+	protected function resetOrderRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+	{
+		$order = $creditmemo->getOrder();
+		$baseOrderRefund = $this->priceCurrency->round(
+				$order->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
+				);
+		$orderRefund = $this->priceCurrency->round(
+				$order->getTotalRefunded() - $creditmemo->getGrandTotal()
+				);
+		$order->setBaseTotalRefunded($baseOrderRefund);
+		$order->setTotalRefunded($orderRefund);
+		
+		$order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() - $creditmemo->getBaseSubtotal());
+		$order->setSubtotalRefunded($order->getSubtotalRefunded() - $creditmemo->getSubtotal());
+		
+		$order->setBaseTaxRefunded($order->getBaseTaxRefunded() - $creditmemo->getBaseTaxAmount());
+		$order->setTaxRefunded($order->getTaxRefunded() - $creditmemo->getTaxAmount());
+		$order->setBaseDiscountTaxCompensationRefunded(
+				$order->getBaseDiscountTaxCompensationRefunded() - $creditmemo->getBaseDiscountTaxCompensationAmount()
+				);
+		$order->setDiscountTaxCompensationRefunded(
+				$order->getDiscountTaxCompensationRefunded() - $creditmemo->getDiscountTaxCompensationAmount()
+				);
+		
+		$order->setBaseShippingRefunded($order->getBaseShippingRefunded() - $creditmemo->getBaseShippingAmount());
+		$order->setShippingRefunded($order->getShippingRefunded() - $creditmemo->getShippingAmount());
+		
+		$order->setBaseShippingTaxRefunded(
+				$order->getBaseShippingTaxRefunded() - $creditmemo->getBaseShippingTaxAmount()
+				);
+		$order->setShippingTaxRefunded($order->getShippingTaxRefunded() - $creditmemo->getShippingTaxAmount());
+		
+		$order->setAdjustmentPositive($order->getAdjustmentPositive() - $creditmemo->getAdjustmentPositive());
+		$order->setBaseAdjustmentPositive(
+				$order->getBaseAdjustmentPositive() - $creditmemo->getBaseAdjustmentPositive()
+				);
+		
+		$order->setAdjustmentNegative($order->getAdjustmentNegative() - $creditmemo->getAdjustmentNegative());
+		$order->setBaseAdjustmentNegative(
+				$order->getBaseAdjustmentNegative() - $creditmemo->getBaseAdjustmentNegative()
+				);
+		
+		$order->setDiscountRefunded($order->getDiscountRefunded() - $creditmemo->getDiscountAmount());
+		$order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() - $creditmemo->getBaseDiscountAmount());
+		
+		if ($creditmemo->getDoTransaction()) {
+			$order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() - $creditmemo->getGrandTotal());
+			$order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() - $creditmemo->getBaseGrandTotal());
+		} else {
+			$order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() - $creditmemo->getGrandTotal());
+			$order->setBaseTotalOfflineRefunded(
+					$order->getBaseTotalOfflineRefunded() - $creditmemo->getBaseGrandTotal()
+					);
+		}
+		
+		$order->setBaseTotalInvoicedCost(
+				$order->getBaseTotalInvoicedCost() + $creditmemo->getBaseCost()
+				);
+	}
+	
+	/**
+	 * Reset invoice data for refund
+	 *
+	 * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+	 * @return void
+	 */
+	protected function resetInvoiceRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+	{
+		if ($creditmemo->getInvoice()) {			
+			$creditmemo->getInvoice()->setBaseTotalRefunded(
+					$creditmemo->getInvoice()->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
+					);
+		}
 	}
 	
 	
