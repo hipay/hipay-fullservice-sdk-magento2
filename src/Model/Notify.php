@@ -329,9 +329,8 @@ class Notify {
 					break;
 				}
 				
-				//If is split payment case, grand total is different to captured amount
-				//So we skip fraud detection in this case
-				$this->_doTransactionCapture(($this->isSplitPayment || $this->isFirstSplitPayment) ?: false);
+                // Skip magento fraud checking
+                $this->_doTransactionCapture(true);
 				/**
 				 * save token and credit card informations encryted
 				 */
