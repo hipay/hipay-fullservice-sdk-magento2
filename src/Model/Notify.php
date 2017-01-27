@@ -118,6 +118,16 @@ class Notify {
 	 * @var ResourceOrder $orderResource
 	 */
 	protected $orderResource;
+	
+	/**
+	 * @var \Magento\Framework\DB\Transaction $transactionDB
+	 */
+	protected $_transactionDB;
+	
+	/**
+	 * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+	 */
+	protected $priceCurrency;
 
 	
 	public function __construct(
@@ -130,6 +140,8 @@ class Notify {
 			\HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
 			\HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
 			ResourceOrder $orderResource,
+			\Magento\Framework\DB\Transaction $_transactionDB,
+			\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
 			$params = []
 			){
 
@@ -143,6 +155,8 @@ class Notify {
 			$this->spFactory = $spFactory;
 
 			$this->orderResource = $orderResource;
+			$this->_transactionDB = $_transactionDB;
+			$this->priceCurrency = $priceCurrency;
 
 	
 			if (isset($params['response']) && is_array($params['response'])) {
@@ -195,19 +209,24 @@ class Notify {
 	
 	protected function canProcessTransaction(){
 		
-		
+		/**
+		 * @TODO remove this condition below
+		 * Because the behavior not allowed process an action already received
+		 * But for capture partial and refund partial it's problematic!
+		 */
 		//Test if status is already processed
-		$savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+		/*$savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
 		if(is_array($savedStatues) && isset($savedStatues[$this->_transaction->getStatus()]))
 		{
 			return false;
-		}
+		}*/
+		$canProcess = false;
 		
 		switch ($this->_transaction->getStatus()){
 			case TransactionStatus::EXPIRED: //114
 				
 				if(in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZED))){
-					return true;
+					$canProcess = true;
 				}
 				
 				break;
@@ -216,20 +235,21 @@ class Notify {
 					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
 					$this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
 					in_array($this->_order->getStatus(),array(Config::STATUS_AUTHORIZATION_REQUESTED))){
-					return true;
+						$canProcess = true;
 				}
 				break;
 			case TransactionStatus::CAPTURE_REQUESTED: //117
 				if(!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal())
 				{
-					return true;
+					$canProcess = true;
 				}
 				break;
 			default:
-				return true;
+				$canProcess = true;
+				break;
 		}
 		
-		return false;
+		return $canProcess;
 		
 	}
 	
@@ -309,9 +329,8 @@ class Notify {
 					break;
 				}
 				
-				//If is split payment case, grand total is different to captured amount
-				//So we skip fraud detection in this case
-				$this->_doTransactionCapture(($this->isSplitPayment || $this->isFirstSplitPayment) ?: false);
+                // Skip magento fraud checking
+                $this->_doTransactionCapture(true);
 				/**
 				 * save token and credit card informations encryted
 				 */
@@ -564,35 +583,85 @@ class Notify {
 	 */
 	protected function _doTransactionRefund()
 	{
-		
-		$isCompleteRefund = true;
-		$parentTransactionId = $this->_order->getPayment()->getLastTransId();
-		
-		$payment = $this->_order->getPayment()
-								->setPreparedMessage($this->_generateComment(''))
-								->setTransactionId($this->_transaction->getTransactionReference(). "-refund")
-								->setCcTransId($this->_transaction->getTransactionReference())
-								->setParentTransactionId($parentTransactionId)
-								->setIsTransactionClosed($isCompleteRefund)
-								->registerRefundNotification(-1 * $this->_transaction->getRefundedAmount());
-		
-		$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUND_REQUESTED;
-		
-		if($this->_transaction->getStatus() == TransactionStatus::PARTIALLY_REFUNDED){
-			$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
-		}
-		
-		$this->_order->setStatus($orderStatus);
-								
-		$this->_order->save();
+		$payment = $this->_order->getPayment();
+		$amount = (float)$this->_transaction->getRefundedAmount();
+		if($this->_order->hasCreditmemos())
+		{
+			/* @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo */			
+				
+			$remain_amount = round($this->_order->getGrandTotal() - $amount,2);
+			$current_amount_refund = round($amount - $this->_order->getTotalRefunded(),2);
+			
+			$status = $this->_order->getStatus();
+			if( $remain_amount > 0 ){
+				
+				$status = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
+			}
+				
+			/* @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
+			foreach ($this->_order->getCreditmemosCollection() as $creditmemo)
+			{
+				
+				if($creditmemo->getState() ==  \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
+						&& round($creditmemo->getGrandTotal(),2) == $current_amount_refund)
+				{
+					$creditmemo->setState( \Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
+						
+					$message = __('Refund accepted by Hipay.');
+						
+					$this->_order->addStatusToHistory($status, $message);
+					
+					$this->prepareOrder($creditmemo);
+					$this->prepareInvoice($creditmemo);
+					
+					
+					if($creditmemo->getInvoice()){
+						$this->_transactionDB->addObject($creditmemo->getInvoice());
+					}
+						
+					$this->_transactionDB->addObject($creditmemo)
+											->addObject($this->_order);
+											
+					$this->_transactionDB->save();
 
-		$creditMemo = $payment->getCreatedCreditmemo();
-		if ($creditMemo) {
-			$this->creditmemoSender->send($creditMemo);
-			$this->_order->addStatusHistoryComment(__('You notified customer about creditmemo #%1.', $creditMemo->getIncrementId()))
-							->setIsCustomerNotified(true)
-							->save();
+					break;
+						
+				}
+			}
 		}
+		elseif($this->_order->canCreditmemo())
+		{
+			$isCompleteRefund = true;
+			$parentTransactionId = $this->_order->getPayment()->getLastTransId();
+			
+			$payment = $this->_order->getPayment()
+									->setPreparedMessage($this->_generateComment(''))
+									->setTransactionId($this->_transaction->getTransactionReference(). "-refund")
+									->setCcTransId($this->_transaction->getTransactionReference())
+									->setParentTransactionId($parentTransactionId)
+									->setIsTransactionClosed($isCompleteRefund)
+									->registerRefundNotification(-1 * $amount);
+			
+			$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUND_REQUESTED;
+			
+			if($this->_transaction->getStatus() == TransactionStatus::PARTIALLY_REFUNDED){
+				$orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
+			}
+			
+			$this->_order->setStatus($orderStatus);
+			
+			$this->_order->save();
+			
+			$creditmemo = $payment->getCreatedCreditmemo();
+			if ($creditmemo) {
+				$this->creditmemoSender->send($creditmemo);
+				$this->_order->addStatusHistoryComment(__('You notified customer about creditmemo #%1.', $creditmemo->getIncrementId()))
+				->setIsCustomerNotified(true)
+				->save();
+			}
+				
+		}
+		
 	}
 	
 	/**
@@ -848,5 +917,89 @@ class Notify {
 		}
 		return $message;
 	}
+	
+	/**
+	 * Prepare order data for refund
+	 *
+	 * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+	 * @return void
+	 */
+	protected function prepareOrder(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+	{
+		$order = $this->_order;
+		$baseOrderRefund = $this->priceCurrency->round(
+				$order->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+				);
+		$orderRefund = $this->priceCurrency->round(
+				$order->getTotalRefunded() + $creditmemo->getGrandTotal()
+				);
+		$order->setBaseTotalRefunded($baseOrderRefund);
+		$order->setTotalRefunded($orderRefund);
+	
+		$order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() + $creditmemo->getBaseSubtotal());
+		$order->setSubtotalRefunded($order->getSubtotalRefunded() + $creditmemo->getSubtotal());
+	
+		$order->setBaseTaxRefunded($order->getBaseTaxRefunded() + $creditmemo->getBaseTaxAmount());
+		$order->setTaxRefunded($order->getTaxRefunded() + $creditmemo->getTaxAmount());
+		$order->setBaseDiscountTaxCompensationRefunded(
+				$order->getBaseDiscountTaxCompensationRefunded() + $creditmemo->getBaseDiscountTaxCompensationAmount()
+				);
+		$order->setDiscountTaxCompensationRefunded(
+				$order->getDiscountTaxCompensationRefunded() + $creditmemo->getDiscountTaxCompensationAmount()
+				);
+	
+		$order->setBaseShippingRefunded($order->getBaseShippingRefunded() + $creditmemo->getBaseShippingAmount());
+		$order->setShippingRefunded($order->getShippingRefunded() + $creditmemo->getShippingAmount());
+	
+		$order->setBaseShippingTaxRefunded(
+				$order->getBaseShippingTaxRefunded() + $creditmemo->getBaseShippingTaxAmount()
+				);
+		$order->setShippingTaxRefunded($order->getShippingTaxRefunded() + $creditmemo->getShippingTaxAmount());
+	
+		$order->setAdjustmentPositive($order->getAdjustmentPositive() + $creditmemo->getAdjustmentPositive());
+		$order->setBaseAdjustmentPositive(
+				$order->getBaseAdjustmentPositive() + $creditmemo->getBaseAdjustmentPositive()
+				);
+	
+		$order->setAdjustmentNegative($order->getAdjustmentNegative() + $creditmemo->getAdjustmentNegative());
+		$order->setBaseAdjustmentNegative(
+				$order->getBaseAdjustmentNegative() + $creditmemo->getBaseAdjustmentNegative()
+				);
+	
+		$order->setDiscountRefunded($order->getDiscountRefunded() + $creditmemo->getDiscountAmount());
+		$order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() + $creditmemo->getBaseDiscountAmount());
+	
+		if ($creditmemo->getDoTransaction()) {
+			$order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() + $creditmemo->getGrandTotal());
+			$order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() + $creditmemo->getBaseGrandTotal());
+		} else {
+			$order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() + $creditmemo->getGrandTotal());
+			$order->setBaseTotalOfflineRefunded(
+					$order->getBaseTotalOfflineRefunded() + $creditmemo->getBaseGrandTotal()
+					);
+		}
+	
+		$order->setBaseTotalInvoicedCost(
+				$order->getBaseTotalInvoicedCost() - $creditmemo->getBaseCost()
+				);
+	}
+	
+	/**
+	 * Prepare invoice data for refund
+	 *
+	 * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+	 * @return void
+	 */
+	protected function prepareInvoice(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+	{
+		if ($creditmemo->getInvoice()) {
+			$creditmemo->getInvoice()->setIsUsedForRefund(true);
+			$creditmemo->getInvoice()->setBaseTotalRefunded(
+					$creditmemo->getInvoice()->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+					);
+			$creditmemo->setInvoiceId($creditmemo->getInvoice()->getId());
+		}
+	}
+	
 	
 }

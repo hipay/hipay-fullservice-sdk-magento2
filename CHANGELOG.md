@@ -1,3 +1,7 @@
+# 1.0.8
+
+- Skip Magento fraud checking
+
 # 1.0.7
 
 - Bugfix Add display selector value to TPP request

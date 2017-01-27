@@ -22,7 +22,7 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
  * Class Generic config provider
- * Can bu used by all payment method
+ * Can be used by all payment method
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
