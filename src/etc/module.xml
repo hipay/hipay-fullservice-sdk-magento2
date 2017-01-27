@@ -19,7 +19,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-  <module name="HiPay_FullserviceMagento" setup_version="1.0.7">
+  <module name="HiPay_FullserviceMagento" setup_version="1.0.8">
   		<sequence>
             <module name="Magento_Checkout"/>
             <module name="Magento_Sales"/>
