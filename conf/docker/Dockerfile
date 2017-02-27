@@ -13,12 +13,15 @@ RUN apt-get update \
 COPY ./bin/magento2-start-override /usr/local/bin/
 RUN chmod u+x /usr/local/bin/magento2-start-override
 
+WORKDIR tmp
+
 # Magerun installation
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar && \
     chmod +x ./n98-magerun2.phar && \
-    ./n98-magerun2.phar selfupdate && \
     cp ./n98-magerun2.phar /usr/local/bin/ && \
     rm ./n98-magerun2.phar
+
+WORKDIR /var/www/html/magento2/
 
 VOLUME /var/www/html/magento2/
 
