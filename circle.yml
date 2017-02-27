@@ -9,7 +9,7 @@ dependencies:
     - "~/docker"
   override:
     - if [[ -e ~/docker/compose-images.tar ]]; then docker load --input ~/docker/compose-images.tar; fi
-    - docker pull hipay/hipay-magento
+    - docker pull hipay/hipay-magento2
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml pull
     - mkdir -p ~/docker; docker save hipay/hipay-magento2 mysql:5.6 selenium/standalone-firefox  > ~/docker/compose-images.tar
 test:
