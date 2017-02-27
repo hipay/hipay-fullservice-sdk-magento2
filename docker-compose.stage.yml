@@ -1,9 +1,7 @@
 magento2:
   ports:
-    - "8080:80"
     - "4444"
   links:
-    - db
     - selenium
   env_file:
     - ./conf/env/mage.env.stage
