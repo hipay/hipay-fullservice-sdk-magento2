@@ -35,8 +35,10 @@ Thumbs.db
 
 #Third party#
 #############
+data/
 vendor/
 .vagrant
+.idea
 
 # Custom dev tools#
 ###################

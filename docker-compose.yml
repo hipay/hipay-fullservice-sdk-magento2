@@ -1,18 +1,12 @@
 magento2:
   container_name: magento2-hipay-fullservice
+  dockerfile: ./conf/docker/Dockerfile
   build: .
   ports:
     - "8080:80"
   links:
     - db
-    - selenium
     - smtp
-  env_file:
-    - env/mage.env.sample
-    - env/module.env.sample
-  volumes:
-    - ../src:/home/magento2/HiPay_Fullservice
-    - ../tests:/home/magento2/tests
 db:
   container_name: magento2-hipay-mysql
   image: mysql:5.6
