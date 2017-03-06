@@ -50,6 +50,11 @@ class Order extends BaseRequest{
 			'MI'=>'maestro'
 	);
 
+    /**
+     * @var \HiPay\FullserviceMagento\Helper\Data
+     */
+    protected $helper;
+
 	/**
 	 * {@inheritDoc}
 	 * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
@@ -68,7 +73,8 @@ class Order extends BaseRequest{
 	{
 		
 		parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper,$params);
-		
+
+		$this->helper = $helper;
 		
 		if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
 			$this->_order = $params['order'];
@@ -111,9 +117,6 @@ class Order extends BaseRequest{
 	 * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
 	 */
 	protected function mapRequest(){
-		/* @var $httpRequest  \Magento\Framework\App\Request\Http */
-		//$httpRequest = $this->_context->getRequest();
-		
 		$orderRequest = new OrderRequest();
 		$orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
 		$orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
@@ -138,10 +141,7 @@ class Order extends BaseRequest{
 		$orderRequest->decline_url =  $this->_urlBuilder->getUrl('hipay/redirect/decline',$redirectParams);
 		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',$redirectParams); 
 		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',$redirectParams);
-		
-		//$orderRequest->http_accept = $httpRequest->getHeader('Accept');
-		//$orderRequest->http_user_agent = $httpRequest->getHeader('User-Agent');
-		
+
 		$orderRequest->device_fingerprint = "";
 		
 		$orderRequest->language = $this->_localeResolver->getLocale();
@@ -150,7 +150,10 @@ class Order extends BaseRequest{
 		
 		$orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
 		$orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',['params' => ['order' => $this->_order,'config' => $this->_config]])->getRequestObject();
-		
+
+		// Technical parameter to track wich magento version is used
+        $orderRequest->source = $this->helper->getRequestSource();
+
 		return $orderRequest;
 		
 	}
