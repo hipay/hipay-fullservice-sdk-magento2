@@ -36,6 +36,7 @@ Thumbs.db
 #Third party#
 #############
 data/
+web/
 vendor/
 .vagrant
 .idea
@@ -47,5 +48,4 @@ tools/
 
 # Env vars #
 ############
-auth.env
 *.env

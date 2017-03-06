@@ -3,9 +3,11 @@ magento2:
     - ./conf/env/mage.env.sample
     - ./conf/env/auth.env.sample
     - ./conf/env/module.env.sample
+    - ./conf/env/hipay.env.sample
   volumes:
     - ./src:/var/www/html/magento2/app/code/HiPay/FullserviceMagento
     - ./tests:/home/magento2/tests
+    - ./log:/home/magento2/var/log
 db:
   ports:
     - "3307:3306"

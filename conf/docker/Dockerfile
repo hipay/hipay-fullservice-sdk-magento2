@@ -3,7 +3,7 @@ FROM hipay/hipay-magento2:latest
 MAINTAINER Support Fullservice <support.tpp@hipay.com>
 
 RUN apt-get update \ 
-	&& apt-get install -y ssmtp \
+	&& apt-get install -y ssmtp vim \
 		&& echo "sendmail_path = /usr/sbin/ssmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
 			&& echo "mailhub=smtp:1025\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
 			&& cp -Rf /etc/apache2/site-available/* /etc/apache2/sites-available \
@@ -26,6 +26,7 @@ WORKDIR /var/www/html/magento2/
 VOLUME /var/www/html/magento2/
 
 ENTRYPOINT ["magento2-start-override"]
+
 
 
 
