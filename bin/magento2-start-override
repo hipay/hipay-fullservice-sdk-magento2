@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set +e
+COLOR_SUCCESS='\033[0;32m'
+NC='\033[0m'
+MAGE_INSTALL=0
+
+#==========================================
+# Install XDebug
+#==========================================
+if [ $MAGE_REINSTALL = 1 ] || [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/magento2/app/etc/env.php ]; then
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}     INSTALLATION XDEBUG $ENVIRONMENT    ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+    echo '' && pecl install xdebug
+    echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
+    echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
+    echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+    MAGE_INSTALL=1
+fi
+
+#==========================================
+# Execute parent Entrypoint
+#==========================================
+/bin/bash /usr/local/bin/magento2-start "$@ --no-exec-apache"
+
+#==========================================
+# Add Hipay's configuration
+#==========================================
+if [ "$MAGE_INSTALL" = "1" ]; then
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY'MODULE            ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials/api_username_test $HIPAY_API_USER_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials/api_password_test $HIPAY_API_PASSWORD_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_moto/api_username_test $HIPAY_API_USER_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/api_password_test $HIPAY_API_PASSWORD_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_PUBLICKEY_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_USERNAME_TEST
+
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+    methods=$(echo $ACTIVE_METHODS| tr "," "\n")
+    for code in $methods
+    do
+        printf "\n"
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/active 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/debug 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/is_test_mode 1
+        printf "${COLOR_SUCCESS} Method $code is activated with test mode ${NC}\n"
+    done
+
+fi
+
+printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
+printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY $ENVIRONMENT IS UP             ${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL FRONT       : $MAGENTO_URL                                    ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL BACK        : $MAGENTO_URL/admin                               ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL MAIL CATCHER: $MAGENTO_URL:1095/                               ${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
+printf "${COLOR_SUCCESS}    |   PHP VERSION     : $PHP_VERSION                                     ${NC}\n"
+printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $MAGENTO_VERSION                                 ${NC}\n"
+printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
+
+exec apache2 -DFOREGROUND
+
+
