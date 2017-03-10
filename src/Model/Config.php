@@ -347,6 +347,17 @@ class Config extends AbstractConfig implements ConfigurationInterface {
 	
 		return  $this->getGeneraleValue($key,'hipay_credentials_tokenjs');
 	}
+
+    /**
+     *  Get fingprint status
+     *
+     * @return mixed
+     */
+    public function isFingerprintEnabled(){
+        $key = "fingerprint_enabled";
+
+        return  $this->getGeneraleValue($key,'configurations');
+    }
 	
 	
 	

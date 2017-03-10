@@ -142,8 +142,9 @@ class Order extends BaseRequest{
 		$orderRequest->cancel_url =  $this->_urlBuilder->getUrl('hipay/redirect/cancel',$redirectParams); 
 		$orderRequest->exception_url =  $this->_urlBuilder->getUrl('hipay/redirect/exception',$redirectParams);
 
-		$orderRequest->device_fingerprint = "";
-		
+		if ($this->_config->isFingerprintEnabled()){
+		    $orderRequest->device_fingerprint = $this->_order->getPayment()->getAdditionalInformation('fingerprint');;
+        }
 		$orderRequest->language = $this->_localeResolver->getLocale();
 		
 		$orderRequest->paymentMethod = $this->_paymentMethod;

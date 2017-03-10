@@ -23,6 +23,12 @@
         <css src="HiPay_FullserviceMagento::css/hipay.css"/>
     </head>
     <body>
+        <referenceBlock name="content">
+            <block class="\HiPay\FullserviceMagento\Block\Fingerprint" name="hipay_fingerprint_field" ifconfig="hipay/configurations/fingerprint_enabled" template="fingerprint/fingerprint_field.phtml"/>
+        </referenceBlock>
+        <referenceBlock name="head.additional">
+            <block class="\HiPay\FullserviceMagento\Block\Fingerprint" name="hipay_fingerprint_js" ifconfig="hipay/configurations/fingerprint_enabled" template="fingerprint/fingerprint_js.phtml"/>
+        </referenceBlock>
         <referenceBlock name="checkout.root">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">

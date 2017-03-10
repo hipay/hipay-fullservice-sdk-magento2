@@ -28,6 +28,7 @@
 			<include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
 			<include path="HiPay_FullserviceMagento::system/credentials_tokenjs.xml"/>
 			<include path="HiPay_FullserviceMagento::system/emails.xml"/>
+			<include path="HiPay_FullserviceMagento::system/general.xml"/>
 		</section>
 		<section id="payment">
 			<include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>

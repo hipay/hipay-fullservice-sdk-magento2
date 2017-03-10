@@ -40,7 +40,8 @@
                 'context': context(),
                 'gateway': getCode(),
             }, 'validation':[]}">
-		
+			<input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
+
 			<fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
 				 <!-- ko if: (useOneclick() && customerHasCard()) -->
                 <div>

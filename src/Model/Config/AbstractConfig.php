@@ -232,6 +232,7 @@ abstract class AbstractConfig implements ConfigInterface {
             case 'api_username_test':
             case 'api_password_test':
             case 'secret_passphrase_test':
+            case 'fingerprint_enabled':
             	return "hipay/{$group}/{$fieldName}";
             default:
                 return null;

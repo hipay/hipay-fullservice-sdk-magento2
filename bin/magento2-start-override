@@ -30,7 +30,7 @@ fi
 #==========================================
 if [ "$MAGE_INSTALL" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY'MODULE            ${NC}\n"
+    printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials/api_username_test $HIPAY_API_USER_TEST
@@ -39,8 +39,8 @@ if [ "$MAGE_INSTALL" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_moto/api_username_test $HIPAY_API_USER_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/api_password_test $HIPAY_API_PASSWORD_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_PUBLICKEY_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_USERNAME_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_USERNAME_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
@@ -62,12 +62,12 @@ printf "${COLOR_SUCCESS}    |===================================================
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
 printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY $ENVIRONMENT IS UP             ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL FRONT       : $MAGENTO_URL                                    ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL BACK        : $MAGENTO_URL/admin                               ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL FRONT       : $MAGE_BASE_URL                                   ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL BACK        : $MAGE_BASE_URL/admin                             ${NC}\n"
 printf "${COLOR_SUCCESS}    |   URL MAIL CATCHER: $MAGENTO_URL:1095/                               ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
 printf "${COLOR_SUCCESS}    |   PHP VERSION     : $PHP_VERSION                                     ${NC}\n"
-printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $MAGENTO_VERSION                                 ${NC}\n"
+printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $MAGE_VERSION                                    ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
 
 exec apache2 -DFOREGROUND

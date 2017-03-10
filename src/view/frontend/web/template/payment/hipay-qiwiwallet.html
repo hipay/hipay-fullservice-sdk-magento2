@@ -36,7 +36,7 @@
         </div>
 
     <form class="form" id="co-qiwiwallet-form" action="#" method="post" data-bind="mageInit: {'validation':[]}">
-		
+            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
 			<fieldset data-bind="attr: {class: 'fieldset payment items ' + getCode(), id: 'payment_form_' + getCode()}">
 			    <!-- ko if: (isShowLegend())-->
 			    <legend class="legend">

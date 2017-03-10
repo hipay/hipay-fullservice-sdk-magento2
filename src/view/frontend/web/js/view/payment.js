@@ -34,6 +34,7 @@ define(
         		customerCards: window.checkoutConfig.payment.hiPayFullservice.customerCards,
         		createOneclick: false,
         		creditCardType: '',
+                fingerprint: '',
         		defaultEci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
         		recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
         		eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
@@ -50,7 +51,8 @@ define(
                         'createOneclick',
                         'creditCardType',
                         'creditCardToken',
-                        'eci'
+                        'eci',
+                        'fingerprint'
                     ]);
                 
                 this.showForm = ko.computed(function () {
@@ -113,7 +115,8 @@ define(
                         'create_oneclick': this.createOneclick(),
                         'card_token': this.creditCardToken(),
                         'eci': this.eci(),
-                        'cc_type': this.creditCardType()
+                        'cc_type': this.creditCardType(),
+                        'fingerprint': $('#ioBB').val()
                     }
                 };
             },
