@@ -61,6 +61,10 @@
                 <identity>sales</identity>
                 <copy_method>bcc</copy_method>
             </hosted_payment_link>
+            <configurations>
+                <fingerprint_enabled>1</fingerprint_enabled>
+                <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint</fingerprint_js_url>
+            </configurations>
 		</hipay>
 		<payment>
 			<hipay_cc>
