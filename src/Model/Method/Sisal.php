@@ -26,36 +26,36 @@ use HiPay\FullserviceMagento\Model\HostedMethod;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Sisal extends HostedMethod{
-	
-	const HIPAY_METHOD_CODE               = 'hipay_sisal';
-	
-	/**
-	 * @var string
-	 */
-	protected $_code = self::HIPAY_METHOD_CODE;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canRefund = false;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canRefundInvoicePartial = false;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canUseInternal = false;
-	
-	
-	
+class Sisal extends HostedMethod
+{
+
+    const HIPAY_METHOD_CODE = 'hipay_sisal';
+
+    /**
+     * @var string
+     */
+    protected $_code = self::HIPAY_METHOD_CODE;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefund = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefundInvoicePartial = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
+
+
 }

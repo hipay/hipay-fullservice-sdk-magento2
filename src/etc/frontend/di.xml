@@ -27,11 +27,35 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\SddConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\SplitConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hostedsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedSplitMethod::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Astropay\AstropayConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_CODE</item>
+                <item name="hipay_banamex" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banamex::HIPAY_METHOD_CODE</item>
+                <item name="hipay_banco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_CODE</item>
+                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bradesco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bradesco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_caixa" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Caixa::HIPAY_METHOD_CODE</item>
+                <item name="hipay_itau" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Itau::HIPAY_METHOD_CODE</item>
+                <item name="hipay_oxxo" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Oxxo::HIPAY_METHOD_CODE</item>
+                <item name="hipay_santander" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santander::HIPAY_METHOD_CODE</item>
+                <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -44,7 +68,29 @@
                 <item name="hipay_hostedsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_qiwiwallet" xsi:type="const">HiPay\FullserviceMagento\Model\Method\QiwiWallet::HIPAY_METHOD_CODE</item>
-            </argument>
+                <item name="hipay_dexia" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Dexia::HIPAY_METHOD_CODE</item>
+                <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
+                <item name="hipay_yandexapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\YandexApi::HIPAY_METHOD_CODE</item>
+                <item name="hipay_webmoneyapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\WebmoneyApi::HIPAY_METHOD_CODE</item>
+                <item name="hipay_sofortapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SofortApi::HIPAY_METHOD_CODE</item>
+                <item name="hipay_ing" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Ing::HIPAY_METHOD_CODE</item>
+                <item name="hipay_ideal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDeal::HIPAY_METHOD_CODE</item>
+                <item name="hipay_giropay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Giropay::HIPAY_METHOD_CODE</item>
+                <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
+                <item name="hipay_postfinancecardapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceCard::HIPAY_METHOD_CODE</item>
+                <item name="hipay_paypalapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Paypal::HIPAY_METHOD_CODE</item>
+                <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
+                <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_CODE</item>
+                <item name="hipay_banamex" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banamex::HIPAY_METHOD_CODE</item>
+                <item name="hipay_banco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_CODE</item>
+                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bradesco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bradesco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_caixa" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Caixa::HIPAY_METHOD_CODE</item>
+                <item name="hipay_itau" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Itau::HIPAY_METHOD_CODE</item>
+                <item name="hipay_oxxo" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Oxxo::HIPAY_METHOD_CODE</item>
+                <item name="hipay_santander" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santander::HIPAY_METHOD_CODE</item>
+                <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_CODE</item>            </argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
@@ -53,6 +99,8 @@
            		<item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\GenericConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\CcConfigProvider</item>
                 <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\SplitConfigProvider</item>
+                <item name="hipay_sdd_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\SddConfigProvider</item>
+                <item name="hipay_astropay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Astropay\AstropayConfigProvider</item>
             </argument>
         </arguments>
     </type>

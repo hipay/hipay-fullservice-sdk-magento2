@@ -36,6 +36,19 @@ define(
             isInAction: iframe.isInAction,
             placeOrderHandler: null,
             validateHandler: null,
+
+            /**
+             *  Get global fingerprint  on dom load of checkout
+             *
+             * @returns {*}
+             */
+            getFingerprint: function () {
+                if ($('#ioBB')) {
+                    return $('#ioBB').val();
+                }else{
+                    return '';
+                }
+            },
             
             /**
              * @param {Function} handler

@@ -23,6 +23,7 @@
 				<label>HiPay Fullservice Credit Card</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+                <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
 				 <field id="cctypes" translate="label" type="checkboxes" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment products</label>
                     <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\CheckboxesSortable</frontend_model>

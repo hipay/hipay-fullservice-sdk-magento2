@@ -1,0 +1,97 @@
+<?php
+
+namespace HiPay\FullserviceMagento\Model\Method;
+
+use Braintree\Exception;
+use HiPay\FullserviceMagento\Model\FullserviceMethod;
+use HiPay\FullserviceMagento\Model\CcMethod;
+use Magento\Framework\Exception\LocalizedException;
+use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+
+/**
+ * Abstract Method for API
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
+abstract class AbstractMethodAPI extends FullserviceMethod
+{
+
+    /**
+     * Payment Method feature Refund
+     *
+     * @var bool
+     */
+    protected $_canRefund = false;
+
+    /**
+     * Payment Method feature Refund Invoice Partial
+     *
+     * @var bool
+     */
+    protected $_canRefundInvoicePartial = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
+
+    /**
+     *
+     * @var bool
+     */
+    protected $_isInitializeNeeded = true;
+
+    /**
+     * Instantiate state and set it to state object
+     *
+     * @param string $paymentAction
+     * @param \Magento\Framework\DataObject $stateObject
+     * @return void
+     */
+    public function initialize($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+        $order = $payment->getOrder();
+        $order->setCanSendNewEmailFlag(false);
+        $payment->setAmountAuthorized($order->getTotalDue());
+        $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+
+        $this->_setHostedUrl($order);
+
+        $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
+        $stateObject->setStatus('pending_payment');
+        $stateObject->setIsNotified(false);
+
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order $order
+     */
+    protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
+    {
+        $gateway = $this->_gatewayManagerFactory->create($order);
+        $hppModel = $gateway->requestNewOrder();
+        $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
+    }
+
+    /**
+     * Set initialization requirement state
+     *
+     * @param bool $isInitializeNeeded
+     * @return void
+     */
+    public function setIsInitializeNeeded($isInitializeNeeded = true)
+    {
+        $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
+    }
+
+}
