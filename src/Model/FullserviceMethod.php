@@ -27,7 +27,7 @@ use Magento\Framework\DataObject;
 
 
 /**
- * Anstract Payment Method Class
+ * Abstract Payment Method Class
  * All HiPay Fullservice payment methods inherit from her
  *
  * @package HiPay\FullserviceMagento
@@ -293,7 +293,7 @@ abstract class FullserviceMethod extends AbstractMethod {
 		return $action;
 	}
 	
-	public function place(\Magento\Payment\Model\InfoInterface $payment){
+	public function     place(\Magento\Payment\Model\InfoInterface $payment){
 	
 		try {
 	

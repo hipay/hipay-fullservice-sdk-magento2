@@ -24,6 +24,7 @@
 				<label>HiPay Fullservice Hosted Page</label>
 				<comment></comment>
 				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+                <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
 				 <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Payment products</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct</source_model>
@@ -76,6 +77,5 @@
                     <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
                 </field>
                 <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-                
 			</group>
 </include>

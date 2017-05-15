@@ -120,8 +120,8 @@ class Order extends BaseRequest{
 		$orderRequest = new OrderRequest();
 		$orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
 		$orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
-		$orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: "cb"; 
-		$orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order #%s",$this->_order->getIncrementId()); //@TODO
+		$orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ? : $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
+		$orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s",$this->_order->getIncrementId()); //@TODO
 		$orderRequest->long_description = "";
 		$orderRequest->currency = $this->_order->getBaseCurrencyCode();
 		$orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
@@ -158,5 +158,6 @@ class Order extends BaseRequest{
 		return $orderRequest;
 		
 	}
+
 
 }

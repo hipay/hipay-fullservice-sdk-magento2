@@ -40,6 +40,7 @@ web/
 vendor/
 .vagrant
 .idea
+conf/sdk/*
 
 # Custom dev tools#
 ###################
