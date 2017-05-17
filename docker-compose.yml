@@ -2,8 +2,6 @@ magento2:
   container_name: magento2-hipay-fullservice
   dockerfile: ./conf/docker/Dockerfile
   build: .
-  ports:
-    - "8080:80"
   links:
     - db
     - smtp

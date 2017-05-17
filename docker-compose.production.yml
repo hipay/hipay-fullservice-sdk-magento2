@@ -1,0 +1,10 @@
+magento2:
+  env_file:
+    - ./conf/production/mage.env.sample
+    - ./conf/production/auth.env.sample
+    - ./conf/production/module.env.sample
+    - ./conf/production/hipay.env.sample
+db:
+  ports:
+    - "3307:3306"
+
