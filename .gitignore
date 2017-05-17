@@ -36,7 +36,7 @@ Thumbs.db
 #Third party#
 #############
 data/
-web/
+/web/
 vendor/
 .vagrant
 .idea
