@@ -1,4 +1,5 @@
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:HiPay_FullserviceMagento:etc/config_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:HiPay_FullserviceMagento:etc/config_include.xsd">
     <model>HiPay\FullserviceMagento\Model\Method\Dexia</model>
     <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
     <active>0</active>
@@ -15,8 +16,11 @@
     <iframe_width>80%</iframe_width>
     <iframe_height>450px</iframe_height>
     <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
-    <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7; border-right: 1px solid #BEBCB7;</iframe_wrapper_style>
-    <payment_products>dexia-directnet</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+    <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7;
+        border-right: 1px solid #BEBCB7;
+    </iframe_wrapper_style>
+    <payment_products>dexia-directnet
+    </payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
     <payment_products_categories>realtime-banking</payment_products_categories>
     <display_selector>0</display_selector>
     <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->

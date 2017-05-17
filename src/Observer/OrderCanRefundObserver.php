@@ -13,6 +13,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
+
 namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -23,7 +24,7 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 
 /**
  * HiPay module observer
- * 
+ *
  * Check if order can be refund with HiPay Fullservice Payment Method
  *
  * @package HiPay\FullserviceMagento
@@ -34,7 +35,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
  */
 class OrderCanRefundObserver implements ObserverInterface
 {
-	
 
 
     /**
@@ -45,36 +45,33 @@ class OrderCanRefundObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-    	/* @var $order \Magento\Sales\Model\Order */
-		$order = $observer->getOrder();
-		if($order->getStatus() == Config::STATUS_CAPTURE_REQUESTED){
-			
-			$order->setForcedCanCreditmemo(false);
-		}
-		
-		if($order->getPayment() && strpos($order->getPayment()->getMethod(), 'hipay') !== false && $order->hasInvoices())
-		{
-			
-			//If configuration validate order with status 117 (capture requested) and Notification 118 (Captured) is not received
-			// we disallow refund
-			if(((int)$order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == TransactionStatus::CAPTURE_REQUESTED)  === true ){
-					
-				$savedStatues = $order->getPayment()->getAdditionalInformation('saved_statues');
-				if(!is_array($savedStatues) || !isset($savedStatues[TransactionStatus::CAPTURED])){
-					$order->setForcedCanCreditmemo(false);
-				}
+        /* @var $order \Magento\Sales\Model\Order */
+        $order = $observer->getOrder();
+        if ($order->getStatus() == Config::STATUS_CAPTURE_REQUESTED) {
 
-			}
-			
-			if($order->getPayment()->getMethod() == 'hipay_cc' && strtolower($order->getPayment()->getCcType()) == 'bcmc' )
-			{
-				$order->setForcedCanCreditmemo(false);
-			}
-		}
-    	
+            $order->setForcedCanCreditmemo(false);
+        }
+
+        if ($order->getPayment() && strpos($order->getPayment()->getMethod(), 'hipay') !== false && $order->hasInvoices()) {
+
+            //If configuration validate order with status 117 (capture requested) and Notification 118 (Captured) is not received
+            // we disallow refund
+            if (((int)$order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == TransactionStatus::CAPTURE_REQUESTED) === true) {
+
+                $savedStatues = $order->getPayment()->getAdditionalInformation('saved_statues');
+                if (!is_array($savedStatues) || !isset($savedStatues[TransactionStatus::CAPTURED])) {
+                    $order->setForcedCanCreditmemo(false);
+                }
+
+            }
+
+            if ($order->getPayment()->getMethod() == 'hipay_cc' && strtolower($order->getPayment()->getCcType()) == 'bcmc') {
+                $order->setForcedCanCreditmemo(false);
+            }
+        }
+
         return $this;
     }
-    
-    
-    
+
+
 }

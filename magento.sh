@@ -21,19 +21,19 @@ fi
 
 if [ "$1" = 'init' ];then
     if [ -f ./conf/env/auth.env ];then
-        docker-compose stop
-        docker-compose rm -fv
+        sudo docker-compose stop
+        sudo docker-compose rm -fv
         sudo rm -Rf data/ log/ web/
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --no-cache
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
-        docker cp magento2-hipay-fullservice:/var/www/html/magento2 web/
-        docker-compose logs -f
+        sudo docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --no-cache
+        sudo docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+        sudo docker cp magento2-hipay-fullservice:/var/www/html/magento2 web/
+        sudo docker-compose logs -f
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"
     fi
 elif [ "$1" = 'restart' ];then
-    docker-compose stop
-    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+    sudo docker-compose stop
+    sudo docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
 elif [ "$1" = 'static' ];then
     docker exec magento2-hipay-fullservice rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma

@@ -19,7 +19,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
- <type name="Magento\Payment\Model\CcGenericConfigProvider">
+    <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\CcMethod::HIPAY_METHOD_CODE</item>
@@ -59,11 +59,11 @@
             </argument>
         </arguments>
     </type>
-     <type name="HiPay\FullserviceMagento\Model\Method\GenericConfigProvider">
+    <type name="HiPay\FullserviceMagento\Model\Method\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-            	<item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\CcMethod::HIPAY_METHOD_CODE</item>
-            	<item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
+                <item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\CcMethod::HIPAY_METHOD_CODE</item>
+                <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted" xsi:type="const">HiPay\FullserviceMagento\Model\HostedMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hostedsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
@@ -90,13 +90,16 @@
                 <item name="hipay_itau" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Itau::HIPAY_METHOD_CODE</item>
                 <item name="hipay_oxxo" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Oxxo::HIPAY_METHOD_CODE</item>
                 <item name="hipay_santander" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santander::HIPAY_METHOD_CODE</item>
-                <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_CODE</item>            </argument>
+                <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_CODE</item>
+                <item name="hipay_facilypay3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay3X::HIPAY_METHOD_CODE</item>
+                <item name="hipay_facilypay4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay4X::HIPAY_METHOD_CODE</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-           		<item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\GenericConfigProvider</item>
+                <item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\GenericConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\CcConfigProvider</item>
                 <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\SplitConfigProvider</item>
                 <item name="hipay_sdd_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\SddConfigProvider</item>
@@ -104,12 +107,12 @@
             </argument>
         </arguments>
     </type>
-     <virtualType name="HiPay\FullserviceMagento\Model\Session\Storage" type="Magento\Framework\Session\Storage">
+    <virtualType name="HiPay\FullserviceMagento\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">hipay</argument>
         </arguments>
     </virtualType>
-     <virtualType name="HiPay\FullserviceMagento\Model\Session" type="Magento\Framework\Session\Generic">
+    <virtualType name="HiPay\FullserviceMagento\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">HiPay\FullserviceMagento\Model\Session\Storage</argument>
         </arguments>

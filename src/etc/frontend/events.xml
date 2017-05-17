@@ -18,7 +18,8 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="controller_action_predispatch_hipay">
         <observer name="check_signature" instance="HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver"/>
     </event>

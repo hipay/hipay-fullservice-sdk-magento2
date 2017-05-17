@@ -13,43 +13,45 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Block\Redirect;
 
-class Pending extends  \Magento\Framework\View\Element\Template
+class Pending extends \Magento\Framework\View\Element\Template
 {
-	
-	/**
-	 * @var \Magento\Checkout\Model\Session
-	 */
-	protected $_checkoutSession;
-	
-	/**
-	 * @param \Magento\Framework\View\Element\Template\Context $context
-	 * @param \Magento\Checkout\Model\Session $checkoutSession
-	 * @param array $data
-	 */
-	public function __construct(
-			\Magento\Framework\View\Element\Template\Context $context,
-			\Magento\Checkout\Model\Session $checkoutSession,
-			array $data = []
-			) {
-				parent::__construct($context, $data);
-				$this->_checkoutSession = $checkoutSession;
 
-	}
-	
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $_checkoutSession;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        array $data = []
+    )
+    {
+        parent::__construct($context, $data);
+        $this->_checkoutSession = $checkoutSession;
+
+    }
+
     public function getRealOrderId()
     {
-    	
+
         return $this->_checkoutSession->getLastRealOrderId();
     }
 
     /**
      *  Payment custom error message
      *
-     *  @return	  string
+     * @return      string
      */
-    public function getErrorMessage ()
+    public function getErrorMessage()
     {
         $error = $this->_checkoutSession->getErrorMessage();
         // Mage::getSingleton('checkout/session')->unsErrorMessage();
@@ -59,7 +61,7 @@ class Pending extends  \Magento\Framework\View\Element\Template
     /**
      * Continue shopping URL
      *
-     *  @return	  string
+     * @return      string
      */
     public function getContinueShoppingUrl()
     {

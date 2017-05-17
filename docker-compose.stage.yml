@@ -1,12 +1,14 @@
 magento2:
   ports:
-    - "4444"
+    - "80:80"
   links:
     - db
     - selenium
   env_file:
-    - ./conf/env/mage.env.stage
-    - ./conf/env/module.env.stage
+    - ./conf/stage/hipay.env.sample
+    - ./conf/stage/auth.env.sample
+    - ./conf/stage/mage.env.sample
+    - ./conf/stage/module.env.sample
 selenium:
   image: selenium/standalone-firefox
   ports:

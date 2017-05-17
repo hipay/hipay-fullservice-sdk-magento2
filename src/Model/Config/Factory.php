@@ -14,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Config;
 
 /**
@@ -33,7 +34,7 @@ class Factory
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
-    
+
     protected $_configClassName = '\HiPay\FullserviceMagento\Model\Config';
 
     /**

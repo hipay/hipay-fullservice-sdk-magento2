@@ -18,10 +18,24 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Fullservice" module="HiPay_FullserviceMagento" sortOrder="20" parent="Magento_Sales::sales" resource="HiPay_FullserviceMagento::hipay_payment" />
-        <add id="HiPay_FullserviceMagento::hipay_payment_profile" title="Payment Profile" module="HiPay_FullserviceMagento" sortOrder="10" parent="HiPay_FullserviceMagento::hipay_payment" action="hipay/paymentprofile" resource="HiPay_FullserviceMagento::hipay_payment_profile"/>
-        <add id="HiPay_FullserviceMagento::hipay_split_payment" title="Split Payment" module="HiPay_FullserviceMagento" sortOrder="20" parent="HiPay_FullserviceMagento::hipay_payment" action="hipay/splitpayment" resource="HiPay_FullserviceMagento::hipay_split_payment"/>
+        <add id="HiPay_FullserviceMagento::hipay_payment_menu" title="HiPay Entreprise"
+             module="HiPay_FullserviceMagento" sortOrder="51" resource="HiPay_FullserviceMagento::hipay_payment"/>
+        <add id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Entreprise" module="HiPay_FullserviceMagento"
+             sortOrder="20" parent="Magento_Sales::sales" resource="HiPay_FullserviceMagento::hipay_payment"/>
+        <add id="HiPay_FullserviceMagento::hipay_payment_profile" title="Payment Profile"
+             module="HiPay_FullserviceMagento" sortOrder="10" parent="HiPay_FullserviceMagento::hipay_payment_menu"
+             action="hipay/paymentprofile" resource="HiPay_FullserviceMagento::hipay_payment_profile"/>
+        <add id="HiPay_FullserviceMagento::hipay_split_payment" title="Split Payment" module="HiPay_FullserviceMagento"
+             sortOrder="20" parent="HiPay_FullserviceMagento::hipay_payment_menu" action="hipay/splitpayment"
+             resource="HiPay_FullserviceMagento::hipay_split_payment"/>
+        <add id="HiPay_FullserviceMagento::hipay_mapping_categories" title="Mapping Categories"
+             module="HiPay_FullserviceMagento" sortOrder="30" parent="HiPay_FullserviceMagento::hipay_payment_menu"
+             action="hipay/cartcategories" resource="HiPay_FullserviceMagento::hipay_cart_categories"/>
+        <add id="HiPay_FullserviceMagento::hipay_mapping_shipping" title="Mapping Shipping Methods"
+             module="HiPay_FullserviceMagento" sortOrder="40" parent="HiPay_FullserviceMagento::hipay_payment_menu"
+             action="hipay/mappingshipping" resource="HiPay_FullserviceMagento::hipay_mapping_shipping"/>
     </menu>
 </config>

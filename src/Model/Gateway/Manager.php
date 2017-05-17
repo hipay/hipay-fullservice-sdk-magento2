@@ -145,15 +145,15 @@ class Manager {
 		
 		//Merge params
 		$params = $this->_getRequestParameters();
-		$params['params']['paymentMethod'] =  $this->_getPaymentMethodRequest();;
+        $params['params']['operation'] = 'Authorization';
+		$params['params']['paymentMethod'] =  $this->_getPaymentMethodRequest();
 		
 		$orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order',$params);
 		$this->_debug($this->_requestToArray($orderRequest));
 		
 		//Request new order transaction
 		$transaction = $this->_gateway->requestNewOrder($orderRequest);
-		$this->_debug($transaction->toArray());
-		
+
 		//If is admin area set mo/to value to payment additionnal informations
 		if($this->getConfiguration()->isAdminArea()){
 			$this->_order->getPayment()->setAdditionalInformation('is_moto',1);
@@ -257,11 +257,20 @@ class Manager {
 	protected function _requestOperation($operationType,$amount=null,$operationId=null){
 		
 		$transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
-		if(is_null($operationId)){			
+
+		if(is_null($operationId)){
 			$operationId = $this->_order->getIncrementId() ."-" . $operationType ."-manual";
 		}
-		
-		$opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount,$operationId);
+
+		$params = $this->_getRequestParameters();
+        $params['params']['operation'] = $operationType;
+        $params['params']['paymentMethod'] =  $this->_getPaymentMethodRequest();
+
+        $maintenanceRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Maintenance',$params);
+        $maintenanceRequest->operation_id = $operationId;
+        $this->_debug($this->_requestToArray($maintenanceRequest));
+
+        $opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount,$operationId,$maintenanceRequest);
 		return$opModel;
 	}
 

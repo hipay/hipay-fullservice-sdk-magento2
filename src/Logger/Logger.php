@@ -5,6 +5,7 @@ namespace HiPay\FullserviceMagento\Logger;
 
 use Magento\Payment\Model\Method\Logger as LoggerMagento;
 use Psr\Log\LoggerInterface;
+
 /**
  * Logger HIPAY
  *
@@ -39,8 +40,9 @@ class Logger extends LoggerMagento
     public function __construct(
         LoggerInterface $logger,
         \Magento\Payment\Gateway\ConfigInterface $config = null
-    ) {
-        parent::__construct($logger,$config);
+    )
+    {
+        parent::__construct($logger, $config);
     }
 
     /**

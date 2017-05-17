@@ -19,7 +19,7 @@
 var config = {
     map: {
         '*': {
-        	fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form',
+            fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form',
             hiPayTpp: 'HiPay_FullserviceMagento/js/hipay-tpp',
             reqwest: 'HiPay_FullserviceMagento/js/reqwest'
         }
