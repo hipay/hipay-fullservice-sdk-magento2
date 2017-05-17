@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ *
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+<group id="hipay_facilypay3X" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+	<label>HiPay Enterprise Oney Facily Pay 3X</label>
+	<comment></comment>
+	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+	<field id="payment_product_fees" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
+		<label>Facily Pay fees</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ProductCode\Facilypay3X</source_model>
+	</field>
+	<field id="default_mapping_shipping_method" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="0">
+		<label>Default mapping shipping method</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay</source_model>
+	</field>
+	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+</group>
+</include>

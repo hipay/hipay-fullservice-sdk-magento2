@@ -406,7 +406,7 @@ class Cart extends \Magento\Payment\Model\Cart
 
 
     /**
-     *  Is CartCategories Ok for sending in transaction
+     *  Is Cart Ok for sending in transaction
      *
      * @return bool
      */

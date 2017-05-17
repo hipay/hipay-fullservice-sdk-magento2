@@ -51,7 +51,6 @@ class CartCategories extends \Magento\Framework\Model\AbstractModel
     )
     {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->typeFactory = $typeFactory;
     }
 
 
