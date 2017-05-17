@@ -23,7 +23,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
  * Upgrade data class
- * 
+ *
  * @codeCoverageIgnore
  *
  * @package HiPay\FullserviceMagento
@@ -34,35 +34,36 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
  */
 class UpgradeData implements UpgradeDataInterface
 {
-	
-	/**
-	 * {@inheritdoc}
-	 * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-	 */
-	public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context){
-		
-		$setup->startSetup();
-		if (version_compare($context->getVersion(), '2.0.1') < 0) {
-			$installer =  $setup->createMigrationSetup();
-			$installer->appendClassAliasReplace(
-					'hipay_rule',
-					'conditions_serialized',
-					\Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-					\Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
-					['rule_id']
-					);
-			$installer->appendClassAliasReplace(
-					'hipay_rule',
-					'actions_serialized',
-					\Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-					\Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
-					['rule_id']
-					);
-			
-			$installer->doUpdateClassAliases();
-		}
-		
-		$setup->endSetup();
-	}
-	
+
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
+    {
+
+        $setup->startSetup();
+        if (version_compare($context->getVersion(), '2.0.1') < 0) {
+            $installer = $setup->createMigrationSetup();
+            $installer->appendClassAliasReplace(
+                'hipay_rule',
+                'conditions_serialized',
+                \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+                \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+                ['rule_id']
+            );
+            $installer->appendClassAliasReplace(
+                'hipay_rule',
+                'actions_serialized',
+                \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
+                \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_SERIALIZED,
+                ['rule_id']
+            );
+
+            $installer->doUpdateClassAliases();
+        }
+
+        $setup->endSetup();
+    }
+
 }

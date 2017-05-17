@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model;
 
 /**
@@ -24,7 +25,7 @@ namespace HiPay\FullserviceMagento\Model;
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
- * 
+ *
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\Rule _getResource()
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\Rule getResource()
  * @method string getMethodCode()
@@ -44,8 +45,8 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
-	
-	/**
+
+    /**
      * @var \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory
      */
     protected $_condCombineFactory;
@@ -55,39 +56,40 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected $_condProdCombineF;
 
-	
-	/**
-	 * Constructor 
-	 * 
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Data\FormFactory $formFactory
-	 * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-	 * @param \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory
-	 * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-	 * @param array $data
-	 */
-	public function __construct(
-			\Magento\Framework\Model\Context $context,
-			\Magento\Framework\Registry $registry,
-			\Magento\Framework\Data\FormFactory $formFactory,
-			\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-			\HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory,
-        	\HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
-			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-			array $data = []
-			) {
-				
-				$this->_condCombineFactory = $condCombineFactory;
-        		$this->_condProdCombineF = $condProdCombineF;
-				parent::__construct($context, $registry,$formFactory,$localeDate, $resource, $resourceCollection, $data);
-	}
-	
-	
-  /**
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory
+     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
+        \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory,
+        \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    )
+    {
+
+        $this->_condCombineFactory = $condCombineFactory;
+        $this->_condProdCombineF = $condProdCombineF;
+        parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
+    }
+
+
+    /**
      * Init resource model and id field
      */
     protected function _construct()
@@ -105,8 +107,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     public function getConditionsInstance()
     {
         return $this->_condCombineFactory->create()
-        			->setMethodCode($this->getMethodCode())
-        			->setConfigPath($this->_getHtmlId());
+            ->setMethodCode($this->getMethodCode())
+            ->setConfigPath($this->_getHtmlId());
     }
 
     /**
@@ -119,10 +121,10 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         return $this->_condProdCombineF->create();
     }
 
-    
+
     protected function _getHtmlId()
     {
-    	return str_replace("/", "_", $this->getConfigPath());
+        return str_replace("/", "_", $this->getConfigPath());
     }
-	
+
 }

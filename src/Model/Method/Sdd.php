@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\FullserviceMagento\Model\FullserviceMethod;
@@ -95,7 +96,8 @@ class Sdd extends FullserviceMethod
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    ) {
+    )
+    {
         parent::__construct($context, $resource, $resourceCollection, $data);
 
         if ($this->getConfigData('electronic_signature')) {

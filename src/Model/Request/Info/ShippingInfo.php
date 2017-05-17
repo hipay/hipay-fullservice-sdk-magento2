@@ -41,12 +41,10 @@ class ShippingInfo extends AbstractInfoRequest {
 		if($this->_order->getIsVirtual()){
 			return $customerShippingInfo;
 		}
-		
-		$customerShippingInfo->shipto_firstname = $this->_order->getCustomerFirstname();
-		$customerShippingInfo->shipto_lastname = $this->_order->getCustomerLastname();
-		
-		
+
 		$shippingAddress = $this->_order->getShippingAddress();
+        $customerShippingInfo->shipto_firstname = $shippingAddress->getFirstname();
+        $customerShippingInfo->shipto_lastname = $shippingAddress->getLastname();
 		$customerShippingInfo->shipto_streetaddress = $shippingAddress->getStreetLine(1);
 		$customerShippingInfo->shipto_streetaddress2 = $shippingAddress->getStreetLine(2);
 		$customerShippingInfo->shipto_city = $shippingAddress->getCity();

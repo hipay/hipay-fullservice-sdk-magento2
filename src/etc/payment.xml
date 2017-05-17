@@ -115,5 +115,11 @@
         <method name="hipay_santandercash">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_facilypay3X">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_facilypay4X">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

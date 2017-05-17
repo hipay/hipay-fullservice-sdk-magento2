@@ -140,6 +140,14 @@ define(
             {
                 type: 'hipay_santandercash',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-santandercash'
+            },
+            {
+                type: 'hipay_facilypay3X',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay3X'
+            },
+            {
+                type: 'hipay_facilypay4X',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay4X'
             }
         );
         /** Add view logic here if needed */

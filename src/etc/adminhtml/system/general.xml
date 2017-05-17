@@ -32,5 +32,15 @@
                 <comment>Not to be modified. Please read our documentation : https://developer.hipay.com/getting-started/platform-hipay-enterprise/overview/#device-fingerprint-integration
                 </comment>
             </field>
+			<field id="basket_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				<label>Send cart</label>
+				<comment>If yes, then customer's cart is sent with transaction</comment>
+			</field>
+			<field id="basket_attribute_ean" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Attributes</source_model>
+				<label>Ean attribute</label>
+				<comment>Select your custom attribute for ean support</comment>
+			</field>
 		</group>
 </include>

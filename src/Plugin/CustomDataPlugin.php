@@ -12,6 +12,7 @@
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
+
 namespace HiPay\FullserviceMagento\Plugin;
 
 use \HiPay\FullserviceMagento\Model\Request\Order as Order;

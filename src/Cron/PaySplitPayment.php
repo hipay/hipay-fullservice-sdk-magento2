@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Cron;
 
 use HiPay\FullserviceMagento\Cron;
@@ -31,24 +32,25 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
 class PaySplitPayment
 {
 
-	const MAX_ATTEMPTS = 3;
-	
-	/**
-	 * 
-	 * @var \Psr\Log\LoggerInterface $logger
-	 */
-	protected $logger;
-	
-	/**
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
-	 */
-	protected $spFactory;
-	
+    const MAX_ATTEMPTS = 3;
+
+    /**
+     *
+     * @var \Psr\Log\LoggerInterface $logger
+     */
+    protected $logger;
+
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
+     */
+    protected $spFactory;
+
     public function __construct(
-    		\HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
-    		\Psr\Log\LoggerInterface $logger
-    ) {
+        \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
+        \Psr\Log\LoggerInterface $logger
+    )
+    {
         $this->spFactory = $spFactory;
         $this->logger = $logger;
     }
@@ -61,20 +63,20 @@ class PaySplitPayment
     public function execute()
     {
         $date = new \DateTime();
-		
-        /** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
-		$splitPayments =  $this->spFactory->create()->getCollection()
-								->addFieldToFilter('status',array('in'=>array(SplitPayment::SPLIT_PAYMENT_STATUS_PENDING,
-																			SplitPayment::SPLIT_PAYMENT_STATUS_FAILED)))
-								->addFieldTofilter('attempts',array('lt'=>3))
-								->addFieldTofilter('date_to_pay',array('to' => $date->format('Y-m-d 00:00:00')));
 
-		foreach ($splitPayments as $splitPayment) {
-			try {
-				$splitPayment->pay();
-			} catch (Exception $e) {
-				$this->logger->debug($e->getMessage());
-			}
-		}
+        /** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
+        $splitPayments = $this->spFactory->create()->getCollection()
+            ->addFieldToFilter('status', array('in' => array(SplitPayment::SPLIT_PAYMENT_STATUS_PENDING,
+                SplitPayment::SPLIT_PAYMENT_STATUS_FAILED)))
+            ->addFieldTofilter('attempts', array('lt' => 3))
+            ->addFieldTofilter('date_to_pay', array('to' => $date->format('Y-m-d 00:00:00')));
+
+        foreach ($splitPayments as $splitPayment) {
+            try {
+                $splitPayment->pay();
+            } catch (Exception $e) {
+                $this->logger->debug($e->getMessage());
+            }
+        }
     }
 }

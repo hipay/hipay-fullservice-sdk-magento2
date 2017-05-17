@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * HiPay fullservice Magento2
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ *
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="HiPay\FullserviceMagento\Block\Adminhtml\Cartcategories\Edit" name="cartcategories_edit"/>
+        </referenceContainer>
+    </body>
+</page>

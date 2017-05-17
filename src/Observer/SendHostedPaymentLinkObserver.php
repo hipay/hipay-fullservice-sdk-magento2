@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -20,7 +21,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * HiPay module observer
- * 
+ *
  * Send Hosted page link to the customer when order was created in Admin (payment Mo/To)
  *
  * @package HiPay\FullserviceMagento
@@ -32,11 +33,11 @@ use Magento\Framework\Event\Observer as EventObserver;
 class SendHostedPaymentLinkObserver implements ObserverInterface
 {
 
-	/**
-	 * 
-	 * @var \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender;
-	 */
-	protected $paymenLinkSender;
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender ;
+     */
+    protected $paymenLinkSender;
 
     /**
      * Constructor
@@ -44,7 +45,8 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
      */
     public function __construct(
         \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
-    ) {
+    )
+    {
         $this->paymenLinkSender = $paymenLinkSender;
     }
 
@@ -59,11 +61,11 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
         $url = $order->getPayment()->getAdditionalInformation('redirectUrl');
-        
-		if($url && (strpos($order->getPayment()->getMethod(),'hipay_hosted') !== false)){
-			$this->paymenLinkSender->send($order);
-		}
-		
+
+        if ($url && (strpos($order->getPayment()->getMethod(), 'hipay_hosted') !== false)) {
+            $this->paymenLinkSender->send($order);
+        }
+
         return $this;
     }
 }

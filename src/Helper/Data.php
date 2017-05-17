@@ -55,7 +55,8 @@ class Data extends AbstractHelper
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         ResourceInterface $moduleResource,
         ProductMetadataInterface $productMetadata
-    ) {
+    )
+    {
         parent::__construct($context);
         $this->ruleFactory = $ruleFactory;
         $this->moduleResource = $moduleResource;
