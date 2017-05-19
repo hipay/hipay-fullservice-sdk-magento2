@@ -248,14 +248,16 @@ abstract class CommonRequest extends BaseRequest
                     ->addFieldToFilter('category_magento_id', $idCategory)
                     ->load();
 
+                // Mapping is on the First Level
                 if ($collection->getItems()) {
-                    $mapping_id = $collection->getFirstItem()->getId();
+                    $mapping_id = (int) $collection->getFirstItem()->getId();
                     break;
                 }
 
-                // Check if mapping exist with parent
-                $category = $this->_categoryFactory->create()->load($categories[0]);
-                if (is_null($category->getParentId())) {
+                // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)
+                $category = $this->_categoryFactory->create()->load($idCategory);
+                $parentId = $category->getParentId();
+                if (is_null($category->getParentId()) || $parentId == 1) {
                     break;
                 }
 
@@ -264,7 +266,7 @@ abstract class CommonRequest extends BaseRequest
             }
         }
 
-        return (int) $mapping_id;
+        return $mapping_id;
     }
 
 }

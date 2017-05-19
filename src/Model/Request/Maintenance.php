@@ -89,11 +89,13 @@ class Maintenance extends CommonRequest
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
+        \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
     )
     {
         parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory,
-            $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface ,$params);
+            $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface ,$mappingCategoriesCollectionFactory,$categoryFactory,$params);
 
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;

@@ -39,10 +39,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $shippingMethodsHipay;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -54,7 +50,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         array $data = []
@@ -63,7 +58,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_shippingMethodsMagento = $shippingMethodsMagento;
         $this->_shippingMethodsHipay = $shippingMethodsHipay;
-        $this->storeManager = $storeManager;
     }
 
 

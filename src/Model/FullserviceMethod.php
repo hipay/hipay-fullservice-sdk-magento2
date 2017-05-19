@@ -16,16 +16,14 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-use Magento\Payment\Model\InfoInterface;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Registry;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Framework\DataObject;
-
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Sales\Model\Order\Creditmemo;
 
 /**
  * Abstract Payment Method Class
@@ -43,104 +41,86 @@ use Magento\Framework\DataObject;
  */
 abstract class FullserviceMethod extends AbstractMethod
 {
-
+    const SLEEP_TIME = 5;
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_isGateway = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canAuthorize = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canCapture = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canCapturePartial = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canCaptureOnce = false;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canRefund = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canRefundInvoicePartial = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_isInitializeNeeded = false;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canReviewPayment = true;
-
     /**
      * Payment Method feature
      *
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
     /**
      * Fields that should be replaced in debug with '***'
      *
      * @var array
      */
     protected $_debugReplacePrivateDataKeys = [];
-
-
     /**
      * @var string[] keys to import in payment additionnal informations
      */
     protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint'];
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
      */
     protected $_hipayConfig;
-
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
-
-
-    const SLEEP_TIME = 5;
 
     /**
      *
@@ -155,8 +135,6 @@ abstract class FullserviceMethod extends AbstractMethod
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [])
     {
-
-
         parent::__construct($context->getModelContext(),
             $context->getRegistry(),
             $context->getExtensionFactory(),
@@ -177,7 +155,6 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->priceCurrency = $context->getPriceCurrency();
 
         $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
-
     }
 
     /**
@@ -207,17 +184,8 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this;
     }
 
-    /**
-     * Wait for notification
-     */
-    protected function sleep()
-    {
-        sleep(self::SLEEP_TIME);
-    }
-
     protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data)
     {
-
         $info = $this->getInfoInstance();
         foreach ($this->getAddtionalInformationKeys() as $key) {
             if (!is_null($data->getData($key))) {
@@ -255,7 +223,6 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     public function canReviewPayment()
     {
-
         $orderCanReview = true;
         /** @var $currentOrder \Magento\Sales\Model\Order */
         $currentOrder = $this->_registry->registry('current_order') ?: $this->_registry->registry('hipay_current_order');
@@ -279,7 +246,6 @@ abstract class FullserviceMethod extends AbstractMethod
         return (bool)(int)$this->getConfigData('active', $storeId) && $this->_hipayConfig->hasCredentials();
     }
 
-
     /**
      * Mapper from HiPay-specific payment actions to Magento payment actions
      *
@@ -297,16 +263,65 @@ abstract class FullserviceMethod extends AbstractMethod
         return $action;
     }
 
-    public function place(\Magento\Payment\Model\InfoInterface $payment)
+    /**
+     * Capture payment method
+     *
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param float $amount
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    {
+        parent::capture($payment, $amount);
+        try {
+            /** @var \Magento\Sales\Model\Order\Payment $payment */
+            if ($payment->getLastTransId()) {  //Is not the first transaction
+
+                $this->manualCapture($payment, $amount);
+            } else { //Ok, it's the first transaction, so we request a new order
+                $this->place($payment);
+            }
+        } catch (LocalizedException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
+        }
+
+
+        return $this;
+    }
+
+    protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
 
-        try {
+        // As we already have a transaction reference, we can request a capture operation.
+        $this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
+        //wait for notification to set correct data to order
+        //$this->sleep();
+    }
 
+    /**
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
+     */
+    public function getGatewayManager($order)
+    {
+        return $this->_gatewayManagerFactory->create($order);
+    }
+
+    public function place(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        try {
             $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
 
             $successUrl = $this->urlBuilder->getUrl('hipay/redirect/accept', ['_secure' => true]);
-            $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);;
-            $forwardUrl = $response->getForwardUrl();;
+            $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
+            $forwardUrl = $response->getForwardUrl();
             $failUrl = $this->urlBuilder->getUrl('hipay/redirect/decline', ['_secure' => true]);
             $redirectUrl = $successUrl;
             switch ($response->getState()) {
@@ -336,59 +351,12 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
             $payment->getOrder()->setStatus($this->getConfigData('order_status'));
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
-
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(__('There was an error request new transaction: %1.', $e->getMessage()));
         }
         return $this;
     }
-
-
-    /**
-     * Capture payment method
-     *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @api
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
-    {
-        parent::capture($payment, $amount);
-        try {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
-            if ($payment->getLastTransId()) {  //Is not the first transaction
-
-                $this->manualCapture($payment, $amount);
-
-            } else { //Ok, it's the first transaction, so we request a new order
-                $this->place($payment);
-
-            }
-
-        } catch (LocalizedException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            $this->_logger->critical($e);
-            throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
-        }
-
-
-        return $this;
-    }
-
-    protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
-    {
-
-        // As we already have a transaction reference, we can request a capture operation.
-        $this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-        //wait for notification to set correct data to order
-        //$this->sleep();
-    }
-
 
     /**
      * Refund specified amount for payment
@@ -402,7 +370,6 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-
         parent::refund($payment, $amount);
 
         $this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
@@ -427,89 +394,6 @@ abstract class FullserviceMethod extends AbstractMethod
 
         //wait for notification to set correct data to order
         //$this->sleep();
-
-        return $this;
-    }
-
-    /**
-     * Attempt to accept a payment that us under review
-     *
-     * @param InfoInterface $payment
-     * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @api
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function acceptPayment(InfoInterface $payment)
-    {
-        parent::acceptPayment($payment);
-        $this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
-        $this->fraudAcceptSender->send($payment->getOrder());
-        //wait for notification to set correct data to order
-        //$this->sleep();
-        return true;
-    }
-
-
-    /**
-     * Attempt to deny a payment that us under review
-     *
-     * @param InfoInterface $payment
-     * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @api
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function denyPayment(InfoInterface $payment)
-    {
-        parent::denyPayment($payment);
-        $this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
-        $this->fraudDenySender->send($payment->getOrder());
-        //wait for notification to set correct data to order
-        //$this->sleep();
-        return true;
-    }
-
-    /**
-     *
-     * @param \Magento\Sales\Model\Order $order
-     * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
-     */
-    public function getGatewayManager($order)
-    {
-        return $this->_gatewayManagerFactory->create($order);
-    }
-
-    /**
-     * Validate payment method information object
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @api
-     */
-    public function validate()
-    {
-        parent::validate();
-
-        $info = $this->getInfoInstance();
-        $cardToken = $info->getAdditionalInformation('card_token');
-        $eci = $info->getAdditionalInformation('eci');
-        if ($cardToken && $eci == 9) {
-            //Check if current customer is owner of card token
-            $card = $this->_cardFactory->create()->load($cardToken, 'cc_token');
-
-            if (!$card->getId() || ($card->getCustomerId() != $this->_checkoutSession->getQuote()->getCustomerId())) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Card does not exist!'));
-            }
-
-            //Set Card data to payment info
-            $info->setCcType($card->getCcType())
-                ->setCcOwner($card->getCcOwner())
-                ->setCcLast4(substr($card->getCcNumberEnc(), -4))
-                ->setCcExpMonth($card->getCcExpMonth())
-                ->setCcExpYear($card->getCcExpYear())
-                ->setCcNumEnc($card->getCcNumberEnc());
-        }
 
         return $this;
     }
@@ -597,5 +481,83 @@ abstract class FullserviceMethod extends AbstractMethod
         }
     }
 
+    /**
+     * Attempt to accept a payment that us under review
+     *
+     * @param InfoInterface $payment
+     * @return false
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function acceptPayment(InfoInterface $payment)
+    {
+        parent::acceptPayment($payment);
+        $this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
+        $this->fraudAcceptSender->send($payment->getOrder());
+        //wait for notification to set correct data to order
+        //$this->sleep();
+        return true;
+    }
 
+    /**
+     * Attempt to deny a payment that us under review
+     *
+     * @param InfoInterface $payment
+     * @return false
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function denyPayment(InfoInterface $payment)
+    {
+        parent::denyPayment($payment);
+        $this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
+        $this->fraudDenySender->send($payment->getOrder());
+        //wait for notification to set correct data to order
+        //$this->sleep();
+        return true;
+    }
+
+    /**
+     * Validate payment method information object
+     *
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @api
+     */
+    public function validate()
+    {
+        parent::validate();
+
+        $info = $this->getInfoInstance();
+        $cardToken = $info->getAdditionalInformation('card_token');
+        $eci = $info->getAdditionalInformation('eci');
+        if ($cardToken && $eci == 9) {
+            //Check if current customer is owner of card token
+            $card = $this->_cardFactory->create()->load($cardToken, 'cc_token');
+
+            if (!$card->getId() || ($card->getCustomerId() != $this->_checkoutSession->getQuote()->getCustomerId())) {
+                throw new \Magento\Framework\Exception\LocalizedException(__('Card does not exist!'));
+            }
+
+            //Set Card data to payment info
+            $info->setCcType($card->getCcType())
+                ->setCcOwner($card->getCcOwner())
+                ->setCcLast4(substr($card->getCcNumberEnc(), -4))
+                ->setCcExpMonth($card->getCcExpMonth())
+                ->setCcExpYear($card->getCcExpYear())
+                ->setCcNumEnc($card->getCcNumberEnc());
+        }
+
+        return $this;
+    }
+
+    /**
+     * Wait for notification
+     */
+    protected function sleep()
+    {
+        sleep(self::SLEEP_TIME);
+    }
 }

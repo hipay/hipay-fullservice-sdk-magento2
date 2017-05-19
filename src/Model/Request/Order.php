@@ -16,8 +16,8 @@
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
-use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
+use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 
 /**
  * Order Request Object
@@ -99,11 +99,9 @@ class Order extends CommonRequest
         \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
-    )
-    {
-
+    ) {
         parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory,
-            $urlBuilder, $helper, $cartFactory,$weeeHelper,$productRepositoryInterface,$mappingCategoriesCollectionFactory,$categoryFactory,$params);
+            $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface, $mappingCategoriesCollectionFactory, $categoryFactory, $params);
 
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;
@@ -119,7 +117,6 @@ class Order extends CommonRequest
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
         } else {
-
         }
 
         if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
@@ -127,7 +124,6 @@ class Order extends CommonRequest
         } else {
             throw new \Exception('Object Request PaymentMethod instance is required.');
         }
-
     }
 
     protected function getCcTypeHipay($mageCcType)
@@ -158,7 +154,8 @@ class Order extends CommonRequest
      *
      * @return string|bool
      */
-    private function getPaymentProductFees() {
+    private function getPaymentProductFees()
+    {
         $payment_fees = $this->_config->getValue('payment_product_fees');
         if (!empty($payment_fees)) {
             return $payment_fees;
@@ -173,9 +170,10 @@ class Order extends CommonRequest
      *
      * @return string
      */
-    private function getSpecifiedPaymentProduct(){
-        return ($this->getPaymentProductFees()) ? $this->getPaymentProductFees():
-                $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');;
+    private function getSpecifiedPaymentProduct()
+    {
+        return ($this->getPaymentProductFees()) ? $this->getPaymentProductFees() :
+            $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
     }
 
 
@@ -185,10 +183,11 @@ class Order extends CommonRequest
     protected function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
+
         $orderRequest = new OrderRequest();
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
         $orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
-        $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: $payment_product ;
+        $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: $payment_product;
         $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s", $this->_order->getIncrementId()); //@TODO
         $orderRequest->long_description = "";
         $orderRequest->currency = $this->_order->getBaseCurrencyCode();
@@ -197,22 +196,39 @@ class Order extends CommonRequest
         $orderRequest->tax = (float)$this->_order->getTaxAmount();
         $orderRequest->cid = $this->_customerId;
         $orderRequest->ipaddr = $this->_order->getRemoteIp();
+        $orderRequest->language = $this->_localeResolver->getLocale();
 
         $redirectParams = ['_secure' => true];
-
         if ($this->isMOTO()) {
             $redirectParams['is_moto'] = true;
         }
 
+        // URL callback
         $orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept', $redirectParams);
         $orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending', $redirectParams);
         $orderRequest->decline_url = $this->_urlBuilder->getUrl('hipay/redirect/decline', $redirectParams);
         $orderRequest->cancel_url = $this->_urlBuilder->getUrl('hipay/redirect/cancel', $redirectParams);
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);
 
+        $orderRequest->paymentMethod = $this->_paymentMethod;
+        $orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
+        $orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
+
+        // Extras informations
+        $this->processExtraInformations($orderRequest);
+
+        return $orderRequest;
+    }
+
+    /**
+     *  Process all extras information for the request
+     *
+     * @param OrderRequest $order OrderRequest passed by reference
+     */
+    private function processExtraInformations(OrderRequest &$orderRequest) {
         // Check if fingerprint is enabled
         if ($this->_config->isFingerprintEnabled()) {
-            $orderRequest->device_fingerprint = $this->_order->getPayment()->getAdditionalInformation('fingerprint');;
+            $orderRequest->device_fingerprint = $this->_order->getPayment()->getAdditionalInformation('fingerprint');
         }
 
         // Check if sending cart is necessary ( If  conf enabled or if payment method product needs it )
@@ -221,20 +237,44 @@ class Order extends CommonRequest
         }
 
         // Check if delivery method is required for the payment method
-        if ($this->_config->isDeliveryMethodRequired($orderRequest->payment_product)){
+        if ($this->_config->isDeliveryMethodRequired($orderRequest->payment_product)) {
             $orderRequest->delivery_information = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
         }
-
-        $orderRequest->language = $this->_localeResolver->getLocale();
-        $orderRequest->paymentMethod = $this->_paymentMethod;
-        $orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
-        $orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
 
         // Technical parameter to track wich magento version is used
         $orderRequest->source = $this->helper->getRequestSource();
 
-        return $orderRequest;
-
+        /*
+         *  Custom Data
+         *
+         * You can use these parameters to submit custom values you wish to show in HiPay back office transaction details,
+         * receive back in the API response messages, in the notifications or to activate specific FPS rules.
+         *
+         *  Please make an Magento 2 plugin which listen the method "getCustomData"
+         *  of the class "HiPay\FullserviceMagento\Helper\Data"
+         */
+        $customData = $this->getCustomData();
+        if (!empty($customData)) {
+            $orderRequest->custom_data = json_encode($customData);
+        }
     }
 
+
+    /**
+     *  Generate custom data to send to HiPay back office
+     *
+     * @return array
+     */
+    public function getCustomData()
+    {
+        $customData = array();
+        return $customData;
+    }
+
+    /**
+     * @return \Magento\Sales\Model\Order|mixed
+     */
+    public function getOrder(){
+        return $this->_order;
+    }
 }

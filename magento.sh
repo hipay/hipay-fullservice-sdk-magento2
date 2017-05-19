@@ -20,7 +20,7 @@ if [ "$1" = '' ] || [ "$1" = '--help' ];then
 fi
 
 if [ "$1" = 'init' ];then
-    if [ -f ./conf/env/auth.env ];then
+    if [ -f ./conf/development/auth.env ];then
         docker-compose stop
         docker-compose rm -fv
         rm -Rf data/ log/ web/
@@ -46,6 +46,10 @@ elif [ "$1" = 'command' ];then
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $2
 elif [ "$1" = 'l' ];then
     docker-compose logs -f
+elif [ "$1" = 'install' ];then
+    docker exec magento2-hipay-fullservice gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
+    docker exec magento2-hipay-fullservice gosu magento2 bin/magento setup:upgrade
+    docker exec magento2-hipay-fullservice gosu magento2 bin/magento c:c
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
 fi
