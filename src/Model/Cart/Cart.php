@@ -150,7 +150,7 @@ class Cart extends \Magento\Payment\Model\Cart
         if ($this->getShipping()) {
             if ((int) $this->_model->getDataUsingMethod('base_shipping_incl_tax') > 0) {
                 $this->addGenericItem($this->_salesModel->getDataUsingMethod('shipping_description'),
-                    $this->_model->getDataUsingMethod('base_shipping_incl_tax'),
+                    round($this->_model->getDataUsingMethod('base_shipping_incl_tax'),3),
                     $this->_salesModel->getDataUsingMethod('shipping_method'),
                     $this->_salesModel->getDataUsingMethod('shipping_description'),
                     round($this->_model->getDataUsingMethod('base_shipping_tax_amount') / $this->_model->getDataUsingMethod('base_shipping_incl_tax') * 100, 2),
@@ -262,8 +262,7 @@ class Cart extends \Magento\Payment\Model\Cart
             $itemTotalInclTax = $this->getTotalPrice($originalItem);
 
             // Need better precision and unit price with reel tax application
-            if ($price * $qty != $itemTotalInclTax) {
-                if ($this->_operation != null && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)) {
+            if ($this->_operation != null && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)) {
                     // To avoid 0.001 between original authorization and capture and refund
                     foreach ($this->_salesModel->getAllItems() as $key => $orderItem) {
                         if ($orderItem->getParentItem()) {
@@ -278,10 +277,10 @@ class Cart extends \Magento\Payment\Model\Cart
                             $discount = ($price * $qty) - $itemTotalInclTax;
                         }
                     }
-                } else {
-                    $price = $this->returnUnitPrice($itemTotalInclTax + $discount, $qty);
-                }
+            } else {
+                $price = $this->returnUnitPrice($itemTotalInclTax + $discount, $qty);
             }
+
 
             // Add an item only if its calculated item
             if ($itemTotalInclTax > 0) {
@@ -349,7 +348,6 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Add "hidden" discount and shipping tax
      *
-     * Go ahead, try to understand ]:->
      *
      * Tax settings for getting "discount tax":
      * - Catalog Prices = Including Tax

@@ -14,7 +14,7 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Block\Adminhtml\CartCategories\Edit;
+namespace HiPay\FullserviceMagento\Block\Adminhtml\Cartcategories\Edit;
 
 use \HiPay\Fullservice\Data\Category\Collection as collection;
 

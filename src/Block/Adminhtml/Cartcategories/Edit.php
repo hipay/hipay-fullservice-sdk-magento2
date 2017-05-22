@@ -13,7 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Block\Adminhtml\CartCategories;
+namespace HiPay\FullserviceMagento\Block\Adminhtml\Cartcategories;
 
 /**
  * Admin Cart Categories edition
