@@ -86,10 +86,6 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-postfinanceefinanceapi'
             },
             {
-                type: 'hipay_postfinanceefinanceapi',
-                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-postfinanceefinanceapi'
-            },
-            {
                 type: 'hipay_przelewy24api',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-przelewy24'
             },

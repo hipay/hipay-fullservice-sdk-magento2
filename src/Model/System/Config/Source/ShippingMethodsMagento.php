@@ -70,6 +70,8 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
             foreach($methods as $code => $method) {
                 if (is_object($method)) {
                     $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method->getText());
+                } else if (!empty($method)) {
+                    $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method);
                 }
             }
         }

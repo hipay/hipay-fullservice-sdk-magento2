@@ -49,7 +49,7 @@ define([
         },
         
         prepare : function(event, method) {
-            if (method.indexOf('hipay_cc') > -1) {
+            if (method && method.indexOf('hipay_cc') > -1) {
                 this.preparePayment();
             }
 

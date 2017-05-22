@@ -1,10 +1,17 @@
 magento2:
+  container_name: jira-mg2tpp-develop.hipay-pos-platform.com
   env_file:
     - ./conf/production/mage.env.sample
     - ./conf/production/auth.env.sample
     - ./conf/production/module.env.sample
     - ./conf/production/hipay.env.sample
-db:
   ports:
-    - "3307:3306"
-
+    - "8522:80"
+db:
+  container_name: magento2-hipay-mysql-tpp-develop
+  ports:
+    - "3317:3306"
+smtp:
+  container_name: magento2-hipay-smtp-tpp-develop
+  ports:
+    - "1222:1080"

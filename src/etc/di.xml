@@ -25,7 +25,7 @@
     <type name="Magento\Sales\Model\Order\Payment">
         <plugin name="hipay_payment_accept" type="\HiPay\FullserviceMagento\Plugin\OrderPaymentPlugin" sortOrder="100" disabled="false"/>
     </type>
-    <type name="HiPay\FullserviceMagento\Model\Request\order">
+    <type name="HiPay\FullserviceMagento\Model\Request\Order">
         <plugin name="hipay_custom_data" type="\HiPay\FullserviceMagento\Plugin\CustomDataPlugin" sortOrder="10" disabled="false"/>
     </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
