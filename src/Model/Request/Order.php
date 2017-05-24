@@ -81,6 +81,19 @@ class Order extends CommonRequest
     protected $_operation = null;
 
     /**
+     * Customer Factory
+     *
+     * @var \Magento\Sales\Model\Order
+     */
+    protected $_customerRepositoryInterface;
+
+    /**
+     *
+     * @var  \Magento\Customer\Api\GroupRepositoryInterface
+     */
+    protected $_groupRepositoryInterface;
+
+    /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
@@ -98,8 +111,11 @@ class Order extends CommonRequest
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
         \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
+        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
         $params = []
-    ) {
+    )
+    {
         parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory,
             $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface, $mappingCategoriesCollectionFactory, $categoryFactory, $params);
 
@@ -107,6 +123,8 @@ class Order extends CommonRequest
         $this->_cartFactory = $cartFactory;
         $this->weeeHelper = $weeeHelper;
         $this->_productRepositoryInterface = $productRepositoryInterface;
+        $this->_customerRepositoryInterface = $customerRepositoryInterface;
+        $this->_groupRepositoryInterface = $groupRepositoryInterface;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -225,7 +243,8 @@ class Order extends CommonRequest
      *
      * @param OrderRequest $order OrderRequest passed by reference
      */
-    private function processExtraInformations(OrderRequest &$orderRequest) {
+    private function processExtraInformations(OrderRequest &$orderRequest)
+    {
         // Check if fingerprint is enabled
         if ($this->_config->isFingerprintEnabled()) {
             $orderRequest->device_fingerprint = $this->_order->getPayment()->getAdditionalInformation('fingerprint');
@@ -274,7 +293,24 @@ class Order extends CommonRequest
     /**
      * @return \Magento\Sales\Model\Order|mixed
      */
-    public function getOrder(){
+    public function getOrder()
+    {
         return $this->_order;
+    }
+
+    /**
+     * @return \Magento\Customer\Api\CustomerRepositoryInterface|\Magento\Sales\Model\Order
+     */
+    public function getCustomerRepositoryInterface()
+    {
+        return $this->_customerRepositoryInterface;
+    }
+
+    /**
+     * @return \Magento\Customer\Api\CustomerRepositoryInterface|\Magento\Sales\Model\Order
+     */
+    public function getGroupRepositoryInterface()
+    {
+        return $this->_groupRepositoryInterface;
     }
 }

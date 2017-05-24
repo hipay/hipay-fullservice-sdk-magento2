@@ -39,9 +39,11 @@ class CustomDataPlugin
         // Customer information
         if ($order->getCustomerId()) {
             $customerId = $order->getCustomerId();
-            $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
-            $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
-            $result['customer_code'] = $group->getCode();
+            if ($subject->getCustomerRepositoryInterface() && $subject->getGroupRepositoryInterface()) {
+                $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
+                $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
+                $result['customer_code'] = $group->getCode();
+            }
         }
 
         // Method payment information

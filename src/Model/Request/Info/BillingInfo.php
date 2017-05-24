@@ -60,6 +60,7 @@ class BillingInfo extends AbstractInfoRequest {
 		$customerBillingInfo->zipcode = $billingAddress->getPostcode();
 		$customerBillingInfo->country = $billingAddress->getCountryId();
 		$customerBillingInfo->phone = $billingAddress->getTelephone();
+        $customerBillingInfo->msisdn = $billingAddress->getTelephone();
 		$customerBillingInfo->state = $billingAddress->getRegion();
 		$customerBillingInfo->recipientinfo = $billingAddress->getCompany();
 		return $customerBillingInfo;
