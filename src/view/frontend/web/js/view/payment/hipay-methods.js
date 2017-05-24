@@ -144,6 +144,10 @@ define(
             {
                 type: 'hipay_facilypay4X',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay4X'
+            },
+            {
+                type: 'hipay_klarna',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'
             }
         );
         /** Add view logic here if needed */

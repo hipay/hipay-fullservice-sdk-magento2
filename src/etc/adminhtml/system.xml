@@ -64,6 +64,7 @@
             <include path="HiPay_FullserviceMagento::system/method/santandercash.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay4X.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/klarna.xml"/>
         </section>
     </system>
 </config>

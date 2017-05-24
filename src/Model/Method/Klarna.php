@@ -13,16 +13,13 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Controller\Redirect;
 
-use HiPay\FullserviceMagento\Controller\Fullservice;
-use Magento\Framework\Controller\ResultFactory;
+namespace HiPay\FullserviceMagento\Model\Method;
+
+use HiPay\FullserviceMagento\Model\HostedMethod;
 
 /**
- * Pending controller
- *
- * Display pending reviex page
- * Redirection on this page occur when payment is in pending review (Challenge transaction)
+ * Klarna invoice Model payment method
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -30,20 +27,36 @@ use Magento\Framework\Controller\ResultFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Pending extends Fullservice {
-	
-	/**
-	 * @return void
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 * */
-	public function execute(){
-		$this->_checkoutSession->clearQuote();
-        $this->_checkoutSession->setErrorMessage('');
-		
-		/** @var \Magento\Framework\View\Result\Page $resultPage */
-		$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-		return $resultPage;
+class Klarna extends HostedMethod
+{
 
-	}
-	
+    const HIPAY_METHOD_CODE = 'hipay_klarna';
+
+    /**
+     * @var string
+     */
+    protected $_code = self::HIPAY_METHOD_CODE;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefund = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefundInvoicePartial = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
+
+
 }
