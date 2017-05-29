@@ -314,38 +314,50 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this->_gatewayManagerFactory->create($order);
     }
 
+    /**
+     *  According the status provide a correct URL FOWARD
+     *
+     * @param $response
+     * @return string Redirect URL
+     * @throws LocalizedException
+     */
+    protected function processResponse($response){
+        $successUrl = $this->urlBuilder->getUrl('hipay/redirect/accept', ['_secure' => true]);
+        $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
+        $forwardUrl = $response->getForwardUrl();
+        $failUrl = $this->urlBuilder->getUrl('hipay/redirect/decline', ['_secure' => true]);
+        $redirectUrl = $successUrl;
+        switch ($response->getState()) {
+            case TransactionState::COMPLETED:
+                //redirectUrl is success by default
+                break;
+            case TransactionState::PENDING:
+                $redirectUrl = $pendingUrl;
+                break;
+            case TransactionState::FORWARDING:
+                $redirectUrl = $forwardUrl;
+                break;
+            case TransactionState::DECLINED:
+                $reason = $response->getReason();
+                $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
+                $redirectUrl = $failUrl;
+                break;
+            case TransactionState::ERROR:
+                $reason = $response->getReason();
+                $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
+                throw new LocalizedException(__('There was an error request new transaction: %1.', $reason['message']));
+            default:
+                $redirectUrl = $failUrl;
+        }
+
+        return $redirectUrl;
+    }
+
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {
         try {
             $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
-
-            $successUrl = $this->urlBuilder->getUrl('hipay/redirect/accept', ['_secure' => true]);
-            $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
-            $forwardUrl = $response->getForwardUrl();
-            $failUrl = $this->urlBuilder->getUrl('hipay/redirect/decline', ['_secure' => true]);
-            $redirectUrl = $successUrl;
-            switch ($response->getState()) {
-                case TransactionState::COMPLETED:
-                    //redirectUrl is success by default
-                    break;
-                case TransactionState::PENDING:
-                    $redirectUrl = $pendingUrl;
-                    break;
-                case TransactionState::FORWARDING:
-                    $redirectUrl = $forwardUrl;
-                    break;
-                case TransactionState::DECLINED:
-                    $reason = $response->getReason();
-                    $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
-                    $redirectUrl = $failUrl;
-                    break;
-                case TransactionState::ERROR:
-                    $reason = $response->getReason();
-                    $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
-                    throw new LocalizedException(__('There was an error request new transaction: %1.', $reason['message']));
-                default:
-                    $redirectUrl = $failUrl;
-            }
+            $redirectUrl = $this->processResponse($response);
 
             //always in pending, because only notification can change order/transaction statues
             $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
