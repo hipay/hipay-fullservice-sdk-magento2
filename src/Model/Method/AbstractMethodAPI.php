@@ -80,7 +80,8 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     {
         $gateway = $this->_gatewayManagerFactory->create($order);
         $hppModel = $gateway->requestNewOrder();
-        $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
+        $redirectURL = $this->processResponse($hppModel);
+        $order->getPayment()->setAdditionalInformation('redirectUrl', $redirectURL);
     }
 
     /**

@@ -119,11 +119,11 @@ class DeliveryInfo extends AbstractInfoRequest {
      * @return null|string
      */
     function getMappingShippingMethod(){
-        $codeMappintShipping = $this->_order->getPayment()->getMethodInstance()->getConfigData('default_mapping_shipping_method');
+        $codeMappingShipping = $this->_order->getPayment()->getMethodInstance()->getConfigData('default_mapping_shipping_method');
         if ($this->_mappingDelivery) {
-            $codeMappintShipping = $this->_mappingDelivery->getHipayShippingId();
+            $codeMappingShipping = $this->_mappingDelivery->getHipayShippingId();
         }
-        $deliveryMethod = $this->_shippingMethodsHipay->getDeliveryMethodByCode($codeMappintShipping);
+        $deliveryMethod = $this->_shippingMethodsHipay->getDeliveryMethodByCode($codeMappingShipping);
         return json_encode(['mode' => $deliveryMethod->getMode(),'shipping' => $deliveryMethod->getShipping()]);
 
     }
