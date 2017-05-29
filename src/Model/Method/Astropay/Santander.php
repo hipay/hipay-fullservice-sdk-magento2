@@ -42,6 +42,6 @@ class Santander extends AbstractAstropay
      *
      * @var bool
      */
-    protected $_typeIdentification = parent::IDENTIFICATION_CPF;
+    protected $_typeIdentification = parent::IDENTIFICATION_CPN;
 
 }
