@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Config;
 
 use Magento\Payment\Model\Method\ConfigInterface;
@@ -22,75 +23,74 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Abstract configuration
  * Manage configuration getter
- * 
+ *
  * @see  HiPay\FullserviceMagento\Model\Config.php
- * 
+ *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-abstract class AbstractConfig implements ConfigInterface {
-	
-	
-	
+abstract class AbstractConfig implements ConfigInterface
+{
 
-	/**
-	 * Current payment method code
-	 *
-	 * @var string
-	 */
-	protected $_methodCode;
-	
-	/**
-	 * Current store id
-	 *
-	 * @var int
-	 */
-	protected $_storeId;
-	
-	/**
-	 * @var MethodInterface
-	 */
-	protected $methodInstance;
-	
-	/**
-	 * @var string
-	 */
-	protected $pathPattern;
-	
-	/**
-	 * Core store config
-	 *
-	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
-	 */
-	protected $_scopeConfig;
-	
 
-	
-	/**
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-	 */
-	public function __construct(
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-			) {
-				$this->_scopeConfig = $scopeConfig;
-	}
-	
-	/**
-	 * Sets method instance used for retrieving method specific data
-	 *
-	 * @param MethodInterface $method
-	 * @return $this
-	 */
-	public function setMethodInstance($method)
-	{
-		$this->methodInstance = $method;
-		return $this;
-	}
-	
-	 /**
+    /**
+     * Current payment method code
+     *
+     * @var string
+     */
+    protected $_methodCode;
+
+    /**
+     * Current store id
+     *
+     * @var int
+     */
+    protected $_storeId;
+
+    /**
+     * @var MethodInterface
+     */
+    protected $methodInstance;
+
+    /**
+     * @var string
+     */
+    protected $pathPattern;
+
+    /**
+     * Core store config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    )
+    {
+        $this->_scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Sets method instance used for retrieving method specific data
+     *
+     * @param MethodInterface $method
+     * @return $this
+     */
+    public function setMethodInstance($method)
+    {
+        $this->methodInstance = $method;
+        return $this;
+    }
+
+    /**
      * Returns payment configuration value
      *
      * @param string $key
@@ -119,7 +119,7 @@ abstract class AbstractConfig implements ConfigInterface {
         }
         return null;
     }
-    
+
     /**
      * Method code setter
      *
@@ -128,15 +128,15 @@ abstract class AbstractConfig implements ConfigInterface {
      */
     public function setMethod($method)
     {
-    	if ($method instanceof MethodInterface) {
-    		$this->_methodCode = $method->getCode();
-    	} elseif (is_string($method)) {
-    		$this->_methodCode = $method;
-    	}
-    	return $this;
+        if ($method instanceof MethodInterface) {
+            $this->_methodCode = $method->getCode();
+        } elseif (is_string($method)) {
+            $this->_methodCode = $method;
+        }
+        return $this;
     }
-    
- /**
+
+    /**
      * Sets method code
      *
      * @param string $methodCode
@@ -146,7 +146,7 @@ abstract class AbstractConfig implements ConfigInterface {
     {
         $this->_methodCode = $methodCode;
     }
-    
+
     /**
      * Payment method instance code getter
      *
@@ -154,9 +154,9 @@ abstract class AbstractConfig implements ConfigInterface {
      */
     public function getMethodCode()
     {
-    	return $this->_methodCode;
+        return $this->_methodCode;
     }
-    
+
 
     /**
      * Sets path pattern
@@ -168,62 +168,63 @@ abstract class AbstractConfig implements ConfigInterface {
     {
         $this->pathPattern = $pathPattern;
     }
-	
-	public function getGeneraleValue($key,$group = 'hipay_credentials'){
 
-		return  $this->_scopeConfig->getValue(
-				$this->_mapGeneralFieldset($key,$group),
-				\Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-				$this->_storeId
-				);
-	}
-	
-	/**
-	 * Store ID setter
-	 *
-	 * @param int $storeId
-	 * @return $this
-	 */
-	public function setStoreId($storeId)
-	{
-		$this->_storeId = (int)$storeId;
-		return $this;
-	}
-	
-	/**
-	 * Map any supported payment method into a config path by specified field name
-	 *
-	 * @param string $fieldName
-	 * @return string|null
-	 */
-	protected function _getSpecificConfigPath($fieldName)
-	{
-		if ($this->pathPattern) {
-			return sprintf($this->pathPattern, $this->_methodCode, $fieldName);
-		}
-	
-		return "payment/{$this->_methodCode}/{$fieldName}";
-	}
-	
-	/**
-	 * Perform additional config value preparation and return new value if needed
-	 *
-	 * @param string $key Underscored key
-	 * @param string $value Old value
-	 * @return string Modified value or old value
-	 */
-	protected function _prepareValue($key, $value)
-	{
-		return $value;
-	}
-	
-	 /**
+    public function getGeneraleValue($key, $group = 'hipay_credentials')
+    {
+
+        return $this->_scopeConfig->getValue(
+            $this->_mapGeneralFieldset($key, $group),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
+    }
+
+    /**
+     * Store ID setter
+     *
+     * @param int $storeId
+     * @return $this
+     */
+    public function setStoreId($storeId)
+    {
+        $this->_storeId = (int)$storeId;
+        return $this;
+    }
+
+    /**
+     * Map any supported payment method into a config path by specified field name
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    protected function _getSpecificConfigPath($fieldName)
+    {
+        if ($this->pathPattern) {
+            return sprintf($this->pathPattern, $this->_methodCode, $fieldName);
+        }
+
+        return "payment/{$this->_methodCode}/{$fieldName}";
+    }
+
+    /**
+     * Perform additional config value preparation and return new value if needed
+     *
+     * @param string $key Underscored key
+     * @param string $value Old value
+     * @return string Modified value or old value
+     */
+    protected function _prepareValue($key, $value)
+    {
+        return $value;
+    }
+
+    /**
      * Map HiPay General Settings
      *
      * @param string $fieldName
      * @return string|null
      */
-    protected function _mapGeneralFieldset($fieldName,$group = 'hipay_credentials')
+    protected function _mapGeneralFieldset($fieldName, $group = 'hipay_credentials')
     {
         switch ($fieldName) {
             case 'api_username':
@@ -232,7 +233,10 @@ abstract class AbstractConfig implements ConfigInterface {
             case 'api_username_test':
             case 'api_password_test':
             case 'secret_passphrase_test':
-            	return "hipay/{$group}/{$fieldName}";
+            case 'fingerprint_enabled':
+            case 'basket_enabled':
+            case 'basket_attribute_ean':
+                return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
         }

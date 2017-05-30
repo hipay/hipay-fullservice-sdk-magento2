@@ -42,7 +42,7 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
         try {
         	   	
             $order = $this->_getCheckoutSession()->getLastRealOrder();
-			
+
            if(!$order->getId()){
             	throw new \Magento\Framework\Exception\LocalizedException(
             			__('We can\'t place the order.')
@@ -75,7 +75,7 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             );
           
         }
-        $this->_redirect('checkout/cart');
+        $this->_redirect('checkout/payment');
     }
 
 

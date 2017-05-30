@@ -90,6 +90,20 @@ define(
             getCcAvailableTypes: function() {
                 return window.checkoutConfig.payment.hipayCc.availableTypes;
             },
+
+            /**
+			 *  Get global fingerprint  on dom load of checkout
+			 *
+             * @returns {*}
+             */
+            getFingerprint: function () {
+            	if ($('#ioBB')) {
+                    return $('#ioBB').val();
+                }else{
+					return '';
+				}
+            },
+
             /**
              * @override
              */

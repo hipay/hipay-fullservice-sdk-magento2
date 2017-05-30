@@ -18,10 +18,11 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
         <route id="hipay" frontName="hipay">
-            <module name="HiPay_FullserviceMagento" />
+            <module name="HiPay_FullserviceMagento"/>
         </route>
     </router>
 </config>

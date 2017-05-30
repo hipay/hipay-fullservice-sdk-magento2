@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2 * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+		<group id="configurations" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Others configurations</label>
+			<field id="fingerprint_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				<label>Device fingerprint active</label>
+				<comment>If yes then a call an external javascript is made on checkout page</comment>
+			</field>
+			<field id="fingerprint_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+            	<label>Url of Hipay's javascript</label>
+                <comment>Not to be modified. Please read our documentation : https://developer.hipay.com/getting-started/platform-hipay-enterprise/overview/#device-fingerprint-integration
+                </comment>
+            </field>
+			<field id="basket_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				<label>Send cart</label>
+				<comment>If yes, then customer's cart is sent with transaction</comment>
+			</field>
+			<field id="basket_attribute_ean" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Attributes</source_model>
+				<label>Ean attribute</label>
+				<comment>Select your custom attribute for ean support</comment>
+			</field>
+		</group>
+</include>

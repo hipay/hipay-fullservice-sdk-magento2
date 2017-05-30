@@ -20,10 +20,10 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 
 /**
  * Billing info Request Object
- * 
+ *
  * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
+ * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @copyright Copyright (c) 2017 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
@@ -38,10 +38,7 @@ class BillingInfo extends AbstractInfoRequest {
 	 */
 	protected function mapRequest() {
 		$customerBillingInfo = new CustomerBillingInfoRequest();
-
-		$customerBillingInfo->firstname = $this->_order->getCustomerFirstname();
-		$customerBillingInfo->lastname = $this->_order->getCustomerLastname();
-		$customerBillingInfo->email = $this->_order->getCustomerEmail();
+        $customerBillingInfo->email = $this->_order->getCustomerEmail();
 		$dob = $this->_order->getCustomerDob();
 		if(!is_null($dob) && !empty($dob)){
 			try {
@@ -54,17 +51,18 @@ class BillingInfo extends AbstractInfoRequest {
 		}
 		
 		$customerBillingInfo->gender =$this->_order->getCustomerGender(); //@TODO make mapping Value with \HiPay\Fullservice\Enum\Customer\Gender
-		
-		$billingAddress = $this->_order->getBillingAddress();
+   		$billingAddress = $this->_order->getBillingAddress();
+        $customerBillingInfo->firstname = $billingAddress->getFirstname();
+        $customerBillingInfo->lastname = $billingAddress->getLastname();
 		$customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);
 		$customerBillingInfo->streetaddress2 = $billingAddress->getStreetLine(2);
 		$customerBillingInfo->city = $billingAddress->getCity();
 		$customerBillingInfo->zipcode = $billingAddress->getPostcode();
 		$customerBillingInfo->country = $billingAddress->getCountryId();
 		$customerBillingInfo->phone = $billingAddress->getTelephone();
+        $customerBillingInfo->msisdn = $billingAddress->getTelephone();
 		$customerBillingInfo->state = $billingAddress->getRegion();
 		$customerBillingInfo->recipientinfo = $billingAddress->getCompany();
-		
 		return $customerBillingInfo;
 	}
 

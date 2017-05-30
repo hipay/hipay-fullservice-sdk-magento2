@@ -110,7 +110,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                     'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Combine',
                     'label' => __('Conditions combination')
                 ],
-                ['label' => __('Cart Attribute'), 'value' => $attributes],
+                ['label' => __('CartCategories Attribute'), 'value' => $attributes],
             	['label' => __('Customer Attribute'), 'value' => $cAttributes]
             ]
         );

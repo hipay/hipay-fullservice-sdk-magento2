@@ -26,41 +26,41 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class QiwiWallet extends FullserviceMethod{
-	
-	const HIPAY_METHOD_CODE               = 'hipay_qiwiwallet';
-	
-	/**
-	 * @var string
-	 */
-	protected $_code = self::HIPAY_METHOD_CODE;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canRefund = false;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canRefundInvoicePartial = false;
-	
-	/**
-	 * Payment Method feature
-	 *
-	 * @var bool
-	 */
-	protected $_canUseInternal = false;
-	
-	/**
-	 * @var string[] keys to import in payment additionnal informations
-	 */
-	protected $_additionalInformationKeys = ['qiwiuser'];
-	
-	
-	
+class QiwiWallet extends FullserviceMethod
+{
+
+    const HIPAY_METHOD_CODE = 'hipay_qiwiwallet';
+
+    /**
+     * @var string
+     */
+    protected $_code = self::HIPAY_METHOD_CODE;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefund = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canRefundInvoicePartial = false;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
+
+    /**
+     * @var string[] keys to import in payment additionnal informations
+     */
+    protected $_additionalInformationKeys = ['qiwiuser'];
+
+
 }

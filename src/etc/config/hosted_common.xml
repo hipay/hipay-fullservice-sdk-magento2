@@ -1,0 +1,35 @@
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:HiPay_FullserviceMagento:etc/config_include.xsd">
+    <model>HiPay\FullserviceMagento\Model\Method\Dexia</model>
+    <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+    <active>0</active>
+    <title>HiPay Belfius / Dexia Direct Net</title>
+    <payment_action>Sale</payment_action>
+    <order_status>pending</order_status>
+    <order_status_payment_accepted>processing</order_status_payment_accepted>
+    <order_status_payment_refused>holded</order_status_payment_refused>
+    <order_status_payment_canceled>canceled</order_status_payment_canceled>
+    <hipay_status_validate_order>118</hipay_status_validate_order>
+    <cancel_pending_order>0</cancel_pending_order>
+    <re_add_to_cart>0</re_add_to_cart>
+    <iframe_mode>1</iframe_mode>
+    <iframe_width>80%</iframe_width>
+    <iframe_height>450px</iframe_height>
+    <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+    <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid #BEBCB7;
+        border-right: 1px solid #BEBCB7;
+    </iframe_wrapper_style>
+    <payment_products>dexia-directnet
+    </payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+    <payment_products_categories>realtime-banking</payment_products_categories>
+    <display_selector>0</display_selector>
+    <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+    <allow_use_oneclick>0</allow_use_oneclick>
+    <template>basic-js</template>
+    <css></css>
+    <allowspecific>0</allowspecific>
+    <allowed_currencies>EUR</allowed_currencies> <!-- Custom local configuration -->
+    <debug>0</debug>
+    <env>STAGE</env>
+    <group>hipay</group>
+</include>

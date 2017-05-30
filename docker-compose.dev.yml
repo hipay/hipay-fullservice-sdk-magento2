@@ -1,0 +1,19 @@
+magento2:
+  env_file:
+    - ./conf/development/mage.env.sample
+    - ./conf/development/auth.env
+    - ./conf/development/module.env.sample
+    - ./conf/development/hipay.env
+  ports:
+    - "8080:80"
+  volumes:
+    - ./src:/var/www/html/magento2/app/code/HiPay/FullserviceMagento
+    - ./tests:/home/magento2/tests
+    - ./log:/home/magento2/var/log
+    - ./conf/sdk:/var/www/html/magento2/sdk
+db:
+  ports:
+    - "3307:3306"
+  volumes:
+    - ./data/mysql:/var/lib/mysql
+

@@ -1,3 +1,25 @@
+# 1.1.0
+
+- New feature FACILIPAY ONEY
+- New feature KLARNA
+- New feature Adding request sources
+- New feature Adding custom data
+- New feature Adding device fingerprint
+- New feature ASTROPAY
+- New feature SEPA SDD
+- New feature POSTFINANCE
+- New feature SOFORT
+- New feature WEBMONEY & YANDEX
+- New feature PRZELEWY24
+- New feature GIROPAY
+- New feature iDEAL
+- New feature PAYPAL
+- New feature Basket V2 (cart synced to HiPay)
+- New feature Mapping categories Website <> HiPay
+- New feature Mapping carriers Website <> HiPay with delivery date synced to HiPay
+- FIX New branding
+- FIX translations
+
 # 1.0.8
 
 - Skip Magento fraud checking

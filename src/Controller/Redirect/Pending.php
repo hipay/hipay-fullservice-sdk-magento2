@@ -37,10 +37,8 @@ class Pending extends Fullservice {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
 	public function execute(){
-		
-		//$this->messageManager->addNoticeMessage(__('Your order is in payment review.'));
-		
 		$this->_checkoutSession->clearQuote();
+        $this->_checkoutSession->setErrorMessage('');
 		
 		/** @var \Magento\Framework\View\Result\Page $resultPage */
 		$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

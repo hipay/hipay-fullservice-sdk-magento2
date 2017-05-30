@@ -73,9 +73,10 @@ class Index extends AppAction {
      		
      		
      	} catch (\Exception $e) {
-     		$this->_logger->error($e->getMessage());
-     		$this->getResponse()->setStatusHeader(400, '1.1', $e->getMessage())->sendResponse();
-     	}
+     		$this->_logger->critical($e);
+     		$this->getResponse()->setStatusHeader(400, '1.1', $e->getMessage());
+            $this->getResponse()->setBody($e->getTraceAsString())->sendResponse();
+        }
 
      	$this->getResponse()->setBody('OK')->sendResponse();
 

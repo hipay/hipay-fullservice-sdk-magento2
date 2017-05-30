@@ -35,10 +35,7 @@ class Decline extends Fullservice {
 	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
 	 * */
 	public function execute(){
-		
-		//ini_set('display_errors',1);
-		//error_reporting(E_ALL);
-		
+
 		$lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
 		if($lastOrderId){
 			/** @var $order  \Magento\Sales\Model\Order */
