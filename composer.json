@@ -22,14 +22,6 @@
             "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
         ]
     },
-     "autoload": {
-       "files": [
-         "registration.php"
-       ],
-        "psr-4": {
-            "HiPay\\FullserviceMagento\\": ""
-        }
-    },
     "autoload-dev": {
       "psr-4": {
        "HiPay\\FullserviceMagento\\Test\\": "tests/functional/tests/app/HiPay/"
