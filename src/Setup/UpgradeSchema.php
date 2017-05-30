@@ -344,7 +344,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($table);
         }
 
-        if (version_compare($context->getVersion(), '1.0.8', '<')) {
+        if (version_compare($context->getVersion(), '1.1.0', '<')) {
 
             /**
              * Create table 'hipay_cart_mapping_categories'
