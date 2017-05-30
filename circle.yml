@@ -14,7 +14,7 @@ dependencies:
     - mkdir -p ~/docker; docker save hipay/hipay-magento2 mysql:5.6 selenium/standalone-firefox  > ~/docker/compose-images.tar
 test:
   pre:
-    - sed -i -e "s/{MAGENTO_URL\}/$MAGENTO_URL/" ./conf/stage/mage.env.sample
+    - sed -i -e "s|{MAGENTO_URL\}|$MAGENTO_URL|" ./conf/stage/mage.env.sample
     - sed -i -e "s/{PORT_WEB\}/$PORT_WEB/" ./conf/stage/mage.env.sample
     - sed -i -e "s/{HIPAY_API_USER_TEST\}/$HIPAY_API_USER_TEST/" ./conf/stage/hipay.env.sample
     - sed -i -e "s/{HIPAY_API_PASSWORD_TEST\}/$HIPAY_API_PASSWORD_TEST/" ./conf/stage/hipay.env.sample
@@ -22,8 +22,8 @@ test:
     - sed -i -e "s/{HIPAY_TOKENJS_USERNAME_TEST\}/$HIPAY_TOKENJS_USERNAME_TEST/" ./conf/stage/hipay.env.sample
     - sed -i -e "s/{HIPAY_SECRET_PASSPHRASE_TEST\}/$HIPAY_SECRET_PASSPHRASE_TEST/" ./conf/stage/hipay.env.sample
     - sed -i -e "s/{ACTIVE_METHODS\}/$ACTIVE_METHODS/" ./conf/stage/hipay.env.sample
-    - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d db selenium
   override:
-    - docker-compose -f docker-compose.yml -f docker-compose.stage.yml run -e GITHUB_API_TOKEN=$GITHUB_API_TOKEN -e MAGE_ACCOUNT_PRIVATE_KEY=$MAGE_ACCOUNT_PRIVATE_KEY -e MAGE_ACCOUNT_PUBLIC_KEY=$MAGE_ACCOUNT_PUBLIC_KEY -e MAGE_INSTALL_SAMPLE_DATA='' -e CUSTOM_PACKAGES=hipay/hipay-fullservice-sdk-magento2=dev-$CIRCLE_BRANCH  magento2 phpunit -c ../../../vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
+    - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d
+    - sleep 120
     - curl --retry 30 --retry-delay 3 -v $MAGENTO_URL:$PORT_WEB
 
