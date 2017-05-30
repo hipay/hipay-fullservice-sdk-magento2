@@ -14,7 +14,7 @@ fi
 #==========================================
 # Install XDebug
 #==========================================
-if [ $XDEBUG_ENABLED = 1 ]; then
+if [ "$XDEBUG_ENABLED" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     INSTALLATION XDEBUG $ENVIRONMENT    ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
@@ -77,6 +77,11 @@ fi
        ln -sf /var/www/html/magento2/sdk/hipay-fullservice-sdk-php hipay-fullservice-sdk-php
        printf "${COLOR_SUCCESS} HiPay's SDK php is now linked ${NC}\n"
     fi
+
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}         APPLY        ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    chown -R magento2:www-data /var/www/html/magento2/var/cache
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"

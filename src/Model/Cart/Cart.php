@@ -146,17 +146,19 @@ class Cart extends \Magento\Payment\Model\Cart
                 TypeItems::DISCOUNT);
 
         }
-
-        if ($this->getShipping()) {
-            if ((int) $this->_model->getDataUsingMethod('base_shipping_incl_tax') > 0) {
+        $base_shipping = 0;
+        $tax_rate = 0;
+        if (!empty($this->_salesModel->getDataUsingMethod('shipping_method'))) {
+            if ((float) $this->_model->getDataUsingMethod('base_shipping_incl_tax') > 0) {
+                $base_shipping = round($this->_model->getDataUsingMethod('base_shipping_incl_tax'), 3);
+                $tax_rate = round($this->_model->getDataUsingMethod('base_shipping_tax_amount') / $this->_model->getDataUsingMethod('base_shipping_incl_tax') * 100, 2);
+            }
                 $this->addGenericItem($this->_salesModel->getDataUsingMethod('shipping_description'),
-                    round($this->_model->getDataUsingMethod('base_shipping_incl_tax'),3),
+                    $base_shipping,
                     $this->_salesModel->getDataUsingMethod('shipping_method'),
                     $this->_salesModel->getDataUsingMethod('shipping_description'),
-                    round($this->_model->getDataUsingMethod('base_shipping_tax_amount') / $this->_model->getDataUsingMethod('base_shipping_incl_tax') * 100, 2),
+                    $tax_rate,
                     TypeItems::FEE);
-            }
-
         }
     }
 
