@@ -823,7 +823,6 @@
                 <active>0</active>
                 <title>Hipay Entreprise Oney Facily Pay 3X</title>
                 <payment_product_fees>3xcb</payment_product_fees>
-                <default_mapping_shipping_method>7</default_mapping_shipping_method>
                 <payment_action>Sale</payment_action>
                 <min_order_total>100</min_order_total>
                 <order_status>pending</order_status>
@@ -852,7 +851,6 @@
                 <active>0</active>
                 <title>Hipay Entreprise Oney Facily Pay 4X</title>
                 <payment_product_fees>4xcb</payment_product_fees>
-                <default_mapping_shipping_method>7</default_mapping_shipping_method>
                 <payment_action>Sale</payment_action>
                 <min_order_total>100</min_order_total>
                 <order_status>pending</order_status>

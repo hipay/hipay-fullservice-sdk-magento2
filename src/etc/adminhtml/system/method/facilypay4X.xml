@@ -27,10 +27,10 @@
 		<label>Facily Pay fees</label>
 		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ProductCode\Facilypay4X</source_model>
 	</field>
-	<field id="default_mapping_shipping_method" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+<!--	<field id="default_mapping_shipping_method" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
 		<label>Default mapping shipping method</label>
 		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay</source_model>
-	</field>
+	</field>-->
 	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
 </group>
 </include>

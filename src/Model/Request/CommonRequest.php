@@ -35,10 +35,6 @@ use Magento\Setup\Exception;
  */
 abstract class CommonRequest extends BaseRequest
 {
-    /**
-     *
-     */
-    const DEFAULT_PRODUCT_CATEGORY = 4;
 
     /**
      * Order
@@ -206,7 +202,6 @@ abstract class CommonRequest extends BaseRequest
                         $name . ' Total discount :' . $amount,
                         0);
 
-                    $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
                     $itemHipay = Item::buildItemTypeFees($reference,
@@ -216,7 +211,6 @@ abstract class CommonRequest extends BaseRequest
                         $discount,
                         $amount);
 
-                    $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
             }
 
@@ -235,11 +229,11 @@ abstract class CommonRequest extends BaseRequest
      *  Get mapping from Magento category for Hipay compliance
      *
      * @param $product
-     * @return int code category Hipay
+     * @return int|null code category Hipay
      */
     protected function getMappingCategory($product)
     {
-        $mapping_id = self::DEFAULT_PRODUCT_CATEGORY;
+        $mapping_id = null;
         $categories = $product->getCategoryIds();
         if (!empty($idCategory = $categories[0])) {
             $mappingNotFound = true;
