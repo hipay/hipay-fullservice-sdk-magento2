@@ -64,8 +64,7 @@
             </hosted_payment_link>
             <configurations>
                 <fingerprint_enabled>1</fingerprint_enabled>
-                <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint
-                </fingerprint_js_url>
+                <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint</fingerprint_js_url>
                 <basket_enabled>0</basket_enabled>
             </configurations>
         </hipay>
