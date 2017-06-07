@@ -37,6 +37,13 @@ abstract class CommonRequest extends BaseRequest
 {
 
     /**
+     * FAKE DEFAULT PRODUCT CATEGORY
+     * @deprecated
+     *
+     */
+    const DEFAULT_PRODUCT_CATEGORY = 4;
+
+    /**
      * Order
      *
      * @var \Magento\Sales\Model\Order
@@ -201,7 +208,7 @@ abstract class CommonRequest extends BaseRequest
                         $taxPercent,
                         $name . ' Total discount :' . $amount,
                         0);
-
+                    $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
                     $itemHipay = Item::buildItemTypeFees($reference,
@@ -210,7 +217,7 @@ abstract class CommonRequest extends BaseRequest
                         $taxPercent,
                         $discount,
                         $amount);
-
+                    $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
             }
 
