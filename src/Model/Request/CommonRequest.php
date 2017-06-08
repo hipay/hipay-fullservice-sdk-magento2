@@ -41,7 +41,7 @@ abstract class CommonRequest extends BaseRequest
      * @deprecated
      *
      */
-    const DEFAULT_PRODUCT_CATEGORY = 4;
+    const DEFAULT_PRODUCT_CATEGORY = 1;
 
     /**
      * Order
