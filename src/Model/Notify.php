@@ -290,6 +290,10 @@ class Notify
         //Write about notification in order history
         $this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 
+        // Write CC TYPE if Payment is Hosted Payment
+        if (empty($this->_order->getPayment()->getCcType())) {
+            $this->_order->getPayment()->setCcType($this->_transaction->getPaymentProduct());
+        }
 
         switch ($this->_transaction->getStatus()) {
             case TransactionStatus::BLOCKED: //110
@@ -779,7 +783,6 @@ class Notify
         if (($this->isFirstSplitPayment || $this->isSplitPayment) && $payment->getIsFraudDetected()) {
             $payment->setIsFraudDetected(false);
         }
-
         if (!$this->_order->getEmailSent()) {
             $this->orderSender->send($this->_order);
         }
