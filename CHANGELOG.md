@@ -1,6 +1,10 @@
+# 1.1.1
+
+- Bugfix CCType for hosted payment
+
 # 1.1.0
 
-- New feature FACILIPAY ONEY
+- New feature FACILY PAY ONEY
 - New feature KLARNA
 - New feature Adding request sources
 - New feature Adding custom data
