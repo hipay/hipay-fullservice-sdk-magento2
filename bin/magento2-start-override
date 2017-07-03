@@ -81,8 +81,10 @@ fi
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}              FOLDER CACHE               ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    rm -Rf /var/www/html/magento2/var/cache
     gosu magento2 mkdir /var/www/html/magento2/var/cache
-    chown -R magento2:www-data /var/www/html/magento2/var/cache
+    chmod 775 /var/www/html/magento2/var/cache
+    chown -R magento2:magento2 /var/www/html/magento2/var/cache
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"

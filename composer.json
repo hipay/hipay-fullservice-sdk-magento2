@@ -10,17 +10,16 @@
         "php":"~5.5.0|~5.6.0|~7.0.0",
         "hipay/hipay-fullservice-sdk-php":"^1.0"
     },
-    "extra": {
-       "map": [
-		        [
-		         "src/*", "HiPay/FullserviceMagento"
-		        ]
-              ]
-     },
      "scripts": {
         "post-install-cmd": [
             "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
         ]
+    },
+    "autoload": {
+      "files": ["registration.php"],
+      "psr-4": {
+        "HiPay\\FullserviceMagento\\": ""
+      }
     },
     "autoload-dev": {
       "psr-4": {
