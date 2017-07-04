@@ -20,7 +20,7 @@
           "src/registration.php"
       ],
       "psr-4": {
-        "HiPay\\FullserviceMagento\\": ""
+        "HiPay\\FullserviceMagento\\": "src/"
       }
     },
     "autoload-dev": {
