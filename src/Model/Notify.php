@@ -177,7 +177,6 @@ class Notify
 
             }
 
-
             $this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 
             $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
@@ -261,8 +260,6 @@ class Notify
 
     public function processTransaction()
     {
-
-
         if ($this->isSplitPayment) {
             $this->processSplitPayment();
             return $this;
@@ -640,7 +637,7 @@ class Notify
 
             $payment = $this->_order->getPayment()
                 ->setPreparedMessage($this->_generateComment(''))
-                ->setTransactionId($this->_transaction->getTransactionReference() . "-refund")
+                ->setTransactionId($this->generateTransactionId("refund"))
                 ->setCcTransId($this->_transaction->getTransactionReference())
                 ->setParentTransactionId($parentTransactionId)
                 ->setIsTransactionClosed($isCompleteRefund)
@@ -679,7 +676,7 @@ class Notify
         $this->_order->getPayment()->setIsTransactionPending(true);
 
         $this->_order->getPayment()->setPreparedMessage($this->_generateComment(''))
-            ->setTransactionId($this->_transaction->getTransactionReference() . "-authorization-pending")
+            ->setTransactionId($this->_transaction->getTransactionReference() . "-auth-pending")
             ->setCcTransId($this->_transaction->getTransactionReference())
             ->setCurrencyCode($this->_transaction->getCurrency())
             ->setIsTransactionClosed(0)
@@ -773,7 +770,7 @@ class Notify
         $payment = $this->_order->getPayment();
 
         $payment->setPreparedMessage($this->_generateComment(''))
-            ->setTransactionId($this->_transaction->getTransactionReference() . "-authorization")
+            ->setTransactionId($this->_transaction->getTransactionReference() . "-auth")
             ->setCcTransId($this->_transaction->getTransactionReference())
             /*->setParentTransactionId(null)*/
             ->setCurrencyCode($this->_transaction->getCurrency())
@@ -797,7 +794,7 @@ class Notify
             $formattedAmount = $this->_order->getBaseCurrency()->formatTxt($this->_transaction->getAuthorizedAmount());
             $comment = __('Authorized amount of %1 online', $formattedAmount);
             $comment = $payment->prependMessage($comment);
-            $comment .= __(' Transaction ID: %1', $this->_transaction->getTransactionReference() . '-authorization');
+            $comment .= __(' Transaction ID: %1', $this->_transaction->getTransactionReference() . '-auth');
             $history->setComment($comment);
 
         }
@@ -816,15 +813,13 @@ class Notify
      */
     protected function _doTransactionCapture($skipFraudDetection = false)
     {
-
         /* @var $payment \Magento\Sales\Model\Order\Payment */
-
         $payment = $this->_order->getPayment();
 
         $parentTransactionId = $payment->getLastTransId();
 
         $payment->setTransactionId(
-            $this->_transaction->getTransactionReference() . "-capture"
+            $this->generateTransactionId("capture")
         );
         $payment->setCcTransId($this->_transaction->getTransactionReference());
         $payment->setCurrencyCode(
@@ -999,6 +994,20 @@ class Notify
                 $creditmemo->getInvoice()->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
             );
             $creditmemo->setInvoiceId($creditmemo->getInvoice()->getId());
+        }
+    }
+
+    /**
+     *  Generate transaction ID for partial capture/refund
+     *
+     * @param string $type
+     * @return string Id transaction
+     */
+    protected function generateTransactionId($type){
+        if ($this->_transaction->getOperation()) {
+            return $this->_transaction->getOperation()->getId();
+        } else {
+            return  $this->_transaction->getTransactionReference() . "-" . $type;
         }
     }
 

@@ -1,3 +1,14 @@
+# 1.1.2
+
+Fixed bugs:
+ - Fix autoclosing tag for fingerprint javascript inclusion
+ - Change composer installation. Remove module installation in folder (app/code/Hipay). Now installation is in folder vendor
+ - Fix wrong invoice status with multiple partials capture
+ - Bad configuration for fingerprint.js
+
+New feature:
+ - Parameter support  : "operation_id"
+
 # 1.1.1
 
 - Bugfix CCType for hosted payment

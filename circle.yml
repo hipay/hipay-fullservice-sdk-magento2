@@ -25,5 +25,6 @@ test:
   override:
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d
     - sleep 120
+    - sudo lxc-attach -n "$(docker inspect --format "{{.Id}}" jira-mg2tpp-develop.hipay-pos-platform.com)" -- phpunit -c /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
     - curl --retry 30 --retry-delay 3 -v $MAGENTO_URL:$PORT_WEB
 

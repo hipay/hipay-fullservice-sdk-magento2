@@ -2,7 +2,7 @@
     "name":"hipay/hipay-fullservice-sdk-magento2",
     "description":"The HiPay Fullservice module for Magento 2 is a PHP module which allows you to accept payments in your Magento 2 online store.",
     "type":"magento2-module",
-    "version":"1.1.1",
+    "version":"1.1.2",
     "license":[
         "Apache 2"
     ],
@@ -10,17 +10,18 @@
         "php":"~5.5.0|~5.6.0|~7.0.0",
         "hipay/hipay-fullservice-sdk-php":"^1.0"
     },
-    "extra": {
-       "map": [
-		        [
-		         "src/*", "HiPay/FullserviceMagento"
-		        ]
-              ]
-     },
      "scripts": {
         "post-install-cmd": [
             "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
         ]
+    },
+    "autoload": {
+      "files": [
+          "src/registration.php"
+      ],
+      "psr-4": {
+        "HiPay\\FullserviceMagento\\": "src/"
+      }
     },
     "autoload-dev": {
       "psr-4": {

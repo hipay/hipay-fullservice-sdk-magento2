@@ -104,13 +104,13 @@ class DeliveryInfo extends AbstractInfoRequest {
      * @return date format YYYY-MM-DD
      */
 	function calculateEstimatedDate(){
-        $today = new \Datetime();
-	    if ($this->_mappingDelivery){
+        if ($this->_mappingDelivery){
+            $today = new \Datetime();
             $daysDelay = $this->_mappingDelivery->getDelayPreparation() + $this->_mappingDelivery->getDelayDelivery();
             $interval = new \DateInterval ("P{$daysDelay}D");
             return $today->add($interval)->format("Y-m-d");
         }
-        return $today->format("Y-m-d");
+        return null;
     }
 
     /**
@@ -119,13 +119,12 @@ class DeliveryInfo extends AbstractInfoRequest {
      * @return null|string
      */
     function getMappingShippingMethod(){
-        $codeMappingShipping = $this->_order->getPayment()->getMethodInstance()->getConfigData('default_mapping_shipping_method');
         if ($this->_mappingDelivery) {
             $codeMappingShipping = $this->_mappingDelivery->getHipayShippingId();
+            $deliveryMethod = $this->_shippingMethodsHipay->getDeliveryMethodByCode($codeMappingShipping);
+            return json_encode(['mode' => $deliveryMethod->getMode(),'shipping' => $deliveryMethod->getShipping()]);
         }
-        $deliveryMethod = $this->_shippingMethodsHipay->getDeliveryMethodByCode($codeMappingShipping);
-        return json_encode(['mode' => $deliveryMethod->getMode(),'shipping' => $deliveryMethod->getShipping()]);
-
+        return null;
     }
 
 	
