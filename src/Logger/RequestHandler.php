@@ -5,7 +5,7 @@ namespace HiPay\FullserviceMagento\Logger;
 use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
+use Monolog\Logger as MonologLogger;
 
 /**
  * Handler Request for gateway
@@ -24,7 +24,7 @@ class RequestHandler extends \Magento\Framework\Logger\Handler\Base
     /**
      * @var int
      */
-    protected $loggerType = Logger::DEBUG;
+    protected $loggerType = MonologLogger::DEBUG;
 
     /**
      *
