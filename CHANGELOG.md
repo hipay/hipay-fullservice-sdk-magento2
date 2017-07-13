@@ -1,3 +1,8 @@
+# 1.1.3
+
+Fixed bugs:
+  - Error with RequestHandler compilation
+
 # 1.1.2
 
 Fixed bugs:
