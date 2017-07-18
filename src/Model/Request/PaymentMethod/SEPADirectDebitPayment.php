@@ -38,9 +38,8 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod{
 	protected function mapRequest() {
         $sddPaymentMethod = new SEPADirectDebitPaymentMethod();
         $sddPaymentMethod->recurring_payment = 0;
-        $sddPaymentMethod->authentication_indicator = 0;
-
         $electronic_signature = $this->_config->getValue('electronic_signature');
+        $sddPaymentMethod->authentication_indicator = (int) $electronic_signature;
 
         if (!$electronic_signature) {
             /* @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
