@@ -1,3 +1,8 @@
+# 1.1.4
+
+Fixed bugs:
+  - Missing authentication indicator
+
 # 1.1.3
 
 Fixed bugs:
