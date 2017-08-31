@@ -22,9 +22,9 @@ test:
     - sed -i -e "s/{HIPAY_TOKENJS_USERNAME_TEST\}/$HIPAY_TOKENJS_USERNAME_TEST/" ./conf/stage/hipay.env.sample
     - sed -i -e "s/{HIPAY_SECRET_PASSPHRASE_TEST\}/$HIPAY_SECRET_PASSPHRASE_TEST/" ./conf/stage/hipay.env.sample
     - sed -i -e "s/{ACTIVE_METHODS\}/$ACTIVE_METHODS/" ./conf/stage/hipay.env.sample
-    - sed -i -e "s/{GITHUB_API_TOKEN\}/GITHUB_API_TOKEN/" ./conf/stage/auth.env.sample
-    - sed -i -e "s/{MAGE_ACCOUNT_PUBLIC_KEY\}/MAGE_ACCOUNT_PUBLIC_KEY/" ./conf/stage/auth.env.sample
-    - sed -i -e "s/{MAGE_ACCOUNT_PRIVATE_KEY\}/MAGE_ACCOUNT_PRIVATE_KEY/" ./conf/stage/auth.env.sample
+    - sed -i -e "s/{GITHUB_API_TOKEN\}/$GITHUB_API_TOKEN/" ./conf/stage/auth.env.sample
+    - sed -i -e "s/{MAGE_ACCOUNT_PUBLIC_KEY\}/$MAGE_ACCOUNT_PUBLIC_KEY/" ./conf/stage/auth.env.sample
+    - sed -i -e "s/{MAGE_ACCOUNT_PRIVATE_KEY\}/$MAGE_ACCOUNT_PRIVATE_KEY/" ./conf/stage/auth.env.sample
   override:
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d
     - sleep 120
