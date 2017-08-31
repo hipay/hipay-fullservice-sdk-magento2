@@ -25,6 +25,7 @@ test:
     - sed -i -e "s/{GITHUB_API_TOKEN\}/$GITHUB_API_TOKEN/" ./conf/stage/auth.env.sample
     - sed -i -e "s/{MAGE_ACCOUNT_PUBLIC_KEY\}/$MAGE_ACCOUNT_PUBLIC_KEY/" ./conf/stage/auth.env.sample
     - sed -i -e "s/{MAGE_ACCOUNT_PRIVATE_KEY\}/$MAGE_ACCOUNT_PRIVATE_KEY/" ./conf/stage/auth.env.sample
+    - sed -i -e "s/{CIRCLE_BRANCH\}/$CIRCLE_BRANCH/" ./conf/stage/module.env.sample
   override:
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d
     - sleep 100
