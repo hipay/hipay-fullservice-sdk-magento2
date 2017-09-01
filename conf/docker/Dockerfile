@@ -21,6 +21,11 @@ RUN curl -O  https://files.magerun.net/n98-magerun2.phar && \
     cp ./n98-magerun2.phar /usr/local/bin/ && \
     rm ./n98-magerun2.phar
 
+RUN wget https://phar.phpunit.de/phpunit-6.2.phar && \
+    chmod +x phpunit-6.2.phar && \
+    sudo mv -f phpunit-6.2.phar /usr/local/bin/phpunit  && \
+    phpunit --version
+
 WORKDIR /var/www/html/magento2/
 
 VOLUME /var/www/html/magento2/
