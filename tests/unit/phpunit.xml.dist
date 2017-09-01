@@ -11,7 +11,7 @@
          bootstrap="../../../../../dev/tests/unit/framework/bootstrap.php"
         >
     <testsuite name="Magento Unit Tests">
-        <directory suffix="Test.php">../../../../../app/code/HiPay/FullserviceMagento/Test/Unit</directory>
+        <directory suffix="Test.php">../../src/Test/Unit</directory>
     </testsuite>
     <php>
         <ini name="date.timezone" value="Europe/Paris"/>
@@ -19,9 +19,9 @@
     </php>
     <filter>
         <whitelist addUncoveredFilesFromWhiteList="true">
-            <directory suffix=".php">../../../../../app/code/HiPay/FullserviceMagento</directory>
+            <directory suffix=".php">../../src/</directory>
             <exclude>
-                <directory>../../../../../app/code/HiPay/FullserviceMagento/Test</directory>
+                <directory>../../src/Test</directory>
 
             </exclude>
         </whitelist>
