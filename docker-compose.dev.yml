@@ -8,12 +8,12 @@ magento2:
     - "8080:80"
   volumes:
     - ./src:/var/www/html/magento2/app/code/HiPay/FullserviceMagento
-    - ./tests:/home/magento2/tests
+    - ./tests:/var/www/html/magento2/tests
     - ./log:/home/magento2/var/log
     - ./conf/sdk:/var/www/html/magento2/sdk
 db:
   ports:
-    - "3307:3306"
+    - "3308:3306"
   volumes:
     - ./data/mysql:/var/lib/mysql
 
