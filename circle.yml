@@ -14,6 +14,7 @@ dependencies:
     - mkdir -p ~/docker; docker save hipay/hipay-magento2 mysql:5.6 selenium/standalone-firefox  > ~/docker/compose-images.tar
 test:
   pre:
+    - sudo apt-get install sshpass
     - sed -i -e "s|{MAGENTO_URL\}|$MAGENTO_URL|" ./conf/stage/mage.env.sample
     - sed -i -e "s|{MAGENTO_URL_SECURE\}|$MAGENTO_URL_SECURE|" ./conf/stage/mage.env.sample
     - sed -i -e "s/{PORT_WEB\}/$PORT_WEB/" ./conf/stage/mage.env.sample
@@ -32,4 +33,10 @@ test:
     - sleep 400
     - sudo lxc-attach -n "$(docker inspect --format "{{.Id}}" jira-mg2tpp-develop.hipay-pos-platform.com)" -- phpunit -c /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
     - curl --retry 30 --retry-delay 3 -v $MAGENTO_URL:$PORT_WEB
+deployment:
+  prod:
+    branch: /.*?/
+    tag: /.*?/
+    commands:
+      - sh ./bin/deployment/deploy_project.sh
 

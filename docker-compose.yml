@@ -13,6 +13,4 @@ db:
 smtp:
   container_name: magento2-hipay-smtp
   image: schickling/mailcatcher
-  ports:
-    - "1081:1080"
 
