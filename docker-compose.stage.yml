@@ -15,6 +15,6 @@ selenium:
   ports:
     - "4444:4444"
 smtp:
-  container_name: {CONTAINER_NAME_SMTP}
+  container_name: magento2-hipay-smtp
   ports:
    - "1081:1080"
