@@ -1,5 +1,5 @@
 magento2:
-    container_name: jira-mg2tpp-develop.hipay-pos-platform.com
+  container_name: jira-mg2tpp-develop.hipay-pos-platform.com
   ports:
     - "80:80"
   links:
