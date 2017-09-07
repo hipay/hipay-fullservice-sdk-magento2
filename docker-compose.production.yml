@@ -7,6 +7,8 @@ magento2:
     - ./conf/production/hipay.env.sample
   ports:
     - "{PORT_WEB}:80"
+  labels:
+    - "com.hipay.github={label}"
 db:
   container_name: {CONTAINER_NAME_MYSQL}
   ports:
