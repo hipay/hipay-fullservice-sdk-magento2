@@ -9,6 +9,7 @@ magento2:
     - "{PORT_WEB}:80"
   labels:
     - "com.hipay.github={label}"
+    - "com.hipay.circleci={circleci}"
 db:
   container_name: {CONTAINER_NAME_MYSQL}
   ports:
