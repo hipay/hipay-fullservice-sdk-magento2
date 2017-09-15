@@ -485,3 +485,4 @@ Title,Title
 "If yes then a call an external javascript is made on checkout page","Si oui, alors un appel à javascript externe est fait sur la page de commande"
 "Not to be modified. Please read our documentation","Ne pas modifier. Veuillez lire notre documentation"
 "Order status when payment is cancelled","Statut de la commande quand le paiement est annulé"
+"Period of validity of the payment page","Période de validité de la page de paiement"
