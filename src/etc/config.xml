@@ -125,6 +125,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
@@ -157,6 +158,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>

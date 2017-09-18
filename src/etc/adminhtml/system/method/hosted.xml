@@ -42,6 +42,10 @@
                     <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
                     <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
                 </field>
+                <field id="time_limit_to_pay" translate="label" type="text" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Period of validity of the payment page</label>
+                    <comment>In hours</comment>
+                </field>
                  <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Custom CSS url</label>
                     <comment>Important, HTTPS protocol is required</comment>
