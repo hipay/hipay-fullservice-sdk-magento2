@@ -7,7 +7,6 @@
         "Apache 2"
     ],
     "require":{
-        "php":"~5.5.0|~5.6.0|~7.0.0|~7.1.0",
         "hipay/hipay-fullservice-sdk-php":"^1.0"
     },
      "scripts": {
@@ -17,10 +16,10 @@
     },
     "autoload": {
       "files": [
-          "src/registration.php"
+          "registration.php"
       ],
       "psr-4": {
-        "HiPay\\FullserviceMagento\\": "src/"
+        "HiPay\\FullserviceMagento\\": ""
       }
     },
     "autoload-dev": {

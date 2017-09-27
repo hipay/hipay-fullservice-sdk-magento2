@@ -20,7 +20,7 @@ if [ "$1" = '' ] || [ "$1" = '--help' ];then
 fi
 
 if [ "$1" = 'init' ];then
-    if [ -f ./conf/development/auth.env ];then
+    if [ -f ./bin/conf/development/auth.env ];then
         docker-compose stop
         docker-compose rm -fv
         rm -Rf data/ log/ web/
