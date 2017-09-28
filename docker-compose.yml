@@ -1,6 +1,6 @@
 magento2:
   container_name: magento2-hipay-fullservice
-  dockerfile: ./conf/docker/Dockerfile
+  dockerfile: ./bin/conf/docker/Dockerfile
   build: .
   links:
     - db
@@ -12,7 +12,5 @@ db:
     - MYSQL_ROOT_PASSWORD=magento2
 smtp:
   container_name: magento2-hipay-smtp
-  image: schickling/mailcatcher
-  ports:
-    - "1081:1080"
+  image: hipay/mailcatcher:1.0.0
 
