@@ -17,4 +17,4 @@ selenium:
 smtp:
   container_name: magento2-hipay-smtp
   ports:
-    - "1081:1080"
+    - "1081:80"
