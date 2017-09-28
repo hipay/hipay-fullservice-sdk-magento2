@@ -6,10 +6,10 @@ magento2:
     - db
     - selenium
   env_file:
-    - ./conf/stage/hipay.env.sample
-    - ./conf/stage/auth.env.sample
-    - ./conf/stage/mage.env.sample
-    - ./conf/stage/module.env.sample
+    - ./bin/conf/stage/hipay.env.sample
+    - ./bin/conf/stage/auth.env.sample
+    - ./bin/conf/stage/mage.env.sample
+    - ./bin/conf/stage/module.env.sample
 selenium:
   image: selenium/standalone-firefox
   ports:

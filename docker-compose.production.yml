@@ -1,10 +1,10 @@
 magento2:
   container_name: {CONTAINER_NAME_WEB}
   env_file:
-    - ./conf/production/mage.env.sample
-    - ./conf/production/auth.env.sample
-    - ./conf/production/module.env.sample
-    - ./conf/production/hipay.env.sample
+    - ./bin/conf/production/mage.env.sample
+    - ./bin/conf/production/auth.env.sample
+    - ./bin/conf/production/module.env.sample
+    - ./bin/conf/production/hipay.env.sample
   ports:
     - "{PORT_WEB}:80"
   labels:
