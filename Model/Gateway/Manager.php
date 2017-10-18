@@ -28,6 +28,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 
+
 /**
  * Gateway Manager Class
  *
@@ -226,7 +227,6 @@ class Manager
      */
     public function requestOperationCapture($amount = null)
     {
-
         return $this->_requestOperation(Operation::CAPTURE, $amount);
     }
 
@@ -324,15 +324,14 @@ class Manager
     protected function _requestOperation($operationType, $amount = null, $operationId = null)
     {
         $transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
-
         if (is_null($operationId)) {
-            $additionalInformation = $this->getAdditionalInformation($this->_getPayment());
-            $incrementTransaction = $additionalInformation ? $additionalInformation : 0;
+            $incrementTransaction = $this->countByTransactionsType($operationType,$this->_getPayment()->getId());
             $incrementTransaction++;
             $this->_getPayment()->setTransactionAdditionalInfo('increment_id', $incrementTransaction);
             $operationId = $this->_order->getIncrementId() . "-" . $operationType . "-manual-" . intval($incrementTransaction);
         }
 
+        $this->_getPayment()->setTransactionId($operationId);
         $params = $this->_getRequestParameters();
         $params['params']['operation'] = $operationType;
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
@@ -345,26 +344,28 @@ class Manager
         return $opModel;
     }
 
+
     /**
-     * Get Additional Information for current transaction
-     *
-     * @param OrderPaymentInterface $payment
-     * @return String|null
+     * @param int $transactionType
+     * @param int $paymentId
+     * @return int
+     * @throws \Magento\Framework\Exception\InputException
      */
-    private function getAdditionalInformation(OrderPaymentInterface $payment)
+    public function countByTransactionsType($transactionType, $paymentId)
     {
-        $transaction = $this->_transactionRepositoryInterface->getByTransactionId(
-            $payment->getTransactionId(),
-            $payment->getId(),
-            $payment->getOrder()->getId()
-        );
+        $filters[] = $this->_filterBuilder
+            ->setField(\Magento\Sales\Api\Data\TransactionInterface::TXN_TYPE)
+            ->setValue($transactionType)
+            ->create();
+        $filters[] = $this->_filterBuilder
+            ->setField(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID)
+            ->setValue($paymentId)
+            ->create();
+        $list = $this->_transactionRepositoryInterface->getList($this->_searchCriteriaBuilder
+                    ->addFilters($filters)
+                    ->create()
+            )->getItems();
 
-        if ($transaction) {
-            return (int)$transaction->getAdditionalInformation(self::TRANSACTION_INCREMENT);
-        }
-
-        return null;
+        return count($list);
     }
-
-
 }

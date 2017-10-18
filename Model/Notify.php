@@ -325,10 +325,8 @@ class Notify
                     break;
             case TransactionStatus::CAPTURED: //118
             case TransactionStatus::PARTIALLY_CAPTURED: //119
-
-                if (($this->_order->getStatus() == $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_accepted')) ||
-                    //If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
-                    ((int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == 117) === true
+            //If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
+                if (((int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == 117) === true
                     && (int)$this->_transaction->getStatus() == 118
                     && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
                 ) {
