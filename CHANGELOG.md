@@ -1,3 +1,7 @@
+# 1.1.6
+
+- Fix invoice/credit-memo status (Pending/Paid) for partials captures
+
 # 1.1.5
 
 - Add time_limit_to_pay in HostedPaymentPageRequest
