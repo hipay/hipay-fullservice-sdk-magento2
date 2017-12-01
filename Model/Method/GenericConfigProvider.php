@@ -114,7 +114,6 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-
         $config = [];
         foreach ($this->methods as $methodCode => $method) {
             if ($method->isAvailable()) {
@@ -122,8 +121,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                     'payment' => [
                         'hiPayFullservice' => [
                             'afterPlaceOrderUrl' => [
-                                $methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',
-                                    ['_secure' => true])
+                                $methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder', ['_secure' => true])
                             ],
                             'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
                             'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
@@ -131,7 +129,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                             'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
                             'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
                             'iFrameStyle' => [$methodCode => $this->getIframeProp($methodCode, 'style')],
-                            'iFrameWrapperStyle' => [$methodCode => $this->getIframeProp($methodCode, 'wrapper_style')]
+                            'iFrameWrapperStyle' => [$methodCode => $this->getIframeProp($methodCode, 'wrapper_style')],
                         ]
                     ]
                 ]);

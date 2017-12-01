@@ -38,14 +38,14 @@ if [ "$MAGE_INSTALL" = "1" ]; then
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials/api_username_test $HIPAY_API_USER_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials/api_password_test $HIPAY_API_PASSWORD_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_moto/api_username_test $HIPAY_API_USER_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/api_password_test $HIPAY_API_PASSWORD_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_USERNAME_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/api_username_test $HIPAY_API_USER_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials/api_password_test $HIPAY_API_PASSWORD_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_moto/api_username_test $HIPAY_API_USER_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_moto/api_password_test $HIPAY_API_PASSWORD_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_USERNAME_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
@@ -55,9 +55,9 @@ if [ "$MAGE_INSTALL" = "1" ]; then
     for code in $methods
     do
         printf "\n"
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/active 1
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/debug 1
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:set payment/$code/is_test_mode 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/active 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/debug 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/is_test_mode 1
         printf "${COLOR_SUCCESS} Method $code is activated in test mode ${NC}\n"
     done
 fi

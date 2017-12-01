@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
+use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 
 /**
@@ -276,6 +277,18 @@ class Order extends CommonRequest
         if (!empty($customData)) {
             $orderRequest->custom_data = json_encode($customData);
         }
+
+        /*
+         * Override or format mapping informations for specific provider
+         */
+        if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb' ) {
+            $orderRequest->customerBillingInfo->phone =  preg_replace('/^(\+33)|(33)/','0',$orderRequest->customerBillingInfo->phone);
+
+            if ($orderRequest->customerBillingInfo->gender == null) {
+                $orderRequest->customerBillingInfo->gender = Gender::MALE;
+            }
+        }
+
     }
 
 
