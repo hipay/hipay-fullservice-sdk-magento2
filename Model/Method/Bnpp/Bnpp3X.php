@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Model\Method\Bnpp;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
+
 /**
  * Bnp Personal finance 3X payment method
  *
