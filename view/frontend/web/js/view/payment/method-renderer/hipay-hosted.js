@@ -22,9 +22,10 @@ define(
      	'ko',
         'HiPay_FullserviceMagento/js/view/payment',
         'HiPay_FullserviceMagento/js/model/iframe',
-        'Magento_Checkout/js/model/full-screen-loader'
+        'Magento_Checkout/js/model/full-screen-loader',
+        'Magento_Checkout/js/model/quote'
     ],
-    function ($, ko, Component,iframe, fullScreenLoader) {
+    function ($, ko, Component,iframe, fullScreenLoader,quote) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -37,6 +38,14 @@ define(
             placeOrderHandler: null,
             validateHandler: null,
 
+            /**
+             *  Return warning messages for some provider rules
+             *
+             * @returns {*}
+             */
+            getWarningsMessages: function() {
+                    return '';
+            },
             /**
              *  Get global fingerprint  on dom load of checkout
              *

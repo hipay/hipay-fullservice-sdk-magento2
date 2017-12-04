@@ -148,6 +148,14 @@ define(
             {
                 type: 'hipay_klarna',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'
+            },
+            {
+                type: 'hipay_bnpp4X',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bnpp4X'
+            },
+            {
+                type: 'hipay_bnpp3X',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bnpp3X'
             }
         );
         /** Add view logic here if needed */

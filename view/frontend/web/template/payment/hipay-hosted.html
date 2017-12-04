@@ -84,8 +84,8 @@
                 <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        
-        <div class="actions-toolbar" data-bind="visible: !isIframeMode() || !showForm()">
+
+        <div class="actions-toolbar" data-bind="visible: (!isIframeMode() || !showForm()) && !getWarningsMessages()">
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
@@ -100,7 +100,11 @@
                 </button>
             </div>
         </div>
-         <!-- ko if: !isIframeMode() -->
+        <!-- ko if: getWarningsMessages() -->
+            <div class="message notice" data-bind="text: $t(getWarningsMessages())"></div>
+        <!-- /ko -->
+
+         <!-- ko if: !isIframeMode() && !getWarningsMessages() -->
         	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
 		<!-- /ko -->
         <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
