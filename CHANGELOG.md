@@ -1,3 +1,7 @@
+# 1.1.7
+
+- New payment method support : Bnp Personal Finance 3X and 4X 
+
 # 1.1.6
 
 - Fix invoice/credit-memo status (Pending/Paid) for partials captures
