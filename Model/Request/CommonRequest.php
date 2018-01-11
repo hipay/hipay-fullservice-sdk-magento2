@@ -242,7 +242,7 @@ abstract class CommonRequest extends BaseRequest
     {
         $mapping_id = null;
         $categories = $product->getCategoryIds();
-        if (!empty($idCategory = $categories[0])) {
+        if (!empty($categories) && !empty($idCategory = $categories[0])) {
             $mappingNotFound = true;
             while ($mappingNotFound) {
                 $collection = $this->_mappingCategoriesCollectionFactory->create()
@@ -254,19 +254,16 @@ abstract class CommonRequest extends BaseRequest
                     $mapping_id = (int) $collection->getFirstItem()->getId();
                     break;
                 }
-
                 // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)
                 $category = $this->_categoryFactory->create()->load($idCategory);
                 $parentId = $category->getParentId();
                 if (is_null($category->getParentId()) || $parentId == 1) {
                     break;
                 }
-
                 $category = $this->_categoryFactory->create()->load($category->getParentId());
                 $idCategory = $category->getId();
             }
         }
-
         return $mapping_id;
     }
 
