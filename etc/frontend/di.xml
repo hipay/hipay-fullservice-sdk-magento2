@@ -132,4 +132,5 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Checkout\Block\Cart\Totals" type="HiPay\FullserviceMagento\Block\Checkout\Cart\Totals" />
 </config>

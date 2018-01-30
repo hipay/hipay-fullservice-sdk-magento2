@@ -42,5 +42,10 @@
 				<label>Ean attribute</label>
 				<comment>Select your custom attribute for ean support</comment>
 			</field>
+			<field id="currency_transaction" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				<label>Use order currency for transaction</label>
+				<comment> Only if payment method is in Sale mode.</comment>
+			</field>
 		</group>
 </include>

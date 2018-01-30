@@ -66,6 +66,7 @@
                 <fingerprint_enabled>1</fingerprint_enabled>
                 <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint</fingerprint_js_url>
                 <basket_enabled>0</basket_enabled>
+                <currency_transaction>0</currency_transaction>
             </configurations>
         </hipay>
         <payment>
