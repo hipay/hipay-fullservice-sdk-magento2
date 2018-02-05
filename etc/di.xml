@@ -62,5 +62,4 @@
             <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping</argument>
         </arguments>
     </virtualType>
-    <preference for="Magento\Checkout\Block\Cart\Totals" type="HiPay\FullserviceMagento\Block\Checkout\Cart\Totals" />
 </config>

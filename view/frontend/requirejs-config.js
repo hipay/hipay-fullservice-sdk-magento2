@@ -24,5 +24,12 @@ var config = {
             reqwest: 'HiPay_FullserviceMagento/js/reqwest',
             card: 'HiPay_FullserviceMagento/card'
         }
+    },
+    config: {
+        mixins: {
+            'Magento_Tax/js/view/checkout/summary/grand-total': {
+                'HiPay_FullserviceMagento/js/grand-total-mixin': true
+            }
+        }
     }
 };
