@@ -5,9 +5,24 @@ magento2:
     - ./bin/conf/development/module.env.sample
     - ./bin/conf/development/hipay.env
   ports:
-    - "8080:80"
+    - "8096:80"
   volumes:
-    - ./:/var/www/html/magento2/app/code/HiPay/FullserviceMagento
+    - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block
+    - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller
+    - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc
+    - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper
+    - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model
+    - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer
+    - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin
+    - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui
+    - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view
+    - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup
+    - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron
+    - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n
+    - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger
+    - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test
+    - ./composer.json:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/composer.json
+    - ./registration.php:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/registration.php
     - ./tests:/var/www/html/magento2/tests
     - ./log:/home/magento2/var/log
     - ./conf/sdk:/var/www/html/magento2/sdk
