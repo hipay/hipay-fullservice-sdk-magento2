@@ -22,6 +22,7 @@ use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use Zend\Validator;
 use Magento\Directory\Model;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * SDD Method
@@ -91,6 +92,7 @@ class Sdd extends FullserviceMethod
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -98,7 +100,7 @@ class Sdd extends FullserviceMethod
         array $data = []
     )
     {
-        parent::__construct($context, $resource, $resourceCollection, $data);
+        parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         if ($this->getConfigData('electronic_signature')) {
             $this->setIsInitializeNeeded(true);

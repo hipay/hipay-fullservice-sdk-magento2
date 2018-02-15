@@ -236,7 +236,6 @@ class Manager
      */
     public function requestOperationRefund($amount = null)
     {
-
         return $this->_requestOperation(Operation::REFUND, $amount);
     }
 

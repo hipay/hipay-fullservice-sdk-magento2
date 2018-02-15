@@ -19,7 +19,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use HiPay\FullserviceMagento\Model\HostedMethod;
-
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * Class Hosted Split Payment Method
@@ -67,13 +67,14 @@ class HostedSplitMethod extends HostedMethod
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $resource, $resourceCollection, $data);
+        parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         $this->profileFactory = $profileFactory;
     }

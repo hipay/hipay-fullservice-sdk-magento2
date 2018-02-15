@@ -81,25 +81,6 @@ class CcMethod extends FullserviceMethod
     protected $_isInitializeNeeded = true;
 
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        \HiPay\FullserviceMagento\Model\Method\Context $context,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    )
-    {
-        parent::__construct($context, $resource, $resourceCollection, $data);
-    }
-
-
-    /**
      * Assign data to info model instance
      *
      * @param \Magento\Framework\DataObject|mixed $data

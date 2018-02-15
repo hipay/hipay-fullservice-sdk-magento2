@@ -94,11 +94,14 @@ class Order extends CommonRequest
      */
     protected $_groupRepositoryInterface;
 
+    protected $_scopeConfig;
+
     /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Customer\Model\Session $customerSession,
@@ -115,10 +118,23 @@ class Order extends CommonRequest
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
         $params = []
-    )
-    {
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory,
-            $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface, $mappingCategoriesCollectionFactory, $categoryFactory, $params);
+    ) {
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $cartFactory,
+            $weeeHelper,
+            $productRepositoryInterface,
+            $mappingCategoriesCollectionFactory,
+            $categoryFactory,
+            $params
+        );
 
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;
@@ -126,6 +142,7 @@ class Order extends CommonRequest
         $this->_productRepositoryInterface = $productRepositoryInterface;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
+        $this->_scopeConfig = $scopeConfig;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -202,6 +219,11 @@ class Order extends CommonRequest
     protected function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
+        $useOrderCurrency = $this->_scopeConfig->getValue(
+            'hipay/configurations/currency_transaction',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            null
+        );
 
         $orderRequest = new OrderRequest();
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
@@ -209,10 +231,18 @@ class Order extends CommonRequest
         $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: $payment_product;
         $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s", $this->_order->getIncrementId()); //@TODO
         $orderRequest->long_description = "";
-        $orderRequest->currency = $this->_order->getBaseCurrencyCode();
-        $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
-        $orderRequest->shipping = (float)$this->_order->getShippingAmount();
-        $orderRequest->tax = (float)$this->_order->getTaxAmount();
+        if($useOrderCurrency){
+            $orderRequest->currency = $this->_order->getOrderCurrencyCode();
+            $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getGrandTotal();
+            $orderRequest->shipping = (float)$this->_order->getShippingAmount();
+            $orderRequest->tax = (float)$this->_order->getTaxAmount();
+        }else{
+            $orderRequest->currency = $this->_order->getBaseCurrencyCode();
+            $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
+            $orderRequest->shipping = (float)$this->_order->getBaseShippingAmount();
+            $orderRequest->tax = (float)$this->_order->getBaseTaxAmount();
+        }
+
         $orderRequest->cid = $this->_customerId;
         $orderRequest->ipaddr = $this->_order->getRemoteIp();
         $orderRequest->language = $this->_localeResolver->getLocale();
@@ -230,8 +260,14 @@ class Order extends CommonRequest
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);
 
         $orderRequest->paymentMethod = $this->_paymentMethod;
-        $orderRequest->customerBillingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
-        $orderRequest->customerShippingInfo = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
+        $orderRequest->customerBillingInfo = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+        $orderRequest->customerShippingInfo = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
 
         // Extras informations
         $this->processExtraInformations($orderRequest);
