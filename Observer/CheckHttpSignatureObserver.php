@@ -84,6 +84,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
     		try {
     			$orderId = $this->getOrderId($request);
 	    		$order = $this->_orderFactory->create()->loadByIncrementId($orderId);
+
 	    		if(!$order->getId()){
 	    			throw new \Exception("Order not found for id: " . $orderId);
 	    		}
@@ -98,6 +99,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
     		} catch (\Exception $e) {
     			$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
     			$controller->getResponse()->setBody("Exception during check signature.");
+				$controller->getResponse()->setHttpResponseCode(500);
     		}
     	}
     	
@@ -115,7 +117,13 @@ class CheckHttpSignatureObserver implements ObserverInterface
     		$orderId = $request->getParam('orderid',0);
     	}
     	elseif(($o = $request->getParam('order',[])) && isset($o['id'])){
-    		$orderId = $o['id'];
+
+			$orderId = $o['id'];
+
+			if (strpos($o['id'], '-split-') !== false) {
+				return explode("-", $o['id'])[0];
+			}
+
     	}
     	return $orderId;
     	
