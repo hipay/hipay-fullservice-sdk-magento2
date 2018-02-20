@@ -26,6 +26,9 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
  * Notify Class Model
@@ -873,22 +876,6 @@ class Notify
             0
         );
 
-        $payment->registerCaptureNotification(
-            $this->_transaction->getCapturedAmount(),
-            $skipFraudDetection /*&& $parentTransactionId*/
-        );
-
-        // notify customer
-        $invoice = $payment->getCreatedInvoice();
-
-        if (!$invoice && $this->isFirstSplitPayment) {
-            $invoice = $this->_order->prepareInvoice()->register();
-            $invoice->setOrder($this->_order);
-            $this->_order->addRelatedObject($invoice);
-            $payment->setCreatedInvoice($invoice);
-            $payment->setShouldCloseParentTransaction(true);
-
-        }
 
         $orderStatus = $payment->getMethodInstance()->getConfigData('order_status_payment_accepted');
 
@@ -897,6 +884,35 @@ class Notify
         }
 
         $this->_order->setStatus($orderStatus);
+
+        $payment->registerCaptureNotification(
+            $this->_transaction->getCapturedAmount(),
+            $skipFraudDetection
+        );
+
+        // notify customer
+        $invoice = $payment->getCreatedInvoice();
+
+        $invoiceFromDB = null;
+
+        if(!$invoice){
+            $invoiceFromDB = $this->getInvoiceForTransactionId($this->_order, $payment->getTransactionId());
+        }
+
+        if (!$invoice && ($this->isFirstSplitPayment || !$invoiceFromDB)) {
+            $invoice = $this->_order->prepareInvoice()->register();
+            $invoice->setOrder($this->_order);
+            $this->_order->addRelatedObject($invoice);
+            $payment->setCreatedInvoice($invoice);
+            $payment->setShouldCloseParentTransaction(true);
+            $payment->setIsFraudDetected(false);
+            if(!$invoiceFromDB && !$this->isFirstSplitPayment){
+                $payment->registerCaptureNotification(
+                    $this->_transaction->getCapturedAmount(),
+                    $skipFraudDetection
+                );
+            }
+        }
 
         $this->_order->save();
 
@@ -1048,5 +1064,29 @@ class Notify
         }
     }
 
+    /**
+     * Return invoice model for transaction
+     *
+     * @param OrderInterface $order
+     * @param string $transactionId
+     * @return false|Invoice
+     */
+    protected function getInvoiceForTransactionId(OrderInterface $order, $transactionId)
+    {
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if ($invoice->getTransactionId() == $transactionId) {
+                return $invoice;
+            }
+        }
+        foreach ($order->getInvoiceCollection() as $invoice) {
+            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+                && $invoice->load($invoice->getId())
+            ) {
+                $invoice->setTransactionId($transactionId);
+                return $invoice;
+            }
+        }
+        return false;
+    }
 
 }
