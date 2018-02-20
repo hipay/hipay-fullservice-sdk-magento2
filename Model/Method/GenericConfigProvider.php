@@ -83,7 +83,6 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     protected $_collection;
 
-    protected $_scopeConfig;
 
     /**
      */
@@ -95,8 +94,7 @@ class GenericConfigProvider implements ConfigProviderInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
-        array $methodCodes = [],
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        array $methodCodes = []
     ) {
 
         $this->ccConfig = $ccConfig;
@@ -108,7 +106,6 @@ class GenericConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $checkoutSession;
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
-        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
@@ -146,7 +143,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                 'ccType' => $card->getCcType()
             ];
         }
-
+        
         $config = array_merge_recursive($config, [
             'payment' => [
                 'hiPayFullservice' => [
@@ -154,7 +151,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                     'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
                     'defaultEci' => ECI::SECURE_ECOMMERCE,
                     'recurringEci' => ECI::RECURRING_ECOMMERCE,
-                    'useOrcerCurrency' => $this->useOrcerCurrency()
+                    'useOrcerCurrency' => $this->hipayHelper->useOrderCurrency()
                 ]
             ]
         ]);
@@ -213,17 +210,6 @@ class GenericConfigProvider implements ConfigProviderInterface
     {
 
         return $this->methods[$methodCode]->getConfigData('iframe_' . $prop);
-
-    }
-
-    protected function useOrcerCurrency()
-    {
-
-        return (bool)$this->_scopeConfig->getValue(
-            'hipay/configurations/currency_transaction',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            null
-        );
 
     }
 

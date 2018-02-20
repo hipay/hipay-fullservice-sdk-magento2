@@ -49,7 +49,6 @@ class Data extends AbstractHelper
      */
     protected $productMetadata;
 
-
     public function __construct(
         Context $context,
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
@@ -146,4 +145,14 @@ class Data extends AbstractHelper
         return json_encode($request);
     }
 
+    public function useOrderCurrency()
+    {
+
+        return (bool)$this->scopeConfig->getValue(
+            'hipay/configurations/currency_transaction',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            null
+        );
+
+    }
 }

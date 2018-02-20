@@ -470,7 +470,12 @@ class Notify
             $profile = $this->ppFactory->create()->load($profileId);
             if ($profile->getId()) {
 
-                $splitAmounts = $profile->splitAmount($this->_order->getBaseGrandTotal());
+                $amount = $this->_order->getBaseGrandTotal();
+                if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
+                    $amount = $this->_order->getGrandTotal();
+                }
+
+                $splitAmounts = $profile->splitAmount($amount);
 
                 /** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
                 for ($i = 0; $i < count($splitAmounts); $i++) {
@@ -488,9 +493,15 @@ class Notify
                     $splitPayment->setStatus(
                         $i == 0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE : SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
                     );
-                    $splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
-                    $splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
                     $splitPayment->setProfileId($profileId);
+                    if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
+                        $splitPayment->setBaseGrandTotal($this->_order->getGrandTotal());
+                        $splitPayment->setBaseCurrencyCode($this->_order->getCurrencyCode());
+                    } else {
+                        $splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
+                        $splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
+
+                    }
 
                     try {
                         $splitPayment->save();
@@ -895,7 +906,7 @@ class Notify
 
         $invoiceFromDB = null;
 
-        if(!$invoice){
+        if (!$invoice) {
             $invoiceFromDB = $this->getInvoiceForTransactionId($this->_order, $payment->getTransactionId());
         }
 
@@ -906,7 +917,7 @@ class Notify
             $payment->setCreatedInvoice($invoice);
             $payment->setShouldCloseParentTransaction(true);
             $payment->setIsFraudDetected(false);
-            if(!$invoiceFromDB && !$this->isFirstSplitPayment){
+            if (!$invoiceFromDB && !$this->isFirstSplitPayment) {
                 $payment->registerCaptureNotification(
                     $this->_transaction->getCapturedAmount(),
                     $skipFraudDetection
