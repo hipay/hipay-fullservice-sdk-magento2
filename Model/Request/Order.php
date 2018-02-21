@@ -219,7 +219,7 @@ class Order extends CommonRequest
     protected function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
-        $useOrderCurrency = $this->_scopeConfig->getValue(
+        $useOrderCurrency = (bool)$this->_scopeConfig->getValue(
             'hipay/configurations/currency_transaction',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
@@ -270,7 +270,7 @@ class Order extends CommonRequest
         )->getRequestObject();
 
         // Extras informations
-        $this->processExtraInformations($orderRequest);
+        $this->processExtraInformations($orderRequest, $useOrderCurrency);
 
         return $orderRequest;
     }
@@ -280,7 +280,7 @@ class Order extends CommonRequest
      *
      * @param OrderRequest $order OrderRequest passed by reference
      */
-    private function processExtraInformations(OrderRequest &$orderRequest)
+    private function processExtraInformations(OrderRequest &$orderRequest, $useOrderCurrency = false)
     {
         // Check if fingerprint is enabled
         if ($this->_config->isFingerprintEnabled()) {
@@ -289,7 +289,7 @@ class Order extends CommonRequest
 
         // Check if sending cart is necessary ( If  conf enabled or if payment method product needs it )
         if ($this->_config->isNecessaryToSendCartItems($orderRequest->payment_product)) {
-            $orderRequest->basket = $this->processCartFromOrder($this->_operation);
+            $orderRequest->basket = $this->processCartFromOrder($this->_operation, $useOrderCurrency);
         }
 
         // Check if delivery method is required for the payment method

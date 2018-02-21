@@ -156,10 +156,11 @@ abstract class CommonRequest extends BaseRequest
      *  Build an Cart Json
      *
      * @param null $operation
-     * @return string
+     * @param bool $useOrderCurrency
+     * @return mixed
      * @throws \Exception
      */
-    protected function processCartFromOrder($operation = null)
+    protected function processCartFromOrder($operation = null, $useOrderCurrency = false)
     {
         $cartFactory = $this->_cartFactory->create(['salesModel' => $this->_order,
             'operation' => $operation,
@@ -167,7 +168,7 @@ abstract class CommonRequest extends BaseRequest
         ]);
 
         $cart = new Cart();
-        $items = $cartFactory->getAllItems();
+        $items = $cartFactory->getAllItems($useOrderCurrency);
         foreach ($items as $item) {
             $reference = $item->getDataUsingMethod('reference');
             $name = $item->getDataUsingMethod('name');
