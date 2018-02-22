@@ -94,6 +94,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
 	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase)){
 		    		$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
 		    		$controller->getResponse()->setBody("Wrong Secret Signature!");
+					$controller->getResponse()->setHttpResponseCode(500);
 	    		}
 
     		} catch (\Exception $e) {
