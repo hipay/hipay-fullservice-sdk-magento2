@@ -313,7 +313,7 @@ abstract class FullserviceMethod extends AbstractMethod
 
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-        if ($this->isDifferentCurrency($payment, $amount)) {
+        if ($this->isDifferentCurrency($payment)) {
             $amount = $this->priceCurrency->convertAndRound(
                 $amount,
                 $payment->getOrder()->getStore(),
@@ -410,7 +410,7 @@ abstract class FullserviceMethod extends AbstractMethod
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
 
-        if ($this->isDifferentCurrency($payment, $amount)) {
+        if ($this->isDifferentCurrency($payment)) {
             $amount = $payment->formatAmount($payment->getCreditmemo()->getGrandTotal());
         }
 
@@ -607,10 +607,9 @@ abstract class FullserviceMethod extends AbstractMethod
 
     /**
      * @param InfoInterface $payment
-     * @param float $amount
      * @return float
      */
-    private function isDifferentCurrency(\Magento\Payment\Model\InfoInterface $payment, $amount)
+    public function isDifferentCurrency(\Magento\Payment\Model\InfoInterface $payment)
     {
         $authTransac = $this->transactionRepository->getByTransactionType(
             \Magento\Sales\Api\Data\TransactionInterface::TYPE_AUTH,

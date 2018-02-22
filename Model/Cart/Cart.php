@@ -114,7 +114,14 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-        $this->_processShippingAndDiscountItems($useOrderCurrency);
+
+        if (
+            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+            || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
+
+        ) {
+            $this->_processShippingAndDiscountItems($useOrderCurrency);
+        }
         $this->_applyDiscountTaxCompensationWorkaround($this->_salesModel, $useOrderCurrency);
         $this->_validate($useOrderCurrency);
     }
@@ -151,7 +158,7 @@ class Cart extends \Magento\Payment\Model\Cart
         $base_shipping = 0;
         $tax_rate = 0;
         if (!empty($this->_salesModel->getDataUsingMethod('shipping_method'))) {
-            $shippingAmount = (float)round($this->_model->getDataUsingMethod('base_shipping_incl_tax'), 3);
+            $shippingAmount = (float)$this->_model->getDataUsingMethod('base_shipping_incl_tax');
             if ($useOrderCurrency) {
                 $shippingAmount = (float)$this->_model->getDataUsingMethod('shipping_incl_tax');
             }
@@ -354,7 +361,12 @@ class Cart extends \Magento\Payment\Model\Cart
                     }
 
                     if ($originalItem->getSku() == $orderItem->getOriginalItem()->getSku()) {
-                        $discountOrder = $orderItem->getOriginalItem()->getBaseDiscountAmount();
+                        if ($useOrderCurrency) {
+                            $discountOrder = $orderItem->getOriginalItem()->getDiscountAmount();
+                        } else {
+                            $discountOrder = $orderItem->getOriginalItem()->getBaseDiscountAmount();
+                        }
+
                         $price = $this->returnUnitPrice(
                             $this->getTotalPrice($orderItem->getOriginalItem(), $useOrderCurrency) + $discountOrder,
                             $orderItem->getOriginalItem()->getData('qty_ordered')
@@ -398,16 +410,18 @@ class Cart extends \Magento\Payment\Model\Cart
     private function getTotalPrice($originalItem, $useOrderCurrency = false)
     {
         if ($useOrderCurrency) {
-            return $originalItem->getRowTotal()
-            - $originalItem->getDiscountAmount()
-            + $originalItem->getDiscountTaxCompensationAmount()
-            + $this->weeeHelper->getRowWeeeTaxInclTax($originalItem) + $originalItem->getTaxAmount();
+            $totalPrice = $originalItem->getRowTotal()
+                - $originalItem->getDiscountAmount()
+                + $originalItem->getDiscountTaxCompensationAmount()
+                + $this->weeeHelper->getRowWeeeTaxInclTax($originalItem) + $originalItem->getTaxAmount();
         } else {
-            return $originalItem->getBaseRowTotal()
-            - $originalItem->getBaseDiscountAmount()
-            + $originalItem->getBaseDiscountTaxCompensationAmount()
-            + $this->weeeHelper->getBaseRowWeeeTaxInclTax($originalItem) + $originalItem->getBaseTaxAmount();
+            $totalPrice = $originalItem->getBaseRowTotal()
+                - $originalItem->getBaseDiscountAmount()
+                + $originalItem->getBaseDiscountTaxCompensationAmount()
+                + $this->weeeHelper->getBaseRowWeeeTaxInclTax($originalItem) + $originalItem->getBaseTaxAmount();
         }
+
+        return $totalPrice;
     }
 
     /**
