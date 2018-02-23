@@ -864,7 +864,7 @@ class Notify
     {
         /* @var $payment \Magento\Sales\Model\Order\Payment */
         $payment = $this->_order->getPayment();
-
+        $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $parentTransactionId = $payment->getLastTransId();
 
         $payment->setTransactionId(

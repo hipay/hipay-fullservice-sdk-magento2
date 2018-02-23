@@ -616,6 +616,13 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->getId(),
             $payment->getOrder()->getId()
         );
+        if(!$authTransac){
+            $authTransac = $this->transactionRepository->getByTransactionType(
+                \Magento\Sales\Api\Data\TransactionInterface::TYPE_CAPTURE,
+                $payment->getId(),
+                $payment->getOrder()->getId()
+            );
+        }
         $transacCurrency = $authTransac->getAdditionalInformation('transac_currency');
         return $transacCurrency
         && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode()
