@@ -496,7 +496,7 @@ class Notify
                     $splitPayment->setProfileId($profileId);
                     if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
                         $splitPayment->setBaseGrandTotal($this->_order->getGrandTotal());
-                        $splitPayment->setBaseCurrencyCode($this->_order->getCurrencyCode());
+                        $splitPayment->setBaseCurrencyCode($this->_transaction->getCurrency());
                     } else {
                         $splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
                         $splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
