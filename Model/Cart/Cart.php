@@ -373,7 +373,7 @@ class Cart extends \Magento\Payment\Model\Cart
                         );
 
                         // Adjust discount to avoid 0.01 difference
-                        $discount = ($price * $qty) - $itemTotalInclTax;
+                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);;
                     }
                 }
             } else {
