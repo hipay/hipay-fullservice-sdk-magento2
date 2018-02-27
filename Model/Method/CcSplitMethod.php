@@ -58,12 +58,6 @@ class CcSplitMethod extends CcMethod
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     */
-    protected $hipayHelper;
-
-    /**
-     *
      * @param \HiPay\FullserviceMagento\Model\Method\Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -75,7 +69,6 @@ class CcSplitMethod extends CcMethod
         TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -83,7 +76,6 @@ class CcSplitMethod extends CcMethod
         parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         $this->profileFactory = $profileFactory;
-        $this->hipayHelper = $hipayHelper;
     }
 
 
@@ -101,7 +93,7 @@ class CcSplitMethod extends CcMethod
             $profile = $this->getProfile($profileId);
 
             $amounts = $payment->getOrder()->getBaseGrandTotal();
-            if ($this->hipayHelper->useOrderCurrency()) {
+            if ($this->_hipayConfig->useOrderCurrency()) {
                 $amounts = $payment->getOrder()->getGrandTotal();
             }
 
@@ -146,7 +138,7 @@ class CcSplitMethod extends CcMethod
         $profile = $this->getProfile($profileId);
 
         $amounts = $payment->getOrder()->getBaseGrandTotal();
-        if ($this->hipayHelper->useOrderCurrency()) {
+        if ($this->_hipayConfig->useOrderCurrency()) {
             $amounts = $payment->getOrder()->getGrandTotal();
         }
 

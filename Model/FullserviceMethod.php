@@ -623,10 +623,12 @@ abstract class FullserviceMethod extends AbstractMethod
                 $payment->getOrder()->getId()
             );
         }
+
         $transacCurrency = $authTransac->getAdditionalInformation('transac_currency');
-        return $transacCurrency
-        && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode()
-        && $transacCurrency === $payment->getOrder()->getOrderCurrencyCode();
+
+        $isDifferentCurrency = $transacCurrency && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode();
+        $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode(); 
+        return $isDifferentCurrency;
 
     }
 }

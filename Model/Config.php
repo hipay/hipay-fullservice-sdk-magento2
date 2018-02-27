@@ -101,9 +101,12 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->appState = $appState;
         $this->logger = $logger;
 
-        if ($params && isset($params['methodCode'])) {
-            $method = $params['methodCode'];
-            $this->setMethod($method);
+        if ($params) {
+            if(isset($params['methodCode'])){
+                $method = $params['methodCode'];
+                $this->setMethod($method);
+            }
+            
             if (isset($params['storeId'])) {
                 $storeId = $params['storeId'];
                 $this->setStoreId($storeId);
@@ -403,6 +406,17 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getOtherConfiguration($key);
     }
 
+    /**
+     * @return bool
+     */
+    public function useOrderCurrency()
+    {
+
+        $key = "currency_transaction";
+        return $this->getOtherConfiguration($key);
+
+    }
+    
     /**
      *  Check if sending Cart items is necessary
      *

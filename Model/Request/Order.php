@@ -94,14 +94,11 @@ class Order extends CommonRequest
      */
     protected $_groupRepositoryInterface;
 
-    protected $_scopeConfig;
-
     /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
         \Magento\Customer\Model\Session $customerSession,
@@ -142,7 +139,6 @@ class Order extends CommonRequest
         $this->_productRepositoryInterface = $productRepositoryInterface;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
-        $this->_scopeConfig = $scopeConfig;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -219,11 +215,7 @@ class Order extends CommonRequest
     protected function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
-        $useOrderCurrency = (bool)$this->_scopeConfig->getValue(
-            'hipay/configurations/currency_transaction',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            null
-        );
+        $useOrderCurrency = $this->_config->useOrderCurrency();
 
         $orderRequest = new OrderRequest();
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();

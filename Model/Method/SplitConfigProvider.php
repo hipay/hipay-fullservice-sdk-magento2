@@ -88,6 +88,12 @@ class SplitConfigProvider implements ConfigProviderInterface
     protected $priceCurrency;
 
     /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+     */
+    protected $_hipayConfig;
+
+    /**
      * @param PaymentHelper $paymentHelper
      */
     public function __construct(
@@ -98,6 +104,7 @@ class SplitConfigProvider implements ConfigProviderInterface
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         PriceCurrencyInterface $priceCurrency,
+        \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
 
@@ -110,6 +117,7 @@ class SplitConfigProvider implements ConfigProviderInterface
         $this->urlBuilder = $urlBuilder;
         $this->hipayHelper = $hipayHelper;
         $this->priceCurrency = $priceCurrency;
+        $this->_hipayConfig = $context->getConfigFactory()->create();
 
     }
 

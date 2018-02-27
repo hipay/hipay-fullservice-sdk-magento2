@@ -7,8 +7,7 @@ define(function () {
             if (!totals) {
                 return false;
             }
-
-            if(window.checkoutConfig.payment.hiPayFullservice.useOrcerCurrency){
+            if(window.checkoutConfig.payment.hiPayFullservice.useOrderCurrency){
                 return false;
             }
 

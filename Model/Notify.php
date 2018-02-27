@@ -959,7 +959,7 @@ class Notify
 
     /**
      * Generate an "Notification" comment with additional explanation.
-     * Returns the generated comment or order status history objectkojako
+     * Returns the generated comment or order status history object
      * @param string $comment
      * @param bool $addToHistory
      * @return string|\Magento\Sales\Model\Order\Status\History

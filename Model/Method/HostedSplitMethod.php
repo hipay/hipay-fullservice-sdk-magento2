@@ -59,12 +59,6 @@ class HostedSplitMethod extends HostedMethod
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     */
-    protected $hipayHelper;
-
-    /**
-     *
      * @param \HiPay\FullserviceMagento\Model\Method\Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -76,7 +70,6 @@ class HostedSplitMethod extends HostedMethod
         TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -84,7 +77,6 @@ class HostedSplitMethod extends HostedMethod
         parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         $this->profileFactory = $profileFactory;
-        $this->hipayHelper = $hipayHelper;
     }
 
 
@@ -101,7 +93,7 @@ class HostedSplitMethod extends HostedMethod
         $profile = $this->getProfile($profileId);
 
         $amounts = $payment->getOrder()->getBaseGrandTotal();
-        if ($this->hipayHelper->useOrderCurrency()) {
+        if ($this->_hipayConfig->useOrderCurrency()) {
             $amounts = $payment->getOrder()->getGrandTotal();
         }
 
@@ -134,7 +126,7 @@ class HostedSplitMethod extends HostedMethod
             $profile = $this->getProfile($profileId);
 
             $amounts = $payment->getOrder()->getBaseGrandTotal();
-            if ($this->hipayHelper->useOrderCurrency()) {
+            if ($this->_hipayConfig->useOrderCurrency()) {
                 $amounts = $payment->getOrder()->getGrandTotal();
             }
 
