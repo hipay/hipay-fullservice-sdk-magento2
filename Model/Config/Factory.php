@@ -49,10 +49,9 @@ class Factory
 
     /**
      * Create class instance with specified parameters
-     *
-     * @param string $className
+     * 
      * @param array $data
-     * @return object
+     * @return mixed
      */
     public function create(array $data = [])
     {

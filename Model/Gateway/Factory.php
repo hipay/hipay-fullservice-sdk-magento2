@@ -17,7 +17,7 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 
 /**
  * Factory class for HiPay\FullserviceMagento\Model\Gateway\Manager
- * 
+ *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
@@ -47,10 +47,14 @@ class Factory
      * Create class instance with order object
      *
      * @param \Magento\Sales\Model\Order $order
+     * @param array $params
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function create($order)
+    public function create($order, $params = array())
     {
-        return $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Gateway\Manager',['params'=>['order'=>$order]]);
+        return $this->_objectManager->create(
+            '\HiPay\FullserviceMagento\Model\Gateway\Manager',
+            ['params' => array_merge(['order' => $order], $params)]
+        );
     }
 }

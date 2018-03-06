@@ -81,11 +81,22 @@ class Config extends AbstractConfig implements ConfigurationInterface
     protected $_order;
 
     /**
-     *
+     * @var bool
+     */
+    protected $_forceMoto;
+
+    /**
+     * @var bool
+     */
+    protected $_forceStage;
+
+    /**
+     * Config constructor.
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      * @param array $params
      */
     public function __construct(
@@ -93,17 +104,21 @@ class Config extends AbstractConfig implements ConfigurationInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         $params = []
-    )
-    {
-        parent::__construct($scopeConfig);
+    ) {
+        parent::__construct($scopeConfig, $configWriter, $cacheTypeList, $cacheFrontendPool);
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
 
-        if ($params && isset($params['methodCode'])) {
-            $method = $params['methodCode'];
-            $this->setMethod($method);
+        if ($params) {
+            if (isset($params['methodCode'])) {
+                $method = $params['methodCode'];
+                $this->setMethod($method);
+            }
             if (isset($params['storeId'])) {
                 $storeId = $params['storeId'];
                 $this->setStoreId($storeId);
@@ -112,28 +127,22 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
                 $this->setOrder($params['order']);
             }
-
-
         }
 
+        $this->_forceMoto = (isset($params['forceMoto'])) ? $params['forceMoto'] : false;
+        $this->_forceStage = (isset($params['forceStage'])) ? $params['forceStage'] : false;
 
-        //Default credentials
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
-
-        //If is Admin store, we use MO/TO credentials
-        if ($this->mustUseMotoCredentials()) {
-            $apiUsername = $this->getApiUsernameMoto();
-            $apiPassword = $this->getApiPasswordMoto();
-
-        }
 
         //@TODO Find a better way for verification of api username and api password
         //@TODO Maybe create a new Config Object with arg order required, for check MO/TO action
         try {
-
-            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $this->getApiEnv(), 'application/json');
-
+            $env = $this->getApiEnv();
+            if ($env == null) {
+                $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
+            }
+            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json');
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             $this->_configSDK = null;
@@ -153,14 +162,16 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $hasLastTransId = false;
         $isMoto = false;
 
-        if ($hasOrder) {
-            $hasLastTransId = $this->getOrder()->getPayment()->getLastTransId() ? true : false;
-            $isMoto = (bool)$this->getOrder()->getPayment()->getAdditionalInformation('is_moto') ?: false;
-
+        if ($this->_forceMoto) {
+            return true;
         }
 
-        return $this->isAdminArea() && $hasOrder
-            && (!$hasLastTransId || ($hasLastTransId && $isMoto));
+        if ($hasOrder) {
+            $hasLastTransId = $this->getOrder()->getPayment()->getLastTransId() ? true : false;
+            $isMoto = $this->isMoto();
+        }
+
+        return $this->isAdminArea() && $hasOrder && (!$hasLastTransId || ($hasLastTransId && $isMoto));
 
     }
 
@@ -171,6 +182,14 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function isAdminArea()
     {
         return $this->appState->getAreaCode() == \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isMoto()
+    {
+        return (bool)$this->getOrder()->getPayment()->getAdditionalInformation('is_moto') ?: false;
     }
 
     /**
@@ -250,7 +269,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function isStageMode()
     {
-        return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE;
+        return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE || $this->_forceStage;
     }
 
     public function hasCredentials($withTokenJs = false)
@@ -273,14 +292,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $apiPassword = $this->getApiPassword();
         $secretKey = $this->getSecretPassphrase();
 
-
-        //check if is admin are and change values if needed
-        if ($this->mustUseMotoCredentials()) {
-            $apiUsername = $this->getApiUsernameMoto();
-            $apiPassword = $this->getApiPasswordMoto();
-            $secretKey = $this->getSecretPassphraseMoto();
-        }
-
         //return false if one of them if empty
         if (empty($apiUsername) || empty($apiPassword) || empty($secretKey)) {
             return false;
@@ -291,6 +302,11 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiUsername()
     {
+
+        if ($this->mustUseMotoCredentials()) {
+            return $this->getApiUsernameMoto();
+        }
+
         $key = "api_username";
         if ($this->isStageMode()) {
             $key = "api_username_test";
@@ -301,6 +317,10 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiPassword()
     {
+        if ($this->mustUseMotoCredentials()) {
+            return $this->getApiPasswordMoto();
+        }
+
         $key = "api_password";
         if ($this->isStageMode()) {
             $key = "api_password_test";
@@ -311,6 +331,9 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getSecretPassphrase()
     {
+        if ($this->mustUseMotoCredentials()) {
+            return $this->getSecretPassphraseMoto();
+        }
         $key = "secret_passphrase";
         if ($this->isStageMode()) {
             $key = "secret_passphrase_test";
@@ -341,6 +364,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getSecretPassphraseMoto()
     {
+
         $key = "secret_passphrase";
         if ($this->isStageMode()) {
             $key = "secret_passphrase_test";
@@ -369,6 +393,33 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getGeneraleValue($key, 'hipay_credentials_tokenjs');
     }
 
+    public function getHashingAlgorithm()
+    {
+        $group = 'hipay_credentials';
+        if ($this->mustUseMotoCredentials()) {
+            $group = 'hipay_credentials_moto';
+        }
+
+        $key = "hashing_algorithm";
+        if ($this->isStageMode()) {
+            $key = "hashing_algorithm_test";
+        }
+        return $this->getGeneraleValue($key, $group);
+    }
+
+    public function setHashingAlgorithm($hash, $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES)
+    {
+        $group = 'hipay_credentials';
+        if ($this->mustUseMotoCredentials()) {
+            $group = 'hipay_credentials_moto';
+        }
+
+        $key = "hashing_algorithm";
+        if ($this->isStageMode()) {
+            $key = "hashing_algorithm_test";
+        }
+        $this->setGeneralValue($key, $hash, $group, $scope);
+    }
 
     /**
      *  Get other configuration
