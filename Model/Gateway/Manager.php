@@ -140,13 +140,11 @@ class Manager
             );
         } else {
             $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
-            $forceMoto = (isset($params['forceMoto'])) ? $params['forceMoto'] : false;
-            $forceStage = (isset($params['forceStage'])) ? $params['forceStage'] : false;
+            $platform = (isset($params['platform'])) ? $params['platform'] : false;
             $params = array(
                 'params' => array(
                     'storeId' => $storeId,
-                    'forceMoto' => $forceMoto,
-                    'forceStage' => $forceStage
+                    'platform' => $platform
                 )
             );
         }

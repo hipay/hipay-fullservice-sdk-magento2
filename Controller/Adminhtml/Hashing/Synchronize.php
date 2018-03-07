@@ -101,37 +101,26 @@ class Synchronize extends \Magento\Backend\App\Action
     protected function _updateHashAlgorithm($storeId)
     {
 
-        $allParams = array(
-            array(
-                'storeId' => $storeId,
-                'forceMoto' => false,
-                'forceStage' => false
-            ),
-            array(
-                'storeId' => $storeId,
-                'forceMoto' => false,
-                'forceStage' => true
-            ),
-            array(
-                'storeId' => $storeId,
-                'forceMoto' => true,
-                'forceStage' => false
-            ),
-            array(
-                'storeId' => $storeId,
-                'forceMoto' => true,
-                'forceStage' => true
-            )
+        $platforms = array(
+            ConfigFactory::PRODUCTION,
+            ConfigFactory::STAGE,
+            ConfigFactory::PRODUCTION_MOTO,
+            ConfigFactory::STAGE_MOTO
         );
 
         $store = $this->_storeManager->getStore($storeId);
+        $scope = ('' !== $this->store) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORES : 'default';
 
-        foreach ($allParams as $params) {
+        foreach ($platforms as $platform) {
             /** @var $config \HiPay\FullserviceMagento\Model\Config */
-            $config = $this->_configFactory->create(array('params' => $params));
+            $config = $this->_configFactory->create(
+                array('params' => array('storeId' => $storeId, 'platform' => $platform))
+            );
             if ($config->hasCredentials()) {
-                $gatewayClient = $this->_gatewayFactory->create(null, $params);
-                $scope = ('' !== $this->store) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORES : 'default';
+                $gatewayClient = $this->_gatewayFactory->create(
+                    null,
+                    array('storeId' => $storeId, 'platform' => $platform)
+                );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
                 } catch (\HiPay\Fullservice\Exception\RuntimeException $e) {

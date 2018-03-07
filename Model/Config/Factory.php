@@ -28,6 +28,15 @@ namespace HiPay\FullserviceMagento\Model\Config;
  */
 class Factory
 {
+
+    const PRODUCTION = "production";
+
+    const PRODUCTION_MOTO = "production_moto";
+
+    const STAGE = "stage";
+
+    const STAGE_MOTO = "stage_moto";
+
     /**
      * Object Manager instance
      *
@@ -35,7 +44,15 @@ class Factory
      */
     protected $_objectManager = null;
 
+    /**
+     * @var string
+     */
     protected $_configClassName = '\HiPay\FullserviceMagento\Model\Config';
+
+    /**
+     * @var array
+     */
+    protected $_config = array();
 
     /**
      * Factory constructor
@@ -45,16 +62,46 @@ class Factory
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
+        $this->_config = array(
+            self::PRODUCTION => array(
+                'forceMoto' => false,
+                'forceStage' => false
+            ),
+            self::PRODUCTION_MOTO => array(
+                'forceMoto' => true,
+                'forceStage' => false
+            ),
+            self::STAGE => array(
+                'forceMoto' => false,
+                'forceStage' => true
+            ),
+            self::STAGE_MOTO => array(
+                'forceMoto' => true,
+                'forceStage' => true
+            ),
+        );
     }
 
     /**
      * Create class instance with specified parameters
-     * 
+     *
      * @param array $data
      * @return mixed
      */
     public function create(array $data = [])
     {
+        if (isset($data['params']['platform'])) {
+            $data['params'] = array_merge($data['params'], $this->_getPlatformConfig($data['params']['platform']));
+        }
         return $this->_objectManager->create($this->_configClassName, $data);
+    }
+
+    /**
+     * @param string $platform
+     * @return array
+     */
+    protected function _getPlatformConfig($platform)
+    {
+        return (isset($this->_config[$platform])) ? $this->_config[$platform] : array();
     }
 }
