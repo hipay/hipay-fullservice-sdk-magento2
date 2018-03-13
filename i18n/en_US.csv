@@ -284,3 +284,6 @@
 "You can retry your order with another credit card.","You can retry your order with another credit card."
 "Period of validity of the payment page","Period of validity of the payment page"
 "Please check the phone number entered.","Please check the phone number entered."
+"Send Notification url":"Send Notification url"
+"If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.","If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site."
+
