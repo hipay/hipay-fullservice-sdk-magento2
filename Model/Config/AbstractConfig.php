@@ -235,6 +235,7 @@ abstract class AbstractConfig implements ConfigInterface
             case 'secret_passphrase_test':
             case 'fingerprint_enabled':
             case 'basket_enabled':
+            case 'send_notification_url':
             case 'basket_attribute_ean':
                 return "hipay/{$group}/{$fieldName}";
             default:
