@@ -487,3 +487,5 @@ Title,Title
 "Order status when payment is cancelled","Statut de la commande quand le paiement est annulé"
 "Period of validity of the payment page","Période de validité de la page de paiement"
 "Please check the phone number entered.","Merci de vérifier le format de téléphone"
+"Send Notification url":"Envoie de l'url de notification"
+"If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.","Si activé, l'URL de votre site est envoyée lors du paiement et les notifications seront envoyées à cette URL. À utiliser uniquement pour les sites multiples."

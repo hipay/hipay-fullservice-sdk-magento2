@@ -382,6 +382,17 @@ class Config extends AbstractConfig implements ConfigurationInterface
     }
 
     /**
+     *  Get Send Notification Url
+     *
+     * @return boolean
+     */
+    public function isSendingNotifyUrl()
+    {
+        $key = "send_notification_url";
+        return $this->getOtherConfiguration($key);
+    }
+
+    /**
      *  Get Fingerprint configuration
      *
      * @return boolean
