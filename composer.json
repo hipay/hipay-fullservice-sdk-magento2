@@ -7,7 +7,7 @@
         "Apache 2"
     ],
     "require":{
-        "hipay/hipay-fullservice-sdk-php":"^1.0"
+        "hipay/hipay-fullservice-sdk-php":"dev-develop"
     },
      "scripts": {
         "post-install-cmd": [

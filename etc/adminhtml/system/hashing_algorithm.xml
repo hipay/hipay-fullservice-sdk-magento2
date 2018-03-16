@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2 * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+-->
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <group id="hashing_algorithm" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>HiPay Fullservice hashing algorithm configuration</label>
+        <comment>
+            <![CDATA[<strong style="color:red">Warning!</strong> If the hash configuration is different than the one set in your Hipay back office, then the notifications will not work. Check that both values match.]]></comment>
+        <field id="hashing_algorithm_production" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Hashing Algorithm (production account)</label>
+            <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ListDisabled</frontend_model>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\HashAlgorithm</source_model>
+            <config_path>hipay/hipay_credentials/hashing_algorithm</config_path>
+        </field>
+        <field id="hashing_algorithm_test" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Hashing Algorithm (test account)</label>
+            <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ListDisabled</frontend_model>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\HashAlgorithm</source_model>
+            <config_path>hipay/hipay_credentials/hashing_algorithm_test</config_path>
+        </field>
+        <field id="hashing_algorithm_production_moto" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Hashing Algorithm (MO/TO production account)</label>
+            <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ListDisabled</frontend_model>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\HashAlgorithm</source_model>
+            <config_path>hipay/hipay_credentials_moto/hashing_algorithm</config_path>
+        </field>
+        <field id="hashing_algorithm_test_moto" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Hashing Algorithm (MO/TO test account)</label>
+            <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\ListDisabled</frontend_model>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\HashAlgorithm</source_model>
+            <config_path>hipay/hipay_credentials_moto/hashing_algorithm_test</config_path>
+        </field>
+
+        <field id="hash_algorithm_sync" translate="label" type="button" sortOrder="70" showInDefault="1"
+               showInWebsite="1" showInStore="1">
+            <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\SyncButton</frontend_model>
+        </field>
+    </group>
+</include>

@@ -67,15 +67,38 @@ abstract class AbstractConfig implements ConfigInterface
      */
     protected $_scopeConfig;
 
+    /**
+     * Core config writer
+     *
+     * @var \Magento\Framework\App\Config\Storage\WriterInterface
+     */
+    protected $_configWriter;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface
+     */
+    protected $_cacheTypeList;
+
+    /**
+     * @var \Magento\Framework\App\Cache\Frontend\Pool
+     */
+    protected $_cacheFrontendPool;
+
+    /**
+     * AbstractConfig constructor.
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-    )
-    {
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
+    ) {
         $this->_scopeConfig = $scopeConfig;
+        $this->_configWriter = $configWriter;
+        $this->_cacheTypeList = $cacheTypeList;
+        $this->_cacheFrontendPool = $cacheFrontendPool;
     }
 
     /**
@@ -179,6 +202,20 @@ abstract class AbstractConfig implements ConfigInterface
         );
     }
 
+    public function setGeneralValue(
+        $key,
+        $data,
+        $group = 'hipay_credentials',
+        $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+    ) {
+        $this->_configWriter->save(
+            $this->_mapGeneralFieldset($key, $group),
+            $data,
+            $scope,
+            $this->_storeId
+        );
+    }
+
     /**
      * Store ID setter
      *
@@ -237,6 +274,8 @@ abstract class AbstractConfig implements ConfigInterface
             case 'basket_enabled':
             case 'send_notification_url':
             case 'basket_attribute_ean':
+            case 'hashing_algorithm':
+            case 'hashing_algorithm_test':
                 return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
