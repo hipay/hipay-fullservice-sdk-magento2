@@ -124,7 +124,11 @@ class Synchronize extends \Magento\Backend\App\Action
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
                 } catch (\HiPay\Fullservice\Exception\RuntimeException $e) {
-                    $this->messageManager->addErrorMessage(__("We can't synchronize at least one of the account"));
+                    $this->messageManager->addErrorMessage(
+                        __(
+                            "We can't synchronize at least one of the account (" . $platform . "). Please check your credentials"
+                        )
+                    );
                     $this->logger->critical($e);
                 }
             }
