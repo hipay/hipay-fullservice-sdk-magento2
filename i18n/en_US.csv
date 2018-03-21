@@ -284,6 +284,8 @@
 "You can retry your order with another credit card.","You can retry your order with another credit card."
 "Period of validity of the payment page","Period of validity of the payment page"
 "Please check the phone number entered.","Please check the phone number entered."
-"Send Notification url":"Send Notification url"
+"Send Notification url","Send Notification url"
 "If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.","If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site."
+"<![CDATA[<strong style=""color:orange"">Notice : </strong> Split payment methods are not compatible with the basket feature. Customer's cart information will not be sent with transaction even if the feature is enabled.]]>", "<![CDATA[<strong style=""color:orange"">Notice : </strong> Split payment methods are not compatible with the basket feature. Customer's cart information will not be sent with transaction even if the feature is enabled.]]>"
+"<![CDATA[<strong style=""color:red"">Warning!</strong> If the hash configuration is different than the one set in your Hipay back office, then the notifications will not work. Check that both values match.]]>","<![CDATA[<strong style=""color:red"">Warning!</strong> If the hash configuration is different than the one set in your Hipay back office, then the notifications will not work. Check that both values match.]]>"
 
