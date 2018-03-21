@@ -636,8 +636,13 @@ class Notify
         if ($this->_order->hasCreditmemos()) {
             /* @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo */
 
-            $remain_amount = round($this->_order->getGrandTotal() - $amount, 2);
-            $current_amount_refund = round($amount - $this->_order->getTotalRefunded(), 2);
+            if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
+                $remain_amount = round($this->_order->getGrandTotal() - $amount, 2);
+                $current_amount_refund = round($amount - $this->_order->getTotalRefunded(), 2);
+            } else {
+                $remain_amount = round($this->_order->getBaseGrandTotal() - $amount, 2);
+                $current_amount_refund = round($amount - $this->_order->getBaseTotalRefunded(), 2);
+            }
 
             $status = $this->_order->getStatus();
             if ($remain_amount > 0) {
@@ -648,8 +653,16 @@ class Notify
             /* @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
 
+                if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
+                    $creditmemoTotal = round($creditmemo->getGrandTotal(), 2);
+                    $current_amount_refund = round($amount - $this->_order->getTotalRefunded(), 2);
+                } else {
+                    $creditmemoTotal = round($creditmemo->getBaseGrandTotal(), 2);
+                }
+
+
                 if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
-                    && round($creditmemo->getGrandTotal(), 2) == $current_amount_refund
+                    && $creditmemoTotal == $current_amount_refund
                 ) {
                     $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
