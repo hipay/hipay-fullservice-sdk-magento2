@@ -94,19 +94,18 @@ class Config extends AbstractConfig implements ConfigurationInterface
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
         $params = []
-    )
-    {
+    ) {
         parent::__construct($scopeConfig);
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
 
         if ($params) {
-            if(isset($params['methodCode'])){
+            if (isset($params['methodCode'])) {
                 $method = $params['methodCode'];
                 $this->setMethod($method);
             }
-            
+
             if (isset($params['storeId'])) {
                 $storeId = $params['storeId'];
                 $this->setStoreId($storeId);
@@ -163,7 +162,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         return $this->isAdminArea() && $hasOrder
-            && (!$hasLastTransId || ($hasLastTransId && $isMoto));
+        && (!$hasLastTransId || ($hasLastTransId && $isMoto));
 
     }
 
@@ -416,7 +415,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getOtherConfiguration($key);
 
     }
-    
+
     /**
      *  Check if sending Cart items is necessary
      *
@@ -424,10 +423,21 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function isNecessaryToSendCartItems($product_code)
     {
-        if ($this->isBasketEnabled() || $this->isBasketRequired($product_code)) {
+        if (($this->isBasketEnabled() || $this->isBasketRequired($product_code)) && !$this->isBasketForcedDisabled()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Basket is forced disabled for some payment method
+     *
+     * @param $product_code
+     * @return bool
+     */
+    public function isBasketForcedDisabled()
+    {
+        return in_array($this->_methodCode, ['hipay_ccsplit', 'hipay_hostedsplit']);
     }
 
     /**
