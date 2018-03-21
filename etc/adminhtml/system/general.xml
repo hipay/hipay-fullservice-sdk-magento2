@@ -47,5 +47,10 @@
 				<label>Use order currency for transaction</label>
 				<comment> Only if payment method is in Sale mode.</comment>
 			</field>
+			<field id="send_notification_url" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				<label>Send Notification url</label>
+				<comment>If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.</comment>
+			</field>
 		</group>
 </include>

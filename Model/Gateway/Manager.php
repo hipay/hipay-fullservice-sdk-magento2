@@ -116,8 +116,7 @@ class Manager
         TransactionRepositoryInterface $repository,
         $params = []
 
-    )
-    {
+    ) {
         $this->_logger = $logger;
         $this->_configFactory = $configFactory;
         $this->_requestFactory = $requestfactory;
@@ -128,17 +127,29 @@ class Manager
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
+            $methodCode = $this->_order->getPayment()->getMethod();
+            $this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
+            $storeId = $this->_order->getStoreId();
+            $params = array(
+                'params' => array(
+                    'methodCode' => $methodCode,
+                    'storeId' => $storeId,
+                    'order' => $this->_order,
+                    'forceMoto' => (isset($params['forceMoto'])) ? $params['forceMoto'] : false
+                )
+            );
         } else {
-            throw new \Exception('Order instance is required.');
+            $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
+            $platform = (isset($params['platform'])) ? $params['platform'] : false;
+            $params = array(
+                'params' => array(
+                    'storeId' => $storeId,
+                    'platform' => $platform
+                )
+            );
         }
 
-        $methodCode = $this->_order->getPayment()->getMethod();
-
-        $this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
-
-        $storeId = $this->_order->getStoreId();
-
-        $this->_config = $this->_configFactory->create(['params' => ['methodCode' => $methodCode, 'storeId' => $storeId, 'order' => $this->_order]]);
+        $this->_config = $this->_configFactory->create($params);
 
         $clientProvider = new SimpleHTTPClient($this->_config);
         $this->_gateway = new GatewayClient($clientProvider);
@@ -259,6 +270,16 @@ class Manager
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function requestSecuritySettings()
+    {
+        $securitySettings = $this->_gateway->requestSecuritySettings();
+        return $securitySettings->getHashingAlgorithm();
+    }
+
     private function cleanTransactionValue($transactionReference)
     {
         list($tr) = explode("-", $transactionReference);
@@ -324,10 +345,12 @@ class Manager
     {
         $transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
         if (is_null($operationId)) {
-            $incrementTransaction = $this->countByTransactionsType($operationType,$this->_getPayment()->getId());
+            $incrementTransaction = $this->countByTransactionsType($operationType, $this->_getPayment()->getId());
             $incrementTransaction++;
             $this->_getPayment()->setTransactionAdditionalInfo('increment_id', $incrementTransaction);
-            $operationId = $this->_order->getIncrementId() . "-" . $operationType . "-manual-" . intval($incrementTransaction);
+            $operationId = $this->_order->getIncrementId() . "-" . $operationType . "-manual-" . intval(
+                    $incrementTransaction
+                );
         }
 
         $this->_getPayment()->setTransactionId($operationId);
@@ -339,7 +362,13 @@ class Manager
         $maintenanceRequest->operation_id = $operationId;
         $this->_debug($this->_requestToArray($maintenanceRequest));
 
-        $opModel = $this->_gateway->requestMaintenanceOperation($operationType, $transactionReference, $amount, $operationId, $maintenanceRequest);
+        $opModel = $this->_gateway->requestMaintenanceOperation(
+            $operationType,
+            $transactionReference,
+            $amount,
+            $operationId,
+            $maintenanceRequest
+        );
         return $opModel;
     }
 
@@ -360,10 +389,11 @@ class Manager
             ->setField(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID)
             ->setValue($paymentId)
             ->create();
-        $list = $this->_transactionRepositoryInterface->getList($this->_searchCriteriaBuilder
-                    ->addFilters($filters)
-                    ->create()
-            )->getItems();
+        $list = $this->_transactionRepositoryInterface->getList(
+            $this->_searchCriteriaBuilder
+                ->addFilters($filters)
+                ->create()
+        )->getItems();
 
         return count($list);
     }

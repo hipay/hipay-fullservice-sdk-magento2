@@ -251,6 +251,10 @@ class Order extends CommonRequest
         $orderRequest->cancel_url = $this->_urlBuilder->getUrl('hipay/redirect/cancel', $redirectParams);
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);
 
+        if ($this->_config->isSendingNotifyUrl()) {
+            $orderRequest->notify_url = $this->_urlBuilder->getUrl("hipay/notify/index");
+        }
+
         $orderRequest->paymentMethod = $this->_paymentMethod;
         $orderRequest->customerBillingInfo = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',

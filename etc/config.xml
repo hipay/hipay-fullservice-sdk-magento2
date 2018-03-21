@@ -27,12 +27,16 @@
                 <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <secret_passphrase backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <secret_passphrase_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <hashing_algorithm>SHA1</hashing_algorithm>
+                <hashing_algorithm_test>SHA1</hashing_algorithm_test>
             </hipay_credentials>
             <hipay_credentials_moto>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <secret_passphrase backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <secret_passphrase_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <hashing_algorithm>SHA1</hashing_algorithm>
+                <hashing_algorithm_test>SHA1</hashing_algorithm_test>
             </hipay_credentials_moto>
             <hipay_credentials_tokenjs>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
@@ -67,6 +71,7 @@
                 <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint</fingerprint_js_url>
                 <basket_enabled>0</basket_enabled>
                 <currency_transaction>0</currency_transaction>
+                <send_notification_url>0</send_notification_url>
             </configurations>
         </hipay>
         <payment>

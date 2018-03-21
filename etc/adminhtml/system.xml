@@ -29,6 +29,7 @@
             <include path="HiPay_FullserviceMagento::system/credentials.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_tokenjs.xml"/>
+            <include path="HiPay_FullserviceMagento::system/hashing_algorithm.xml"/>
             <include path="HiPay_FullserviceMagento::system/emails.xml"/>
             <include path="HiPay_FullserviceMagento::system/general.xml"/>
         </section>

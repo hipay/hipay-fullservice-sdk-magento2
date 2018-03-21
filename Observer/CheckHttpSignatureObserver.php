@@ -18,13 +18,15 @@ namespace HiPay\FullserviceMagento\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 
 /**
  * HiPay module observer
- * 
+ *
  * Check http signature from TPP notification
- * 
+ *
  * Redirections haven't checked because http params can be not present (Depend of TPP config)
  *
  * @package HiPay\FullserviceMagento
@@ -35,36 +37,54 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
  */
 class CheckHttpSignatureObserver implements ObserverInterface
 {
-	protected $_actionsToCheck = [
-			/*'hipay_redirect_accept',
-			'hipay_redirect_cancel',
-			'hipay_redirect_decline',
-			'hipay_redirect_exception',*/
-			'hipay_notify_index'
-	];
-	
-	/**
-	 *
-	 * @var \Magento\Sales\Model\OrderFactory $_orderFactory
-	 */
-	protected $_orderFactory;
-	
-	/**
-	 * 
-	 * @var ConfigFactory
-	 */
-	protected $_configFactory;
+    protected $_actionsToCheck = [
+        /*'hipay_redirect_accept',
+        'hipay_redirect_cancel',
+        'hipay_redirect_decline',
+        'hipay_redirect_exception',*/
+        'hipay_notify_index'
+    ];
 
     /**
-     * Constructor
      *
+     * @var \Magento\Sales\Model\OrderFactory $_orderFactory
+     */
+    protected $_orderFactory;
+
+    /**
+     *
+     * @var ConfigFactory
+     */
+    protected $_configFactory;
+
+    /**
+     *
+     * @var GatewayFactory
+     */
+    protected $_gatewayFactory;
+
+    /**
+     * @var \HiPay\FullserviceMagento\Helper\Data
+     */
+    protected $_hipayHelper;
+
+    /**
+     * CheckHttpSignatureObserver constructor.
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param ConfigFactory $configFactory
+     * @param GatewayFactory $gatewayFactory
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
      */
     public function __construct(
-			 \Magento\Sales\Model\OrderFactory $orderFactory,
-    		ConfigFactory $configFactory
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        ConfigFactory $configFactory,
+        GatewayFactory $gatewayFactory,
+        \HiPay\FullserviceMagento\Helper\Data $hipayHelper
     ) {
-		$this->_orderFactory = $orderFactory;
-		$this->_configFactory = $configFactory;
+        $this->_orderFactory = $orderFactory;
+        $this->_configFactory = $configFactory;
+        $this->_gatewayFactory = $gatewayFactory;
+        $this->_hipayHelper = $hipayHelper;
     }
 
     /**
@@ -89,12 +109,41 @@ class CheckHttpSignatureObserver implements ObserverInterface
 	    			throw new \Exception("Order not found for id: " . $orderId);
 	    		}
 	    		/** @var $config \HiPay\FullserviceMagento\Model\Config */
-	    		$config = $this->_configFactory->create(['params'=>['methodCode'=>$order->getPayment()->getMethod(),'storeId'=>$order->getStoreId(),'order'=>$order]]);
+                $config = $this->_configFactory->create(
+                    [
+                        'params' => [
+                            'methodCode' => $order->getPayment()->getMethod(),
+                            'storeId' => $order->getStoreId(),
+                            'order' => $order,
+                            'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto')
+                        ]
+                    ]
+                );
 	    		$secretPassphrase = $config->getSecretPassphrase();
-	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase)){
-		    		$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-		    		$controller->getResponse()->setBody("Wrong Secret Signature!");
-					$controller->getResponse()->setHttpResponseCode(500);
+                $hash = $config->getHashingAlgorithm();
+	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)){
+
+                    $gatewayClient = $this->_gatewayFactory->create(
+                        $order,
+                        array(
+                            'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto')
+                        )
+                    );
+                    
+                    try {
+                        $hash = $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $order->getStore());
+                    } catch (Exception $e) {
+                        throw new \Exception('Error with retry hashing configuration .');
+                    }
+                    if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+                        $controller->getActionFlag()->set(
+                            '',
+                            \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
+                            true
+                        );
+                        $controller->getResponse()->setBody("Wrong Secret Signature!");
+                        $controller->getResponse()->setHttpResponseCode(500);
+                    }
 	    		}
 
     		} catch (\Exception $e) {
@@ -107,12 +156,13 @@ class CheckHttpSignatureObserver implements ObserverInterface
     	
         return $this;
     }
-    
+
     /**
-     * 
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\RequestInterface $request
+     * @return int|mixed
      */
-    protected function getOrderId(\Magento\Framework\App\RequestInterface $request){
+    protected function getOrderId(\Magento\Framework\App\RequestInterface $request)
+    {
     	$orderId = 0;
     	if($request->getParam('orderid',0)){ //Redirection case
     		$orderId = $request->getParam('orderid',0);
@@ -129,6 +179,5 @@ class CheckHttpSignatureObserver implements ObserverInterface
     	return $orderId;
     	
     }
-    
     
 }
