@@ -314,12 +314,12 @@ abstract class FullserviceMethod extends AbstractMethod
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         if ($this->isDifferentCurrency($payment)) {
-            $amount = $this->priceCurrency->convertAndRound(
-                $amount,
-                $payment->getOrder()->getStore(),
-                $payment->getOrder()->getOrderCurrencyCode()
-            );
+            $amount = $payment->getTransactionAdditionalInfo()['invoice_capture']->getGrandTotal();
         }
+
+        //Magento doesn't allow us to save object in transaction additional info
+        $payment->setTransactionAdditionalInfo('invoice_capture', '');
+
         // As we already have a transaction reference, we can request a capture operation.
         $this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
         //wait for notification to set correct data to order
@@ -616,7 +616,7 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->getId(),
             $payment->getOrder()->getId()
         );
-        if(!$authTransac){
+        if (!$authTransac) {
             $authTransac = $this->transactionRepository->getByTransactionType(
                 \Magento\Sales\Api\Data\TransactionInterface::TYPE_CAPTURE,
                 $payment->getId(),
@@ -627,7 +627,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $transacCurrency = $authTransac->getAdditionalInformation('transac_currency');
 
         $isDifferentCurrency = $transacCurrency && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode();
-        $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode(); 
+        $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode();
         return $isDifferentCurrency;
 
     }
