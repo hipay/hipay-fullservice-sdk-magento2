@@ -24,6 +24,7 @@ use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * Abstract Payment Method Class
@@ -123,6 +124,11 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository TransactionRepository
+     */
+    protected $transactionRepository;
+
+    /**
      *
      * @param \HiPay\FullserviceMagento\Model\Method\Context $context
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -130,12 +136,14 @@ abstract class FullserviceMethod extends AbstractMethod
      * @param array $data
      */
     public function __construct(
+        TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [])
-    {
-        parent::__construct($context->getModelContext(),
+        array $data = []
+    ) {
+        parent::__construct(
+            $context->getModelContext(),
             $context->getRegistry(),
             $context->getExtensionFactory(),
             $context->getCustomAttributeFactor(),
@@ -143,8 +151,11 @@ abstract class FullserviceMethod extends AbstractMethod
             $context->getScopeConfig(),
             $context->getLogger(),
             $resource,
-            $resourceCollection, $data);
+            $resourceCollection,
+            $data
+        );
 
+        $this->transactionRepository = $transactionRepository;
         $this->_gatewayManagerFactory = $context->getGatewayManagerFactory();
         $this->urlBuilder = $context->getUrlBuilder();
         $this->fraudAcceptSender = $context->getFraudAcceptSender();
@@ -225,9 +236,14 @@ abstract class FullserviceMethod extends AbstractMethod
     {
         $orderCanReview = true;
         /** @var $currentOrder \Magento\Sales\Model\Order */
-        $currentOrder = $this->_registry->registry('current_order') ?: $this->_registry->registry('hipay_current_order');
+        $currentOrder = $this->_registry->registry('current_order') ?: $this->_registry->registry(
+            'hipay_current_order'
+        );
         if ($currentOrder) {
-            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status') !== TransactionStatus::AUTHORIZED_AND_PENDING) {
+            if ((int)$currentOrder->getPayment()->getAdditionalInformation(
+                    'last_status'
+                ) !== TransactionStatus::AUTHORIZED_AND_PENDING
+            ) {
                 $orderCanReview = false;
             }
         }
@@ -281,7 +297,7 @@ abstract class FullserviceMethod extends AbstractMethod
             if ($payment->getLastTransId()) {  //Is not the first transaction
 
                 $this->manualCapture($payment, $amount);
-            } else { //Ok, it's the first transaction, so we request a new order
+            } else { //Ok, it's the first transaction, so we request a new order (MO/TO)
                 $this->place($payment);
             }
         } catch (LocalizedException $e) {
@@ -297,6 +313,12 @@ abstract class FullserviceMethod extends AbstractMethod
 
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+        if ($this->isDifferentCurrency($payment)) {
+            $amount = $payment->getTransactionAdditionalInfo()['invoice_capture']->getGrandTotal();
+        }
+
+        //Magento doesn't allow us to save object in transaction additional info
+        $payment->setTransactionAdditionalInfo('invoice_capture', '');
 
         // As we already have a transaction reference, we can request a capture operation.
         $this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
@@ -321,7 +343,8 @@ abstract class FullserviceMethod extends AbstractMethod
      * @return string Redirect URL
      * @throws LocalizedException
      */
-    protected function processResponse($response){
+    protected function processResponse($response)
+    {
         $successUrl = $this->urlBuilder->getUrl('hipay/redirect/accept', ['_secure' => true]);
         $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
         $forwardUrl = $response->getForwardUrl();
@@ -339,12 +362,16 @@ abstract class FullserviceMethod extends AbstractMethod
                 break;
             case TransactionState::DECLINED:
                 $reason = $response->getReason();
-                $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
+                $this->_checkoutSession->setErrorMessage(
+                    __('There was an error request new transaction: %1.', $reason['message'])
+                );
                 $redirectUrl = $failUrl;
                 break;
             case TransactionState::ERROR:
                 $reason = $response->getReason();
-                $this->_checkoutSession->setErrorMessage(__('There was an error request new transaction: %1.', $reason['message']));
+                $this->_checkoutSession->setErrorMessage(
+                    __('There was an error request new transaction: %1.', $reason['message'])
+                );
                 throw new LocalizedException(__('There was an error request new transaction: %1.', $reason['message']));
             default:
                 $redirectUrl = $failUrl;
@@ -382,6 +409,11 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
+
+        if ($this->isDifferentCurrency($payment)) {
+            $amount = $payment->formatAmount($payment->getCreditmemo()->getGrandTotal());
+        }
+
         parent::refund($payment, $amount);
 
         $this->getGatewayManager($payment->getOrder())->requestOperationRefund($amount);
@@ -571,5 +603,32 @@ abstract class FullserviceMethod extends AbstractMethod
     protected function sleep()
     {
         sleep(self::SLEEP_TIME);
+    }
+
+    /**
+     * @param InfoInterface $payment
+     * @return float
+     */
+    public function isDifferentCurrency(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        $authTransac = $this->transactionRepository->getByTransactionType(
+            \Magento\Sales\Api\Data\TransactionInterface::TYPE_AUTH,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
+        if (!$authTransac) {
+            $authTransac = $this->transactionRepository->getByTransactionType(
+                \Magento\Sales\Api\Data\TransactionInterface::TYPE_CAPTURE,
+                $payment->getId(),
+                $payment->getOrder()->getId()
+            );
+        }
+
+        $transacCurrency = $authTransac->getAdditionalInformation('transac_currency');
+
+        $isDifferentCurrency = $transacCurrency && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode();
+        $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode();
+        return $isDifferentCurrency;
+
     }
 }

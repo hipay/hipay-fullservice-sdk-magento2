@@ -115,9 +115,18 @@ abstract class CommonRequest extends BaseRequest
         \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
-    )
-    {
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder, $helper, $params);
+    ) {
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $params
+        );
 
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;
@@ -156,18 +165,22 @@ abstract class CommonRequest extends BaseRequest
      *  Build an Cart Json
      *
      * @param null $operation
-     * @return string
+     * @param bool $useOrderCurrency
+     * @return mixed
      * @throws \Exception
      */
-    protected function processCartFromOrder($operation = null)
+    protected function processCartFromOrder($operation = null, $useOrderCurrency = false)
     {
-        $cartFactory = $this->_cartFactory->create(['salesModel' => $this->_order,
-            'operation' => $operation,
-            'payment' => $this->_order->getPayment()
-        ]);
+        $cartFactory = $this->_cartFactory->create(
+            [
+                'salesModel' => $this->_order,
+                'operation' => $operation,
+                'payment' => $this->_order->getPayment()
+            ]
+        );
 
         $cart = new Cart();
-        $items = $cartFactory->getAllItems();
+        $items = $cartFactory->getAllItems($useOrderCurrency);
         foreach ($items as $item) {
             $reference = $item->getDataUsingMethod('reference');
             $name = $item->getDataUsingMethod('name');
@@ -201,22 +214,26 @@ abstract class CommonRequest extends BaseRequest
                     }
                     break;
                 case TypeItems::DISCOUNT:
-                    $itemHipay = Item::buildItemTypeDiscount($reference,
+                    $itemHipay = Item::buildItemTypeDiscount(
+                        $reference,
                         $name,
                         0,
                         0,
                         $taxPercent,
                         $name . ' Total discount :' . $amount,
-                        0);
+                        0
+                    );
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
-                    $itemHipay = Item::buildItemTypeFees($reference,
+                    $itemHipay = Item::buildItemTypeFees(
+                        $reference,
                         $name,
                         $amount,
                         $taxPercent,
                         $discount,
-                        $amount);
+                        $amount
+                    );
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
             }
@@ -251,7 +268,7 @@ abstract class CommonRequest extends BaseRequest
 
                 // Mapping is on the First Level
                 if ($collection->getItems()) {
-                    $mapping_id = (int) $collection->getFirstItem()->getId();
+                    $mapping_id = (int)$collection->getFirstItem()->getId();
                     break;
                 }
                 // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)

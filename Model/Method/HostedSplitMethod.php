@@ -19,7 +19,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use HiPay\FullserviceMagento\Model\HostedMethod;
-
+use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * Class Hosted Split Payment Method
@@ -67,13 +67,14 @@ class HostedSplitMethod extends HostedMethod
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
+        TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $resource, $resourceCollection, $data);
+        parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         $this->profileFactory = $profileFactory;
     }
@@ -91,7 +92,12 @@ class HostedSplitMethod extends HostedMethod
         $profileId = $payment->getAdditionalInformation('profile_id');
         $profile = $this->getProfile($profileId);
 
-        $splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
+        $amounts = $payment->getOrder()->getBaseGrandTotal();
+        if ($this->_hipayConfig->useOrderCurrency()) {
+            $amounts = $payment->getOrder()->getGrandTotal();
+        }
+
+        $splitAmounts = $profile->splitAmount($amounts);
 
         if (!is_array($splitAmounts) || !count($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
@@ -119,7 +125,12 @@ class HostedSplitMethod extends HostedMethod
             $profileId = $payment->getAdditionalInformation('profile_id');
             $profile = $this->getProfile($profileId);
 
-            $splitAmounts = $profile->splitAmount($payment->getOrder()->getBaseGrandTotal());
+            $amounts = $payment->getOrder()->getBaseGrandTotal();
+            if ($this->_hipayConfig->useOrderCurrency()) {
+                $amounts = $payment->getOrder()->getGrandTotal();
+            }
+
+            $splitAmounts = $profile->splitAmount($amounts);
             if (!is_array($splitAmounts) || !count($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }

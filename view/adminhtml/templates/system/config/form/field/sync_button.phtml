@@ -1,3 +1,4 @@
+<?php
 /**
  * HiPay Fullservice Magento
  *
@@ -16,20 +17,4 @@
  *
  */
 
-var config = {
-    map: {
-        '*': {
-            transparent: 'Magento_Payment/transparent',
-            hipay_tpp: 'HiPay_FullserviceMagento/js/hipay-tpp',
-            reqwest: 'HiPay_FullserviceMagento/js/reqwest',
-            card: 'HiPay_FullserviceMagento/card'
-        }
-    },
-    config: {
-        mixins: {
-            'Magento_Tax/js/view/checkout/summary/grand-total': {
-                'HiPay_FullserviceMagento/js/grand-total-mixin': true
-            }
-        }
-    }
-};
+echo $block->getButtonHtml();

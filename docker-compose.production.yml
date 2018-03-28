@@ -10,6 +10,8 @@ magento2:
   labels:
     - "com.hipay.github={label}"
     - "com.hipay.circleci={circleci}"
+  mem_limit: 512M
+  restart: always
 db:
   container_name: {CONTAINER_NAME_MYSQL}
   ports:
@@ -17,6 +19,8 @@ db:
   labels:
     - "com.hipay.github={label}"
     - "com.hipay.circleci={circleci}"
+  mem_limit: 512M
+  restart: always
 smtp:
   container_name: {CONTAINER_NAME_SMTP}
   ports:
@@ -24,3 +28,5 @@ smtp:
   labels:
     - "com.hipay.github={label}"
     - "com.hipay.circleci={circleci}"
+  mem_limit: 512M
+  restart: always

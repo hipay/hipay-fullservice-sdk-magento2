@@ -1,3 +1,13 @@
+# 1.2.0
+
+- Add support for multi-currency payments
+- Add hash algorithm selection in BO
+- Add notification URL support
+- Fix notification response (500 HTTP code on fail)
+- Fix : split payment
+- Fix : MOTO
+- Fix : basket
+
 # 1.1.8
 
 - Add support for product without category and option basket
@@ -93,3 +103,4 @@ New feature:
 # 1.0.1
 
 - README updates
+
