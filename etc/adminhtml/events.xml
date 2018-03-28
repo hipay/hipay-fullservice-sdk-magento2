@@ -31,4 +31,7 @@
     <event name="sales_order_load_after">
         <observer name="order_can_refund" instance="HiPay\FullserviceMagento\Observer\OrderCanRefundObserver"/>
     </event>
+    <event name="sales_order_payment_capture">
+        <observer name="hipay_sales_order_payment_capture" instance="HiPay\FullserviceMagento\Observer\SalesOrderPaymentCaptureObserver" />
+    </event>
 </config>

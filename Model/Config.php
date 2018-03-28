@@ -364,7 +364,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getSecretPassphraseMoto()
     {
-
         $key = "secret_passphrase";
         if ($this->isStageMode()) {
             $key = "secret_passphrase_test";
@@ -466,16 +465,38 @@ class Config extends AbstractConfig implements ConfigurationInterface
     }
 
     /**
+     * @return bool
+     */
+    public function useOrderCurrency()
+    {
+
+        $key = "currency_transaction";
+        return $this->getOtherConfiguration($key);
+
+    }
+
+    /**
      *  Check if sending Cart items is necessary
      *
      * @return boolean
      */
     public function isNecessaryToSendCartItems($product_code)
     {
-        if ($this->isBasketEnabled() || $this->isBasketRequired($product_code)) {
+        if (($this->isBasketEnabled() || $this->isBasketRequired($product_code)) && !$this->isBasketForcedDisabled()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Basket is forced disabled for some payment method
+     *
+     * @param $product_code
+     * @return bool
+     */
+    public function isBasketForcedDisabled()
+    {
+        return in_array($this->_methodCode, ['hipay_ccsplit', 'hipay_hostedsplit']);
     }
 
     /**

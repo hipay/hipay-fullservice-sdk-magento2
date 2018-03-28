@@ -49,7 +49,6 @@ class Data extends AbstractHelper
      */
     protected $productMetadata;
 
-
     public function __construct(
         Context $context,
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
@@ -145,6 +144,27 @@ class Data extends AbstractHelper
         return json_encode($request);
     }
 
+    /**
+     * @return bool
+     */
+    public function useOrderCurrency()
+    {
+
+        return (bool)$this->scopeConfig->getValue(
+            'hipay/configurations/currency_transaction',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            null
+        );
+
+    }
+
+    /**
+     * @param \HiPay\FullserviceMagento\Model\Config $config
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient
+     * @param $store
+     * @param string $scope
+     * @return mixed
+     */
     public function updateHashAlgorithm(
         \HiPay\FullserviceMagento\Model\Config $config,
         \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient,

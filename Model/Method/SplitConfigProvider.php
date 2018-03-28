@@ -19,6 +19,7 @@ use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class Generic config provider
@@ -75,6 +76,22 @@ class SplitConfigProvider implements ConfigProviderInterface
      */
     protected $urlBuilder;
 
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     */
+    protected $hipayHelper;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+     */
+    protected $_hipayConfig;
 
     /**
      * @param PaymentHelper $paymentHelper
@@ -85,6 +102,9 @@ class SplitConfigProvider implements ConfigProviderInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \Magento\Framework\Url $urlBuilder,
+        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
+        PriceCurrencyInterface $priceCurrency,
+        \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
 
@@ -95,6 +115,9 @@ class SplitConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $checkoutSession;
         $this->checkoutHelper = $checkoutHelper;
         $this->urlBuilder = $urlBuilder;
+        $this->hipayHelper = $hipayHelper;
+        $this->priceCurrency = $priceCurrency;
+        $this->_hipayConfig = $context->getConfigFactory()->create();
 
     }
 
@@ -107,17 +130,22 @@ class SplitConfigProvider implements ConfigProviderInterface
         $config = [];
         foreach ($this->methods as $methodCode => $method) {
             if ($method->isAvailable()) {
-                $config = array_merge_recursive($config, [
-                    'payment' => [
-                        'hipaySplit' => [
-                            'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)],
+                $config = array_merge_recursive(
+                    $config,
+                    [
+                        'payment' => [
+                            'hipaySplit' => [
+                                'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)],
+                            ]
                         ]
                     ]
-                ]);
+                );
             }
         }
 
-        $config['payment']['hipaySplit']['refreshConfigUrl'] = $this->urlBuilder->getUrl('hipay/payment/refreshCheckoutConfig');
+        $config['payment']['hipaySplit']['refreshConfigUrl'] = $this->urlBuilder->getUrl(
+            'hipay/payment/refreshCheckoutConfig'
+        );
 
 
         return $config;
@@ -157,12 +185,25 @@ class SplitConfigProvider implements ConfigProviderInterface
         /** @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile */
         foreach ($this->getPaymentProfiles($methodCode) as $pp) {
 
-            $splitAmounts = $pp->splitAmount($this->checkoutSession->getQuote()->getBaseGrandTotal());
+            $amounts = $this->checkoutSession->getQuote()->getBaseGrandTotal();
+            $currency = $this->checkoutSession->getQuote()->getStore()->getBaseCurrency();
+            if ($this->hipayHelper->useOrderCurrency()) {
+                $amounts = $this->checkoutSession->getQuote()->getGrandTotal();
+                $currency = null;
+            }
+
+            $splitAmounts = $pp->splitAmount($amounts);
 
             foreach ($splitAmounts as $index => $split) {
                 $date = new \DateTime($split['dateToPay']);
                 $splitAmounts[$index]['dateToPayFormatted'] = $date->format('d/m/Y');
-                $splitAmounts[$index]['amountToPayFormatted'] = $this->checkoutHelper->formatPrice($split['amountToPay']);
+                $splitAmounts[$index]['amountToPayFormatted'] = $this->priceCurrency->format(
+                    $split['amountToPay'],
+                    true,
+                    PriceCurrencyInterface::DEFAULT_PRECISION,
+                    $this->checkoutSession->getQuote()->getStore(),
+                    $currency
+                );
             }
 
             $pProfiles[] = [
@@ -173,9 +214,7 @@ class SplitConfigProvider implements ConfigProviderInterface
             ];
         }
 
-
         return $pProfiles;
-
 
     }
 

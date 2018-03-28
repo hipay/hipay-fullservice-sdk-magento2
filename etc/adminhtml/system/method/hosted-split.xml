@@ -21,7 +21,7 @@
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_hostedsplit" translate="label" type="text" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>HiPay Enterprise Hosted Page Split Payment</label>
-				<comment></comment>
+                <comment><![CDATA[<strong style="color:orange">Notice : </strong> Split payment methods are not compatible with the basket feature. Customer's cart information will not be sent with transaction even if the feature is enabled.]]></comment>
 				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
                 <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
 

@@ -75,30 +75,16 @@ abstract class AbstractConfig implements ConfigInterface
     protected $_configWriter;
 
     /**
-     * @var \Magento\Framework\App\Cache\TypeListInterface
-     */
-    protected $_cacheTypeList;
-
-    /**
-     * @var \Magento\Framework\App\Cache\Frontend\Pool
-     */
-    protected $_cacheFrontendPool;
-
-    /**
      * AbstractConfig constructor.
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_configWriter = $configWriter;
-        $this->_cacheTypeList = $cacheTypeList;
-        $this->_cacheFrontendPool = $cacheFrontendPool;
     }
 
     /**
@@ -274,6 +260,7 @@ abstract class AbstractConfig implements ConfigInterface
             case 'basket_enabled':
             case 'send_notification_url':
             case 'basket_attribute_ean':
+            case 'currency_transaction':
             case 'hashing_algorithm':
             case 'hashing_algorithm_test':
                 return "hipay/{$group}/{$fieldName}";

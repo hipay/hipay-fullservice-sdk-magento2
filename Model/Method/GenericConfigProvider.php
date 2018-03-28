@@ -83,6 +83,11 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     protected $_collection;
 
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+     */
+    protected $_hipayConfig;
 
     /**
      */
@@ -94,6 +99,7 @@ class GenericConfigProvider implements ConfigProviderInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
+        \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
 
@@ -107,6 +113,9 @@ class GenericConfigProvider implements ConfigProviderInterface
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
 
+        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+
+        $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['storeId' => $storeId]]);
     }
 
     /**
@@ -151,7 +160,8 @@ class GenericConfigProvider implements ConfigProviderInterface
                     'customerCards' => $cards,
                     'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
                     'defaultEci' => ECI::SECURE_ECOMMERCE,
-                    'recurringEci' => ECI::RECURRING_ECOMMERCE
+                    'recurringEci' => ECI::RECURRING_ECOMMERCE,
+                    'useOrderCurrency' => (bool)$this->_hipayConfig->useOrderCurrency()
                 ]
             ]
         ]);

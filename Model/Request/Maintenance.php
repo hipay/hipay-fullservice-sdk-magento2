@@ -72,7 +72,6 @@ class Maintenance extends CommonRequest
     protected $_productRepositoryInterface;
 
 
-
     /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
@@ -92,10 +91,23 @@ class Maintenance extends CommonRequest
         \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
-    )
-    {
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory,
-            $urlBuilder, $helper, $cartFactory, $weeeHelper, $productRepositoryInterface ,$mappingCategoriesCollectionFactory,$categoryFactory,$params);
+    ) {
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $cartFactory,
+            $weeeHelper,
+            $productRepositoryInterface,
+            $mappingCategoriesCollectionFactory,
+            $categoryFactory,
+            $params
+        );
 
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;
@@ -131,14 +143,16 @@ class Maintenance extends CommonRequest
         $maintenanceRequest = new MaintenanceRequest();
         $payment_product = $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
         if ($this->_config->isNecessaryToSendCartItems($payment_product)) {
-            $maintenanceRequest->basket = $this->processCartFromOrder($this->_operation);
+            $useOrderCurrency = $this->_order->getPayment()->getMethodInstance()->isDifferentCurrency(
+                $this->_order->getPayment()
+            );
+            $maintenanceRequest->basket = $this->processCartFromOrder($this->_operation, $useOrderCurrency);
         }
         // Technical parameter to track wich magento version is used
         $maintenanceRequest->source = $this->helper->getRequestSource();
         return $maintenanceRequest;
 
     }
-
 
 
 }

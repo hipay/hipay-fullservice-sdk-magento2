@@ -62,8 +62,7 @@ class Cart extends \Magento\Payment\Model\Cart
         $salesModel,
         $operation,
         $payment
-    )
-    {
+    ) {
         $this->_eventManager = $eventManager;
         $this->_salesModel = $salesModelFactory->create($salesModel);
         $this->weeeHelper = $weeeHelper;
@@ -113,11 +112,18 @@ class Cart extends \Magento\Payment\Model\Cart
      *
      * @return void
      */
-    protected function _calculateCustomItemsSubtotal()
+    protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-        $this->_processShippingAndDiscountItems();
-        $this->_applyDiscountTaxCompensationWorkaround($this->_salesModel);
-        $this->_validate();
+
+        if (
+            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+            || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
+
+        ) {
+            $this->_processShippingAndDiscountItems($useOrderCurrency);
+        }
+        $this->_applyDiscountTaxCompensationWorkaround($this->_salesModel, $useOrderCurrency);
+        $this->_validate($useOrderCurrency);
     }
 
     /**
@@ -125,11 +131,12 @@ class Cart extends \Magento\Payment\Model\Cart
      *
      * @return void
      */
-    protected function _processShippingAndDiscountItems()
+    protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
         if ($this->_operation != Operation::REFUND &&
-                $this->_operation != Operation::CAPTURE &&
-                     $this->getDiscount()) {
+            $this->_operation != Operation::CAPTURE &&
+            $this->getDiscount()
+        ) {
             $reference = self::GENERIC_DISCOUNT;
             $description = self::GENERIC_DISCOUNT;
 
@@ -138,27 +145,53 @@ class Cart extends \Magento\Payment\Model\Cart
                 $description = $this->_salesModel->getDataUsingMethod('discount_description');
             }
 
-            $this->addGenericItem($description,
+            $this->addGenericItem(
+                $description,
                 -1.00 * $this->getDiscount(),
                 $reference,
                 $description,
                 0,
-                TypeItems::DISCOUNT);
+                TypeItems::DISCOUNT
+            );
 
         }
         $base_shipping = 0;
         $tax_rate = 0;
         if (!empty($this->_salesModel->getDataUsingMethod('shipping_method'))) {
-            if ((float) $this->_model->getDataUsingMethod('base_shipping_incl_tax') > 0) {
-                $base_shipping = round($this->_model->getDataUsingMethod('base_shipping_incl_tax'), 3);
-                $tax_rate = round($this->_model->getDataUsingMethod('base_shipping_tax_amount') / $this->_model->getDataUsingMethod('base_shipping_incl_tax') * 100, 2);
+            $shippingAmount = (float)$this->_model->getDataUsingMethod('base_shipping_incl_tax');
+            if ($useOrderCurrency) {
+                $shippingAmount = (float)$this->_model->getDataUsingMethod('shipping_incl_tax');
             }
-                $this->addGenericItem($this->_salesModel->getDataUsingMethod('shipping_description'),
-                    $base_shipping,
-                    $this->_salesModel->getDataUsingMethod('shipping_method'),
-                    $this->_salesModel->getDataUsingMethod('shipping_description'),
-                    $tax_rate,
-                    TypeItems::FEE);
+            if ($shippingAmount > 0) {
+                $base_shipping = round($shippingAmount, 3);
+                if ($useOrderCurrency) {
+                    $tax_rate = round(
+                        $this->_model->getDataUsingMethod(
+                            'shipping_tax_amount'
+                        ) / $this->_model->getDataUsingMethod(
+                            'shipping_incl_tax'
+                        ) * 100,
+                        2
+                    );
+                } else {
+                    $tax_rate = round(
+                        $this->_model->getDataUsingMethod(
+                            'base_shipping_tax_amount'
+                        ) / $this->_model->getDataUsingMethod(
+                            'base_shipping_incl_tax'
+                        ) * 100,
+                        2
+                    );
+                }
+            }
+            $this->addGenericItem(
+                $this->_salesModel->getDataUsingMethod('shipping_description'),
+                $base_shipping,
+                $this->_salesModel->getDataUsingMethod('shipping_method'),
+                $this->_salesModel->getDataUsingMethod('shipping_description'),
+                $tax_rate,
+                TypeItems::FEE
+            );
         }
     }
 
@@ -176,7 +209,8 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     public function addGenericItem($name, $amount, $reference, $description, $taxPercent, $type)
     {
-        $this->_customItems[] = $this->_createItemHipayFromData($name,
+        $this->_customItems[] = $this->_createItemHipayFromData(
+            $name,
             1,
             $amount,
             $amount,
@@ -194,10 +228,14 @@ class Cart extends \Magento\Payment\Model\Cart
      *
      * @return void
      */
-    protected function _validate()
+    protected function _validate($useOrderCurrency = false)
     {
         $this->_areAmountsValid = true;
-        $referenceAmount = $this->_model->getDataUsingMethod('base_grand_total');
+        if ($useOrderCurrency) {
+            $referenceAmount = $this->_model->getDataUsingMethod('grand_total');
+        } else {
+            $referenceAmount = $this->_model->getDataUsingMethod('base_grand_total');
+        }
         $itemsSubtotal = 0;
         foreach ($this->_salesModelItems as $item) {
             $itemsSubtotal = $itemsSubtotal + $item->getAmount();
@@ -205,7 +243,7 @@ class Cart extends \Magento\Payment\Model\Cart
         $sum = $itemsSubtotal + $this->getShipping();
 
         if (sprintf('%.4F', $sum) != sprintf('%.4F', $referenceAmount)) {
-            $delta = (float) $referenceAmount - $sum;
+            $delta = (float)$referenceAmount - $sum;
             if ($delta < 0.02) {
                 // Bug with 1 cent on specific shipping method (For example UPS)
                 foreach ($this->_customItems as $item) {
@@ -220,18 +258,64 @@ class Cart extends \Magento\Payment\Model\Cart
     }
 
     /**
-     * Import items and convert to HiPays format
+     * Get all cart items
      *
+     * @param bool $useOrderCurrency
+     * @return array
+     * @api
+     */
+    public function getAllItems($useOrderCurrency = false)
+    {
+        $this->_collectItemsAndAmounts($useOrderCurrency);
+        return array_merge($this->_salesModelItems, $this->_customItems);
+    }
+
+    /**
+     * Collect all items, discounts, taxes, shipping to cart
+     *
+     * @param bool $useOrderCurrency
      * @return void
      */
-    protected function _importItemsFromSalesModel()
+    protected function _collectItemsAndAmounts($useOrderCurrency = false)
+    {
+        if (!$this->_itemsCollectingRequired) {
+            return;
+        }
+
+        $this->_itemsCollectingRequired = false;
+
+        $this->_salesModelItems = [];
+        $this->_customItems = [];
+
+        $this->_resetAmounts();
+
+        $this->_eventManager->dispatch('payment_cart_collect_items_and_amounts', ['cart' => $this]);
+
+        $this->_importItemsFromSalesModel($useOrderCurrency);
+        $this->_calculateCustomItemsSubtotal($useOrderCurrency);
+    }
+
+    /**
+     * Import items and convert to HiPays format
+     *
+     * @param bool $useOrderCurrency
+     * @return void
+     */
+    protected function _importItemsFromSalesModel($useOrderCurrency = false)
     {
         $this->_salesModelItems = [];
         $items = $this->_model->getAllItems();
-        $totalSubTotal = $this->_model->getBaseSubtotal();
-        $totalTax = $this->_model->getBaseTaxAmount();
-        $totalShipping = $this->_model->getDataUsingMethod('base_shipping_incl_tax');
-        $totalDiscount = $this->_model->getBaseDiscountAmount();
+        if ($useOrderCurrency) {
+            $totalTax = $this->_model->getDataUsingMethod('tax_amount');
+            $totalSubTotal = $this->_model->getDataUsingMethod('subtotal');
+            $totalDiscount = $this->_model->getDataUsingMethod('discount_amount');
+            $totalShipping = $this->_model->getDataUsingMethod('shipping_incl_tax');
+        } else {
+            $totalTax = $this->_model->getBaseTaxAmount();
+            $totalSubTotal = $this->_model->getBaseSubtotal();
+            $totalDiscount = $this->_model->getBaseDiscountAmount();
+            $totalShipping = $this->_model->getDataUsingMethod('base_shipping_incl_tax');
+        }
 
         foreach ($items as $item) {
             if ($item->getParentItem()) {
@@ -253,32 +337,45 @@ class Cart extends \Magento\Payment\Model\Cart
                 $qty = intval($originalItem->getData('qty_ordered'));
             }
 
-            $price = $originalItem->getBasePriceInclTax();
             $sku = $originalItem->getSku();
             $description = $originalItem->getDescription();
             $taxPercent = $originalItem->getTaxPercent();
-            $discount = $originalItem->getBaseDiscountAmount();
+            if ($useOrderCurrency) {
+                $price = $originalItem->getPriceInclTax();
+                $discount = $originalItem->getDiscountAmount();
+            } else {
+                $price = $originalItem->getBasePriceInclTax();
+                $discount = $originalItem->getBaseDiscountAmount();
+            }
 
             //HiPay needs total amount with 3 decimals to match the correct total amount within 1 cent
             //@see Magento\Weee\Block\Item\Price
-            $itemTotalInclTax = $this->getTotalPrice($originalItem);
+            $itemTotalInclTax = $this->getTotalPrice($originalItem, $useOrderCurrency);
 
             // Need better precision and unit price with reel tax application
             if ($this->_operation != null && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)) {
-                    // To avoid 0.001 between original authorization and capture and refund
-                    foreach ($this->_salesModel->getAllItems() as $key => $orderItem) {
-                        if ($orderItem->getParentItem()) {
-                            continue;
-                        }
-
-                        if ($originalItem->getSku() == $orderItem->getOriginalItem()->getSku()) {
-                            $discountOrder = $orderItem->getOriginalItem()->getBaseDiscountAmount();
-                            $price = $this->returnUnitPrice($this->getTotalPrice($orderItem->getOriginalItem()) + $discountOrder, $orderItem->getOriginalItem()->getData('qty_ordered'));
-
-                            // Adjust discount to avoid 0.01 difference
-                            $discount = ($price * $qty) - $itemTotalInclTax;
-                        }
+                // To avoid 0.001 between original authorization and capture and refund
+                foreach ($this->_salesModel->getAllItems() as $key => $orderItem) {
+                    if ($orderItem->getParentItem()) {
+                        continue;
                     }
+
+                    if ($originalItem->getSku() == $orderItem->getOriginalItem()->getSku()) {
+                        if ($useOrderCurrency) {
+                            $discountOrder = $orderItem->getOriginalItem()->getDiscountAmount();
+                        } else {
+                            $discountOrder = $orderItem->getOriginalItem()->getBaseDiscountAmount();
+                        }
+
+                        $price = $this->returnUnitPrice(
+                            $this->getTotalPrice($orderItem->getOriginalItem(), $useOrderCurrency) + $discountOrder,
+                            $orderItem->getOriginalItem()->getData('qty_ordered')
+                        );
+
+                        // Adjust discount to avoid 0.01 difference
+                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);;
+                    }
+                }
             } else {
                 $price = $this->returnUnitPrice($itemTotalInclTax + $discount, $qty);
             }
@@ -310,12 +407,21 @@ class Cart extends \Magento\Payment\Model\Cart
      * @param $originalItem
      * @return float
      */
-    private function getTotalPrice($originalItem)
+    private function getTotalPrice($originalItem, $useOrderCurrency = false)
     {
-        return $originalItem->getBaseRowTotal()
-            - $originalItem->getBaseDiscountAmount()
-            + $originalItem->getBaseDiscountTaxCompensationAmount()
-            + $this->weeeHelper->getBaseRowWeeeTaxInclTax($originalItem) + $originalItem->getBaseTaxAmount();
+        if ($useOrderCurrency) {
+            $totalPrice = $originalItem->getRowTotal()
+                - $originalItem->getDiscountAmount()
+                + $originalItem->getDiscountTaxCompensationAmount()
+                + $this->weeeHelper->getRowWeeeTaxInclTax($originalItem) + $originalItem->getTaxAmount();
+        } else {
+            $totalPrice = $originalItem->getBaseRowTotal()
+                - $originalItem->getBaseDiscountAmount()
+                + $originalItem->getBaseDiscountTaxCompensationAmount()
+                + $this->weeeHelper->getBaseRowWeeeTaxInclTax($originalItem) + $originalItem->getBaseTaxAmount();
+        }
+
+        return $totalPrice;
     }
 
     /**
@@ -332,17 +438,30 @@ class Cart extends \Magento\Payment\Model\Cart
      * @param string type
      * @return \Magento\Framework\DataObject
      */
-    protected function _createItemHipayFromData($name, $qty, $amount, $price, $sku, $description, $taxPercent, $discount, $type)
-    {
-        $item = new \Magento\Framework\DataObject(['name' => $name,
-            'qty' => $qty,
-            'amount' => $amount,
-            'price' => $price,
-            'reference' => $sku,
-            'description' => $description,
-            'tax_percent' => $taxPercent,
-            'discount' => $discount,
-            'type' => $type]);
+    protected function _createItemHipayFromData(
+        $name,
+        $qty,
+        $amount,
+        $price,
+        $sku,
+        $description,
+        $taxPercent,
+        $discount,
+        $type
+    ) {
+        $item = new \Magento\Framework\DataObject(
+            [
+                'name' => $name,
+                'qty' => $qty,
+                'amount' => $amount,
+                'price' => $price,
+                'reference' => $sku,
+                'description' => $description,
+                'tax_percent' => $taxPercent,
+                'discount' => $discount,
+                'type' => $type
+            ]
+        );
 
         return $item;
     }
@@ -369,12 +488,17 @@ class Cart extends \Magento\Payment\Model\Cart
      * @return void
      */
     protected function _applyDiscountTaxCompensationWorkaround(
-        \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
-    )
-    {
+        \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity,
+        $useOrderCurrency = false
+    ) {
         $dataContainer = $salesEntity->getTaxContainer();
-        $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
-        $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+        if ($useOrderCurrency) {
+            $this->addTax((double)$dataContainer->getDiscountTaxCompensationAmount());
+            $this->addTax((double)$dataContainer->getShippingDiscountTaxCompensationAmnt());
+        } else {
+            $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
+            $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+        }
     }
 
     /*
