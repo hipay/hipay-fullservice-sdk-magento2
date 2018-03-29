@@ -1,3 +1,11 @@
+version: "2.1"
+
+networks:
+  magento2:
+    internal: true
+  outside:
+    external: true
+
 magento2:
   container_name: {CONTAINER_NAME_WEB}
   env_file:
