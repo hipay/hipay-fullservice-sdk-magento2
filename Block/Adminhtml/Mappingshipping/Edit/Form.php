@@ -53,8 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_shippingMethodsMagento = $shippingMethodsMagento;
         $this->_shippingMethodsHipay = $shippingMethodsHipay;
@@ -91,10 +90,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($model != null) {
             if ($model->getMappingShippingId() !== null) {
-                $config = array_merge($config,['disabled' => true]);
+                $config = array_merge($config, ['disabled' => true]);
             }
         }
-        
+
         $fieldset->addField(
             'magento_shipping_code',
             'select',
@@ -138,8 +137,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_eventManager->dispatch('adminhtml_cart_mappingshipping_edit_prepare_form', ['form' => $form]);
 
         if ($model != null) {
-            if ($model->getMappingShippingId() !== null){
-                $form->addField('mapping_shipping_id', 'hidden', ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]);
+            if ($model->getMappingShippingId() !== null) {
+                $form->addField('mapping_shipping_id', 'hidden',
+                    ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]);
             }
             $form->setValues($model->getData());
         }

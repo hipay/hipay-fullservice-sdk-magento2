@@ -221,14 +221,15 @@ class Order extends CommonRequest
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
         $orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
         $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: $payment_product;
-        $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s", $this->_order->getIncrementId()); //@TODO
+        $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s",
+            $this->_order->getIncrementId()); //@TODO
         $orderRequest->long_description = "";
-        if($useOrderCurrency){
+        if ($useOrderCurrency) {
             $orderRequest->currency = $this->_order->getOrderCurrencyCode();
             $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getGrandTotal();
             $orderRequest->shipping = (float)$this->_order->getShippingAmount();
             $orderRequest->tax = (float)$this->_order->getTaxAmount();
-        }else{
+        } else {
             $orderRequest->currency = $this->_order->getBaseCurrencyCode();
             $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
             $orderRequest->shipping = (float)$this->_order->getBaseShippingAmount();
@@ -290,7 +291,8 @@ class Order extends CommonRequest
 
         // Check if delivery method is required for the payment method
         if ($this->_config->isDeliveryMethodRequired($orderRequest->payment_product)) {
-            $orderRequest->delivery_information = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
+            $orderRequest->delivery_information = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo',
+                ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
         }
 
         // Technical parameter to track wich magento version is used
@@ -313,8 +315,9 @@ class Order extends CommonRequest
         /*
          * Override or format mapping informations for specific provider
          */
-        if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb' ) {
-            $orderRequest->customerBillingInfo->phone =  preg_replace('/^(\+33)|(33)/','0',$orderRequest->customerBillingInfo->phone);
+        if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb') {
+            $orderRequest->customerBillingInfo->phone = preg_replace('/^(\+33)|(33)/', '0',
+                $orderRequest->customerBillingInfo->phone);
 
             if ($orderRequest->customerBillingInfo->gender == null) {
                 $orderRequest->customerBillingInfo->gender = Gender::MALE;

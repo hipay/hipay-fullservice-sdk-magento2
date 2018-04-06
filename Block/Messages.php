@@ -54,9 +54,9 @@ class Messages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
         \Magento\Customer\Model\Session $customerSession,
         array $data = []
-    )
-    {
-        parent::__construct($context, $messageFactory, $collectionFactory, $messageManager, $interpretationStrategy, $data);
+    ) {
+        parent::__construct($context, $messageFactory, $collectionFactory, $messageManager, $interpretationStrategy,
+            $data);
         $this->customerSession = $customerSession;
     }
 

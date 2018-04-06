@@ -49,8 +49,7 @@ class PaySplitPayment
     public function __construct(
         \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
         \Psr\Log\LoggerInterface $logger
-    )
-    {
+    ) {
         $this->spFactory = $spFactory;
         $this->logger = $logger;
     }
@@ -66,8 +65,12 @@ class PaySplitPayment
 
         /** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
         $splitPayments = $this->spFactory->create()->getCollection()
-            ->addFieldToFilter('status', array('in' => array(SplitPayment::SPLIT_PAYMENT_STATUS_PENDING,
-                SplitPayment::SPLIT_PAYMENT_STATUS_FAILED)))
+            ->addFieldToFilter('status', array(
+                'in' => array(
+                    SplitPayment::SPLIT_PAYMENT_STATUS_PENDING,
+                    SplitPayment::SPLIT_PAYMENT_STATUS_FAILED
+                )
+            ))
             ->addFieldTofilter('attempts', array('lt' => 3))
             ->addFieldTofilter('date_to_pay', array('to' => $date->format('Y-m-d 00:00:00')));
 

@@ -27,13 +27,13 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 class Pay extends \Magento\Backend\App\Action
 {
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function _isAllowed()
-	{
-		return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_pay');
-	}
+    /**
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_pay');
+    }
 
     /**
      * Delete action
@@ -52,10 +52,10 @@ class Pay extends \Magento\Backend\App\Action
                 // init model and delete
                 $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
                 $model->load($id);
-                
+
                 //Pay this split payment
                 $model->pay();
-                
+
                 // display success message
                 $this->messageManager->addSuccess(__('The split payment has been paid.'));
                 // go to grid

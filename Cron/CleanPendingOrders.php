@@ -68,8 +68,7 @@ class CleanPendingOrders
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Psr\Log\LoggerInterface $logger
-    )
-    {
+    ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
         $this->logger = $logger;
@@ -105,7 +104,8 @@ class CleanPendingOrders
             ->addFieldToFilter('main_table.state', \Magento\Sales\Model\Order::STATE_NEW)
             ->addFieldToFilter('op.method', array('in' => array_values($methodCodes)))
             ->addAttributeToFilter('created_at', array('to' => ($date->sub($interval)->format('Y-m-d H:i:s'))))
-            ->join(array('op' => $orderModel->getResource()->getTable('sales_order_payment')), 'main_table.entity_id=op.parent_id', array('method'));
+            ->join(array('op' => $orderModel->getResource()->getTable('sales_order_payment')),
+                'main_table.entity_id=op.parent_id', array('method'));
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
@@ -115,7 +115,8 @@ class CleanPendingOrders
                     $order->cancel();
                     $order
                         ->addStatusToHistory($order->getStatus(),// keep order status/state
-                            __("Order canceled automatically by cron because order is pending since %1 minutes", $limitedTime));
+                            __("Order canceled automatically by cron because order is pending since %1 minutes",
+                                $limitedTime));
 
                     $order->save();
 

@@ -33,9 +33,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('HiPay\FullserviceMagento\Model\CartCategories', 'HiPay\FullserviceMagento\Model\ResourceModel\CartCategories');
+        $this->_init('HiPay\FullserviceMagento\Model\CartCategories',
+            'HiPay\FullserviceMagento\Model\ResourceModel\CartCategories');
     }
-    
+
     /**
      * Get collection data as options array
      *
@@ -43,9 +44,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionArray()
     {
-    	return $this->_toOptionArray('mapping_id');
+        return $this->_toOptionArray('mapping_id');
     }
-    
+
     /**
      * Get collection data as options hash
      *
@@ -53,8 +54,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionHash()
     {
-    	return $this->_toOptionHash('mapping_id');
+        return $this->_toOptionHash('mapping_id');
     }
-    
+
 
 }

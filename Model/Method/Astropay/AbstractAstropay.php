@@ -94,7 +94,8 @@ class AbstractAstropay extends AbstractMethodAPI
      *
      * @return string cpf|cpn
      */
-    public function getTypeIdentification(){
+    public function getTypeIdentification()
+    {
         return $this->_typeIdentification;
     }
 

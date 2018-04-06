@@ -43,8 +43,9 @@ class PaymentProfile implements OptionSourceInterface
      *
      * @param CollectionFactory $collectionFactory
      */
-    public function __construct(\HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $collectionFactory
+    ) {
         $this->collectionFactory = $collectionFactory;
     }
 

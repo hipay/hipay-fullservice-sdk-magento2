@@ -33,9 +33,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('HiPay\FullserviceMagento\Model\PaymentProfile', 'HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile');
+        $this->_init('HiPay\FullserviceMagento\Model\PaymentProfile',
+            'HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile');
     }
-    
+
     /**
      * Get collection data as options array
      *
@@ -43,9 +44,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionArray()
     {
-    	return $this->_toOptionArray('profile_id');
+        return $this->_toOptionArray('profile_id');
     }
-    
+
     /**
      * Get collection data as options hash
      *
@@ -53,8 +54,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionHash()
     {
-    	return $this->_toOptionHash('profile_id');
+        return $this->_toOptionHash('profile_id');
     }
-    
+
 
 }

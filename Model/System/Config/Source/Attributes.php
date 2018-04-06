@@ -54,8 +54,7 @@ class Attributes extends \Magento\Framework\DataObject implements \Magento\Frame
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-    )
-    {
+    ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_productAttributeRepository = $productAttributeRepository;
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;

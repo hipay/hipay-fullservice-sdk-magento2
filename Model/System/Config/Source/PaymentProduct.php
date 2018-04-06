@@ -26,75 +26,76 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
-	const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
+    const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
 
-	
-	/**
-	 * Payment config model
-	 *
-	 * @var \Magento\Payment\Model\Config
-	 */
-	protected $_paymentConfig;
-	
-	/**
-	 * Core store config
-	 *
-	 * @var \Magento\Framework\App\Config\ScopeConfigInterface
-	 */
-	protected $_scopeConfig;
-	
-	/**
-	 * Config
-	 *
-	 * @param \Magento\Payment\Model\Config $paymentConfig
-	 */
-	public function __construct(
-			\Magento\Payment\Model\Config $paymentConfig,
-			\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-			)
-	{
-		$this->_paymentConfig = $paymentConfig;
-		$this->_scopeConfig = $scopeConfig;
-	}
-	
+
+    /**
+     * Payment config model
+     *
+     * @var \Magento\Payment\Model\Config
+     */
+    protected $_paymentConfig;
+
+    /**
+     * Core store config
+     *
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
+
+    /**
+     * Config
+     *
+     * @param \Magento\Payment\Model\Config $paymentConfig
+     */
+    public function __construct(
+        \Magento\Payment\Model\Config $paymentConfig,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
+        $this->_paymentConfig = $paymentConfig;
+        $this->_scopeConfig = $scopeConfig;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function toOptionArray()
     {
 
-    	$categories = null;
-    	
-    	if($this->getPath()){
-    		
-	    	list($section_locale,$method) = explode("/", $this->getPath());
-	    	list($section) = explode("_",$section_locale);
-	    	
-	    	$categories = $this->_scopeConfig->getValue(implode('/',[$section,$method,self::PAYMENT_PRODUCT_FIELD])) ?: null;
+        $categories = null;
 
-	    	if(!empty($categories)){
-	    		$categories = explode(',',$categories);
-	    	}
-    	}
-    	
-    	$list = [];
-    	foreach($this->getPaymentProducts($categories) as $paymentProduct){
-    		$list[] = ['value'=>$paymentProduct->getProductCode(),'label'=>$paymentProduct->getBrandName()];
-    	}
-    	
-    	return $list;
+        if ($this->getPath()) {
+
+            list($section_locale, $method) = explode("/", $this->getPath());
+            list($section) = explode("_", $section_locale);
+
+            $categories = $this->_scopeConfig->getValue(implode('/',
+                [$section, $method, self::PAYMENT_PRODUCT_FIELD])) ?: null;
+
+            if (!empty($categories)) {
+                $categories = explode(',', $categories);
+            }
+        }
+
+        $list = [];
+        foreach ($this->getPaymentProducts($categories) as $paymentProduct) {
+            $list[] = ['value' => $paymentProduct->getProductCode(), 'label' => $paymentProduct->getBrandName()];
+        }
+
+        return $list;
 
     }
-    
+
     /**
      * Payment products source getter
      *
      * @return \HiPay\Fullservice\Data\PaymentProduct[]
      */
-    public function getPaymentProducts($categories = null){
-    	/* @var $collection \HiPay\Fullservice\Data\PaymentProduct[] */
-    	$collection = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItems($categories);
-    	 
-    	return $collection;
+    public function getPaymentProducts($categories = null)
+    {
+        /* @var $collection \HiPay\Fullservice\Data\PaymentProduct[] */
+        $collection = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItems($categories);
+
+        return $collection;
     }
 }

@@ -259,8 +259,7 @@ class Notify
                 }
                 break;
             case TransactionStatus::CAPTURE_REQUESTED: //117
-                if (!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue(
-                    ) == $this->_order->getBaseGrandTotal()
+                if (!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal()
                 ) {
                     $canProcess = true;
                 }
@@ -344,8 +343,9 @@ class Notify
                 if (((int)$this->_order->getPayment()->getMethodInstance()->getConfigData(
                             'hipay_status_validate_order'
                         ) == 117) === false
-                )
+                ) {
                     break;
+                }
             case TransactionStatus::CAPTURED: //118
             case TransactionStatus::PARTIALLY_CAPTURED: //119
                 //If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
@@ -588,8 +588,7 @@ class Notify
                 $payment->setAdditionalInformation('fraud_score', $fraudSreening->getScoring());
                 $payment->setAdditionalInformation('fraud_review', $fraudSreening->getReview());
 
-                $isDeny = ($fraudSreening->getResult() != 'challenged' || $this->_transaction->getState(
-                    ) == TransactionState::DECLINED);
+                $isDeny = ($fraudSreening->getResult() != 'challenged' || $this->_transaction->getState() == TransactionState::DECLINED);
 
                 if (!$isDeny) {
                     $this->fraudReviewSender->send($this->_order);
@@ -606,7 +605,9 @@ class Notify
         $this->_generateComment($comment, $addToHistory);
         $this->_order->setStatus($status);
 
-        if ($save) $this->_order->save();
+        if ($save) {
+            $this->_order->save();
+        }
     }
 
     /**

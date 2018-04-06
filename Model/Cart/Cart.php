@@ -72,9 +72,11 @@ class Cart extends \Magento\Payment\Model\Cart
 
         if ($this->_operation == Operation::REFUND) {
             $this->_model = $this->_payment->getCreditMemo();
-        } else if ($this->_operation == Operation::CAPTURE) {
-            if ($this->_payment->getOrder()->hasInvoices()) {
-                $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
+        } else {
+            if ($this->_operation == Operation::CAPTURE) {
+                if ($this->_payment->getOrder()->hasInvoices()) {
+                    $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
+                }
             }
         }
 

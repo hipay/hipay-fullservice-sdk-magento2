@@ -65,8 +65,7 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         OrderRepositoryInterface $orderRepository
-    )
-    {
+    ) {
         $this->_coreRegistry = $registry;
         $this->buttonList = $context->getButtonList();
         $this->orderRepository = $orderRepository;
@@ -88,7 +87,8 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 
                 /** @var $controller \Magento\Sales\Controller\Adminhtml\Order\View */
                 $message = __('Are you sure you want to accept this payment?');
-                $actionUrl = $controller->getUrl('hipay/order/acceptAndCapturePayment', ['order_id' => $order->getEntityId()]);
+                $actionUrl = $controller->getUrl('hipay/order/acceptAndCapturePayment',
+                    ['order_id' => $order->getEntityId()]);
                 $this->buttonList->add('accept_capture_payment', [
                     'label' => __('Accept and Capture Payment'),
                     'onclick' => "confirmSetLocation('{$message}', '{$actionUrl}')",

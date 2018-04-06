@@ -44,13 +44,14 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
     /**
      * Constructor
      *
-     * @param \Magento\Shipping\Helper\Carrier  $collectionFactory
+     * @param \Magento\Shipping\Helper\Carrier $collectionFactory
      */
-    public function __construct(\Magento\Shipping\Model\Config $configShipping,
-                                \Magento\Store\Model\StoreManagerInterface $storeManager,
-                                \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
-        $this->_config_shipping  = $configShipping;
+    public function __construct(
+        \Magento\Shipping\Model\Config $configShipping,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
+        $this->_config_shipping = $configShipping;
         $this->storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
     }
@@ -67,11 +68,19 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
         $carriers = $this->_config_shipping->getActiveCarriers();
         foreach ($carriers as $carrier) {
             $methods = $carrier->getAllowedMethods();
-            foreach($methods as $code => $method) {
+            foreach ($methods as $code => $method) {
                 if (is_object($method)) {
-                    $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method->getText());
-                } else if (!empty($method)) {
-                    $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method);
+                    $options[] = array(
+                        'value' => $carrier->getId() . '_' . $code,
+                        'label' => $carrier->getId() . ' - ' . $method->getText()
+                    );
+                } else {
+                    if (!empty($method)) {
+                        $options[] = array(
+                            'value' => $carrier->getId() . '_' . $code,
+                            'label' => $carrier->getId() . ' - ' . $method
+                        );
+                    }
                 }
             }
         }

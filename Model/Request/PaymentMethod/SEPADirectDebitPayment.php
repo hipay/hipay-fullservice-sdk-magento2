@@ -16,7 +16,7 @@
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 
-use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod ;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod;
 
 /**
  * SEPADirectDebitPaymentMethod Payment Method Request Object
@@ -27,7 +27,8 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class SEPADirectDebitPayment extends AbstractPaymentMethod{
+class SEPADirectDebitPayment extends AbstractPaymentMethod
+{
 
 
     /**
@@ -35,11 +36,12 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod{
      *
      * @return SddPaymentMethod
      */
-	protected function mapRequest() {
+    protected function mapRequest()
+    {
         $sddPaymentMethod = new SEPADirectDebitPaymentMethod();
         $sddPaymentMethod->recurring_payment = 0;
         $electronic_signature = $this->_config->getValue('electronic_signature');
-        $sddPaymentMethod->authentication_indicator = (int) $electronic_signature;
+        $sddPaymentMethod->authentication_indicator = (int)$electronic_signature;
 
         if (!$electronic_signature) {
             /* @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
@@ -51,6 +53,6 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod{
             $sddPaymentMethod->gender = $this->_order->getPayment()->getAdditionalInformation('sdd_gender');
         }
 
-		return $sddPaymentMethod;
-	}
+        return $sddPaymentMethod;
+    }
 }

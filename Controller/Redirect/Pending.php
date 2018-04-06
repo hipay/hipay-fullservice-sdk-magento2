@@ -30,20 +30,22 @@ use Magento\Framework\Controller\ResultFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Pending extends Fullservice {
-	
-	/**
-	 * @return void
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 * */
-	public function execute(){
-		$this->_checkoutSession->clearQuote();
-        $this->_checkoutSession->setErrorMessage('');
-		
-		/** @var \Magento\Framework\View\Result\Page $resultPage */
-		$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-		return $resultPage;
+class Pending extends Fullservice
+{
 
-	}
-	
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * */
+    public function execute()
+    {
+        $this->_checkoutSession->clearQuote();
+        $this->_checkoutSession->setErrorMessage('');
+
+        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        return $resultPage;
+
+    }
+
 }

@@ -34,9 +34,10 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-                                \Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
     }
@@ -55,7 +56,7 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
         $collection = $this->getCategoryTree($storeId, $rootId);
         $options = [];
         foreach ($collection as $category) {
-            $options[] = array('value'=>$category->getId(),'label'=> $category->getName());
+            $options[] = array('value' => $category->getId(), 'label' => $category->getName());
         }
         return $options;
     }
@@ -82,4 +83,4 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
         $collection->addOrderField('name');
         return $collection;
     }
-    }
+}

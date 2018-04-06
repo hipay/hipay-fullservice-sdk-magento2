@@ -98,8 +98,7 @@ class Sdd extends FullserviceMethod
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         if ($this->getConfigData('electronic_signature')) {

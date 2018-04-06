@@ -39,8 +39,8 @@ class Facilypay3X implements OptionSourceInterface
     public function toOptionArray()
     {
         $options = [];
-        $options[] = array('label'=>__('With fees'),'value'=>'3xcb');
-        $options[] = array('label'=>__('Without fees'),'value'=>'3xcb-no-fees');
+        $options[] = array('label' => __('With fees'), 'value' => '3xcb');
+        $options[] = array('label' => __('Without fees'), 'value' => '3xcb-no-fees');
         return $options;
     }
 }

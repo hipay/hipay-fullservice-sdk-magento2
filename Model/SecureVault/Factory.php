@@ -51,8 +51,9 @@ class Factory
      * @param int|null $storeId
      * @return \HiPay\FullserviceMagento\Model\SecureVault\Manager
      */
-    public function create($methodCode,$storeId=null)
+    public function create($methodCode, $storeId = null)
     {
-        return $this->_objectManager->create('\HiPay\FullserviceMagento\Model\SecureVault\Manager',['params'=>['methodCode'=>$methodCode,'storeId'=>$storeId]]);
+        return $this->_objectManager->create('\HiPay\FullserviceMagento\Model\SecureVault\Manager',
+            ['params' => ['methodCode' => $methodCode, 'storeId' => $storeId]]);
     }
 }

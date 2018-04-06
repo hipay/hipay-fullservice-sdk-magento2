@@ -130,7 +130,8 @@ class GenericConfigProvider implements ConfigProviderInterface
                     'payment' => [
                         'hiPayFullservice' => [
                             'afterPlaceOrderUrl' => [
-                                $methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder', ['_secure' => true])
+                                $methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder',
+                                    ['_secure' => true])
                             ],
                             'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
                             'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],

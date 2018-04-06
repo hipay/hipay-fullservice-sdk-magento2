@@ -95,8 +95,7 @@ abstract class Fullservice extends AppAction
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
         \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
-    )
-    {
+    ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
         $this->_hipaySession = $hipaySession;

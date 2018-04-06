@@ -34,7 +34,7 @@ class Templates implements \Magento\Framework\Option\ArrayInterface
     {
         return $this->getTemplates();
     }
-    
+
 
     /**
      * Templates type source getter
@@ -43,9 +43,9 @@ class Templates implements \Magento\Framework\Option\ArrayInterface
      */
     public function getTemplates()
     {
-    	return [
-    			\HiPay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
-    	];
-    
+        return [
+            \HiPay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
+        ];
+
     }
 }

@@ -27,13 +27,13 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 class Delete extends \Magento\Backend\App\Action
 {
 
-	/**
-	 * {@inheritdoc}
-	 */
-	protected function _isAllowed()
-	{
-		return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_delete');
-	}
+    /**
+     * {@inheritdoc}
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_delete');
+    }
 
     /**
      * Delete action

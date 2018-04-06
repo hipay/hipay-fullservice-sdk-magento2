@@ -36,9 +36,10 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @param Action\Context $context
      */
-    public function __construct(Action\Context $context,
-                                \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory)
-    {
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory
+    ) {
         parent::__construct($context);
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
     }
@@ -68,7 +69,8 @@ class Save extends \Magento\Backend\App\Action
                 if ($count > 1) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+                    return $resultRedirect->setPath('*/*/edit',
+                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
                 }
             }
 
@@ -83,7 +85,8 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['mapping_shipping_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath('*/*/edit',
+                        ['mapping_shipping_id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (\LocalizedException $e) {
@@ -95,7 +98,8 @@ class Save extends \Magento\Backend\App\Action
             }
 
             $this->_getSession()->setFormData($data);
-            return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+            return $resultRedirect->setPath('*/*/edit',
+                ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
         }
         return $resultRedirect->setPath('*/*/');
     }

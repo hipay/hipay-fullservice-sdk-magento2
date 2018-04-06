@@ -28,25 +28,25 @@ use Magento\Framework\Convert\DataObject;
  */
 class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 {
-       
+
     /**
-     * 
+     *
      * @var \Magento\Config\Model\Config\Source\Yesno $_yesNo
      */
     protected $_yesNo;
-    
+
     /**
-     *  
+     *
      * @var \Magento\Customer\Model\Config\Source\Group\Multiselect $_customerGroups
      */
     protected $_customerGroups;
-    
+
     /**
-     * 
+     *
      * @var \Magento\Sales\Model\OrderFactory $_orderFactory
      */
     protected $_orderFactory;
-    
+
     protected $methodCode = null;
 
     /**
@@ -57,12 +57,12 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
         \Magento\Customer\Model\Config\Source\Group\Multiselect $customerGroups,
-    	\Magento\Config\Model\Config\Source\Yesno $yesNo,
-    	\Magento\Sales\Model\OrderFactory $orderFactory,
-    	array $data = []
+        \Magento\Config\Model\Config\Source\Yesno $yesNo,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        array $data = []
     ) {
         parent::__construct($context, $data);
-		
+
         $this->_customerGroups = $customerGroups;
         $this->_yesNo = $yesNo;
         $this->_orderFactory = $orderFactory;
@@ -76,11 +76,11 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     public function loadAttributeOptions()
     {
         $attributes = [
-           	'orders_count' => __('Orders count'),
+            'orders_count' => __('Orders count'),
             'customer_is_guest' => __('Customer is guest'),
             'diff_addresses' => __('Billing and shipping addresses are differents'),
-        	'customer_group' => __('Customer Groups')
-        	
+            'customer_group' => __('Customer Groups')
+
         ];
 
         $this->setAttributeOption($attributes);
@@ -95,13 +95,13 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function getInputType()
     {
-    	switch ($this->getAttribute()) {
+        switch ($this->getAttribute()) {
             case 'orders_count':
                 return 'numeric';
-			case 'customer_is_guest': 
-			case 'diff_addresses':
-				return 'boolean';
-			case 'customer_group':
+            case 'customer_is_guest':
+            case 'diff_addresses':
+                return 'boolean';
+            case 'customer_group':
                 return 'multiselect';
         }
         return 'string';
@@ -114,9 +114,9 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function getValueElementType()
     {
-    	switch ($this->getAttribute()) {
-			case 'customer_is_guest': 
-			case 'diff_addresses':
+        switch ($this->getAttribute()) {
+            case 'customer_is_guest':
+            case 'diff_addresses':
                 return 'select';
             case 'customer_group':
                 return 'multiselect';
@@ -132,12 +132,12 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     public function getValueSelectOptions()
     {
         if (!$this->hasData('value_select_options')) {
-        switch ($this->getAttribute()) {
+            switch ($this->getAttribute()) {
                 case 'customer_is_guest':
-				case 'diff_addresses':
+                case 'diff_addresses':
                     $options = $this->_yesNo->toOptionArray();
                     break;
-               case 'customer_group':
+                case 'customer_group':
                     $options = $this->_customerGroups->toOptionArray();
                     break;
                 default:
@@ -156,14 +156,14 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-    	/* @var $quote \Magento\Quote\Model\Quote */
+        /* @var $quote \Magento\Quote\Model\Quote */
         $quote = $model;
         $toValidate = new DataObject();
 
         $customer_id = $quote->getCustomerId();
         $orders_count = $this->_orderFactory->create()->getCollection()
-        							->addAttributeToFilter('customer_id',$customer_id)
-        							->count();
+            ->addAttributeToFilter('customer_id', $customer_id)
+            ->count();
         $toValidate->setOrdersCount($orders_count);
         $toValidate->setCustomerIsGuest(is_null($quote->getCustomerIsGuest()) ? 0 : $quote->getCustomerIsGuest());
         $toValidate->setDiffAddresses($this->_addressesesAreDifferent($quote));
@@ -171,95 +171,95 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
         return parent::validate($toValidate);
     }
-    
+
     /**
      * @param \Magento\Quote\Model\Quote $quote
      * @return boolean $isDifferent
      */
     protected function _addressesesAreDifferent($quote)
     {
-    	$isDifferent = 0;
-    	if($quote->getIsVirtual()){    		
-    		return $isDifferent;
-    	}
-    
-    
-    	$billingAddress = $quote->getBillingAddress();
-    	$shippingAddress = $quote->getShippingAddress();
-    	$methods = array('getStreetFull','getCity','getCountryId','getPostcode','getRegionId');
-    
-    	foreach($methods as $method_name)
-    	{
-    		$billingValue = call_user_func(array($billingAddress, $method_name));
-    		$shippingValue = call_user_func(array($shippingAddress,$method_name));
-    		if($billingValue != $shippingValue)
-    		{
-    			$isDifferent =  1;
-    			break;
-    		}
-    	}
-    
-    	return $isDifferent;
+        $isDifferent = 0;
+        if ($quote->getIsVirtual()) {
+            return $isDifferent;
+        }
+
+
+        $billingAddress = $quote->getBillingAddress();
+        $shippingAddress = $quote->getShippingAddress();
+        $methods = array('getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId');
+
+        foreach ($methods as $method_name) {
+            $billingValue = call_user_func(array($billingAddress, $method_name));
+            $shippingValue = call_user_func(array($shippingAddress, $method_name));
+            if ($billingValue != $shippingValue) {
+                $isDifferent = 1;
+                break;
+            }
+        }
+
+        return $isDifferent;
     }
 
-    
-    public function setMethodCode($methodCode){
-    	$this->methodCode = $methodCode;
-    	$this->setData('method_code',$this->methodCode);
-    	return $this;
+
+    public function setMethodCode($methodCode)
+    {
+        $this->methodCode = $methodCode;
+        $this->setData('method_code', $this->methodCode);
+        return $this;
     }
-    
-    public function setConfigPath($configPath){
-    	$this->elementName = 'rule_' . $configPath;
-    	$this->setData('config_path',$configPath);
-    	return $this;
+
+    public function setConfigPath($configPath)
+    {
+        $this->elementName = 'rule_' . $configPath;
+        $this->setData('config_path', $configPath);
+        return $this;
     }
-    
+
     /**
      * @return AbstractElement
      */
     public function getTypeElement()
     {
-    	return $this->getForm()->addField(
-    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__type',
-    			'hidden',
-    			[
-    					'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
-    					'value' => $this->getType(),
-    					'no_span' => true,
-    					'class' => 'hidden'
-    			]
-    			);
+        return $this->getForm()->addField(
+            $this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__type',
+            'hidden',
+            [
+                'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
+                'value' => $this->getType(),
+                'no_span' => true,
+                'class' => 'hidden'
+            ]
+        );
     }
-    
+
     /**
      * @return $this
      */
     public function getAttributeElement()
     {
-    	if (null === $this->getAttribute()) {
-    		foreach (array_keys($this->getAttributeOption()) as $option) {
-    			$this->setAttribute($option);
-    			break;
-    		}
-    	}
-    	$elt = $this->getForm()->addField(
-    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__attribute',
-    			'select',
-    			[
-    					'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
-    					'values' => $this->getAttributeSelectOptions(),
-    					'value' => $this->getAttribute(),
-    					'value_name' => $this->getAttributeName()
-    			]
-    			)->setRenderer(
-    					$this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
-    					);
-    	$elt->setShowAsText(true);
-    	return $elt;
+        if (null === $this->getAttribute()) {
+            foreach (array_keys($this->getAttributeOption()) as $option) {
+                $this->setAttribute($option);
+                break;
+            }
+        }
+        $elt = $this->getForm()->addField(
+            $this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__attribute',
+            'select',
+            [
+                'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
+                'values' => $this->getAttributeSelectOptions(),
+                'value' => $this->getAttribute(),
+                'value_name' => $this->getAttributeName()
+            ]
+        )->setRenderer(
+            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+        );
+        $elt->setShowAsText(true);
+        return $elt;
     }
-    
-    
+
+
     /**
      * Retrieve Condition Operator element Instance
      * If the operator value is empty - define first available operator value as default
@@ -268,57 +268,57 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function getOperatorElement()
     {
-    	$options = $this->getOperatorSelectOptions();
-    	if ($this->getOperator() === null) {
-    		foreach ($options as $option) {
-    			$this->setOperator($option['value']);
-    			break;
-    		}
-    	}
-    
-    	$elementId = sprintf('%s__%s__operator', $this->getPrefix(), $this->getId() . '_' . $this->getConfigPath());
-    	$elementName = sprintf($this->elementName . '[%s][%s][operator]', $this->getPrefix(), $this->getId());
-    	$element = $this->getForm()->addField(
-    			$elementId,
-    			'select',
-    			[
-    					'name' => $elementName,
-    					'values' => $options,
-    					'value' => $this->getOperator(),
-    					'value_name' => $this->getOperatorName()
-    			]
-    			);
-    	$element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
-    
-    	return $element;
+        $options = $this->getOperatorSelectOptions();
+        if ($this->getOperator() === null) {
+            foreach ($options as $option) {
+                $this->setOperator($option['value']);
+                break;
+            }
+        }
+
+        $elementId = sprintf('%s__%s__operator', $this->getPrefix(), $this->getId() . '_' . $this->getConfigPath());
+        $elementName = sprintf($this->elementName . '[%s][%s][operator]', $this->getPrefix(), $this->getId());
+        $element = $this->getForm()->addField(
+            $elementId,
+            'select',
+            [
+                'name' => $elementName,
+                'values' => $options,
+                'value' => $this->getOperator(),
+                'value_name' => $this->getOperatorName()
+            ]
+        );
+        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+
+        return $element;
     }
-    
+
     /**
      * @return $this
      */
     public function getValueElement()
     {
-    	$elementParams = [
-    			'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][value]',
-    			'value' => $this->getValue(),
-    			'values' => $this->getValueSelectOptions(),
-    			'value_name' => $this->getValueName(),
-    			'after_element_html' => $this->getValueAfterElementHtml(),
-    			'explicit_apply' => $this->getExplicitApply(),
-    	];
-    	if ($this->getInputType() == 'date') {
-    		// date format intentionally hard-coded
-    		$elementParams['input_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-    		$elementParams['date_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
-    	}
-    	return $this->getForm()->addField(
-    			$this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__value',
-    			$this->getValueElementType(),
-    			$elementParams
-    			)->setRenderer(
-    					$this->getValueElementRenderer()
-    					);
+        $elementParams = [
+            'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][value]',
+            'value' => $this->getValue(),
+            'values' => $this->getValueSelectOptions(),
+            'value_name' => $this->getValueName(),
+            'after_element_html' => $this->getValueAfterElementHtml(),
+            'explicit_apply' => $this->getExplicitApply(),
+        ];
+        if ($this->getInputType() == 'date') {
+            // date format intentionally hard-coded
+            $elementParams['input_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+            $elementParams['date_format'] = \Magento\Framework\Stdlib\DateTime::DATE_INTERNAL_FORMAT;
+        }
+        return $this->getForm()->addField(
+            $this->getPrefix() . '__' . $this->getId() . '_' . $this->getConfigPath() . '__value',
+            $this->getValueElementType(),
+            $elementParams
+        )->setRenderer(
+            $this->getValueElementRenderer()
+        );
     }
-    
-    
+
+
 }

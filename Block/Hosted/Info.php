@@ -45,8 +45,7 @@ class Info extends \Magento\Payment\Block\Info
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Payment\Model\Config $paymentConfig,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->_paymentConfig = $paymentConfig;
     }

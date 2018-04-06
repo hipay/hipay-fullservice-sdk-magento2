@@ -16,16 +16,18 @@
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\DeliveryShippingInfoRequest;
+
 /**
  * Delivery info Request Object
- * 
+ *
  * @package HiPay\FullserviceMagento
  * @author Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class DeliveryInfo extends AbstractInfoRequest {
+class DeliveryInfo extends AbstractInfoRequest
+{
     /**
      * @var \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory
      */
@@ -60,10 +62,10 @@ class DeliveryInfo extends AbstractInfoRequest {
         \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         $params = []
-    )
-    {
+    ) {
 
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver, $requestFactory, $urlBuilder,$helper,$params);
+        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver,
+            $requestFactory, $urlBuilder, $helper, $params);
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -76,7 +78,7 @@ class DeliveryInfo extends AbstractInfoRequest {
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
         if ($this->_order->getShippingMethod()) {
             $collection = $this->_mappingShippingCollectionFactory->create()
-                ->addFieldToFilter('magento_shipping_code',$this->_order->getShippingMethod())
+                ->addFieldToFilter('magento_shipping_code', $this->_order->getShippingMethod())
                 ->load();
             if ($collection->getItems()) {
                 $this->_mappingDelivery = $collection->getFirstItem();
@@ -84,27 +86,29 @@ class DeliveryInfo extends AbstractInfoRequest {
         }
     }
 
-	/**
-	 *
-	 * {@inheritDoc}
-	 *
-	 * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
-	 * @return \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo
-	 */
-	protected function mapRequest() {
-		$deliveryInformation = new DeliveryShippingInfoRequest();
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @return \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo
+     */
+    protected function mapRequest()
+    {
+        $deliveryInformation = new DeliveryShippingInfoRequest();
         $deliveryInformation->delivery_date = $this->calculateEstimatedDate();
         $deliveryInformation->delivery_method = $this->getMappingShippingMethod();
-		return $deliveryInformation;
-	}
+        return $deliveryInformation;
+    }
 
     /**
      * According the mapping, provide a approximated date delivery
      *
      * @return date format YYYY-MM-DD
      */
-	function calculateEstimatedDate(){
-        if ($this->_mappingDelivery){
+    function calculateEstimatedDate()
+    {
+        if ($this->_mappingDelivery) {
             $today = new \Datetime();
             $daysDelay = $this->_mappingDelivery->getDelayPreparation() + $this->_mappingDelivery->getDelayDelivery();
             $interval = new \DateInterval ("P{$daysDelay}D");
@@ -118,14 +122,15 @@ class DeliveryInfo extends AbstractInfoRequest {
      *
      * @return null|string
      */
-    function getMappingShippingMethod(){
+    function getMappingShippingMethod()
+    {
         if ($this->_mappingDelivery) {
             $codeMappingShipping = $this->_mappingDelivery->getHipayShippingId();
             $deliveryMethod = $this->_shippingMethodsHipay->getDeliveryMethodByCode($codeMappingShipping);
-            return json_encode(['mode' => $deliveryMethod->getMode(),'shipping' => $deliveryMethod->getShipping()]);
+            return json_encode(['mode' => $deliveryMethod->getMode(), 'shipping' => $deliveryMethod->getShipping()]);
         }
         return null;
     }
 
-	
+
 }

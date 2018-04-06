@@ -51,14 +51,32 @@ class InstallData implements InstallDataInterface
         $statuesToStateData = [];
         $statuses = [
             Config::STATUS_AUTHORIZED => ["label" => __('Authorized'), 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_AUTHORIZED_PENDING => ["label" => __('Authorized and pending'), 'state' => Order::STATE_PAYMENT_REVIEW],
-            Config::STATUS_AUTHORIZATION_REQUESTED => ["label" => __('Authorization requested'), 'state' => Order::STATE_PENDING_PAYMENT],
-            Config::STATUS_CAPTURE_REQUESTED => ["label" => __('Capture requested'), 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_PARTIALLY_CAPTURED => ["label" => __('Partially captured'), 'state' => Order::STATE_PROCESSING],
+            Config::STATUS_AUTHORIZED_PENDING => [
+                "label" => __('Authorized and pending'),
+                'state' => Order::STATE_PAYMENT_REVIEW
+            ],
+            Config::STATUS_AUTHORIZATION_REQUESTED => [
+                "label" => __('Authorization requested'),
+                'state' => Order::STATE_PENDING_PAYMENT
+            ],
+            Config::STATUS_CAPTURE_REQUESTED => [
+                "label" => __('Capture requested'),
+                'state' => Order::STATE_PROCESSING
+            ],
+            Config::STATUS_PARTIALLY_CAPTURED => [
+                "label" => __('Partially captured'),
+                'state' => Order::STATE_PROCESSING
+            ],
             Config::STATUS_REFUND_REQUESTED => ["label" => __('Refund requested'), 'state' => Order::STATE_PROCESSING],
             Config::STATUS_REFUND_REFUSED => ["label" => __('Refund refused'), 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_PARTIALLY_REFUNDED => ["label" => __('Partially refunded'), 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_AUTHENTICATION_REQUESTED => ["label" => __('Authentication requested'), 'state' => Order::STATE_PENDING_PAYMENT],
+            Config::STATUS_PARTIALLY_REFUNDED => [
+                "label" => __('Partially refunded'),
+                'state' => Order::STATE_PROCESSING
+            ],
+            Config::STATUS_AUTHENTICATION_REQUESTED => [
+                "label" => __('Authentication requested'),
+                'state' => Order::STATE_PENDING_PAYMENT
+            ],
             Config::STATUS_EXPIRED => ["label" => __('Authorization Expired'), 'state' => Order::STATE_HOLDED],
         ];
         foreach ($statuses as $code => $info) {
@@ -75,7 +93,8 @@ class InstallData implements InstallDataInterface
             ->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $statuesData);
 
         //Assign new statues to states
-        $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'), ['status', 'state', 'is_default', 'visible_on_front'], $statuesToStateData);
+        $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'),
+            ['status', 'state', 'is_default', 'visible_on_front'], $statuesToStateData);
 
 
         /**

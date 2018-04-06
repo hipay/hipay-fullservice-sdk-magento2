@@ -47,8 +47,13 @@ class CaptureCommandPlugin
      * @param OrderInterface $order
      * @return string
      */
-    public function aroundExecute(\Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject, callable $proceed, OrderPaymentInterface $payment, $amount, OrderInterface $order)
-    {
+    public function aroundExecute(
+        \Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject,
+        callable $proceed,
+        OrderPaymentInterface $payment,
+        $amount,
+        OrderInterface $order
+    ) {
         $message = '';
         if (strpos($payment->getMethod(), 'hipay') !== false) {
 

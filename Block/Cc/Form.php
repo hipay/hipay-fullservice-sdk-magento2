@@ -56,8 +56,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
         \Magento\Payment\Model\Config $paymentConfig,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->configFactory = $configFactory;
 

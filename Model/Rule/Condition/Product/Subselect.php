@@ -138,12 +138,12 @@ class Subselect extends Combine
     public function asHtml()
     {
         $html = $this->getTypeElement()->getHtml() . __(
-            "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:",
-            $this->getAttributeElement()->getHtml(),
-            $this->getOperatorElement()->getHtml(),
-            $this->getValueElement()->getHtml(),
-            $this->getAggregatorElement()->getHtml()
-        );
+                "If %1 %2 %3 for a subselection of items in cart matching %4 of these conditions:",
+                $this->getAttributeElement()->getHtml(),
+                $this->getOperatorElement()->getHtml(),
+                $this->getValueElement()->getHtml(),
+                $this->getAggregatorElement()->getHtml()
+            );
         if ($this->getId() != '1') {
             $html .= $this->getRemoveLinkHtml();
         }

@@ -26,26 +26,27 @@ use Magento\Framework\Controller\ResultFactory;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Index extends \Magento\Backend\App\Action {
-	
-	/**
-	 *
+class Index extends \Magento\Backend\App\Action
+{
+
+    /**
+     *
      *  Cart categories Management Grid
-	 * {@inheritDoc}
-	 * @see \Magento\Framework\App\ActionInterface::execute()
-	 * @return \Magento\Backend\Model\View\Result\Page
-	 */
+     * {@inheritDoc}
+     * @see \Magento\Framework\App\ActionInterface::execute()
+     * @return \Magento\Backend\Model\View\Result\Page
+     */
     public function execute()
     {
-    	$resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-    	$resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories');
-    	$resultPage->addBreadcrumb(__('HiPay'), __('HiPay'));
-    	$resultPage->addBreadcrumb(__('Mapping categories'), __('Mapping categories'));
-    	$resultPage->getConfig()->getTitle()->prepend(__('Mapping Categories'));
+        $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
+        $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories');
+        $resultPage->addBreadcrumb(__('HiPay'), __('HiPay'));
+        $resultPage->addBreadcrumb(__('Mapping categories'), __('Mapping categories'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Mapping Categories'));
 
-    	return $resultPage;
+        return $resultPage;
     }
-    
+
     /**
      * Check the permission to run it
      *
@@ -53,7 +54,7 @@ class Index extends \Magento\Backend\App\Action {
      */
     protected function _isAllowed()
     {
-    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
     }
-	
+
 }

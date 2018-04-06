@@ -114,8 +114,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
@@ -154,7 +153,8 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
             $this->_order = $this->orderF->create()->load($this->getOrderId());
 
             //set custom data before call api
-            $desc = sprintf(__("Order SPLIT #%s by %s"), $this->_order->getIncrementId(), $this->_order->getCustomerEmail());
+            $desc = sprintf(__("Order SPLIT #%s by %s"), $this->_order->getIncrementId(),
+                $this->_order->getCustomerEmail());
             $this->_order->setForcedDescription($desc);
             $this->_order->setForcedAmount($this->getAmountToPay());
             $this->_order->setForcedOrderId($this->_order->getIncrementId() . "-split-" . $this->getId());//added because if the same order_id TPP response "Max Attempts exceed!"

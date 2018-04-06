@@ -88,7 +88,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('cart_categories')->getId()) {
-            return __("Edit Mapping Categories '%1'", $this->escapeHtml($this->_coreRegistry->registry('cart_categories')->getName()));
+            return __("Edit Mapping Categories '%1'",
+                $this->escapeHtml($this->_coreRegistry->registry('cart_categories')->getName()));
         } else {
             return __('New Mapping Categories');
         }

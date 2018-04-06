@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * HiPay fullservice Magento2
  *
@@ -29,63 +29,64 @@ use Magento\Config\Block\System\Config\Form\Field;
  */
 class Rule extends Field
 {
-	
-	/**
-	 * @var \Magento\Framework\ObjectManagerInterface
-	 */
-	protected $_objectManager;
-	
-	
-	/**
-	 * Check if columns are defined, set template
-	 *
-	 */
-	public function __construct(
-			\Magento\Backend\Block\Template\Context $context,
-			\Magento\Framework\ObjectManagerInterface $objectManager,
-			array $data = [])
-	{
-		
-		$this->_objectManager = $objectManager;
-		
-		parent::__construct($context, $data);
-		
-		if (!$this->getTemplate()) {
-			$this->setTemplate('HiPay_FullserviceMagento::system/config/form/field/rules.phtml');
-		}
-	}
-	
-	public function getNewChildUrl(){
-		return $this->getUrl('hipay_rule/rule/newConditionHtml/form/rule_conditions_fieldset');
-	}
-	
-	/**
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $_objectManager;
+
+
+    /**
+     * Check if columns are defined, set template
+     *
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\ObjectManagerInterface $objectManager,
+        array $data = []
+    ) {
+
+        $this->_objectManager = $objectManager;
+
+        parent::__construct($context, $data);
+
+        if (!$this->getTemplate()) {
+            $this->setTemplate('HiPay_FullserviceMagento::system/config/form/field/rules.phtml');
+        }
+    }
+
+    public function getNewChildUrl()
+    {
+        return $this->getUrl('hipay_rule/rule/newConditionHtml/form/rule_conditions_fieldset');
+    }
+
+    /**
      * Retrieve element HTML markup
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
-	{
-		$rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
-       
-		$field = $element->getFieldConfig()['id'];
-		list(,$methodCode) = explode('/',$element->getFieldConfig()['path']);
-		$configPath = 'payment/' . $methodCode . '/' . $field;
-		
-        $rule->setMethodCode($methodCode);                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                              
-        if($element->getValue()){                                                                                                                                                                                                                     
-        	$rule->load($element->getValue());                                                                                                                                                                                                    
-        }                                                                                                                                                                                                                                             
-                                                                                                                                                                                                                                                              
-        if($rule->getConfigPath() == ""){                                                                                                                                                                                                             
-            $rule->setConfigPath($configPath);                                                                                                                                                                                              
-        }                                                                                                                                                                                                                                             
-                                                                                                                                                                                                                                                              
-        $element->setRule($rule);                                                                                                                                                                                                                     
-		$this->setElement($element);                                                                                                                                                                                                                                  
-        
-		return $this->_toHtml();   
-	}
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    {
+        $rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+
+        $field = $element->getFieldConfig()['id'];
+        list(, $methodCode) = explode('/', $element->getFieldConfig()['path']);
+        $configPath = 'payment/' . $methodCode . '/' . $field;
+
+        $rule->setMethodCode($methodCode);
+
+        if ($element->getValue()) {
+            $rule->load($element->getValue());
+        }
+
+        if ($rule->getConfigPath() == "") {
+            $rule->setConfigPath($configPath);
+        }
+
+        $element->setRule($rule);
+        $this->setElement($element);
+
+        return $this->_toHtml();
+    }
 }

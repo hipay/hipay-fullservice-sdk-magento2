@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * HiPay fullservice Magento2
  *
@@ -29,27 +29,28 @@ use Magento\Config\Block\System\Config\Form\Field;
  */
 class ListDisabled extends Field
 {
-	/**
-	 * Set element Disabled
-	 * 
-	 * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-	 * @return string
-	 */
-	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element) {
-		$element->setDisabled('disabled');
-		return parent::_getElementHtml($element);
-	}
+    /**
+     * Set element Disabled
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     */
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    {
+        $element->setDisabled('disabled');
+        return parent::_getElementHtml($element);
+    }
 
-	/**
-	 * Unset some non-related element parameters
-	 *
-	 * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
-	 * @return string
-	 */
-	public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
-	{
-		$element->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
-		return parent::render($element);
-	}
+    /**
+     * Unset some non-related element parameters
+     *
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @return string
+     */
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    {
+        $element->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+        return parent::render($element);
+    }
 
 }

@@ -40,8 +40,7 @@ class Logger extends LoggerMagento
     public function __construct(
         LoggerInterface $logger,
         \Magento\Payment\Gateway\ConfigInterface $config = null
-    )
-    {
+    ) {
         parent::__construct($logger, $config);
     }
 

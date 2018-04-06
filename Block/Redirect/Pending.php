@@ -33,8 +33,7 @@ class Pending extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
         $this->_checkoutSession = $checkoutSession;
 

@@ -55,11 +55,12 @@ class Save extends \Magento\Backend\App\Action
             if ($id) {
                 $model->load($id);
             } else {
-                $model->load($data['category_magento_id'],'category_magento_id');
+                $model->load($data['category_magento_id'], 'category_magento_id');
                 if ($model->getId()) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+                    return $resultRedirect->setPath('*/*/edit',
+                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
                 }
             }
 

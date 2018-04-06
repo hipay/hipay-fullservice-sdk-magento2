@@ -32,36 +32,35 @@ class MappingShipping extends \Magento\Framework\Model\AbstractModel
 {
 
 
-	/**
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory
-	 */
-	protected $typeFactory;
+    /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory
+     */
+    protected $typeFactory;
 
-	/**
-	 * Constructor
-	 *
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-	 * @param array $data
-	 */
-	public function __construct(
-			\Magento\Framework\Model\Context $context,
-			\Magento\Framework\Registry $registry,
-			\HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory,
-			\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-			\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-			array $data = []
-			)
-	{
-			parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-			$this->typeFactory = $typeFactory;
-	}
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->typeFactory = $typeFactory;
+    }
 
 
-  /**
+    /**
      * Init resource model and id field
      */
     protected function _construct()
@@ -70,7 +69,6 @@ class MappingShipping extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping');
         $this->setIdFieldName('mapping_shipping_id');
     }
-
 
 
 }

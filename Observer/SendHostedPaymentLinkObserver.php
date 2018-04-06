@@ -45,8 +45,7 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
      */
     public function __construct(
         \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
-    )
-    {
+    ) {
         $this->paymenLinkSender = $paymenLinkSender;
     }
 

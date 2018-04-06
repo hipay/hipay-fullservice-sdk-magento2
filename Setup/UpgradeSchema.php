@@ -237,7 +237,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'payment_type',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     60,
-                    ['nullable' => false, 'default' => \HiPay\FullserviceMagento\Model\SplitPayment::SPLIT_PAYMENT_STATUS_PENDING],
+                    [
+                        'nullable' => false,
+                        'default' => \HiPay\FullserviceMagento\Model\SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
+                    ],
                     'Type of payment'
                 );
 

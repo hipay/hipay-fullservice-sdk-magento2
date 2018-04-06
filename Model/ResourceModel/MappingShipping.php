@@ -27,17 +27,17 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel;
  */
 class MappingShipping extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-	
-	/**
-	 * Initialize main table and table id field
-	 *
-	 * @return void
-	 * @codeCoverageIgnore
-	 */
-	protected function _construct()
-	{
-		$this->_init('hipay_cart_mapping_shipping', 'mapping_shipping_id');
-	}
-	
-  
+
+    /**
+     * Initialize main table and table id field
+     *
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function _construct()
+    {
+        $this->_init('hipay_cart_mapping_shipping', 'mapping_shipping_id');
+    }
+
+
 }

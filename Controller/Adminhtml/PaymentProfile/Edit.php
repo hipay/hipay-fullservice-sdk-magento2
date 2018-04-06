@@ -65,10 +65,10 @@ class Edit extends \Magento\Backend\App\Action
         // load layout, set active menu and breadcrumbs
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        
+
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_payment_profile')
-           ->addBreadcrumb(__('HiPay'), __('HiPay'))
-           ->addBreadcrumb(__('Payment Profiles'), __('Payment Profiles'));
+            ->addBreadcrumb(__('HiPay'), __('HiPay'))
+            ->addBreadcrumb(__('Payment Profiles'), __('Payment Profiles'));
 
         return $resultPage;
     }

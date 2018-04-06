@@ -89,8 +89,7 @@ class CcConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
         Source $assetSource
-    )
-    {
+    ) {
         $this->method = $paymentHelper->getMethodInstance($this->methodCode);
         $this->urlBuilder = $urlBuilder;
         $this->_cctypeSource = $cctypeSource;

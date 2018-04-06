@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Controller\Hosted;
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
-{	
+{
 
 
     /**
@@ -37,27 +37,27 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-    	ini_set('display_errors', 1);
-    	error_reporting(E_ALL | E_STRICT);
-    	
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL | E_STRICT);
+
         try {
-        	
-        	
-           //Retieve last order increment id
-           $order = $this->_getCheckoutSession()->getLastRealOrder();
-			
-           if(!$order->getId()){
-            	throw new \Magento\Framework\Exception\LocalizedException(
-            			__('We can\'t place the order.')
-            			);
+
+
+            //Retieve last order increment id
+            $order = $this->_getCheckoutSession()->getLastRealOrder();
+
+            if (!$order->getId()) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('We can\'t place the order.')
+                );
             }
-           
+
             //Create gateway manage with order data
             $gateway = $this->_gatewayManagerFactory->create($order);
-        	
+
             //Call fullservice api to get hosted page url
             $hppModel = $gateway->requestHostedPaymentPage();
-			
+
             //Redirect to hosted page
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
@@ -70,17 +70,16 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             );
 
         } catch (\Exception $e) {
-        	$this->logger->addDebug($e->getMessage());
-        	$this->messageManager->addErrorMessage($e->getMessage());
+            $this->logger->addDebug($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('We can\'t place the order.')
             );
-          
+
         }
         $this->_redirect('checkout/cart');
     }
 
 
- 
 }

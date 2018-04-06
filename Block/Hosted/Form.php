@@ -41,8 +41,7 @@ class Form extends \Magento\Payment\Block\Form
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $data);
     }
 

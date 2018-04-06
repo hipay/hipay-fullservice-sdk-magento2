@@ -54,7 +54,7 @@ class Edit extends \Magento\Backend\App\Action
         $this->_coreRegistry = $registry;
         parent::__construct($context);
     }
-    
+
     /**
      * Check the permission to run it
      *
@@ -62,7 +62,7 @@ class Edit extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
     }
 
     /**
@@ -75,10 +75,10 @@ class Edit extends \Magento\Backend\App\Action
         // load layout, set active menu and breadcrumbs
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        
+
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_split_payment')
-           ->addBreadcrumb(__('HiPay'), __('HiPay'))
-           ->addBreadcrumb(__('Split Payments'), __('Split Payments'));
+            ->addBreadcrumb(__('HiPay'), __('HiPay'))
+            ->addBreadcrumb(__('Split Payments'), __('Split Payments'));
 
         return $resultPage;
     }
@@ -95,16 +95,16 @@ class Edit extends \Magento\Backend\App\Action
         $id = $this->getRequest()->getParam('split_payment_id');
         $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
 
-        if(!$id){
-        	
-        	$this->messageManager->addError(__("You can't create a split payment."));
-        	
-        	/** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        	$resultRedirect = $this->resultRedirectFactory->create();
-        	
-        	return $resultRedirect->setPath('*/*/');
+        if (!$id) {
+
+            $this->messageManager->addError(__("You can't create a split payment."));
+
+            /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+
+            return $resultRedirect->setPath('*/*/');
         }
-        
+
         // 2. Initial checking
         if ($id) {
             $model->load($id);

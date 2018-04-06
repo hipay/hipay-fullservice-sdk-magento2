@@ -27,7 +27,7 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 class ThreeDs implements \Magento\Framework\Option\ArrayInterface
 {
 
-/**
+    /**
      * Options getter
      *
      * @return array
@@ -35,13 +35,13 @@ class ThreeDs implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            array('value' => 0, 'label'=>__('Disabled')),
-            array('value' => 1, 'label'=>__('Try to enable for all transactions.')),
-            array('value' => 2, 'label'=>__('Try to enable for configured 3ds rules')),
-        	array('value' => 3, 'label'=>__('Force for configured 3ds rules')),
-        	array('value' => 4, 'label'=>__('Force for all transactions.')),
-            
+            array('value' => 0, 'label' => __('Disabled')),
+            array('value' => 1, 'label' => __('Try to enable for all transactions.')),
+            array('value' => 2, 'label' => __('Try to enable for configured 3ds rules')),
+            array('value' => 3, 'label' => __('Force for configured 3ds rules')),
+            array('value' => 4, 'label' => __('Force for all transactions.')),
+
         );
     }
-	
+
 }

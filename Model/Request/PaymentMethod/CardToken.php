@@ -27,21 +27,24 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class CardToken extends AbstractPaymentMethod{
+class CardToken extends AbstractPaymentMethod
+{
 
 
-	protected function mapRequest() {
-		
-		//Token can be empty
-		$cardtoken = $this->_order->getForcedCardToken() ?: $this->_order->getPayment()->getAdditionalInformation('card_token');
-		$eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
-		$authentication_indicator = $this->_order->getForcedAuthenticationIndicator() ?: $this->_helper->is3dSecure($this->_config->getValue('authentication_indicator'), $this->_config->getValue('config_3ds_rules'),$this->getQuote());
-		
-		$cardTokenPaymentMethod = new CardTokenPaymentMethod();
-		$cardTokenPaymentMethod->authentication_indicator = $authentication_indicator;
-		$cardTokenPaymentMethod->cardtoken = $cardtoken;
-		$cardTokenPaymentMethod->eci = $eci ?: ECI::SECURE_ECOMMERCE;
-		
-		return $cardTokenPaymentMethod;
-	}
+    protected function mapRequest()
+    {
+
+        //Token can be empty
+        $cardtoken = $this->_order->getForcedCardToken() ?: $this->_order->getPayment()->getAdditionalInformation('card_token');
+        $eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
+        $authentication_indicator = $this->_order->getForcedAuthenticationIndicator() ?: $this->_helper->is3dSecure($this->_config->getValue('authentication_indicator'),
+            $this->_config->getValue('config_3ds_rules'), $this->getQuote());
+
+        $cardTokenPaymentMethod = new CardTokenPaymentMethod();
+        $cardTokenPaymentMethod->authentication_indicator = $authentication_indicator;
+        $cardTokenPaymentMethod->cardtoken = $cardtoken;
+        $cardTokenPaymentMethod->eci = $eci ?: ECI::SECURE_ECOMMERCE;
+
+        return $cardTokenPaymentMethod;
+    }
 }
