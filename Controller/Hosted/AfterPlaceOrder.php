@@ -28,7 +28,6 @@ namespace HiPay\FullserviceMagento\Controller\Hosted;
 class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
 
-
     /**
      * Submit the order
      *
@@ -37,11 +36,8 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL | E_STRICT);
 
         try {
-
 
             //Retieve last order increment id
             $order = $this->_getCheckoutSession()->getLastRealOrder();
@@ -61,14 +57,11 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             //Redirect to hosted page
             $this->getResponse()->setRedirect($hppModel->getForwardUrl());
             return;
-
-
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 $e->getMessage()
             );
-
         } catch (\Exception $e) {
             $this->logger->addDebug($e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -76,10 +69,7 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $e,
                 __('We can\'t place the order.')
             );
-
         }
         $this->_redirect('checkout/cart');
     }
-
-
 }

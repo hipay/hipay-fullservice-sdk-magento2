@@ -31,7 +31,6 @@ namespace HiPay\FullserviceMagento\Model;
 class MappingShipping extends \Magento\Framework\Model\AbstractModel
 {
 
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory
@@ -59,7 +58,6 @@ class MappingShipping extends \Magento\Framework\Model\AbstractModel
         $this->typeFactory = $typeFactory;
     }
 
-
     /**
      * Init resource model and id field
      */
@@ -69,6 +67,4 @@ class MappingShipping extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping');
         $this->setIdFieldName('mapping_shipping_id');
     }
-
-
 }

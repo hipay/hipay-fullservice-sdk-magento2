@@ -35,7 +35,6 @@ class Rule extends Field
      */
     protected $_objectManager;
 
-
     /**
      * Check if columns are defined, set template
      *

@@ -188,8 +188,6 @@ abstract class FullserviceMethod extends AbstractMethod
             }
         }
 
-        //$this->getInfoInstance()->addData($data->getData());
-
         $this->_assignAdditionalInformation($additionalData);
 
         return $this;
@@ -199,7 +197,7 @@ abstract class FullserviceMethod extends AbstractMethod
     {
         $info = $this->getInfoInstance();
         foreach ($this->getAddtionalInformationKeys() as $key) {
-            if (!is_null($data->getData($key))) {
+            if ($data->getData($key) !== null) {
                 $info->setAdditionalInformation($key, $data->getData($key));
             }
         }
@@ -240,9 +238,8 @@ abstract class FullserviceMethod extends AbstractMethod
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if ((int)$currentOrder->getPayment()->getAdditionalInformation(
-                    'last_status'
-                ) !== TransactionStatus::AUTHORIZED_AND_PENDING
+            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+                !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;
             }
@@ -307,7 +304,6 @@ abstract class FullserviceMethod extends AbstractMethod
             throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
         }
 
-
         return $this;
     }
 
@@ -322,8 +318,6 @@ abstract class FullserviceMethod extends AbstractMethod
 
         // As we already have a transaction reference, we can request a capture operation.
         $this->getGatewayManager($payment->getOrder())->requestOperationCapture($amount);
-        //wait for notification to set correct data to order
-        //$this->sleep();
     }
 
     /**
@@ -430,14 +424,11 @@ abstract class FullserviceMethod extends AbstractMethod
          * Fix for: TPPMAG2-64
          * Save creditmemo with a new state
          * Creditmemo repository object is not used because we want to save only the state
-         * If we call Creditmemo repository save method, it's do a recall of process relation and potentially cause an infinite loop
+         * If we call Creditmemo repository save method, it's do a recall of process relation
+         * and potentially cause an infinite loop
          * @see https://github.com/magento/magento2/blob/2.1/app/code/Magento/Sales/Model/ResourceModel/Order/Creditmemo/Relation/Refund.php#L53
          */
         $payment->getCreditmemo()->save();
-
-
-        //wait for notification to set correct data to order
-        //$this->sleep();
 
         return $this;
     }
@@ -539,8 +530,6 @@ abstract class FullserviceMethod extends AbstractMethod
         parent::acceptPayment($payment);
         $this->getGatewayManager($payment->getOrder())->requestOperationAcceptChallenge();
         $this->fraudAcceptSender->send($payment->getOrder());
-        //wait for notification to set correct data to order
-        //$this->sleep();
         return true;
     }
 
@@ -558,8 +547,6 @@ abstract class FullserviceMethod extends AbstractMethod
         parent::denyPayment($payment);
         $this->getGatewayManager($payment->getOrder())->requestOperationDenyChallenge();
         $this->fraudDenySender->send($payment->getOrder());
-        //wait for notification to set correct data to order
-        //$this->sleep();
         return true;
     }
 
@@ -629,6 +616,5 @@ abstract class FullserviceMethod extends AbstractMethod
         $isDifferentCurrency = $transacCurrency && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode();
         $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode();
         return $isDifferentCurrency;
-
     }
 }

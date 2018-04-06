@@ -66,6 +66,4 @@ class Sortable extends \Magento\Framework\App\Config\Value
         }
         return parent::_afterload();
     }
-
-
 }

@@ -40,7 +40,5 @@ class Exception extends Fullservice
     {
         $this->_checkoutSession->setErrorMessage(__('An error was occured.'));
         $this->_redirect('checkout/cart');
-
     }
-
 }

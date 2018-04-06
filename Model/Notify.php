@@ -171,7 +171,6 @@ class Notify
         $this->transactionRepository = $transactionRepository;
 
         if (isset($params['response']) && is_array($params['response'])) {
-
             $incrementId = $params['response']['order']['id'];
             if (strpos($incrementId, '-split-') !== false) {
                 list($realIncrementId, , $splitPaymentId) = explode("-", $incrementId);
@@ -182,7 +181,6 @@ class Notify
                 if (!$this->splitPayment->getId()) {
                     throw new \Exception(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId));
                 }
-
             }
 
             $this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
@@ -202,13 +200,10 @@ class Notify
 
             //Debug transaction notification if debug enabled
             $this->_methodInstance->debugData($this->_transaction->toArray());
-
         } else {
             throw new \Exception('Posted data response as array is required.');
         }
-
     }
-
 
     public function processSplitPayment()
     {
@@ -224,26 +219,13 @@ class Notify
         return $this;
     }
 
-
     protected function canProcessTransaction()
     {
 
-        /**
-         * @TODO remove this condition below
-         * Because the behavior not allowed process an action already received
-         * But for capture partial and refund partial it's problematic!
-         */
-        //Test if status is already processed
-        /*$savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
-        if(is_array($savedStatues) && isset($savedStatues[$this->_transaction->getStatus()]))
-        {
-            return false;
-        }*/
         $canProcess = false;
 
         switch ($this->_transaction->getStatus()) {
             case TransactionStatus::EXPIRED: //114
-
                 if (in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZED))) {
                     $canProcess = true;
                 }
@@ -259,7 +241,8 @@ class Notify
                 }
                 break;
             case TransactionStatus::CAPTURE_REQUESTED: //117
-                if (!$this->_order->hasInvoices() || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal()
+                if (!$this->_order->hasInvoices()
+                    || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal()
                 ) {
                     $canProcess = true;
                 }
@@ -270,9 +253,7 @@ class Notify
         }
 
         return $canProcess;
-
     }
-
 
     public function processTransaction()
     {
@@ -281,11 +262,9 @@ class Notify
             return $this;
         }
 
-
         if (!$this->canProcessTransaction()) {
             return $this;
         }
-
 
         /**
          * Begin transaction to lock this order record during update
@@ -301,7 +280,6 @@ class Notify
 
         //Execute for update query
         $this->orderResource->getConnection()->fetchOne($selectForupdate);
-
 
         //Write about notification in order history
         $this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
@@ -554,9 +532,7 @@ class Notify
                 $card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
                 $card->setName(sprintf(__('Card %s - %s'), $paymentMethod->getBrand(), $paymentMethod->getPan()));
 
-
                 try {
-
                     return $card->save();
                 } catch (\Exception $e) {
                     $this->_generateComment(__("Card not registered! Due to: %s", $e->getMessage()), true);
@@ -579,7 +555,7 @@ class Notify
     protected function _setFraudDetected()
     {
 
-        if (!is_null($fraudSreening = $this->_transaction->getFraudScreening())) {
+        if (($fraudSreening = $this->_transaction->getFraudScreening()) !== null) {
             if ($fraudSreening->getResult()) {
                 $payment = $this->_order->getPayment();
                 $payment->setIsFraudDetected(true);
@@ -588,7 +564,8 @@ class Notify
                 $payment->setAdditionalInformation('fraud_score', $fraudSreening->getScoring());
                 $payment->setAdditionalInformation('fraud_review', $fraudSreening->getReview());
 
-                $isDeny = ($fraudSreening->getResult() != 'challenged' || $this->_transaction->getState() == TransactionState::DECLINED);
+                $isDeny = ($fraudSreening->getResult() != 'challenged'
+                    || $this->_transaction->getState() == TransactionState::DECLINED);
 
                 if (!$isDeny) {
                     $this->fraudReviewSender->send($this->_order);
@@ -647,7 +624,6 @@ class Notify
 
             $status = $this->_order->getStatus();
             if ($remain_amount > 0) {
-
                 $status = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
             }
 
@@ -660,7 +636,6 @@ class Notify
                 } else {
                     $creditmemoTotal = round($creditmemo->getBaseGrandTotal(), 2);
                 }
-
 
                 if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $creditmemoTotal == $current_amount_refund
@@ -685,7 +660,6 @@ class Notify
                     $this->_transactionDB->save();
 
                     break;
-
                 }
             }
         } elseif ($this->_order->canCreditmemo()) {
@@ -719,9 +693,7 @@ class Notify
                     ->setIsCustomerNotified(true)
                     ->save();
             }
-
         }
-
     }
 
     /**
@@ -789,7 +761,6 @@ class Notify
      */
     protected function _doTransactionDenied()
     {
-
         $this->_order->getPayment()
             ->setTransactionId($this->_transaction->getTransactionReference() . "-denied")
             ->setCcTransId($this->_transaction->getTransactionReference())
@@ -828,7 +799,6 @@ class Notify
      */
     protected function _doTransactionAuthorization()
     {
-
         /** @var $payment \Magento\Sales\Model\Order\Payment */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
@@ -843,6 +813,7 @@ class Notify
         if (($this->isFirstSplitPayment || $this->isSplitPayment) && $payment->getIsFraudDetected()) {
             $payment->setIsFraudDetected(false);
         }
+
         if (!$this->_order->getEmailSent()) {
             $this->orderSender->send($this->_order);
         }
@@ -881,26 +852,13 @@ class Notify
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $parentTransactionId = $payment->getLastTransId();
 
-        $payment->setTransactionId(
-            $this->generateTransactionId("capture")
-        );
+        $payment->setTransactionId($this->generateTransactionId("capture"));
         $payment->setCcTransId($this->_transaction->getTransactionReference());
-        $payment->setCurrencyCode(
-            $this->_transaction->getCurrency()
-        );
-        $payment->setPreparedMessage(
-            $this->_generateComment('')
-        );
-        $payment->setParentTransactionId(
-            $parentTransactionId
-        );
-        $payment->setShouldCloseParentTransaction(
-            true
-        );
-        $payment->setIsTransactionClosed(
-            0
-        );
-
+        $payment->setCurrencyCode($this->_transaction->getCurrency());
+        $payment->setPreparedMessage($this->_generateComment(''));
+        $payment->setParentTransactionId($parentTransactionId);
+        $payment->setShouldCloseParentTransaction(true);
+        $payment->setIsTransactionClosed(0);
 
         $orderStatus = $payment->getMethodInstance()->getConfigData('order_status_payment_accepted');
 
@@ -917,7 +875,6 @@ class Notify
 
         // notify customer
         $invoice = $payment->getCreatedInvoice();
-
         $invoiceFromDB = null;
 
         if (!$invoice) {
@@ -945,12 +902,9 @@ class Notify
             $this->orderSender->send($this->_order);
             $this->_order->addStatusHistoryComment(
                 __('You notified customer about invoice #%1.', $invoice->getIncrementId())
-            )->setIsCustomerNotified(
-                true
-            )->save();
+            )->setIsCustomerNotified(true)
+                ->save();
         }
-
-
     }
 
     /**
@@ -984,10 +938,12 @@ class Notify
         if ($comment) {
             $message .= ' ' . $comment;
         }
+
         if ($addToHistory) {
             $message = $this->_order->addStatusHistoryComment($message);
             $message->setIsCustomerNotified(null);
         }
+
         return $message;
     }
 
@@ -1003,9 +959,7 @@ class Notify
         $baseOrderRefund = $this->priceCurrency->round(
             $order->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
         );
-        $orderRefund = $this->priceCurrency->round(
-            $order->getTotalRefunded() + $creditmemo->getGrandTotal()
-        );
+        $orderRefund = $this->priceCurrency->round($order->getTotalRefunded() + $creditmemo->getGrandTotal());
         $order->setBaseTotalRefunded($baseOrderRefund);
         $order->setTotalRefunded($orderRefund);
 
@@ -1113,5 +1067,4 @@ class Notify
         }
         return false;
     }
-
 }

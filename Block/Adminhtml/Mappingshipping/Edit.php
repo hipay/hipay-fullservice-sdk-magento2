@@ -60,7 +60,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-
         $this->buttonList->update('save', 'label', __('Save Mapping Shipping'));
         $this->buttonList->add(
             'saveandcontinue',
@@ -77,7 +76,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         );
 
         $this->buttonList->update('delete', 'label', __('Delete Mapping Shipping'));
-
     }
 
     /**
@@ -88,8 +86,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('cart_mapping_shipping')->getId()) {
-            return __("Edit Mapping Shipping '%1'",
-                $this->escapeHtml($this->_coreRegistry->registry('cart_mapping_shipping')->getName()));
+            return __(
+                "Edit Mapping Shipping '%1'",
+                $this->escapeHtml($this->_coreRegistry->registry('cart_mapping_shipping')->getName())
+            );
         } else {
             return __('New Mapping Shipping');
         }

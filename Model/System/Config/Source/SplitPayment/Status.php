@@ -30,7 +30,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
 class Status implements OptionSourceInterface
 {
 
-
     /**
      * Get options
      *

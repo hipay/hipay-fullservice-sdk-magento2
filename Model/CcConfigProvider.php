@@ -34,7 +34,6 @@ use Magento\Framework\View\Asset\Source;
 class CcConfigProvider implements ConfigProviderInterface
 {
 
-
     /**
      * @var string
      */
@@ -49,7 +48,6 @@ class CcConfigProvider implements ConfigProviderInterface
      * @var CcConfig
      */
     protected $ccConfig;
-
 
     /**
      * Url Builder
@@ -97,7 +95,6 @@ class CcConfigProvider implements ConfigProviderInterface
         $this->assetSource = $assetSource;
 
         $this->_hipayConfig = $configFactory->create(['params' => ['methodCode' => $this->methodCode]]);
-
     }
 
     /**
@@ -116,13 +113,11 @@ class CcConfigProvider implements ConfigProviderInterface
                 ],
             ],
         ] : [];
-
     }
 
     /**
      * Retrieve availables credit card types and preserve saved order
      *
-     * @param string $methodCode
      * @return array
      */
     protected function getCcAvailableTypesOrdered()
@@ -153,7 +148,9 @@ class CcConfigProvider implements ConfigProviderInterface
         $types = $this->getCcAvailableTypesOrdered();
         foreach (array_keys($types) as $code) {
             if (!array_key_exists($code, $icons)) {
-                $asset = $this->ccConfig->createAsset('HiPay_FullserviceMagento::images/cc/' . strtolower($code) . '.png');
+                $asset = $this->ccConfig->createAsset(
+                    'HiPay_FullserviceMagento::images/cc/' . strtolower($code) . '.png'
+                );
                 $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
                 if ($placeholder) {
                     list($width, $height) = getimagesize($asset->getSourceFile());
@@ -167,5 +164,4 @@ class CcConfigProvider implements ConfigProviderInterface
         }
         return $icons;
     }
-
 }

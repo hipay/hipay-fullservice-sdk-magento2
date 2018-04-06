@@ -126,7 +126,6 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
             $this->_collection
                 ->filterByCustomerId($customerId)
                 ->onlyValid();
-
         }
         return $this->_collection;
     }

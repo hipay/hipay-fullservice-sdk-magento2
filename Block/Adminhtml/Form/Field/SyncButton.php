@@ -73,9 +73,10 @@ class SyncButton extends Field
             [
                 'id' => 'hashing_algorithm_button',
                 'label' => __('Synchronize Hashing algorithm'),
-                'onclick' => 'deleteConfirm(\'' . __(
-                        'Are you sure you want to sync the hashing configuration for notifications ?'
-                    ) . '\',\'' . $this->getButtonAction() . '\')',
+                'onclick' =>
+                    'deleteConfirm(\''
+                    . __('Are you sure you want to sync the hashing configuration for notifications ?')
+                    . '\',\'' . $this->getButtonAction() . '\')',
             ]
         );
 

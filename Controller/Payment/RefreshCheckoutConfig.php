@@ -31,7 +31,6 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
 class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
 
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Method\SplitConfigProvider $splitConfigProvider
@@ -49,11 +48,17 @@ class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullser
         \HiPay\FullserviceMagento\Model\Method\SplitConfigProvider $splitConfigProvider
     ) {
 
-        parent::__construct($context, $customerSession, $checkoutSession, $hipaySession, $logger,
-            $gatewayManagerFactory, $vaultManagerFactory);
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $hipaySession,
+            $logger,
+            $gatewayManagerFactory,
+            $vaultManagerFactory
+        );
 
         $this->splitConfigProvider = $splitConfigProvider;
-
     }
 
     /**
@@ -65,17 +70,13 @@ class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullser
     public function execute()
     {
         try {
-
             $this->getResponse()->representJson(\Zend_Json::encode($this->splitConfigProvider->getConfig()));
-
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
             $this->getResponse()->representJson(json_encode(array(
                 "code" => $e->getCode(),
                 "message" => $e->getMessage()
             )));
             $this->getResponse()->setStatusHeader(400, '1.1');
-
         } catch (\Exception $e) {
             $this->getResponse()->representJson(json_encode(array(
                 "code" => $e->getCode(),
@@ -83,11 +84,6 @@ class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullser
             )));
             $this->getResponse()->setStatusHeader(400, '1.1');
             $this->logger->addDebug($e->getMessage());
-
-
         }
-
     }
-
-
 }

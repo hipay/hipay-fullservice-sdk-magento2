@@ -39,7 +39,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $shippingMethodsHipay;
 
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -58,7 +57,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_shippingMethodsMagento = $shippingMethodsMagento;
         $this->_shippingMethodsHipay = $shippingMethodsHipay;
     }
-
 
     /**
      * Prepare form
@@ -100,7 +98,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $config
         );
 
-
         $options = $this->_shippingMethodsHipay->toOptionArray();
         $fieldset->addField(
             'hipay_shipping_id',
@@ -138,17 +135,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($model != null) {
             if ($model->getMappingShippingId() !== null) {
-                $form->addField('mapping_shipping_id', 'hidden',
-                    ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]);
+                $form->addField(
+                    'mapping_shipping_id',
+                    'hidden',
+                    ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]
+                );
             }
             $form->setValues($model->getData());
         }
-
 
         $form->setUseContainer(true);
         $this->setForm($form);
 
         return parent::_prepareForm();
     }
-
 }

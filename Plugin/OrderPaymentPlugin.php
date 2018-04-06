@@ -54,18 +54,7 @@ class OrderPaymentPlugin
             $method = $subject->getMethodInstance();
             $method->setStore($subject->getOrder()->getStoreId());
             if ($method->acceptPayment($subject)) {
-
                 //Do nothing let notification to change status order
-
-                //Set Authorization requested, if order status still un payment review
-                /*if($subject->getOrder()->getState() == Order::STATE_PAYMENT_REVIEW) {
-                    $message = __('Authorization was requested.');
-                    $subject->getOrder()
-                        ->setState(Order::STATE_PROCESSING)
-                    ->addStatusHistoryComment($message);
-                    
-                }*/
-
             } else {
                 $message = $subject->_appendTransactionToMessage(
                     $transactionId,
@@ -93,22 +82,15 @@ class OrderPaymentPlugin
     {
 
         if ($this->isHipayMethod($subject->getMethod())) {
-            //$transactionId = $isOnline ? $subject->getLastTransId() : $subject->getTransactionId();
-
             if ($isOnline) {
                 /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
 
                 $method = $subject->getMethodInstance();
                 $method->setStore($subject->getOrder()->getStoreId());
                 $method->denyPayment($subject);
-
             } else {
                 $proceed($isOnline);
             }
-
-
-            // @var \Magento\Payment\Model\Method\AbstractMethod $method //
-
         } else {
             $proceed($isOnline);
         }
@@ -123,12 +105,10 @@ class OrderPaymentPlugin
      */
     protected function isHipayMethod($method)
     {
-
         if (strpos($method, 'hipay') !== false) {
             return true;
         }
 
         return false;
     }
-
 }

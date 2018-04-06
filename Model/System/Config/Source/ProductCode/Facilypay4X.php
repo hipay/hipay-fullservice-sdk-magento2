@@ -30,7 +30,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
 class Facilypay4X implements OptionSourceInterface
 {
 
-
     /**
      * Get options
      *

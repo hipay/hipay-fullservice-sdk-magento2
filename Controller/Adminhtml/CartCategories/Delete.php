@@ -27,7 +27,6 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 class Delete extends \Magento\Backend\App\Action
 {
 
-
     /**
      * Delete action
      *

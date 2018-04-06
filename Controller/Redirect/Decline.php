@@ -43,7 +43,6 @@ class Decline extends Fullservice
             /** @var $order  \Magento\Sales\Model\Order */
             $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
-
                 /* @var $cart \Magento\Checkout\Model\Cart */
                 $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
                 $items = $order->getItemsCollection();
@@ -56,11 +55,11 @@ class Decline extends Fullservice
                         } else {
                             $this->messageManager->addError($e->getMessage());
                         }
-
                     } catch (\Exception $e) {
-                        $this->messageManager->addException($e,
-                            __('We can\'t add this item to your shopping cart right now.'));
-
+                        $this->messageManager->addException(
+                            $e,
+                            __('We can\'t add this item to your shopping cart right now.')
+                        );
                     }
                 }
 
@@ -76,7 +75,5 @@ class Decline extends Fullservice
 
         $this->_checkoutSession->setErrorMessage(__('Your order was declined.'));
         $this->_redirect('checkout/onepage/failure');
-
     }
-
 }

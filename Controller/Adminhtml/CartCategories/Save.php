@@ -29,7 +29,6 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
 
-
     /**
      * @param Action\Context $context
      */
@@ -37,7 +36,6 @@ class Save extends \Magento\Backend\App\Action
     {
         parent::__construct($context);
     }
-
 
     /**
      * Save action
@@ -59,8 +57,10 @@ class Save extends \Magento\Backend\App\Action
                 if ($model->getId()) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit',
-                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+                    );
                 }
             }
 

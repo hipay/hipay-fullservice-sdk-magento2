@@ -33,7 +33,6 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
      */
     protected $_config_shipping;
 
-
     /**
      * Core store config
      *
@@ -42,9 +41,11 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
     protected $_scopeConfig;
 
     /**
-     * Constructor
+     * ShippingMethodsMagento constructor.
      *
-     * @param \Magento\Shipping\Helper\Carrier $collectionFactory
+     * @param \Magento\Shipping\Model\Config $configShipping
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Shipping\Model\Config $configShipping,
@@ -55,7 +56,6 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
         $this->storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
     }
-
 
     /**
      * Return Shipping methods available in all store
@@ -86,5 +86,4 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
         }
         return $options;
     }
-
 }

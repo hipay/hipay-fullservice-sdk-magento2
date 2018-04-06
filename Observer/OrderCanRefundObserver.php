@@ -36,7 +36,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 class OrderCanRefundObserver implements ObserverInterface
 {
 
-
     /**
      * Add accept and capture buuton to order view toolbar
      *
@@ -48,15 +47,14 @@ class OrderCanRefundObserver implements ObserverInterface
         /* @var $order \Magento\Sales\Model\Order */
         $order = $observer->getOrder();
         if ($order->getStatus() == Config::STATUS_CAPTURE_REQUESTED) {
-
             $order->setForcedCanCreditmemo(false);
         }
 
-        if ($order->getPayment() && strpos($order->getPayment()->getMethod(),
-                'hipay') !== false && $order->hasInvoices()
+        if ($order->getPayment()
+            && strpos($order->getPayment()->getMethod(), 'hipay') !== false && $order->hasInvoices()
         ) {
-
-            //If configuration validate order with status 117 (capture requested) and Notification 118 (Captured) is not received
+            //If configuration validate order with status 117
+            // (capture requested) and Notification 118 (Captured) is not received
             // we disallow refund
             if (((int)$order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order') == TransactionStatus::CAPTURE_REQUESTED) === true) {
 
@@ -64,16 +62,15 @@ class OrderCanRefundObserver implements ObserverInterface
                 if (!is_array($savedStatues) || !isset($savedStatues[TransactionStatus::CAPTURED])) {
                     $order->setForcedCanCreditmemo(false);
                 }
-
             }
 
-            if ($order->getPayment()->getMethod() == 'hipay_cc' && strtolower($order->getPayment()->getCcType()) == 'bcmc') {
+            if ($order->getPayment()->getMethod() == 'hipay_cc'
+                && strtolower($order->getPayment()->getCcType()) == 'bcmc'
+            ) {
                 $order->setForcedCanCreditmemo(false);
             }
         }
 
         return $this;
     }
-
-
 }

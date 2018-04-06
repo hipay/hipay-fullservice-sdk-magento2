@@ -56,7 +56,6 @@ class CaptureCommandPlugin
     ) {
         $message = '';
         if (strpos($payment->getMethod(), 'hipay') !== false) {
-
             $status = Config::STATUS_CAPTURE_REQUESTED;
 
             //Change status to processing (default) if validation status is Capture Requested (117)
@@ -73,13 +72,11 @@ class CaptureCommandPlugin
                 $formattedAmount
             );
 
-
             $this->setOrderStateAndStatus($order, $status, $state);
 
             //Set payment to pending, to not paid the invoice
             /** @see Magento\Sales\Model\Order\Payment\Operations\CaptureOperation */
             $payment->setIsTransactionPending(true);
-
         } else {
             $message = $proceed($payment, $amount, $order);
         }
@@ -101,5 +98,4 @@ class CaptureCommandPlugin
 
         $order->setState($state)->setStatus($status);
     }
-
 }

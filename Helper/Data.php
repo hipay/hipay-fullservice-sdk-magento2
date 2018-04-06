@@ -71,7 +71,7 @@ class Data extends AbstractHelper
     public function is3dSecure($use3dSecure, $config3dsRules, $quote = null)
     {
         $params = 0;
-        if ($use3dSecure > 0 && is_null($quote)) {
+        if ($use3dSecure > 0 && $quote === null) {
             $params = 1;
         } else {
             switch ((int)$use3dSecure) {
@@ -84,11 +84,10 @@ class Data extends AbstractHelper
                     $rule = $this->_ruleFactory->create()->load($config3dsRules);
                     if ($rule->getId() && $rule->validate($quote)) {
                         $params = 1;
-                        if ((int)$use3dSecure == 3)//case for force 3ds if rules are validated
-                        {
+                        //case for force 3ds if rules are validated
+                        if ((int)$use3dSecure == 3) {
                             $params = 2;
                         }
-
                     }
                     break;
                 case 4:
@@ -155,7 +154,6 @@ class Data extends AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
         );
-
     }
 
     /**

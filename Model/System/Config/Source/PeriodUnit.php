@@ -74,7 +74,8 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     /**
      * Render label for specified period unit
      *
-     * @param string $unit
+     * @param $unit
+     * @return \Magento\Framework\Phrase
      */
     public function getPeriodUnitLabel($unit)
     {
@@ -92,5 +93,4 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
         }
         return $unit;
     }
-
 }

@@ -87,8 +87,10 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 
                 /** @var $controller \Magento\Sales\Controller\Adminhtml\Order\View */
                 $message = __('Are you sure you want to accept this payment?');
-                $actionUrl = $controller->getUrl('hipay/order/acceptAndCapturePayment',
-                    ['order_id' => $order->getEntityId()]);
+                $actionUrl = $controller->getUrl(
+                    'hipay/order/acceptAndCapturePayment',
+                    ['order_id' => $order->getEntityId()]
+                );
                 $this->buttonList->add('accept_capture_payment', [
                     'label' => __('Accept and Capture Payment'),
                     'onclick' => "confirmSetLocation('{$message}', '{$actionUrl}')",
@@ -103,7 +105,6 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
         return $this;
     }
 
-
     /**
      * Retrieve order model object
      * @param \Magento\Sales\Controller\Adminhtml\Order\View $controller
@@ -111,8 +112,7 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
      */
     public function getOrder($controller)
     {
-        if (is_null($this->order)) {
-
+        if ($this->order === null) {
             $id = $controller->getRequest()->getParam('order_id');
             try {
                 $this->order = $this->orderRepository->get($id);

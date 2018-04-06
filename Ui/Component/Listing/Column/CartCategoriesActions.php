@@ -90,8 +90,10 @@ class CartCategoriesActions extends Column
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::PROFILE_URL_PATH_DELETE,
-                            ['mapping_id' => $item['mapping_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            self::PROFILE_URL_PATH_DELETE,
+                            ['mapping_id' => $item['mapping_id']]
+                        ),
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete mapping'),

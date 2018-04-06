@@ -42,16 +42,18 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
             /** @var $order \Magento\Sales\Model\Order */
             $order = $this->_initOrder();
             if ($order) {
-
                 //1. Authorize the payment
                 $order->getPayment()->accept();
                 /* @var $orderService \Magento\Sales\Model\Service\OrderService */
                 $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
-                $orderService->setState($order,
+                $orderService->setState(
+                    $order,
                     \Magento\Sales\Model\Order::STATE_PROCESSING,
                     \HiPay\FullserviceMagento\Model\Config::STATUS_AUTHORIZED,
                     '',
-                    null, false);
+                    null,
+                    false
+                );
 
                 $this->orderRepository->save($order);
 
@@ -64,7 +66,6 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addSuccess($message);
 
                 $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
-
             } else {
                 $resultRedirect->setPath('sales/*');
                 return $resultRedirect;

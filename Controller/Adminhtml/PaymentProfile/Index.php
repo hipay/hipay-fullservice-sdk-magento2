@@ -44,7 +44,6 @@ class Index extends \Magento\Backend\App\Action
 
         $resultPage->getConfig()->getTitle()->prepend(__('Payment Profiles'));
 
-
         return $resultPage;
     }
 

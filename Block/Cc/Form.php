@@ -45,7 +45,6 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     protected $configFactory;
 
-
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
@@ -59,7 +58,6 @@ class Form extends \Magento\Payment\Block\Form\Cc
     ) {
         parent::__construct($context, $paymentConfig, $data);
         $this->configFactory = $configFactory;
-
     }
 
     /**
@@ -67,7 +65,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function getConfig()
     {
-        if (is_null($this->_hipayConfig)) {
+        if ($this->_hipayConfig === null) {
             $this->_hipayConfig = $this->configFactory->create(['params' => ['methodCode' => $this->getMethodCode()]]);
         }
 
@@ -83,12 +81,11 @@ class Form extends \Magento\Payment\Block\Form\Cc
     {
         $availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes'));
         $ssPresenations = array_intersect(['SS', 'SO'], $availableTypes);
-        if ($availableTypes && count($ssPresenations) > 0) {
+        if ($availableTypes && !empty($ssPresenations)) {
             return true;
         }
         return false;
     }
-
 
     public function getEnv()
     {

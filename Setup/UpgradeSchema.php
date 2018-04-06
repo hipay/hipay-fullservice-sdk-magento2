@@ -105,7 +105,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'Simple Action'
                 );
 
-
             $setup->getConnection()->createTable($table);
         }
 

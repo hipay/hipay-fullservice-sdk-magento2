@@ -38,11 +38,11 @@ class Save extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
-
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -50,13 +50,16 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-
             if ((int)$data['period_max_cycles'] < 1) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("Period max cycles is equals zero or negative "));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Period max cycles is equals zero or negative ")
+                );
             }
 
             if ((int)$data['period_frequency'] < 1) {
-                throw new \Magento\Framework\Exception\LocalizedException(__("Period frequency is equals zero or negative for Payment Profile ID: %s"));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Period frequency is equals zero or negative for Payment Profile ID: %s")
+                );
             }
 
             $data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
@@ -74,7 +77,6 @@ class Save extends \Magento\Backend\App\Action
                 'hipay_paymentprofile_prepare_save',
                 ['paymentprofile' => $model, 'request' => $this->getRequest()]
             );
-
 
             try {
                 $model->save();

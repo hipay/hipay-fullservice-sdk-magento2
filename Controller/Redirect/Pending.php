@@ -45,7 +45,5 @@ class Pending extends Fullservice
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         return $resultPage;
-
     }
-
 }

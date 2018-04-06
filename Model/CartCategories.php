@@ -52,7 +52,6 @@ class CartCategories extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Init resource model and id field
      */
@@ -62,6 +61,4 @@ class CartCategories extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\CartCategories');
         $this->setIdFieldName('mapping_id');
     }
-
-
 }

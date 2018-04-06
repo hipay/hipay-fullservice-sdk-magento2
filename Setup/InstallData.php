@@ -36,7 +36,6 @@ use Magento\Sales\Model\Order;
 class InstallData implements InstallDataInterface
 {
 
-
     /**
      * {@inheritdoc}
      */
@@ -96,11 +95,9 @@ class InstallData implements InstallDataInterface
         $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'),
             ['status', 'state', 'is_default', 'visible_on_front'], $statuesToStateData);
 
-
         /**
          * Prepare database after install
          */
         $setup->endSetup();
-
     }
 }

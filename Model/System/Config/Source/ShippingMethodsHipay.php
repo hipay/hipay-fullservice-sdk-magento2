@@ -64,5 +64,4 @@ class ShippingMethodsHipay implements \Magento\Framework\Option\ArrayInterface
         }
         return null;
     }
-
 }

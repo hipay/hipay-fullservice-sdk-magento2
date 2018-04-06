@@ -43,5 +43,4 @@ class ThreeDs implements \Magento\Framework\Option\ArrayInterface
 
         );
     }
-
 }

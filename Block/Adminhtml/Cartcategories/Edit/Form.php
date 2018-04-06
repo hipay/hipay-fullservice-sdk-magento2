@@ -39,7 +39,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $categoriesHipay;
 
-
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -58,7 +57,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->categoriesMagento = $categoriesMagento;
         $this->categoriesHipay = $categoriesHipay;
     }
-
 
     /**
      * Prepare form

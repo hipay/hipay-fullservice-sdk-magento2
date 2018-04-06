@@ -111,20 +111,22 @@ class CleanPendingOrders
         foreach ($collection as $order) {
             if ($order->canCancel()) {
                 try {
-
                     $order->cancel();
+                    // keep order status/state
                     $order
-                        ->addStatusToHistory($order->getStatus(),// keep order status/state
-                            __("Order canceled automatically by cron because order is pending since %1 minutes",
-                                $limitedTime));
+                        ->addStatusToHistory(
+                            $order->getStatus(),
+                            __(
+                                "Order canceled automatically by cron because order is pending since %1 minutes",
+                                $limitedTime
+                            )
+                        );
 
                     $order->save();
-
                 } catch (Exception $e) {
                     $this->logger->critical($e->getMessage());
                 }
             }
-
         }
 
         return $this;
@@ -143,6 +145,5 @@ class CleanPendingOrders
         }
 
         return $methods;
-
     }
 }

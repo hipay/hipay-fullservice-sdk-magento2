@@ -39,7 +39,6 @@ class Index extends AppAction
      */
     protected $_logger;
 
-
     /**
      * @param Context $context
      */
@@ -50,9 +49,7 @@ class Index extends AppAction
         parent::__construct($context);
 
         $this->_logger = $_logger;
-
     }
-
 
     /**
      * @return void
@@ -60,19 +57,15 @@ class Index extends AppAction
      * */
     public function execute()
     {
-        //ini_set('display_errors',1);
-        //error_reporting(E_ALL);
-
         $params = $this->getRequest()->getPost()->toArray();
 
         try {
-
             /* @var $notify \HiPay\FullserviceMagento\Model\Notify */
-            $notify = $this->_objectManager->create('\HiPay\FullserviceMagento\Model\Notify',
-                ['params' => ['response' => $params]]);
+            $notify = $this->_objectManager->create(
+                '\HiPay\FullserviceMagento\Model\Notify',
+                ['params' => ['response' => $params]]
+            );
             $notify->processTransaction();
-
-
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             $this->getResponse()->setStatusHeader(400, '1.1', $e->getMessage());
@@ -80,7 +73,6 @@ class Index extends AppAction
         }
 
         $this->getResponse()->setBody('OK')->sendResponse();
-
     }
 
     /**
@@ -102,6 +94,4 @@ class Index extends AppAction
     {
         return $this->_response;
     }
-
-
 }

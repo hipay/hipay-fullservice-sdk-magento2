@@ -82,7 +82,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['legend' => __('Split Payment'), 'class' => 'fieldset-wide']
         );
 
-
         $dateFormat = $this->_localeDate->getDateFormat(
             \IntlDateFormatter::SHORT
         );
@@ -100,7 +99,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'class' => 'validate-date validate-date-range'
             ]
         );
-
 
         $fieldset->addField(
             'amount_to_pay',
@@ -129,13 +127,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-
         $this->_eventManager->dispatch('adminhtml_hipay_splitpayment_edit_prepare_form', ['form' => $form]);
 
         if ($model->getSplitPaymentId() !== null) {
             // If edit add id
-            $form->addField('split_payment_id', 'hidden',
-                ['name' => 'split_payment_id', 'value' => $model->getSplitPaymentId()]);
+            $form->addField(
+                'split_payment_id',
+                'hidden',
+                ['name' => 'split_payment_id', 'value' => $model->getSplitPaymentId()]
+            );
         }
 
         $form->setValues($model->getData());

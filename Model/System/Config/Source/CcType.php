@@ -107,12 +107,13 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 
         //populate options with allowed natives cc types
         foreach ($this->_paymentConfig->getCcTypes() as $code => $name) {
-            if (in_array($code, $allowed) || !count($allowed)) {
+            if (in_array($code, $allowed) || empty($allowed)) {
                 if ($withCustomLabel && isset($this->_codeToLabel[$code])) {
                     $name = $this->_codeToLabel[$code];
-                } elseif (strpos(strtolower($name),
-                        "maestro") !== false
-                ) { //Special case due to wrong comparison in magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36
+                } elseif (strpos(strtolower($name), "maestro") !== false
+                ) {
+                    //Special case due to wrong comparison in
+                    // magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36
                     $name = "Maestro";
                 }
                 $options[$code] = ['value' => $code, 'label' => $name];
@@ -121,11 +122,10 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 
         //populate options with allowed fullservice payment methods
         foreach ($this->_paymentProductSource->toOptionArray() as $option) {
-            if (in_array($option['value'], $allowed) || !count($allowed)) {
+            if (in_array($option['value'], $allowed) || empty($allowed)) {
                 $options[$option['value']] = $option;
             }
         }
-
 
         $ordered = array();
 
@@ -137,7 +137,6 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 
             $availableTypes = explode(",", $configData);
 
-
             foreach ($availableTypes as $key) {
                 if (array_key_exists($key, $options)) {
                     $ordered[$key] = $options[$key];
@@ -147,10 +146,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
         }
 
         return array_merge($ordered, $options);
-
-
     }
-
 
     /**
      * {@inheritdoc}
@@ -159,5 +155,4 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
     {
         return $this->toKeyValue(true);
     }
-
 }

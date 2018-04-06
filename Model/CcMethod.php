@@ -38,7 +38,6 @@ class CcMethod extends FullserviceMethod
 
     const HIPAY_METHOD_CODE = 'hipay_cc';
 
-
     /**
      * @var string
      */
@@ -113,11 +112,8 @@ class CcMethod extends FullserviceMethod
             ->setCcSsStartMonth($additionalData->getCcSsStartMonth())
             ->setCcSsStartYear($additionalData->getCcSsStartYear());
 
-        //$this->_assignAdditionalInformation($data);
-
         return $this;
     }
-
 
     /**
      * Instantiate state and set it to state object
@@ -138,7 +134,6 @@ class CcMethod extends FullserviceMethod
         $this->processAction($paymentAction, $payment);
 
         $stateObject->setIsNotified(false);
-
     }
 
     /**
@@ -172,10 +167,10 @@ class CcMethod extends FullserviceMethod
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -185,7 +180,6 @@ class CcMethod extends FullserviceMethod
         $this->place($payment);
         return $this;
     }
-
 
     /**
      * Validate payment method information object
@@ -220,14 +214,10 @@ class CcMethod extends FullserviceMethod
         $ccType = '';
 
         if (in_array($info->getCcType(), $availableTypes)) {
-            if ($this->validateCcNum(
-                    $ccNumber
-                ) || $this->otherCcType(
-                    $info->getCcType()
-                ) && $this->validateCcNumOther(
-                // Other credit card type number validation
-                    $ccNumber
-                )
+            // Other credit card type number validation
+            if ($this->validateCcNum($ccNumber)
+                || $this->otherCcType($info->getCcType())
+                && $this->validateCcNumOther($ccNumber)
             ) {
                 $ccTypeRegExpList = [
                     //Solo, Switch or Maestro. International safe
@@ -257,12 +247,8 @@ class CcMethod extends FullserviceMethod
                         '|5[0-9]{14}))$/',
                 ];
 
-                $ccNumAndTypeMatches = isset(
-                        $ccTypeRegExpList[$info->getCcType()]
-                    ) && preg_match(
-                        $ccTypeRegExpList[$info->getCcType()],
-                        $ccNumber
-                    );
+                $ccNumAndTypeMatches = isset($ccTypeRegExpList[$info->getCcType()])
+                    && preg_match($ccTypeRegExpList[$info->getCcType()], $ccNumber);
                 $ccType = $ccNumAndTypeMatches ? $info->getCcType() : 'OT';
 
                 if (!$ccNumAndTypeMatches && !$this->otherCcType($info->getCcType())) {
@@ -336,8 +322,11 @@ class CcMethod extends FullserviceMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (!$expYear || !$expMonth || (int)$date->format('Y') > $expYear
-            || (int)$date->format('Y') == $expYear && (int)$date->format('m') > $expMonth
+        if (!$expYear
+            || !$expMonth
+            || (int)$date->format('Y') > $expYear
+            || (int)$date->format('Y') == $expYear
+            && (int)$date->format('m') > $expMonth
         ) {
             return false;
         }
@@ -427,6 +416,4 @@ class CcMethod extends FullserviceMethod
     {
         return (bool)(int)$this->getConfigData('active', $storeId) && $this->_hipayConfig->hasCredentials(true);
     }
-
-
 }

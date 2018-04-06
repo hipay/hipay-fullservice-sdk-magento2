@@ -72,6 +72,5 @@ class Attributes extends \Magento\Framework\DataObject implements \Magento\Frame
         }
 
         return $list;
-
     }
 }

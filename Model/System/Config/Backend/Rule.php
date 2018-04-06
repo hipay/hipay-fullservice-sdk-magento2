@@ -30,7 +30,6 @@ use Magento\Framework\Phrase;
 class Rule extends \Magento\Framework\App\Config\Value
 {
 
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface $_objectManager
      */
@@ -45,14 +44,16 @@ class Rule extends \Magento\Framework\App\Config\Value
     protected $_ruleData = null;
 
     /**
+     * Rule constructor.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param \Magento\Framework\App\RequestInterface $httpRequest
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -75,6 +76,7 @@ class Rule extends \Magento\Framework\App\Config\Value
      * Processing object before save data
      *
      * @return $this
+     * @throws \Magento\Framework\Validator\Exception
      */
     public function beforeSave()
     {
@@ -144,18 +146,15 @@ class Rule extends \Magento\Framework\App\Config\Value
 
     protected function _getRuleData()
     {
-        if (is_null($this->_ruleData)) {
+        if ($this->_ruleData === null) {
             $post = $this->_request->getPost();
 
             if (isset($post['rule_' . $this->_getFieldName()]['conditions'])) {
                 $this->_ruleData = array();
                 $this->_ruleData['conditions'] = $post['rule_' . $this->_getFieldName()]['conditions'];
             }
-
         }
 
         return $this->_ruleData;
     }
-
-
 }

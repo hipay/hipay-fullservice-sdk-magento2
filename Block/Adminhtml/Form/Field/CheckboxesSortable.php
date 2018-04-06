@@ -62,6 +62,4 @@ class CheckboxesSortable extends Field
 
         return parent::_getElementHtml($element);
     }
-
-
 }

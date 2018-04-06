@@ -40,7 +40,6 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
     public function execute()
     {
         try {
-
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 
             if (!$order->getId()) {
@@ -57,14 +56,11 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             }
 
             return;
-
-
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 $e->getMessage()
             );
-
         } catch (\Exception $e) {
             $this->logger->addDebug($e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -72,10 +68,7 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $e,
                 __('We can\'t place the order.')
             );
-
         }
         $this->_redirect('checkout/payment');
     }
-
-
 }

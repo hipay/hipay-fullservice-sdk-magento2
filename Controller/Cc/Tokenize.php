@@ -28,7 +28,6 @@ namespace HiPay\FullserviceMagento\Controller\Cc;
 class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
 
-
     /**
      * Call Secure vault to generate a new token
      *
@@ -37,11 +36,7 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-        ini_set('display_errors', 1);
-        error_reporting(E_ALL | E_STRICT);
-        //die(ini_get('memory_limit'));
         try {
-
             $data = json_decode($this->getRequest()->getContent());
             if ($data) {
                 $methodCode = $data->method;
@@ -53,15 +48,16 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $ccCid = isset($cardInfo->cc_cid) ? $cardInfo->cc_cid : "";
                 $ccCardHolder = isset($cardInfo->cc_card_holder) ? $cardInfo->cc_card_holder : "";
 
-                $tokenModel = $vaultManager->requestGenerateToken($ccNumber, $ccExpMonth, $ccExpYear, $ccCid,
-                    $ccCardHolder);
+                $tokenModel = $vaultManager->requestGenerateToken(
+                    $ccNumber,
+                    $ccExpMonth,
+                    $ccExpYear,
+                    $ccCid,
+                    $ccCardHolder
+                );
 
                 $this->getResponse()->representJson($tokenModel->toJson());
-
-
             }
-
-
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
             $this->getResponse()->representJson(json_encode(array(
@@ -69,7 +65,6 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
                 "message" => $e->getMessage()
             )));
             $this->getResponse()->setStatusHeader(400, '1.1');
-
         } catch (\Exception $e) {
             $this->getResponse()->representJson(json_encode(array(
                 "code" => $e->getCode(),
@@ -77,11 +72,6 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
             )));
             $this->getResponse()->setStatusHeader(400, '1.1');
             $this->logger->addDebug($e->getMessage());
-
-
         }
-
     }
-
-
 }

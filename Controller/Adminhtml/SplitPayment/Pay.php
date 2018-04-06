@@ -47,7 +47,6 @@ class Pay extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
-
             try {
                 // init model and delete
                 $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');

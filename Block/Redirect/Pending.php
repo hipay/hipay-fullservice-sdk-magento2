@@ -36,7 +36,6 @@ class Pending extends \Magento\Framework\View\Element\Template
     ) {
         parent::__construct($context, $data);
         $this->_checkoutSession = $checkoutSession;
-
     }
 
     public function getRealOrderId()
@@ -53,7 +52,6 @@ class Pending extends \Magento\Framework\View\Element\Template
     public function getErrorMessage()
     {
         $error = $this->_checkoutSession->getErrorMessage();
-        // Mage::getSingleton('checkout/session')->unsErrorMessage();
         return $error;
     }
 

@@ -29,9 +29,8 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
 {
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
+     * CategoriesMagento constructor.
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -60,7 +59,6 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
         }
         return $options;
     }
-
 
     /**
      * Get Category Tree

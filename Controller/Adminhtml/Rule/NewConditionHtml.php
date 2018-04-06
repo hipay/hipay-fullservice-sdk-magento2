@@ -42,7 +42,6 @@ class NewConditionHtml extends \Magento\Backend\App\Action
         $marker = array();
 
         if (preg_match('/_([a-z0-9_]*)--/', $id, $marker)) {
-
             $customId = $marker[1];
             $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
             $type = $typeArr[0];
@@ -75,5 +74,4 @@ class NewConditionHtml extends \Magento\Backend\App\Action
         }
         $this->getResponse()->setBody($html);
     }
-
 }

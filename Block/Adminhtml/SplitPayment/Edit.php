@@ -61,7 +61,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         if ($this->_isAllowedAction('HiPay_FullserviceMagento::split_save')) {
-
             $this->buttonList->update('save', 'label', __('Save Split Payment'));
             $this->buttonList->update('save', 'class', 'save secondary');
             $this->buttonList->add(
@@ -87,23 +86,23 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->remove('delete');
         }
 
-        if ($this->_isAllowedAction('HiPay_FullserviceMagento::split_pay') && $this->_coreRegistry->registry('split_payment')->canPay()) {
+        if ($this->_isAllowedAction('HiPay_FullserviceMagento::split_pay')
+            && $this->_coreRegistry->registry('split_payment')->canPay()
+        ) {
             $this->buttonList->add(
                 'pay',
                 [
                     'label' => __('Pay'),
                     'class' => 'run primary',
-                    'onclick' => 'confirmSetLocation(\'' . __(
-                            'Are you sure you want to do this?'
-                        ) . '\', \'' . $this->getPayUrl() . '\')'
+                    'onclick' =>
+                        'confirmSetLocation(\''
+                        . __('Are you sure you want to do this?') . '\', \'' . $this->getPayUrl() . '\')'
                 ],
                 1
             );
         } else {
             $this->buttonList->remove('pay');
         }
-
-
     }
 
     /**
@@ -114,8 +113,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('split_payment')->getId()) {
-            return __("Edit Split Payment '%1'",
-                $this->escapeHtml($this->_coreRegistry->registry('split_payment')->getName()));
+            return __(
+                "Edit Split Payment '%1'",
+                $this->escapeHtml($this->_coreRegistry->registry('split_payment')->getName())
+            );
         } else {
             return __('New Split Payment');
         }

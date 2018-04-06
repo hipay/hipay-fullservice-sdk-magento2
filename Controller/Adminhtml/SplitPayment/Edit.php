@@ -96,7 +96,6 @@ class Edit extends \Magento\Backend\App\Action
         $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
 
         if (!$id) {
-
             $this->messageManager->addError(__("You can't create a split payment."));
 
             /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

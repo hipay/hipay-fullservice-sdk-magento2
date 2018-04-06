@@ -28,7 +28,6 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
 {
     const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
 
-
     /**
      * Payment config model
      *
@@ -65,12 +64,11 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
         $categories = null;
 
         if ($this->getPath()) {
-
             list($section_locale, $method) = explode("/", $this->getPath());
             list($section) = explode("_", $section_locale);
 
-            $categories = $this->_scopeConfig->getValue(implode('/',
-                [$section, $method, self::PAYMENT_PRODUCT_FIELD])) ?: null;
+            $categories = $this->_scopeConfig->getValue(implode('/', [$section, $method, self::PAYMENT_PRODUCT_FIELD]))
+                ?: null;
 
             if (!empty($categories)) {
                 $categories = explode(',', $categories);
@@ -83,7 +81,6 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
         }
 
         return $list;
-
     }
 
     /**

@@ -71,7 +71,6 @@ abstract class Fullservice extends AppAction
      */
     protected $_vaultManagerFactory;
 
-
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
@@ -105,9 +104,7 @@ abstract class Fullservice extends AppAction
         $this->_vaultManagerFactory = $vaultManagerFactory;
 
         parent::__construct($context);
-
     }
-
 
     /**
      * Return checkout session object
@@ -161,6 +158,4 @@ abstract class Fullservice extends AppAction
     {
         return $this->_response;
     }
-
-
 }

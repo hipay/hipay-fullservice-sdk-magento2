@@ -108,5 +108,4 @@ class Logger extends LoggerMagento
         }
         return $debugData;
     }
-
 }

@@ -89,7 +89,6 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         $this->typeFactory = $typeFactory;
     }
 
-
     /**
      * Init resource model and id field
      */
@@ -124,33 +123,28 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
             $todayClone = clone $todayDate;
             $frequencyValue = $periodFrequency + $j;
             switch ($periodUnit) {
-                case self::PERIOD_UNIT_MONTH : {
+                case self::PERIOD_UNIT_MONTH:
                     $interval = new \DateInterval ("P{$frequencyValue}M");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_DAY : {
+                case self::PERIOD_UNIT_DAY:
                     $interval = new \DateInterval ("P{$frequencyValue}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_SEMI_MONTH : {
+                case self::PERIOD_UNIT_SEMI_MONTH:
                     $semiMonthFreq = 15 + $frequencyValue;
                     $interval = new \DateInterval ("P{$semiMonthFreq}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_WEEK : {
+                case self::PERIOD_UNIT_WEEK:
                     $week = 7 + $frequencyValue;
                     $interval = new \DateInterval ("P{$week}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_YEAR : {
+                case self::PERIOD_UNIT_YEAR:
                     $interval = new \DateInterval ("P{$frequencyValue}Y");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
             }
 
             $amountToPay = $i == 0 ? ($part + $fmod) : $part;
@@ -162,7 +156,6 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         }
 
         return $paymentsSplit;
-
     }
 
     public function getAllPaymentTypes($withLabels = true)

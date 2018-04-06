@@ -60,7 +60,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-
         $this->buttonList->update('save', 'label', __('Save Mapping Categories'));
         $this->buttonList->add(
             'saveandcontinue',
@@ -77,7 +76,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         );
 
         $this->buttonList->update('delete', 'label', __('Delete Mapping Categories'));
-
     }
 
     /**
@@ -88,8 +86,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('cart_categories')->getId()) {
-            return __("Edit Mapping Categories '%1'",
-                $this->escapeHtml($this->_coreRegistry->registry('cart_categories')->getName()));
+            return __(
+                "Edit Mapping Categories '%1'",
+                $this->escapeHtml($this->_coreRegistry->registry('cart_categories')->getName())
+            );
         } else {
             return __('New Mapping Categories');
         }

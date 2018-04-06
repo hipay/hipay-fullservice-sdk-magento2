@@ -56,7 +56,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected $_condProdCombineF;
 
-
     /**
      * Constructor
      *
@@ -86,7 +85,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_condProdCombineF = $condProdCombineF;
         parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
     }
-
 
     /**
      * Init resource model and id field
@@ -119,7 +117,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         return $this->_condProdCombineF->create();
     }
-
 
     protected function _getHtmlId()
     {

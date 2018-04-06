@@ -135,8 +135,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
 
-        //@TODO Find a better way for verification of api username and api password
-        //@TODO Maybe create a new Config Object with arg order required, for check MO/TO action
         try {
             $env = $this->getApiEnv();
             if ($env == null) {
@@ -147,7 +145,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $this->logger->critical($e->getMessage());
             $this->_configSDK = null;
         }
-
     }
 
     /**
@@ -158,7 +155,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function mustUseMotoCredentials()
     {
 
-        $hasOrder = !is_null($this->getOrder());
+        $hasOrder = $this->getOrder() !== null;
         $hasLastTransId = false;
         $isMoto = false;
 
@@ -172,7 +169,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         return $this->isAdminArea() && $hasOrder && (!$hasLastTransId || ($hasLastTransId && $isMoto));
-
     }
 
     /**
@@ -200,7 +196,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getTemplates()
     {
         return (new Templates())->getTemplates();
-
     }
 
     /**
@@ -236,7 +231,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
         $pp = (new PaymentProduct())->getPaymentProducts($this->getAllowedPaymentProductCategories());
         return $pp;
-
     }
 
     public function getAllowedPaymentProductCategories()
@@ -251,7 +245,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentActions()
     {
-
         return (new PaymentActions())->getPaymentActions();
     }
 
@@ -262,10 +255,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getEnvironments()
     {
-
         return (new Environments())->getEnvironments();
     }
-
 
     public function isStageMode()
     {
@@ -276,7 +267,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
 
         if ($withTokenJs) {
-
             //token JS credential
             $apiUsernameTokenJs = $this->getApiUsernameTokenJs();
             $apiPasswordTokenJs = $this->getApiPasswordTokenJs();
@@ -284,7 +274,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if (empty($apiUsernameTokenJs) || empty($apiPasswordTokenJs)) {
                 return false;
             }
-
         }
 
         //default api username, password, secret passphrase
@@ -469,10 +458,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function useOrderCurrency()
     {
-
         $key = "currency_transaction";
         return $this->getOtherConfiguration($key);
-
     }
 
     /**
@@ -491,7 +478,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Basket is forced disabled for some payment method
      *
-     * @param $product_code
      * @return bool
      */
     public function isBasketForcedDisabled()
@@ -535,32 +521,32 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiEndpoint()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpoint() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpoint() : '';
     }
 
     public function getApiEndpointProd()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpointProd() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointProd() : '';
     }
 
     public function getApiEndpointStage()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpointStage() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointStage() : '';
     }
 
     public function getSecureVaultEndpointProd()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpointProd() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpointProd() : '';
     }
 
     public function getSecureVaultEndpointStage()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpointStage() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpointStage() : '';
     }
 
     public function getSecureVaultEndpoint()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpoint() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpoint() : '';
     }
 
     public function getApiEnv()
@@ -570,7 +556,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiHTTPHeaderAccept()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
     }
 
     public function getOrder()
@@ -582,5 +568,4 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
         $this->_order = $order;
     }
-
 }

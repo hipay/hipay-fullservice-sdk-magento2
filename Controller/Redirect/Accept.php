@@ -44,7 +44,5 @@ class Accept extends Fullservice
             return $this->resultRedirectFactory->create()->setPath('customer/account');
         }
         return $this->resultRedirectFactory->create()->setPath('checkout/onepage/success');
-
     }
-
 }

@@ -40,7 +40,7 @@ namespace HiPay\FullserviceMagento\Model;
  * @method string getCclast4()
  * @method \HiPay\FullserviceMagento\Model\Card setCclast4(string $cclast4)
  * @method string getCcOwner()
- * @method \HiPay\FullserviceMagento\Model\Card setCcOwner((string $ccOwner)
+ * @method \HiPay\FullserviceMagento\Model\Card setCcOwner(string $ccOwner)
  * @method string getCcType()
  * @method \HiPay\FullserviceMagento\Model\Card setCcType(string $ccType)
  * @method string getCcNumberEnc()
@@ -81,7 +81,6 @@ class Card extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
-
     /**
      * Init resource model and id field
      */
@@ -91,5 +90,4 @@ class Card extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\Card');
         $this->setIdFieldName('card_id');
     }
-
 }

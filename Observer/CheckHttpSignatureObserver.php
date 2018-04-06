@@ -38,10 +38,6 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class CheckHttpSignatureObserver implements ObserverInterface
 {
     protected $_actionsToCheck = [
-        /*'hipay_redirect_accept',
-        'hipay_redirect_cancel',
-        'hipay_redirect_decline',
-        'hipay_redirect_exception',*/
         'hipay_notify_index'
     ];
 
@@ -145,14 +141,12 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         $controller->getResponse()->setHttpResponseCode(500);
                     }
                 }
-
             } catch (\Exception $e) {
                 $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $controller->getResponse()->setBody("Exception during check signature.");
                 $controller->getResponse()->setHttpResponseCode(500);
             }
         }
-
 
         return $this;
     }
@@ -167,16 +161,12 @@ class CheckHttpSignatureObserver implements ObserverInterface
         if ($request->getParam('orderid', 0)) { //Redirection case
             $orderId = $request->getParam('orderid', 0);
         } elseif (($o = $request->getParam('order', [])) && isset($o['id'])) {
-
             $orderId = $o['id'];
 
             if (strpos($o['id'], '-split-') !== false) {
                 return explode("-", $o['id'])[0];
             }
-
         }
         return $orderId;
-
     }
-
 }
