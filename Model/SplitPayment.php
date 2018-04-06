@@ -210,7 +210,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         }
         $this->setAttempts($this->getAttempts() + 1);
 
-        $this->save();
+        $this->getResource()->save($this);
 
         return $this;
     }

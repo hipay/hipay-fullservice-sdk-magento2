@@ -111,8 +111,8 @@ class Data extends AbstractHelper
             case 0:
                 return false;
             case 1:
-                /* @var $rule Allopass_Hipay_Model_Rule */
-                $rule = $this->ruleFactory->create()->load($filterOneclick);
+                $rule = $this->ruleFactory->create();
+                $rule = $rule->getResource()->load($rule, $filterOneclick);
                 if ($rule->getId()) {
                     return (int)$rule->validate($quote);
                 }
