@@ -123,7 +123,7 @@ class CleanPendingOrders
                         );
 
                     $order->save();
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $this->logger->critical($e->getMessage());
                 }
             }

@@ -47,7 +47,7 @@ class BillingInfo extends AbstractInfoRequest
 
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
 
             }
         }

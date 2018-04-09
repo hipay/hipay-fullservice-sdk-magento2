@@ -119,9 +119,9 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
                 if ($this->order->getId()) {
                     $this->_coreRegistry->register('hipay_current_order', $this->order);
                 }
-            } catch (NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 return null;
-            } catch (InputException $e) {
+            } catch (\Magento\Framework\Exception\InputException $e) {
                 return null;
             }
         }

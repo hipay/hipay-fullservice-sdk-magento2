@@ -77,7 +77,7 @@ class PaySplitPayment
         foreach ($splitPayments as $splitPayment) {
             try {
                 $splitPayment->pay();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->debug($e->getMessage());
             }
         }

@@ -483,7 +483,7 @@ class Notify
 
                     try {
                         $splitPayment->save();
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         if ($this->_order->canHold()) {
                             $this->_order->hold();
                         }
