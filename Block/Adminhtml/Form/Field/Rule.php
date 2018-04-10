@@ -36,15 +36,22 @@ class Rule extends Field
     protected $_objectManager;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory
+     */
+    private $ruleFactory;
+
+    /**
      * Check if columns are defined, set template
      *
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\ObjectManagerInterface $objectManager,
+        \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory,
         array $data = []
     ) {
 
+        $this->ruleFactory = $ruleFactory;
         $this->_objectManager = $objectManager;
 
         parent::__construct($context, $data);
@@ -67,7 +74,7 @@ class Rule extends Field
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+        $rule = $this->ruleFactory->create();
 
         $field = $element->getFieldConfig()['id'];
         list(, $methodCode) = explode('/', $element->getFieldConfig()['path']);
@@ -76,7 +83,7 @@ class Rule extends Field
         $rule->setMethodCode($methodCode);
 
         if ($element->getValue()) {
-            $rule->load($element->getValue());
+            $rule->getResource()->load($rule, $element->getValue());
         }
 
         if ($rule->getConfigPath() == "") {

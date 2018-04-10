@@ -15,6 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
+use Magento\Backend\App\Action;
+
 /**
  * Delete split payment
  *
@@ -26,6 +28,24 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
  */
 class Delete extends \Magento\Backend\App\Action
 {
+
+    /**
+     * @var \HiPay\FullserviceMagento\Model\SplitPayment\Factory
+     */
+    private $splitPaymentFactory;
+
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+    ) {
+        $this->splitPaymentFactory = $splitPaymentFactory;
+        parent::__construct($context);
+    }
 
     /**
      * {@inheritdoc}
@@ -50,9 +70,9 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
-                $model->load($id);
-                $model->delete();
+                $model = $this->splitPaymentFactory->create();
+                $model->getResource()->load($model, $id);
+                $model->getResource()->delete($model);
                 // display success message
                 $this->messageManager->addSuccess(__('The split payment has been deleted.'));
                 // go to grid

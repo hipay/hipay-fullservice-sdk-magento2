@@ -15,6 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
+use Magento\Backend\App\Action;
+
 /**
  * Pay a split payment
  *
@@ -26,6 +28,24 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
  */
 class Pay extends \Magento\Backend\App\Action
 {
+
+    /**
+     * @var \HiPay\FullserviceMagento\Model\SplitPayment\Factory
+     */
+    private $splitPaymentFactory;
+
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+    ) {
+        $this->splitPaymentFactory = $splitPaymentFactory;
+        parent::__construct($context);
+    }
 
     /**
      * {@inheritdoc}
@@ -49,8 +69,8 @@ class Pay extends \Magento\Backend\App\Action
         if ($id) {
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
-                $model->load($id);
+                $model = $this->splitPaymentFactory->create();
+                $model->getResource()->load($model, $id);
 
                 //Pay this split payment
                 $model->pay();

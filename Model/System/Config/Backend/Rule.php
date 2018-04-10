@@ -44,14 +44,19 @@ class Rule extends \Magento\Framework\App\Config\Value
     protected $_ruleData = null;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
      * Rule constructor.
-     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\RequestInterface $httpRequest
+     * @param \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -63,10 +68,12 @@ class Rule extends \Magento\Framework\App\Config\Value
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
+        \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
+        $this->ruleFactory = $ruleFactory;
         $this->_objectManager = $objectManager;
         $this->_request = $httpRequest;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
@@ -81,7 +88,8 @@ class Rule extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         /* @var $rule \HiPay\FullserviceMagento\Model\Rule */
-        $rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')->load($this->getValue());
+        $rule = $this->ruleFactory->create();
+        $rule->getResource()->load($rule, $this->getValue());
 
         if ($errors = $rule->validateData(new DataObject($this->_getRuleData())) !== true) {
             $exception = new \Magento\Framework\Validator\Exception(
@@ -111,10 +119,10 @@ class Rule extends \Magento\Framework\App\Config\Value
         parent::_afterload();
 
         /* @var $rule \HiPay\FullserviceMagento\Model\Rule */
-        $rule = $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule');
+        $rule = $this->ruleFactory->create();
 
         if ($this->getValue()) {
-            $rule = $rule->getResource()->load($rule, $this->getValue());
+            $rule->getResource()->load($rule, $this->getValue());
             if (!$rule->getId()) {
                 $rule->setMethodCode($this->_getMethodCode());
                 if ($rule->getConfigPath() == "") {

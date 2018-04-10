@@ -34,12 +34,19 @@ class Save extends \Magento\Backend\App\Action
     protected $_mappingShippingCollectionFactory;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
+     */
+    private $mappingShippingFactory;
+
+    /**
      * @param Action\Context $context
      */
     public function __construct(
         Action\Context $context,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory
+        \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory,
+        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
     ) {
+        $this->mappingShippingFactory = $mappingShippingFactory;
         parent::__construct($context);
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
     }
@@ -55,10 +62,10 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\MappingShipping');
+            $model = $this->mappingShippingFactory->create();
             $id = $this->getRequest()->getParam('mapping_shipping_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             } else {
                 $count = $this->_mappingShippingCollectionFactory->create()
                     ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
@@ -82,7 +89,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

@@ -41,17 +41,26 @@ class Edit extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\SplitPayment\Factory
+     */
+    private $splitPaymentFactory;
+
+    /**
+     * Edit constructor.
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
+        $this->splitPaymentFactory = $splitPaymentFactory;
         parent::__construct($context);
     }
 
@@ -93,7 +102,7 @@ class Edit extends \Magento\Backend\App\Action
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('split_payment_id');
-        $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
+        $model = $this->splitPaymentFactory->create();
 
         if (!$id) {
             $this->messageManager->addError(__("You can't create a split payment."));
@@ -106,7 +115,7 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($id) {
-            $model->load($id);
+            $model->getResource()->load($model, $id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This split payment no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

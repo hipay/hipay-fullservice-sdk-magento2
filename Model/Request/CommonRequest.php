@@ -272,12 +272,14 @@ abstract class CommonRequest extends BaseRequest
                     break;
                 }
                 // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)
-                $category = $this->_categoryFactory->create()->load($idCategory);
+                $category = $this->_categoryFactory->create();
+                $category->getResource()->load($category, $idCategory);
                 $parentId = $category->getParentId();
                 if (is_null($category->getParentId()) || $parentId == 1) {
                     break;
                 }
-                $category = $this->_categoryFactory->create()->load($category->getParentId());
+                $category = $this->_categoryFactory->create();
+                $category->getResource()->load($category, $category->getParentId());
                 $idCategory = $category->getId();
             }
         }

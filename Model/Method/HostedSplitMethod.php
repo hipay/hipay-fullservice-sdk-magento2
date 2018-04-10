@@ -79,7 +79,6 @@ class HostedSplitMethod extends HostedMethod
         $this->profileFactory = $profileFactory;
     }
 
-
     protected function getAddtionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
@@ -99,7 +98,7 @@ class HostedSplitMethod extends HostedMethod
 
         $splitAmounts = $profile->splitAmount($amounts);
 
-        if (!is_array($splitAmounts) || !count($splitAmounts)) {
+        if (!is_array($splitAmounts) || empty($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
         }
         $firstSplit = current($splitAmounts);
@@ -114,7 +113,6 @@ class HostedSplitMethod extends HostedMethod
             $hppModel = $gateway->requestHostedPaymentPage();
             $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
         }
-
     }
 
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
@@ -131,17 +129,14 @@ class HostedSplitMethod extends HostedMethod
             }
 
             $splitAmounts = $profile->splitAmount($amounts);
-            if (!is_array($splitAmounts) || !count($splitAmounts)) {
+            if (!is_array($splitAmounts) || empty($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }
             $firstSplit = current($splitAmounts);
             $amount = (float)$firstSplit['amountToPay'];
-
         }
 
         return parent::manualCapture($payment, $amount);
-
-
     }
 
     /**
@@ -156,13 +151,12 @@ class HostedSplitMethod extends HostedMethod
         if (empty($profileId)) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
-        $profile = $this->profileFactory->create()->load($profileId);
+        $profile = $this->profileFactory->create();
+        $profile->getResource()->load($profile, $profileId);
         if (!$profile->getId()) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
 
         return $profile;
     }
-
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,28 +14,24 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\ResourceModel;
+
+namespace HiPay\FullserviceMagento\Model\MappingShipping;
+
+use HiPay\FullserviceMagento\Model\AbstractFactory;
 
 /**
- * Rule Resource Model
+ * Factory class for rule
  *
  * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
+ * @author      HiPay <support.tpp@hipay.com>
+ * @copyright   Copyright (c) 2018 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
+class Factory extends AbstractFactory
 {
-
     /**
-     * Initialize main table and table id field
-     *
-     * @return void
-     * @codeCoverageIgnore
+     * @var string
      */
-    protected function _construct()
-    {
-        $this->_init('hipay_rule', 'rule_id');
-    }
+    protected $configClassName = '\HiPay\FullserviceMagento\Model\MappingShipping';
 }

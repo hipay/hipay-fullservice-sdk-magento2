@@ -29,12 +29,21 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
+     */
+    private $paymentProfileFactory;
 
     /**
+     * Save constructor.
      * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
      */
-    public function __construct(Action\Context $context)
-    {
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
+    ) {
+        $this->paymentProfileFactory = $paymentProfileFactory;
         parent::__construct($context);
     }
 
@@ -64,11 +73,11 @@ class Save extends \Magento\Backend\App\Action
 
             $data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
 
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
+            $model = $this->paymentProfileFactory->create();
 
             $id = $this->getRequest()->getParam('profile_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             }
 
             $model->setData($data);
@@ -79,7 +88,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this payment profile.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

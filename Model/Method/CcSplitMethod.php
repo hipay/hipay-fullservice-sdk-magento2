@@ -123,7 +123,8 @@ class CcSplitMethod extends CcMethod
         if (empty($profileId)) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
-        $profile = $this->profileFactory->create()->load($profileId);
+        $profile = $this->profileFactory->create();
+        $profile->getResource()->load($profile, $profileId);
         if (!$profile->getId()) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }

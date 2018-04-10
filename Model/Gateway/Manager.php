@@ -225,7 +225,7 @@ class Manager
         //If is admin area set mo/to value to payment additionnal informations
         if ($this->getConfiguration()->isAdminArea()) {
             $this->_order->getPayment()->setAdditionalInformation('is_moto', 1);
-            $this->_order->save();
+            $this->_order->getResource()->save($this->_order);
         }
 
 

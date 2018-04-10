@@ -30,6 +30,43 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  */
 class Cancel extends Fullservice
 {
+    /**
+     * @var \Magento\Sales\Model\OrderFactory
+     */
+    private $orderFactory;
+
+    /**
+     * Cancel constructor.
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Session\Generic $hipaySession
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\Session\Generic $hipaySession,
+        \Psr\Log\LoggerInterface $logger,
+        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+        \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory,
+        \Magento\Sales\Model\OrderFactory $orderFactory
+    ) {
+        $this->orderFactory = $orderFactory;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $hipaySession,
+            $logger,
+            $gatewayManagerFactory,
+            $vaultManagerFactory
+        );
+    }
 
     /**
      * @return void
@@ -41,7 +78,8 @@ class Cancel extends Fullservice
         $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
         if ($lastOrderId) {
             /** @var $order  \Magento\Sales\Model\Order */
-            $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($lastOrderId);
+            $order = $this->orderFactory->create();
+            $order->getResource()->load($order, $lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /* @var $cart \Magento\Checkout\Model\Cart */
                 $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
@@ -63,7 +101,7 @@ class Cancel extends Fullservice
                     }
                 }
 
-                $cart->save();
+                $cart->getResource()->save($cart);
             }
         }
 
