@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use HiPay\FullserviceMagento\Model\HostedMethod;
@@ -36,7 +35,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 class HostedSplitMethod extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hostedsplit';
 
     /**
@@ -58,11 +56,12 @@ class HostedSplitMethod extends HostedMethod
     protected $_canUseInternal = false;
 
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * HostedSplitMethod constructor.
+     * @param TransactionRepository $transactionRepository
+     * @param Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -86,7 +85,6 @@ class HostedSplitMethod extends HostedMethod
 
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
     {
-
         $payment = $order->getPayment();
         $profileId = $payment->getAdditionalInformation('profile_id');
         $profile = $this->getProfile($profileId);
@@ -147,7 +145,6 @@ class HostedSplitMethod extends HostedMethod
      */
     protected function getProfile($profileId)
     {
-
         if (empty($profileId)) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }

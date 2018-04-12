@@ -13,8 +13,8 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Block\Adminhtml\PaymentProfile\Edit;
 
+namespace HiPay\FullserviceMagento\Block\Adminhtml\PaymentProfile\Edit;
 
 /**
  * Adminhtml payment profile edit form block
@@ -35,9 +35,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $periodUnitSource;
 
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit $periodUnitSource
      * @param array $data
      */
     public function __construct(
@@ -47,7 +49,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit $periodUnitSource,
         array $data = []
     ) {
-
         parent::__construct($context, $registry, $formFactory, $data);
         $this->periodUnitSource = $periodUnitSource;
     }
@@ -135,5 +136,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return parent::_prepareForm();
     }
-
 }

@@ -32,9 +32,9 @@ class Accept extends Fullservice
 {
 
     /**
-     * @return void
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * */
+     */
     public function execute()
     {
         //MO/TO case

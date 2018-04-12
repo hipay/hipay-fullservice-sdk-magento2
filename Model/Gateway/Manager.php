@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Gateway;
 
-
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
@@ -27,7 +26,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-
 
 /**
  * Gateway Manager Class
@@ -171,7 +169,6 @@ class Manager
         return $this->_config;
     }
 
-
     /**
      *
      */
@@ -228,12 +225,11 @@ class Manager
             $this->_order->getResource()->save($this->_order);
         }
 
-
         return $transaction;
     }
 
     /**
-     *
+     * @param null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationCapture($amount = null)
@@ -242,7 +238,7 @@ class Manager
     }
 
     /**
-     *
+     * @param null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationRefund($amount = null)
@@ -256,7 +252,6 @@ class Manager
      */
     public function requestOperationAcceptChallenge()
     {
-
         return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);
     }
 
@@ -266,10 +261,8 @@ class Manager
      */
     public function requestOperationDenyChallenge()
     {
-
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
     }
-
 
     /**
      * @return mixed
@@ -286,7 +279,6 @@ class Manager
         return $tr;
     }
 
-
     protected function _getPaymentMethodRequest()
     {
         $className = $this->_methodInstance->getConfigData('payment_method');
@@ -296,13 +288,11 @@ class Manager
     }
 
     /**
-     *
      * @param \HiPay\Fullservice\Request\RequestInterface $request
-     * @return []
+     * @return array
      */
     protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request)
     {
-
         return (new RequestSerializer($request))->toArray();
     }
 
@@ -371,7 +361,6 @@ class Manager
         );
         return $opModel;
     }
-
 
     /**
      * @param int $transactionType

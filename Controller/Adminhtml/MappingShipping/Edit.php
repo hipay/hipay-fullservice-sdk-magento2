@@ -46,9 +46,11 @@ class Edit extends \Magento\Backend\App\Action
     private $mappingShippingFactory;
 
     /**
+     * Edit constructor.
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
         Action\Context $context,

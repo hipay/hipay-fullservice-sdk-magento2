@@ -49,13 +49,14 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
     protected $currentCustomer;
 
     /**
+     * ListCard constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
-     * @param ÷HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(

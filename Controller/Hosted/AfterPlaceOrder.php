@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Hosted;
 
-
 /**
  * @deprecated
  *
@@ -36,9 +35,7 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
-
         try {
-
             //Retieve last order increment id
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 

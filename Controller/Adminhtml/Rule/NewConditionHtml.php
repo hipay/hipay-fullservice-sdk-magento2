@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Rule;
 
-
 use Magento\Rule\Model\Condition\AbstractCondition;
 
 /**
@@ -62,7 +61,7 @@ class NewConditionHtml extends \Magento\Backend\App\Action
                 'conditions'
             )
                 ->setMethodCode($methodCode)
-                ->setConfigPath(str_replace("/", "_", $configPath));;
+                ->setConfigPath(str_replace("/", "_", $configPath));
             if (!empty($typeArr[1])) {
                 $model->setAttribute($typeArr[1]);
             }

@@ -43,9 +43,9 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
     protected $_scopeConfig;
 
     /**
-     * Config
-     *
+     * PaymentProduct constructor.
      * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Payment\Model\Config $paymentConfig,
@@ -86,11 +86,12 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
     /**
      * Payment products source getter
      *
+     * @param null $categories
      * @return \HiPay\Fullservice\Data\PaymentProduct[]
      */
     public function getPaymentProducts($categories = null)
     {
-        /* @var $collection \HiPay\Fullservice\Data\PaymentProduct[] */
+        /** @var $collection \HiPay\Fullservice\Data\PaymentProduct[] */
         $collection = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItems($categories);
 
         return $collection;

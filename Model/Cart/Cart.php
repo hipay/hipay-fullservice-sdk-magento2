@@ -2,7 +2,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Cart;
 
-
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 
@@ -33,7 +32,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * @var string
      */
     protected $_payment;
-
 
     /**
      *  Sales Model for Invoice or CreditMemo
@@ -112,11 +110,10 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Calculate subtotal from custom items
      *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-
         if (
             $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
             || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
@@ -131,7 +128,7 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Calculate subtotal from shipping and discount items
      *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
@@ -155,7 +152,6 @@ class Cart extends \Magento\Payment\Model\Cart
                 0,
                 TypeItems::DISCOUNT
             );
-
         }
         $base_shipping = 0;
         $tax_rate = 0;
@@ -226,9 +222,7 @@ class Cart extends \Magento\Payment\Model\Cart
 
     /**
      * Check line items and totals
-     *
-     *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _validate($useOrderCurrency = false)
     {
@@ -375,7 +369,7 @@ class Cart extends \Magento\Payment\Model\Cart
                         );
 
                         // Adjust discount to avoid 0.01 difference
-                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);;
+                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);
                     }
                 }
             } else {
@@ -407,7 +401,8 @@ class Cart extends \Magento\Payment\Model\Cart
 
     /**
      * @param $originalItem
-     * @return float
+     * @param bool $useOrderCurrency
+     * @return mixed
      */
     private function getTotalPrice($originalItem, $useOrderCurrency = false)
     {
@@ -487,7 +482,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * - go to PayPal
      *
      * @param \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _applyDiscountTaxCompensationWorkaround(
         \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity,
@@ -540,5 +535,4 @@ class Cart extends \Magento\Payment\Model\Cart
     {
         return $this->_areAmountsValid;
     }
-
 }

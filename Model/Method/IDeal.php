@@ -57,6 +57,4 @@ class IDeal extends HostedMethod
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
 }

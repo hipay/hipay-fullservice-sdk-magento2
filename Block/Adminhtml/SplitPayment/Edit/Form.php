@@ -34,9 +34,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $spStatus;
 
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\SplitPayment\Status $spStatus
      * @param array $data
      */
     public function __construct(
@@ -46,7 +48,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \HiPay\FullserviceMagento\Model\System\Config\Source\SplitPayment\Status $spStatus,
         array $data = []
     ) {
-
         parent::__construct($context, $registry, $formFactory, $data);
         $this->spStatus = $spStatus;
     }
@@ -155,5 +156,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         return $this->_authorization->isAllowed($resourceId);
     }
-
 }

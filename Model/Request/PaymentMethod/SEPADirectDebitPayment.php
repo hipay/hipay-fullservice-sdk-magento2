@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
-
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod;
 
 /**
@@ -30,7 +29,6 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
 class SEPADirectDebitPayment extends AbstractPaymentMethod
 {
 
-
     /**
      *  Map Request for specific SEPADirectDebitPaymentMethod
      *
@@ -44,7 +42,7 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod
         $sddPaymentMethod->authentication_indicator = (int)$electronic_signature;
 
         if (!$electronic_signature) {
-            /* @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
+            /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
             $sddPaymentMethod->bank_name = $this->_order->getPayment()->getAdditionalInformation('sdd_bank_name');
             $sddPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('sdd_bic');
             $sddPaymentMethod->iban = $this->_order->getPayment()->getAdditionalInformation('sdd_iban');

@@ -38,12 +38,12 @@ class MappingShipping extends \Magento\Framework\Model\AbstractModel
     protected $typeFactory;
 
     /**
-     * Constructor
-     *
+     * MappingShipping constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param MappingShipping\Type\Factory $typeFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(

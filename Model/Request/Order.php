@@ -208,7 +208,6 @@ class Order extends CommonRequest
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
     }
 
-
     /**
      * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
      */
@@ -273,9 +272,11 @@ class Order extends CommonRequest
     }
 
     /**
-     *  Process all extras information for the request
+     * Process all extras information for the request
      *
-     * @param OrderRequest $order OrderRequest passed by reference
+     * @param OrderRequest $orderRequest
+     * @param bool $useOrderCurrency
+     * @throws \Exception
      */
     private function processExtraInformations(OrderRequest &$orderRequest, $useOrderCurrency = false)
     {
@@ -325,7 +326,6 @@ class Order extends CommonRequest
         }
 
     }
-
 
     /**
      *  Generate custom data to send to HiPay back office

@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-
 /**
  * Source model for Hipay carriers
  *

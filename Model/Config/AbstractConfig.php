@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Config;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
-
 /**
  * Abstract configuration
  * Manage configuration getter
@@ -34,7 +33,6 @@ use Magento\Store\Model\ScopeInterface;
  */
 abstract class AbstractConfig implements ConfigInterface
 {
-
 
     /**
      * Current payment method code
@@ -166,7 +164,6 @@ abstract class AbstractConfig implements ConfigInterface
         return $this->_methodCode;
     }
 
-
     /**
      * Sets path pattern
      *
@@ -180,7 +177,6 @@ abstract class AbstractConfig implements ConfigInterface
 
     public function getGeneraleValue($key, $group = 'hipay_credentials')
     {
-
         return $this->_scopeConfig->getValue(
             $this->_mapGeneralFieldset($key, $group),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -244,8 +240,9 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Map HiPay General Settings
      *
-     * @param string $fieldName
-     * @return string|null
+     * @param $fieldName
+     * @param string $group
+     * @return null|string
      */
     protected function _mapGeneralFieldset($fieldName, $group = 'hipay_credentials')
     {

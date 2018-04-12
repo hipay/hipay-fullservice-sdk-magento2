@@ -81,7 +81,7 @@ class Cancel extends Fullservice
             $order = $this->orderFactory->create();
             $order->getResource()->load($order, $lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
-                /* @var $cart \Magento\Checkout\Model\Cart */
+                /** @var $cart \Magento\Checkout\Model\Cart **/
                 $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
                 $items = $order->getItemsCollection();
                 foreach ($items as $item) {

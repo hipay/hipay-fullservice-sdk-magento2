@@ -18,7 +18,6 @@ namespace HiPay\FullserviceMagento\Model\Method\Astropay;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
-use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
  * Astropay config provider
@@ -42,7 +41,6 @@ class AstropayConfigProvider implements ConfigProviderInterface
      * @var MethodInterface[]
      */
     protected $methods = [];
-
 
     /**
      * Url Builder
@@ -83,8 +81,16 @@ class AstropayConfigProvider implements ConfigProviderInterface
      */
     protected $_collection;
 
-
     /**
+     * AstropayConfigProvider constructor.
+     * @param CcConfig $ccConfig
+     * @param PaymentHelper $paymentHelper
+     * @param \Magento\Framework\Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
+     * @param array $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -96,7 +102,6 @@ class AstropayConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         array $methodCodes = []
     ) {
-
         $this->ccConfig = $ccConfig;
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
@@ -106,9 +111,7 @@ class AstropayConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $checkoutSession;
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
-
     }
-
 
     /**
      * Get Type identification
@@ -118,9 +121,7 @@ class AstropayConfigProvider implements ConfigProviderInterface
      */
     protected function getTypeIdentification($methodCode)
     {
-
         return (string)$this->methods[$methodCode]->getTypeIdentification();
-
     }
 
     /**
@@ -142,6 +143,4 @@ class AstropayConfigProvider implements ConfigProviderInterface
         }
         return $config;
     }
-
-
 }

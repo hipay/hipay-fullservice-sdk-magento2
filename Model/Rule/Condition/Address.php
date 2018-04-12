@@ -60,11 +60,13 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $methodCode = null;
 
     /**
+     * Address constructor.
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Directory\Model\Config\Source\Country $directoryCountry
      * @param \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion
      * @param \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods
      * @param \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods
+     * @param \Magento\Config\Model\Config\Source\Locale\Currency $currencies
      * @param array $data
      */
     public function __construct(
@@ -194,6 +196,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                     break;
                 case 'base_currency_code':
                     $options = $this->_currencies->toOptionArray(false);
+                    break;
                 case 'created_at':
                     $options = [
                         ["value" => "00::8", "label" => __("Midnight - 8:00 a.m.")],
@@ -272,7 +275,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                 return '15::20';
             case ($hour > 20 && $hour <= 23):
                 return '20::23';
-
         }
 
         return '';
@@ -336,7 +338,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         return $elt;
     }
 
-
     /**
      * Retrieve Condition Operator element Instance
      * If the operator value is empty - define first available operator value as default
@@ -396,6 +397,4 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
             $this->getValueElementRenderer()
         );
     }
-
-
 }

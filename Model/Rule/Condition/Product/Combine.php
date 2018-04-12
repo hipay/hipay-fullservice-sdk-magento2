@@ -36,8 +36,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     protected $methodCode = null;
 
     /**
+     * Combine constructor.
      * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
@@ -158,7 +159,6 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
         );
     }
-
 
     /**
      * Retrieve Condition Operator element Instance
@@ -284,6 +284,4 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
         );
     }
-
-
 }

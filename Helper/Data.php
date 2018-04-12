@@ -80,7 +80,7 @@ class Data extends AbstractHelper
                     break;
                 case 2:
                 case 3:
-                    /* @var $rule Allopass_Hipay_Model_Rule */
+                    /** @var $rule Allopass_Hipay_Model_Rule **/
                     $rule = $this->_ruleFactory->create();
                     $rule->getResource()->load($rule, $config3dsRules);
                     if ($rule->getId() && $rule->validate($quote)) {

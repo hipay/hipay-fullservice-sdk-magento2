@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Cc;
 
-
 /**
  * @deprecated
  *
@@ -37,7 +36,6 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
     public function execute()
     {
         try {
-
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 
             if (!$order->getId()) {

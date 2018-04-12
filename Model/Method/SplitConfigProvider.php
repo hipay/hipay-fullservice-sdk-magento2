@@ -34,7 +34,6 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 class SplitConfigProvider implements ConfigProviderInterface
 {
 
-
     /**
      * @var string $methodCode
      */
@@ -94,7 +93,16 @@ class SplitConfigProvider implements ConfigProviderInterface
     protected $_hipayConfig;
 
     /**
+     * SplitConfigProvider constructor.
      * @param PaymentHelper $paymentHelper
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Framework\Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param Context $context
+     * @param array $methodCodes
      */
     public function __construct(
         PaymentHelper $paymentHelper,
@@ -107,7 +115,6 @@ class SplitConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
-
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
         }
@@ -118,7 +125,6 @@ class SplitConfigProvider implements ConfigProviderInterface
         $this->hipayHelper = $hipayHelper;
         $this->priceCurrency = $priceCurrency;
         $this->_hipayConfig = $context->getConfigFactory()->create();
-
     }
 
     /**
@@ -126,7 +132,6 @@ class SplitConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-
         $config = [];
         foreach ($this->methods as $methodCode => $method) {
             if ($method->isAvailable()) {
@@ -147,9 +152,7 @@ class SplitConfigProvider implements ConfigProviderInterface
             'hipay/payment/refreshCheckoutConfig'
         );
 
-
         return $config;
-
     }
 
     /**
@@ -159,9 +162,7 @@ class SplitConfigProvider implements ConfigProviderInterface
      */
     protected function getPaymentProfiles($methodCode)
     {
-
         if (!isset($this->paymentProfiles[$methodCode])) {
-
             $ppIds = $this->methods[$methodCode]->getConfigData('split_payments');
             if (!is_array($ppIds)) {
                 $ppIds = explode(',', $ppIds);
@@ -174,9 +175,8 @@ class SplitConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     *
-     * @param string $methodCode
-     * @return []
+     * @param $methodCode
+     * @return array
      */
     protected function getPaymentProfilesAsArray($methodCode)
     {
@@ -184,7 +184,6 @@ class SplitConfigProvider implements ConfigProviderInterface
 
         /** @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile */
         foreach ($this->getPaymentProfiles($methodCode) as $pp) {
-
             $amounts = $this->checkoutSession->getQuote()->getBaseGrandTotal();
             $currency = $this->checkoutSession->getQuote()->getStore()->getBaseCurrency();
             if ($this->hipayHelper->useOrderCurrency()) {
@@ -215,7 +214,5 @@ class SplitConfigProvider implements ConfigProviderInterface
         }
 
         return $pProfiles;
-
     }
-
 }

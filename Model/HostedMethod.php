@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
-
 /**
  * Class Hosted Payment Method
  *
@@ -35,7 +34,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedMethod extends FullserviceMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hosted';
 
     /**
@@ -76,7 +74,6 @@ class HostedMethod extends FullserviceMethod
      */
     public function initialize($paymentAction, $stateObject)
     {
-
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
         $order->setCanSendNewEmailFlag(false);

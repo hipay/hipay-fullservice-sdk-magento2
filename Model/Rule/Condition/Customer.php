@@ -50,8 +50,11 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $methodCode = null;
 
     /**
+     * Customer constructor.
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Customer\Model\Config\Source\Group\Multiselect $customerGroups
+     * @param \Magento\Config\Model\Config\Source\Yesno $yesNo
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param array $data
      */
     public function __construct(
@@ -156,7 +159,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        /* @var $quote \Magento\Quote\Model\Quote */
+        /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $model;
         $toValidate = new DataObject();
 
@@ -183,7 +186,6 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
             return $isDifferent;
         }
 
-
         $billingAddress = $quote->getBillingAddress();
         $shippingAddress = $quote->getShippingAddress();
         $methods = array('getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId');
@@ -199,7 +201,6 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
         return $isDifferent;
     }
-
 
     public function setMethodCode($methodCode)
     {
@@ -258,7 +259,6 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
         $elt->setShowAsText(true);
         return $elt;
     }
-
 
     /**
      * Retrieve Condition Operator element Instance
@@ -319,6 +319,4 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
             $this->getValueElementRenderer()
         );
     }
-
-
 }

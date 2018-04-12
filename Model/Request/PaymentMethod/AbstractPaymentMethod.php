@@ -29,7 +29,6 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 abstract class AbstractPaymentMethod extends AbstractRequest
 {
 
-
     /**
      * Order
      *
@@ -86,5 +85,4 @@ abstract class AbstractPaymentMethod extends AbstractRequest
     {
         return $this->_quote;
     }
-
 }

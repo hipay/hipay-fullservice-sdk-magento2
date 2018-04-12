@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\SecureVault;
 
-
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
@@ -38,7 +37,6 @@ use HiPay\Fullservice\SecureVault\Model\PaymentCardToken;
  */
 class Manager
 {
-
 
     /**
      *
@@ -68,7 +66,6 @@ class Manager
         RequestFactory $requestfactory,
         ConfigFactory $configFactory,
         $params = []
-
     ) {
         $this->_configFactory = $configFactory;
         $this->_requestFactory = $requestfactory;
@@ -87,7 +84,6 @@ class Manager
         } else {
             throw new \Exception('Method code is required.');
         }
-
     }
 
     /**
@@ -124,7 +120,6 @@ class Manager
         $cardHolder = "",
         $multiUse = false
     ) {
-
         $generateTokenRequest = new GenerateTokenRequest();
         $generateTokenRequest->card_number = $cardNumber;
         $generateTokenRequest->card_expiry_month = $cardExpiryMonth;
@@ -138,6 +133,4 @@ class Manager
 
         return $paymentCardToken;
     }
-
-
 }

@@ -46,10 +46,11 @@ class Attributes extends \Magento\Framework\DataObject implements \Magento\Frame
     protected $_searchCriteriaBuilder;
 
     /**
-     * Config
-     *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface
-     * */
+     * Attributes constructor.
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,

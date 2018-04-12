@@ -67,7 +67,6 @@ class Delete extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
-            $title = "";
             try {
                 // init model and delete
                 $model = $this->splitPaymentFactory->create();

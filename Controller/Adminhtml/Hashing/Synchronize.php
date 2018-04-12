@@ -100,7 +100,6 @@ class Synchronize extends \Magento\Backend\App\Action
      */
     protected function _updateHashAlgorithm($storeId)
     {
-
         $platforms = array(
             ConfigFactory::PRODUCTION,
             ConfigFactory::STAGE,
@@ -169,5 +168,4 @@ class Synchronize extends \Magento\Backend\App\Action
             )
         );
     }
-
 }

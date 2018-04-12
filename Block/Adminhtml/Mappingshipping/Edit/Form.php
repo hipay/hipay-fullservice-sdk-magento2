@@ -16,8 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping\Edit;
 
-use \HiPay\Fullservice\Data\Category\Collection as collection;
-
 /**
  * Adminhtml Cart Categories edit form block
  *
@@ -40,9 +38,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $shippingMethodsHipay;
 
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay
      * @param array $data
      */
     public function __construct(

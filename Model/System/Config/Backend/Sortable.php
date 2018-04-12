@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\System\Config\Backend;
 
-
 /**
  * Sortable Backend Model
  *
@@ -29,9 +28,10 @@ class Sortable extends \Magento\Framework\App\Config\Value
 {
 
     /**
+     * Sortable constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection

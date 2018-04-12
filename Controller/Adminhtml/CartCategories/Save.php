@@ -35,7 +35,9 @@ class Save extends \Magento\Backend\App\Action
     private $cartCategoriesFactory;
 
     /**
+     * Save constructor.
      * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
      */
     public function __construct(
         Action\Context $context,

@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 use HiPay\FullserviceMagento\Model\CcMethod;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
@@ -35,7 +34,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 class CcSplitMethod extends CcMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_ccsplit';
 
     /**
@@ -57,11 +55,12 @@ class CcSplitMethod extends CcMethod
     protected $profileFactory;
 
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * CcSplitMethod constructor.
+     * @param TransactionRepository $transactionRepository
+     * @param Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -103,12 +102,9 @@ class CcSplitMethod extends CcMethod
             }
             $firstSplit = current($splitAmounts);
             $amount = (float)$firstSplit['amountToPay'];
-
         }
 
         return parent::manualCapture($payment, $amount);
-
-
     }
 
     /**
@@ -119,7 +115,6 @@ class CcSplitMethod extends CcMethod
      */
     protected function getProfile($profileId)
     {
-
         if (empty($profileId)) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
@@ -134,7 +129,6 @@ class CcSplitMethod extends CcMethod
 
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {
-
         $profileId = $payment->getAdditionalInformation('profile_id');
         $profile = $this->getProfile($profileId);
 
@@ -151,7 +145,5 @@ class CcSplitMethod extends CcMethod
         $payment->getOrder()->setForcedAmount((float)$firstSplit['amountToPay']);
 
         return parent::place($payment);
-
     }
-
 }

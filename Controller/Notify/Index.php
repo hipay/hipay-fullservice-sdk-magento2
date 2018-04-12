@@ -40,7 +40,9 @@ class Index extends AppAction
     protected $_logger;
 
     /**
+     * Index constructor.
      * @param Context $context
+     * @param \Psr\Log\LoggerInterface $_logger
      */
     public function __construct(
         Context $context,
@@ -60,7 +62,7 @@ class Index extends AppAction
         $params = $this->getRequest()->getPost()->toArray();
 
         try {
-            /* @var $notify \HiPay\FullserviceMagento\Model\Notify */
+            /** @var $notify \HiPay\FullserviceMagento\Model\Notify **/
             $notify = $this->_objectManager->create(
                 '\HiPay\FullserviceMagento\Model\Notify',
                 ['params' => ['response' => $params]]

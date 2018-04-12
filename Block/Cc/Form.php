@@ -46,8 +46,10 @@ class Form extends \Magento\Payment\Block\Form\Cc
     protected $configFactory;
 
     /**
+     * Form constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
      * @param array $data
      */
     public function __construct(
@@ -101,5 +103,4 @@ class Form extends \Magento\Payment\Block\Form\Cc
     {
         return $this->getConfig()->getApiPassword();
     }
-
 }

@@ -43,5 +43,4 @@ class Form extends \Magento\Payment\Block\Form
     ) {
         parent::__construct($context, $data);
     }
-
 }

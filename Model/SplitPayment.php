@@ -97,12 +97,14 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     protected $paymentHelper;
 
     /**
-     * Constructor
-     *
+     * SplitPayment constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param PaymentHelper $paymentHelper
+     * @param \Magento\Sales\Model\OrderFactory $orderF
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(

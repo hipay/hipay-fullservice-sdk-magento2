@@ -74,11 +74,13 @@ class CcConfigProvider implements ConfigProviderInterface
     protected $assetSource;
 
     /**
+     * CcConfigProvider constructor.
      * @param CcConfig $ccConfig
      * @param PaymentHelper $paymentHelper
      * @param \Magento\Framework\Url $urlBuilder
-     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
-     * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+     * @param System\Config\Source\CcType $cctypeSource
+     * @param Config\Factory $configFactory
+     * @param Source $assetSource
      */
     public function __construct(
         CcConfig $ccConfig,

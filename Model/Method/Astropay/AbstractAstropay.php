@@ -34,7 +34,6 @@ class AbstractAstropay extends AbstractMethodAPI
     const IDENTIFICATION_CPF = 'cpf';
     const IDENTIFICATION_CPN = 'cpn';
 
-
     /**
      * Payment Method feature
      *
@@ -49,14 +48,12 @@ class AbstractAstropay extends AbstractMethodAPI
      */
     protected $_canRefundInvoicePartial = false;
 
-
     /**
      *  Extra informations
      *
      * @var array
      */
     protected $_additionalInformationKeys = ['nationalIdentification'];
-
 
     /**
      * Validate payment method information object
@@ -98,6 +95,4 @@ class AbstractAstropay extends AbstractMethodAPI
     {
         return $this->_typeIdentification;
     }
-
-
 }

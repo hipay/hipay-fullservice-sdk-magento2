@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-
 /**
  * Payment Profile Resource Model
  *
@@ -38,6 +37,4 @@ class PaymentProfile extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     {
         $this->_init('hipay_payment_profile', 'profile_id');
     }
-
-
 }

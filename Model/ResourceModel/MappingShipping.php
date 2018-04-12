@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-
 /**
  * Cart categories Resource Model
  *
@@ -38,6 +37,4 @@ class MappingShipping extends \Magento\Framework\Model\ResourceModel\Db\Abstract
     {
         $this->_init('hipay_cart_mapping_shipping', 'mapping_shipping_id');
     }
-
-
 }

@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
-
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\QiwiWalletPaymentMethod;
 
 /**
@@ -29,11 +28,8 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\QiwiWalletPaymentMethod;
  */
 class QiwiWallet extends AbstractPaymentMethod
 {
-
-
     protected function mapRequest()
     {
-
         $qiwiWalletPaymentMethod = new QiwiWalletPaymentMethod();
         $qiwiWalletPaymentMethod->qiwiuser = $this->_order->getPayment()->getAdditionalInformation('qiwiuser');
 

@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Payment;
 
-
 /**
  * After place order controller
  *
@@ -29,7 +28,6 @@ namespace HiPay\FullserviceMagento\Controller\Payment;
  */
 class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
-
 
     /**
      * Submit the order

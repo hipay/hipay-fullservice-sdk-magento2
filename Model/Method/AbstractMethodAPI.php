@@ -70,7 +70,6 @@ abstract class AbstractMethodAPI extends FullserviceMethod
         $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
         $stateObject->setStatus('pending_payment');
         $stateObject->setIsNotified(false);
-
     }
 
     /**
@@ -94,5 +93,4 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     {
         $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
     }
-
 }

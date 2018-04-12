@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Cc;
 
-
 /**
  * @deprecated
  *
@@ -59,7 +58,6 @@ class Tokenize extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $this->getResponse()->representJson($tokenModel->toJson());
             }
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
             $this->getResponse()->representJson(json_encode(array(
                 "code" => $e->getCode(),
                 "message" => $e->getMessage()

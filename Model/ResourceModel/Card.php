@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-
 /**
  * Card Resource Model
  *
@@ -38,6 +37,4 @@ class Card extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->_init('hipay_customer_card', 'card_id');
     }
-
-
 }

@@ -39,12 +39,12 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
-            /** @var $order \Magento\Sales\Model\Order */
+            /** @var $order \Magento\Sales\Model\Order **/
             $order = $this->_initOrder();
             if ($order) {
                 //1. Authorize the payment
                 $order->getPayment()->accept();
-                /* @var $orderService \Magento\Sales\Model\Service\OrderService */
+                /** @var $orderService \Magento\Sales\Model\Service\OrderService **/
                 $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
                 $orderService->setState(
                     $order,

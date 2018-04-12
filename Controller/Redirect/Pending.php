@@ -34,9 +34,9 @@ class Pending extends Fullservice
 {
 
     /**
-     * @return void
+     * @return \Magento\Framework\View\Result\Page
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * */
+     */
     public function execute()
     {
         $this->_checkoutSession->clearQuote();

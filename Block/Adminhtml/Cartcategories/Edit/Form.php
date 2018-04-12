@@ -40,9 +40,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $categoriesHipay;
 
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesMagento $categoriesMagento
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesHipay $categoriesHipay
      * @param array $data
      */
     public function __construct(
@@ -115,5 +118,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return parent::_prepareForm();
     }
-
 }

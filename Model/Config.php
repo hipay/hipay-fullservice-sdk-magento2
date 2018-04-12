@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
-
 use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
@@ -24,7 +23,6 @@ use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
-
 
 /**
  * Main Config Class
@@ -38,7 +36,6 @@ use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
  */
 class Config extends AbstractConfig implements ConfigurationInterface
 {
-
     const STATUS_AUTHORIZED = 'hipay_authorized';
     const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
     const STATUS_AUTHORIZED_PENDING = "hipay_authorized_pending";
@@ -97,6 +94,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param array $params
      */
     public function __construct(
@@ -154,7 +153,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function mustUseMotoCredentials()
     {
-
         $hasOrder = $this->getOrder() !== null;
         $hasLastTransId = false;
         $isMoto = false;
@@ -203,7 +201,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentProductsList()
     {
-
         $list = explode(",", $this->getValue('payment_products'));
         return $list;
     }
@@ -265,7 +262,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function hasCredentials($withTokenJs = false)
     {
-
         if ($withTokenJs) {
             //token JS credential
             $apiUsernameTokenJs = $this->getApiUsernameTokenJs();
@@ -291,7 +287,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiUsername()
     {
-
         if ($this->mustUseMotoCredentials()) {
             return $this->getApiUsernameMoto();
         }
@@ -463,9 +458,10 @@ class Config extends AbstractConfig implements ConfigurationInterface
     }
 
     /**
-     *  Check if sending Cart items is necessary
+     * Check if sending Cart items is necessary
      *
-     * @return boolean
+     * @param $product_code
+     * @return bool
      */
     public function isNecessaryToSendCartItems($product_code)
     {

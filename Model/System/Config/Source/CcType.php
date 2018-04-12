@@ -58,9 +58,10 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
     protected $_codeToLabel = ['VI' => 'Visa/Carte bleue', 'MI' => 'Maestro/Bancontact'];
 
     /**
-     * Config
-     *
+     * CcType constructor.
      * @param \Magento\Payment\Model\Config $paymentConfig
+     * @param PaymentProduct $paymentProductSource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Payment\Model\Config $paymentConfig,

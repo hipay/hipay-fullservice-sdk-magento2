@@ -39,7 +39,10 @@ class Save extends \Magento\Backend\App\Action
     private $mappingShippingFactory;
 
     /**
+     * Save constructor.
      * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory
+     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
         Action\Context $context,

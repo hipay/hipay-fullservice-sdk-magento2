@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-
 /**
  * Source model for Categories Hipay
  *
@@ -42,5 +41,4 @@ class CategoriesHipay implements \Magento\Framework\Option\ArrayInterface
         }
         return $options;
     }
-
 }

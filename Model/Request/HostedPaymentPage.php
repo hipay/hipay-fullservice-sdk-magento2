@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request;
 
-
 use HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
 
 /**
@@ -30,7 +29,6 @@ use HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
 class HostedPaymentPage extends Order
 {
 
-
     /**
      *
      * {@inheritDoc}
@@ -39,7 +37,6 @@ class HostedPaymentPage extends Order
      */
     protected function mapRequest()
     {
-
         $hppRequest = new HostedPaymentPageRequest();
         $orderRequest = parent::mapRequest();
 
@@ -62,8 +59,5 @@ class HostedPaymentPage extends Order
         $hppRequest->display_selector = $this->_config->getValue('display_selector');
 
         return $hppRequest;
-
     }
-
-
 }

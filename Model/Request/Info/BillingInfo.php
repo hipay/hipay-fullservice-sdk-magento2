@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
-
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 
 /**
@@ -44,11 +43,9 @@ class BillingInfo extends AbstractInfoRequest
         $dob = $this->_order->getCustomerDob();
         if (!is_null($dob) && !empty($dob)) {
             try {
-
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
             } catch (\Exception $e) {
-
             }
         }
 
@@ -67,6 +64,4 @@ class BillingInfo extends AbstractInfoRequest
         $customerBillingInfo->recipientinfo = $billingAddress->getCompany();
         return $customerBillingInfo;
     }
-
-
 }

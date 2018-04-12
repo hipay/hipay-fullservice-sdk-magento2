@@ -18,7 +18,6 @@ namespace HiPay\FullserviceMagento\Model\Request\SecureVault;
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\SecureVault\Request\GenerateTokenRequest;
 
-
 /**
  * Generate Token SecureVault Request Object
  *
@@ -52,9 +51,17 @@ class GenerateToken extends BaseRequest
         \HiPay\FullserviceMagento\Helper\Data $helper,
         $params = []
     ) {
-
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver,
-            $requestFactory, $urlBuilder, $helper, $params);
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $params
+        );
 
 
         if (isset($params['payment']) && $params['payment'] instanceof \Magento\Sales\Model\Order\Payment) {
@@ -62,7 +69,6 @@ class GenerateToken extends BaseRequest
         } else {
             throw new \Exception('Payment instance is required.');
         }
-
     }
 
 
@@ -71,12 +77,9 @@ class GenerateToken extends BaseRequest
      */
     protected function mapRequest()
     {
-
-
         $generateRequest = new GenerateTokenRequest();
         $generateRequest->card_number = $this->_payment;
 
         return $generateRequest;
     }
-
 }

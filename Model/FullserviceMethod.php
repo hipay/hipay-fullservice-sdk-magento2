@@ -129,10 +129,11 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $transactionRepository;
 
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * FullserviceMethod constructor.
+     * @param TransactionRepository $transactionRepository
+     * @param Method\Context $context
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -403,7 +404,6 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
-
         if ($this->isDifferentCurrency($payment)) {
             $amount = $payment->formatAmount($payment->getCreditmemo()->getGrandTotal());
         }
