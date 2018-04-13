@@ -34,9 +34,10 @@ class Astropay extends AbstractPaymentMethod
      */
     protected function mapRequest()
     {
-        /* @var HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod */
+        /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod */
         $astropayPaymentMethod = new AstropayPaymentMethod();
-        $astropayPaymentMethod->national_identification_number = $this->_order->getPayment()->getAdditionalInformation('nationalIdentification');
+        $astropayPaymentMethod->national_identification_number = $this->_order
+            ->getPayment()->getAdditionalInformation('nationalIdentification');
         return $astropayPaymentMethod;
     }
 }

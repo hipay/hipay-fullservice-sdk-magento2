@@ -33,9 +33,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('HiPay\FullserviceMagento\Model\SplitPayment',
-            'HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment');
+        $this->_init(
+            'HiPay\FullserviceMagento\Model\SplitPayment',
+            'HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment'
+        );
     }
-
-
 }

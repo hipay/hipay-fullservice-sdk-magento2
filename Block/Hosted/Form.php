@@ -32,15 +32,4 @@ class Form extends \Magento\Payment\Block\Form
      * @var string
      */
     protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-    }
 }

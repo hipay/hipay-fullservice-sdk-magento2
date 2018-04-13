@@ -34,7 +34,6 @@ abstract class AbstractRequest implements RequestInterface
      */
     protected $_customerSession;
 
-
     /**
      * Customer ID
      *
@@ -42,14 +41,12 @@ abstract class AbstractRequest implements RequestInterface
      */
     protected $_customerId;
 
-
     /**
      * Checkout data
      *
      * @var \Magento\Checkout\Helper\Data $_checkoutData
      */
     protected $_checkoutData;
-
 
     /**
      * @var \Psr\Log\LoggerInterface $_logger
@@ -74,7 +71,6 @@ abstract class AbstractRequest implements RequestInterface
      * @var \Magento\Framework\Url $_urlBuilder
      */
     protected $_urlBuilder;
-
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface $_localeResolver
@@ -102,8 +98,8 @@ abstract class AbstractRequest implements RequestInterface
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -123,14 +119,11 @@ abstract class AbstractRequest implements RequestInterface
 
         $this->_customerId = $this->_customerSession->getCustomerId();
 
-
         if (isset($params['config']) && $params['config'] instanceof HiPayConfig) {
             $this->_config = $params['config'];
         } else {
-            throw new \Exception('Config instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Config instance is required.'));
         }
-
-
     }
 
     /**
@@ -148,6 +141,4 @@ abstract class AbstractRequest implements RequestInterface
      * @return \HiPay\Fullservice\Request\AbstractRequest
      */
     abstract protected function mapRequest();
-
-
 }

@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\DeliveryShippingInfoRequest;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Delivery info Request Object
@@ -53,24 +54,32 @@ class DeliveryInfo extends AbstractInfoRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory,
+        CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         $params = []
     ) {
-
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver,
-            $requestFactory, $urlBuilder, $helper, $params);
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $params
+        );
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
         $this->_shippingMethodsHipay = $shippingMethodsHipay;
 
@@ -106,12 +115,12 @@ class DeliveryInfo extends AbstractInfoRequest
      *
      * @return date format YYYY-MM-DD
      */
-    function calculateEstimatedDate()
+    public function calculateEstimatedDate()
     {
         if ($this->_mappingDelivery) {
             $today = new \Datetime();
             $daysDelay = $this->_mappingDelivery->getDelayPreparation() + $this->_mappingDelivery->getDelayDelivery();
-            $interval = new \DateInterval ("P{$daysDelay}D");
+            $interval = new \DateInterval("P{$daysDelay}D");
             return $today->add($interval)->format("Y-m-d");
         }
         return null;
@@ -122,7 +131,7 @@ class DeliveryInfo extends AbstractInfoRequest
      *
      * @return null|string
      */
-    function getMappingShippingMethod()
+    public function getMappingShippingMethod()
     {
         if ($this->_mappingDelivery) {
             $codeMappingShipping = $this->_mappingDelivery->getHipayShippingId();
@@ -131,6 +140,4 @@ class DeliveryInfo extends AbstractInfoRequest
         }
         return null;
     }
-
-
 }

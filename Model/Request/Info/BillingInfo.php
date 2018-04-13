@@ -41,15 +41,16 @@ class BillingInfo extends AbstractInfoRequest
         $customerBillingInfo = new CustomerBillingInfoRequest();
         $customerBillingInfo->email = $this->_order->getCustomerEmail();
         $dob = $this->_order->getCustomerDob();
-        if (!is_null($dob) && !empty($dob)) {
+        if ($dob !== null && !empty($dob)) {
             try {
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
             } catch (\Exception $e) {
+                $customerBillingInfo->birthdate = null;
             }
         }
 
-        $customerBillingInfo->gender = $this->_order->getCustomerGender(); //@TODO make mapping Value with \HiPay\Fullservice\Enum\Customer\Gender
+        $customerBillingInfo->gender = $this->_order->getCustomerGender();
         $billingAddress = $this->_order->getBillingAddress();
         $customerBillingInfo->firstname = $billingAddress->getFirstname();
         $customerBillingInfo->lastname = $billingAddress->getLastname();

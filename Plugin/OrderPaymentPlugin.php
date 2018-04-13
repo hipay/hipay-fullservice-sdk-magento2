@@ -73,10 +73,10 @@ class OrderPaymentPlugin
      * Run HiPay deny payment
      * Used to set custom status and state when order is denied
      *
-     * @param \Magento\Sales\Model\Order\Payment $subject
+     * @param Order\Payment $subject
      * @param callable $proceed
-     *
-     * @return \Magento\Sales\Model\Order\Payment
+     * @param bool $isOnline
+     * @return Order\Payment
      */
     public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
     {

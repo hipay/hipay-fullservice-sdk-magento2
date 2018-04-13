@@ -92,8 +92,11 @@ class InstallData implements InstallDataInterface
             ->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], $statuesData);
 
         //Assign new statues to states
-        $setup->getConnection()->insertArray($setup->getTable('sales_order_status_state'),
-            ['status', 'state', 'is_default', 'visible_on_front'], $statuesToStateData);
+        $setup->getConnection()->insertArray(
+            $setup->getTable('sales_order_status_state'),
+            ['status', 'state', 'is_default', 'visible_on_front'],
+            $statuesToStateData
+        );
 
         /**
          * Prepare database after install

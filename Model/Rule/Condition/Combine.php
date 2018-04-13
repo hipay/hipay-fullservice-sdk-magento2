@@ -65,7 +65,6 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         $this->_conditionCustomer = $conditionCustomer;
         parent::__construct($context, $data);
         $this->setType('HiPay\FullserviceMagento\Model\Rule\Condition\Combine');
-
     }
 
     /**

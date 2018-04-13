@@ -43,11 +43,9 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
     /**
      * Options getter
      *
-     * @param int $level Default 2
      * @return array
-     *
      */
-    public function toOptionArray($level = 2)
+    public function toOptionArray()
     {
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();

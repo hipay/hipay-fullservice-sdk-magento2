@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Cron;
 
-
 /**
  * HiPay module crontab
  *
@@ -92,7 +91,7 @@ class CleanPendingOrders
         $limitedTime = 30;
 
         $date = new \DateTime();
-        $interval = new \DateInterval ("PT{$limitedTime}M");
+        $interval = new \DateInterval("PT{$limitedTime}M");
 
         /** @var \Magento\Sales\Model\Order $orderModel */
         $orderModel = $this->_orderFactory->create();
@@ -104,8 +103,11 @@ class CleanPendingOrders
             ->addFieldToFilter('main_table.state', \Magento\Sales\Model\Order::STATE_NEW)
             ->addFieldToFilter('op.method', array('in' => array_values($methodCodes)))
             ->addAttributeToFilter('created_at', array('to' => ($date->sub($interval)->format('Y-m-d H:i:s'))))
-            ->join(array('op' => $orderModel->getResource()->getTable('sales_order_payment')),
-                'main_table.entity_id=op.parent_id', array('method'));
+            ->join(
+                array('op' => $orderModel->getResource()->getTable('sales_order_payment')),
+                'main_table.entity_id=op.parent_id',
+                array('method')
+            );
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {

@@ -33,8 +33,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('HiPay\FullserviceMagento\Model\MappingShipping',
-            'HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping');
+        $this->_init(
+            'HiPay\FullserviceMagento\Model\MappingShipping',
+            'HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping'
+        );
     }
 
     /**
@@ -56,6 +58,4 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         return $this->_toOptionHash('mapping_shipping_id');
     }
-
-
 }

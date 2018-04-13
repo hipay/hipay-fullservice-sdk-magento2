@@ -110,11 +110,6 @@ class Sdd extends FullserviceMethod
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
     }
 
-    public function place(\Magento\Payment\Model\InfoInterface $payment)
-    {
-        return parent::place($payment);
-    }
-
     /**
      * Assign data to info model instance
      *

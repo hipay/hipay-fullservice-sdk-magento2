@@ -21,7 +21,6 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-
 /**
  * HiPay module observer
  *
@@ -102,7 +101,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
 
                 if (!$order->getId()) {
-                    throw new \Exception("Order not found for id: " . $orderId);
+                    throw new LocalizedException(__("Order not found for id: " . $orderId));
                 }
                 /** @var $config \HiPay\FullserviceMagento\Model\Config */
                 $config = $this->_configFactory->create(
@@ -118,7 +117,6 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 $secretPassphrase = $config->getSecretPassphrase();
                 $hash = $config->getHashingAlgorithm();
                 if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
-
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
                         array(
@@ -129,7 +127,10 @@ class CheckHttpSignatureObserver implements ObserverInterface
                     try {
                         $hash = $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $order->getStore());
                     } catch (Exception $e) {
-                        throw new \Exception('Error with retry hashing configuration .');
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('Error with retry hashing configuration .'),
+                            $e
+                        );
                     }
                     if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                         $controller->getActionFlag()->set(

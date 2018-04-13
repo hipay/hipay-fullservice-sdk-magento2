@@ -25,13 +25,14 @@ class Pending extends \Magento\Framework\View\Element\Template
     protected $_checkoutSession;
 
     /**
+     * Pending constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Checkout\Model\Session\Proxy $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         array $data = []
     ) {
         parent::__construct($context, $data);

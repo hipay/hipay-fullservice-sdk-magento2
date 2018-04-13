@@ -23,6 +23,7 @@ use HiPay\Fullservice\Gateway\Model\Cart\Cart as Cart;
 use HiPay\Fullservice\Gateway\Model\Cart\Item as Item;
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use Magento\Setup\Exception;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Commmon Request Object
@@ -57,7 +58,6 @@ abstract class CommonRequest extends BaseRequest
      */
     protected $_paymentMethod;
 
-
     protected $_ccTypes = array(
         'VI' => 'visa',
         'AE' => 'american-express',
@@ -74,7 +74,6 @@ abstract class CommonRequest extends BaseRequest
      * @var \Magento\Weee\Helper\Data
      */
     protected $weeeHelper;
-
 
     /**
      * @var
@@ -103,8 +102,8 @@ abstract class CommonRequest extends BaseRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -112,7 +111,7 @@ abstract class CommonRequest extends BaseRequest
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
+        CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
     ) {
@@ -138,15 +137,18 @@ abstract class CommonRequest extends BaseRequest
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
+        if (isset($params['paymentMethod'])
+            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
+        ) {
             $this->_paymentMethod = $params['paymentMethod'];
         } else {
-            throw new \Exception('Object Request PaymentMethod instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Object Request PaymentMethod instance is required.')
+            );
         }
-
     }
 
     /**
@@ -159,7 +161,6 @@ abstract class CommonRequest extends BaseRequest
     {
         return str_ireplace("'", "&apos;", $string);
     }
-
 
     /**
      *  Build an Cart Json
@@ -242,12 +243,11 @@ abstract class CommonRequest extends BaseRequest
         }
 
         if (!$cartFactory->isAmountAvailable()) {
-            throw new \Exception('Amount for line items is not correct.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Amount for line items is not correct.'));
         }
 
         return $cart->toJson();
     }
-
 
     /**
      *  Get mapping from Magento category for Hipay compliance
@@ -275,7 +275,7 @@ abstract class CommonRequest extends BaseRequest
                 $category = $this->_categoryFactory->create();
                 $category->getResource()->load($category, $idCategory);
                 $parentId = $category->getParentId();
-                if (is_null($category->getParentId()) || $parentId == 1) {
+                if ($category->getParentId() === null || $parentId == 1) {
                     break;
                 }
                 $category = $this->_categoryFactory->create();
@@ -285,5 +285,4 @@ abstract class CommonRequest extends BaseRequest
         }
         return $mapping_id;
     }
-
 }

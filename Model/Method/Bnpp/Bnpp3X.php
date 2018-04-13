@@ -28,7 +28,6 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Bnpp3X extends AbstractBnpp
 {
-
     const HIPAY_METHOD_CODE = 'hipay_bnpp3X';
 
     /**
@@ -56,5 +55,4 @@ class Bnpp3X extends AbstractBnpp
      * @var bool
      */
     protected $_canUseInternal = false;
-
 }

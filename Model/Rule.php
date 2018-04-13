@@ -80,7 +80,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-
         $this->_condCombineFactory = $condCombineFactory;
         $this->_condProdCombineF = $condProdCombineF;
         parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
@@ -122,5 +121,4 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     {
         return str_replace("/", "_", $this->getConfigPath());
     }
-
 }

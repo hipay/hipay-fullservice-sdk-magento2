@@ -77,7 +77,6 @@ class CcSplitMethod extends CcMethod
         $this->profileFactory = $profileFactory;
     }
 
-
     protected function getAddtionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
@@ -97,7 +96,7 @@ class CcSplitMethod extends CcMethod
             }
 
             $splitAmounts = $profile->splitAmount($amounts);
-            if (!is_array($splitAmounts) || !count($splitAmounts)) {
+            if (!is_array($splitAmounts) || empty($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }
             $firstSplit = current($splitAmounts);
@@ -138,7 +137,7 @@ class CcSplitMethod extends CcMethod
         }
 
         $splitAmounts = $profile->splitAmount($amounts);
-        if (!is_array($splitAmounts) || !count($splitAmounts)) {
+        if (!is_array($splitAmounts) || empty($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
         }
         $firstSplit = current($splitAmounts);

@@ -168,7 +168,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
             ->addAttributeToFilter('customer_id', $customer_id)
             ->count();
         $toValidate->setOrdersCount($orders_count);
-        $toValidate->setCustomerIsGuest(is_null($quote->getCustomerIsGuest()) ? 0 : $quote->getCustomerIsGuest());
+        $toValidate->setCustomerIsGuest($quote->getCustomerIsGuest() === nulll ? 0 : $quote->getCustomerIsGuest());
         $toValidate->setDiffAddresses($this->_addressesesAreDifferent($quote));
         $toValidate->setCustomerGroup($quote->getCustomerGroupId());
 

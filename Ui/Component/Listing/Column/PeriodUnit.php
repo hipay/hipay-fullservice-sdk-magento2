@@ -40,9 +40,8 @@ class PeriodUnit implements OptionSourceInterface
     protected $periodUnitFactory;
 
     /**
-     * Constructor
-     *
-     * @param PUSource $ppFactory ;
+     * PeriodUnit constructor.
+     * @param PUSource $periodUnitFactory
      */
     public function __construct(PUSource $periodUnitFactory)
     {

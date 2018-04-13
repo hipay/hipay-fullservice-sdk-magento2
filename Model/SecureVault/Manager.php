@@ -82,7 +82,7 @@ class Manager
             $clientProvider = new SimpleHTTPClient($this->_config);
             $this->_vault = new SecureVaultClient($clientProvider);
         } else {
-            throw new \Exception('Method code is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Method code is required.'));
         }
     }
 

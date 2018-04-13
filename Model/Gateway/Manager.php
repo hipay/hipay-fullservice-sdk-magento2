@@ -113,7 +113,6 @@ class Manager
         SearchCriteriaBuilder $searchCriteriaBuilder,
         TransactionRepositoryInterface $repository,
         $params = []
-
     ) {
         $this->_logger = $logger;
         $this->_configFactory = $configFactory;
@@ -308,7 +307,7 @@ class Manager
 
     protected function _getRequestObject($requestClassName, array $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             $params = $this->_getRequestParameters();
         }
         return $this->_requestFactory->create($requestClassName, $params)->getRequestObject();
@@ -334,13 +333,13 @@ class Manager
     protected function _requestOperation($operationType, $amount = null, $operationId = null)
     {
         $transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
-        if (is_null($operationId)) {
+        if ($operationId === null) {
             $incrementTransaction = $this->countByTransactionsType($operationType, $this->_getPayment()->getId());
             $incrementTransaction++;
             $this->_getPayment()->setTransactionAdditionalInfo('increment_id', $incrementTransaction);
-            $operationId = $this->_order->getIncrementId() . "-" . $operationType . "-manual-" . intval(
-                    $incrementTransaction
-                );
+            $operationId = $this->_order->getIncrementId()
+                . "-" . $operationType . "-manual-"
+                . (int)$incrementTransaction;
         }
 
         $this->_getPayment()->setTransactionId($operationId);

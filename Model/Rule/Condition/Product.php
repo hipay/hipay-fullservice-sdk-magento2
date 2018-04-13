@@ -26,7 +26,6 @@ namespace HiPay\FullserviceMagento\Model\Rule\Condition;
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
-
     protected $methodCode = null;
 
     /**
@@ -51,7 +50,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        //@todo reimplement this method when is fixed MAGETWO-5713
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $model->getProduct();
         if (!$product instanceof \Magento\Catalog\Model\Product) {
@@ -127,7 +125,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         return $elt;
     }
 
-
     /**
      * Retrieve Condition Operator element Instance
      * If the operator value is empty - define first available operator value as default
@@ -187,5 +184,4 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $this->getValueElementRenderer()
         );
     }
-
 }

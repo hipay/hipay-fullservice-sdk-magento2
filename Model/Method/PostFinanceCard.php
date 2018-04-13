@@ -28,7 +28,6 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class PostFinanceCard extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_postfinancecardapi';
 
     /**

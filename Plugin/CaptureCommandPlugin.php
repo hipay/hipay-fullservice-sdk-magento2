@@ -21,7 +21,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
 use HiPay\FullserviceMagento\Model\Config;
 use Magento\Sales\Model\Order as SalesOrder;
 
-
 /**
  * HiPay Plugin
  *
@@ -42,10 +41,12 @@ class CaptureCommandPlugin
      * Run HiPay capture command
      * Used to set custom status and state when order is captured
      *
+     * @param SalesOrder\Payment\State\CaptureCommand $subject
+     * @param callable $proceed
      * @param OrderPaymentInterface $payment
-     * @param string|float|int $amount
+     * @param $amount
      * @param OrderInterface $order
-     * @return string
+     * @return \Magento\Framework\Phrase|string
      */
     public function aroundExecute(
         \Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject,
@@ -54,7 +55,6 @@ class CaptureCommandPlugin
         $amount,
         OrderInterface $order
     ) {
-        $message = '';
         if (strpos($payment->getMethod(), 'hipay') !== false) {
             $status = Config::STATUS_CAPTURE_REQUESTED;
 

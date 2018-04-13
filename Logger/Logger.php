@@ -34,17 +34,6 @@ class Logger extends LoggerMagento
     private $config;
 
     /**
-     * @param LoggerInterface $logger
-     * @param \Magento\Payment\Gateway\ConfigInterface $config
-     */
-    public function __construct(
-        LoggerInterface $logger,
-        \Magento\Payment\Gateway\ConfigInterface $config = null
-    ) {
-        parent::__construct($logger, $config);
-    }
-
-    /**
      * Logs payment related information used for debug
      *
      * @param array $data

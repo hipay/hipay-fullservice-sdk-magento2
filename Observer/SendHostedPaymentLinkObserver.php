@@ -40,8 +40,8 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
     protected $paymenLinkSender;
 
     /**
-     * Constructor
-     *
+     * SendHostedPaymentLinkObserver constructor.
+     * @param \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
      */
     public function __construct(
         \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
@@ -57,7 +57,7 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $order \Magento\Sales\Model\Order */
+        /** @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
         $url = $order->getPayment()->getAdditionalInformation('redirectUrl');
 

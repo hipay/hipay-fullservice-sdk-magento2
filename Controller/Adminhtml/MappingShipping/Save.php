@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
 use Magento\Backend\App\Action;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Save Mapping Shipping
@@ -41,12 +42,12 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Save constructor.
      * @param Action\Context $context
-     * @param \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory
+     * @param CollectionFactory $mappingShippingCollectionFactory
      * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
         Action\Context $context,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory,
+        CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
     ) {
         $this->mappingShippingFactory = $mappingShippingFactory;

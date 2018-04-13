@@ -59,7 +59,8 @@ class Found extends Combine
      */
     public function asHtml()
     {
-        $html = $this->getTypeElement()->getHtml() . __(
+        $html = $this->getTypeElement()->getHtml()
+            . __(
                 "If an item is %1 in the cart with %2 of these conditions true:",
                 $this->getValueElement()->getHtml(),
                 $this->getAggregatorElement()->getHtml()

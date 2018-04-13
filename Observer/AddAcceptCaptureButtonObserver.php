@@ -58,8 +58,10 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     protected $order;
 
     /**
-     * Constructor
-     *
+     * AddAcceptCaptureButtonObserver constructor.
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,

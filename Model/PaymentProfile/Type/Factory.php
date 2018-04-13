@@ -34,7 +34,6 @@ class Factory
      */
     protected $_objectManager = null;
 
-
     /**
      * Factory constructor
      *

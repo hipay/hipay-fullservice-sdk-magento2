@@ -151,7 +151,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {

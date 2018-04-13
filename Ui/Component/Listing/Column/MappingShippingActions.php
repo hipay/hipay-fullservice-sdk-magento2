@@ -21,7 +21,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
 use Magento\Framework\UrlInterface;
 
-
 /**
  * Ui Column Class
  * Mapping shipping Actions

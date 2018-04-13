@@ -178,7 +178,9 @@ class Notify
                 $this->splitPayment->getResource()->load($this->splitPayment, (int)$splitPaymentId);
 
                 if (!$this->splitPayment->getId()) {
-                    throw new \Exception(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId))
+                    );
                 }
             }
 
@@ -187,7 +189,9 @@ class Notify
             $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
 
             if (!$this->_order->getId()) {
-                throw new \Exception(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()))
+                );
             }
 
             if ($this->_order->getPayment()->getAdditionalInformation('profile_id') && !$this->isSplitPayment) {
@@ -200,7 +204,9 @@ class Notify
             //Debug transaction notification if debug enabled
             $this->_methodInstance->debugData($this->_transaction->toArray());
         } else {
-            throw new \Exception('Posted data response as array is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Posted data response as array is required.')
+            );
         }
     }
 
@@ -223,13 +229,14 @@ class Notify
         $canProcess = false;
 
         switch ($this->_transaction->getStatus()) {
-            case TransactionStatus::EXPIRED: //114
+            case TransactionStatus::EXPIRED:
+                // status : 114
                 if (in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZED))) {
                     $canProcess = true;
                 }
-
                 break;
-            case  TransactionStatus::AUTHORIZED: //116
+            case TransactionStatus::AUTHORIZED:
+                // status : 116
                 if ($this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
                     $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
                     $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
@@ -238,7 +245,8 @@ class Notify
                     $canProcess = true;
                 }
                 break;
-            case TransactionStatus::CAPTURE_REQUESTED: //117
+            case TransactionStatus::CAPTURE_REQUESTED:
+                // status : 117
                 if (!$this->_order->hasInvoices()
                     || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal()
                 ) {
@@ -288,48 +296,60 @@ class Notify
         }
 
         switch ($this->_transaction->getStatus()) {
-            case TransactionStatus::BLOCKED: //110
+            case TransactionStatus::BLOCKED:
+                // status : 110
                 $this->_setFraudDetected();
                 // no break
-            case TransactionStatus::DENIED: //111
+            case TransactionStatus::DENIED:
+                // status : 111
                 $this->_doTransactionDenied();
                 break;
-            case TransactionStatus::AUTHORIZED_AND_PENDING: //112
-            case TransactionStatus::PENDING_PAYMENT: //200
+            case TransactionStatus::AUTHORIZED_AND_PENDING:
+                // status : 112
+            case TransactionStatus::PENDING_PAYMENT:
+                // status : 200
                 $this->_setFraudDetected();
                 $this->_doTransactionAuthorizedAndPending();
                 break;
-            case TransactionStatus::AUTHORIZATION_REQUESTED: //142
+            case TransactionStatus::AUTHORIZATION_REQUESTED:
+                // status : 142
                 $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
                 break;
-            case TransactionStatus::REFUSED: //113
-            case TransactionStatus::CANCELLED: //115 Cancel order and transaction
-            case TransactionStatus::AUTHORIZATION_REFUSED: //163
-            case TransactionStatus::CAPTURE_REFUSED: //173
+            case TransactionStatus::REFUSED:
+                // status : 113
+            case TransactionStatus::CANCELLED:
+                //115 Cancel order and transaction
+            case TransactionStatus::AUTHORIZATION_REFUSED:
+                // status : 163
+            case TransactionStatus::CAPTURE_REFUSED:
+                // status : 173
                 $this->_doTransactionFailure();
                 break;
             case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
                 $this->_doTransactionVoid();
                 break;
-            case TransactionStatus::AUTHORIZED: //116
+            case TransactionStatus::AUTHORIZED:
+                // status : 116
                 $this->_doTransactionAuthorization();
                 break;
-            case TransactionStatus::CAPTURE_REQUESTED: //117
+            case TransactionStatus::CAPTURE_REQUESTED:
+                // status : 117
                 $this->_doTransactionCaptureRequested();
                 //If status Capture Requested is not configured to validate the order, we break.
-                if (((int)$this->_order->getPayment()->getMethodInstance()->getConfigData(
-                            'hipay_status_validate_order'
-                        ) == 117) === false
+                if (((int)$this->_order->getPayment()->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order') == 117) === false
                 ) {
                     break;
                 }
                 // no break
-            case TransactionStatus::CAPTURED: //118
-            case TransactionStatus::PARTIALLY_CAPTURED: //119
-                //If status Capture Requested is configured to validate the order and is a direct capture notification (118), we break because order is already validate.
-                if (((int)$this->_order->getPayment()->getMethodInstance()->getConfigData(
-                            'hipay_status_validate_order'
-                        ) == 117) === true
+            case TransactionStatus::CAPTURED:
+                // status : 118
+            case TransactionStatus::PARTIALLY_CAPTURED:
+                // status : 119
+                //If status Capture Requested is configured to validate the order and is a direct capture notification
+                // (118), we break because order is already validate.
+                if (((int)$this->_order->getPayment()->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order') == 117) === true
                     && (int)$this->_transaction->getStatus() == 118
                     && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
                 ) {
@@ -351,38 +371,63 @@ class Notify
                 }
 
                 break;
-            case TransactionStatus::REFUND_REQUESTED: //124
+            case TransactionStatus::REFUND_REQUESTED:
+                // status : 124
                 $this->_doTransactionRefundRequested();
                 break;
-            case TransactionStatus::REFUNDED: //125
-            case TransactionStatus::PARTIALLY_REFUNDED: //126
+            case TransactionStatus::REFUNDED:
+                // status : 125
+            case TransactionStatus::PARTIALLY_REFUNDED:
+                // status : 126
                 $this->_doTransactionRefund();
                 break;
-            case TransactionStatus::REFUND_REFUSED: //165
+            case TransactionStatus::REFUND_REFUSED:
+                // status : 165
                 $this->_order->setStatus(Config::STATUS_REFUND_REFUSED);
                 $this->_order->getResource()->save($this->_order);
                 // no break
-            case TransactionStatus::CREATED: //101
-            case TransactionStatus::CARD_HOLDER_ENROLLED: //103
-            case TransactionStatus::CARD_HOLDER_NOT_ENROLLED: //104
-            case TransactionStatus::UNABLE_TO_AUTHENTICATE: //105
-            case TransactionStatus::CARD_HOLDER_AUTHENTICATED: //106
-            case TransactionStatus::AUTHENTICATION_ATTEMPTED: //107
-            case TransactionStatus::COULD_NOT_AUTHENTICATE: //108
-            case TransactionStatus::AUTHENTICATION_FAILED: //109
-            case TransactionStatus::COLLECTED: //120
-            case TransactionStatus::PARTIALLY_COLLECTED: //121
-            case TransactionStatus::SETTLED: //122
-            case TransactionStatus::PARTIALLY_SETTLED: //123
-            case TransactionStatus::CHARGED_BACK: //129
-            case TransactionStatus::DEBITED: //131
-            case TransactionStatus::PARTIALLY_DEBITED: //132
-            case TransactionStatus::AUTHENTICATION_REQUESTED: //140
-            case TransactionStatus::AUTHENTICATED: //141
-            case TransactionStatus::ACQUIRER_FOUND: //150
-            case TransactionStatus::ACQUIRER_NOT_FOUND: //151
-            case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN: //160
-            case TransactionStatus::RISK_ACCEPTED: //161
+            case TransactionStatus::CREATED:
+                // status : 101
+            case TransactionStatus::CARD_HOLDER_ENROLLED:
+                // status : 103
+            case TransactionStatus::CARD_HOLDER_NOT_ENROLLED:
+                // status : 104
+            case TransactionStatus::UNABLE_TO_AUTHENTICATE:
+                // status : 105
+            case TransactionStatus::CARD_HOLDER_AUTHENTICATED:
+                // status : 106
+            case TransactionStatus::AUTHENTICATION_ATTEMPTED:
+                // status : 107
+            case TransactionStatus::COULD_NOT_AUTHENTICATE:
+                // status : 108
+            case TransactionStatus::AUTHENTICATION_FAILED:
+                // status : 109
+            case TransactionStatus::COLLECTED:
+                // status : 120
+            case TransactionStatus::PARTIALLY_COLLECTED:
+                // status : 121
+            case TransactionStatus::SETTLED:
+                // status : 122
+            case TransactionStatus::PARTIALLY_SETTLED:
+                // status : 123
+            case TransactionStatus::CHARGED_BACK:
+                // status : 129
+            case TransactionStatus::DEBITED:
+                // status : 131
+            case TransactionStatus::PARTIALLY_DEBITED:
+                // status : 132
+            case TransactionStatus::AUTHENTICATION_REQUESTED:
+                // status : 140
+            case TransactionStatus::AUTHENTICATED:
+                // status : 141
+            case TransactionStatus::ACQUIRER_FOUND:
+                // status : 150
+            case TransactionStatus::ACQUIRER_NOT_FOUND:
+                // status : 151
+            case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN:
+                // status : 160
+            case TransactionStatus::RISK_ACCEPTED:
+                // status : 161
                 $this->_doTransactionMessage();
                 break;
         }
@@ -465,7 +510,8 @@ class Notify
                     $splitPayment->setRealOrderId($this->_order->getIncrementId());
                     $splitPayment->setOrderId($this->_order->getId());
                     $splitPayment->setStatus(
-                        $i == 0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE : SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
+                        $i == 0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE :
+                            SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
                     );
                     $splitPayment->setProfileId($profileId);
                     if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
@@ -593,7 +639,6 @@ class Notify
         $this->_order->getResource()->save($this->_order);
     }
 
-
     /**
      * Process a refund
      *
@@ -603,7 +648,7 @@ class Notify
     {
         $amount = (float)$this->_transaction->getRefundedAmount();
         if ($this->_order->hasCreditmemos()) {
-            /* @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo */
+            /** @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo */
 
             if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
                 $remain_amount = round($this->_order->getGrandTotal() - $amount, 2);
@@ -618,7 +663,7 @@ class Notify
                 $status = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
             }
 
-            /* @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
+            /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
                 if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
                     $creditmemoTotal = round($creditmemo->getGrandTotal(), 2);
@@ -638,7 +683,6 @@ class Notify
 
                     $this->prepareOrder($creditmemo);
                     $this->prepareInvoice($creditmemo);
-
 
                     if ($creditmemo->getInvoice()) {
                         $this->_transactionDB->addObject($creditmemo->getInvoice());
@@ -709,7 +753,6 @@ class Notify
         $this->_order->getResource()->save($this->_order);
     }
 
-
     /**
      * Process capture requested payment notification
      *
@@ -740,7 +783,6 @@ class Notify
     {
         $this->_changeStatus(Config::STATUS_REFUND_REFUSED, 'Refund Refused.');
     }
-
 
     /**
      * Process denied payment notification
@@ -780,7 +822,6 @@ class Notify
         $this->_order->getResource()->save($this->_order);
     }
 
-
     /**
      * Register authorized payment
      * @return void
@@ -793,7 +834,6 @@ class Notify
         $payment->setPreparedMessage($this->_generateComment(''))
             ->setTransactionId($this->_transaction->getTransactionReference() . "-auth")
             ->setCcTransId($this->_transaction->getTransactionReference())
-            /*->setParentTransactionId(null)*/
             ->setCurrencyCode($this->_transaction->getCurrency())
             ->setIsTransactionClosed(0)
             ->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
@@ -808,7 +848,7 @@ class Notify
 
         //Change last status history
         $histories = $this->_order->getStatusHistories();
-        if (count($histories)) {
+        if (!empty($histories)) {
             $history = $histories[count($histories) - 1];
             $history->setStatus(Config::STATUS_AUTHORIZED);
 
@@ -834,7 +874,7 @@ class Notify
      */
     protected function _doTransactionCapture($skipFraudDetection = false)
     {
-        /* @var $payment \Magento\Sales\Model\Order\Payment */
+        /** @var $payment \Magento\Sales\Model\Order\Payment */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $parentTransactionId = $payment->getLastTransId();

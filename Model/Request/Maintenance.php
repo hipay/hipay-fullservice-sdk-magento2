@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Maintenance\MaintenanceRequest as MaintenanceRequest;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Maintenance Request Object
@@ -71,7 +72,6 @@ class Maintenance extends CommonRequest
      */
     protected $_productRepositoryInterface;
 
-
     /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
@@ -79,8 +79,8 @@ class Maintenance extends CommonRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -88,7 +88,7 @@ class Maintenance extends CommonRequest
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
+        CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
     ) {
@@ -117,19 +117,23 @@ class Maintenance extends CommonRequest
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
         } else {
-            throw new \Exception('Operation  is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
+        if (isset($params['paymentMethod'])
+            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
+        ) {
             $this->_paymentMethod = $params['paymentMethod'];
         } else {
-            throw new \Exception('Object Request PaymentMethod instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Object Request PaymentMethod instance is required.')
+            );
         }
     }
 
@@ -151,8 +155,5 @@ class Maintenance extends CommonRequest
         // Technical parameter to track wich magento version is used
         $maintenanceRequest->source = $this->helper->getRequestSource();
         return $maintenanceRequest;
-
     }
-
-
 }
