@@ -1,16 +1,17 @@
-magento2:
-  container_name: magento2-hipay-fullservice
-  dockerfile: ./bin/conf/docker/Dockerfile
-  build: .
-  links:
-    - db
-    - smtp
-db:
-  container_name: magento2-hipay-mysql
-  image: mysql:5.6
-  environment:
-    - MYSQL_ROOT_PASSWORD=magento2
-smtp:
-  container_name: magento2-hipay-smtp
-  image: hipay/mailcatcher:1.0.0
+version: "2.1"
+
+services:
+  magento2:
+    build:
+      context: .
+      dockerfile: ./bin/conf/docker/Dockerfile
+
+  db:
+    container_name: magento2-hipay-mysql
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=magento2
+  smtp:
+    container_name: magento2-hipay-smtp
+    image: hipay/mailcatcher:1.0.0
 

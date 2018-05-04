@@ -8,6 +8,10 @@
 - Fix : MOTO
 - Fix : basket
 
+# 1.1.8
+
+- Add support for product without category and option basket
+
 # 1.1.7
 
 - New payment method support : Bnp Personal Finance 3X and 4X 
@@ -99,3 +103,4 @@ New feature:
 # 1.0.1
 
 - README updates
+
