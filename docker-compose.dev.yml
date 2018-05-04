@@ -26,9 +26,20 @@ magento2:
     - ./tests:/var/www/html/magento2/tests
     - ./log:/home/magento2/var/log
     - ./conf/sdk:/var/www/html/magento2/sdk
+  dockerfile: ./bin/conf/docker/Dockerfile
+  build: .
+  links:
+    - db
+    - smtp
 db:
+  image: mysql:5.6
+  environment:
+    - MYSQL_ROOT_PASSWORD=magento2
   ports:
     - "3308:3306"
   volumes:
     - ./data/mysql:/var/lib/mysql
+smtp:
+  container_name: magento2-hipay-smtp
+  image: hipay/mailcatcher:1.0.0
 
