@@ -7,6 +7,14 @@
 #  and hipay.env before start and update
 #  the docker-compose.dev to link this files
 #==========================================
+
+BASE_URL="http://127.0.0.1:8096/"
+URL_MAILCATCHER="http://localhost:1096/"
+header="bin/tests/"
+pathPreFile=${header}000*/*.js
+pathLibHipay=${header}000*/*/*/*.js
+pathDir=${header}0*
+
 if [ "$1" = '' ] || [ "$1" = '--help' ];then
     printf "\n                                                      "
     printf "\n ==================================================== "
@@ -50,6 +58,21 @@ elif [ "$1" = 'install' ];then
     docker exec magento2-hipay-fullservice gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
     docker exec magento2-hipay-fullservice gosu magento2 bin/magento setup:upgrade
     docker exec magento2-hipay-fullservice gosu magento2 bin/magento c:c
+elif [ "$1" = 'test' ]; then
+
+    cd bin/tests/000_lib
+    bower install hipay-casperjs-lib#develop --allow-root
+    cd ../../../;
+
+    if [ "$(ls -A ~/.local/share/Ofi\ Labs/PhantomJS/)" ]; then
+        rm -rf ~/.local/share/Ofi\ Labs/PhantomJS/*
+        printf "Cache cleared !\n\n"
+    else
+        printf "Pas de cache à effacer !\n\n"
+    fi
+
+    casperjs test $pathLibHipay $pathPreFile ${pathDir}/[0-1]*/[0-9][0-9][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --login-backend=$LOGIN_BACKEND --pass-backend=$PASS_BACKEND --login-paypal=$LOGIN_PAYPAL --pass-paypal=$PASS_PAYPAL --xunit=${header}result.xml --ignore-ssl-errors=true --ssl-protocol=any
+
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
 fi
