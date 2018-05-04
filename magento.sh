@@ -24,8 +24,8 @@ if [ "$1" = 'init' ];then
         docker-compose stop
         docker-compose rm -fv
         rm -Rf data/ log/ web/
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml build --no-cache
-        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+        docker-compose -f docker-compose.dev.yml build --no-cache
+        docker-compose -f docker-compose.dev.yml up -d
         docker cp magento2-hipay-fullservice:/var/www/html/magento2 web/
         docker-compose logs -f
     else

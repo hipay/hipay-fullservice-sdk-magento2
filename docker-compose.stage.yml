@@ -1,20 +1,36 @@
-magento2:
-  container_name: jira-mg2tpp-develop.hipay-pos-platform.com
-  ports:
-    - "80:80"
-  links:
-    - db
-    - selenium
-  env_file:
-    - ./bin/conf/stage/hipay.env.sample
-    - ./bin/conf/stage/auth.env.sample
-    - ./bin/conf/stage/mage.env.sample
-    - ./bin/conf/stage/module.env.sample
-selenium:
-  image: selenium/standalone-firefox
-  ports:
-    - "4444:4444"
-smtp:
-  container_name: magento2-hipay-smtp
-  ports:
-    - "1081:80"
+version: "2.1"
+
+networks:
+  magento2:
+    internal: true
+  outside:
+    external: true
+
+services:
+  magento2:
+    container_name: hipay-mg2-$CI_JOB_ID
+    networks:
+      - magento2
+      - outside
+    env_file:
+      - ./bin/conf/stage/hipay.env.sample
+      - ./bin/conf/stage/auth.env.sample
+      - ./bin/conf/stage/mage.env.sample
+      - ./bin/conf/stage/module.env.sample
+    depends_on:
+      - db
+  selenium:
+    image: selenium/standalone-firefox
+    ports:
+      - "4444:4444"
+    networks:
+      - magento2
+  smtp:
+    container_name: hipay-smtp-mg2-$CI_JOB_ID
+    networks:
+      - magento2
+  db:
+    networks:
+      - magento2
+
+
