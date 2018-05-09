@@ -34,23 +34,27 @@ casper.test.begin('Functions', function (test) {
             test.assertNotExists('.message-error.error.message', "Warning message not present on submitting formular");
             test.assertExists("#product-addtocart-button", "Submit button exists");
         });
+        this.then(function () {
+            this.wait(1000, function () {
+                this.click('.action.showcart');
 
-        this.wait(1000, function () {
-            this.click('.action.showcart');
-
+            })
+        });
+        this.then(function () {
             this.waitUntilVisible('#top-cart-btn-checkout', function () {
                 this.click('#top-cart-btn-checkout');
             }, function fail() {
                 test.assertExists("#top-cart-btn-checkout", "Checkout button exists");
             }, 7500);
-
+        });
+        this.then(function () {
             this.waitForSelector("#shipping-method-buttons-container", function success() {
                 test.assertExists("#shipping-method-buttons-container", "Checkout button exists");
                 test.info('Proceed to checkout');
             }, function fail() {
                 test.assertExists("#shipping-method-buttons-container", "Checkout button exists");
             }, 7500);
-        })
+        });
     };
     /* Fill billing operation */
     casper.billingInformation = function (country) {
@@ -143,6 +147,17 @@ casper.test.begin('Functions', function (test) {
         }, 50000);
     };
 
+    /* Test file again with another currency */
+    casper.testOtherCurrency = function (file) {
+        casper.then(function () {
+            if (currentCurrency == allowedCurrencies[0]) {
+                currentCurrency = allowedCurrencies[1];
+                phantom.injectJs(pathHeader + file);
+            }
+            else if (currentCurrency == allowedCurrencies[1])
+                currentCurrency = allowedCurrencies[0]; // retour du currency à la normale --> EURO pour la suite des tests
+        });
+    };
     /* Configure HiPay Enterprise options via formular */
     casper.fillFormHipayEnterprise = function (credentials, moto) {
         var stringMoto = "";
@@ -163,7 +178,9 @@ casper.test.begin('Functions', function (test) {
         }
         this.wait(500, function () {
             this.click("#save");
+        });
 
+        this.then(function () {
             this.waitForSelector(".message.message-success.success", function success() {
                 test.info("HiPay Enterprise credentials configuration done");
             }, function fail() {
@@ -188,13 +205,14 @@ casper.test.begin('Functions', function (test) {
                     'select[name="groups[configurations][fields][fingerprint_enabled][value]"]': state
                 }, false);
                 this.click("#save");
-                this.waitForSelector(".message.message-success.success", function success() {
-                    test.info("HiPay Enterprise credentials configuration done");
-                }, function fail() {
-                    test.fail('Failed to apply HiPay Enterprise credentials configuration on the system');
-                }, 20000);
             }
-        })
+        }).then(function () {
+            this.waitForSelector(".message.message-success.success", function success() {
+                test.info("HiPay Enterprise credentials configuration done");
+            }, function fail() {
+                test.fail('Failed to apply HiPay Enterprise credentials configuration on the system');
+            }, 20000);
+        });
     };
 
     casper.echo('Fonctions chargées !', 'INFO');

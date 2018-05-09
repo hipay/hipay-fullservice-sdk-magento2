@@ -5,8 +5,24 @@ casper.test.begin('Functions Checkout', function (test) {
     /* Fill Step Payment */
     casper.fillStepPayment = function () {
         this.echo("Choosing payment method and filling 'Payment Information' formular with " + currentBrandCC + "...", "INFO");
-        this.waitForSelector('#hipay_cc', function success() {
-            method_hipay = "hipay_cc";
+
+        this.waitWhileVisible(".loading-mask", function () {
+            this.echo("Payment form loaded", "INFO");
+        });
+
+        this.then(function () {
+            this.waitForSelector('#hipay_cc', function success() {
+                method_hipay = "hipay_cc";
+            }, function fail() {
+                test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
+                test.info("Initial credential for api_user_name was :" + initialCredential);
+                this.fillFormHipayEnterprise(initialCredential);
+                test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
+            }, 15000);
+        });
+
+        this.then(function () {
+            this.echo("Filling payment form", "INFO");
             this.wait(1000, function () {
                 this.click('input#' + method_hipay);
 
@@ -23,15 +39,16 @@ casper.test.begin('Functions Checkout', function (test) {
                     this.fillFormMagentoCreditCard(cardsNumber.maestro);
                 }
 
+
+            });
+        });
+
+        this.then(function () {
+            this.wait(500, function () {
                 this.clickPayButton();
                 test.info("Done");
             });
-        }, function fail() {
-            test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
-            test.info("Initial credential for api_user_name was :" + initialCredential);
-            this.fillFormHipayEnterprise(initialCredential);
-            test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
-        }, 15000);
+        });
     };
 
     /* Fill HiPayCC formular */
@@ -60,7 +77,7 @@ casper.test.begin('Functions Checkout', function (test) {
         }, 25000);
     };
 
-    casper.clickPayButton = function (){
+    casper.clickPayButton = function () {
         this.echo("Click Pay or continue Button ...", "INFO");
         this.click('.payment-method._active .actions-toolbar:not([style="display: none;"])>div>button.checkout');
     }
