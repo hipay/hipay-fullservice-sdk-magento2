@@ -41,7 +41,7 @@ if [ "$1" = 'init' ];then
     fi
 elif [ "$1" = 'restart' ];then
     docker-compose stop
-    docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+    docker-compose -f docker-compose.dev.yml up -d
 elif [ "$1" = 'static' ];then
     docker exec magento2-hipay-fullservice rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
@@ -60,6 +60,7 @@ elif [ "$1" = 'install' ];then
     docker exec magento2-hipay-fullservice gosu magento2 bin/magento c:c
 elif [ "$1" = 'test' ]; then
 
+    rm -rf bin/tests/errors/*
     cd bin/tests/000_lib
     bower install hipay-casperjs-lib#develop --allow-root
     cd ../../../;

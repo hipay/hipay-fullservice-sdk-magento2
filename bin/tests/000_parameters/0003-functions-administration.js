@@ -54,29 +54,6 @@ casper.test.begin('Functions Administration', function(test) {
         });
     };
 
-    casper.setCurrencySetup = function(currency) {
-        if(currency == 'BRL')
-            this.echo("Changing currency setup...", "INFO");
-        else
-            this.echo("Reinitializing currency setup...", "INFO");
-        this.click(x('//span[contains(., "Currency Setup")]'));
-        this.waitForUrl(/section\/currency/, function success() {
-            this.fillSelectors('form#config_edit_form', {
-                'select[name="groups[options][fields][base][value]"]': currency,
-                'select[name="groups[options][fields][default][value]"]': currency,
-                'select[name="groups[options][fields][allow][value][]"]': currency
-            }, false);
-            this.click(x('//span[text()="Save Config"]'));
-            this.waitForSelector(x('//span[contains(.,"The configuration has been saved.")]'), function success() {
-                test.info("Currency Setup Configuration done");
-            }, function fail() {
-                test.fail('Failed to apply Currency Setup Configuration on the system');
-            }, 15000);
-        }, function fail() {
-            test.assertUrlMatch(/section\/currency/, "Currency Setup page exists");
-        }, 10000);
-    };
-
     /* Test file again with another card type */
     casper.testOtherTypeCC = function(file,new_typeCC) {
         casper.then(function() {

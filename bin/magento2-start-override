@@ -29,6 +29,8 @@ printf "Set composer http-basic $GITLAB_API_TOKEN"
 gosu magento2 composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
 gosu magento2 composer config --list
 
+gosu magento2 chmod 755 auth.json
+
 #==========================================
 # Execute parent Entrypoint
 #==========================================
