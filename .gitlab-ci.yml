@@ -40,6 +40,8 @@ casperjs-part1:
     - docker exec "hipay-mg2-"$CI_JOB_ID phpunit -c /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
     - sh bin/tests/casper_run_circle.sh http://magento2
   allow_failure: false
+  tags:
+    - magento2
   artifacts:
     paths:
     - bin/tests/errors
