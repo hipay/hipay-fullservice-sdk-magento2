@@ -23,13 +23,19 @@ casper.test.begin('Test Magento Without Device Fingerprint', function (test) {
         .then(function () {
             this.addItemGoCheckout();
         })
+        .then(function () {
+            this.billingInformation();
+        })
+        .then(function () {
+            this.shippingMethod();
+        })
         /* Check no ioBB field */
         .then(function () {
-            this.waitForUrl(/checkout\/onepage/, function success() {
+            this.waitForSelector('#hipay_cc', function success() {
                 this.echo("Checking 'ioBB' field NOT inside checkout page...", "INFO");
-                test.assertDoesntExist('input#ioBB', "'ioBB' field is present and not empty !");
+                test.assertDoesntExist('input#ioBB', "'ioBB' field is Not present !");
             }, function fail() {
-                test.assertUrlMatch(/checkout\/onepage/, "Checkout page exists");
+                test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
             }, 10000);
         })
         .run(function () {

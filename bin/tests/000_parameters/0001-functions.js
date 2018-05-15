@@ -27,8 +27,9 @@ casper.test.begin('Functions', function (test) {
         this.echo("Adding this item then, accessing to the checkout...", "INFO");
 
         this.waitForSelector("#product-addtocart-button", function success() {
-            this.click("#product-addtocart-button");
-
+            this.wait(1000, function () {
+                this.click("#product-addtocart-button");
+            });
             test.info('Item added to cart');
         }, function fail() {
             test.assertNotExists('.message-error.error.message', "Warning message not present on submitting formular");
@@ -37,7 +38,6 @@ casper.test.begin('Functions', function (test) {
         this.then(function () {
             this.wait(1000, function () {
                 this.click('.action.showcart');
-
             })
         });
         this.then(function () {
@@ -191,27 +191,33 @@ casper.test.begin('Functions', function (test) {
 
     /* Configure Device Fingerprint options via formular */
     casper.setDeviceFingerprint = function (state, test) {
+        var valueFingerprint;
         casper.then(function () {
             configuration.goingToHiPayConfiguration(test);
         }).then(function () {
             this.echo("Changing 'Device Fingerprint' field...", "INFO");
-            var valueFingerprint = this.evaluate(function () {
+            valueFingerprint = this.evaluate(function () {
                 return document.querySelector('select[name="groups[configurations][fields][fingerprint_enabled][value]"]').value;
             });
-            if (valueFingerprint == state)
+            if (valueFingerprint == state) {
                 test.info("Device Fingerprint configuration already done");
-            else {
+            } else {
                 this.fillSelectors("form#config-edit-form", {
                     'select[name="groups[configurations][fields][fingerprint_enabled][value]"]': state
                 }, false);
-                this.click("#save");
+                this.click("#hipay_configurations-head");
+                this.wait(500, function () {
+                    this.click("#save");
+                });
             }
         }).then(function () {
-            this.waitForSelector(".message.message-success.success", function success() {
-                test.info("HiPay Enterprise credentials configuration done");
-            }, function fail() {
-                test.fail('Failed to apply HiPay Enterprise credentials configuration on the system');
-            }, 20000);
+            if (valueFingerprint != state) {
+                this.waitForSelector(".message.message-success.success", function success() {
+                    test.info("HiPay Enterprise credentials configuration done");
+                }, function fail() {
+                    test.fail('Failed to apply HiPay Enterprise credentials configuration on the system');
+                }, 20000);
+            }
         });
     };
 
