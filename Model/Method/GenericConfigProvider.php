@@ -16,7 +16,6 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 
@@ -93,10 +92,7 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     public function __construct(
         CcConfig $ccConfig,
-        PaymentHelper $paymentHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
@@ -105,11 +101,11 @@ class GenericConfigProvider implements ConfigProviderInterface
 
         $this->ccConfig = $ccConfig;
         foreach ($methodCodes as $code) {
-            $this->methods[$code] = $paymentHelper->getMethodInstance($code);
+            $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
         }
-        $this->urlBuilder = $urlBuilder;
+        $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
-        $this->checkoutSession = $checkoutSession;
+        $this->checkoutSession = $context->getCheckoutSession();
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
 
