@@ -29,16 +29,23 @@ casperjs-part1:
     - sed -i -e "s/{MAGE_ACCOUNT_PUBLIC_KEY\}/$MAGE_ACCOUNT_PUBLIC_KEY/" ./bin/conf/stage/auth.env.sample
     - sed -i -e "s/{MAGE_ACCOUNT_PRIVATE_KEY\}/$MAGE_ACCOUNT_PRIVATE_KEY/" ./bin/conf/stage/auth.env.sample
     - sed -i "s/$(echo "{BRANCH}" | sed -e 's/\([[\/.*]\|\]\)/\\&/g')/$(echo $CI_COMMIT_REF_NAME | sed -e 's/[\/&]/\\&/g')/g" ./bin/conf/stage/module.env.sample
+    - docker-compose -f docker-compose.yml -f docker-compose.stage.yml stop
+    - docker-compose -f docker-compose.yml -f docker-compose.stage.yml rm -fv
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml build --no-cache
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml up -d
-    - sleep 500
+    - sleep 600
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml logs
+    - curl --retry 10 --retry-delay 20 -v http://magento2
   script:
     - docker exec "hipay-mg2-"$CI_JOB_ID phpunit -c /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-magento2/tests/unit/phpunit.xml.dist
+    - sh bin/tests/casper_run_circle.sh http://magento2
   allow_failure: false
+  tags:
+    - magento2
   artifacts:
     paths:
     - bin/tests/errors
+    when: always
   after_script:
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml stop
     - docker-compose -f docker-compose.yml -f docker-compose.stage.yml rm -fv
