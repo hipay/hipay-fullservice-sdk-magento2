@@ -5,7 +5,9 @@ COLOR_SUCCESS='\033[0;32m'
 NC='\033[0m'
 MAGE_INSTALL=0
 PREFIX_STORE1=$RANDOM
-
+ENV_DEVELOPMENT="development"
+ENV_STAGE="stage"
+ENV_PROD="production"
 
 if [ $MAGE_REINSTALL = 1 ] || [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/magento2/app/etc/env.php ]; then
     MAGE_INSTALL=1
@@ -52,6 +54,11 @@ if [ "$MAGE_INSTALL" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_USERNAME_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
+
+    if [ "$ENVIRONMENT" = "$ENV_PROD" ];then
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/configurations/send_notification_url 1
+    fi
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
