@@ -1,32 +1,41 @@
-magento2:
-  container_name: {CONTAINER_NAME_WEB}
-  env_file:
-    - ./bin/conf/production/mage.env.sample
-    - ./bin/conf/production/auth.env.sample
-    - ./bin/conf/production/module.env.sample
-    - ./bin/conf/production/hipay.env.sample
-  ports:
-    - "{PORT_WEB}:80"
-  labels:
-    - "com.hipay.github={label}"
-    - "com.hipay.circleci={circleci}"
-  mem_limit: 512M
-  restart: always
-db:
-  container_name: {CONTAINER_NAME_MYSQL}
-  ports:
-    - "{PORT_MYSQL}:3306"
-  labels:
-    - "com.hipay.github={label}"
-    - "com.hipay.circleci={circleci}"
-  mem_limit: 512M
-  restart: always
-smtp:
-  container_name: {CONTAINER_NAME_SMTP}
-  ports:
-     - "{PORT_SMTP}:80"
-  labels:
-    - "com.hipay.github={label}"
-    - "com.hipay.circleci={circleci}"
-  mem_limit: 512M
-  restart: always
+version: "2.1"
+
+networks:
+  magento2:
+    internal: true
+  outside:
+    external: true
+
+services:
+  magento2:
+    container_name: {CONTAINER_NAME_WEB}
+    env_file:
+      - ./bin/conf/production/mage.env.sample
+      - ./bin/conf/production/auth.env.sample
+      - ./bin/conf/production/module.env.sample
+      - ./bin/conf/production/hipay.env.sample
+    ports:
+      - "{PORT_WEB}:80"
+    labels:
+      - "com.hipay.github={label}"
+      - "com.hipay.circleci={circleci}"
+    mem_limit: 512M
+    restart: always
+  db:
+    container_name: {CONTAINER_NAME_MYSQL}
+    ports:
+      - "{PORT_MYSQL}:3306"
+    labels:
+      - "com.hipay.github={label}"
+      - "com.hipay.circleci={circleci}"
+    mem_limit: 512M
+    restart: always
+  smtp:
+    container_name: {CONTAINER_NAME_SMTP}
+    ports:
+       - "{PORT_SMTP}:80"
+    labels:
+      - "com.hipay.github={label}"
+      - "com.hipay.circleci={circleci}"
+    mem_limit: 512M
+    restart: always
