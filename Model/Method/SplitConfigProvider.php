@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
@@ -94,29 +93,30 @@ class SplitConfigProvider implements ConfigProviderInterface
     protected $_hipayConfig;
 
     /**
-     * @param PaymentHelper $paymentHelper
+     * SplitConfigProvider constructor.
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * @param array $methodCodes
      */
     public function __construct(
-        PaymentHelper $paymentHelper,
         \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        PriceCurrencyInterface $priceCurrency,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
 
         foreach ($methodCodes as $code) {
-            $this->methods[$code] = $paymentHelper->getMethodInstance($code);
+            $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
         }
         $this->ppCollectionFactory = $ppCollectionFactory;
-        $this->checkoutSession = $checkoutSession;
+        $this->checkoutSession = $context->getCheckoutSession();
         $this->checkoutHelper = $checkoutHelper;
-        $this->urlBuilder = $urlBuilder;
+        $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
-        $this->priceCurrency = $priceCurrency;
+        $this->priceCurrency = $context->getPriceCurrency();
         $this->_hipayConfig = $context->getConfigFactory()->create();
 
     }
