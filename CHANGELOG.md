@@ -1,3 +1,11 @@
+# 1.2.1
+
+- Fix : Api call wrongly formatted (gender)
+- Fix : Issue [#107](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/107)
+- Fix : Error on DI compilation [#113](https://github.com/hipay/hipay-fullservice-sdk-magento2/pull/113)
+- Add casperJS tests
+- Improve CI
+
 # 1.2.0
 
 - Add support for multi-currency payments
