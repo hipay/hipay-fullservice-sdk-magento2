@@ -7,11 +7,22 @@ exports.proceed = function proceed(test, method, nameField, option) {
         configuration.goingToHiPayMethodsConfiguration(test);
     })
         .then(function () {
+            otherPaymentBlock = this.getElementAttribute('#payment_us_other_payment_methods-head', 'class');
+            if(otherPaymentBlock !== "open" ){
+                this.wait(500, function () {
+                    test.info("Collapse bloc is closed. Try to expand it.");
+                    this.click('#payment_us_other_payment_methods-head');
+                });
+            }
+        })
+        .then(function () {
             this.waitForSelector(x('//a[text()="' + method + '"]'), function success() {
-                linkBlock = this.getElementAttribute('#payment_hipay_' + nameField + '-head', 'class');
+                linkBlock = this.getElementAttribute('#payment_us_hipay_' + nameField + '-head', 'class');
                 if (linkBlock == "") {
                     test.info("Collapse bloc is closed. Try to expand it.");
-                    this.click(x('//a[text()="' + method + '"]'));
+                    this.wait(500, function () {
+                        this.click(x('//a[text()="' + method + '"]'));
+                    });
                 }
 
             }, function fail() {

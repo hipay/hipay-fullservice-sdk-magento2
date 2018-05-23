@@ -53,7 +53,7 @@ casper.test.begin('Test Magento Admin Menus', function (test) {
         /* Check Payment Methods bloc count */
         .then(function () {
             this.echo("Checking Payments Methods blocs...", "INFO");
-            this.click(x('//span[contains(., "Payment Methods")]'));
+            configuration.goingToHiPayMethodsConfiguration(test);
             this.waitForSelector('#payment_us_other_payment_methods-head', function success() {
                 test.assert(this.exists('#payment_us_hipay_cc-head'), "Payments Methods blocs exists !");
             }, function fail() {
