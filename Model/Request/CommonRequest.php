@@ -197,16 +197,16 @@ abstract class CommonRequest extends BaseRequest
                     $product = $this->_productRepositoryInterface->get($reference);
                     $description = $product->getCustomAttribute('description');
                     $itemHipay = new Item();
-                    $itemHipay->setName($name)
-                        ->setProductReference($reference)
-                        ->setType(TypeItems::GOOD)
-                        ->setQuantity($qty)
-                        ->setUnitPrice($price)
-                        ->setTaxRate($taxPercent)
-                        ->setDiscount($discount)
-                        ->setTotalAmount($amount)
-                        ->setProductDescription($this->escapeHtmlToJson($description->getValue()))
-                        ->setProductCategory($this->getMappingCategory($product));
+                    $itemHipay->setName($name);
+                    $itemHipay->setProductReference($reference);
+                        $itemHipay->setType(TypeItems::GOOD);
+                        $itemHipay->setQuantity($qty);
+                        $itemHipay->setUnitPrice($price);
+                        $itemHipay->setTaxRate($taxPercent);
+                        $itemHipay->setDiscount($discount);
+                        $itemHipay->setTotalAmount($amount);
+                        $itemHipay->setProductDescription($this->escapeHtmlToJson($description->getValue()));
+                        $itemHipay->setProductCategory($this->getMappingCategory($product));
 
                     // Set Specifics informations as EAN
                     if (!empty($this->_config->getEanAttribute())) {
@@ -275,11 +275,11 @@ abstract class CommonRequest extends BaseRequest
                 $category = $this->_categoryFactory->create();
                 $category->getResource()->load($category, $idCategory);
                 $parentId = $category->getParentId();
-                if ($category->getParentId() === null || $parentId == 1) {
+                if ($parentId === null || $parentId == 1) {
                     break;
                 }
                 $category = $this->_categoryFactory->create();
-                $category->getResource()->load($category, $category->getParentId());
+                $category->getResource()->load($category, $parentId);
                 $idCategory = $category->getId();
             }
         }
