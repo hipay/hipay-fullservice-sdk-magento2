@@ -16,7 +16,6 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 
@@ -91,10 +90,7 @@ class GenericConfigProvider implements ConfigProviderInterface
     /**
      * GenericConfigProvider constructor.
      * @param CcConfig $ccConfig
-     * @param PaymentHelper $paymentHelper
-     * @param \Magento\Framework\Url $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
      * @param Context $context
@@ -102,22 +98,19 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     public function __construct(
         CcConfig $ccConfig,
-        PaymentHelper $paymentHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
         $this->ccConfig = $ccConfig;
         foreach ($methodCodes as $code) {
-            $this->methods[$code] = $paymentHelper->getMethodInstance($code);
+            $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
         }
-        $this->urlBuilder = $urlBuilder;
+        $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
-        $this->checkoutSession = $checkoutSession;
+        $this->checkoutSession = $context->getCheckoutSession();
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
 

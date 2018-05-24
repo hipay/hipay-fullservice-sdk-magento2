@@ -57,7 +57,7 @@ class ShippingInfo extends AbstractInfoRequest
         $customerShippingInfo->shipto_msisdn = $shippingAddress->getTelephone();
         // Fake data because it's not default information in MAGENTO
         $customerShippingInfo->shipto_house_number = '999';
-        $customerShippingInfo->shipto_gender = $this->_order->getCustomerGender();
+        $customerShippingInfo->shipto_gender = $this->getHipayGender($this->_order->getCustomerGender());
 
         return $customerShippingInfo;
     }

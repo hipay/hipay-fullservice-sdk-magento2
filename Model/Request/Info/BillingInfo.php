@@ -15,6 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
+
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 
 /**
@@ -43,14 +44,15 @@ class BillingInfo extends AbstractInfoRequest
         $dob = $this->_order->getCustomerDob();
         if ($dob !== null && !empty($dob)) {
             try {
+
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $customerBillingInfo->birthdate = null;
             }
         }
 
-        $customerBillingInfo->gender = $this->_order->getCustomerGender();
+        $customerBillingInfo->gender = $this->getHipayGender($this->_order->getCustomerGender());
         $billingAddress = $this->_order->getBillingAddress();
         $customerBillingInfo->firstname = $billingAddress->getFirstname();
         $customerBillingInfo->lastname = $billingAddress->getLastname();

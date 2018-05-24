@@ -100,15 +100,15 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\App\Config\Storage\WriterInterface $configWriter,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         $params = []
     ) {
-        parent::__construct($scopeConfig, $configWriter, $cacheTypeList, $cacheFrontendPool);
+        parent::__construct($scopeConfig, $configWriter);
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;

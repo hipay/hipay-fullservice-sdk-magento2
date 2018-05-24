@@ -61,7 +61,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
         /** @var $card \HiPay\FullserviceMagento\Model\Card */
         foreach ($this->getItems() as $card) {
-            if ($card->getCcExpYear() == $currentYear && $currentMonth < $card->getCcExpMonth()) {
+            if ($card->getCcExpYear() == $currentYear && $card->getCcExpMonth() < $currentMonth) {
                 $this->removeItemByKey($card->getId());
             }
         }

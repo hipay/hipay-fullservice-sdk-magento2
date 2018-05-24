@@ -214,7 +214,7 @@ var TPP = {
 			    	}
 		        },
 			    error: function (err) {
-			    	obj = JSON.parse(err['response']);
+			    	var obj = JSON.parse(err['response']);
 		            fn_failure({ code: obj['code'], message: obj['message'] });
 		        }
 	        });
