@@ -110,6 +110,10 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-banco'
             },
             {
+                type: 'hipay_caixa',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-caixa'
+            },
+            {
                 type: 'hipay_bbva',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bbva'
             },
