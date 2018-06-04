@@ -26,17 +26,15 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel;
  */
 class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 {
-	
-	/**
-	 * Initialize main table and table id field
-	 *
-	 * @return void
-	 * @codeCoverageIgnore
-	 */
-	protected function _construct()
-	{
-		$this->_init('hipay_rule', 'rule_id');
-	}
-	
-  
+
+    /**
+     * Initialize main table and table id field
+     *
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function _construct()
+    {
+        $this->_init('hipay_rule', 'rule_id');
+    }
 }

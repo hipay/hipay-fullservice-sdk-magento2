@@ -28,7 +28,6 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class Przelewy24Api extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_przelewy24api';
 
     /**

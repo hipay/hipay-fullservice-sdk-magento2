@@ -35,20 +35,20 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-    	//$this->markTestSkipped("Not implemented yet!");
-    	//return;
-    	
-    	$this->ccConfigMock = $this->getMockBuilder('Magento\Payment\Model\CcConfig')
-    	->disableOriginalConstructor()
-    	->getMock();
+        //$this->markTestSkipped("Not implemented yet!");
+        //return;
+
+        $this->ccConfigMock = $this->getMockBuilder('Magento\Payment\Model\CcConfig')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentHelperMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
 
-       /* $this->model = new CcConfigProvider(
-            $this->ccConfigMock,
-            $this->paymentHelperMock,
-        	array()
-        );*/
+        /* $this->model = new CcConfigProvider(
+             $this->ccConfigMock,
+             $this->paymentHelperMock,
+             array()
+         );*/
     }
 
     public function testGetConfig()

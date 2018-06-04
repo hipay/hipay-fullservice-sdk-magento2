@@ -68,12 +68,12 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     protected $typeFactory;
 
     /**
-     * Constructor
-     *
+     * PaymentProfile constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param PaymentProfile\Type\Factory $typeFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -83,13 +83,10 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
-
+    ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->typeFactory = $typeFactory;
     }
-
 
     /**
      * Init resource model and id field
@@ -103,8 +100,9 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Split an amount by profile data
-     * @param float $amount
-     * @return []
+     *
+     * @param $amount
+     * @return array
      */
     public function splitAmount($amount)
     {
@@ -115,7 +113,7 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         $periodFrequency = ( int )$this->getPeriodFrequency();
         $periodUnit = $this->getPeriodUnit();
 
-        $todayDate = new \DateTime ();
+        $todayDate = new \DateTime();
 
         $part = ( int )($amount / $maxCycles);
         $fmod = fmod($amount, $maxCycles);
@@ -125,33 +123,28 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
             $todayClone = clone $todayDate;
             $frequencyValue = $periodFrequency + $j;
             switch ($periodUnit) {
-                case self::PERIOD_UNIT_MONTH : {
-                    $interval = new \DateInterval ("P{$frequencyValue}M");
+                case self::PERIOD_UNIT_MONTH:
+                    $interval = new \DateInterval("P{$frequencyValue}M");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_DAY : {
-                    $interval = new \DateInterval ("P{$frequencyValue}D");
+                case self::PERIOD_UNIT_DAY:
+                    $interval = new \DateInterval("P{$frequencyValue}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_SEMI_MONTH : {
+                case self::PERIOD_UNIT_SEMI_MONTH:
                     $semiMonthFreq = 15 + $frequencyValue;
-                    $interval = new \DateInterval ("P{$semiMonthFreq}D");
+                    $interval = new \DateInterval("P{$semiMonthFreq}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_WEEK : {
+                case self::PERIOD_UNIT_WEEK:
                     $week = 7 + $frequencyValue;
-                    $interval = new \DateInterval ("P{$week}D");
+                    $interval = new \DateInterval("P{$week}D");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
-                case self::PERIOD_UNIT_YEAR : {
-                    $interval = new \DateInterval ("P{$frequencyValue}Y");
+                case self::PERIOD_UNIT_YEAR:
+                    $interval = new \DateInterval("P{$frequencyValue}Y");
                     $dateToPay = $todayClone->add($interval)->format("Y-m-d");
                     break;
-                }
             }
 
             $amountToPay = $i == 0 ? ($part + $fmod) : $part;
@@ -163,7 +156,6 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         }
 
         return $paymentsSplit;
-
     }
 
     public function getAllPaymentTypes($withLabels = true)
@@ -193,5 +185,4 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         }
         return $paymentType;
     }
-
 }

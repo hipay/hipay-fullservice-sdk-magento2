@@ -24,11 +24,12 @@ namespace HiPay\FullserviceMagento\Model\Request;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-interface RequestInterface {
-	
-	/**
-	 * Return sdk request object
-	 * @see \HiPay\Fullservice\Request\AbstractRequest
-	 */
-	public function getRequestObject();
+interface RequestInterface
+{
+
+    /**
+     * Return sdk request object
+     * @see \HiPay\Fullservice\Request\AbstractRequest
+     */
+    public function getRequestObject();
 }

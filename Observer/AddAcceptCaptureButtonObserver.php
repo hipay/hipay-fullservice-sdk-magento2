@@ -58,15 +58,16 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     protected $order;
 
     /**
-     * Constructor
-     *
+     * AddAcceptCaptureButtonObserver constructor.
+     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         OrderRepositoryInterface $orderRepository
-    )
-    {
+    ) {
         $this->_coreRegistry = $registry;
         $this->buttonList = $context->getButtonList();
         $this->orderRepository = $orderRepository;
@@ -88,7 +89,10 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 
                 /** @var $controller \Magento\Sales\Controller\Adminhtml\Order\View */
                 $message = __('Are you sure you want to accept this payment?');
-                $actionUrl = $controller->getUrl('hipay/order/acceptAndCapturePayment', ['order_id' => $order->getEntityId()]);
+                $actionUrl = $controller->getUrl(
+                    'hipay/order/acceptAndCapturePayment',
+                    ['order_id' => $order->getEntityId()]
+                );
                 $this->buttonList->add('accept_capture_payment', [
                     'label' => __('Accept and Capture Payment'),
                     'onclick' => "confirmSetLocation('{$message}', '{$actionUrl}')",
@@ -103,7 +107,6 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
         return $this;
     }
 
-
     /**
      * Retrieve order model object
      * @param \Magento\Sales\Controller\Adminhtml\Order\View $controller
@@ -111,17 +114,16 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
      */
     public function getOrder($controller)
     {
-        if (is_null($this->order)) {
-
+        if ($this->order === null) {
             $id = $controller->getRequest()->getParam('order_id');
             try {
                 $this->order = $this->orderRepository->get($id);
                 if ($this->order->getId()) {
                     $this->_coreRegistry->register('hipay_current_order', $this->order);
                 }
-            } catch (NoSuchEntityException $e) {
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                 return null;
-            } catch (InputException $e) {
+            } catch (\Magento\Framework\Exception\InputException $e) {
                 return null;
             }
         }

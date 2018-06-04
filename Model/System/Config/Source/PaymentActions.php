@@ -27,13 +27,13 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 class PaymentActions implements \Magento\Framework\Option\ArrayInterface
 {
 
-	/**
-	 * Payment actions
-	 */
-	const PAYMENT_ACTION_SALE = 'Sale';
-	
-	const PAYMENT_ACTION_AUTH = 'Authorization';
-	
+    /**
+     * Payment actions
+     */
+    const PAYMENT_ACTION_SALE = 'Sale';
+
+    const PAYMENT_ACTION_AUTH = 'Authorization';
+
     /**
      * {@inheritdoc}
      */
@@ -41,7 +41,7 @@ class PaymentActions implements \Magento\Framework\Option\ArrayInterface
     {
         return $this->getPaymentActions();
     }
-    
+
     /**
      * Payment actions source getter
      *
@@ -49,11 +49,11 @@ class PaymentActions implements \Magento\Framework\Option\ArrayInterface
      */
     public function getPaymentActions()
     {
-    	$paymentActions = [
-    			self::PAYMENT_ACTION_AUTH => __('Authorization'),
-    			self::PAYMENT_ACTION_SALE => __('Sale'),
-    	];
-    
-    	return $paymentActions;
+        $paymentActions = [
+            self::PAYMENT_ACTION_AUTH => __('Authorization'),
+            self::PAYMENT_ACTION_SALE => __('Sale'),
+        ];
+
+        return $paymentActions;
     }
 }

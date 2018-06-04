@@ -30,7 +30,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
 class Facilypay4X implements OptionSourceInterface
 {
 
-
     /**
      * Get options
      *
@@ -39,8 +38,8 @@ class Facilypay4X implements OptionSourceInterface
     public function toOptionArray()
     {
         $options = [];
-        $options[] = array('label'=>__('With fees'),'value'=>'4xcb');
-        $options[] = array('label'=>__('Without fees'),'value'=>'4xcb-no-fees');
+        $options[] = array('label' => __('With fees'), 'value' => '4xcb');
+        $options[] = array('label' => __('Without fees'), 'value' => '4xcb-no-fees');
         return $options;
     }
 }

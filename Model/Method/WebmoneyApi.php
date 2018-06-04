@@ -28,7 +28,6 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class WebmoneyApi extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_webmoneyapi';
 
     /**

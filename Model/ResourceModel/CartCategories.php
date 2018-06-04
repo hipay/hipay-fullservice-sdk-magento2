@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-
 /**
  * Mapping categories Resource Model
  *
@@ -27,17 +26,15 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel;
  */
 class CartCategories extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-	
-	/**
-	 * Initialize main table and table id field
-	 *
-	 * @return void
-	 * @codeCoverageIgnore
-	 */
-	protected function _construct()
-	{
-		$this->_init('hipay_cart_mapping_categories', 'mapping_id');
-	}
-	
-  
+
+    /**
+     * Initialize main table and table id field
+     *
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function _construct()
+    {
+        $this->_init('hipay_cart_mapping_categories', 'mapping_id');
+    }
 }

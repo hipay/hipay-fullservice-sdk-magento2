@@ -21,7 +21,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
 use Magento\Framework\UrlInterface;
 
-
 /**
  * Ui Column Class
  * Payment profiles Actions
@@ -90,11 +89,14 @@ class PaymentProfileActions extends Column
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::PROFILE_URL_PATH_DELETE, ['profile_id' => $item['profile_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            self::PROFILE_URL_PATH_DELETE,
+                            ['profile_id' => $item['profile_id']]
+                        ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete %1','${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?','${ $.$data.name }')
+                            'title' => __('Delete %1', '${ $.$data.name }'),
+                            'message' => __('Are you sure you wan\'t to delete a %1 record?', '${ $.$data.name }')
                         ]
                     ];
                 }

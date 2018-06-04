@@ -21,7 +21,6 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
-
 /**
  * HiPay module observer
  *
@@ -38,10 +37,6 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 class CheckHttpSignatureObserver implements ObserverInterface
 {
     protected $_actionsToCheck = [
-        /*'hipay_redirect_accept',
-        'hipay_redirect_cancel',
-        'hipay_redirect_decline',
-        'hipay_redirect_exception',*/
         'hipay_notify_index'
     ];
 
@@ -95,20 +90,20 @@ class CheckHttpSignatureObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-    	/** @var $controller \HiPay\FullserviceMagento\Controller\Fullservice */
-    	$controller = $observer->getControllerAction();
-    	/** @var $request \Magento\Framework\App\Request\Http */
-    	$request = $observer->getRequest();
-    	
-    	if(in_array($request->getFullActionName(),$this->_actionsToCheck)){
-    		try {
-    			$orderId = $this->getOrderId($request);
-	    		$order = $this->_orderFactory->create()->loadByIncrementId($orderId);
+        /** @var $controller \HiPay\FullserviceMagento\Controller\Fullservice */
+        $controller = $observer->getControllerAction();
+        /** @var $request \Magento\Framework\App\Request\Http */
+        $request = $observer->getRequest();
 
-	    		if(!$order->getId()){
-	    			throw new \Exception("Order not found for id: " . $orderId);
-	    		}
-	    		/** @var $config \HiPay\FullserviceMagento\Model\Config */
+        if (in_array($request->getFullActionName(), $this->_actionsToCheck)) {
+            try {
+                $orderId = $this->getOrderId($request);
+                $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
+
+                if (!$order->getId()) {
+                    throw new LocalizedException(__("Order not found for id: " . $orderId));
+                }
+                /** @var $config \HiPay\FullserviceMagento\Model\Config */
                 $config = $this->_configFactory->create(
                     [
                         'params' => [
@@ -119,21 +114,23 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         ]
                     ]
                 );
-	    		$secretPassphrase = $config->getSecretPassphrase();
+                $secretPassphrase = $config->getSecretPassphrase();
                 $hash = $config->getHashingAlgorithm();
-	    		if(!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)){
-
+                if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
                         array(
                             'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto')
                         )
                     );
-                    
+
                     try {
                         $hash = $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $order->getStore());
                     } catch (Exception $e) {
-                        throw new \Exception('Error with retry hashing configuration .');
+                        throw new \Magento\Framework\Exception\LocalizedException(
+                            __('Error with retry hashing configuration .'),
+                            $e
+                        );
                     }
                     if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                         $controller->getActionFlag()->set(
@@ -144,16 +141,14 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         $controller->getResponse()->setBody("Wrong Secret Signature!");
                         $controller->getResponse()->setHttpResponseCode(500);
                     }
-	    		}
+                }
+            } catch (\Exception $e) {
+                $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+                $controller->getResponse()->setBody("Exception during check signature.");
+                $controller->getResponse()->setHttpResponseCode(500);
+            }
+        }
 
-    		} catch (\Exception $e) {
-    			$controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-    			$controller->getResponse()->setBody("Exception during check signature.");
-				$controller->getResponse()->setHttpResponseCode(500);
-    		}
-    	}
-    	
-    	
         return $this;
     }
 
@@ -163,21 +158,16 @@ class CheckHttpSignatureObserver implements ObserverInterface
      */
     protected function getOrderId(\Magento\Framework\App\RequestInterface $request)
     {
-    	$orderId = 0;
-    	if($request->getParam('orderid',0)){ //Redirection case
-    		$orderId = $request->getParam('orderid',0);
-    	}
-    	elseif(($o = $request->getParam('order',[])) && isset($o['id'])){
+        $orderId = 0;
+        if ($request->getParam('orderid', 0)) { //Redirection case
+            $orderId = $request->getParam('orderid', 0);
+        } elseif (($o = $request->getParam('order', [])) && isset($o['id'])) {
+            $orderId = $o['id'];
 
-			$orderId = $o['id'];
-
-			if (strpos($o['id'], '-split-') !== false) {
-				return explode("-", $o['id'])[0];
-			}
-
-    	}
-    	return $orderId;
-    	
+            if (strpos($o['id'], '-split-') !== false) {
+                return explode("-", $o['id'])[0];
+            }
+        }
+        return $orderId;
     }
-    
 }

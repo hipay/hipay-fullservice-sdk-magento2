@@ -97,12 +97,14 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     protected $paymentHelper;
 
     /**
-     * Constructor
-     *
+     * SplitPayment constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param PaymentHelper $paymentHelper
+     * @param \Magento\Sales\Model\OrderFactory $orderF
+     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
@@ -114,17 +116,14 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
 
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
         $this->paymentHelper = $paymentHelper;
         $this->orderF = $orderF;
         $this->checkoutHelper = $checkoutHelper;
-
     }
-
 
     /**
      * Init resource model and id field
@@ -136,11 +135,10 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         $this->setIdFieldName('split_payment_id');
     }
 
-
     protected function getMethodInstance()
     {
 
-        if (is_null($this->method)) {
+        if ($this->method === null) {
             $this->method = $this->paymentHelper->getMethodInstance($this->getMethodCode());
         }
 
@@ -150,18 +148,25 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     public function getOrder()
     {
 
-        if (is_null($this->_order)) {
-            $this->_order = $this->orderF->create()->load($this->getOrderId());
+        if ($this->_order === null) {
+            $this->_order = $this->orderF->create();
+            $this->_order->getResource()->load($this->_order, $this->getOrderId());
 
             //set custom data before call api
-            $desc = sprintf(__("Order SPLIT #%s by %s"), $this->_order->getIncrementId(), $this->_order->getCustomerEmail());
+            $desc = sprintf(
+                __("Order SPLIT #%s by %s"),
+                $this->_order->getIncrementId(),
+                $this->_order->getCustomerEmail()
+            );
             $this->_order->setForcedDescription($desc);
             $this->_order->setForcedAmount($this->getAmountToPay());
-            $this->_order->setForcedOrderId($this->_order->getIncrementId() . "-split-" . $this->getId());//added because if the same order_id TPP response "Max Attempts exceed!"
+            //added because if the same order_id TPP response "Max Attempts exceed!"
+            $this->_order->setForcedOrderId($this->_order->getIncrementId() . "-split-" . $this->getId());
             $this->_order->setForcedEci(ECI::RECURRING_ECOMMERCE);
-            $this->_order->setForcedOperation(\HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE);
+            $this->_order->setForcedOperation(
+                \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE
+            );
             $this->_order->setForcedCardToken($this->getCardToken());
-
         }
 
         return $this->_order;
@@ -169,7 +174,8 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 
     public function canPay()
     {
-        return $this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED || $this->getStatus() == self::SPLIT_PAYMENT_STATUS_PENDING;
+        return $this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED
+        || $this->getStatus() == self::SPLIT_PAYMENT_STATUS_PENDING;
     }
 
     public function pay()
@@ -184,13 +190,12 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         }
 
         try {
-
             //Call TPP api
             $op = $this->getMethodInstance()->getGatewayManager($this->getOrder())->requestNewOrder();
             $state = $op->getState();
 
             switch ($state) {
-                case TransactionState::COMPLETED;
+                case TransactionState::COMPLETED:
                 case TransactionState::FORWARDING:
                 case TransactionState::PENDING:
                     $this->setStatus(self::SPLIT_PAYMENT_STATUS_COMPLETE);
@@ -201,29 +206,21 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
                     $this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
                     $this->sendErrorEmail();
                     break;
-
             }
-
         } catch (Exception $e) {
-
             $this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
             $this->sendErrorEmail();
-
         }
         $this->setAttempts($this->getAttempts() + 1);
 
-        $this->save();
+        $this->getResource()->save($this);
 
         return $this;
-
     }
-
 
     public function sendErrorEmail()
     {
         $message = __("Error on request split Payment HIPAY. Split Payment Id: " . $this->getId());
         $this->checkoutHelper->sendPaymentFailedEmail($this->getOrder(), $message, __('Split Payment Hipay'));
     }
-
-
 }

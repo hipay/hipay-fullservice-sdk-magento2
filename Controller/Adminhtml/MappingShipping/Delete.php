@@ -15,6 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
+use Magento\Backend\App\Action;
+
 /**
  * Delete payment profile
  *
@@ -27,6 +29,23 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 class Delete extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
+     */
+    private $mappingShippingFactory;
+
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+    ) {
+        $this->mappingShippingFactory = $mappingShippingFactory;
+        parent::__construct($context);
+    }
 
     /**
      * Delete action
@@ -42,10 +61,10 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\MappingShipping');
-                $model->load($id);
+                $model = $this->mappingShippingFactory->create();
+                $model->getResource()->load($model, $id);
                 $title = $model->getName();
-                $model->delete();
+                $model->getResource()->delete($model);
                 // display success message
                 $this->messageManager->addSuccess(__('The mapping shipping has been deleted.'));
                 // go to grid

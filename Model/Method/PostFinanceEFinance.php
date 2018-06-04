@@ -28,12 +28,10 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class PostFinanceEFinance extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_postfinanceefinanceapi';
 
     /**
      * @var string
      */
     protected $_code = self::HIPAY_METHOD_CODE;
-
 }

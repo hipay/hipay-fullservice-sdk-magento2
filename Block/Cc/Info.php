@@ -28,5 +28,4 @@ namespace HiPay\FullserviceMagento\Block\Cc;
 class Info extends \Magento\Payment\Block\Info\Cc
 {
 
-
 }

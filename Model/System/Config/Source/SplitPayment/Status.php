@@ -30,7 +30,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
 class Status implements OptionSourceInterface
 {
 
-
     /**
      * Get options
      *
@@ -39,10 +38,10 @@ class Status implements OptionSourceInterface
     public function toOptionArray()
     {
         $options = [];
-        $options[] = array('label'=>__('Pending'),'value'=>SplitPayment::SPLIT_PAYMENT_STATUS_PENDING);
-        $options[] = array('label'=>__('Complete'),'value'=>SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE);
-        $options[] = array('label'=>__('Failed'),'value'=>SplitPayment::SPLIT_PAYMENT_STATUS_FAILED);
-        
+        $options[] = array('label' => __('Pending'), 'value' => SplitPayment::SPLIT_PAYMENT_STATUS_PENDING);
+        $options[] = array('label' => __('Complete'), 'value' => SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE);
+        $options[] = array('label' => __('Failed'), 'value' => SplitPayment::SPLIT_PAYMENT_STATUS_FAILED);
+
         return $options;
     }
 }

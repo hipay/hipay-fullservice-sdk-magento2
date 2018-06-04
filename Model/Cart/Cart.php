@@ -2,7 +2,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Cart;
 
-
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 
@@ -33,7 +32,6 @@ class Cart extends \Magento\Payment\Model\Cart
      * @var string
      */
     protected $_payment;
-
 
     /**
      *  Sales Model for Invoice or CreditMemo
@@ -72,9 +70,11 @@ class Cart extends \Magento\Payment\Model\Cart
 
         if ($this->_operation == Operation::REFUND) {
             $this->_model = $this->_payment->getCreditMemo();
-        } else if ($this->_operation == Operation::CAPTURE) {
-            if ($this->_payment->getOrder()->hasInvoices()) {
-                $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
+        } else {
+            if ($this->_operation == Operation::CAPTURE) {
+                if ($this->_payment->getOrder()->hasInvoices()) {
+                    $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
+                }
             }
         }
 
@@ -110,15 +110,12 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Calculate subtotal from custom items
      *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-
-        if (
-            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+        if ($this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
             || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
-
         ) {
             $this->_processShippingAndDiscountItems($useOrderCurrency);
         }
@@ -129,7 +126,7 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Calculate subtotal from shipping and discount items
      *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
@@ -153,7 +150,6 @@ class Cart extends \Magento\Payment\Model\Cart
                 0,
                 TypeItems::DISCOUNT
             );
-
         }
         $base_shipping = 0;
         $tax_rate = 0;
@@ -224,9 +220,7 @@ class Cart extends \Magento\Payment\Model\Cart
 
     /**
      * Check line items and totals
-     *
-     *
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _validate($useOrderCurrency = false)
     {
@@ -323,7 +317,7 @@ class Cart extends \Magento\Payment\Model\Cart
             }
             $originalItem = $item->getOriginalItem();
             switch ($this->_operation) {
-                case Operation::REFUND :
+                case Operation::REFUND:
                     $originalItem = $item;
                     break;
                 case Operation::CAPTURE:
@@ -331,10 +325,12 @@ class Cart extends \Magento\Payment\Model\Cart
                     break;
             }
 
-            if ($this->_operation != null && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)) {
-                $qty = intval($originalItem->getData('qty'));
+            if ($this->_operation != null
+                && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)
+            ) {
+                $qty = (int)$originalItem->getData('qty');
             } else {
-                $qty = intval($originalItem->getData('qty_ordered'));
+                $qty = (int)$originalItem->getData('qty_ordered');
             }
 
             $sku = $originalItem->getSku();
@@ -349,11 +345,14 @@ class Cart extends \Magento\Payment\Model\Cart
             }
 
             //HiPay needs total amount with 3 decimals to match the correct total amount within 1 cent
-            //@see Magento\Weee\Block\Item\Price
+            /** @see Magento\Weee\Block\Item\Price */
             $itemTotalInclTax = $this->getTotalPrice($originalItem, $useOrderCurrency);
 
             // Need better precision and unit price with reel tax application
-            if ($this->_operation != null && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)) {
+            if ($this->_operation != null
+                && ($this->_operation == Operation::CAPTURE
+                    || $this->_operation == Operation::REFUND)
+            ) {
                 // To avoid 0.001 between original authorization and capture and refund
                 foreach ($this->_salesModel->getAllItems() as $key => $orderItem) {
                     if ($orderItem->getParentItem()) {
@@ -373,13 +372,12 @@ class Cart extends \Magento\Payment\Model\Cart
                         );
 
                         // Adjust discount to avoid 0.01 difference
-                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);;
+                        $discount = round(($price * $qty) - $itemTotalInclTax, 3);
                     }
                 }
             } else {
                 $price = $this->returnUnitPrice($itemTotalInclTax + $discount, $qty);
             }
-
 
             // Add an item only if its calculated item
             if ($itemTotalInclTax > 0) {
@@ -405,7 +403,8 @@ class Cart extends \Magento\Payment\Model\Cart
 
     /**
      * @param $originalItem
-     * @return float
+     * @param bool $useOrderCurrency
+     * @return mixed
      */
     private function getTotalPrice($originalItem, $useOrderCurrency = false)
     {
@@ -485,7 +484,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * - go to PayPal
      *
      * @param \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
-     * @return void
+     * @param bool $useOrderCurrency
      */
     protected function _applyDiscountTaxCompensationWorkaround(
         \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity,
@@ -501,11 +500,12 @@ class Cart extends \Magento\Payment\Model\Cart
         }
     }
 
-    /*
-     *  Calculate unit price for one product and quantity ( Get better precision )
+    /**
+     * Calculate unit price for one product and quantity ( Get better precision )
      *
-     *@param $product
-     *@param $quantity
+     * @param $itemTotalInclTax
+     * @param $qty
+     * @return float
      */
     private function returnUnitPrice($itemTotalInclTax, $qty)
     {
@@ -528,7 +528,6 @@ class Cart extends \Magento\Payment\Model\Cart
         return false;
     }
 
-
     /**
      *  Is Cart Ok for sending in transaction
      *
@@ -538,5 +537,4 @@ class Cart extends \Magento\Payment\Model\Cart
     {
         return $this->_areAmountsValid;
     }
-
 }

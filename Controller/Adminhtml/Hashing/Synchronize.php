@@ -100,7 +100,6 @@ class Synchronize extends \Magento\Backend\App\Action
      */
     protected function _updateHashAlgorithm($storeId)
     {
-
         $platforms = array(
             ConfigFactory::PRODUCTION,
             ConfigFactory::STAGE,
@@ -126,7 +125,8 @@ class Synchronize extends \Magento\Backend\App\Action
                 } catch (\HiPay\Fullservice\Exception\RuntimeException $e) {
                     $this->messageManager->addErrorMessage(
                         __(
-                            "We can't synchronize at least one of the account (" . $platform . "). Please check your credentials"
+                            "We can't synchronize at least one of the account ("
+                            . $platform . "). Please check your credentials"
                         )
                     );
                     $this->logger->critical($e);
@@ -168,5 +168,4 @@ class Synchronize extends \Magento\Backend\App\Action
             )
         );
     }
-
 }

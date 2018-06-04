@@ -29,15 +29,23 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
+     */
+    private $cartCategoriesFactory;
 
     /**
+     * Save constructor.
      * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
      */
-    public function __construct(Action\Context $context)
-    {
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+    ) {
+        $this->cartCategoriesFactory = $cartCategoriesFactory;
         parent::__construct($context);
     }
-
 
     /**
      * Save action
@@ -50,16 +58,19 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\CartCategories');
+            $model = $this->cartCategoriesFactory->create();
             $id = $this->getRequest()->getParam('mapping_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             } else {
-                $model->load($data['category_magento_id'],'category_magento_id');
+                $model->getResource()->load($model, $data['category_magento_id'], 'category_magento_id');
                 if ($model->getId()) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+                    );
                 }
             }
 
@@ -70,7 +81,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this mapping category.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

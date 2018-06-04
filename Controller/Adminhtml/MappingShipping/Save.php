@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
 use Magento\Backend\App\Action;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Save Mapping Shipping
@@ -34,15 +35,25 @@ class Save extends \Magento\Backend\App\Action
     protected $_mappingShippingCollectionFactory;
 
     /**
-     * @param Action\Context $context
+     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
      */
-    public function __construct(Action\Context $context,
-                                \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory $mappingShippingCollectionFactory)
-    {
+    private $mappingShippingFactory;
+
+    /**
+     * Save constructor.
+     * @param Action\Context $context
+     * @param CollectionFactory $mappingShippingCollectionFactory
+     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        CollectionFactory $mappingShippingCollectionFactory,
+        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+    ) {
+        $this->mappingShippingFactory = $mappingShippingFactory;
         parent::__construct($context);
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
     }
-
 
     /**
      * Save action
@@ -55,10 +66,10 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\MappingShipping');
+            $model = $this->mappingShippingFactory->create();
             $id = $this->getRequest()->getParam('mapping_shipping_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             } else {
                 $count = $this->_mappingShippingCollectionFactory->create()
                     ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
@@ -68,7 +79,10 @@ class Save extends \Magento\Backend\App\Action
                 if ($count > 1) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+                    );
                 }
             }
 
@@ -79,11 +93,14 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['mapping_shipping_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['mapping_shipping_id' => $model->getId(), '_current' => true]
+                    );
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (\LocalizedException $e) {
@@ -95,7 +112,10 @@ class Save extends \Magento\Backend\App\Action
             }
 
             $this->_getSession()->setFormData($data);
-            return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]);
+            return $resultRedirect->setPath(
+                '*/*/edit',
+                ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+            );
         }
         return $resultRedirect->setPath('*/*/');
     }

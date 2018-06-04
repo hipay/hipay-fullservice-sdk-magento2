@@ -27,8 +27,9 @@ namespace HiPay\FullserviceMagento\Model\Rule\Condition\Product;
 class Found extends Combine
 {
     /**
+     * Found constructor.
      * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product $ruleConditionProduct
+     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct
      * @param array $data
      */
     public function __construct(
@@ -58,11 +59,12 @@ class Found extends Combine
      */
     public function asHtml()
     {
-        $html = $this->getTypeElement()->getHtml() . __(
-            "If an item is %1 in the cart with %2 of these conditions true:",
-            $this->getValueElement()->getHtml(),
-            $this->getAggregatorElement()->getHtml()
-        );
+        $html = $this->getTypeElement()->getHtml()
+            . __(
+                "If an item is %1 in the cart with %2 of these conditions true:",
+                $this->getValueElement()->getHtml(),
+                $this->getAggregatorElement()->getHtml()
+            );
         if ($this->getId() != '1') {
             $html .= $this->getRemoveLinkHtml();
         }

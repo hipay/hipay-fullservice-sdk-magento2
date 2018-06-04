@@ -28,12 +28,10 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class Paypal extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_paypalapi';
 
     /**
      * @var string
      */
     protected $_code = self::HIPAY_METHOD_CODE;
-
 }

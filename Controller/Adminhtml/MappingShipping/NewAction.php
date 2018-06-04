@@ -54,7 +54,7 @@ class NewAction extends \Magento\Backend\App\Action
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('edit');
     }
-    
+
     /**
      * Check the permission to run it
      *
@@ -62,6 +62,6 @@ class NewAction extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-    	return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
     }
 }

@@ -60,24 +60,22 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
+        $this->buttonList->update('save', 'label', __('Save Payment Profile'));
+        $this->buttonList->add(
+            'saveandcontinue',
+            [
+                'label' => __('Save and Continue Edit'),
+                'class' => 'save',
+                'data_attribute' => [
+                    'mage-init' => [
+                        'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form'],
+                    ],
+                ]
+            ],
+            -100
+        );
 
-            $this->buttonList->update('save', 'label', __('Save Payment Profile'));
-            $this->buttonList->add(
-                'saveandcontinue',
-                [
-                    'label' => __('Save and Continue Edit'),
-                    'class' => 'save',
-                    'data_attribute' => [
-                        'mage-init' => [
-                            'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form'],
-                        ],
-                    ]
-                ],
-                -100
-            );
-
-            $this->buttonList->update('delete', 'label', __('Delete Payment Profile'));
-
+        $this->buttonList->update('delete', 'label', __('Delete Payment Profile'));
     }
 
     /**
@@ -88,7 +86,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->_coreRegistry->registry('payment_profile')->getId()) {
-            return __("Edit Payment Profile '%1'", $this->escapeHtml($this->_coreRegistry->registry('payment_profile')->getName()));
+            return __(
+                "Edit Payment Profile '%1'",
+                $this->escapeHtml($this->_coreRegistry->registry('payment_profile')->getName())
+            );
         } else {
             return __('New Payment Profile');
         }

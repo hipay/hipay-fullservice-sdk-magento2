@@ -15,6 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
+use Magento\Backend\App\Action;
+
 /**
  * Delete payment profile
  *
@@ -27,6 +29,23 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 class Delete extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
+     */
+    private $cartCategoriesFactory;
+
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+    ) {
+        $this->cartCategoriesFactory = $cartCategoriesFactory;
+        parent::__construct($context);
+    }
 
     /**
      * Delete action
@@ -43,10 +62,10 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\CartCategories');
-                $model->load($id);
+                $model = $this->cartCategoriesFactory->create();
+                $model->getResource()->load($model, $id);
                 $title = $model->getName();
-                $model->delete();
+                $model->getResource()->delete($model);
                 // display success message
                 $this->messageManager->addSuccess(__('The mapping has been deleted.'));
                 // go to grid
