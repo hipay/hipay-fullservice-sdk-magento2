@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 
-
 /**
  * Class Hosted Payment Method
  *
@@ -35,7 +34,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedMethod extends FullserviceMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hosted';
 
     /**
@@ -67,7 +65,6 @@ class HostedMethod extends FullserviceMethod
      */
     protected $_canUseInternal = true;
 
-
     /**
      * Instantiate state and set it to state object
      *
@@ -77,7 +74,6 @@ class HostedMethod extends FullserviceMethod
      */
     public function initialize($paymentAction, $stateObject)
     {
-
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
         $order->setCanSendNewEmailFlag(false);
@@ -89,7 +85,6 @@ class HostedMethod extends FullserviceMethod
         $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
         $stateObject->setStatus('pending_payment');
         $stateObject->setIsNotified(false);
-
     }
 
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
@@ -103,16 +98,15 @@ class HostedMethod extends FullserviceMethod
             $hppModel = $gateway->requestHostedPaymentPage();
             $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
         }
-
     }
 
     /**
      * Capture payment method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param \Magento\Payment\Model\InfoInterface $payment
      * @param float $amount
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -127,16 +121,11 @@ class HostedMethod extends FullserviceMethod
             if ($payment->getLastTransId()) {  //Is not the first transaction
                 $this->manualCapture($payment, $amount);
             }
-
-
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(__('There was an error capturing the transaction: %1.', $e->getMessage()));
         }
 
-
         return $this;
     }
-
-
 }

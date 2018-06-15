@@ -81,15 +81,14 @@ class Sdd extends FullserviceMethod
         'cc_type'
     ];
 
-
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * Sdd constructor.
+     * @param TransactionRepository $transactionRepository
+     * @param Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -98,8 +97,7 @@ class Sdd extends FullserviceMethod
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
 
         if ($this->getConfigData('electronic_signature')) {
@@ -107,23 +105,17 @@ class Sdd extends FullserviceMethod
         }
     }
 
-
     protected function getAddtionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
     }
 
-    public function place(\Magento\Payment\Model\InfoInterface $payment)
-    {
-        return parent::place($payment);
-    }
-
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject|mixed $data
+     * @param \Magento\Framework\DataObject $additionalData
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function _assignAdditionalInformation(\Magento\Framework\DataObject $additionalData)
     {
@@ -158,7 +150,9 @@ class Sdd extends FullserviceMethod
             }
 
             // Instantiate validators for the model
-            $validatorIban = new \Zend\Validator\Iban(array('country_code' => $order->getBillingAddress()->getCountryId()));
+            $validatorIban = new \Zend\Validator\Iban(
+                array('country_code' => $order->getBillingAddress()->getCountryId())
+            );
             $validatorEmpty = new \Zend\Validator\NotEmpty();
 
             if (!$validatorIban->isValid($info->getAdditionalInformation('sdd_iban'))) {
@@ -191,7 +185,6 @@ class Sdd extends FullserviceMethod
      */
     public function initialize($paymentAction, $stateObject)
     {
-
         $payment = $this->getInfoInstance();
         $order = $payment->getOrder();
         $order->setCanSendNewEmailFlag(false);
@@ -203,7 +196,6 @@ class Sdd extends FullserviceMethod
         $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
         $stateObject->setStatus('pending_payment');
         $stateObject->setIsNotified(false);
-
     }
 
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
@@ -225,5 +217,4 @@ class Sdd extends FullserviceMethod
     {
         $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
     }
-
 }

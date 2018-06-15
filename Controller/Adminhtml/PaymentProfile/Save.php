@@ -29,20 +29,29 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
+     */
+    private $paymentProfileFactory;
 
     /**
+     * Save constructor.
      * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
      */
-    public function __construct(Action\Context $context)
-    {
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
+    ) {
+        $this->paymentProfileFactory = $paymentProfileFactory;
         parent::__construct($context);
     }
-
 
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute()
     {
@@ -50,22 +59,25 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-        	
-        	if((int)$data['period_max_cycles'] < 1){
-        		throw new \Magento\Framework\Exception\LocalizedException(__("Period max cycles is equals zero or negative "));
-        	}
-        	
-        	if((int)$data['period_frequency'] < 1){
-        		throw new \Magento\Framework\Exception\LocalizedException(__("Period frequency is equals zero or negative for Payment Profile ID: %s"));
-        	}
-        	
-        	$data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
-        	
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
+            if ((int)$data['period_max_cycles'] < 1) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Period max cycles is equals zero or negative ")
+                );
+            }
+
+            if ((int)$data['period_frequency'] < 1) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __("Period frequency is equals zero or negative for Payment Profile ID: %s")
+                );
+            }
+
+            $data['payment_type'] = \HiPay\FullserviceMagento\Model\PaymentProfile::PAYMENT_TYPE_SPLIT;
+
+            $model = $this->paymentProfileFactory->create();
 
             $id = $this->getRequest()->getParam('profile_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             }
 
             $model->setData($data);
@@ -75,9 +87,8 @@ class Save extends \Magento\Backend\App\Action
                 ['paymentprofile' => $model, 'request' => $this->getRequest()]
             );
 
-
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this payment profile.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

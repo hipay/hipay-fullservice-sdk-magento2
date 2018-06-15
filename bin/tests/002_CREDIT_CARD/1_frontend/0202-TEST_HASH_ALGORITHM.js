@@ -32,8 +32,17 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
             configuration.goingToHiPayConfiguration(test);
         })
         .then(function () {
+            var open = this.getElementAttribute('#hipay_hashing_algorithm-head', 'class');
+            if(open !== "open"){
+                test.info("Collapse bloc is closed. Try to expand it.");
+                this.wait(500, function () {
+                    this.click("#hipay_hashing_algorithm-head");
+                });
+            }
+        })
+        .then(function () {
             this.echo("Synchronize Hashing Algorithm", "INFO");
-            this.waitForSelector('button#hashing_algorithm_button', function success() {
+            this.waitUntilVisible('button#hashing_algorithm_button', function success() {
                 var current = this.evaluate(function () {
                     return document.querySelector('#hipay_hashing_algorithm_hashing_algorithm_test').value;
                 });

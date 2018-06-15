@@ -54,11 +54,6 @@ class CustomDataPlugin
             $result['display_iframe'] = $payment->getMethodInstance()->getConfigData('iframe_mode');
         }
 
-        /* Wait feature
-        if ($split_number) {
-            $customData['payment_type'] = 'Split ' . $split_number;
-        }*/
-
         // Use OneClick
         if ($payment->getAdditionalInformation('create_oneclick')) {
             $result['payment_type'] = 'OneClick';

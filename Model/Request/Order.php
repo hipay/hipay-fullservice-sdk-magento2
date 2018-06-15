@@ -19,6 +19,7 @@ namespace HiPay\FullserviceMagento\Model\Request;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Order Request Object
@@ -63,7 +64,6 @@ class Order extends CommonRequest
      */
     protected $weeeHelper;
 
-
     /**
      * @var
      */
@@ -101,8 +101,8 @@ class Order extends CommonRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -110,7 +110,7 @@ class Order extends CommonRequest
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
+        CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
@@ -143,18 +143,21 @@ class Order extends CommonRequest
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
-        } else {
         }
 
-        if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
+        if (isset($params['paymentMethod'])
+            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
+        ) {
             $this->_paymentMethod = $params['paymentMethod'];
         } else {
-            throw new \Exception('Object Request PaymentMethod instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Object Request PaymentMethod instance is required.')
+            );
         }
     }
 
@@ -208,7 +211,6 @@ class Order extends CommonRequest
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
     }
 
-
     /**
      * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
      */
@@ -219,16 +221,21 @@ class Order extends CommonRequest
 
         $orderRequest = new OrderRequest();
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
-        $orderRequest->operation = $this->_order->getForcedOperation() ?: $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
-        $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?: $payment_product;
-        $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf("Order %s", $this->_order->getIncrementId()); //@TODO
+        $orderRequest->operation = $this->_order->getForcedOperation() ?:
+            $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
+        $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?:
+            $payment_product;
+        $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf(
+            "Order %s",
+            $this->_order->getIncrementId()
+        );
         $orderRequest->long_description = "";
-        if($useOrderCurrency){
+        if ($useOrderCurrency) {
             $orderRequest->currency = $this->_order->getOrderCurrencyCode();
             $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getGrandTotal();
             $orderRequest->shipping = (float)$this->_order->getShippingAmount();
             $orderRequest->tax = (float)$this->_order->getTaxAmount();
-        }else{
+        } else {
             $orderRequest->currency = $this->_order->getBaseCurrencyCode();
             $orderRequest->amount = $this->_order->getForcedAmount() ?: (float)$this->_order->getBaseGrandTotal();
             $orderRequest->shipping = (float)$this->_order->getBaseShippingAmount();
@@ -272,9 +279,11 @@ class Order extends CommonRequest
     }
 
     /**
-     *  Process all extras information for the request
+     * Process all extras information for the request
      *
-     * @param OrderRequest $order OrderRequest passed by reference
+     * @param OrderRequest $orderRequest
+     * @param bool $useOrderCurrency
+     * @throws \Exception
      */
     private function processExtraInformations(OrderRequest &$orderRequest, $useOrderCurrency = false)
     {
@@ -290,7 +299,10 @@ class Order extends CommonRequest
 
         // Check if delivery method is required for the payment method
         if ($this->_config->isDeliveryMethodRequired($orderRequest->payment_product)) {
-            $orderRequest->delivery_information = $this->_requestFactory->create('\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo', ['params' => ['order' => $this->_order, 'config' => $this->_config]])->getRequestObject();
+            $orderRequest->delivery_information = $this->_requestFactory->create(
+                '\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo',
+                ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+            )->getRequestObject();
         }
 
         // Technical parameter to track wich magento version is used
@@ -299,7 +311,8 @@ class Order extends CommonRequest
         /*
          *  Custom Data
          *
-         * You can use these parameters to submit custom values you wish to show in HiPay back office transaction details,
+         * You can use these parameters to submit custom values
+         * you wish to show in HiPay back office transaction details,
          * receive back in the API response messages, in the notifications or to activate specific FPS rules.
          *
          *  Please make an Magento 2 plugin which listen the method "getCustomData"
@@ -313,16 +326,18 @@ class Order extends CommonRequest
         /*
          * Override or format mapping informations for specific provider
          */
-        if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb' ) {
-            $orderRequest->customerBillingInfo->phone =  preg_replace('/^(\+33)|(33)/','0',$orderRequest->customerBillingInfo->phone);
+        if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb') {
+            $orderRequest->customerBillingInfo->phone = preg_replace(
+                '/^(\+33)|(33)/',
+                '0',
+                $orderRequest->customerBillingInfo->phone
+            );
 
             if ($orderRequest->customerBillingInfo->gender == null) {
                 $orderRequest->customerBillingInfo->gender = Gender::MALE;
             }
         }
-
     }
-
 
     /**
      *  Generate custom data to send to HiPay back office

@@ -42,7 +42,6 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     protected $methods = [];
 
-
     /**
      * Url Builder
      *
@@ -89,6 +88,13 @@ class GenericConfigProvider implements ConfigProviderInterface
     protected $_hipayConfig;
 
     /**
+     * GenericConfigProvider constructor.
+     * @param CcConfig $ccConfig
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
+     * @param Context $context
+     * @param array $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -98,7 +104,6 @@ class GenericConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
-
         $this->ccConfig = $ccConfig;
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
@@ -126,7 +131,10 @@ class GenericConfigProvider implements ConfigProviderInterface
                     'payment' => [
                         'hiPayFullservice' => [
                             'afterPlaceOrderUrl' => [
-                                $methodCode => $this->urlBuilder->getUrl('hipay/payment/afterPlaceOrder', ['_secure' => true])
+                                $methodCode => $this->urlBuilder->getUrl(
+                                    'hipay/payment/afterPlaceOrder',
+                                    ['_secure' => true]
+                                )
                             ],
                             'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
                             'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
@@ -162,16 +170,13 @@ class GenericConfigProvider implements ConfigProviderInterface
             ]
         ]);
 
-
         return $config;
-
     }
 
     protected function displayCardOwner($methodCode)
     {
         return $this->methods[$methodCode]->getConfigData('display_card_owner');
     }
-
 
     /**
      * Get cards
@@ -189,34 +194,26 @@ class GenericConfigProvider implements ConfigProviderInterface
                 ->filterByCustomerId($customerId)
                 ->addOrder('card_id', 'desc')
                 ->onlyValid();
-
         }
         return $this->_collection;
     }
 
     protected function useOneclick($methodCode)
     {
-
         $allowUseOneclick = $this->methods[$methodCode]->getConfigData('allow_use_oneclick');
         $filterOneclick = $this->methods[$methodCode]->getConfigData('filter_oneclick');
         $quote = $this->checkoutSession->getQuote();
 
         return (bool)$this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
-
     }
 
     protected function isIframeMode($methodCode)
     {
-
         return (bool)$this->methods[$methodCode]->getConfigData('iframe_mode');
-
     }
 
     protected function getIframeProp($methodCode, $prop)
     {
-
         return $this->methods[$methodCode]->getConfigData('iframe_' . $prop);
-
     }
-
 }

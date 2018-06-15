@@ -18,7 +18,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
-use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
  * SDD config provider
@@ -42,7 +41,6 @@ class SddConfigProvider implements ConfigProviderInterface
      * @var MethodInterface[]
      */
     protected $methods = [];
-
 
     /**
      * Url Builder
@@ -83,20 +81,27 @@ class SddConfigProvider implements ConfigProviderInterface
      */
     protected $_collection;
 
-
     /**
+     * SddConfigProvider constructor.
+     * @param CcConfig $ccConfig
+     * @param PaymentHelper $paymentHelper
+     * @param \Magento\Framework\Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
+     * @param array $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
         PaymentHelper $paymentHelper,
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         array $methodCodes = []
     ) {
-
         $this->ccConfig = $ccConfig;
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $paymentHelper->getMethodInstance($code);
@@ -106,9 +111,7 @@ class SddConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $checkoutSession;
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
-
     }
-
 
     /**
      * Get flag electronic_signature in config
@@ -118,9 +121,7 @@ class SddConfigProvider implements ConfigProviderInterface
      */
     protected function useElectronicSignature($methodCode)
     {
-
         return (bool)$this->methods[$methodCode]->getConfigData('electronic_signature');
-
     }
 
     /**
@@ -142,6 +143,4 @@ class SddConfigProvider implements ConfigProviderInterface
         }
         return $config;
     }
-
-
 }

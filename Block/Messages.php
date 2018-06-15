@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Block;
 
-
 /**
  * Hipay Fullservice messages block
  *
@@ -36,14 +35,13 @@ class Messages extends \Magento\Framework\View\Element\Messages
     protected $customerSession;
 
     /**
-     * Constructor
-     *
-     * @param Template\Context $context
+     * Messages constructor.
+     * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
+     * @param \Magento\Customer\Model\Session\Proxy $customerSession
      * @param array $data
      */
     public function __construct(
@@ -52,11 +50,17 @@ class Messages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
         array $data = []
-    )
-    {
-        parent::__construct($context, $messageFactory, $collectionFactory, $messageManager, $interpretationStrategy, $data);
+    ) {
+        parent::__construct(
+            $context,
+            $messageFactory,
+            $collectionFactory,
+            $messageManager,
+            $interpretationStrategy,
+            $data
+        );
         $this->customerSession = $customerSession;
     }
 
@@ -66,7 +70,6 @@ class Messages extends \Magento\Framework\View\Element\Messages
     protected function _prepareLayout()
     {
         if ($this->customerSession->getFromMoto()) {
-
             $this->validateMoto();
 
             $this->addMessages($this->messageManager->getMessages(true));
@@ -79,15 +82,15 @@ class Messages extends \Magento\Framework\View\Element\Messages
     {
 
         if ($this->customerSession->getAccept()) {
-
-            $this->messageManager->addSuccess(__('Thank you for your order. You will receveive a confirmation email soon.'));
+            $this->messageManager->addSuccess(
+                __('Thank you for your order. You will receveive a confirmation email soon.')
+            );
             $message = __('You can check the status of your order by logging into your account.');
             if ($this->customerSession->isLoggedIn()) {
                 $message = __('You can check the status of your order in your order history.');
             }
             $this->messageManager->addSuccess($message);
             $this->customerSession->unsAccept();
-
         } elseif ($this->customerSession->getDecline()) {
             $this->messageManager->addError(__('Your transaction is declined.'));
             $message = __('You can retry your order with another credit card.');
@@ -95,6 +98,4 @@ class Messages extends \Magento\Framework\View\Element\Messages
             $this->customerSession->unsDecline();
         }
     }
-
-
 }

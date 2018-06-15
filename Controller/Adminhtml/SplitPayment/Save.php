@@ -29,17 +29,33 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\SplitPayment\Factory
+     */
+    private $splitPaymentFactory;
 
-	/**
-	 * Check the permission to run it
-	 *
-	 * @return bool
-	 */
-	protected function _isAllowed()
-	{
-		return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
-	}
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
+    ) {
+        $this->splitPaymentFactory = $splitPaymentFactory;
+        parent::__construct($context);
+    }
 
+    /**
+     * Check the permission to run it
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::split_save');
+    }
 
     /**
      * Save action
@@ -52,13 +68,11 @@ class Save extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
-        	
-        	
-            $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\SplitPayment');
+            $model = $this->splitPaymentFactory->create();
 
             $id = $this->getRequest()->getParam('split_payment_id');
             if ($id) {
-                $model->load($id);
+                $model->getResource()->load($model, $id);
             }
 
             $model->setData($data);
@@ -68,13 +82,15 @@ class Save extends \Magento\Backend\App\Action
                 ['splitpayment' => $model, 'request' => $this->getRequest()]
             );
 
-
             try {
-                $model->save();
+                $model->getResource()->save($model);
                 $this->messageManager->addSuccess(__('You saved this split payment.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['split_payment_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath(
+                        '*/*/edit',
+                        ['split_payment_id' => $model->getId(), '_current' => true]
+                    );
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -86,7 +102,10 @@ class Save extends \Magento\Backend\App\Action
             }
 
             $this->_getSession()->setFormData($data);
-            return $resultRedirect->setPath('*/*/edit', ['split_payment_id' => $this->getRequest()->getParam('split_payment_id')]);
+            return $resultRedirect->setPath(
+                '*/*/edit',
+                ['split_payment_id' => $this->getRequest()->getParam('split_payment_id')]
+            );
         }
         return $resultRedirect->setPath('*/*/');
     }

@@ -71,7 +71,6 @@ abstract class Fullservice extends AppAction
      */
     protected $_vaultManagerFactory;
 
-
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
@@ -89,14 +88,13 @@ abstract class Fullservice extends AppAction
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
         \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
-    )
-    {
+    ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
         $this->_hipaySession = $hipaySession;
@@ -106,9 +104,7 @@ abstract class Fullservice extends AppAction
         $this->_vaultManagerFactory = $vaultManagerFactory;
 
         parent::__construct($context);
-
     }
-
 
     /**
      * Return checkout session object
@@ -162,6 +158,4 @@ abstract class Fullservice extends AppAction
     {
         return $this->_response;
     }
-
-
 }

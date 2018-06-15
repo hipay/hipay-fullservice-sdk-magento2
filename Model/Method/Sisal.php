@@ -57,6 +57,4 @@ class Sisal extends HostedMethod
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
 }

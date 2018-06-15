@@ -56,5 +56,4 @@ class Facilypay4X extends AbstractMethodAPI
      * @var bool
      */
     protected $_canUseInternal = false;
-
 }

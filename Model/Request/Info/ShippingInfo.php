@@ -17,7 +17,6 @@ namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
 
-
 /**
  * Shipping info Request Object
  *
@@ -62,6 +61,4 @@ class ShippingInfo extends AbstractInfoRequest
 
         return $customerShippingInfo;
     }
-
-
 }

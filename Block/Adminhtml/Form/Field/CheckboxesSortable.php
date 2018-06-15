@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * HiPay fullservice Magento2
  *
@@ -29,20 +29,20 @@ use Magento\Config\Block\System\Config\Form\Field;
  */
 class CheckboxesSortable extends Field
 {
-	
-	/**
+
+    /**
      * Add js to sort checkboxes
      *
      * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-	protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
-	{
-		 $javaScript = '
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    {
+        $javaScript = '
             <script type="text/javascript">
 			 	require(["jquery","jquery/ui"], function($){
 				    
-		 		var options = $("#row_'.$element->getHtmlId().' td.value div.nested div");
+		 		var options = $("#row_' . $element->getHtmlId() . ' td.value div.nested div");
 		 		options.each(function(){
 		 				var input = $(this).find("input").first();
 		 				var nameArray = input.attr("name") + \'[]\';
@@ -54,14 +54,12 @@ class CheckboxesSortable extends Field
 	
 				});
 		 		
-					$( "#row_'.$element->getHtmlId().' td.value div.nested" ).sortable();
+					$( "#row_' . $element->getHtmlId() . ' td.value div.nested" ).sortable();
 					  	 
 				});
             </script>';
-		$element->setData('after_element_html',$javaScript.$element->getAfterElementHtml());
-		
-		return parent::_getElementHtml($element);
-	}
-	
-	
+        $element->setData('after_element_html', $javaScript . $element->getAfterElementHtml());
+
+        return parent::_getElementHtml($element);
+    }
 }

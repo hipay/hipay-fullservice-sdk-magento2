@@ -16,8 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping\Edit;
 
-use \HiPay\Fullservice\Data\Category\Collection as collection;
-
 /**
  * Adminhtml Cart Categories edit form block
  *
@@ -39,11 +37,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $shippingMethodsHipay;
 
-
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay
      * @param array $data
      */
     public function __construct(
@@ -53,13 +53,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->_shippingMethodsMagento = $shippingMethodsMagento;
         $this->_shippingMethodsHipay = $shippingMethodsHipay;
     }
-
 
     /**
      * Prepare form
@@ -91,16 +89,15 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         if ($model != null) {
             if ($model->getMappingShippingId() !== null) {
-                $config = array_merge($config,['disabled' => true]);
+                $config = array_merge($config, ['disabled' => true]);
             }
         }
-        
+
         $fieldset->addField(
             'magento_shipping_code',
             'select',
             $config
         );
-
 
         $options = $this->_shippingMethodsHipay->toOptionArray();
         $fieldset->addField(
@@ -138,17 +135,19 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_eventManager->dispatch('adminhtml_cart_mappingshipping_edit_prepare_form', ['form' => $form]);
 
         if ($model != null) {
-            if ($model->getMappingShippingId() !== null){
-                $form->addField('mapping_shipping_id', 'hidden', ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]);
+            if ($model->getMappingShippingId() !== null) {
+                $form->addField(
+                    'mapping_shipping_id',
+                    'hidden',
+                    ['name' => 'mapping_shipping_id', 'value' => $model->getMappingShippingId()]
+                );
             }
             $form->setValues($model->getData());
         }
-
 
         $form->setUseContainer(true);
         $this->setForm($form);
 
         return parent::_prepareForm();
     }
-
 }

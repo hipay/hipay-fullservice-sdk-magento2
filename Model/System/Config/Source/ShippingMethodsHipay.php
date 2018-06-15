@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-
 /**
  * Source model for Hipay carriers
  *
@@ -39,7 +38,10 @@ class ShippingMethodsHipay implements \Magento\Framework\Option\ArrayInterface
         $collection = \HiPay\Fullservice\Data\DeliveryMethod\Collection::getItems();
         $options = [];
         foreach ($collection as $deliveryMethod) {
-            $options[] = array('value' => $deliveryMethod->getCode(), 'label' => $deliveryMethod->getMode() . ' - ' . $deliveryMethod->getShipping());
+            $options[] = array(
+                'value' => $deliveryMethod->getCode(),
+                'label' => $deliveryMethod->getMode() . ' - ' . $deliveryMethod->getShipping()
+            );
         }
         return $options;
     }
@@ -61,5 +63,4 @@ class ShippingMethodsHipay implements \Magento\Framework\Option\ArrayInterface
         }
         return null;
     }
-
 }

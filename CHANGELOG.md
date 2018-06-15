@@ -1,3 +1,9 @@
+# 1.2.2
+
+- Fix : Astropay payment method bug
+- Fix : Category mapping bug
+- Code rework/reformatting
+
 # 1.2.1
 
 - Fix : Api call wrongly formatted (gender)

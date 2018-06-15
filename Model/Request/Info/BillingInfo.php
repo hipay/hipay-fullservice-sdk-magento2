@@ -42,13 +42,13 @@ class BillingInfo extends AbstractInfoRequest
         $customerBillingInfo = new CustomerBillingInfoRequest();
         $customerBillingInfo->email = $this->_order->getCustomerEmail();
         $dob = $this->_order->getCustomerDob();
-        if (!is_null($dob) && !empty($dob)) {
+        if ($dob !== null && !empty($dob)) {
             try {
 
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
             } catch (Exception $e) {
-
+                $customerBillingInfo->birthdate = null;
             }
         }
 

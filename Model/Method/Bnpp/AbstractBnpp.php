@@ -15,9 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method\Bnpp;
 
-
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
-
 
 class AbstractBnpp extends AbstractMethodAPI
 {
@@ -47,5 +45,4 @@ class AbstractBnpp extends AbstractMethodAPI
 
         return $this;
     }
-
 }

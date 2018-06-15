@@ -20,7 +20,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Customer Cards list block
- * 
+ *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
@@ -29,19 +29,19 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class ListCard extends \Magento\Customer\Block\Account\Dashboard
 {
-	/**
-	 * Cards collection
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection
-	 */
-	protected $_collection;
-	
-	/**
-	 * Card resource model
-	 *
-	 * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory
-	 */
-	protected $_collectionFactory;
+    /**
+     * Cards collection
+     *
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection
+     */
+    protected $_collection;
+
+    /**
+     * Card resource model
+     *
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory
+     */
+    protected $_collectionFactory;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -49,26 +49,27 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
     protected $currentCustomer;
 
     /**
+     * ListCard constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Model\Session\Proxy $customerSession
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $customerAccountManagement
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
-     * @param ÷HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
+     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
-    	\HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
+        \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         array $data = []
     ) {
-        
+
         parent::__construct(
             $context,
             $customerSession,
@@ -125,8 +126,7 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
             $this->_collection = $this->_collectionFactory->create();
             $this->_collection
                 ->filterByCustomerId($customerId)
-            	->onlyValid();
-
+                ->onlyValid();
         }
         return $this->_collection;
     }
