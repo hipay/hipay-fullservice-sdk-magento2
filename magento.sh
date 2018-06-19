@@ -43,13 +43,13 @@ elif [ "$1" = 'restart' ];then
     docker-compose stop
     docker-compose -f docker-compose.dev.yml up -d
 elif [ "$1" = 'static' ];then
-    docker exec magento2-hipay-fullservice rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
-    docker exec magento2-hipay-fullservice gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
-    docker exec magento2-hipay-fullservice gosu magento2 php bin/magento c:c
+    docker exec hipayfullservicesdkmagento2_magento2_1 rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 php bin/magento c:c
 elif [ "$1" = 'di' ];then
-    docker exec magento2-hipay-fullservice rm -Rf /var/www/html/magento2/var/cache /var/www/html/magento2/var/di /var/www/html/magento2/var/generation /var/www/html/magento2/var/page_cache
-    docker exec magento2-hipay-fullservice gosu magento2 php bin/magento setup:di:compile
-    docker exec magento2-hipay-fullservice gosu magento2 php bin/magento c:c
+    docker exec hipayfullservicesdkmagento2_magento2_1 rm -Rf /var/www/html/magento2/var/cache /var/www/html/magento2/var/di /var/www/html/magento2/var/generation /var/www/html/magento2/var/page_cache
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 php bin/magento setup:di:compile
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 php bin/magento c:c
 elif [ "$1" = 'command' ];then
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $2
 elif [ "$1" = 'l' ];then

@@ -30,10 +30,6 @@
         -->
         <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
         <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
-        <field id="electronic_signature" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-            <label>Enable the electronic signature of the mandate</label>
-            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>
 </include>

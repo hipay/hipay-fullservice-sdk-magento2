@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod;
@@ -38,18 +39,14 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod
     {
         $sddPaymentMethod = new SEPADirectDebitPaymentMethod();
         $sddPaymentMethod->recurring_payment = 0;
-        $electronic_signature = $this->_config->getValue('electronic_signature');
-        $sddPaymentMethod->authentication_indicator = (int)$electronic_signature;
 
-        if (!$electronic_signature) {
-            /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
-            $sddPaymentMethod->bank_name = $this->_order->getPayment()->getAdditionalInformation('sdd_bank_name');
-            $sddPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('sdd_bic');
-            $sddPaymentMethod->iban = $this->_order->getPayment()->getAdditionalInformation('sdd_iban');
-            $sddPaymentMethod->firstname = $this->_order->getPayment()->getAdditionalInformation('sdd_firstname');
-            $sddPaymentMethod->lastname = $this->_order->getPayment()->getAdditionalInformation('sdd_lastname');
-            $sddPaymentMethod->gender = $this->_order->getPayment()->getAdditionalInformation('sdd_gender');
-        }
+        /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
+        $sddPaymentMethod->bank_name = $this->_order->getPayment()->getAdditionalInformation('sdd_bank_name');
+        $sddPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('sdd_bic');
+        $sddPaymentMethod->iban = $this->_order->getPayment()->getAdditionalInformation('sdd_iban');
+        $sddPaymentMethod->firstname = $this->_order->getPayment()->getAdditionalInformation('sdd_firstname');
+        $sddPaymentMethod->lastname = $this->_order->getPayment()->getAdditionalInformation('sdd_lastname');
+        $sddPaymentMethod->gender = $this->_order->getPayment()->getAdditionalInformation('sdd_gender');
 
         return $sddPaymentMethod;
     }
