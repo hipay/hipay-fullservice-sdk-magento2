@@ -73,6 +73,12 @@
                 <currency_transaction>0</currency_transaction>
                 <send_notification_url>0</send_notification_url>
             </configurations>
+            <hipay_proxy_settings>
+                <hipay_proxy_host/>
+                <hipay_proxy_port/>
+                <hipay_proxy_user/>
+                <hipay_proxy_password/>
+            </hipay_proxy_settings>
         </hipay>
         <payment>
             <hipay_cc>
