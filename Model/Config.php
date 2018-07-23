@@ -139,7 +139,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if ($env == null) {
                 $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
             }
-            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json');
+            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json', $this->getProxy());
         } catch (\Exception $e) {
             $this->logger->critical($e->getMessage());
             $this->_configSDK = null;
@@ -148,7 +148,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     /**
      * Check if we must to use MO/TO credentials
-     * Essentialy, Admin operations
+     * Essentially, Admin operations
      * @return bool
      */
     public function mustUseMotoCredentials()
@@ -402,6 +402,25 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $key = "hashing_algorithm_test";
         }
         $this->setGeneralValue($key, $hash, $group, $scope);
+    }
+
+    /**
+     * @return array
+     */
+    public function getProxy()
+    {
+        $group = 'hipay_proxy_settings';
+
+        if (empty($this->getGeneraleValue("hipay_proxy_host", $group))) {
+            return array();
+        }
+
+        return array(
+            "host" => $this->getGeneraleValue("hipay_proxy_host", $group),
+            "port" => $this->getGeneraleValue("hipay_proxy_port", $group),
+            "user" => $this->getGeneraleValue("hipay_proxy_user", $group),
+            "password" => $this->getGeneraleValue("hipay_proxy_password", $group)
+        );
     }
 
     /**

@@ -260,6 +260,10 @@ abstract class AbstractConfig implements ConfigInterface
             case 'currency_transaction':
             case 'hashing_algorithm':
             case 'hashing_algorithm_test':
+            case 'hipay_proxy_host':
+            case 'hipay_proxy_port':
+            case 'hipay_proxy_user':
+            case 'hipay_proxy_password':
                 return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
