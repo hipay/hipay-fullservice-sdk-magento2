@@ -34,7 +34,7 @@ if [ "$1" = 'init' ];then
         rm -Rf data/ log/ web/
         docker-compose -f docker-compose.dev.yml build --no-cache
         docker-compose -f docker-compose.dev.yml up -d
-        docker cp magento2-hipay-fullservice:/var/www/html/magento2 web/
+        docker cp hipayfullservicesdkmagento2_magento2_1:/var/www/html/magento2 web/
         docker-compose logs -f
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"
@@ -55,9 +55,9 @@ elif [ "$1" = 'command' ];then
 elif [ "$1" = 'l' ];then
     docker-compose logs -f
 elif [ "$1" = 'install' ];then
-    docker exec magento2-hipay-fullservice gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
-    docker exec magento2-hipay-fullservice gosu magento2 bin/magento setup:upgrade
-    docker exec magento2-hipay-fullservice gosu magento2 bin/magento c:c
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 bin/magento setup:upgrade
+    docker exec hipayfullservicesdkmagento2_magento2_1 gosu magento2 bin/magento c:c
 elif [ "$1" = 'test' ]; then
 
     rm -rf bin/tests/errors/*

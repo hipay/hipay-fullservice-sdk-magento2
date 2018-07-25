@@ -22,6 +22,7 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\Gateway\Model\Cart\Cart as Cart;
 use HiPay\Fullservice\Gateway\Model\Cart\Item as Item;
 use HiPay\Fullservice\Enum\Cart\TypeItems;
+use HiPay\Fullservice\Enum\Transaction\Operation;
 use Magento\Setup\Exception;
 use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
@@ -183,6 +184,7 @@ abstract class CommonRequest extends BaseRequest
         $cart = new Cart();
         $items = $cartFactory->getAllItems($useOrderCurrency);
         foreach ($items as $item) {
+            $itemHipay = null;
             $reference = $item->getDataUsingMethod('reference');
             $name = $item->getDataUsingMethod('name');
             $amount = $item->getDataUsingMethod('amount');
@@ -199,14 +201,14 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay = new Item();
                     $itemHipay->setName($name);
                     $itemHipay->setProductReference($reference);
-                        $itemHipay->setType(TypeItems::GOOD);
-                        $itemHipay->setQuantity($qty);
-                        $itemHipay->setUnitPrice($price);
-                        $itemHipay->setTaxRate($taxPercent);
-                        $itemHipay->setDiscount($discount);
-                        $itemHipay->setTotalAmount($amount);
-                        $itemHipay->setProductDescription($this->escapeHtmlToJson($description->getValue()));
-                        $itemHipay->setProductCategory($this->getMappingCategory($product));
+                    $itemHipay->setType(TypeItems::GOOD);
+                    $itemHipay->setQuantity($qty);
+                    $itemHipay->setUnitPrice($price);
+                    $itemHipay->setTaxRate($taxPercent);
+                    $itemHipay->setDiscount($discount);
+                    $itemHipay->setTotalAmount($amount);
+                    $itemHipay->setProductDescription($this->escapeHtmlToJson($description->getValue()));
+                    $itemHipay->setProductCategory($this->getMappingCategory($product));
 
                     // Set Specifics informations as EAN
                     if (!empty($this->_config->getEanAttribute())) {
@@ -227,6 +229,9 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
+                    if (in_array($operation, array(Operation::REFUND, Operation::CAPTURE)) && $amount == 0) {
+                        break;
+                    }
                     $itemHipay = Item::buildItemTypeFees(
                         $reference,
                         $name,
@@ -237,9 +242,12 @@ abstract class CommonRequest extends BaseRequest
                     );
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
+
             }
 
-            $cart->addItem($itemHipay);
+            if ($itemHipay) {
+                $cart->addItem($itemHipay);
+            }
         }
 
         if (!$cartFactory->isAmountAvailable()) {
