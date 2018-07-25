@@ -1,3 +1,9 @@
+# 1.3.0
+
+- Add proxy settings (gateway requests)
+- Fix : SEPA remove electronic signature
+- Fix : partial refund
+
 # 1.2.2
 
 - Fix : Astropay payment method bug
