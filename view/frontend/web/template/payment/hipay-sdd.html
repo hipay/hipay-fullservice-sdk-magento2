@@ -35,7 +35,7 @@
             <!--/ko-->
         </div>
 
-        <form class="form" id="co-transparent-form" data-bind="mageInit: {'validation':[]},visible: !useElectronicSignature()" action="#" method="post" autocomplete="off">
+        <form class="form" id="co-transparent-form" data-bind="mageInit: {'validation':[]}" action="#" method="post" autocomplete="off">
             <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]"
                    data-bind="attr: {value: getFingerprint()}"/>
 
@@ -148,8 +148,6 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
-        <div data-bind="visible: useElectronicSignature()">
-            <!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
         <div class="actions-toolbar">
             <div class="primary">
                 <button class="action primary checkout"

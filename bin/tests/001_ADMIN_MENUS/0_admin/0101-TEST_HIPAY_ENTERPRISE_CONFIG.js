@@ -19,6 +19,7 @@ casper.test.begin('Test Magento Hipay Enterprise Config', function (test) {
                 test.assertExists('div.section-config>div>a#hipay_fraud_payment_deny-head', "fraud deny configuration activated !");
                 test.assertExists('div.section-config>div>a#hipay_fraud_payment_accept-head', "fraud accept configuration activated !");
                 test.assertExists('div.section-config>div>a#hipay_configurations-head', "Others configuration activated !");
+                test.assertExists('div.section-config>div>a#hipay_hipay_proxy_settings-head', "Proxy configuration activated !");
             }, function fail() {
                 test.assertExists('#hipay_hipay_credentials-head', "Hipay Enterprise admin page exists");
             }, 10000);
