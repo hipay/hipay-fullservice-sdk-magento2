@@ -415,9 +415,6 @@ abstract class FullserviceMethod extends AbstractMethod
         //Set state to "OPEN" because we wait for notification with "REFUND" status
         $payment->getCreditmemo()->setState(Creditmemo::STATE_OPEN);
 
-        //Reset refund totals
-        $this->resetOrderRefund($payment->getCreditmemo());
-        $this->resetInvoiceRefund($payment->getCreditmemo());
         $payment->getOrder()->save();
 
         /**
@@ -431,89 +428,6 @@ abstract class FullserviceMethod extends AbstractMethod
         $payment->getCreditmemo()->save();
 
         return $this;
-    }
-
-    /**
-     * Reset order data for refund
-     * Creditmemo is in pending and wait for notification
-     * So, we reset all totals refunded
-     *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return void
-     */
-    protected function resetOrderRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
-    {
-        $order = $creditmemo->getOrder();
-        $baseOrderRefund = $this->priceCurrency->round(
-            $order->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
-        );
-        $orderRefund = $this->priceCurrency->round(
-            $order->getTotalRefunded() - $creditmemo->getGrandTotal()
-        );
-        $order->setBaseTotalRefunded($baseOrderRefund);
-        $order->setTotalRefunded($orderRefund);
-
-        $order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() - $creditmemo->getBaseSubtotal());
-        $order->setSubtotalRefunded($order->getSubtotalRefunded() - $creditmemo->getSubtotal());
-
-        $order->setBaseTaxRefunded($order->getBaseTaxRefunded() - $creditmemo->getBaseTaxAmount());
-        $order->setTaxRefunded($order->getTaxRefunded() - $creditmemo->getTaxAmount());
-        $order->setBaseDiscountTaxCompensationRefunded(
-            $order->getBaseDiscountTaxCompensationRefunded() - $creditmemo->getBaseDiscountTaxCompensationAmount()
-        );
-        $order->setDiscountTaxCompensationRefunded(
-            $order->getDiscountTaxCompensationRefunded() - $creditmemo->getDiscountTaxCompensationAmount()
-        );
-
-        $order->setBaseShippingRefunded($order->getBaseShippingRefunded() - $creditmemo->getBaseShippingAmount());
-        $order->setShippingRefunded($order->getShippingRefunded() - $creditmemo->getShippingAmount());
-
-        $order->setBaseShippingTaxRefunded(
-            $order->getBaseShippingTaxRefunded() - $creditmemo->getBaseShippingTaxAmount()
-        );
-        $order->setShippingTaxRefunded($order->getShippingTaxRefunded() - $creditmemo->getShippingTaxAmount());
-
-        $order->setAdjustmentPositive($order->getAdjustmentPositive() - $creditmemo->getAdjustmentPositive());
-        $order->setBaseAdjustmentPositive(
-            $order->getBaseAdjustmentPositive() - $creditmemo->getBaseAdjustmentPositive()
-        );
-
-        $order->setAdjustmentNegative($order->getAdjustmentNegative() - $creditmemo->getAdjustmentNegative());
-        $order->setBaseAdjustmentNegative(
-            $order->getBaseAdjustmentNegative() - $creditmemo->getBaseAdjustmentNegative()
-        );
-
-        $order->setDiscountRefunded($order->getDiscountRefunded() - $creditmemo->getDiscountAmount());
-        $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() - $creditmemo->getBaseDiscountAmount());
-
-        if ($creditmemo->getDoTransaction()) {
-            $order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() - $creditmemo->getGrandTotal());
-            $order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() - $creditmemo->getBaseGrandTotal());
-        } else {
-            $order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() - $creditmemo->getGrandTotal());
-            $order->setBaseTotalOfflineRefunded(
-                $order->getBaseTotalOfflineRefunded() - $creditmemo->getBaseGrandTotal()
-            );
-        }
-
-        $order->setBaseTotalInvoicedCost(
-            $order->getBaseTotalInvoicedCost() + $creditmemo->getBaseCost()
-        );
-    }
-
-    /**
-     * Reset invoice data for refund
-     *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return void
-     */
-    protected function resetInvoiceRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
-    {
-        if ($creditmemo->getInvoice()) {
-            $creditmemo->getInvoice()->setBaseTotalRefunded(
-                $creditmemo->getInvoice()->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
-            );
-        }
     }
 
     /**
