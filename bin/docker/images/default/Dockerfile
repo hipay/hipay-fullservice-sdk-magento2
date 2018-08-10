@@ -1,4 +1,4 @@
-FROM hipay/hipay-magento2:latest
+FROM hipay/hipay-magento2:2.1.10
 
 MAINTAINER Support Fullservice <support.tpp@hipay.com>
 
@@ -10,8 +10,8 @@ RUN apt-get update \
             && cp -Rf /etc/apache2/site-available/* /etc/apache2/sites-enabled
 
 # Override parent entrypoint to add custom configuration
-COPY ./bin/magento2-start-override /usr/local/bin/
-RUN chmod u+x /usr/local/bin/magento2-start-override
+COPY ./bin/docker/images/default/entrypoint.sh /usr/local/bin/
+RUN chmod u+x /usr/local/bin/entrypoint.sh
 
 WORKDIR tmp
 
@@ -30,7 +30,7 @@ WORKDIR /var/www/html/magento2/
 
 VOLUME /var/www/html/magento2/
 
-ENTRYPOINT ["magento2-start-override"]
+ENTRYPOINT ["entrypoint.sh"]
 
 
 

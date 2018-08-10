@@ -17,7 +17,7 @@ casper.test.begin('Test Magento Admin Menus', function (test) {
                 test.assertUrlMatch(/maccount/, "Dashboard page with account ID exists");
             });
         })
-        .thenOpen(urlBackend, function () {
+        .then(function () {
             this.logToBackend();
         })
         /* Check HiPay Split Payments menu */

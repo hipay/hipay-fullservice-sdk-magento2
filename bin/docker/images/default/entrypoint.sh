@@ -56,8 +56,11 @@ if [ "$MAGE_INSTALL" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
 
     if [ "$ENVIRONMENT" = "$ENV_PROD" ];then
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/configurations/send_notification_url 1
+    fi
+
+    if [ "$ENVIRONMENT" != "$ENV_DEVELOPMENT" ];then
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
     fi
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
