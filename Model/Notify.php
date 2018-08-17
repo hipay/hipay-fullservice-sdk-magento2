@@ -923,14 +923,14 @@ class Notify
             $invoiceFromDB = $this->getInvoiceForTransactionId($this->_order, $payment->getTransactionId());
         }
 
-        if (!$invoice && ($this->isFirstSplitPayment || !$invoiceFromDB)) {
+        if (!$invoice && !$invoiceFromDB) {
             $invoice = $this->_order->prepareInvoice()->register();
             $invoice->setOrder($this->_order);
             $this->_order->addRelatedObject($invoice);
             $payment->setCreatedInvoice($invoice);
             $payment->setShouldCloseParentTransaction(true);
             $payment->setIsFraudDetected(false);
-            if (!$invoiceFromDB && !$this->isFirstSplitPayment) {
+            if (!$invoiceFromDB) {
                 $payment->registerCaptureNotification(
                     $this->_transaction->getCapturedAmount(),
                     $skipFraudDetection

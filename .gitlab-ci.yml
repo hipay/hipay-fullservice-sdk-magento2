@@ -62,12 +62,12 @@ casperjs-2-1-10:
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml stop
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml rm -fv
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml up -d
-    - sleep 666
+    - sleep 900
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
     - sh bin/tests/casper_run_circle.sh http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web
   after_script:
-    - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}
+    - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
 
 #build-test-2-2-4:
 #  stage: build-test-2
