@@ -1,0 +1,47 @@
+version: "3.3"
+
+networks:
+  magento2:
+    internal: true
+  outside:
+    external: true
+
+services:
+  web:
+    image: ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
+    container_name: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_web
+    build:
+      context: .
+      dockerfile: ./bin/docker/images/default/Dockerfile
+    networks:
+      magento2:
+      outside:
+       aliases:
+         - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web
+    depends_on:
+      - database
+    env_file:
+      - ./bin/docker/conf/test/hipay.env.sample
+      - ./bin/docker/conf/test/auth.env.sample
+      - ./bin/docker/conf/test/mage.env.sample
+      - ./bin/docker/conf/test/module.env.sample
+  database:
+    container_name: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=magento2
+    networks:
+      magento2:
+        aliases:
+          - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  smtp:
+    image: schickling/mailcatcher
+    container_name: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
+    networks:
+      magento2:
+        aliases:
+          - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
