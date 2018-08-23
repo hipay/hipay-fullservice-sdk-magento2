@@ -20,7 +20,7 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
         .then(function () {
             this.echo("Open Integration nav", "INFO");
             this.waitForUrl(/maccount/, function success() {
-                this.selectHashingAlgorithm("SHA512");
+                this.selectHashingAlgorithm("SHA1");
             }, function fail() {
                 test.assertUrlMatch(/maccount/, "Dashboard page with account ID exists");
             });
@@ -47,7 +47,7 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
                     return document.querySelector('#hipay_hashing_algorithm_hashing_algorithm_test').value;
                 });
                 test.info("Initial Hashing Algorithm :" + current);
-                if (current != 'SHA1') {
+                if (current != 'SHA512') {
                     test.fail("Initial value is wrong for Hashing : " + current);
                 }
                 this.thenClick('button#hashing_algorithm_button', function () {
@@ -62,7 +62,7 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
                         var newHashingAlgo = this.evaluate(function () {
                             return document.querySelector('#hipay_hashing_algorithm_hashing_algorithm_test').value;
                         });
-                        if (newHashingAlgo != 'SHA512') {
+                        if (newHashingAlgo != 'SHA1') {
                             test.fail("Synchronize doesn't work : " + current);
                         } else {
                             test.info("Done");

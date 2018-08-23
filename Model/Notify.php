@@ -299,7 +299,7 @@ class Notify
             case TransactionStatus::BLOCKED:
                 // status : 110
                 $this->_setFraudDetected();
-                // no break
+            // no break
             case TransactionStatus::DENIED:
                 // status : 111
                 $this->_doTransactionDenied();
@@ -341,7 +341,7 @@ class Notify
                 ) {
                     break;
                 }
-                // no break
+            // no break
             case TransactionStatus::CAPTURED:
                 // status : 118
             case TransactionStatus::PARTIALLY_CAPTURED:
@@ -383,9 +383,8 @@ class Notify
                 break;
             case TransactionStatus::REFUND_REFUSED:
                 // status : 165
-                $this->_order->setStatus(Config::STATUS_REFUND_REFUSED);
-                $this->_order->getResource()->save($this->_order);
-                // no break
+                $this->_doTransactionRefundRefused();
+            // no break
             case TransactionStatus::CREATED:
                 // status : 101
             case TransactionStatus::CARD_HOLDER_ENROLLED:
@@ -543,10 +542,10 @@ class Notify
     protected function _canSaveCc()
     {
         return (bool)in_array(
-            $this->_transaction->getPaymentProduct(),
-            ['visa', 'american-express', 'mastercard', 'cb']
-        )
-        && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+                $this->_transaction->getPaymentProduct(),
+                ['visa', 'american-express', 'mastercard', 'cb']
+            )
+            && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
     }
 
     /**
@@ -642,7 +641,7 @@ class Notify
     /**
      * Process a refund
      *
-     * @return void
+     * @throws \Exception
      */
     protected function _doTransactionRefund()
     {
@@ -652,10 +651,8 @@ class Notify
 
             if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
                 $remain_amount = round($this->_order->getGrandTotal() - $amount, 2);
-                $current_amount_refund = round($amount - $this->_order->getTotalRefunded(), 2);
             } else {
                 $remain_amount = round($this->_order->getBaseGrandTotal() - $amount, 2);
-                $current_amount_refund = round($amount - $this->_order->getBaseTotalRefunded(), 2);
             }
 
             $status = $this->_order->getStatus();
@@ -665,24 +662,15 @@ class Notify
 
             /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-                if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
-                    $creditmemoTotal = round($creditmemo->getGrandTotal(), 2);
-                    $current_amount_refund = round($amount - $this->_order->getTotalRefunded(), 2);
-                } else {
-                    $creditmemoTotal = round($creditmemo->getBaseGrandTotal(), 2);
-                }
 
                 if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
-                    && $creditmemoTotal == $current_amount_refund
+                    && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
                 ) {
                     $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
 
                     $message = __('Refund accepted by Hipay.');
 
                     $this->_order->addStatusToHistory($status, $message);
-
-                    $this->prepareOrder($creditmemo);
-                    $this->prepareInvoice($creditmemo);
 
                     if ($creditmemo->getInvoice()) {
                         $this->_transactionDB->addObject($creditmemo->getInvoice());
@@ -777,17 +765,44 @@ class Notify
     /**
      * Process refund refused payment notification
      *
-     * @return void
+     * @throws \Exception
      */
     protected function _doTransactionRefundRefused()
     {
+
         $this->_changeStatus(Config::STATUS_REFUND_REFUSED, 'Refund Refused.');
+
+        if ($this->_order->hasCreditmemos()) {
+
+            foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
+
+                if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
+                    && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
+                ) {
+                    $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
+                    $this->resetOrderRefund($creditmemo);
+                    $this->resetInvoiceRefund($creditmemo);
+
+                    if ($creditmemo->getInvoice()) {
+                        $this->_transactionDB->addObject($creditmemo->getInvoice());
+                    }
+
+                    $this->_transactionDB->addObject($creditmemo)
+                        ->addObject($this->_order);
+
+                    $this->_transactionDB->save();
+
+                    break;
+                }
+            }
+
+        }
     }
 
     /**
      * Process denied payment notification
      *
-     * @return void
+     * @throws \Exception
      */
     protected function _doTransactionDenied()
     {
@@ -908,14 +923,14 @@ class Notify
             $invoiceFromDB = $this->getInvoiceForTransactionId($this->_order, $payment->getTransactionId());
         }
 
-        if (!$invoice && ($this->isFirstSplitPayment || !$invoiceFromDB)) {
+        if (!$invoice && !$invoiceFromDB) {
             $invoice = $this->_order->prepareInvoice()->register();
             $invoice->setOrder($this->_order);
             $this->_order->addRelatedObject($invoice);
             $payment->setCreatedInvoice($invoice);
             $payment->setShouldCloseParentTransaction(true);
             $payment->setIsFraudDetected(false);
-            if (!$invoiceFromDB && !$this->isFirstSplitPayment) {
+            if (!$invoiceFromDB) {
                 $payment->registerCaptureNotification(
                     $this->_transaction->getCapturedAmount(),
                     $skipFraudDetection
@@ -974,83 +989,96 @@ class Notify
     }
 
     /**
-     * Prepare order data for refund
+     * Reset order data for refund
+     * Creditmemo is in pending and wait for notification
+     * So, we reset all totals refunded
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
      */
-    protected function prepareOrder(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+    protected function resetOrderRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
+
         $order = $this->_order;
         $baseOrderRefund = $this->priceCurrency->round(
-            $order->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+            $order->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
         );
-        $orderRefund = $this->priceCurrency->round($order->getTotalRefunded() + $creditmemo->getGrandTotal());
+        $orderRefund = $this->priceCurrency->round(
+            $order->getTotalRefunded() - $creditmemo->getGrandTotal()
+        );
         $order->setBaseTotalRefunded($baseOrderRefund);
         $order->setTotalRefunded($orderRefund);
 
-        $order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() + $creditmemo->getBaseSubtotal());
-        $order->setSubtotalRefunded($order->getSubtotalRefunded() + $creditmemo->getSubtotal());
+        $order->setBaseSubtotalRefunded($order->getBaseSubtotalRefunded() - $creditmemo->getBaseSubtotal());
+        $order->setSubtotalRefunded($order->getSubtotalRefunded() - $creditmemo->getSubtotal());
 
-        $order->setBaseTaxRefunded($order->getBaseTaxRefunded() + $creditmemo->getBaseTaxAmount());
-        $order->setTaxRefunded($order->getTaxRefunded() + $creditmemo->getTaxAmount());
+        $order->setBaseTaxRefunded($order->getBaseTaxRefunded() - $creditmemo->getBaseTaxAmount());
+        $order->setTaxRefunded($order->getTaxRefunded() - $creditmemo->getTaxAmount());
         $order->setBaseDiscountTaxCompensationRefunded(
-            $order->getBaseDiscountTaxCompensationRefunded() + $creditmemo->getBaseDiscountTaxCompensationAmount()
+            $order->getBaseDiscountTaxCompensationRefunded() - $creditmemo->getBaseDiscountTaxCompensationAmount()
         );
         $order->setDiscountTaxCompensationRefunded(
-            $order->getDiscountTaxCompensationRefunded() + $creditmemo->getDiscountTaxCompensationAmount()
+            $order->getDiscountTaxCompensationRefunded() - $creditmemo->getDiscountTaxCompensationAmount()
         );
 
-        $order->setBaseShippingRefunded($order->getBaseShippingRefunded() + $creditmemo->getBaseShippingAmount());
-        $order->setShippingRefunded($order->getShippingRefunded() + $creditmemo->getShippingAmount());
+        $order->setBaseShippingRefunded($order->getBaseShippingRefunded() - $creditmemo->getBaseShippingAmount());
+        $order->setShippingRefunded($order->getShippingRefunded() - $creditmemo->getShippingAmount());
 
         $order->setBaseShippingTaxRefunded(
-            $order->getBaseShippingTaxRefunded() + $creditmemo->getBaseShippingTaxAmount()
+            $order->getBaseShippingTaxRefunded() - $creditmemo->getBaseShippingTaxAmount()
         );
-        $order->setShippingTaxRefunded($order->getShippingTaxRefunded() + $creditmemo->getShippingTaxAmount());
+        $order->setShippingTaxRefunded($order->getShippingTaxRefunded() - $creditmemo->getShippingTaxAmount());
 
-        $order->setAdjustmentPositive($order->getAdjustmentPositive() + $creditmemo->getAdjustmentPositive());
+        $order->setAdjustmentPositive($order->getAdjustmentPositive() - $creditmemo->getAdjustmentPositive());
         $order->setBaseAdjustmentPositive(
-            $order->getBaseAdjustmentPositive() + $creditmemo->getBaseAdjustmentPositive()
+            $order->getBaseAdjustmentPositive() - $creditmemo->getBaseAdjustmentPositive()
         );
 
-        $order->setAdjustmentNegative($order->getAdjustmentNegative() + $creditmemo->getAdjustmentNegative());
+        $order->setAdjustmentNegative($order->getAdjustmentNegative() - $creditmemo->getAdjustmentNegative());
         $order->setBaseAdjustmentNegative(
-            $order->getBaseAdjustmentNegative() + $creditmemo->getBaseAdjustmentNegative()
+            $order->getBaseAdjustmentNegative() - $creditmemo->getBaseAdjustmentNegative()
         );
 
-        $order->setDiscountRefunded($order->getDiscountRefunded() + $creditmemo->getDiscountAmount());
-        $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() + $creditmemo->getBaseDiscountAmount());
+        $order->setDiscountRefunded($order->getDiscountRefunded() - $creditmemo->getDiscountAmount());
+        $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() - $creditmemo->getBaseDiscountAmount());
+
+        $order->getPayment()->setAmountRefunded(
+            $order->getPayment()->getAmountRefunded() -  $creditmemo->getGrandTotal()
+        );
+        $order->getPayment()->setBaseAmountRefunded(
+            $order->getPayment()->getBaseAmountRefunded() - $creditmemo->getBaseGrandTotal()
+        );
+        $order->getPayment()->setBaseAmountRefundedOnline(
+            $order->getPayment()->getBaseAmountRefundedOnline() - $creditmemo->getBaseGrandTotal()
+        );
 
         if ($creditmemo->getDoTransaction()) {
-            $order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() + $creditmemo->getGrandTotal());
-            $order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() + $creditmemo->getBaseGrandTotal());
+            $order->setTotalOnlineRefunded($order->getTotalOnlineRefunded() - $creditmemo->getGrandTotal());
+            $order->setBaseTotalOnlineRefunded($order->getBaseTotalOnlineRefunded() - $creditmemo->getBaseGrandTotal());
         } else {
-            $order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() + $creditmemo->getGrandTotal());
+            $order->setTotalOfflineRefunded($order->getTotalOfflineRefunded() - $creditmemo->getGrandTotal());
             $order->setBaseTotalOfflineRefunded(
-                $order->getBaseTotalOfflineRefunded() + $creditmemo->getBaseGrandTotal()
+                $order->getBaseTotalOfflineRefunded() - $creditmemo->getBaseGrandTotal()
             );
         }
 
         $order->setBaseTotalInvoicedCost(
-            $order->getBaseTotalInvoicedCost() - $creditmemo->getBaseCost()
+            $order->getBaseTotalInvoicedCost() + $creditmemo->getBaseCost()
         );
     }
 
     /**
-     * Prepare invoice data for refund
+     * Reset invoice data for refund
      *
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
      */
-    protected function prepareInvoice(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+    protected function resetInvoiceRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
         if ($creditmemo->getInvoice()) {
-            $creditmemo->getInvoice()->setIsUsedForRefund(true);
             $creditmemo->getInvoice()->setBaseTotalRefunded(
-                $creditmemo->getInvoice()->getBaseTotalRefunded() + $creditmemo->getBaseGrandTotal()
+                $creditmemo->getInvoice()->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
             );
-            $creditmemo->setInvoiceId($creditmemo->getInvoice()->getId());
         }
     }
 

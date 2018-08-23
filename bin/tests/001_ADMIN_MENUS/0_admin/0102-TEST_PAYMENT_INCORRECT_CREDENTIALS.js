@@ -43,7 +43,7 @@ casper.test.begin('Test Payment With Incorrect Credentials', function(test) {
             test.assertHttpStatus(200, "Correct HTTP Status Code 200");
             test.assertSelectorHasText(
                 '.message.message-error.error',
-                "\n        An error occurred on the server. Please try to place the order again.\n    ",
+                "\n        There was an error request new transaction: Incorrect Credentials : API User Not Found.\n    ",
                 "Correct response from Magento server !"
             );
         }, function fail() {

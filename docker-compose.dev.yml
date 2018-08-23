@@ -1,9 +1,9 @@
-magento2:
+web:
   env_file:
-    - ./bin/conf/development/mage.env.sample
-    - ./bin/conf/development/auth.env
-    - ./bin/conf/development/module.env.sample
-    - ./bin/conf/development/hipay.env
+    - ./bin/docker/conf/development/mage.env.sample
+    - ./bin/docker/conf/development/auth.env
+    - ./bin/docker/conf/development/module.env.sample
+    - ./bin/docker/conf/development/hipay.env
   ports:
     - "8096:80"
   volumes:
@@ -26,12 +26,12 @@ magento2:
     - ./tests:/var/www/html/magento2/tests
     - ./log:/home/magento2/var/log
     - ./conf/sdk:/var/www/html/magento2/sdk
-  dockerfile: ./bin/conf/docker/Dockerfile
+  dockerfile: ./bin/docker/images/default/Dockerfile
   build: .
   links:
-    - db
+    - database
     - smtp
-db:
+database:
   image: mysql:5.6
   environment:
     - MYSQL_ROOT_PASSWORD=magento2

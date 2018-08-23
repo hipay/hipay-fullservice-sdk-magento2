@@ -1,0 +1,56 @@
+version: "3.3"
+
+networks:
+  magento2:
+    internal: true
+  outside-pi-overlay:
+    external: true
+  traefik_traefik:
+      external: true
+
+services:
+  web:
+    image: ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
+    build:
+      context: .
+      dockerfile: ./bin/docker/images/default/Dockerfile
+    ports:
+      - "80"
+    networks:
+      - magento2
+      - traefik_traefik
+      - outside-pi-overlay
+    env_file:
+      - ./bin/docker/conf/acceptance/hipay.env.sample
+      - ./bin/docker/conf/acceptance/auth.env.sample
+      - ./bin/docker/conf/acceptance/mage.env.sample
+      - ./bin/docker/conf/acceptance/module.env.sample
+    deploy:
+      labels:
+        - "traefik.frontend.rule=Host:${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com"
+        - "traefik.port=80"
+        - "traefik.docker.network=traefik_traefik"
+  smtp:
+    image: schickling/mailcatcher
+    ports:
+      - "1080"
+    networks:
+      traefik_traefik:
+      magento2:
+        aliases:
+          - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
+    deploy:
+      labels:
+        - "traefik.frontend.rule=Host:${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-mail.hipay-pos-platform.com"
+        - "traefik.port=1080"
+        - "traefik.docker.network=traefik_traefik"
+  database:
+      image: mysql:5.7
+      ports:
+        - "3306"
+      environment:
+        - MYSQL_ROOT_PASSWORD=magento2
+      networks:
+        magento2:
+          aliases:
+            - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database
