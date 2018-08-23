@@ -1,3 +1,8 @@
+# 1.3.1
+
+- Fix : Change refund workflow
+- Fix : Split payment status
+
 # 1.3.0
 
 - Add proxy settings (gateway requests)
