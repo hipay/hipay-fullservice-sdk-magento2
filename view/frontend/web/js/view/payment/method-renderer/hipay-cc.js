@@ -21,7 +21,8 @@ define(
      	'ko',
      	'jquery',
      	'HiPay_FullserviceMagento/js/view/payment/cc-form',
-     	'hipay_tpp',
+     	'HiPay_FullserviceMagento/js/hipay-tpp',
+        'HiPay_FullserviceMagento/js/reqwest',
      	'mage/storage',
      	'Magento_Checkout/js/model/full-screen-loader'
     ],
@@ -159,7 +160,7 @@ define(
 	                        }
 	                    );
 	                    
-	                    fullScreenLoader.startLoader();
+	                    //fullScreenLoader.startLoader();
 	                    
 	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
 	                    TPP.setCredentials(this.apiUsernameTokenJs,this.apiPasswordTokenJs);

@@ -82,7 +82,7 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
-define(["reqwest"], function(reqwest) {
+define(["HiPay_FullserviceMagento/js/reqwest"], function(reqwest) {
 	'use strict';
 
 /**
