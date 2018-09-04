@@ -102,7 +102,7 @@ class Decline extends Fullservice
                     }
                 }
 
-                $cart->getResource()->save($cart);
+                $cart->save();
             }
         }
         //MO/TO case
