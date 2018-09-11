@@ -18,59 +18,73 @@
 
 define(
     [
-     	'jquery',
-     	'ko',
-     	'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
+        'jquery',
+        'ko',
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-cc'
     ],
-    function ($,ko,Component) {
+    function ($, ko, Component) {
         'use strict';
         var splitAmounts = ko.observableArray();
         return Component.extend({
-            
-        	defaults: {
-        		template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
-        		selectedPaymentProfile: '',
-        		splitAmounts: splitAmounts,
-        		refreshConfigUrl: window.checkoutConfig.payment.hipaySplit.refreshConfigUrl,
-        	},
-        	isLoading: ko.observable(false),
-        	initialize: function(){
-        		this._super();
-        	},
+
+            defaults: {
+                template: 'HiPay_FullserviceMagento/payment/hipay-cc-split',
+                selectedPaymentProfile: '',
+                splitAmounts: splitAmounts,
+                refreshConfigUrl: window.checkoutConfig.payment.hipaySplit.refreshConfigUrl,
+                env: window.checkoutConfig.payment.hipaySplit.env.hipay_ccsplit,
+                apiUsernameTokenJs: window.checkoutConfig.payment.hipaySplit.apiUsernameTokenJs.hipay_ccsplit,
+                apiPasswordTokenJs: window.checkoutConfig.payment.hipaySplit.apiPasswordTokenJs.hipay_ccsplit,
+                icons: window.checkoutConfig.payment.hipaySplit.icons.hipay_ccsplit
+            },
+            isLoading: ko.observable(false),
+            initialize: function () {
+                this._super();
+            },
+
+            getIcons: function (type) {
+                return this.icons.hasOwnProperty(type)
+                    ? this.icons[type]
+                    : false
+            },
+
+            getCcAvailableTypes: function () {
+                return window.checkoutConfig.payment.hipaySplit.availableTypes.hipay_ccsplit;
+            },
+
             /**
              * @override
              */
             initObservable: function () {
-            	var self = this;
-            	
-                this._super().
-                observe([
-                       'selectedPaymentProfile',
-                   ]);
-               
-                
-                //Ajax call to update splitAmounts, when method view is loaded.        
-            	self.reloadPaymentProfiles();
-   
+                var self = this;
 
-            	//Set expiration year to credit card data object
-                this.selectedPaymentProfile.subscribe(function(value) {
-                	self.splitAmounts.removeAll()
-                	if(value){
-                		
-                		$.each(self.getSplitAmountByProfile(value), function(index,split){
-                			self.splitAmounts.push(split);
-                		});
-                	}
+                this._super().observe([
+                    'selectedPaymentProfile',
+                ]);
+
+
+                //Ajax call to update splitAmounts, when method view is loaded.        
+                self.reloadPaymentProfiles();
+
+
+                //Set expiration year to credit card data object
+                this.selectedPaymentProfile.subscribe(function (value) {
+                    self.splitAmounts.removeAll()
+                    if (value) {
+
+                        $.each(self.getSplitAmountByProfile(value), function (index, split) {
+                            self.splitAmounts.push(split);
+                        });
+                    }
                 });
-                
-                if(this.hasPaymentProfiles()){
-                	this.selectedPaymentProfile(this.getFirstPaymentProfileId());
+
+                if (this.hasPaymentProfiles()) {
+                    this.selectedPaymentProfile(this.getFirstPaymentProfileId());
                 }
-                
+
                 return this;
             },
-        	/**
+            /**
              * @returns {Boolean}
              */
             isActive: function () {
@@ -82,19 +96,19 @@ define(
             isShowLegend: function () {
                 return true;
             },
-            context: function() {
+            context: function () {
                 return this;
             },
-            getData: function(){
-            	
-            	var parent = this._super();           
-            	var additionalData = {
-            			'additional_data':{            				
-            				'profile_id': this.selectedPaymentProfile()
-            			}
-            	}
+            getData: function () {
 
-            	return $.extend(true, parent, additionalData);
+                var parent = this._super();
+                var additionalData = {
+                    'additional_data': {
+                        'profile_id': this.selectedPaymentProfile()
+                    }
+                }
+
+                return $.extend(true, parent, additionalData);
             },
             /**
              * @override
@@ -102,74 +116,74 @@ define(
             getCode: function () {
                 return 'hipay_ccsplit';
             },
-            reloadPaymentProfiles: function(){
-            	var self = this;
-            	this.isLoading(true);
-            	$.ajax({
+            reloadPaymentProfiles: function () {
+                var self = this;
+                this.isLoading(true);
+                $.ajax({
                     url: this.refreshConfigUrl,
                     type: 'GET',
                     global: true,
                     contentType: 'application/json',
                     showLoader: true
                 }).done(
-                        function (response) {
-                        	if(response.payment){
-	                        	self.updateSplitAmounts(response.payment);                   	
-                        	}
-                        	else{
-                        		console.log(response);
-                                
-                        	}
-                        	
+                    function (response) {
+                        if (response.payment) {
+                            self.updateSplitAmounts(response.payment);
                         }
-                    ).fail(
-                        function (response) {
-                        	console.log(response);
+                        else {
+                            console.log(response);
+
                         }
-                    );
-            	this.isLoading(false);
+
+                    }
+                ).fail(
+                    function (response) {
+                        console.log(response);
+                    }
+                );
+                this.isLoading(false);
             },
-            updateSplitAmounts: function(payment){
-            	var self = this;
-            	//Merge with current checkoutConfig
-        		$.extend(true,window.checkoutConfig.payment,payment);
-        		
-        		this.splitAmounts.removeAll();
-        		
-        		$.each(this.getSplitAmountByProfile(this.selectedPaymentProfile()), function(index,split){
-        			self.splitAmounts.push(split);
-        		});
+            updateSplitAmounts: function (payment) {
+                var self = this;
+                //Merge with current checkoutConfig
+                $.extend(true, window.checkoutConfig.payment, payment);
+
+                this.splitAmounts.removeAll();
+
+                $.each(this.getSplitAmountByProfile(this.selectedPaymentProfile()), function (index, split) {
+                    self.splitAmounts.push(split);
+                });
 
             },
-            getSplitAmounts: function (){
-            	return this.splitAmounts;
+            getSplitAmounts: function () {
+                return this.splitAmounts;
             },
-            getPaymentProfiles: function(){
-            	return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
+            getPaymentProfiles: function () {
+                return window.checkoutConfig.payment.hipaySplit.paymentProfiles[this.getCode()];
             },
-            hasPaymentProfiles: function(){
-            	return this.getPaymentProfiles().length > 0;
+            hasPaymentProfiles: function () {
+                return this.getPaymentProfiles().length > 0;
             },
-            getFirstPaymentProfile: function(){
-            	var pp= this.getPaymentProfiles();
-            	for(var i=0;i<pp.length;i++){
-            		return pp[i];
-            	}
+            getFirstPaymentProfile: function () {
+                var pp = this.getPaymentProfiles();
+                for (var i = 0; i < pp.length; i++) {
+                    return pp[i];
+                }
             },
-            getFirstPaymentProfileId: function(){
-            	return this.getFirstPaymentProfile().profileId;
+            getFirstPaymentProfileId: function () {
+                return this.getFirstPaymentProfile().profileId;
             },
-            getSplitAmountByProfile: function(profileId){
-            	var ppArr = this.getPaymentProfiles();
-            	for(var i=0;i<ppArr.length;i++){
-            		if(ppArr[i].profileId == profileId){
-            			return ppArr[i].splitAmounts;
-            		}
-            	}
-            	
-            	return [];
+            getSplitAmountByProfile: function (profileId) {
+                var ppArr = this.getPaymentProfiles();
+                for (var i = 0; i < ppArr.length; i++) {
+                    if (ppArr[i].profileId == profileId) {
+                        return ppArr[i].splitAmounts;
+                    }
+                }
+
+                return [];
             }
-            
+
         });
     }
 );
