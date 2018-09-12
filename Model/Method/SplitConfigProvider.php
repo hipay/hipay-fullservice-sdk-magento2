@@ -13,12 +13,15 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use HiPay\FullserviceMagento\Model\CcConfigProvider;
+use HiPay\FullserviceMagento\Model\CcMethod;
 
 /**
  * Class Generic config provider
@@ -30,7 +33,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class SplitConfigProvider implements ConfigProviderInterface
+class SplitConfigProvider extends CcConfigProvider
 {
 
     /**
@@ -86,26 +89,35 @@ class SplitConfigProvider implements ConfigProviderInterface
     protected $priceCurrency;
 
     /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
-     */
-    protected $_hipayConfig;
-
-    /**
      * SplitConfigProvider constructor.
+     * @param \Magento\Payment\Model\CcConfig $ccConfig
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Framework\Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
+     * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+     * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * @param Context $context
      * @param array $methodCodes
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
+        \Magento\Payment\Model\CcConfig $ccConfig,
+        \Magento\Payment\Helper\Data $paymentHelper,
+        \Magento\Framework\Url $urlBuilder,
+        \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
+        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
+        \Magento\Framework\View\Asset\Source $assetSource,
         \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
+        parent::__construct($ccConfig, $paymentHelper, $urlBuilder, $cctypeSource, $configFactory, $assetSource);
+
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
         }
@@ -115,11 +127,10 @@ class SplitConfigProvider implements ConfigProviderInterface
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->priceCurrency = $context->getPriceCurrency();
-        $this->_hipayConfig = $context->getConfigFactory()->create();
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function getConfig()
     {
@@ -132,6 +143,11 @@ class SplitConfigProvider implements ConfigProviderInterface
                         'payment' => [
                             'hipaySplit' => [
                                 'paymentProfiles' => [$methodCode => $this->getPaymentProfilesAsArray($methodCode)],
+                                'apiUsernameTokenJs' => [$methodCode => $this->_hipayConfig->getApiUsernameTokenJs()],
+                                'apiPasswordTokenJs' => [$methodCode => $this->_hipayConfig->getApiPasswordTokenJs()],
+                                'availableTypes' => [$methodCode => $this->getCcAvailableTypesOrdered()],
+                                'env' => [$methodCode => $this->_hipayConfig->getApiEnv()],
+                                'icons' => [$methodCode => $this->getIcons()]
                             ]
                         ]
                     ]

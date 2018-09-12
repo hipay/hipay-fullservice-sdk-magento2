@@ -25,6 +25,15 @@ services:
       - ./bin/docker/conf/acceptance/auth.env.sample
       - ./bin/docker/conf/acceptance/mage.env.sample
       - ./bin/docker/conf/acceptance/module.env.sample
+    labels:
+      - "com.hipay.ir.publish=1"
+      - "com.hipay.ir.name=web"
+      - "com.hipay.ir.branch=${CI_COMMIT_REF_SLUG}"
+      - "com.hipay.ir.gitlab.feature.link=${CI_PROJECT_URL}/tree/${CI_COMMIT_REF_NAME}"
+      - "com.hipay.ir.gitlab.org=pi-ecommerce"
+      - "com.hipay.ir.gitlab.project=hipay-fullservice-sdk-magento2"
+      - "com.hipay.ir.admin.url=${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/admin"
+      - "com.hipay.ir.url=${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com"
     deploy:
       labels:
         - "traefik.frontend.rule=Host:${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com"
@@ -39,6 +48,14 @@ services:
       magento2:
         aliases:
           - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
+    labels:
+      - "com.hipay.ir.publish=1"
+      - "com.hipay.ir.name=mail"
+      - "com.hipay.ir.branch=${CI_COMMIT_REF_SLUG}"
+      - "com.hipay.ir.gitlab.feature.link=${CI_PROJECT_URL}/tree/${CI_COMMIT_REF_NAME}"
+      - "com.hipay.ir.gitlab.org=pi-ecommerce"
+      - "com.hipay.ir.gitlab.project=hipay-fullservice-sdk-magento2"
+      - "com.hipay.ir.url=${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-mail.hipay-pos-platform.com"
     deploy:
       labels:
         - "traefik.frontend.rule=Host:${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-mail.hipay-pos-platform.com"

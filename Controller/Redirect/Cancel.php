@@ -101,7 +101,7 @@ class Cancel extends Fullservice
                     }
                 }
 
-                $cart->getResource()->save($cart);
+                $cart->save();
             }
         }
 
