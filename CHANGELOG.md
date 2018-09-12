@@ -1,3 +1,8 @@
+# 1.3.2
+
+- [#114](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/114) Fix issue #114 : Fatal error on failure order (#114)
+- Fix : Split payment AI method cannot be displayed alone
+
 # 1.3.1
 
 - Fix : Change refund workflow
