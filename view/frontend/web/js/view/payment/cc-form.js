@@ -36,7 +36,8 @@ define(
                 creditCardSsStartYear: '',
                 creditCardVerificationNumber: '',
                 selectedCardType: null,
-                creditCardOwner: ''
+                creditCardOwner: '',
+                showCVV: true
             },
 
             initObservable: function () {
@@ -50,7 +51,8 @@ define(
                         'creditCardSsStartMonth',
                         'creditCardSsStartYear',
                         'selectedCardType',
-                        'creditCardOwner'
+                        'creditCardOwner',
+                        'showCVV'
                     ]);
                 return this;
             },
@@ -73,6 +75,7 @@ define(
                         return false;
                     }
                     if (result.card !== null) {
+                        self.showCVV(self.isCreditCardTypeNeedCVV(value));
                         self.selectedCardType(result.card.type);
                         creditCardData.creditCard = result.card;
                     }
@@ -97,6 +100,10 @@ define(
                 this.creditCardVerificationNumber.subscribe(function(value) {
                     creditCardData.cvvCode = value;
                 });
+            },
+
+            isCreditCardTypeNeedCVV: function(cardNumber) {
+                return !(new RegExp('^(6703)[0-9]{8,15}$').test(cardNumber));
             },
 
             getCode: function() {
