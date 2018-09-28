@@ -1,6 +1,6 @@
 # HiPay Fullservice module for Magento 2
 
-[![Build Status](https://hook.hipay.org/badge-ci/build/pi-ecommerce/hipay-fullservice-sdk-magento2/master?service=github)](https://hook.hipay.org/badge-ci/build/pi-ecommerce/hipay-fullservice-sdk-magento2/master?service=github)
+[![Build Status](https://hook.hipay.org/badge-ci/build/pi-ecommerce/hipay-fullservice-sdk-magento2/develop?service=github)](https://hook.hipay.org/badge-ci/build/pi-ecommerce/hipay-fullservice-sdk-magento2/develop?service=github)
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/hipay/hipay-fullservice-sdk-magento2/master/LICENSE.md)
 
 The **HiPay Fullservice module for Magento 2** is a PHP module which allows you to accept payments in your Magento 2 online store. It offers innovative features to reduce shopping cart abandonment rates, optimize success rates and enhance the purchasing process on merchants’ sites in order to significantly increase business volumes without additional investments in the Magento 2 e-commerce CMS solution.
