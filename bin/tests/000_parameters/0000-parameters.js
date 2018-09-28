@@ -30,6 +30,7 @@ var fs = require('fs'),
 		visa:"VI",
 		cb:"MC",
 		amex:"AE",
+		maestro: "MI"
 	},
     currentCurrency = allowedCurrencies[0],
     generatedCPF = "373.243.176-26";
