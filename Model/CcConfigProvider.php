@@ -73,30 +73,30 @@ class CcConfigProvider implements ConfigProviderInterface
      */
     protected $assetSource;
 
+
+    protected $context;
+
     /**
      * CcConfigProvider constructor.
      * @param CcConfig $ccConfig
-     * @param PaymentHelper $paymentHelper
-     * @param \Magento\Framework\Url $urlBuilder
      * @param System\Config\Source\CcType $cctypeSource
      * @param Config\Factory $configFactory
      * @param Source $assetSource
      */
     public function __construct(
         CcConfig $ccConfig,
-        PaymentHelper $paymentHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
-        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        Source $assetSource
+        Source $assetSource,
+        \HiPay\FullserviceMagento\Model\Method\Context $context
     ) {
-        $this->method = $paymentHelper->getMethodInstance($this->methodCode);
-        $this->urlBuilder = $urlBuilder;
+        $this->method = $context->_paymentData->getMethodInstance($this->methodCode);
+        $this->urlBuilder = $context->urlBuilder;
         $this->_cctypeSource = $cctypeSource;
         $this->ccConfig = $ccConfig;
         $this->assetSource = $assetSource;
+        $this->context = $context;
 
-        $this->_hipayConfig = $configFactory->create(['params' => ['methodCode' => $this->methodCode]]);
+        $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['methodCode' => $this->methodCode]]);
     }
 
     /**
