@@ -27,16 +27,16 @@ casper.test.begin('Functions Checkout', function (test) {
                 this.click('input#' + method_hipay);
 
                 if (currentBrandCC == 'visa') {
-                    this.fillFormMagentoCreditCard(cardsNumber.visa);
+                    this.fillFormMagentoCreditCard(cardsNumber.visa,true);
                 }
                 else if (currentBrandCC == 'cb' || currentBrandCC == "mastercard") {
-                    this.fillFormMagentoCreditCard(cardsNumber.cb);
+                    this.fillFormMagentoCreditCard(cardsNumber.cb,true);
                 }
                 else if (currentBrandCC == 'visa_3ds') {
-                    this.fillFormMagentoCreditCard(cardsNumber.visa_3ds);
+                    this.fillFormMagentoCreditCard(cardsNumber.visa_3ds,true);
                 }
                 else if (currentBrandCC == 'maestro') {
-                    this.fillFormMagentoCreditCard(cardsNumber.maestro);
+                    this.fillFormMagentoCreditCard(cardsNumber.maestro,false);
                 }
 
 
@@ -52,13 +52,13 @@ casper.test.begin('Functions Checkout', function (test) {
     };
 
     /* Fill HiPayCC formular */
-    casper.fillFormMagentoCreditCard = function (card) {
+    casper.fillFormMagentoCreditCard = function (card, cvv) {
         this.fillSelectors('form#co-payment-form', {
             'input[name="payment[cc_owner]"]': "TEST TEST",
             'input[name="payment[cc_number]"]': card,
             'select[name="payment[cc_exp_month]"]': '2',
             'select[name="payment[cc_exp_year]"]': '2020',
-            'input[name="payment[cc_cid]"]': '500'
+            'input[name="payment[cc_cid]"]': (cvv) ? '500' : ""
         }, false);
     };
 
