@@ -40,7 +40,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      *
      * @var \Magento\Framework\Url
      */
-    protected $urlBuilder;
+    public $urlBuilder;
 
     /**
      *
@@ -100,7 +100,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      *
      * @var \Magento\Payment\Helper\Data $paymentData
      */
-    protected $_paymentData;
+    public $_paymentData;
 
     /**
      *

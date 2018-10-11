@@ -105,10 +105,7 @@ class SplitConfigProvider extends CcConfigProvider
      */
     public function __construct(
         \Magento\Payment\Model\CcConfig $ccConfig,
-        \Magento\Payment\Helper\Data $paymentHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource,
-        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
         \Magento\Framework\View\Asset\Source $assetSource,
         \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory,
         \Magento\Checkout\Helper\Data $checkoutHelper,
@@ -116,7 +113,7 @@ class SplitConfigProvider extends CcConfigProvider
         \HiPay\FullserviceMagento\Model\Method\Context $context,
         array $methodCodes = []
     ) {
-        parent::__construct($ccConfig, $paymentHelper, $urlBuilder, $cctypeSource, $configFactory, $assetSource);
+        parent::__construct($ccConfig, $cctypeSource, $assetSource, $context);
 
         foreach ($methodCodes as $code) {
             $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
