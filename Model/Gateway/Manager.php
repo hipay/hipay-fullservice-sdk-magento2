@@ -343,7 +343,11 @@ class Manager
         }
 
         $this->_getPayment()->setTransactionId($operationId);
-        $this->_getPayment()->getCreditMemo()->setTransactionId($operationId);
+
+        if ($operationType== Operation::REFUND) {
+            $this->_getPayment()->getCreditMemo()->setTransactionId($operationId);
+        }
+
         $params = $this->_getRequestParameters();
         $params['params']['operation'] = $operationType;
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();

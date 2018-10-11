@@ -1,3 +1,7 @@
+# 1.3.3
+- Fix the exception with manual captures
+- Fix compilation error
+
 # 1.3.2
 
 - [#114](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/114) Fix issue #114 : Fatal error on failure order (#114)
