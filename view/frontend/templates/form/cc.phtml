@@ -109,7 +109,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <div class="control">
             <input type="number" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
                    class="input-text cvv" id="<?php /* @noEscape */ echo $code; ?>_cc_cid" name="payment[cc_cid]" value=""
-                   data-validate='{"required-number":true, "validate-cc-cvn":"#<?php /* @noEscape */ echo $code; ?>_cc_type"}' />
+                   data-validate='{"validate-cc-cvn":"#<?php /* @noEscape */ echo $code; ?>_cc_type"}' />
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
                 '\" title=\"' . $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />'; ?>

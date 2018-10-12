@@ -115,7 +115,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
                 ) {
                     //Special case due to wrong comparison in
                     // magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36
-                    $name = "Maestro";
+                    $name = "Maestro International";
                 }
                 $options[$code] = ['value' => $code, 'label' => $name];
             }

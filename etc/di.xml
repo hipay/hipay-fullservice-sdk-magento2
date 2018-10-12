@@ -62,4 +62,11 @@
             <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hipay" xsi:type="object">HiPay\FullserviceMagento\Console\Command\ConvertSerializedData</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

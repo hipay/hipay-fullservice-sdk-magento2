@@ -69,10 +69,12 @@ define(
                 this._super();
 
                 this.showCcForm = ko.computed(function () {
-
-                    return !(self.useOneclick() && self.customerHasCard()) ||
+                    var showCC = !(self.useOneclick() && self.customerHasCard()) ||
                         self.selectedCard() === undefined ||
                         self.selectedCard() === '';
+
+                    self.showCVV(showCC);
+                    return showCC;
                 }, this);
 
                 return this;
