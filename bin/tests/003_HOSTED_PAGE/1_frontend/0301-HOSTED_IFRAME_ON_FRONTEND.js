@@ -7,39 +7,35 @@
  /**********************************************************************************************/
 
 var paymentType = "HiPay Enterprise Hosted Page",
-    currentBrandCC = typeCC;
+    currentBrandCC = utilsHiPay.getTypeCC();
 
 casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + currentBrandCC, function (test) {
     phantom.clearCookies();
 
     casper.start(baseURL + "admin/")
     /* Active Hosted payment method with display iframe */
-        .then(function () {
-            this.logToBackend();
-            method.proceed(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '1']);
+        .thenOpen(baseURL + "admin/", function () {
+            adminMod.logToBackend(test);
+            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '1']);
         })
         .thenOpen(baseURL, function () {
-            this.waitUntilVisible('div.footer', function success() {
-                this.selectItemAndOptions();
-            }, function fail() {
-                test.assertVisible("div.footer", "'Footer' exists");
-            }, 10000);
+            checkoutMod.selectItemAndOptions(test);
         })
         .then(function () {
-            this.addItemGoCheckout();
+            checkoutMod.addItemGoCheckout(test);
         })
         .then(function () {
-            this.billingInformation();
+            checkoutMod.billingInformation(test, "FR");
         })
         .then(function () {
-            this.shippingMethod();
+            checkoutMod.shippingMethod(test);
         })
         .then(function () {
-            this.choosingPaymentMethod("hipay_hosted");
+            checkoutMod.choosingPaymentMethod(test, "hipay_hosted");
         })
         .then(function () {
-            this.wait(1000, function () {
-                this.clickPayButton();
+            this.wait(500, function () {
+                checkoutMod.clickPayButton();
             });
         })
         /* Fill payment formular inside iframe */
@@ -47,12 +43,12 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
             this.wait(10000, function () {
                 this.withFrame(0, function () {
                     this.echo("Fill payment Formular", "INFO");
-                    this.fillCCFormular(currentBrandCC);
+                    paymentLibHiPay.fillPaymentFormularByPaymentProduct(currentBrandCC, test);
                 });
             });
         })
         .then(function () {
-            this.orderResult(paymentType);
+            adminMod.orderResult(test, paymentType);
         })
         .run(function () {
             test.done();

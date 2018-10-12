@@ -1,9 +1,24 @@
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+
 casper.test.begin('Test Magento Hipay Enterprise Config', function (test) {
     phantom.clearCookies();
     var fields = [];
     casper.start(baseURL + "admin/")
         .then(function () {
-            this.logToBackend();
+            adminMod.logToBackend();
         })
         .then(function () {
             this.echo("Accessing to Hipay Enterprise menu and checking blocs menu...", "INFO");

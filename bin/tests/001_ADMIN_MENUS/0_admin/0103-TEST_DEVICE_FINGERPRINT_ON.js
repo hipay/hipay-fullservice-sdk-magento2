@@ -1,5 +1,19 @@
-var initialCredential,
-    currentBrandCC = typeCC;
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+
+var currentBrandCC = utilsHiPay.getTypeCC();
 
 casper.test.begin('Test Magento With Device Fingerprint', function (test) {
     phantom.clearCookies();
@@ -13,24 +27,24 @@ casper.test.begin('Test Magento With Device Fingerprint', function (test) {
             }
         })
         .thenOpen(baseURL + "admin/", function () {
-            this.logToBackend();
-            method.proceed(test, paymentType, "cc");
+            adminMod.logToBackend(test);
+            method.configure(test, paymentType, "cc");
         })
         /* Active device fingerprint */
         .then(function () {
-            this.setDeviceFingerprint('1', test);
+            adminMod.setDeviceFingerprint(test, '1');
         })
-        .thenOpen(baseURL, function () {
-            this.selectItemAndOptions();
+        .thenOpen(baseURL, function() {
+            checkoutMod.selectItemAndOptions(test);
         })
-        .then(function () {
-            this.addItemGoCheckout();
+        .then(function() {
+            checkoutMod.addItemGoCheckout(test);
         })
-        .then(function () {
-            this.billingInformation();
+        .then(function() {
+            checkoutMod.billingInformation(test, "FR");
         })
-        .then(function () {
-            this.shippingMethod();
+        .then(function() {
+            checkoutMod.shippingMethod(test);
         })
         /* Check ioBB field during payment formular step */
         .then(function () {
@@ -38,21 +52,20 @@ casper.test.begin('Test Magento With Device Fingerprint', function (test) {
             this.waitForSelector('#hipay_cc', function success() {
                 ioBB = this.getElementAttribute('input#ioBBFingerPrint', 'value');
                 test.assert(this.exists('input#ioBB') && ioBB != "", "'ioBB' field is present and not empty !");
-                this.fillStepPayment();
+                checkoutMod.fillStepPayment(test);
             }, function fail() {
                 test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
             }, 10000);
         })
         .then(function () {
-            this.orderResult(paymentType);
+            adminMod.orderResult(test, paymentType);
         })
         /* Access to BO TPP */
         .thenOpen(urlBackend, function () {
-            orderID = this.getOrderId();
-            this.logToHipayBackend(loginBackend, passBackend);
+            backendLibHiPay.logToHipayBackend(test, loginBackend, passBackend);
         })
         .then(function () {
-            this.selectAccountBackend("OGONE_DEV");
+            backendLibHiPay.selectAccountBackend(test, "OGONE_DEV");
         })
         .then(function () {
             this.waitForUrl(/maccount/, function success() {
@@ -64,12 +77,12 @@ casper.test.begin('Test Magento With Device Fingerprint', function (test) {
                 25000);
         })
         .then(function () {
-            this.echo("Finding order # " + orderID + " in order list...", "INFO");
+            this.echo("Finding order # " + order.getId() + " in order list...", "INFO");
             this.waitForUrl(/manage/, function success() {
                 this.evaluate(function (ID) {
                     document.querySelector('input#orderid').value = ID;
                     document.querySelector('input[name="submitorderbutton"]').click();
-                }, orderID);
+                }, order.getId());
                 test.info("Done");
             }, function fail() {
                 test.assertUrlMatch(/manage/, "Manage page exists");

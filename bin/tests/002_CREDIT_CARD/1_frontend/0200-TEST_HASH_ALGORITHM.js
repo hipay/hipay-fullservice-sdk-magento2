@@ -1,7 +1,22 @@
-var paymentType = "HiPay Enterprise Credit Card",
-    currentBrandCC = typeCC;
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
 
-casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, function (test) {
+var paymentType = "HiPay Enterprise Credit Card",
+    currentBrandCC = utilsHiPay.getTypeCC();
+
+casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + currentBrandCC, function (test) {
     phantom.clearCookies();
 
     casper.setFilter("page.confirm", function (msg) {
@@ -11,29 +26,29 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
 
     casper.start(baseURL)
         .thenOpen(urlBackend, function () {
-            this.logToHipayBackend(loginBackend, passBackend);
+            backendLibHiPay.logToHipayBackend(test, loginBackend, passBackend);
         })
         .then(function () {
-            this.selectAccountBackend("OGONE_DEV");
+            backendLibHiPay.selectAccountBackend(test, "OGONE_DEV");
         })
         /* Open Integration tab */
         .then(function () {
             this.echo("Open Integration nav", "INFO");
             this.waitForUrl(/maccount/, function success() {
-                this.selectHashingAlgorithm("SHA1");
+                backendLibHiPay.selectHashingAlgorithm(test, "SHA1");
             }, function fail() {
                 test.assertUrlMatch(/maccount/, "Dashboard page with account ID exists");
             });
         })
-        .then(function () {
-            this.logToBackend();
+        .thenOpen(baseURL + "admin/", function () {
+            adminMod.logToBackend(test);
         })
         .then(function () {
             configuration.goingToHiPayConfiguration(test);
         })
         .then(function () {
             var open = this.getElementAttribute('#hipay_hashing_algorithm-head', 'class');
-            if(open !== "open"){
+            if (open !== "open") {
                 test.info("Collapse bloc is closed. Try to expand it.");
                 this.wait(500, function () {
                     this.click("#hipay_hashing_algorithm-head");
@@ -75,53 +90,42 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + typeCC, fu
         })
         .thenOpen(baseURL, function () {
             this.waitUntilVisible('div.footer', function success() {
-                this.selectItemAndOptions();
+                checkoutMod.selectItemAndOptions(test);
             }, function fail() {
                 test.assertVisible("div.footer", "'Footer' exists");
             }, 10000);
         }, 15000)
         .then(function () {
-            this.addItemGoCheckout();
+            checkoutMod.addItemGoCheckout(test);
         })
         .then(function () {
-            this.billingInformation();
+            checkoutMod.billingInformation(test, "FR");
         })
         .then(function () {
-            this.shippingMethod();
+            checkoutMod.shippingMethod(test);
         })
         /* Fill steps payment */
         .then(function () {
-            this.fillStepPayment();
+            checkoutMod.fillStepPayment(test);
         })
         .then(function () {
-            this.orderResult(paymentType);
-
+            adminMod.orderResult(test, paymentType);
         })
         .thenOpen(urlBackend, function () {
-            this.logToHipayBackend(loginBackend, passBackend);
-        })
-        .then(function () {
-            this.selectAccountBackend("OGONE_DEV");
-        })
-        .then(function () {
-            cartID = casper.getOrderId();
-            orderID = casper.getOrderId();
-            this.processNotifications(true, false, true, false, "OGONE_DEV");
-        })
-        .thenOpen(urlBackend, function () {
-            this.logToHipayBackend(loginBackend, passBackend);
-        })
-        .then(function () {
-            this.selectAccountBackend("OGONE_DEV");
-        })
-        /* Open Integration tab */
-        .then(function () {
-            this.echo("Open Integration nav", "INFO");
-            this.waitForUrl(/maccount/, function success() {
-                this.selectHashingAlgorithm("SHA1");
-            }, function fail() {
-                test.assertUrlMatch(/maccount/, "Dashboard page with account ID exists");
-            });
+            notificationLibHiPay.processNotifications(
+                test,
+                order.getId(),
+                true,
+                false,
+                true,
+                false,
+                "OGONE_DEV",
+                backendLibHiPay,
+                loginBackend,
+                passBackend,
+                baseURL,
+                urlNotification
+            );
         })
         .run(function () {
             test.done();
