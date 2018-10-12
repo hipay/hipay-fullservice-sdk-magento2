@@ -1,3 +1,15 @@
+ # 1.3.4
+ - Fix cvv not mandatory for Maestro card
+ - Add command to convert data serialized to json 
+ 
+If you are migrating Magento from 2.1.X to 2.2.X and have defined 3DS or OneClick rules, you will need to run the new command to perform the migration.
+See: https://devdocs.magento.com/guides/v2.2/release-notes/backward-incompatible-changes/
+
+After your magento upgrade, execute in your magento directory:
+  
+     php bin/magento hipay:upgradeToJson
+ 
+
 # 1.3.3
 - Fix the exception with manual captures
 - Fix compilation error
