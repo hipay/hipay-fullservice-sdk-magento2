@@ -1,13 +1,13 @@
-exports.proceed = function proceed(test, method, nameField, option) {
+exports.configure = function configure(test, method, nameField, option) {
 
-    var needConfig = true
+    var needConfig = true;
 
     /* Payment method configuration */
     casper.then(function () {
         configuration.goingToHiPayMethodsConfiguration(test);
     })
         .then(function () {
-            otherPaymentBlock = this.getElementAttribute('#payment_us_other_payment_methods-head', 'class');
+            var otherPaymentBlock = this.getElementAttribute('#payment_us_other_payment_methods-head', 'class');
             if(otherPaymentBlock !== "open" ){
                 this.wait(500, function () {
                     test.info("Collapse bloc is closed. Try to expand it.");
@@ -17,7 +17,7 @@ exports.proceed = function proceed(test, method, nameField, option) {
         })
         .then(function () {
             this.waitForSelector(x('//a[text()="' + method + '"]'), function success() {
-                linkBlock = this.getElementAttribute('#payment_us_hipay_' + nameField + '-head', 'class');
+                var linkBlock = this.getElementAttribute('#payment_us_hipay_' + nameField + '-head', 'class');
                 if (linkBlock == "") {
                     test.info("Collapse bloc is closed. Try to expand it.");
                     this.wait(500, function () {

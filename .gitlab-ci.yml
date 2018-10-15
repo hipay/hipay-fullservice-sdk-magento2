@@ -2,8 +2,6 @@ image: hipay/gitlab-ci-base:jessie
 
 variables:
   PORT_WEB: 80
-
-variables:
   PROJECT_NAME_TEST_MG2_1: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}-1
   PROJECT_NAME_TEST_MG2_2: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}-2
 
@@ -40,7 +38,6 @@ stages:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
-  allow_failure: false
   tags:
     - pi-commerce-no-overlay
   artifacts:
@@ -109,7 +106,7 @@ sonarqube:
   stage: analysis
   image: ciricihq/gitlab-sonar-scanner
   variables:
-    SONAR_URL: http://172.17.0.1:19000
+    SONAR_URL: $SONAR_URL
     SONAR_ANALYSIS_MODE: preview
     SONAR_TOKEN: $SONAR_LOGIN
   script:
@@ -121,7 +118,7 @@ sonarqube-reports:
   stage: analysis
   image: ciricihq/gitlab-sonar-scanner
   variables:
-    SONAR_URL: http://172.17.0.1:19000
+    SONAR_URL: $SONAR_URL
     SONAR_ANALYSIS_MODE: "publish"
     SONAR_TOKEN: $SONAR_LOGIN
   script:

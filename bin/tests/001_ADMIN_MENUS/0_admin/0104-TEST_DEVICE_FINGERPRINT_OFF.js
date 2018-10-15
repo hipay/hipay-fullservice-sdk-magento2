@@ -1,8 +1,23 @@
-var initialCredential,
-    currentBrandCC = typeCC;
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+
+var currentBrandCC = utilsHiPay.getTypeCC();
 
 casper.test.begin('Test Magento Without Device Fingerprint', function (test) {
     phantom.clearCookies();
+
     var ioBB = "";
     casper.start(baseURL)
         .then(function () {
@@ -11,23 +26,23 @@ casper.test.begin('Test Magento Without Device Fingerprint', function (test) {
             }
         })
         .thenOpen(baseURL + "admin/", function () {
-            this.logToBackend();
+            adminMod.logToBackend(test);
         })
-        /* Disactive device fingerprint */
+        /* Active device fingerprint */
         .then(function () {
-            this.setDeviceFingerprint('0', test);
+            adminMod.setDeviceFingerprint(test, '0');
         })
-        .thenOpen(baseURL, function () {
-            this.selectItemAndOptions();
+        .thenOpen(baseURL, function() {
+            checkoutMod.selectItemAndOptions(test);
         })
-        .then(function () {
-            this.addItemGoCheckout();
+        .then(function() {
+            checkoutMod.addItemGoCheckout(test);
         })
-        .then(function () {
-            this.billingInformation();
+        .then(function() {
+            checkoutMod.billingInformation(test, "FR");
         })
-        .then(function () {
-            this.shippingMethod();
+        .then(function() {
+            checkoutMod.shippingMethod(test);
         })
         /* Check no ioBB field */
         .then(function () {

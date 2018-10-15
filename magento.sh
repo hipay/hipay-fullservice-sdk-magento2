@@ -12,7 +12,6 @@ BASE_URL="http://127.0.0.1:8096/"
 URL_MAILCATCHER="http://localhost:1096/"
 header="bin/tests/"
 pathPreFile=${header}000*/*.js
-pathLibHipay=${header}000*/*/*/*.js
 pathDir=${header}0*
 
 if [ "$1" = '' ] || [ "$1" = '--help' ];then
@@ -62,7 +61,7 @@ elif [ "$1" = 'test' ]; then
 
     rm -rf bin/tests/errors/*
     cd bin/tests/000_lib
-    bower install hipay-casperjs-lib#develop --allow-root
+    npm install
     cd ../../../;
 
     if [ "$(ls -A ~/.local/share/Ofi\ Labs/PhantomJS/)" ]; then
@@ -72,7 +71,7 @@ elif [ "$1" = 'test' ]; then
         printf "Pas de cache à effacer !\n\n"
     fi
 
-    casperjs test $pathLibHipay $pathPreFile ${pathDir}/[0-1]*/[0-9][0-9][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --login-backend=$LOGIN_BACKEND --pass-backend=$PASS_BACKEND --login-paypal=$LOGIN_PAYPAL --pass-paypal=$PASS_PAYPAL --xunit=${header}result.xml --ignore-ssl-errors=true --ssl-protocol=any
+    casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][0-9][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --login-backend=$LOGIN_BACKEND --pass-backend=$PASS_BACKEND --login-paypal=$LOGIN_PAYPAL --pass-paypal=$PASS_PAYPAL --xunit=${header}result.xml --ignore-ssl-errors=true --ssl-protocol=any --fail-fast
 
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1

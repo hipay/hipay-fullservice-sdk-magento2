@@ -1,22 +1,23 @@
 /**********************************************************************************************
  *
- *                       VALIDATION TEST METHOD : HOSTED
+ *                       VALIDATION TEST METHOD : CREDIT CART (DIRECT)
  *
  *  To launch test, please pass two arguments URL (BASE URL)  and TYPE_CC ( CB,VI,MC )
  *
  /**********************************************************************************************/
 
-var paymentType = "HiPay Enterprise Hosted Page",
-    currentBrandCC = utilsHiPay.getTypeCC();
+var paymentType = "HiPay Enterprise Credit Card",
+    currentBrandCC = utilsHiPay.getTypeCC(),
+    file_path = "002_CREDIT_CARD/1_frontend/0200-CREDIT_CARD_FRONTEND.js";
 
-casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + currentBrandCC, function (test) {
+casper.test.begin('Test Checkout ' + paymentType + ' with ' + currentBrandCC, function (test) {
     phantom.clearCookies();
 
     casper.start(baseURL + "admin/")
     /* Active HiPay CC payment method if default card type is not defined or is VISA */
         .thenOpen(baseURL + "admin/", function () {
             adminMod.logToBackend(test);
-            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '0']);
+            method.configure(test, paymentType, "cc");
         })
         .thenOpen(baseURL, function () {
             checkoutMod.selectItemAndOptions(test);
@@ -30,24 +31,17 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
         .then(function () {
             checkoutMod.shippingMethod(test);
         })
+        /* Fill steps payment */
         .then(function () {
-            checkoutMod.choosingPaymentMethod(test, "hipay_hosted");
-        })
-        .then(function () {
-            this.wait(500, function () {
-                checkoutMod.clickPayButton();
-            });
-        })
-        /* Fill payment formular inside iframe */
-        .then(function () {
-            this.waitForUrl(/payment\/web/, function success() {
-                paymentLibHiPay.fillPaymentFormularByPaymentProduct(currentBrandCC, test);
-            }, function fail() {
-                test.assertUrlMatch(/payment\/web/, "Payment page exists");
-            }, 30000);
+            checkoutMod.fillStepPayment(test);
         })
         .then(function () {
             adminMod.orderResult(test, paymentType);
+
+            /* Test it again with another card type */
+            if (currentBrandCC == 'visa') {
+                utilsHiPay.testOtherTypeCC(test, file_path, 'mastercard');
+            }
         })
         .run(function () {
             test.done();

@@ -1,0 +1,7 @@
+{
+  "name": "000_lib",
+  "version": "0.0.1",
+  "dependencies": {
+    "hipay-casperjs-lib": "git+https://github.com/hipay/hipay-casperjs-lib#feature/module"
+  }
+}
