@@ -13,9 +13,10 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Payment\Model\CcConfig;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 
@@ -88,6 +89,12 @@ class GenericConfigProvider implements ConfigProviderInterface
     protected $_hipayConfig;
 
     /**
+     * @var ResolverInterface
+     */
+    private $resolver;
+
+
+    /**
      * GenericConfigProvider constructor.
      * @param CcConfig $ccConfig
      * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
@@ -102,21 +109,23 @@ class GenericConfigProvider implements ConfigProviderInterface
         \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
+        \Psr\Log\LoggerInterface $logger,
+        ResolverInterface $resolver,
+        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
-        $this->ccConfig = $ccConfig;
-        foreach ($methodCodes as $code) {
-            $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
-        }
+        $this->methods= $methodCodes;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
+        $this->resolver = $resolver;
         $this->checkoutSession = $context->getCheckoutSession();
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
 
         $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
-
-        $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['storeId' => $storeId]]);
+        $this->_hipayConfig = $hipayConfig;
+        $this->_hipayConfig->setStoreId($storeId);
+        $this->_hipayConfig->setMethodCode("");
     }
 
     /**
@@ -125,8 +134,9 @@ class GenericConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $config = [];
-        foreach ($this->methods as $methodCode => $method) {
-            if ($method->isAvailable()) {
+        foreach ($this->methods as $methodCode) {
+            $this->_hipayConfig->setMethodCode($methodCode);
+            if ($this->_hipayConfig->isPaymentMethodActive()) {
                 $config = array_merge_recursive($config, [
                     'payment' => [
                         'hiPayFullservice' => [
@@ -143,6 +153,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                             'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
                             'iFrameStyle' => [$methodCode => $this->getIframeProp($methodCode, 'style')],
                             'iFrameWrapperStyle' => [$methodCode => $this->getIframeProp($methodCode, 'wrapper_style')],
+                            'locale' => [$methodCode => strtolower($this->resolver->getLocale())]
                         ]
                     ]
                 ]);
@@ -154,7 +165,8 @@ class GenericConfigProvider implements ConfigProviderInterface
             $cards[] = [
                 'name' => $card->getName(),
                 'ccToken' => $card->getCcToken(),
-                'ccType' => $card->getCcType()
+                'ccType' => $card->getCcType(),
+                'ccOwner' => $card->getCcOwner()
             ];
         }
 
@@ -173,9 +185,9 @@ class GenericConfigProvider implements ConfigProviderInterface
         return $config;
     }
 
-    protected function displayCardOwner($methodCode)
+    protected function displayCardOwner()
     {
-        return $this->methods[$methodCode]->getConfigData('display_card_owner');
+        return $this->_hipayConfig->getValue('display_card_owner');
     }
 
     /**
@@ -200,8 +212,8 @@ class GenericConfigProvider implements ConfigProviderInterface
 
     protected function useOneclick($methodCode)
     {
-        $allowUseOneclick = $this->methods[$methodCode]->getConfigData('allow_use_oneclick');
-        $filterOneclick = $this->methods[$methodCode]->getConfigData('filter_oneclick');
+        $allowUseOneclick = $this->_hipayConfig->getValue('allow_use_oneclick');
+        $filterOneclick = $this->_hipayConfig->getValue('filter_oneclick');
         $quote = $this->checkoutSession->getQuote();
 
         return (bool)$this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
@@ -209,11 +221,11 @@ class GenericConfigProvider implements ConfigProviderInterface
 
     protected function isIframeMode($methodCode)
     {
-        return (bool)$this->methods[$methodCode]->getConfigData('iframe_mode');
+        return (bool)$this->_hipayConfig->getValue('iframe_mode');
     }
 
     protected function getIframeProp($methodCode, $prop)
     {
-        return $this->methods[$methodCode]->getConfigData('iframe_' . $prop);
+        return $this->_hipayConfig->getValue('iframe_' . $prop);
     }
 }

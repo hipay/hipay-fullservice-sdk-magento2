@@ -41,7 +41,7 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + currentBra
             });
         })
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
         })
         .then(function () {
             configuration.goingToHiPayConfiguration(test);
@@ -106,10 +106,10 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + currentBra
         })
         /* Fill steps payment */
         .then(function () {
-            checkoutMod.fillStepPayment(test);
+            checkoutMod.fillStepPayment(test,false, "hipay_cc", currentBrandCC, parametersLibHiPay);
         })
         .then(function () {
-            adminMod.orderResult(test, paymentType);
+            adminMod.orderResult(test, paymentType, order);
         })
         .thenOpen(urlBackend, function () {
             notificationLibHiPay.processNotifications(
@@ -124,7 +124,8 @@ casper.test.begin('Change Hash Algorithm ' + paymentType + ' with ' + currentBra
                 loginBackend,
                 passBackend,
                 baseURL,
-                urlNotification
+                urlNotification,
+                urlBackend
             );
         })
         .run(function () {

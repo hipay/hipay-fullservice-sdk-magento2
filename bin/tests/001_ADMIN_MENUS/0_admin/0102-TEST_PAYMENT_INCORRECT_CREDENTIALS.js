@@ -21,9 +21,12 @@ casper.test.begin('Test Payment With Incorrect Credentials', function(test) {
         initialCredential;
 
     casper.start(baseURL + "admin/")
+    .then(function () {
+        this.clearCache();
+    })
     .then(function() {
-        adminMod.logToBackend(test);
-        method.configure(test, paymentType, "cc");
+        adminMod.logToBackend(baseURL,admin_login,admin_passwd);
+        method.configure(test, paymentType, "cc", "", configuration);
     })
     /* Disactive MOTO option */
     .then(function() {
@@ -52,7 +55,7 @@ casper.test.begin('Test Payment With Incorrect Credentials', function(test) {
     })
     /* HiPay CC payment */
     .then(function() {
-        checkoutMod.fillStepPayment(test);
+        checkoutMod.fillStepPayment(test, false, "hipay_cc", currentBrandCC, parametersLibHiPay);
     })
     /* Check failure page */
     .then(function() {
@@ -69,7 +72,7 @@ casper.test.begin('Test Payment With Incorrect Credentials', function(test) {
         }, 15000);
     })
     .then(function() {
-        adminMod.logToBackend(test);
+        adminMod.logToBackend(baseURL,admin_login,admin_passwd);
     })
     .then(function() {
         this.echo("Accessing to Hipay Enterprise menu...", "INFO");

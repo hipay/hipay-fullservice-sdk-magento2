@@ -68,7 +68,7 @@
 			        <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
 			    </legend><br />
 			    <!-- /ko -->
-			    <!-- ko if: (getDisplayCardOwner())-->
+
 			    <div class="field cc-owner number required" data-bind="attr: {id: getCode() + '_cc_owner_div'},visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_owner'}" class="label">
 			            <span><!-- ko i18n: 'Card Owner Name'--><!-- /ko --></span>
@@ -87,7 +87,7 @@
 			                        value: creditCardOwner" />
 			        </div>
 			    </div>
-			    <!-- /ko -->
+
 			    <div class="field number required" data-bind="visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
 			            <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>

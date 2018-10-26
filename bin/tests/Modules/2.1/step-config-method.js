@@ -1,4 +1,7 @@
-exports.configure = function configure(test, method, nameField, option) {
+var casper;
+var x = require('casper').selectXPath;
+
+exports.configure = function configure(test, method, nameField, option, configuration) {
 
     var needConfig = true;
 
@@ -13,6 +16,8 @@ exports.configure = function configure(test, method, nameField, option) {
                     test.info("Collapse bloc is closed. Try to expand it.");
                     this.click('#payment_us_other_payment_methods-head');
                 });
+            } else {
+                test.info("Collapse bloc Other Payment Method is open. Try to expand it.");
             }
         })
         .then(function () {
@@ -23,6 +28,8 @@ exports.configure = function configure(test, method, nameField, option) {
                     this.wait(500, function () {
                         this.click(x('//a[text()="' + method + '"]'));
                     });
+                } else {
+                    test.info("Collapse bloc is open.");
                 }
 
             }, function fail() {
@@ -71,7 +78,7 @@ exports.configure = function configure(test, method, nameField, option) {
                 }, function fail() {
                     test.assertVisible('select[name="groups[hipay_' + nameField + '][fields][active][value]"]', "'Enabled' select exists");
                 },
-                30000);
+                80000);
         })
         .then(function () {
             if (needConfig) {
@@ -86,7 +93,11 @@ exports.configure = function configure(test, method, nameField, option) {
                     test.info(method + " Configuration done");
                 }, function fail() {
                     test.fail('Failed to apply ' + method + ' Configuration on the system');
-                }, 30000);
+                }, 40000);
             }
         })
+};
+
+exports.setCasper = function setCasper(casperInstance) {
+    casper = casperInstance;
 };

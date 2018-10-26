@@ -14,14 +14,13 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use HiPay\FullserviceMagento\Model\CcConfigProvider;
-use HiPay\FullserviceMagento\Model\CcMethod;
+use HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider;
 
 /**
  * Class Generic config provider
@@ -111,19 +110,25 @@ class SplitConfigProvider extends CcConfigProvider
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
+        \Psr\Log\LoggerInterface $logger,
+        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
-        parent::__construct($ccConfig, $cctypeSource, $assetSource, $context);
+        parent::__construct($ccConfig, $cctypeSource, $assetSource, $context,$logger,$hipayConfig);
 
-        foreach ($methodCodes as $code) {
-            $this->methods[$code] = $context->getPaymentData()->getMethodInstance($code);
-        }
+        $this->methods= $methodCodes;
         $this->ppCollectionFactory = $ppCollectionFactory;
         $this->checkoutSession = $context->getCheckoutSession();
         $this->checkoutHelper = $checkoutHelper;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->priceCurrency = $context->getPriceCurrency();
+        $this->checkoutSession = $context->getCheckoutSession();
+        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+
+        $this->_hipayConfig = $hipayConfig;
+        $this->_hipayConfig->setStoreId($storeId);
+        $this->_hipayConfig->setMethodCode("");
     }
 
     /**
@@ -132,8 +137,9 @@ class SplitConfigProvider extends CcConfigProvider
     public function getConfig()
     {
         $config = [];
-        foreach ($this->methods as $methodCode => $method) {
-            if ($method->isAvailable()) {
+        foreach ($this->methods as $methodCode) {
+            $this->_hipayConfig->setMethodCode($methodCode);
+            if ($this->_hipayConfig->isPaymentMethodActive()) {
                 $config = array_merge_recursive(
                     $config,
                     [
@@ -167,7 +173,7 @@ class SplitConfigProvider extends CcConfigProvider
     protected function getPaymentProfiles($methodCode)
     {
         if (!isset($this->paymentProfiles[$methodCode])) {
-            $ppIds = $this->methods[$methodCode]->getConfigData('split_payments');
+            $ppIds = $this->_hipayConfig->getValue('split_payments');
             if (!is_array($ppIds)) {
                 $ppIds = explode(',', $ppIds);
             }

@@ -14,7 +14,7 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
@@ -112,7 +112,7 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * @var string[] keys to import in payment additionnal informations
      */
-    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint'];
+    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint','cc_owner'];
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
@@ -155,7 +155,6 @@ abstract class FullserviceMethod extends AbstractMethod
             $resourceCollection,
             $data
         );
-
         $this->transactionRepository = $transactionRepository;
         $this->_gatewayManagerFactory = $context->getGatewayManagerFactory();
         $this->urlBuilder = $context->getUrlBuilder();

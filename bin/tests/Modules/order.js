@@ -14,7 +14,7 @@
  */
 
 var id = 0;
-
+var x = require('casper').selectXPath;
 
 function setId(pending) {
     id = getOrderIdFromPage(pending);
@@ -36,8 +36,12 @@ function getOrderIdFromPage(pending) {
     }
     return orderID;
 }
+ function setCasper(casperInstance) {
+    casper = casperInstance;
+};
 
 module.exports = {
     setId: setId,
-    getId: getId
+    getId: getId,
+    setCasper: setCasper
 };

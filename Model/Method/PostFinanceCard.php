@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
 
 /**
  * PostFinance Card Model payment method

@@ -15,8 +15,8 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
     casper.start(baseURL + "admin/")
     /* Active HiPay CC payment method if default card type is not defined or is VISA */
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
-            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '0']);
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
+            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '0'], configuration);
         })
         .thenOpen(baseURL, function () {
             checkoutMod.selectItemAndOptions(test);
@@ -47,7 +47,7 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
             }, 30000);
         })
         .then(function () {
-            adminMod.orderResult(test, paymentType);
+            adminMod.orderResult(test, paymentType, order);
         })
         .run(function () {
             test.done();

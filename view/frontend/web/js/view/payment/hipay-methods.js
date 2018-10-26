@@ -30,6 +30,10 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
             },
             {
+                type: 'hipay_hosted_fields',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-fields'
+            },
+            {
                 type: 'hipay_hostedsplit',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
             },

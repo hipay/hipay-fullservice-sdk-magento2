@@ -20,7 +20,7 @@ namespace HiPay\FullserviceMagento\Test\Unit\Model;
 
 use Magento\Payment\Helper\Data;
 use HiPay\FullserviceMagento\Model\Config as CcConfig;
-use HiPay\FullserviceMagento\Model\CcConfigProvider;
+use HiPay\FullserviceMagento\Model\Methid\Providers\CcConfigProvider;
 
 class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
 {

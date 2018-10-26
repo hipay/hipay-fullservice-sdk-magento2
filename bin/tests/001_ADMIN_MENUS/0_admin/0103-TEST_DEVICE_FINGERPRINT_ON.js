@@ -22,17 +22,20 @@ casper.test.begin('Test Magento With Device Fingerprint', function (test) {
 
     casper.start(baseURL)
         .then(function () {
+            this.clearCache();
+        })
+        .then(function () {
             if (this.visible('p[class="bugs"]')) {
                 test.done();
             }
         })
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
-            method.configure(test, paymentType, "cc");
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
+            method.configure(test, paymentType, "cc", "", configuration);
         })
         /* Active device fingerprint */
         .then(function () {
-            adminMod.setDeviceFingerprint(test, '1');
+            adminMod.setDeviceFingerprint(test, '1', configuration);
         })
         .thenOpen(baseURL, function() {
             checkoutMod.selectItemAndOptions(test);
@@ -52,13 +55,13 @@ casper.test.begin('Test Magento With Device Fingerprint', function (test) {
             this.waitForSelector('#hipay_cc', function success() {
                 ioBB = this.getElementAttribute('input#ioBBFingerPrint', 'value');
                 test.assert(this.exists('input#ioBB') && ioBB != "", "'ioBB' field is present and not empty !");
-                checkoutMod.fillStepPayment(test);
+                checkoutMod.fillStepPayment(test,false, "hipay_cc",currentBrandCC, parametersLibHiPay);
             }, function fail() {
                 test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
             }, 10000);
         })
         .then(function () {
-            adminMod.orderResult(test, paymentType);
+            adminMod.orderResult(test, paymentType, order);
         })
         /* Access to BO TPP */
         .thenOpen(urlBackend, function () {

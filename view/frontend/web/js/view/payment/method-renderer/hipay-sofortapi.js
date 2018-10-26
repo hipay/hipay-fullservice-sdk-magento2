@@ -30,9 +30,6 @@ define(
 
             getCode: function() {
                 return 'hipay_sofortapi';
-            },
-            isActive: function() {
-                return true;
             }
         });
     }

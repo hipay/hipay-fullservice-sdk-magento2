@@ -567,6 +567,7 @@ class Notify
                 $card->setCcExpYear($paymentMethod->getCardExpiryYear());
                 $card->setCcNumberEnc($paymentMethod->getPan());
                 $card->setCcType($paymentProduct);
+                $card->setCcOwner($paymentMethod->getCardHolder());
                 $card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
                 $card->setName(sprintf(__('Card %s - %s'), $paymentMethod->getBrand(), $paymentMethod->getPan()));
 
