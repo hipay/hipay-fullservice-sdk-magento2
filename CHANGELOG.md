@@ -1,3 +1,6 @@
+  # 1.4.0
+ - **Add Payment Method Hosted Fields** 
+ 
  # 1.3.4
  - Fix cvv not mandatory for Maestro card
  - Add command to convert data serialized to json 
