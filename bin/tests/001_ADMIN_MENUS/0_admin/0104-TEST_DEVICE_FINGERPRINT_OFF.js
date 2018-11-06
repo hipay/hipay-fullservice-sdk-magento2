@@ -26,11 +26,11 @@ casper.test.begin('Test Magento Without Device Fingerprint', function (test) {
             }
         })
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
         })
         /* Active device fingerprint */
         .then(function () {
-            adminMod.setDeviceFingerprint(test, '0');
+            adminMod.setDeviceFingerprint(test, '0', configuration);
         })
         .thenOpen(baseURL, function() {
             checkoutMod.selectItemAndOptions(test);

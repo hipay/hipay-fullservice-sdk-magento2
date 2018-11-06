@@ -15,8 +15,8 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
     casper.start(baseURL + "admin/")
     /* Active Hosted payment method with display iframe */
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
-            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '1']);
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
+            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '1'], configuration);
         })
         .thenOpen(baseURL, function () {
             checkoutMod.selectItemAndOptions(test);
@@ -48,7 +48,7 @@ casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + current
             });
         })
         .then(function () {
-            adminMod.orderResult(test, paymentType);
+            adminMod.orderResult(test, paymentType, order);
         })
         .run(function () {
             test.done();

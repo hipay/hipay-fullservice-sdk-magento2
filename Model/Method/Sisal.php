@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
 
 /**
  * Sisal Model payment method

@@ -61,6 +61,7 @@ casperjs-2-1-10:
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml up -d
     - sleep 900
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
+    - docker cp bin/tests/tmp/default.xml ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_web:/var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-magento2/view/frontend/layout
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
     - sh bin/tests/casper_run_circle.sh http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web
   after_script:
@@ -166,8 +167,23 @@ deploy2recette:
   script:
     - bash /tools/deployToDockerMachine.sh -e ./bin/docker/conf/acceptance/hipay.env.sample -e ./bin/docker/conf/acceptance/auth.env.sample -e ./bin/docker/conf/acceptance/mage.env.sample -e ./bin/docker/conf/acceptance/module.env.sample -s docker-compose.acceptance.yml -n $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG
   allow_failure: true
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/
+    on_stop: stop_review
   tags:
     - pi-commerce-no-overlay
+
+stop_review:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - docker stack rm $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
 
 sync:
   stage: sync

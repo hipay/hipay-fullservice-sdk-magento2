@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
 use Magento\Framework\Exception\LocalizedException;
 use Zend\Validator;
 use Magento\Directory\Model;

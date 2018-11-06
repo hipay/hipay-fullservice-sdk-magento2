@@ -200,8 +200,6 @@ class Manager
      */
     public function requestNewOrder()
     {
-
-        //Merge params
         $params = $this->_getRequestParameters();
         $params['params']['operation'] = 'Authorization';
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();

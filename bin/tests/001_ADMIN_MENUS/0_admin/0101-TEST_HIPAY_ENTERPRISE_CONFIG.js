@@ -18,7 +18,7 @@ casper.test.begin('Test Magento Hipay Enterprise Config', function (test) {
     var fields = [];
     casper.start(baseURL + "admin/")
         .then(function () {
-            adminMod.logToBackend();
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
         })
         .then(function () {
             this.echo("Accessing to Hipay Enterprise menu and checking blocs menu...", "INFO");

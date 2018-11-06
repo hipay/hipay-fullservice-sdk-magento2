@@ -18,7 +18,7 @@ casper.test.begin('Test Magento Admin Menus', function (test) {
 
     casper.start(baseURL + "admin/")
         .then(function () {
-            adminMod.logToBackend();
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
         })
         /* Check HiPay Split Payments menu */
         .then(function () {

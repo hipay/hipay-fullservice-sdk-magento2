@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\CcMethod;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;

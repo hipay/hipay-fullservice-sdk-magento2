@@ -13,8 +13,9 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\Method\Astropay;
+namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
+use HiPay\FullserviceMagento\Model\Method\Context;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
@@ -82,6 +83,12 @@ class AstropayConfigProvider implements ConfigProviderInterface
     protected $_collection;
 
     /**
+     *
+     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+     */
+    protected $_hipayConfig;
+
+    /**
      * AstropayConfigProvider constructor.
      * @param CcConfig $ccConfig
      * @param PaymentHelper $paymentHelper
@@ -94,23 +101,28 @@ class AstropayConfigProvider implements ConfigProviderInterface
      */
     public function __construct(
         CcConfig $ccConfig,
-        PaymentHelper $paymentHelper,
-        \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
+        Context $context,
+        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
         $this->ccConfig = $ccConfig;
-        foreach ($methodCodes as $code) {
-            $this->methods[$code] = $paymentHelper->getMethodInstance($code);
-        }
-        $this->urlBuilder = $urlBuilder;
+        $this->methods= $methodCodes;
+        $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->checkoutSession = $checkoutSession;
         $this->_collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
+
+        $this->checkoutSession = $context->getCheckoutSession();
+        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+
+        $this->_hipayConfig = $hipayConfig;
+        $this->_hipayConfig->setStoreId($storeId);
+        $this->_hipayConfig->setMethodCode("");
     }
 
     /**
@@ -130,8 +142,9 @@ class AstropayConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $config = [];
-        foreach ($this->methods as $methodCode => $method) {
-            if ($method->isAvailable()) {
+        foreach ($this->methods as $methodCode) {
+            $this->_hipayConfig->setMethodCode($methodCode);
+            if ($this->_hipayConfig->isPaymentMethodActive()) {
                 $config = array_merge_recursive($config, [
                     'payment' => [
                         'hiPayFullservice' => [

@@ -16,19 +16,35 @@
 
 namespace HiPay\FullserviceMagento\Block;
 
-class Fingerprint extends \Magento\Framework\View\Element\Template
+class ExternalJS extends \Magento\Framework\View\Element\Template
 {
     const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
+    const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
 
     /**
      * Return figerprint URL
      *
      * @return string
      */
-    public function getJsSrc()
+    public function getJsSrcFingerprint()
     {
         return $this->_scopeConfig->getValue(
             self::JS_SRC_CONFIG_FINGERPRINT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            null
+        );
+    }
+
+
+    /**
+     * Return hosted fields URL
+     *
+     * @return string
+     */
+    public function getJsSrcHostedFields()
+    {
+        return $this->_scopeConfig->getValue(
+            self::JS_SRC_CONFIG_HOSTED_FIELDS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
         );

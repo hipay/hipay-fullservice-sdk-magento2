@@ -14,7 +14,7 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Model;
+namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;

@@ -24,11 +24,12 @@ casper.test.begin('Send Notification to Magento from TPP BackOffice via ' + paym
                 loginBackend,
                 passBackend,
                 baseURL,
-                urlNotification
+                urlNotification,
+                urlBackend
             );
         })
         .thenOpen(baseURL + "admin/", function () {
-            adminMod.logToBackend(test);
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
         })
         /* Open Magento admin panel and access to details of this order */
         .then(function () {

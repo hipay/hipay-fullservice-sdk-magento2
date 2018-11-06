@@ -19,10 +19,9 @@
 /*jshint jquery:true*/
 define([
     "jquery",
-    "hiPayTpp",
     'Magento_Ui/js/modal/alert',
     "jquery/ui"
-], function($, TPP,alert){
+], function($,alert){
     "use strict";
 
     $.widget('hipay.fullserviceCcForm', {
@@ -37,6 +36,8 @@ define([
         ccExprYr: "",
         ccExprMo: "",
         cvc: "",
+        hipay: "",
+        hipaySDK: "",
         
         _create: function() {
             $('#edit_form').on('changePaymentMethod', this.prepare.bind(this));
@@ -53,54 +54,53 @@ define([
                 this.preparePayment();
             }
 
+            require([ this.options.sdkJsUrl], function (hipay) {
+                self.hipay = hipay;
+            });
+
         },
         preparePayment: function() {
             $('#edit_form').off('submitOrder').on('submitOrder', this.submitAdminOrder.bind(this));
         },
         submitAdminOrder: function() {
-            var ccNumber = $("#" + this.options.code + "_cc_number").val(),
-                ccExprYr = $("#" + this.options.code + "_expiration_yr").val(),
-                ccExprMo = $("#" + this.options.code + "_expiration").val(),
-                cvc = $("#" + this.options.code + "_cc_cid").val(),
-                self = this;
+            var self = this;
 
+            self.hipaySDK = HiPay({
+                username: this.options.apiUsername,
+                password: this.options.apiPassword,
+                environment: this.options.env
+            });
+
+            var ccNumber = $("#" + this.options.code + "_cc_number").val();
             if (ccNumber) {
-                
-                
-                TPP.setTarget(this.options.env);
-                TPP.setCredentials(this.options.apiUsername, this.options.apiPassword);
+                var params = {
+                    cardNumber: ccNumber,
+                    cvc: $("#" + this.options.code + "_cc_cid").val(),
+                    expiryMonth: $("#" + this.options.code + "_expiration").val().padStart(2, '0'),
+                    expiryYear: $("#" + this.options.code + "_expiration_yr").val().substr(-2),
+                    cardHolder: $("#" + this.options.code + "_cc_owner").val(),
+                    multiUse: 0
+                };
 
-                TPP.create({
-                    card_number:  ccNumber,
-                    cvc: cvc,
-                    card_expiry_month:ccExprMo,
-                    card_expiry_year: ccExprYr,
-                    card_holder: '',
-                    multi_use: '0'
-                  },
-                      function (response) {
-                          	if(response.token){
-                          		
-                          		$("#" + self.options.code + "_card_token").val(response.token);
-                          		order._realSubmit();
-                          	}
-                          	else{
-                          		var error = response;
-                          		self._processErrors(error);
-                          		$('#edit_form').trigger('processStop');
-                          	}
-
-                      },
-                      function (response) {
-                        	var error = response;
-                        	self._processErrors(error.message);
-                        	$('#edit_form').trigger('processStop');
+                self.hipaySDK.tokenize(params)
+                    .then(function (response) {
+                            if(response.token){
+                                $("#" + self.options.code + "_card_token").val(response.token);
+                                order._realSubmit();
+                            }
+                            else{
+                                self._processErrors(response);
+                                $('#edit_form').trigger('processStop');
+                            }
+                        },
+                        function (error) {
+                            self._processErrors(error);
+                            $('#edit_form').trigger('processStop');
                         }
-                  );
-
+                    );
             } 
             else{
-            	this._processErrors("Cc Number is empty!");
+                self._processErrors("Cc Number is empty!");
             	$('#edit_form').trigger('processStop');
             }
         },

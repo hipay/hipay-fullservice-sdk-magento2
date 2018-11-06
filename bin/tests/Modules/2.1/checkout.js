@@ -13,6 +13,9 @@
  *
  */
 
+var casper;
+var x = require("casper").selectXPath;
+var utils = require('utils');
 
 /**
  * @param test
@@ -58,7 +61,7 @@ exports.addItemGoCheckout = function addItemGoCheckout(test) {
                 this.click('#top-cart-btn-checkout');
             }, function fail() {
                 test.assertExists("#top-cart-btn-checkout", "Checkout button exists");
-            }, 7500);
+            }, 20000);
         });
         this.then(function () {
             this.waitForSelector("#shipping-method-buttons-container", function success() {
@@ -66,7 +69,7 @@ exports.addItemGoCheckout = function addItemGoCheckout(test) {
                 this.echo("Proceed to checkout", "INFO");
             }, function fail() {
                 test.assertExists("#shipping-method-buttons-container", "Checkout button exists");
-            }, 7500);
+            }, 20000);
         });
     });
 };
@@ -162,10 +165,8 @@ exports.shippingMethod = function shippingMethod(test) {
 /**
  * @param test
  */
-exports.fillStepPayment = function fillStepPayment(test) {
+exports.fillStepPayment = function fillStepPayment(test,hostedField, method_hipay, currentBrandCC, parametersLibHiPay ) {
     casper.then(function () {
-
-        var method_hipay;
 
         this.echo("Choosing payment method and filling 'Payment Information' formular with " + currentBrandCC + "...", "INFO");
 
@@ -176,8 +177,8 @@ exports.fillStepPayment = function fillStepPayment(test) {
         }, 15000);
 
         this.then(function () {
-            this.waitForSelector('#hipay_cc', function success() {
-                method_hipay = "hipay_cc";
+            this.waitForSelector('#' + method_hipay, function success() {
+                this.echo("Payment methid loaded", "INFO");
             }, function fail() {
                 test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
             }, 15000);
@@ -188,25 +189,27 @@ exports.fillStepPayment = function fillStepPayment(test) {
             this.wait(1000, function () {
                 this.click('input#' + method_hipay);
 
-                if (currentBrandCC == 'visa') {
-                    fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.visa);
-                }
-                else if (currentBrandCC == 'cb' || currentBrandCC == "mastercard") {
-                    fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.cb);
-                }
-                else if (currentBrandCC == 'visa_3ds') {
-                    fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.visa_3ds);
-                }
-                else if (currentBrandCC == 'maestro') {
-                    fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.maestro);
-                }
+                this.wait(10000, function () {
+                    if (currentBrandCC == 'visa') {
+                        fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.visa, "600", hostedField);
+                    }
+                    else if (currentBrandCC == 'cb' || currentBrandCC == "mastercard") {
+                        fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.cb, "600", hostedField);
+                    }
+                    else if (currentBrandCC == 'visa_3ds') {
+                        fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.visa_3ds, "600", hostedField);
+                    }
+                    else if (currentBrandCC == 'maestro') {
+                        fillFormMagentoCreditCard(parametersLibHiPay.cardsNumber.maestro, "600", hostedField);
+                    }
+                });
 
 
             });
         });
 
         this.then(function () {
-            this.wait(500, function () {
+            this.wait(10000, function () {
                 clickPayButton();
                 test.info("Done");
             });
@@ -216,16 +219,126 @@ exports.fillStepPayment = function fillStepPayment(test) {
 
 /**
  *
+ * @param selector
+ * @param value
+ */
+function sendKeysMagento(selector, value) {
+    casper.evaluate(function (value, selector) {
+        var nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+        nativeInputValueSetter.call(document.querySelector(selector), value);
+        var ev2 = new Event('input', { bubbles: true});
+        document.querySelector(selector).dispatchEvent(ev2);
+    }, value, selector );
+}
+
+/**
+ La fonction waitAndSendKeys ajoute un waitForSelector à la fonction sendKeys() de casperjs
+ Elle s'appelle avec un this.waitAndSendKeys()
+ Si vous voulez utiliser l'ancienne méthode, utilisez this.sendKeys()
+ *
+ * @param  String  selector  A DOM CSS3 compatible selector
+ * @param  String  keys      A string representing the sequence of char codes to send
+ * @param  Object  options   Options
+ * @return Casper
+ */
+function waitAndSendKeys(selector, keys, options) {
+    casper.waitForSelector(selector, function () {
+        casper.checkStarted();
+        options = utils.mergeObjects({
+            eventType: 'keypress',
+            reset: false
+        }, options || {});
+        var elemInfos = casper.getElementInfo(selector),
+            tag = elemInfos.nodeName.toLowerCase(),
+            type = utils.getPropertyPath(elemInfos, 'attributes.type'),
+            supported = ["color", "date", "datetime", "datetime-local", "email",
+                "hidden", "month", "number", "password", "range", "search",
+                "tel", "text", "time", "url", "week"],
+            isTextInput = false,
+            isTextArea = tag === 'textarea',
+            isValidInput = tag === 'input' && (typeof type === 'undefined' || supported.indexOf(type) !== -1),
+            isContentEditable = !!elemInfos.attributes.contenteditable;
+
+        if (isTextArea || isValidInput || isContentEditable) {
+            // clicking on the input element brings it focus
+            isTextInput = true;
+            casper.click(selector);
+        }
+        if (options.reset) {
+            casper.evaluate(function (selector) {
+                __utils__.setField(__utils__.findOne(selector), '');
+            }, selector);
+            casper.click(selector);
+        }
+        var modifiers = utils.computeModifier(options && options.modifiers || null,
+            casper.page.event.modifier);
+        casper.page.sendEvent(options.eventType, keys, null, null, modifiers);
+        if (isTextInput && !options.keepFocus) {
+            // remove the focus
+            casper.evaluate(function (selector) {
+                __utils__.findOne(selector).blur();
+            }, selector);
+        }
+        return casper;
+    });
+};
+
+/*
+ La fonction waitAndAssertSelectorHasText() ajoute un waitForSelector à la fonction assertSelectorHasText() de casperjs
+ Elle s'appelle avec un this.waitAndAssertSelectorHasText()
+ Si vous voulez utiliser l'ancienne méthode, utilisez this.test.assertSelectorHasText()
+ */
+function waitAndAssertSelectorHasText(selector, text, message) {
+    casper.waitForSelector(selector, function () {
+        var got = casper.fetchText(selector);
+        var textFound = got.indexOf(text) !== -1;
+        return casper.test.assert(textFound, message, {
+            type: "assertSelectorHasText",
+            standard: 'Find the selector',
+            values: {
+                selector: selector,
+                text: text,
+                actualContent: got
+            }
+        });
+    });
+};
+
+/**
+ *
  * @param card
  */
-function fillFormMagentoCreditCard(card) {
-    casper.fillSelectors('form#co-payment-form', {
-        'input[name="payment[cc_owner]"]': "TEST TEST",
-        'input[name="payment[cc_number]"]': card,
-        'select[name="payment[cc_exp_month]"]': '2',
-        'select[name="payment[cc_exp_year]"]': '2020',
-        'input[name="payment[cc_cid]"]': '500'
-    }, false);
+function fillFormMagentoCreditCard(card, cvv, hostedFields) {
+    if (hostedFields) {
+        casper.withFrame(1, function () {
+            sendKeysMagento('input[name="ccname"]',  'TEST TEST');
+            waitAndAssertSelectorHasText('input[name="ccname"]', 'TEST TEST', 'Payment Page : Cardholder is ok');
+        });
+
+        casper.withFrame(2, function () {
+            this.test.assertSelectorExists('input[name="cardnumber"]', 'CardNumber is present');
+            sendKeysMagento('input[name="cardnumber"]',  card);
+        });
+
+        casper.withFrame(3, function () {
+            this.test.assertSelectorExists('input[name="cc-exp"]', 'Exp date is present');
+            sendKeysMagento('input[name="cc-exp"]',  '06/21');
+        });
+
+        casper.withFrame(4, function () {
+            this.test.assertSelectorExists('input[name="cvc"]', 'CVV is present');
+            sendKeysMagento('input[name="cvc"]', cvv);
+        });
+
+    } else {
+        casper.fillSelectors('form#co-payment-form', {
+            'input[name="payment[cc_owner]"]': "TEST TEST",
+            'input[name="payment[cc_number]"]': card,
+            'select[name="payment[cc_exp_month]"]': '2',
+            'select[name="payment[cc_exp_year]"]': '2020',
+            'input[name="payment[cc_cid]"]': '500'
+        }, false);
+    }
 }
 
 function clickPayButton() {
@@ -245,4 +358,8 @@ exports.choosingPaymentMethod = function (test, method_hipay) {
             test.assertVisible("#checkout-step-payment", "'Payment Information' formular exists");
         }, 25000);
     });
+};
+
+exports.setCasper = function setCasper(casperInstance) {
+    casper = casperInstance;
 };

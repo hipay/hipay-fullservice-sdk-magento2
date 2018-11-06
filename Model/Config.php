@@ -47,6 +47,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
     const STATUS_EXPIRED = 'hipay_expired';
     const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
 
+    const CONFIG_HIPAY_KEY_CC_TYPE = "cctypes_mapper";
+
     /**
      *
      * @var ConfigurationInterface $_configSDK
@@ -109,6 +111,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $params = []
     ) {
         parent::__construct($scopeConfig, $configWriter);
+
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
@@ -141,7 +144,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
             }
             $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json', $this->getProxy());
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
             $this->_configSDK = null;
         }
     }
@@ -362,7 +364,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         if ($this->isStageMode()) {
             $key = "api_username_test";
         }
-
         return $this->getGeneraleValue($key, 'hipay_credentials_tokenjs');
     }
 
@@ -569,6 +570,11 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getValue('env');
     }
 
+    public function getSdkJsUrl()
+    {
+        return $this->getOtherConfiguration('sdk_js_url');
+    }
+
     public function getApiHTTPHeaderAccept()
     {
         return $this->_configSDK !== null ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
@@ -582,5 +588,24 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function setOrder($order)
     {
         $this->_order = $order;
+    }
+
+    public function isPaymentMethodActive() {
+        return $this->getValue("active");
+    }
+
+    /**
+     * Retrieve mapper between Magento and HiPay
+     *
+     * @return array
+     */
+    public function getCcTypesMapper()
+    {
+        $result = json_decode(
+            $this->getValue(self::CONFIG_HIPAY_KEY_CC_TYPE),
+            true
+        );
+
+        return is_array($result) ? $result : [];
     }
 }

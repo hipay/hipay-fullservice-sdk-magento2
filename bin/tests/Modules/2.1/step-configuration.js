@@ -1,3 +1,6 @@
+var casper;
+var x = require('casper').selectXPath;
+
 exports.goingToHiPayConfiguration = function goingToHiPayConfiguration(test) {
 
     this.goingToConfiguration(test, "HiPay Fullservice");
@@ -45,4 +48,8 @@ exports.goingToConfiguration = function goingToHiPayMethodsConfiguration(test, n
                 test.assertExists(x('//span[text()="' + name + '"]'), "Hipay Enterprise admin page exists");
             }, 10000);
         })
+};
+
+exports.setCasper = function setCasper(casperInstance) {
+    casper = casperInstance;
 };

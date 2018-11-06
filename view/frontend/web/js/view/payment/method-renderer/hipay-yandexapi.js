@@ -30,9 +30,6 @@ define(
 
             getCode: function() {
                 return 'hipay_yandexapi';
-            },
-            isActive: function() {
-                return true;
             }
         });
     }

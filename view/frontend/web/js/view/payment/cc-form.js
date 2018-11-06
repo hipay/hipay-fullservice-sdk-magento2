@@ -37,7 +37,9 @@ define(
                 creditCardVerificationNumber: '',
                 selectedCardType: null,
                 creditCardOwner: '',
-                showCVV: true
+                showCVV: true,
+                hipaySdk: null,
+                locale: ""
             },
 
             initObservable: function () {
@@ -52,14 +54,38 @@ define(
                         'creditCardSsStartYear',
                         'selectedCardType',
                         'creditCardOwner',
-                        'showCVV'
+                        'showCVV',
+                        'domReady!'
                     ]);
                 return this;
+            },
+
+            initHiPayConfiguration: function(initCallback) {
+                var self =this;
+                var lang = 'en';
+
+                if (self.locale &&
+                    self.locale.length > 2) {
+                    lang = self.locale.substr(0, 2);
+                }
+
+                self.hipaySdk = HiPay({
+                    username: self.apiUsernameTokenJs,
+                    password: self.apiPasswordTokenJs,
+                    environment: self.env,
+                    lang: lang
+                });
+
+                if (initCallback) {
+                    initCallback(self);
+                }
             },
 
             initialize: function() {
                 var self = this;
                 this._super();
+
+                this.initHiPayConfiguration();
 
                 //Set credit card number to credit card data object
                 this.creditCardNumber.subscribe(function(value) {
@@ -189,6 +215,20 @@ define(
                     }
                 });
             },
+
+            /**
+             *  Get global fingerprint  on dom load of checkout
+             *
+             * @returns {*}
+             */
+            getFingerprint: function () {
+                if ($('#ioBB')) {
+                    return $('#ioBB').val();
+                } else {
+                    return '';
+                }
+            },
+
             isShowLegend: function() {
                 return false;
             },

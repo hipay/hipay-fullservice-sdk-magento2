@@ -13,12 +13,14 @@
  *
  */
 
+var casper;
+var x = require('casper').selectXPath;
 
 /**
  * Log to Magento2 Backend
  * @param test
  */
-exports.logToBackend = function logToBackend(test) {
+exports.logToBackend = function logToBackend( baseURL, admin_login, admin_passwd) {
     casper.thenOpen(baseURL + "/admin", function () {
         this.echo("Connecting to admin panel...", "INFO");
         this.waitForSelector("#login-form", function success() {
@@ -94,7 +96,7 @@ exports.fillFormHipayEnterprise = function fillFormHipayEnterprise(test, credent
  * @param test
  * @param state
  */
-exports.setDeviceFingerprint = function setDeviceFingerprint(test, state) {
+exports.setDeviceFingerprint = function setDeviceFingerprint(test, state, configuration) {
     var valueFingerprint;
     casper.then(function () {
         configuration.goingToHiPayConfiguration(test);
@@ -127,27 +129,28 @@ exports.setDeviceFingerprint = function setDeviceFingerprint(test, state) {
 
 /**
  *
- * @param test
  * @param paymentType
  */
-exports.orderResult = function orderResult(test, paymentType) {
+exports.orderResult = function orderResult(test, paymentType, order) {
     casper.then(function () {
         this.echo("Checking order success...", "INFO");
-        this.waitForUrl(/checkout\/onepage\/success/, function success() {
-            test.assertHttpStatus(200, "Correct HTTP Status Code 200");
-            test.assertExists('.checkout-onepage-success', "The order has been successfully placed with method " + paymentType + " !");
+        this.waitForUrl(/checkout\/onepage\/success/, function success(response) {
+            // With SlimerJS it's 302 and not 200
+            //test.assertHttpStatus(200, "Correct HTTP Status Code 200");
+            test.assertExists('.checkout-onepage-success', response.status + " The order has been successfully placed with method " + paymentType + " !");
             order.setId(false);
         }, function fail() {
             this.echo("Success payment page doesn't exists. Checking for pending payment page...", 'WARNING');
             this.waitForUrl(/hipay\/checkout\/pending/, function success() {
                 this.warn("OK. This order is in pending");
-                test.assertHttpStatus(200, "Correct HTTP Status Code 200");
+                // With SlimerJS it's 302 and not 200
+                //test.assertHttpStatus(200, "Correct HTTP Status Code 200");
                 test.assertExists('.hipay-checkout-pending', "The order has been successfully pended with method " + paymentType + " !");
                 order.setId(true);
             }, function fail() {
                 test.assertUrlMatch(/hipay\/checkout\/pending/, "Checkout result page exists");
-            }, 50000);
-        }, 50000);
+            }, 150000);
+        }, 150000);
     });
 };
 
@@ -202,4 +205,9 @@ exports.goToOrderDetails = function (test, orderId) {
             test.assertExists(x('//td[contains(., "' + orderId + '")]'), "Order # " + orderId + " exists");
         });
     });
+};
+
+
+exports.setCasper = function setCasper(casperInstance) {
+    casper = casperInstance;
 };

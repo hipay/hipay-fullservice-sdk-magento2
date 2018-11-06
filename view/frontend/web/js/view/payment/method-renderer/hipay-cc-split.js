@@ -35,7 +35,9 @@ define(
                 env: window.checkoutConfig.payment.hipaySplit.env.hipay_ccsplit,
                 apiUsernameTokenJs: window.checkoutConfig.payment.hipaySplit.apiUsernameTokenJs.hipay_ccsplit,
                 apiPasswordTokenJs: window.checkoutConfig.payment.hipaySplit.apiPasswordTokenJs.hipay_ccsplit,
-                icons: window.checkoutConfig.payment.hipaySplit.icons.hipay_ccsplit
+                icons: window.checkoutConfig.payment.hipaySplit.icons.hipay_ccsplit,
+                createOneclick: true,
+                sdkJsUrl:  (window.checkoutConfig.payment.hipaySplit !== undefined) ? window.checkoutConfig.payment.hipaySplit.sdkJsUrl : "",
             },
             isLoading: ko.observable(false),
             initialize: function () {
