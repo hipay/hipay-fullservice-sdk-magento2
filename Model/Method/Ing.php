@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
+
 
 /**
  * Ing Model payment method

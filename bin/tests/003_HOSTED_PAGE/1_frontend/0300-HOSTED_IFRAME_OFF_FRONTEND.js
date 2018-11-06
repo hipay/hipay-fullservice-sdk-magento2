@@ -7,51 +7,47 @@
  /**********************************************************************************************/
 
 var paymentType = "HiPay Enterprise Hosted Page",
-    currentBrandCC = typeCC;
+    currentBrandCC = utilsHiPay.getTypeCC();
 
 casper.test.begin('Test Checkout ' + paymentType + ' with Iframe and ' + currentBrandCC, function (test) {
     phantom.clearCookies();
 
     casper.start(baseURL + "admin/")
-    /* Active Hosted payment method with display iframe */
-        .then(function () {
-            this.logToBackend();
-            method.proceed(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '0']);
+    /* Active HiPay CC payment method if default card type is not defined or is VISA */
+        .thenOpen(baseURL + "admin/", function () {
+            adminMod.logToBackend(baseURL,admin_login,admin_passwd);
+            method.configure(test, paymentType, "hosted", ['select[name="groups[hipay_hosted][fields][iframe_mode][value]"]', '0'], configuration);
         })
         .thenOpen(baseURL, function () {
-            this.waitUntilVisible('div.footer', function success() {
-                this.selectItemAndOptions();
-            }, function fail() {
-                test.assertVisible("div.footer", "'Footer' exists");
-            }, 10000);
+            checkoutMod.selectItemAndOptions(test);
         })
         .then(function () {
-            this.addItemGoCheckout();
+            checkoutMod.addItemGoCheckout(test);
         })
         .then(function () {
-            this.billingInformation();
+            checkoutMod.billingInformation(test, "FR");
         })
         .then(function () {
-            this.shippingMethod();
+            checkoutMod.shippingMethod(test);
         })
         .then(function () {
-            this.choosingPaymentMethod("hipay_hosted");
+            checkoutMod.choosingPaymentMethod(test, "hipay_hosted");
         })
         .then(function () {
             this.wait(500, function () {
-                this.clickPayButton();
+                checkoutMod.clickPayButton();
             });
         })
         /* Fill payment formular inside iframe */
         .then(function () {
             this.waitForUrl(/payment\/web/, function success() {
-                this.fillPaymentFormularByPaymentProduct(currentBrandCC);
+                paymentLibHiPay.fillPaymentFormularByPaymentProduct(currentBrandCC, test);
             }, function fail() {
                 test.assertUrlMatch(/payment\/web/, "Payment page exists");
             }, 30000);
         })
         .then(function () {
-            this.orderResult(paymentType);
+            adminMod.orderResult(test, paymentType, order);
         })
         .run(function () {
             test.done();

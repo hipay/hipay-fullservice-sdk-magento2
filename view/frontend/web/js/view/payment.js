@@ -64,6 +64,17 @@ define(
                 
                 return this;
             },
+
+            isActive: function() {
+                return true;
+            },
+
+            initBasicField: function(value) {
+                var customerCard = this.getCustomerCardByToken(value);
+                this.creditCardType(customerCard.ccType);
+                this.creditCardOwner(customerCard.ccOwner);
+            },
+
             initialize: function(){
             	var self = this;
             	this._super();
@@ -71,6 +82,7 @@ define(
             	if(this.selectedCard() && this.useOneclick()){
             		this.eci(this.recurringEci);
             		this.creditCardToken(this.selectedCard());
+            		this.initBasicField(this.selectedCard());
             	}
             	
             	//Set selected card token
@@ -83,7 +95,7 @@ define(
                 	}
 
                 	self.creditCardToken(value);
-                	self.creditCardType(self.getCustomerCardByToken(value).ccType);
+                    self.initBasicField(value);
                 });
             	
             },
@@ -120,6 +132,21 @@ define(
                     }
                 };
             },
+
+            /**
+             * Display error message
+             * @param {*} error - error message
+             */
+            addError: function (error) {
+                this.creditCardToken("");
+                if (_.isObject(error)) {
+                    this.messageContainer.addErrorMessage(error);
+                } else {
+                    this.messageContainer.addErrorMessage({
+                        message: error
+                    });
+                }
+            }
         });
     }
 );

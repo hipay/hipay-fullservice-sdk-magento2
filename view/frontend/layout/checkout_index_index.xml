@@ -21,13 +21,17 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<head>
         <css src="HiPay_FullserviceMagento::css/hipay.css"/>
+        <css src="HiPay_FullserviceMagento::css/hosted-fields.css"/>
     </head>
     <body>
         <referenceBlock name="content">
-            <block class="HiPay\FullserviceMagento\Block\Fingerprint" name="hipay_fingerprint_field" ifconfig="hipay/configurations/fingerprint_enabled" template="fingerprint/fingerprint_field.phtml"/>
+            <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_fingerprint_field" ifconfig="hipay/configurations/fingerprint_enabled" template="additional/fingerprint_field.phtml"/>
         </referenceBlock>
         <referenceBlock name="head.additional">
-            <block class="HiPay\FullserviceMagento\Block\Fingerprint" name="hipay_fingerprint_js" ifconfig="hipay/configurations/fingerprint_enabled" template="fingerprint/fingerprint_js.phtml"/>
+            <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_fingerprint_js" ifconfig="hipay/configurations/fingerprint_enabled" template="additional/fingerprint_js.phtml"/>
+        </referenceBlock>
+        <referenceBlock name="head.additional">
+            <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_external_js"  template="additional/external_js.phtml"/>
         </referenceBlock>
         <referenceBlock name="checkout.root">
             <arguments>
@@ -49,6 +53,9 @@
                                                                     <item name="component" xsi:type="string">HiPay_FullserviceMagento/js/view/payment/hipay-methods</item>
                                                                     <item name="methods" xsi:type="array">
                                                                         <item name="hipay_hosted" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                        <item name="hipay_hosted_fields" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_hostedsplit" xsi:type="array">

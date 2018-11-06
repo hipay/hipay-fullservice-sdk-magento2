@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
-
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 
 /**
@@ -31,6 +30,16 @@ class BillingInfo extends AbstractInfoRequest
 {
 
     /**
+     * @var string
+     */
+    const KEY_FIRSTNAME = 'firstname';
+
+    /**
+     * @var string
+     */
+    const KEY_LASTNAME = 'lastname';
+
+    /**
      *
      * {@inheritDoc}
      *
@@ -44,7 +53,6 @@ class BillingInfo extends AbstractInfoRequest
         $dob = $this->_order->getCustomerDob();
         if ($dob !== null && !empty($dob)) {
             try {
-
                 $dob = new \DateTime($dob);
                 $customerBillingInfo->birthdate = $dob->format('Ymd');
             } catch (Exception $e) {
@@ -54,8 +62,7 @@ class BillingInfo extends AbstractInfoRequest
 
         $customerBillingInfo->gender = $this->getHipayGender($this->_order->getCustomerGender());
         $billingAddress = $this->_order->getBillingAddress();
-        $customerBillingInfo->firstname = $billingAddress->getFirstname();
-        $customerBillingInfo->lastname = $billingAddress->getLastname();
+        $this->mapCardHolder($customerBillingInfo, $billingAddress);
         $customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);
         $customerBillingInfo->streetaddress2 = $billingAddress->getStreetLine(2);
         $customerBillingInfo->city = $billingAddress->getCity();
@@ -65,6 +72,63 @@ class BillingInfo extends AbstractInfoRequest
         $customerBillingInfo->msisdn = $billingAddress->getTelephone();
         $customerBillingInfo->state = $billingAddress->getRegion();
         $customerBillingInfo->recipientinfo = $billingAddress->getCompany();
+
         return $customerBillingInfo;
+    }
+
+    /**
+     *  AMEX needs similar cardholder between tokenization and transaction
+     *
+     * @param $customerBillingInfo
+     * @param BillingInfo $billingAddress
+     */
+    private function mapCardHolder(&$customerBillingInfo, $billingAddress)
+    {
+        $ccType = $this->_order->getPayment()->getCcType();
+        $cardOwner = $this->_order->getPayment()->getCcOwner();
+        $partsCardOwner = explode(' ', trim($cardOwner));
+
+        $firstName = $billingAddress->getFirstname();
+        $lastName = $billingAddress->getLastname();
+        $theoricCardHolder = $firstName . ' ' . $lastName;
+        if (( $ccType == 'AE' || $ccType == 'american-express')
+            && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
+            && count($partsCardOwner) > 1 ) {
+            $firstName = $this->extractPartOfCardHolder($cardOwner, self::KEY_FIRSTNAME);
+            $lastName = $this->extractPartOfCardHolder($cardOwner, self::KEY_LASTNAME);
+        }
+
+        $customerBillingInfo->firstname = $firstName;
+        $customerBillingInfo->lastname = $lastName;
+    }
+
+    /**
+     * Extract FirstName et LastName from cardOwner
+     *
+     * @param string $cardOwner
+     * @param string $key
+     * @return string
+     */
+    private function extractPartOfCardHolder($cardOwner, $key)
+    {
+        $split = explode(' ', trim($cardOwner));
+        switch ($key) {
+            case 'firstname':
+                 return $split[0];
+            case 'lastname':
+                return trim(preg_replace('/' . $split[0] . '/', "", $cardOwner, 1));
+            default:
+                return "";
+        }
+    }
+
+    /**
+     *
+     * @param $str
+     * @return string
+     */
+    private static function stripAccents($str)
+    {
+        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
     }
 }

@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
 
 /**
  * Giropay Model payment method

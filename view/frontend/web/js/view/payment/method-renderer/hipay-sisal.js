@@ -28,10 +28,7 @@ define(
             },
 	        getCode: function() {
 	            return 'hipay_sisal';
-	        },
-            isActive: function() {
-                return true;
-            }
+	        }
         });
     }
 );

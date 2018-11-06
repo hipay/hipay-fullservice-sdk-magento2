@@ -103,4 +103,9 @@ class Form extends \Magento\Payment\Block\Form\Cc
     {
         return $this->getConfig()->getApiPassword();
     }
+
+    public function getSdkJsUrl()
+    {
+        return $this->getConfig()->getSdkJsUrl();
+    }
 }
