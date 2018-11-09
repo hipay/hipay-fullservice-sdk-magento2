@@ -63,7 +63,7 @@ class CcMethod extends FullserviceMethod
      *
      * @var bool
      */
-    protected $_canUseInternal = true;
+    protected $_canUseInternal = false;
 
     /**
      * Url Builder

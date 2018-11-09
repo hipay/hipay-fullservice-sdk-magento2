@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * HiPay Fullservice Magento
  *
@@ -23,10 +23,15 @@
  */
 $code = $block->escapeHtml($block->getMethodCode());
 ?>
-<fieldset class="fieldset payment items <?php /* @noEscape */ echo $code; ?>"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display: none;">
-          <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */ echo $code; ?>_eci" value="1" />
-          
-          <?php echo $block->escapeHtml( __('An email with a payment link will be sent to the customer.')) ?>
-          
+<fieldset class="fieldset payment items <?php /* @noEscape */
+echo $code; ?>"
+          id="payment_form_<?php /* @noEscape */
+          echo $code; ?>" style="display: none;">
+    <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */
+    echo $code; ?>_eci" value="1"/>
+    <?php if ($block->isSendMailToCustomer()) : ?>
+        <?php echo $block->escapeHtml(__('An email with a payment link will be sent to the customer.')) ?>
+    <?php else : ?>
+        <?php echo $block->escapeHtml( __('You will be redirect to payment page after submit order.')) ?>
+    <?php endif; ?>
 </fieldset>
