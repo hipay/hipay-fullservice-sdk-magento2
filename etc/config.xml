@@ -162,7 +162,7 @@
             <hipay_hostedmoto>
                 <model>HiPay\FullserviceMagento\Model\Method\HostedMoto</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
-                <active>1</active>
+                <active>0</active>
                 <title>Credit Card HOSTED MO/TO</title>
                 <send_mail_to_customer>1</send_mail_to_customer>
                 <payment_action>Sale</payment_action>
