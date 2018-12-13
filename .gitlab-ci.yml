@@ -24,6 +24,7 @@ stages:
   allow_failure: false
   before_script:
     - sed -i -e "s/{PORT_WEB\}/$PORT_WEB/" ./bin/docker/conf/test/mage.env.sample
+    - sed -i -e "s/{SMTP_LINK\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp/" ./bin/docker/conf/test/hipay.env.sample
     - sed -i -e "s/{HIPAY_API_USER_TEST\}/$HIPAY_API_USER_TEST/" ./bin/docker/conf/test/hipay.env.sample
     - sed -i -e "s/{HIPAY_API_PASSWORD_TEST\}/$HIPAY_API_PASSWORD_TEST/" ./bin/docker/conf/test/hipay.env.sample
     - sed -i -e "s/{HIPAY_TOKENJS_PUBLICKEY_TEST\}/$HIPAY_TOKENJS_PUBLICKEY_TEST/" ./bin/docker/conf/test/hipay.env.sample
@@ -142,6 +143,7 @@ deploy2recette:
   stage: deploy
   before_script:
     - sed -i -e "s/{PORT_WEB\}/$PORT_WEB/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s/{SMTP_LINK\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp/" ./bin/docker/conf/acceptance/hipay.env.sample
     - sed -i -e "s/{HIPAY_API_USER_TEST\}/$HIPAY_API_USER_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
     - sed -i -e "s/{HIPAY_API_PASSWORD_TEST\}/$HIPAY_API_PASSWORD_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
     - sed -i -e "s/{HIPAY_TOKENJS_PUBLICKEY_TEST\}/$HIPAY_TOKENJS_PUBLICKEY_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
