@@ -107,7 +107,7 @@ abstract class CommonRequest extends BaseRequest
         \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
-        \Magento\Framework\Url $urlBuilder,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,

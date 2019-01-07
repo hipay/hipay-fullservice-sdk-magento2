@@ -43,4 +43,6 @@ database:
 smtp:
   container_name: magento2-hipay-smtp
   image: hipay/mailcatcher:1.0.0
+  ports:
+    - "1096:80"
 

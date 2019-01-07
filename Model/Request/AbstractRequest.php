@@ -102,7 +102,7 @@ abstract class AbstractRequest implements RequestInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
-        \Magento\Framework\Url $urlBuilder,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         $params = []
     ) {

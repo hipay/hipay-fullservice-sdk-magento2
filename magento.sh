@@ -33,7 +33,7 @@ if [ "$1" = 'init' ];then
         rm -Rf data/ log/ web/
         docker-compose -f docker-compose.dev.yml build --no-cache
         docker-compose -f docker-compose.dev.yml up -d
-        docker cp hipay-fullservice-sdk-magento2_web_1:/var/www/html/magento2 web/
+        docker cp hipayfullservicesdkmagento2_web_1:/var/www/html/magento2 web/
         docker-compose -f docker-compose.dev.yml logs -f
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"

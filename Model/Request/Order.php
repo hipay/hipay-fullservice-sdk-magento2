@@ -95,6 +95,17 @@ class Order extends CommonRequest
     protected $_groupRepositoryInterface;
 
     /**
+     *
+     * @var \Magento\Framework\App\State $appState
+     */
+    protected $appState;
+
+    /**
+     * @var \Magento\Framework\Url
+     */
+    protected $frontendUrlBuilder;
+
+    /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
@@ -105,7 +116,8 @@ class Order extends CommonRequest
         \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
-        \Magento\Framework\Url $urlBuilder,
+        \Magento\Framework\UrlInterface $urlBuilder,
+        \Magento\Framework\Url $frontendUrlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
@@ -114,6 +126,7 @@ class Order extends CommonRequest
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
+        \Magento\Framework\App\State $appState,
         $params = []
     ) {
         parent::__construct(
@@ -132,7 +145,8 @@ class Order extends CommonRequest
             $categoryFactory,
             $params
         );
-
+        $this->frontendUrlBuilder = $frontendUrlBuilder;
+        $this->appState = $appState;
         $this->helper = $helper;
         $this->_cartFactory = $cartFactory;
         $this->weeeHelper = $weeeHelper;
@@ -250,6 +264,12 @@ class Order extends CommonRequest
         if ($this->isMOTO()) {
             $redirectParams['is_moto'] = true;
         }
+        // url builder depend on context (admin or frontend)
+        // if we send payment link to the customer
+        // he/she must be redirect to frontend controller
+        if($this->_config->getValue('send_mail_to_customer')){
+            $this->_urlBuilder = $this->frontendUrlBuilder;
+        }
 
         // URL callback
         $orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept', $redirectParams);
@@ -259,7 +279,7 @@ class Order extends CommonRequest
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);
 
         if ($this->_config->isSendingNotifyUrl()) {
-            $orderRequest->notify_url = $this->_urlBuilder->getUrl("hipay/notify/index");
+            $orderRequest->notify_url = $this->frontendUrlBuilder->getUrl("hipay/notify/index");
         }
 
         $orderRequest->paymentMethod = $this->_paymentMethod;
