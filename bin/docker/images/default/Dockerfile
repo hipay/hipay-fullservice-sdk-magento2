@@ -1,4 +1,4 @@
-FROM hipay/hipay-magento2:2.1.10
+FROM hipay/hipay-magento2:2.1.16
 
 MAINTAINER Support Fullservice <support.tpp@hipay.com>
 
