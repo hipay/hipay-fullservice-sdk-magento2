@@ -59,22 +59,6 @@ elif [ "$1" = 'install' ];then
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento c:c
 elif [ "$1" = 'test' ]; then
 
-    rm -rf bin/tests/errors/*
-    cd bin/tests/000_lib
-    npm install
-    cd ../../../;
-
-    if [ "$(ls -A ~/.local/share/Ofi\ Labs/PhantomJS/)" ]; then
-        rm -rf ~/.local/share/Ofi\ Labs/PhantomJS/*
-        printf "Cache cleared !\n\n"
-    else
-
-        printf "Pas de cache à effacer !\n\n"
-    fi
-
-    #casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --login-backend=$LOGIN_BACKEND --pass-backend=$PASS_BACKEND --login-paypal=$LOGIN_PAYPAL --pass-paypal=$PASS_PAYPAL --xunit=${header}result.xml --ssl-protocol=any --fail-fast
-    casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER  --xunit=${header}result.xml --ssl-protocol=TLSv1.2 --engine=slimerjs --headless
-
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
 fi

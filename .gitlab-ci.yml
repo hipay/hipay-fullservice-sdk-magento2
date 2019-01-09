@@ -3,13 +3,10 @@ image: hipay/gitlab-ci-base:jessie
 variables:
   PORT_WEB: 80
   PROJECT_NAME_TEST_MG2_1: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}-1
-  PROJECT_NAME_TEST_MG2_2: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_ID}-2
 
 stages:
  - build-test-1
  - test-1
-# - build-test-2
-# - test-2
  - clean-stack
  - analysis
  - build
@@ -53,7 +50,7 @@ build-test-2-1-10:
   tags:
     - pi-commerce-no-overlay
 
-casperjs-2-1-10:
+cypress-2-1-10:
   <<: *test_definition
   stage: test-1
   script:
@@ -63,34 +60,9 @@ casperjs-2-1-10:
     - sleep 900
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
-    - sh bin/tests/casper_run_circle.sh http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web
+    #- sh bin/tests/casper_run_circle.sh http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web
   after_script:
     - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
-
-#build-test-2-2-4:
-#  stage: build-test-2
-#  script:
-#    - chmod u+x bin/docker/images/generate_dockerfile.sh
-#    - ./bin/docker/images/generate_dockerfile.sh 2.2.4
-#    - docker-compose -f docker-compose.test-2.2.4.yml build
-#  tags:
-#    - pi-commerce-no-overlay
-#
-#casperjs-2-2-4:
-#  <<: *test_definition
-#  stage: test-2
-#  script:
-#    - chmod u+x bin/docker/images/generate_dockerfile.sh
-#    - ./bin/docker/images/generate_dockerfile.sh 2.2.4
-#    - docker-compose -p $PROJECT_NAME_TEST_MG2_2 -f docker-compose.test-2.2.4.yml stop
-#    - docker-compose -p $PROJECT_NAME_TEST_MG2_2 -f docker-compose.test-2.2.4.yml rm -fv
-#    - docker-compose -p $PROJECT_NAME_TEST_MG2_2 -f docker-compose.test-2.2.4.yml up -d
-#    - sleep 666
-#    - docker-compose -p $PROJECT_NAME_TEST_MG2_2 -f docker-compose.test.yml logs
-#    - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_web/
-#    - sh bin/tests/casper_run_circle.sh http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_web
-#  after_script:
-#    - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_2 docker-compose.test-2.2.4.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}-2.2.4
 
 clean-stack-test:
   stage: clean-stack
@@ -98,7 +70,6 @@ clean-stack-test:
     - echo "Clean remaining containers, network and images"
   after_script:
     - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
-#    - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_2 docker-compose.test-2.2.4.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web-2.2.4:${CI_COMMIT_REF_SLUG}
   tags:
     - pi-commerce-no-overlay
   when: always
