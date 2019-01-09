@@ -1,4 +1,7 @@
-  # 1.4.0
+   # 1.4.1
+  - Fix entity name for new magento checks
+  
+ # 1.4.0
  - **Add Payment Method Hosted Fields** 
  
  # 1.3.4
