@@ -67,8 +67,6 @@ class Index extends AppAction
      * */
     public function execute()
     {
-        var_dump("test");
-        die;
         $params = $this->getRequest()->getPost()->toArray();
 
         try {
