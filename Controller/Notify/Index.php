@@ -17,6 +17,7 @@ namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 /**
  * Notification controller
@@ -51,6 +52,13 @@ class Index extends AppAction
         parent::__construct($context);
 
         $this->_logger = $_logger;
+
+        if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
+            $request = $this->getRequest();
+            if ($request instanceof HttpRequest && $request->isPost()) {
+                $request->setParam('isAjax', true);
+            }
+        }
     }
 
     /**

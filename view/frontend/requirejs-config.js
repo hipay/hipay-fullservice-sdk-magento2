@@ -19,7 +19,7 @@
 var config = {
     map: {
         '*': {
-            transparent: 'Magento_Payment/transparent',
+            transparent: 'Magento_Payment/js/transparent',
             card: 'HiPay_FullserviceMagento/card',
             validation: 'HiPay_FullserviceMagento/js/validation'
         }
