@@ -42,7 +42,7 @@
     }
 }
 
-.hipay-row {
+.hipay-form-row {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -105,7 +105,7 @@
 }
 
 @media screen and (max-width: 359px) {
-    .hipay-row {
+    .hipay-form-row {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         margin-bottom: 0;
@@ -129,7 +129,7 @@
     background-color: #f3f3f3;
 }
 
-.hipay-label {
+.hipay-field-label {
     z-index: 1;
     position: absolute;
     width: 100%;
@@ -159,8 +159,8 @@
     margin-bottom: 0;
 }
 
-.HiPayField--focused + .hipay-label,
-.hipay-field:not(.HiPayField--empty) + .hipay-label {
+.HiPayField--focused + .hipay-field-label,
+.hipay-field:not(.HiPayField--empty) + .hipay-field-label {
     color: #aab7c4;
     -webkit-transform: scale(0.85) translateY(-25px);
     -ms-transform: scale(0.85) translateY(-25px);
@@ -168,8 +168,8 @@
     cursor: default;
 }
 
-.HiPayField--focused + .hipay-label,
-.HiPayField--focused + .hipay-label svg {
+.HiPayField--focused + .hipay-field-label,
+.HiPayField--focused + .hipay-field-label svg {
     color: #00ADE9 !important;
     fill: #00ADE9 !important;
 }
@@ -178,7 +178,7 @@
     color: #00ADE9 !important;
 }
 
-.HiPayField--invalid + .hipay-label {
+.HiPayField--invalid + .hipay-field-label {
     color: #D50000 !important;
 }
 
@@ -195,15 +195,15 @@
     transition: border-bottom 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.HiPayField--focused + .hipay-label + .hipay-baseline {
+.HiPayField--focused + .hipay-field-label + .hipay-baseline {
     border-bottom: solid 1px #00ADE9;
 }
 
-.HiPayField--invalid + .hipay-label + .hipay-baseline {
+.HiPayField--invalid + .hipay-field-label + .hipay-baseline {
     border-bottom: solid 1px #D50000;
 }
 
-.HiPayField--disabled + .hipay-label + .hipay-baseline {
+.HiPayField--disabled + .hipay-field-label + .hipay-baseline {
     border-bottom: dotted 1px #cfd7df;
 }
 

@@ -50,3 +50,7 @@ tools/
 # Env vars #
 ############
 *.env
+
+bin/tests/node_modules
+bin/tests/cypress/videos
+bin/tests/.npmrc

@@ -147,18 +147,18 @@ define(
                     multi_use: this.allowOneclick.hipay_hosted_fields,
                     fields: {
                         cardHolder: {
-                            selector: "hipay-card-holder",
+                            selector: "hipay-card-field-cardHolder",
                             defaultFirstname: customerFirstName,
                             defaultLastname: customerLastName
                         },
                         cardNumber: {
-                            selector: "hipay-card-number"
+                            selector: "hipay-card-field-cardNumber"
                         },
                         expiryDate: {
-                            selector: "hipay-date-expiry"
+                            selector: "hipay-card-field-expiryDate"
                         },
                         cvc: {
-                            selector: "hipay-cvc",
+                            selector: "hipay-card-field-cvc",
                             helpButton: true,
                             helpSelector: "hipay-help-cvc"
                         }

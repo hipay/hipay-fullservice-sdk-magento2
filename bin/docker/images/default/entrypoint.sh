@@ -66,6 +66,15 @@ if [ "$MAGE_INSTALL" = "1" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
     fi
 
+    if [ "$ENVIRONMENT" = "$ENV_STAGE" ];then
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set dev/template/minify_html 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set dev/css/merge_css_files 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set dev/css/minify_files 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set dev/js/merge_files 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set dev/js/minify_files 1
+        php bin/magento deploy:mode:set production
+    fi
+
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
@@ -104,6 +113,7 @@ fi
     gosu magento2 mkdir /var/www/html/magento2/var/cache
     chmod 775 /var/www/html/magento2/var/cache
     chown -R magento2:magento2 /var/www/html/magento2/var/cache
+    chmod 777 -R /var/www/html/magento2/var/
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"

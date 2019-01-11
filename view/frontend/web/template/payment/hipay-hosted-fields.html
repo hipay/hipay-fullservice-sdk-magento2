@@ -49,7 +49,7 @@
                 <!--<![endif]-->
                 <!-- ko if: (useOneclick() && customerHasCard()) -->
 
-                <div class="hipay-row">
+                <div class="hipay-form-row">
                     <div class="hipay-field-container">
                         <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
                             <span><!-- ko i18n: 'Your credit cards'--><!-- /ko --></span>
@@ -70,36 +70,36 @@
                 </div>
                 <!-- /ko -->
 
-                <div class="hipay-row" data-bind="visible: showCcForm()">
+                <div class="hipay-form-row" data-bind="visible: showCcForm()">
                     <div class="hipay-field-container">
-                        <div class="hipay-field" id="hipay-card-holder"></div>
-                        <label class="hipay-label" for="hipay-card-holder">
+                        <div class="hipay-field" id="hipay-card-field-cardHolder"></div>
+                        <label class="hipay-field-label" for="hipay-card-field-cardHolder">
                             <!-- ko i18n: 'Card Owner Name'--><!-- /ko --></label>
-                        <div class="hipay-baseline"></div>
+                        <div class="hipay-field-baseline"></div>
                         <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cardHolder'></div>
                     </div>
                 </div>
-                <div class="hipay-row" data-bind="visible: showCcForm()">
+                <div class="hipay-form-row" data-bind="visible: showCcForm()">
                     <div class="hipay-field-container">
-                        <div class="hipay-field" id="hipay-card-number"></div>
-                        <label class="hipay-label" for="hipay-card-number">
+                        <div class="hipay-field" id="hipay-card-field-cardNumber"></div>
+                        <label class="hipay-field-label" for="hipay-card-field-cardNumber">
                             <!-- ko i18n: 'Card number'--><!-- /ko -->
                         </label>
                         <div class="hipay-baseline"></div>
                         <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cardNumber'></div>
                     </div>
                 </div>
-                <div class="hipay-row" data-bind="visible: showCcForm()">
+                <div class="hipay-form-row" data-bind="visible: showCcForm()">
                     <div class="hipay-field-container hipay-field-container-half">
-                        <div class="hipay-field" id="hipay-date-expiry"></div>
-                        <label class="hipay-label" for="hipay-date-expiry">
+                        <div class="hipay-field" id="hipay-card-field-expiryDate"></div>
+                        <label class="hipay-field-label" for="hipay-card-field-expiryDate">
                             <!-- ko i18n: 'Expiry date'--><!-- /ko --></label>
                         <div class="hipay-baseline"></div>
                         <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-expiryDate'></div>
                     </div>
                     <div class="hipay-field-container hipay-field-container-half">
-                        <div class="hipay-field" id="hipay-cvc"></div>
-                        <label class="hipay-label" for="hipay-cvc">
+                        <div class="hipay-field" id="hipay-card-field-cvc"></div>
+                        <label class="hipay-field-label" for="hipay-card-field-cvc">
                             <!-- ko i18n: 'CVC'--><!-- /ko --></label>
                         <div class="hipay-baseline"></div>
                         <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cvc'></div>
@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="hipay-elements-container" data-bind="visible: showCcForm()">
-                    <div id="hipay-help-cvc"></div>
+                    <div id="hipay-help-cvc" data-hipay-id='hipay-help-cvc'></div>
                 </div>
                 <!-- ko if: (useOneclick())-->
                 <div class="field" data-bind="visible: showForm()">
