@@ -58,7 +58,7 @@ elif [ "$1" = 'install' ];then
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento setup:upgrade
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento c:c
 elif [ "$1" = 'test' ]; then
-
+    echo "test"
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
 fi
