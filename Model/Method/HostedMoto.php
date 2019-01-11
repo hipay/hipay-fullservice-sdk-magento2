@@ -14,10 +14,11 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Block\Hosted;
+namespace HiPay\FullserviceMagento\Model\Method;
+
 
 /**
- * Block Hosted Form
+ * Hosted Mo/To Model payment method
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,20 +26,33 @@ namespace HiPay\FullserviceMagento\Block\Hosted;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Form extends \Magento\Payment\Block\Form
+class HostedMoto extends HostedMethod
 {
+
+    const HIPAY_METHOD_CODE = 'hipay_hostedmoto';
 
     /**
      * @var string
      */
-    protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
+    protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
-     * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = true;
+
+    /**
+     * @var bool
+     */
+    protected $_canUseCheckout = false;
+
+    /**
+     * @return null|string
      */
     public function isSendMailToCustomer()
     {
-        return $this->getMethod()->isSendMailToCustomer();
+        return $this->_hipayConfig->getValue('send_mail_to_customer');
     }
 }

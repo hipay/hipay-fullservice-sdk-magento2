@@ -200,14 +200,7 @@ define(
                     .then(function (response) {
                             self.creditCardToken(response.token);
 
-                            var brand = "";
-                            if (response.hasOwnProperty("domestic_network")) {
-                                brand = response.domestic_network;
-                            } else {
-                                brand = response.brand;
-                            }
-
-                            self.creditCardType(brand);
+                            self.creditCardType(response.payment_product);
                             self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
                             self.creditCardToken("");
                             fullScreenLoader.stopLoader();

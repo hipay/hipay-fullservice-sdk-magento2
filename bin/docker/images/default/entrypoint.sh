@@ -27,6 +27,8 @@ if [ "$XDEBUG_ENABLED" = "1" ]; then
     echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 fi
 
+echo "mailhub=$SMTP_LINK\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
+
 printf "Set composer http-basic $GITLAB_API_TOKEN"
 gosu magento2 composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
 gosu magento2 composer config --list
