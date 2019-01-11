@@ -185,7 +185,7 @@
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
-                <cctypes_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP", "bcmc" : "MI"}]]></cctypes_mapper>
+                <cctypes_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP", "bcmc" : "MI", "cb": "VI"}]]></cctypes_mapper>
             </hipay_hosted_fields>
             <hipay_hostedsplit>
                 <model>HiPay\FullserviceMagento\Model\Method\HostedSplitMethod</model>
