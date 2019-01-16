@@ -31,7 +31,8 @@ define(
             defaults: {
                 template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
                 afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
-                paymentReady: false
+                paymentReady: false,
+                creditCardOwner: null,
             },
             redirectAfterPlaceOrder: false,
             isInAction: iframe.isInAction,

@@ -72,7 +72,9 @@ define(
             initBasicField: function(value) {
                 var customerCard = this.getCustomerCardByToken(value);
                 this.creditCardType(customerCard.ccType);
-                this.creditCardOwner(customerCard.ccOwner);
+                if (this.creditCardOwner != null) {
+                    this.creditCardOwner(customerCard.ccOwner);
+                }
             },
 
             initialize: function(){
