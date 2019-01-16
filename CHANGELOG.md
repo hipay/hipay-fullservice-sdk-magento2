@@ -1,4 +1,8 @@
- # 1.4.1
+ # 1.4.2
+  - Fix multi_use for one-click
+  - Fix Magento 2.3 compliance
+  
+# 1.4.1
   - Fix entity name for new magento checks
   - Fix Magento 2.3 compliance
   
