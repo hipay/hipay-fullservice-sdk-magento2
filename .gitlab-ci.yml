@@ -139,6 +139,19 @@ build:
   tags:
     - pi-commerce-no-overlay
 
+build23:
+  stage: build
+  before_script:
+    - /tools/docker-rmi.sh ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web_2-3-0:${CI_COMMIT_REF_SLUG}
+  script:
+    - sh bin/docker/images/generate_dockerfile.sh
+    - docker-compose -f docker-compose.acceptance-2-3-0.yml build
+    - docker-compose -f docker-compose.acceptance-2-3-0.yml push
+  after_script:
+    - docker rmi ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web_2-3-0:${CI_COMMIT_REF_SLUG}
+  tags:
+    - pi-commerce-no-overlay
+
 deploy2recette:
   stage: deploy
   before_script:
@@ -171,6 +184,43 @@ deploy2recette:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/
+    on_stop: stop_review
+  tags:
+    - pi-commerce-no-overlay
+
+deploy2recetteV23:
+  stage: deploy
+  before_script:
+    - sh bin/docker/images/generate_dockerfile.sh
+    - sed -i -e "s/{PORT_WEB\}/$PORT_WEB/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s/{SMTP_LINK\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp:1025/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{HIPAY_API_USER_TEST\}/$HIPAY_API_USER_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{HIPAY_API_PASSWORD_TEST\}/$HIPAY_API_PASSWORD_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{HIPAY_TOKENJS_PUBLICKEY_TEST\}/$HIPAY_TOKENJS_PUBLICKEY_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{HIPAY_TOKENJS_USERNAME_TEST\}/$HIPAY_TOKENJS_USERNAME_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{HIPAY_SECRET_PASSPHRASE_TEST\}/$HIPAY_SECRET_PASSPHRASE_RE7/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{ACTIVE_METHODS\}/$ACTIVE_METHODS/" ./bin/docker/conf/acceptance/hipay.env.sample
+    - sed -i -e "s/{GITHUB_API_TOKEN\}/$GITHUB_TOKEN/" ./bin/docker/conf/acceptance/auth.env.sample
+    - sed -i -e "s/{GITLAB_API_TOKEN\}/$GITLAB_API_TOKEN/" ./bin/docker/conf/acceptance/auth.env.sample
+    - sed -i -e "s/{MAGE_ACCOUNT_PUBLIC_KEY\}/$MAGE_ACCOUNT_PUBLIC_KEY/" ./bin/docker/conf/acceptance/auth.env.sample
+    - sed -i -e "s/{MAGE_ACCOUNT_PRIVATE_KEY\}/$MAGE_ACCOUNT_PRIVATE_KEY/" ./bin/docker/conf/acceptance/auth.env.sample
+    - sed -i "s/$(echo "{BRANCH}" | sed -e 's/\([[\/.*]\|\]\)/\\&/g')/$(echo $CI_COMMIT_REF_NAME | sed -e 's/[\/&]/\\&/g')/g" ./bin/docker/conf/acceptance/module.env.sample
+    - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-2-3-0.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-2-3-0.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
+    # Substitute env variables which doesn't exists on the distant machine
+    - /tools/substitute-env-var.sh docker-compose.acceptance-2-3-0.yml
+    # Change path for relative path to environment files
+    - sed -i -e "s|bin/docker/conf/acceptance/hipay.env.sample|hipay.env.sample|g" docker-compose.acceptance-2-3-0.yml
+    - sed -i -e "s|bin/docker/conf/acceptance/auth.env.sample|auth.env.sample|g" docker-compose.acceptance-2-3-0.yml
+    - sed -i -e "s|bin/docker/conf/acceptance/mage.env.sample|mage.env.sample|g" docker-compose.acceptance-2-3-0.yml
+    - sed -i -e "s|bin/docker/conf/acceptance/module.env.sample|module.env.sample|g" docker-compose.acceptance-2-3-0.yml
+  script:
+    - bash /tools/deployToDockerMachine.sh -e ./bin/docker/conf/acceptance/hipay.env.sample -e ./bin/docker/conf/acceptance/auth.env.sample -e ./bin/docker/conf/acceptance/mage.env.sample -e ./bin/docker/conf/acceptance/module.env.sample -s docker-compose.acceptance.yml -n $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG-2-3-0
+  allow_failure: true
+  environment:
+    name: review/$CI_COMMIT_REF_NAME-2-3-0
+    url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-2-3-0.hipay-pos-platform.com/
     on_stop: stop_review
   tags:
     - pi-commerce-no-overlay

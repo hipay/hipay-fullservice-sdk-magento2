@@ -31,7 +31,6 @@ web:
   build: .
   links:
     - database
-    - smtp
 database:
   image: mysql:5.6
   environment:
@@ -40,9 +39,4 @@ database:
     - "3308:3306"
   volumes:
     - ./data/mysql:/var/lib/mysql
-smtp:
-  container_name: magento2-hipay-smtp
-  image: hipay/mailcatcher:1.0.0
-  ports:
-    - "1096:80"
 
