@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
@@ -30,8 +31,8 @@ class HostedPaymentPage extends Order
 {
 
     /**
-     *
      * {@inheritDoc}
+     *
      * @see \HiPay\FullserviceMagento\Model\Request\Order::getRequestObject()
      * @return \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
      */
@@ -58,6 +59,10 @@ class HostedPaymentPage extends Order
 
         //Add display selector value. #TPPMAG2-68
         $hppRequest->display_selector = $this->_config->getValue('display_selector');
+
+        if ($this->_order->getPayment()->getAdditionalInformation('create_oneclick')) {
+            $hppRequest->multi_use = 1;
+        }
 
         return $hppRequest;
     }
