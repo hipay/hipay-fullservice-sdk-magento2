@@ -63,7 +63,7 @@ class HostedMethod extends FullserviceMethod
      *
      * @var bool
      */
-    protected $_canUseInternal = true;
+    protected $_canUseInternal = false;
 
     /**
      * Instantiate state and set it to state object

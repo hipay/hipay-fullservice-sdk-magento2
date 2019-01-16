@@ -29,6 +29,9 @@
         <method name="hipay_hosted">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_hostedmoto">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

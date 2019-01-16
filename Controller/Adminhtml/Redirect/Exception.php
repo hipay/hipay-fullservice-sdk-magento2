@@ -14,10 +14,12 @@
  *
  */
 
-namespace HiPay\FullserviceMagento\Block\Hosted;
+namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
 
 /**
- * Block Hosted Form
+ * Accept controller
+ *
+ * Used to redirect the customer when payment is accepted
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,20 +27,16 @@ namespace HiPay\FullserviceMagento\Block\Hosted;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Form extends \Magento\Payment\Block\Form
+class Exception extends \Magento\Backend\App\Action
 {
 
     /**
-     * @var string
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
-
-    /**
-     * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function isSendMailToCustomer()
+    public function execute()
     {
-        return $this->getMethod()->isSendMailToCustomer();
+        $this->messageManager->addError(__("An exception occurred during payment"));
+        return $this->resultRedirectFactory->create()->setPath('sales/order/');
     }
 }
