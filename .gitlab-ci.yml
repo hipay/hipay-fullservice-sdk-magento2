@@ -181,6 +181,7 @@ deploy2recette:
   script:
     - bash /tools/deployToDockerMachine.sh -e ./bin/docker/conf/acceptance/hipay.env.sample -e ./bin/docker/conf/acceptance/auth.env.sample -e ./bin/docker/conf/acceptance/mage.env.sample -e ./bin/docker/conf/acceptance/module.env.sample -s docker-compose.acceptance.yml -n $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG
   allow_failure: true
+  when: manual
   environment:
     name: review/$CI_COMMIT_REF_NAME
     url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/
@@ -218,10 +219,11 @@ deploy2recetteV23:
   script:
     - bash /tools/deployToDockerMachine.sh -e ./bin/docker/conf/acceptance/hipay.env.sample -e ./bin/docker/conf/acceptance/auth.env.sample -e ./bin/docker/conf/acceptance/mage.env.sample -e ./bin/docker/conf/acceptance/module.env.sample -s docker-compose.acceptance.yml -n $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG-2-3-0
   allow_failure: true
+  when: manual
   environment:
     name: review/$CI_COMMIT_REF_NAME-2-3-0
     url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-2-3-0.hipay-pos-platform.com/
-    on_stop: stop_review
+    on_stop: stop_reviewV23
   tags:
     - pi-commerce-no-overlay
 
@@ -235,6 +237,18 @@ stop_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
+
+stop_reviewV23:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - docker stack rm $DOCKER_STACK-$DOCKER_SERVICE-$CI_COMMIT_REF_SLUG-2-3-0
+  when: manual
+  environment:
+    name: review/$CI_COMMIT_REF_NAME-2-3-0
+    action: stop
+
 
 sync:
   stage: sync
