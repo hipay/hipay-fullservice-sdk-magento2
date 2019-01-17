@@ -9,8 +9,8 @@ Cypress.Commands.add("logToAdmin", () => {
 Cypress.Commands.add("goToPaymentMethods", () => {
     cy.get('#menu-magento-backend-stores').click();
     cy.get('.item-system-config > a').click();
-    cy.get('.admin__page-nav-link.item-nav > span').contains("Payment Methods").click({force: true});
-    cy.get('#payment_us_other_payment_methods-head').click({force: true});
+    cy.get('.admin__page-nav-link.item-nav > span',{timeout: 50000}).contains("Payment Methods").click({force: true});
+    cy.get('#payment_us_other_payment_methods-head',{timeout: 50000}).click({force: true});
 });
 
 Cypress.Commands.add("activatePaymentMethod", (method) => {
@@ -19,3 +19,40 @@ Cypress.Commands.add("activatePaymentMethod", (method) => {
     cy.get('#payment_us_' + method + '_env').select("stage", {force: true});
     cy.get('#save').click({force: true});
 });
+
+
+Cypress.Commands.add("configureAndActivateHostedFields", () => {
+    cy.logToAdmin();
+    cy.goToPaymentMethods();
+    cy.activatePaymentMethod('hipay_hosted_fields');
+    cy.get('#save',{timeout: 70000}).click({force: true});
+});
+
+/**
+ *
+ */
+Cypress.Commands.add("goToDetailOrder", (orderId) => {
+    cy.get("tr.data-row").contains(orderId).parent().parent().find(".data-grid-actions-cell a").click();
+});
+
+/**
+ * Activate Option send cart
+ */
+Cypress.Commands.add("activateOptionSendCart", (orderId) => {
+    cy.logToAdmin();
+    cy.goToGeneralConfiguration();
+    cy.get("#hipay_configurations_basket_enabled").select("1");
+    cy.get('#save').click();
+});
+
+/**
+ * Go To Hipay General configuration
+ */
+Cypress.Commands.add("goToGeneralConfiguration", () => {
+    cy.get('#menu-magento-backend-stores').click();
+    cy.get('.item-system-config > a').click();
+    cy.get('.admin__page-nav-link.item-nav > span',{timeout: 50000}).contains("HiPay Fullservice").click({force: true});
+});
+
+
+

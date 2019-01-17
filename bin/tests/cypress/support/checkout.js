@@ -29,7 +29,7 @@ Cypress.Commands.add("addProductQuantity", (qty) => {
 });
 
 Cypress.Commands.add("goToCheckout", () => {
-    cy.get('#top-cart-btn-checkout').click({force: true});
+    cy.get('#top-cart-btn-checkout',{"timeout": 35000}).click({force: true});
 });
 
 Cypress.Commands.add("fillShippingForm", (country) => {
@@ -54,7 +54,7 @@ Cypress.Commands.add("fillShippingForm", (country) => {
         customerFixture = "customer" + country
     }
 
-    cy.wait('@getEstimateShippingMethods', {"timeout": 35000});
+    cy.wait('@getEstimateShippingMethods', {"timeout": 45000});
 
     cy.fixture(customerFixture).then((customer) => {
         cy.get('#customer-email').type(customer.email);
@@ -69,7 +69,7 @@ Cypress.Commands.add("fillShippingForm", (country) => {
         cy.get('[name="telephone"]').type(customer.phone);
     });
 
-    cy.wait('@getEstimateShippingMethods', {"timeout": 35000});
+    cy.wait('@getEstimateShippingMethods', {"timeout": 45000});
     cy.get('#s_method_flatrate').should('be.checked');
     cy.get('button.continue').click();
 });
@@ -106,4 +106,31 @@ Cypress.Commands.add("saveLastOrderId", () => {
             });
         }
     });
+});
+
+/**
+ * Process an order ( Checkout and pay with Hosted Fields)
+ */
+Cypress.Commands.add("processAnOrder", () => {
+    cy.configureAndActivateHostedFields();
+    cy.goToFront();
+    cy.selectItemAndGoToCart();
+    cy.goToCheckout();
+    cy.fillShippingForm("FR");
+    cy.get('#hipay_hosted_fields').click();
+
+    cy.get('#hipay-field-cardHolder> iframe');
+    cy.wait(3000);
+    cy.fill_hostedfield_card("visa_ok");
+    cy.get(".payment-method._active > .payment-method-content .actions-toolbar:visible button").click();
+    cy.checkOrderSuccess();
+    cy.saveLastOrderId();
+});
+
+/**
+ * Process an order ( Checkout and pay with Hosted Fields)
+ */
+Cypress.Commands.add("processAnOrderWithBasket", () => {
+    cy.activateOptionSendCart();
+    cy.processAnOrder();
 });
