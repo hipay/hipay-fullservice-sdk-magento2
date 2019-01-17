@@ -19,10 +19,10 @@ Cypress.Commands.add("activatePaymentMethod", (method) => {
 });
 
 
-Cypress.Commands.add("configureAndActivateHostedFields", () => {
+Cypress.Commands.add("configureAndActivatePaymentMethod", (method) => {
     cy.logToAdmin();
     cy.goToPaymentMethods();
-    cy.activatePaymentMethod('hipay_hosted_fields');
+    cy.activatePaymentMethod(method);
     cy.get('#save',{timeout: 70000}).click({force: true});
 });
 

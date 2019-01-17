@@ -74,6 +74,10 @@ Cypress.Commands.add("fillShippingForm", (country) => {
     cy.get('button.continue').click();
 });
 
+Cypress.Commands.add("checkOrderRedirect", () => {
+    cy.location('pathname', {timeout: 50000}).should('include', '/checkout/onepage');
+});
+
 Cypress.Commands.add("checkOrderSuccess", () => {
     cy.location('pathname', {timeout: 50000}).should('include', '/checkout/onepage/success');
 });
