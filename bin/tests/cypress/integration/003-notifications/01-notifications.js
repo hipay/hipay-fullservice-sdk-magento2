@@ -9,18 +9,18 @@
  */
 describe('Pay by credit card and process notification', function () {
 
-
-
     /**
-     * Process an complete order (Configuration
-     */
-    it('Succeed an Order ', function () {    /**
      * Before Each
      */
     beforeEach(function () {
         cy.fixture('order').as("order");
         cy.fixture('notification').as("notification");
     });
+
+    /**
+     * Process an complete order (Configuration
+     */
+    it('Succeed an Order ', function () {
         cy.processAnOrder();
     });
 
@@ -39,7 +39,11 @@ describe('Pay by credit card and process notification', function () {
      * Send transaction for authorization ( Good signature )
      */
     it('Process Notification Authorization with good signature', function () {
-        cy.processAnNotification(this.notification.url,this.order.lastOrderId, 116);
+        cy.connectAndSelectAccountOnHipayBO();
+        cy.openTransactionOnHipayBO(this.order.lastOrderId);
+        cy.openNotificationOnHipayBO(116).then(() => {
+            cy.sendNotification(this.notification.url, {data: this.data, hash: "BAD HASH"},true);
+        });
     });
 
     /**
