@@ -116,7 +116,7 @@ Cypress.Commands.add("saveLastOrderId", () => {
  * Process an order ( Checkout and pay with Hosted Fields)
  */
 Cypress.Commands.add("processAnOrder", () => {
-    cy.configureAndActivateHostedFields();
+    cy.configureAndActivatePaymentMethod('hipay_hosted_fields');
     cy.goToFront();
     cy.selectItemAndGoToCart();
     cy.goToCheckout();
