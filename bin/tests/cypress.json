@@ -4,5 +4,8 @@
   "viewportWidth": 1280,
   "viewportHeight": 720,
   "watchForFileChanges": false,
-  "defaultCommandTimeout": 30000
+  "defaultCommandTimeout": 30000,
+  "env": {
+    "completeProviderPayment": true
+  }
 }

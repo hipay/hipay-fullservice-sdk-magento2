@@ -5,7 +5,7 @@ describe('Pay by bnppf', function () {
      */
     before(function () {
         cy.configureAndActivatePaymentMethod("hipay_bnpp3X");
-        cy.get('.account-signout').click();
+        cy.get('.account-signout').click({force: true});
         cy.configureAndActivatePaymentMethod("hipay_bnpp4X");
     });
 
@@ -24,9 +24,12 @@ describe('Pay by bnppf', function () {
      */
     afterEach(() => {
         cy.get(".payment-method._active > .payment-method-content > .actions-toolbar:visible button").click();
-        cy.payBnppf();
-        cy.checkOrderRedirect();
-        cy.saveLastOrderId();
+        if (Cypress.env('completeProviderPayment')) {
+            cy.payBnppf();
+            cy.checkOrderRedirect();
+        } else {
+            cy.location('pathname', {timeout: 100000}).should('include', '/souscription.do');
+        }
     });
 
     /**
@@ -39,7 +42,7 @@ describe('Pay by bnppf', function () {
     /**
      *  Bnppf 4xcb
      */
-    it('pay 4xcb', function () {
+    it('Pay Bnpp 4xcb', function () {
         cy.get('#hipay_bnpp4X').click();
     });
 
