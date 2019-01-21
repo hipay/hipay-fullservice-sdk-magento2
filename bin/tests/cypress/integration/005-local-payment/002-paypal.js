@@ -10,20 +10,13 @@ describe('Pay by paypal', function () {
     });
 
     /**
-     * Before Each
+     *  Paypal
      */
-    beforeEach(function () {
+    it('Pay with Paypal', function () {
         cy.goToFront();
         cy.selectItemAndGoToCart();
         cy.goToCheckout();
         cy.fillShippingForm("FR");
-    });
-
-
-    /**
-     *  Paypal
-     */
-    it('Pay with Paypal', function () {
         cy.get('#hipay_paypalapi').click();
         cy.get(".payment-method._active > .payment-method-content > .actions-toolbar:visible button").click();
         // if (Cypress.env('completeProviderPayment')) {

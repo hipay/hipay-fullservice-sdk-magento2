@@ -36,10 +36,10 @@ Cypress.Commands.add("goToDetailOrder", (orderId) => {
 /**
  * Activate Option send cart
  */
-Cypress.Commands.add("activateOptionSendCart", (orderId) => {
+Cypress.Commands.add("setOptionSendCart", (value) => {
     cy.logToAdmin();
     cy.goToGeneralConfiguration();
-    cy.get("#hipay_configurations_basket_enabled").select("1");
+    cy.get("#hipay_configurations_basket_enabled").select(value);
     cy.get('#save').click();
 });
 
