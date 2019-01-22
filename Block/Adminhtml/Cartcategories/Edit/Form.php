@@ -39,11 +39,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $categoriesHipay;
 
-
     /**
+     * Form constructor.
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesMagento $categoriesMagento
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesHipay $categoriesHipay
      * @param array $data
      */
     public function __construct(
@@ -53,13 +55,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesMagento $categoriesMagento,
         \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesHipay $categoriesHipay,
         array $data = []
-    )
-    {
+    ) {
         parent::__construct($context, $registry, $formFactory, $data);
         $this->categoriesMagento = $categoriesMagento;
         $this->categoriesHipay = $categoriesHipay;
     }
-
 
     /**
      * Prepare form
@@ -109,7 +109,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_eventManager->dispatch('adminhtml_cart_categories_edit_prepare_form', ['form' => $form]);
 
         if ($model->getMappingId() !== null) {
-                $form->addField('mapping_id', 'hidden', ['name' => 'mapping_id', 'value' => $model->getMappingId()]);
+            $form->addField('mapping_id', 'hidden', ['name' => 'mapping_id', 'value' => $model->getMappingId()]);
         }
 
         $form->setValues($model->getData());
@@ -118,5 +118,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return parent::_prepareForm();
     }
-
 }

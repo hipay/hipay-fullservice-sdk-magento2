@@ -64,18 +64,18 @@ class HostedPaymentLinkSender extends Sender
      */
     protected $eventManager;
 
-	/**
-	 * 
-	 * @param Template $templateContainer
-	 * @param HostedPaymentLinkIdentity $identityContainer
-	 * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
-	 * @param \Psr\Log\LoggerInterface $logger
-	 * @param Renderer $addressRenderer
-	 * @param PaymentHelper $paymentHelper
-	 * @param OrderResource $orderResource
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-	 * @param ManagerInterface $eventManager
-	 */
+    /**
+     *
+     * @param Template $templateContainer
+     * @param HostedPaymentLinkIdentity $identityContainer
+     * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
+     * @param PaymentHelper $paymentHelper
+     * @param OrderResource $orderResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param ManagerInterface $eventManager
+     */
     public function __construct(
         Template $templateContainer,
         HostedPaymentLinkIdentity $identityContainer,
@@ -98,7 +98,7 @@ class HostedPaymentLinkSender extends Sender
     /**
      * Sends link to hosted payment page.
      *
-     * Email will be sent immediately 
+     * Email will be sent immediately
      *
      * @param Order $order
      * @return bool
@@ -106,9 +106,9 @@ class HostedPaymentLinkSender extends Sender
     public function send(Order $order)
     {
 
-    	if ($this->checkAndSend($order)) {
-       		return true;
-       	}
+        if ($this->checkAndSend($order)) {
+            return true;
+        }
 
         return false;
     }
@@ -128,7 +128,7 @@ class HostedPaymentLinkSender extends Sender
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
-        	'hostedRedirectUrl' => $order->getPayment()->getAdditionalInformation('redirectUrl'),
+            'hostedRedirectUrl' => $order->getPayment()->getAdditionalInformation('redirectUrl'),
         ];
 
         $this->templateContainer->setTemplateVars($transport);

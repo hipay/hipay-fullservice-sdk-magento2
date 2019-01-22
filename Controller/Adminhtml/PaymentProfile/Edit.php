@@ -41,17 +41,26 @@ class Edit extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
+     */
+    private $paymentProfileFactory;
+    
+    /**
+     * Edit constructor.
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
+        $this->paymentProfileFactory = $paymentProfileFactory;
         parent::__construct($context);
     }
 
@@ -65,10 +74,10 @@ class Edit extends \Magento\Backend\App\Action
         // load layout, set active menu and breadcrumbs
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        
+
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_payment_profile')
-           ->addBreadcrumb(__('HiPay'), __('HiPay'))
-           ->addBreadcrumb(__('Payment Profiles'), __('Payment Profiles'));
+            ->addBreadcrumb(__('HiPay'), __('HiPay'))
+            ->addBreadcrumb(__('Payment Profiles'), __('Payment Profiles'));
 
         return $resultPage;
     }
@@ -83,11 +92,11 @@ class Edit extends \Magento\Backend\App\Action
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('profile_id');
-        $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
+        $model = $this->paymentProfileFactory->create();
 
         // 2. Initial checking
         if ($id) {
-            $model->load($id);
+            $model->getResource()->load($model, $id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This payment profile no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

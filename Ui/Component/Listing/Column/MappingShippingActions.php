@@ -21,7 +21,6 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Cms\Block\Adminhtml\Page\Grid\Renderer\Action\UrlBuilder;
 use Magento\Framework\UrlInterface;
 
-
 /**
  * Ui Column Class
  * Mapping shipping Actions
@@ -86,11 +85,17 @@ class MappingShippingActions extends Column
                 $name = $this->getData('name');
                 if (isset($item['mapping_shipping_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['mapping_shipping_id' => $item['mapping_shipping_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            $this->editUrl,
+                            ['mapping_shipping_id' => $item['mapping_shipping_id']]
+                        ),
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::PROFILE_URL_PATH_DELETE, ['mapping_shipping_id' => $item['mapping_shipping_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            self::PROFILE_URL_PATH_DELETE,
+                            ['mapping_shipping_id' => $item['mapping_shipping_id']]
+                        ),
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete shipping mapping'),

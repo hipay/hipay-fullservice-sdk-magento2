@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
-
 use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
@@ -24,7 +23,6 @@ use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
-
 
 /**
  * Main Config Class
@@ -38,7 +36,6 @@ use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
  */
 class Config extends AbstractConfig implements ConfigurationInterface
 {
-
     const STATUS_AUTHORIZED = 'hipay_authorized';
     const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
     const STATUS_AUTHORIZED_PENDING = "hipay_authorized_pending";
@@ -49,6 +46,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
     const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
     const STATUS_EXPIRED = 'hipay_expired';
     const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
+
+    const CONFIG_HIPAY_KEY_CC_TYPE = "cctypes_mapper";
 
     /**
      *
@@ -97,6 +96,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      * @param \Magento\Framework\App\State $appState
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
      * @param array $params
      */
     public function __construct(
@@ -110,6 +111,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $params = []
     ) {
         parent::__construct($scopeConfig, $configWriter);
+
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
@@ -135,30 +137,25 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
 
-        //@TODO Find a better way for verification of api username and api password
-        //@TODO Maybe create a new Config Object with arg order required, for check MO/TO action
         try {
             $env = $this->getApiEnv();
             if ($env == null) {
                 $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
             }
-            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json');
+            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json', $this->getProxy());
         } catch (\Exception $e) {
-            $this->logger->critical($e->getMessage());
             $this->_configSDK = null;
         }
-
     }
 
     /**
      * Check if we must to use MO/TO credentials
-     * Essentialy, Admin operations
+     * Essentially, Admin operations
      * @return bool
      */
     public function mustUseMotoCredentials()
     {
-
-        $hasOrder = !is_null($this->getOrder());
+        $hasOrder = $this->getOrder() !== null;
         $hasLastTransId = false;
         $isMoto = false;
 
@@ -172,7 +169,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         return $this->isAdminArea() && $hasOrder && (!$hasLastTransId || ($hasLastTransId && $isMoto));
-
     }
 
     /**
@@ -200,7 +196,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getTemplates()
     {
         return (new Templates())->getTemplates();
-
     }
 
     /**
@@ -208,7 +203,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentProductsList()
     {
-
         $list = explode(",", $this->getValue('payment_products'));
         return $list;
     }
@@ -236,7 +230,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
         $pp = (new PaymentProduct())->getPaymentProducts($this->getAllowedPaymentProductCategories());
         return $pp;
-
     }
 
     public function getAllowedPaymentProductCategories()
@@ -251,7 +244,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentActions()
     {
-
         return (new PaymentActions())->getPaymentActions();
     }
 
@@ -262,10 +254,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getEnvironments()
     {
-
         return (new Environments())->getEnvironments();
     }
-
 
     public function isStageMode()
     {
@@ -274,9 +264,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function hasCredentials($withTokenJs = false)
     {
-
         if ($withTokenJs) {
-
             //token JS credential
             $apiUsernameTokenJs = $this->getApiUsernameTokenJs();
             $apiPasswordTokenJs = $this->getApiPasswordTokenJs();
@@ -284,7 +272,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if (empty($apiUsernameTokenJs) || empty($apiPasswordTokenJs)) {
                 return false;
             }
-
         }
 
         //default api username, password, secret passphrase
@@ -302,7 +289,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiUsername()
     {
-
         if ($this->mustUseMotoCredentials()) {
             return $this->getApiUsernameMoto();
         }
@@ -378,7 +364,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         if ($this->isStageMode()) {
             $key = "api_username_test";
         }
-
         return $this->getGeneraleValue($key, 'hipay_credentials_tokenjs');
     }
 
@@ -418,6 +403,25 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $key = "hashing_algorithm_test";
         }
         $this->setGeneralValue($key, $hash, $group, $scope);
+    }
+
+    /**
+     * @return array
+     */
+    public function getProxy()
+    {
+        $group = 'hipay_proxy_settings';
+
+        if (empty($this->getGeneraleValue("hipay_proxy_host", $group))) {
+            return array();
+        }
+
+        return array(
+            "host" => $this->getGeneraleValue("hipay_proxy_host", $group),
+            "port" => $this->getGeneraleValue("hipay_proxy_port", $group),
+            "user" => $this->getGeneraleValue("hipay_proxy_user", $group),
+            "password" => $this->getGeneraleValue("hipay_proxy_password", $group)
+        );
     }
 
     /**
@@ -469,16 +473,15 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function useOrderCurrency()
     {
-
         $key = "currency_transaction";
         return $this->getOtherConfiguration($key);
-
     }
 
     /**
-     *  Check if sending Cart items is necessary
+     * Check if sending Cart items is necessary
      *
-     * @return boolean
+     * @param $product_code
+     * @return bool
      */
     public function isNecessaryToSendCartItems($product_code)
     {
@@ -491,7 +494,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Basket is forced disabled for some payment method
      *
-     * @param $product_code
      * @return bool
      */
     public function isBasketForcedDisabled()
@@ -535,32 +537,32 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getApiEndpoint()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpoint() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpoint() : '';
     }
 
     public function getApiEndpointProd()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpointProd() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointProd() : '';
     }
 
     public function getApiEndpointStage()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiEndpointStage() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointStage() : '';
     }
 
     public function getSecureVaultEndpointProd()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpointProd() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpointProd() : '';
     }
 
     public function getSecureVaultEndpointStage()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpointStage() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpointStage() : '';
     }
 
     public function getSecureVaultEndpoint()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getSecureVaultEndpoint() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpoint() : '';
     }
 
     public function getApiEnv()
@@ -568,9 +570,14 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getValue('env');
     }
 
+    public function getSdkJsUrl()
+    {
+        return $this->getOtherConfiguration('sdk_js_url');
+    }
+
     public function getApiHTTPHeaderAccept()
     {
-        return !is_null($this->_configSDK) ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
+        return $this->_configSDK !== null ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
     }
 
     public function getOrder()
@@ -583,4 +590,22 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_order = $order;
     }
 
+    public function isPaymentMethodActive() {
+        return $this->getValue("active");
+    }
+
+    /**
+     * Retrieve mapper between Magento and HiPay
+     *
+     * @return array
+     */
+    public function getCcTypesMapper()
+    {
+        $result = json_decode(
+            $this->getValue(self::CONFIG_HIPAY_KEY_CC_TYPE),
+            true
+        );
+
+        return is_array($result) ? $result : [];
+    }
 }

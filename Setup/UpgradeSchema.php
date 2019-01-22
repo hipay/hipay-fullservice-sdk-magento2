@@ -105,7 +105,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'Simple Action'
                 );
 
-
             $setup->getConnection()->createTable($table);
         }
 
@@ -237,7 +236,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'payment_type',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     60,
-                    ['nullable' => false, 'default' => \HiPay\FullserviceMagento\Model\SplitPayment::SPLIT_PAYMENT_STATUS_PENDING],
+                    [
+                        'nullable' => false,
+                        'default' => \HiPay\FullserviceMagento\Model\SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
+                    ],
                     'Type of payment'
                 );
 
@@ -381,9 +383,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
                 )->addForeignKey(
                     $installer->getFkName('hipay_cart_mapping_categories', 'category_magento_id',
-                        'mage_catalog_category_entity', 'entity_id'),
+                        'catalog_category_entity', 'entity_id'),
                     'category_magento_id',
-                    $installer->getTable('mage_catalog_category_entity'),
+                    $installer->getTable('catalog_category_entity'),
                     'entity_id'
                 );
 

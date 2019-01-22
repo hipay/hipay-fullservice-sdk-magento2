@@ -40,7 +40,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      *
      * @var \Magento\Framework\Url
      */
-    protected $urlBuilder;
+    public $urlBuilder;
 
     /**
      *
@@ -53,7 +53,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
      */
     protected $fraudDenySender;
-
 
     /**
      * @var \Magento\Checkout\Model\Session
@@ -101,7 +100,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      *
      * @var \Magento\Payment\Helper\Data $paymentData
      */
-    protected $_paymentData;
+    public $_paymentData;
 
     /**
      *
@@ -120,14 +119,12 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      */
     protected $priceCurrency;
 
-
     /**
-     * Construct with needed object for payment methods
-     *
-     * @param \Magento\Framework\Model\Context $context
+     * Context constructor.
+     * @param \Magento\Framework\Model\Context $modelContext
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactor
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Payment\Model\Method\Logger $logger
@@ -154,7 +151,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
@@ -177,8 +174,6 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_checkoutSession = $checkoutSession;
         $this->_cardFactory = $cardFactory;
         $this->priceCurrency = $priceCurrency;
-
-
     }
 
     public function getGatewayManagerFactory()
@@ -255,6 +250,4 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     {
         return $this->priceCurrency;
     }
-
-
 }

@@ -18,28 +18,43 @@
 
 define(
     [
-     	'ko',
-     	'jquery',
-     	'HiPay_FullserviceMagento/js/view/payment/cc-form',
-     	'hipay_tpp',
-     	'mage/storage',
-     	'Magento_Checkout/js/model/full-screen-loader'
+        'ko',
+        'jquery',
+        'HiPay_FullserviceMagento/js/view/payment/cc-form',
+        'mage/storage',
+        'Magento_Checkout/js/model/full-screen-loader',
+        'mage/translate'
     ],
-    function (ko, $,Component,TPP,storage,fullScreenLoader) {
+    function (ko, $, Component, storage, fullScreenLoader, $t) {
 
         'use strict';
         return Component.extend({
-            
-        	defaults: {
-        		template: 'HiPay_FullserviceMagento/payment/hipay-cc',
-        		showCcForm: true,
-        		apiUsernameTokenJs: window.checkoutConfig.payment.hipayCc.apiUsernameTokenJs ,
-        		apiPasswordTokenJs: window.checkoutConfig.payment.hipayCc.apiPasswordTokenJs
-        		
-        	},
+
+            defaults: {
+                template: 'HiPay_FullserviceMagento/payment/hipay-cc',
+                showCcForm: true,
+                env: (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.env : "",
+                apiUsernameTokenJs: (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.apiUsernameTokenJs : "",
+                apiPasswordTokenJs: (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.apiPasswordTokenJs : "",
+                icons: (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.icons : "",
+                allowOneclick: (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.allowOneclick : false,
+                sdkJsUrl:  (window.checkoutConfig.payment.hipay_cc !== undefined) ? window.checkoutConfig.payment.hipay_cc.sdkJsUrl : ""
+            },
+
             placeOrderHandler: null,
             validateHandler: null,
-            
+
+            initialize: function () {
+                var self = this;
+                this._super();
+            },
+
+            getIcons: function (type) {
+                return this.icons.hasOwnProperty(type)
+                    ? this.icons[type]
+                    : false
+            },
+
             /**
              * @param {Function} handler
              */
@@ -57,51 +72,35 @@ define(
              * @override
              */
             initObservable: function () {
-            	var self = this;
+                var self = this;
                 this._super();
-                
-                this.showCcForm = ko.computed(function () {
 
-                    return !(self.useOneclick() && self.customerHasCard()) ||
-                    		self.selectedCard() === undefined ||
-                    		self.selectedCard() === '';
+                this.showCcForm = ko.computed(function () {
+                    var showCC = !(self.useOneclick() && self.customerHasCard()) ||
+                        self.selectedCard() === undefined ||
+                        self.selectedCard() === '';
+
+                    self.showCVV(showCC);
+                    return showCC;
                 }, this);
 
                 return this;
             },
-        	/**
-             * @returns {Boolean}
-             */
-            isActive: function () {
-                return true;
-            },
+
             /**
              * @returns {Boolean}
              */
             isShowLegend: function () {
                 return true;
             },
-            context: function() {
+            context: function () {
                 return this;
             },
-            hasSsCardType: function() {
+            hasSsCardType: function () {
                 return false;
             },
-            getCcAvailableTypes: function() {
-                return window.checkoutConfig.payment.hipayCc.availableTypes;
-            },
-
-            /**
-			 *  Get global fingerprint  on dom load of checkout
-			 *
-             * @returns {*}
-             */
-            getFingerprint: function () {
-            	if ($('#ioBB')) {
-                    return $('#ioBB').val();
-                }else{
-					return '';
-				}
+            getCcAvailableTypes: function () {
+                return window.checkoutConfig.payment.hipay_cc.availableTypes;
             },
 
             /**
@@ -110,7 +109,7 @@ define(
             getCode: function () {
                 return 'hipay_cc';
             },
-            getData: function() {
+            getData: function () {
                 return this._super();
             },
             /**
@@ -118,6 +117,7 @@ define(
              * @param {*} error - error message
              */
             addError: function (error) {
+                this.creditCardToken("");
                 if (_.isObject(error)) {
                     this.messageContainer.addErrorMessage(error);
                 } else {
@@ -125,75 +125,52 @@ define(
                         message: error
                     });
                 }
-            },          
+            },
             /**
              * After place order callback
              */
-	        afterPlaceOrder: function () {
-	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
-	        },
-            generateToken: function (data,event){
-            	var self = this,
-            	isTokenizeProcessing = null;
-            	
+            afterPlaceOrder: function () {
+                $.mage.redirect(this.getAfterPlaceOrderUrl());
+            },
+            generateToken: function (data, event) {
+                var self = this;
 
                 if (event) {
                     event.preventDefault();
                 }
-                
-	            if(this.validateHandler()){
 
-	            	 if(this.creditCardToken()){
-	            		 	self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
-	            		 	return;
-	                 }
-	            	
-	            	 isTokenizeProcessing = $.Deferred();
-	                    $.when(isTokenizeProcessing).done(
-	                        function () {
-	                            self.placeOrder(self.getData(),self.redirectAfterPlaceOrder);
-	                        }
-	                    ).fail(
-	                        function (error) {
-	                            self.addError(error);
-	                        }
-	                    );
-	                    
-	                    fullScreenLoader.startLoader();
-	                    
-	                    TPP.setTarget(window.checkoutConfig.payment.hipayCc.env);
-	                    TPP.setCredentials(this.apiUsernameTokenJs,this.apiPasswordTokenJs);
-	                    
-	                    TPP.create({
-	                        card_number:  this.creditCardNumber(),
-	                        cvc: this.creditCardVerificationNumber(),
-	                        card_expiry_month:this.creditCardExpMonth(),
-	                        card_expiry_year: this.creditCardExpYear(),
-	                        card_holder: '',
-	                        multi_use: '0'
-	                      },
-		                      function (response) {
-		                          	if(response.token){
-		                          		self.creditCardToken(response.token);
-		                          		isTokenizeProcessing.resolve();
-		                          	}
-		                          	else{
-		                          		var error = response;
-			                                isTokenizeProcessing.reject(error);
-		                          	}
-		                          	fullScreenLoader.stopLoader();
-	                          },
-	                          function (response) {
-	                            	var error = response;
-	                            	isTokenizeProcessing.reject(error);
-	                                fullScreenLoader.stopLoader();
-	                            }
-	                      );
-	                    
-	            }
+                if (this.validateHandler()) {
+                    if (this.creditCardToken()) {
+                        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+                        return;
+                    }
+
+                    fullScreenLoader.startLoader();
+                    var params = {
+                        cardNumber: this.creditCardNumber(),
+                        cvc: this.creditCardVerificationNumber(),
+                        expiryMonth: this.creditCardExpMonth().padStart(2, '0'),
+                        expiryYear: this.creditCardExpYear().substr(-2),
+                        cardHolder: this.creditCardOwner(),
+                        multiUse: this.createOneclick()
+                    };
+
+                    this.hipaySdk.tokenize(params)
+                        .then(function (response) {
+                                self.creditCardToken(response.token);
+                                self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+                                fullScreenLoader.stopLoader();
+                            },
+                            function (error) {
+                                self.addError($t('An error has occured, please check the information entered.'));
+                                fullScreenLoader.stopLoader();
+                            }
+                        );
+
+                }
 
             }
-            
+
         });
     }
 );

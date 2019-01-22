@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
 
 /**
  * Qiwiwallet Model payment method
@@ -61,6 +60,4 @@ class QiwiWallet extends FullserviceMethod
      * @var string[] keys to import in payment additionnal informations
      */
     protected $_additionalInformationKeys = ['qiwiuser'];
-
-
 }

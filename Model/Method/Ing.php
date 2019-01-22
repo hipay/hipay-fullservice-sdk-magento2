@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
+
 
 /**
  * Ing Model payment method
@@ -57,6 +57,4 @@ class Ing extends HostedMethod
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
 }

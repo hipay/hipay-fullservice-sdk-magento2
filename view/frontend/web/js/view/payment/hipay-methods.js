@@ -30,6 +30,10 @@ define(
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
             },
             {
+                type: 'hipay_hosted_fields',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-fields'
+            },
+            {
                 type: 'hipay_hostedsplit',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
             },
@@ -108,6 +112,10 @@ define(
             {
                 type: 'hipay_banco',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-banco'
+            },
+            {
+                type: 'hipay_caixa',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-caixa'
             },
             {
                 type: 'hipay_bbva',

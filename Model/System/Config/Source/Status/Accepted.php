@@ -31,7 +31,7 @@ class Accepted extends \Magento\Sales\Model\Config\Source\Order\Status
      */
     protected $_stateStatuses = [
         \Magento\Sales\Model\Order::STATE_PROCESSING,
-    	\Magento\Sales\Model\Order::STATE_COMPLETE,
-    	\Magento\Sales\Model\Order::STATE_CLOSED
+        \Magento\Sales\Model\Order::STATE_COMPLETE,
+        \Magento\Sales\Model\Order::STATE_CLOSED
     ];
 }

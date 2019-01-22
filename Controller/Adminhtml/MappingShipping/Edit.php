@@ -41,17 +41,26 @@ class Edit extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
+     */
+    private $mappingShippingFactory;
+
+    /**
+     * Edit constructor.
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Registry $registry
+     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
+        $this->mappingShippingFactory = $mappingShippingFactory;
         parent::__construct($context);
     }
 
@@ -65,10 +74,10 @@ class Edit extends \Magento\Backend\App\Action
         // load layout, set active menu and breadcrumbs
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        
+
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories')
-           ->addBreadcrumb(__('HiPay'), __('HiPay'))
-           ->addBreadcrumb(__('Mapping shipping'), __('Create mapping shipping'));
+            ->addBreadcrumb(__('HiPay'), __('HiPay'))
+            ->addBreadcrumb(__('Mapping shipping'), __('Create mapping shipping'));
 
         return $resultPage;
     }
@@ -83,11 +92,11 @@ class Edit extends \Magento\Backend\App\Action
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('mapping_shipping_id');
-        $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\MappingShipping');
+        $model = $this->mappingShippingFactory->create();
 
         // 2. Initial checking
         if ($id) {
-            $model->load($id);
+            $model->getResource()->load($model, $id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This mapping no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

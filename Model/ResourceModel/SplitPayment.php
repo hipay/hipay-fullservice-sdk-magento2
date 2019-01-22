@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
-
 /**
  * Split Payment Resource Model
  *
@@ -27,17 +26,15 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel;
  */
 class SplitPayment extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-	
-	/**
-	 * Initialize main table and table id field
-	 *
-	 * @return void
-	 * @codeCoverageIgnore
-	 */
-	protected function _construct()
-	{
-		$this->_init('hipay_split_payment', 'split_payment_id');
-	}
-	
-  
+
+    /**
+     * Initialize main table and table id field
+     *
+     * @return void
+     * @codeCoverageIgnore
+     */
+    protected function _construct()
+    {
+        $this->_init('hipay_split_payment', 'split_payment_id');
+    }
 }

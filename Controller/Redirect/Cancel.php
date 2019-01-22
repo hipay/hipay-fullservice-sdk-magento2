@@ -28,49 +28,85 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Cancel extends Fullservice {
-	
-	
-	/**
-	 * @return void
-	 * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-	 * */
-	public function execute(){
-		
-		$lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
-		if($lastOrderId){
-			/** @var $order  \Magento\Sales\Model\Order */
-			$order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($lastOrderId);
-			if($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')){
-				
-				/* @var $cart \Magento\Checkout\Model\Cart */
-				$cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-				$items = $order->getItemsCollection();
-				foreach ($items as $item) {
-					try {
-						$cart->addOrderItem($item);
-					} catch (\Magento\Framework\Exception\LocalizedException $e) {
-						if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-							$this->messageManager->addNotice($e->getMessage());
-						} else {
-							$this->messageManager->addError($e->getMessage());
-						}
+class Cancel extends Fullservice
+{
+    /**
+     * @var \Magento\Sales\Model\OrderFactory
+     */
+    private $orderFactory;
 
-					} catch (\Exception $e) {
-						$this->messageManager->addException($e, __('We can\'t add this item to your shopping cart right now.'));
+    /**
+     * Cancel constructor.
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Session\Generic $hipaySession
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Framework\Session\Generic $hipaySession,
+        \Psr\Log\LoggerInterface $logger,
+        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+        \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory,
+        \Magento\Sales\Model\OrderFactory $orderFactory
+    ) {
+        $this->orderFactory = $orderFactory;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $hipaySession,
+            $logger,
+            $gatewayManagerFactory,
+            $vaultManagerFactory
+        );
+    }
 
-					}
-				}
-				
-				$cart->save();
-			}
-		}
-		
-		$this->messageManager->addNoticeMessage(__('Your order was canceled.'));
-		
-		$this->_redirect('checkout/cart');
-		
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * */
+    public function execute()
+    {
 
-	}
-	
+        $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
+        if ($lastOrderId) {
+            /** @var $order  \Magento\Sales\Model\Order */
+            $order = $this->orderFactory->create();
+            $order->getResource()->load($order, $lastOrderId);
+            if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
+                /** @var $cart \Magento\Checkout\Model\Cart **/
+                $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+                $items = $order->getItemsCollection();
+                foreach ($items as $item) {
+                    try {
+                        $cart->addOrderItem($item);
+                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
+                            $this->messageManager->addNotice($e->getMessage());
+                        } else {
+                            $this->messageManager->addError($e->getMessage());
+                        }
+                    } catch (\Exception $e) {
+                        $this->messageManager->addException(
+                            $e,
+                            __('We can\'t add this item to your shopping cart right now.')
+                        );
+                    }
+                }
+
+                $cart->save();
+            }
+        }
+
+        $this->messageManager->addNoticeMessage(__('Your order was canceled.'));
+
+        $this->_redirect('checkout/cart');
+    }
 }

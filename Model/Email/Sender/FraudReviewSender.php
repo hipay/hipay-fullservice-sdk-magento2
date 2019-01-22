@@ -64,18 +64,18 @@ class FraudReviewSender extends Sender
      */
     protected $eventManager;
 
-	/**
-	 * 
-	 * @param Template $templateContainer
-	 * @param FraudReviewIdentity $identityContainer
-	 * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
-	 * @param \Psr\Log\LoggerInterface $logger
-	 * @param Renderer $addressRenderer
-	 * @param PaymentHelper $paymentHelper
-	 * @param OrderResource $orderResource
-	 * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-	 * @param ManagerInterface $eventManager
-	 */
+    /**
+     *
+     * @param Template $templateContainer
+     * @param FraudReviewIdentity $identityContainer
+     * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
+     * @param PaymentHelper $paymentHelper
+     * @param OrderResource $orderResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param ManagerInterface $eventManager
+     */
     public function __construct(
         Template $templateContainer,
         FraudReviewIdentity $identityContainer,
@@ -98,7 +98,7 @@ class FraudReviewSender extends Sender
     /**
      * Sends Reviewed Fraud email to the customer.
      *
-     * Email will be sent immediately 
+     * Email will be sent immediately
      *
      * @param Order $order
      * @return bool
@@ -106,9 +106,9 @@ class FraudReviewSender extends Sender
     public function send(Order $order)
     {
 
-    	if ($this->checkAndSend($order)) {
-       		return true;
-       	}
+        if ($this->checkAndSend($order)) {
+            return true;
+        }
 
         return false;
     }

@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
 
 /**
  * Sofort Card Model payment method
@@ -28,7 +27,6 @@ use HiPay\FullserviceMagento\Model\FullserviceMethod;
  */
 class Przelewy24Api extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_przelewy24api';
 
     /**

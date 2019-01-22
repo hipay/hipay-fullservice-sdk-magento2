@@ -39,15 +39,18 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
      */
     protected $paymenLinkSender;
 
+    protected $responseFactory;
+
     /**
-     * Constructor
-     *
+     * SendHostedPaymentLinkObserver constructor.
+     * @param \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
      */
     public function __construct(
-        \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
-    )
-    {
+        \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender,
+        \Magento\Framework\App\ResponseFactory $responseFactory
+    ) {
         $this->paymenLinkSender = $paymenLinkSender;
+        $this->responseFactory = $responseFactory;
     }
 
     /**
@@ -58,11 +61,16 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
-        /* @var $order \Magento\Sales\Model\Order */
+
+        /** @var $order \Magento\Sales\Model\Order */
         $order = $observer->getEvent()->getData('order');
         $url = $order->getPayment()->getAdditionalInformation('redirectUrl');
 
-        if ($url && (strpos($order->getPayment()->getMethod(), 'hipay_hosted') !== false)) {
+        if ($url && (strpos($order->getPayment()->getMethod(), 'hipay_hostedmoto') !== false)) {
+            if (!$order->getPayment()->getData('method_instance')->isSendMailToCustomer()) {
+                $this->responseFactory->create()->setRedirect($url)->sendResponse(); //Redirect to HiPay hosted page
+                die(); //This will stop execution and redirect to specific page
+            }
             $this->paymenLinkSender->send($order);
         }
 

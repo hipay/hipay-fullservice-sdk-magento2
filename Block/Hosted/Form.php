@@ -33,17 +33,12 @@ class Form extends \Magento\Payment\Block\Form
      */
     protected $_template = 'HiPay_FullserviceMagento::form/hosted.phtml';
 
-
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $data
+     * @return mixed
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        array $data = []
-    )
+    public function isSendMailToCustomer()
     {
-        parent::__construct($context, $data);
+        return $this->getMethod()->isSendMailToCustomer();
     }
-
 }

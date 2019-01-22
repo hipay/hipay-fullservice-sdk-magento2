@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-
 /**
  * Source model for Categories Magento
  *
@@ -29,14 +28,14 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
 {
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $collectionFactory
+     * CategoriesMagento constructor.
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-                                \Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    ) {
         $this->categoryCollectionFactory = $categoryCollectionFactory;
         $this->storeManager = $storeManager;
     }
@@ -44,22 +43,19 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
     /**
      * Options getter
      *
-     * @param int $level Default 2
      * @return array
-     *
      */
-    public function toOptionArray($level = 2)
+    public function toOptionArray()
     {
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
         $collection = $this->getCategoryTree($storeId, $rootId);
         $options = [];
         foreach ($collection as $category) {
-            $options[] = array('value'=>$category->getId(),'label'=> $category->getName());
+            $options[] = array('value' => $category->getId(), 'label' => $category->getName());
         }
         return $options;
     }
-
 
     /**
      * Get Category Tree
@@ -82,4 +78,4 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
         $collection->addOrderField('name');
         return $collection;
     }
-    }
+}

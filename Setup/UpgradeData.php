@@ -64,5 +64,4 @@ class UpgradeData implements UpgradeDataInterface
 
         $setup->endSetup();
     }
-
 }

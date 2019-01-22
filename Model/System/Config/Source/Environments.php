@@ -36,7 +36,7 @@ class Environments implements \Magento\Framework\Option\ArrayInterface
     {
         return $this->getEnvironments();
     }
-    
+
     /**
      * Environments source getter
      *
@@ -44,11 +44,11 @@ class Environments implements \Magento\Framework\Option\ArrayInterface
      */
     public function getEnvironments()
     {
-    	$envs = [
-    			ConfigSDK::API_ENV_STAGE => __('Stage'),
-    			ConfigSDK::API_ENV_PRODUCTION => __('Production'),
-    	];
-    
-    	return $envs;
+        $envs = [
+            ConfigSDK::API_ENV_STAGE => __('Stage'),
+            ConfigSDK::API_ENV_PRODUCTION => __('Production'),
+        ];
+
+        return $envs;
     }
 }

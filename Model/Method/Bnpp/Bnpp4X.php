@@ -56,6 +56,4 @@ class Bnpp4X extends AbstractBnpp
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
 }

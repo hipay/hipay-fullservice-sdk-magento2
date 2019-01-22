@@ -31,7 +31,8 @@ $formData = [
 		"code" => $code,
 		"env" => $block->getEnv(),
 		'apiUsername' => $block->getApiUsername(),
-		'apiPassword' => $block->getApiPassword()
+		'apiPassword' => $block->getApiPassword(),
+        'sdkJsUrl' => $block->getSdkJsUrl()
 ];
 
 $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($formData);
@@ -42,7 +43,20 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
           
           <input type="hidden" name="payment[card_token]" id="<?php /* @noEscape */ echo $code; ?>_card_token" value="" />
           <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */ echo $code; ?>_eci" value="1" />
-          
+
+    <div class="field-number admin__field _required">
+        <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_owner">
+            <span><?php echo $block->escapeHtml(__('Card Owner Name')); ?></span>
+        </label>
+        <div class="admin__field-control">
+            <input type="text" id="<?php /* @noEscape */ echo $code; ?>_cc_owner"
+                   name="payment[cc_owner]"
+                   title="<?php echo $block->escapeHtml(__('Card Owner Name')); ?>"
+                   class="input-text admin__control-text"
+                   value="<?php /* @noEscape */ echo $block->getInfoData('cc_owner'); ?>"
+            />
+        </div>
+    </div>
     <div class="field-type admin__field _required">
         <label class="admin__field-label" for="<?php /* @noEscape */ echo $code; ?>_cc_type">
             <span><?php echo $block->escapeHtml(__('Credit Card Type')); ?></span>
@@ -110,7 +124,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
             </label>
             <div class="admin__field-control">
                 <input type="text" title="<?php echo $block->escapeHtml(__('Card Verification Number')); ?>"
-                       class="required-entry validate-cc-cvn admin__control-cvn admin__control-text"
+                       class="validate-cc-cvn admin__control-cvn admin__control-text"
                        id="<?php /* @noEscape */ echo $code; ?>_cc_cid"
                        name="payment[cc_cid]" value="<?php /* @noEscape */ echo $block->getInfoData('cc_cid') ?>"/>
             </div>

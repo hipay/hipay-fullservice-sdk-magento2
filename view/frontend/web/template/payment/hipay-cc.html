@@ -40,8 +40,8 @@
                 'context': context(),
                 'gateway': getCode(),
             }, 'validation':[]}">
-			<input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
 
+            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
 			<fieldset data-bind="attr: {class: 'fieldset payment items ccard ' + getCode(), id: 'payment_form_' + getCode()}">
 				 <!-- ko if: (useOneclick() && customerHasCard()) -->
                 <div>
@@ -68,7 +68,7 @@
 			        <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
 			    </legend><br />
 			    <!-- /ko -->
-			    <!-- ko if: (getDisplayCardOwner())-->
+
 			    <div class="field cc-owner number required" data-bind="attr: {id: getCode() + '_cc_owner_div'},visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_owner'}" class="label">
 			            <span><!-- ko i18n: 'Card Owner Name'--><!-- /ko --></span>
@@ -87,7 +87,7 @@
 			                        value: creditCardOwner" />
 			        </div>
 			    </div>
-			    <!-- /ko -->
+
 			    <div class="field number required" data-bind="visible: showCcForm">
 			        <label data-bind="attr: {for: getCode() + '_cc_number'}" class="label">
 			            <span><!-- ko i18n: 'Credit Card Number'--><!-- /ko --></span>
@@ -176,8 +176,9 @@
 			            </div>
 			        </div>
 			    </div>
+
 			    <!-- ko if: (hasVerification())-->
-			    <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'},visible: showCcForm">
+			    <div class="field cvv required" data-bind="attr: {id: getCode() + '_cc_type_cvv_div'},visible: showCVV">
 			        <label data-bind="attr: {for: getCode() + '_cc_cid'}" class="label">
 			            <span><!-- ko i18n: 'Card Verification Number'--><!-- /ko --></span>
 			        </label>
@@ -190,8 +191,7 @@
 			                   data-bind="attr: {id: getCode() + '_cc_cid',
 			                        title: $t('Card Verification Number'),
 			                        'data-container': getCode() + '-cc-cvv',
-			                        'data-validate': JSON.stringify({'required-number':true, 'validate-card-cvv':'#' + getCode() + '_cc_type'})},
-			                        enable: isActive($parents),
+			                        'data-validate': JSON.stringify({'validate-cvv-hipay':'#' + getCode() + '_cc_type'})},
 			                        value: creditCardVerificationNumber" />
 			            <div class="field-tooltip toggle">
 			                <span class="field-tooltip-action action-cvv"

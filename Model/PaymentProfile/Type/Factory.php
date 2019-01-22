@@ -33,7 +33,6 @@ class Factory
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_objectManager = null;
-    
 
     /**
      * Factory constructor

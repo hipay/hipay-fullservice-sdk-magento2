@@ -15,10 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
-use HiPay\FullserviceMagento\Model\HostedMethod;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
@@ -36,7 +34,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 class HostedSplitMethod extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hostedsplit';
 
     /**
@@ -58,11 +55,12 @@ class HostedSplitMethod extends HostedMethod
     protected $_canUseInternal = false;
 
     /**
-     *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     * HostedSplitMethod constructor.
+     * @param TransactionRepository $transactionRepository
+     * @param Context $context
      * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -79,7 +77,6 @@ class HostedSplitMethod extends HostedMethod
         $this->profileFactory = $profileFactory;
     }
 
-
     protected function getAddtionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
@@ -87,7 +84,6 @@ class HostedSplitMethod extends HostedMethod
 
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
     {
-
         $payment = $order->getPayment();
         $profileId = $payment->getAdditionalInformation('profile_id');
         $profile = $this->getProfile($profileId);
@@ -99,7 +95,7 @@ class HostedSplitMethod extends HostedMethod
 
         $splitAmounts = $profile->splitAmount($amounts);
 
-        if (!is_array($splitAmounts) || !count($splitAmounts)) {
+        if (!is_array($splitAmounts) || empty($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
         }
         $firstSplit = current($splitAmounts);
@@ -114,7 +110,6 @@ class HostedSplitMethod extends HostedMethod
             $hppModel = $gateway->requestHostedPaymentPage();
             $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
         }
-
     }
 
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
@@ -131,17 +126,14 @@ class HostedSplitMethod extends HostedMethod
             }
 
             $splitAmounts = $profile->splitAmount($amounts);
-            if (!is_array($splitAmounts) || !count($splitAmounts)) {
+            if (!is_array($splitAmounts) || empty($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }
             $firstSplit = current($splitAmounts);
             $amount = (float)$firstSplit['amountToPay'];
-
         }
 
         return parent::manualCapture($payment, $amount);
-
-
     }
 
     /**
@@ -152,17 +144,15 @@ class HostedSplitMethod extends HostedMethod
      */
     protected function getProfile($profileId)
     {
-
         if (empty($profileId)) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
-        $profile = $this->profileFactory->create()->load($profileId);
+        $profile = $this->profileFactory->create();
+        $profile->getResource()->load($profile, $profileId);
         if (!$profile->getId()) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }
 
         return $profile;
     }
-
-
 }

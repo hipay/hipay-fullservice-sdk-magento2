@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\HostedMethod;
 
 /**
  * Dexia Model payment method
@@ -57,6 +56,4 @@ class Dexia extends HostedMethod
      * @var bool
      */
     protected $_canUseInternal = false;
-
-
 }

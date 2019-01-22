@@ -111,15 +111,6 @@ define(
                 };
             },
 
-            /**
-             *  Get module configuration
-             *
-             * @returns {*}
-             */
-            useElectronicSignature: function(){
-                return window.checkoutConfig.payment.hiPayFullservice.useElectronicSignature[this.getCode()];
-            },
-
             initialize: function(){
                 this._super();
             },
@@ -138,12 +129,7 @@ define(
             afterPlaceOrder: function () {
                 var self = this;
 
-                if(this.useElectronicSignature()){
-                    this.redirectAfterPlaceOrder = false;
-                    $.mage.redirect(this.getAfterPlaceOrderUrl());
-                }else{
-                    this.redirectAfterPlaceOrder = true;
-                }
+                this.redirectAfterPlaceOrder = true;
             },
 
             /**

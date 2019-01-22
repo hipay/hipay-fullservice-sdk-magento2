@@ -1,9 +1,9 @@
-magento2:
+web:
   env_file:
-    - ./bin/conf/development/mage.env.sample
-    - ./bin/conf/development/auth.env
-    - ./bin/conf/development/module.env.sample
-    - ./bin/conf/development/hipay.env
+    - ./bin/docker/conf/development/mage.env.sample
+    - ./bin/docker/conf/development/auth.env
+    - ./bin/docker/conf/development/module.env.sample
+    - ./bin/docker/conf/development/hipay.env
   ports:
     - "8096:80"
   volumes:
@@ -12,6 +12,7 @@ magento2:
     - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc
     - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper
     - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model
+    - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console
     - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer
     - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin
     - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui
@@ -26,9 +27,22 @@ magento2:
     - ./tests:/var/www/html/magento2/tests
     - ./log:/home/magento2/var/log
     - ./conf/sdk:/var/www/html/magento2/sdk
-db:
+  dockerfile: ./bin/docker/images/default/Dockerfile
+  build: .
+  links:
+    - database
+    - smtp
+database:
+  image: mysql:5.6
+  environment:
+    - MYSQL_ROOT_PASSWORD=magento2
   ports:
     - "3308:3306"
   volumes:
     - ./data/mysql:/var/lib/mysql
+smtp:
+  container_name: magento2-hipay-smtp
+  image: hipay/mailcatcher:1.0.0
+  ports:
+    - "1096:80"
 

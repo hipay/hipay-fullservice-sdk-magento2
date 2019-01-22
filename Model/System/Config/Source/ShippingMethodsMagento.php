@@ -15,7 +15,6 @@
  */
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
-
 /**
  * Source model for Magento
  *
@@ -33,7 +32,6 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
      */
     protected $_config_shipping;
 
-
     /**
      * Core store config
      *
@@ -42,19 +40,21 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
     protected $_scopeConfig;
 
     /**
-     * Constructor
+     * ShippingMethodsMagento constructor.
      *
-     * @param \Magento\Shipping\Helper\Carrier  $collectionFactory
+     * @param \Magento\Shipping\Model\Config $configShipping
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
-    public function __construct(\Magento\Shipping\Model\Config $configShipping,
-                                \Magento\Store\Model\StoreManagerInterface $storeManager,
-                                \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
-    {
-        $this->_config_shipping  = $configShipping;
+    public function __construct(
+        \Magento\Shipping\Model\Config $configShipping,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+    ) {
+        $this->_config_shipping = $configShipping;
         $this->storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
     }
-
 
     /**
      * Return Shipping methods available in all store
@@ -67,15 +67,22 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
         $carriers = $this->_config_shipping->getActiveCarriers();
         foreach ($carriers as $carrier) {
             $methods = $carrier->getAllowedMethods();
-            foreach($methods as $code => $method) {
+            foreach ($methods as $code => $method) {
                 if (is_object($method)) {
-                    $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method->getText());
-                } else if (!empty($method)) {
-                    $options[] = array('value' => $carrier->getId() . '_' . $code, 'label' => $carrier->getId() .' - ' .  $method);
+                    $options[] = array(
+                        'value' => $carrier->getId() . '_' . $code,
+                        'label' => $carrier->getId() . ' - ' . $method->getText()
+                    );
+                } else {
+                    if (!empty($method)) {
+                        $options[] = array(
+                            'value' => $carrier->getId() . '_' . $code,
+                            'label' => $carrier->getId() . ' - ' . $method
+                        );
+                    }
                 }
             }
         }
         return $options;
     }
-
 }

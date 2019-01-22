@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Gateway;
 
-
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
@@ -27,7 +26,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
-
 
 /**
  * Gateway Manager Class
@@ -115,7 +113,6 @@ class Manager
         SearchCriteriaBuilder $searchCriteriaBuilder,
         TransactionRepositoryInterface $repository,
         $params = []
-
     ) {
         $this->_logger = $logger;
         $this->_configFactory = $configFactory;
@@ -171,7 +168,6 @@ class Manager
         return $this->_config;
     }
 
-
     /**
      *
      */
@@ -204,8 +200,6 @@ class Manager
      */
     public function requestNewOrder()
     {
-
-        //Merge params
         $params = $this->_getRequestParameters();
         $params['params']['operation'] = 'Authorization';
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
@@ -225,15 +219,14 @@ class Manager
         //If is admin area set mo/to value to payment additionnal informations
         if ($this->getConfiguration()->isAdminArea()) {
             $this->_order->getPayment()->setAdditionalInformation('is_moto', 1);
-            $this->_order->save();
+            $this->_order->getResource()->save($this->_order);
         }
-
 
         return $transaction;
     }
 
     /**
-     *
+     * @param null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationCapture($amount = null)
@@ -242,7 +235,7 @@ class Manager
     }
 
     /**
-     *
+     * @param null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationRefund($amount = null)
@@ -256,7 +249,6 @@ class Manager
      */
     public function requestOperationAcceptChallenge()
     {
-
         return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);
     }
 
@@ -266,10 +258,8 @@ class Manager
      */
     public function requestOperationDenyChallenge()
     {
-
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
     }
-
 
     /**
      * @return mixed
@@ -286,7 +276,6 @@ class Manager
         return $tr;
     }
 
-
     protected function _getPaymentMethodRequest()
     {
         $className = $this->_methodInstance->getConfigData('payment_method');
@@ -296,13 +285,11 @@ class Manager
     }
 
     /**
-     *
      * @param \HiPay\Fullservice\Request\RequestInterface $request
-     * @return []
+     * @return array
      */
     protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request)
     {
-
         return (new RequestSerializer($request))->toArray();
     }
 
@@ -318,7 +305,7 @@ class Manager
 
     protected function _getRequestObject($requestClassName, array $params = null)
     {
-        if (is_null($params)) {
+        if ($params === null) {
             $params = $this->_getRequestParameters();
         }
         return $this->_requestFactory->create($requestClassName, $params)->getRequestObject();
@@ -344,16 +331,21 @@ class Manager
     protected function _requestOperation($operationType, $amount = null, $operationId = null)
     {
         $transactionReference = $this->cleanTransactionValue($this->_getPayment()->getCcTransId());
-        if (is_null($operationId)) {
+        if ($operationId === null) {
             $incrementTransaction = $this->countByTransactionsType($operationType, $this->_getPayment()->getId());
             $incrementTransaction++;
             $this->_getPayment()->setTransactionAdditionalInfo('increment_id', $incrementTransaction);
-            $operationId = $this->_order->getIncrementId() . "-" . $operationType . "-manual-" . intval(
-                    $incrementTransaction
-                );
+            $operationId = $this->_order->getIncrementId()
+                . "-" . $operationType . "-manual-"
+                . (int)$incrementTransaction;
         }
 
         $this->_getPayment()->setTransactionId($operationId);
+
+        if ($operationType== Operation::REFUND) {
+            $this->_getPayment()->getCreditMemo()->setTransactionId($operationId);
+        }
+
         $params = $this->_getRequestParameters();
         $params['params']['operation'] = $operationType;
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
@@ -371,7 +363,6 @@ class Manager
         );
         return $opModel;
     }
-
 
     /**
      * @param int $transactionType

@@ -22,7 +22,9 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\Gateway\Model\Cart\Cart as Cart;
 use HiPay\Fullservice\Gateway\Model\Cart\Item as Item;
 use HiPay\Fullservice\Enum\Cart\TypeItems;
+use HiPay\Fullservice\Enum\Transaction\Operation;
 use Magento\Setup\Exception;
+use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Commmon Request Object
@@ -57,7 +59,6 @@ abstract class CommonRequest extends BaseRequest
      */
     protected $_paymentMethod;
 
-
     protected $_ccTypes = array(
         'VI' => 'visa',
         'AE' => 'american-express',
@@ -74,7 +75,6 @@ abstract class CommonRequest extends BaseRequest
      * @var \Magento\Weee\Helper\Data
      */
     protected $weeeHelper;
-
 
     /**
      * @var
@@ -103,16 +103,16 @@ abstract class CommonRequest extends BaseRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
-        \Magento\Framework\Url $urlBuilder,
+        \Magento\Framework\UrlInterface $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
         \Magento\Weee\Helper\Data $weeeHelper,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
-        \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory $mappingCategoriesCollectionFactory,
+        CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
     ) {
@@ -138,15 +138,18 @@ abstract class CommonRequest extends BaseRequest
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (isset($params['paymentMethod']) && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest) {
+        if (isset($params['paymentMethod'])
+            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
+        ) {
             $this->_paymentMethod = $params['paymentMethod'];
         } else {
-            throw new \Exception('Object Request PaymentMethod instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Object Request PaymentMethod instance is required.')
+            );
         }
-
     }
 
     /**
@@ -159,7 +162,6 @@ abstract class CommonRequest extends BaseRequest
     {
         return str_ireplace("'", "&apos;", $string);
     }
-
 
     /**
      *  Build an Cart Json
@@ -182,6 +184,7 @@ abstract class CommonRequest extends BaseRequest
         $cart = new Cart();
         $items = $cartFactory->getAllItems($useOrderCurrency);
         foreach ($items as $item) {
+            $itemHipay = null;
             $reference = $item->getDataUsingMethod('reference');
             $name = $item->getDataUsingMethod('name');
             $amount = $item->getDataUsingMethod('amount');
@@ -196,16 +199,16 @@ abstract class CommonRequest extends BaseRequest
                     $product = $this->_productRepositoryInterface->get($reference);
                     $description = $product->getCustomAttribute('description');
                     $itemHipay = new Item();
-                    $itemHipay->setName($name)
-                        ->setProductReference($reference)
-                        ->setType(TypeItems::GOOD)
-                        ->setQuantity($qty)
-                        ->setUnitPrice($price)
-                        ->setTaxRate($taxPercent)
-                        ->setDiscount($discount)
-                        ->setTotalAmount($amount)
-                        ->setProductDescription($this->escapeHtmlToJson($description->getValue()))
-                        ->setProductCategory($this->getMappingCategory($product));
+                    $itemHipay->setName($name);
+                    $itemHipay->setProductReference($reference);
+                    $itemHipay->setType(TypeItems::GOOD);
+                    $itemHipay->setQuantity($qty);
+                    $itemHipay->setUnitPrice($price);
+                    $itemHipay->setTaxRate($taxPercent);
+                    $itemHipay->setDiscount($discount);
+                    $itemHipay->setTotalAmount($amount);
+                    $itemHipay->setProductDescription($this->escapeHtmlToJson($description->getValue()));
+                    $itemHipay->setProductCategory($this->getMappingCategory($product));
 
                     // Set Specifics informations as EAN
                     if (!empty($this->_config->getEanAttribute())) {
@@ -226,6 +229,9 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
+                    if (in_array($operation, array(Operation::REFUND, Operation::CAPTURE)) && $amount == 0) {
+                        break;
+                    }
                     $itemHipay = Item::buildItemTypeFees(
                         $reference,
                         $name,
@@ -236,18 +242,20 @@ abstract class CommonRequest extends BaseRequest
                     );
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
+
             }
 
-            $cart->addItem($itemHipay);
+            if ($itemHipay) {
+                $cart->addItem($itemHipay);
+            }
         }
 
         if (!$cartFactory->isAmountAvailable()) {
-            throw new \Exception('Amount for line items is not correct.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Amount for line items is not correct.'));
         }
 
         return $cart->toJson();
     }
-
 
     /**
      *  Get mapping from Magento category for Hipay compliance
@@ -272,16 +280,17 @@ abstract class CommonRequest extends BaseRequest
                     break;
                 }
                 // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)
-                $category = $this->_categoryFactory->create()->load($idCategory);
+                $category = $this->_categoryFactory->create();
+                $category->getResource()->load($category, $idCategory);
                 $parentId = $category->getParentId();
-                if (is_null($category->getParentId()) || $parentId == 1) {
+                if ($parentId === null || $parentId == 1) {
                     break;
                 }
-                $category = $this->_categoryFactory->create()->load($category->getParentId());
+                $category = $this->_categoryFactory->create();
+                $category->getResource()->load($category, $parentId);
                 $idCategory = $category->getId();
             }
         }
         return $mapping_id;
     }
-
 }

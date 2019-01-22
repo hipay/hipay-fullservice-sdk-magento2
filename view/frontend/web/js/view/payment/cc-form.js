@@ -36,7 +36,10 @@ define(
                 creditCardSsStartYear: '',
                 creditCardVerificationNumber: '',
                 selectedCardType: null,
-                creditCardOwner: ''
+                creditCardOwner: '',
+                showCVV: true,
+                hipaySdk: null,
+                locale: ""
             },
 
             initObservable: function () {
@@ -50,14 +53,39 @@ define(
                         'creditCardSsStartMonth',
                         'creditCardSsStartYear',
                         'selectedCardType',
-                        'creditCardOwner'
+                        'creditCardOwner',
+                        'showCVV',
+                        'domReady!'
                     ]);
                 return this;
+            },
+
+            initHiPayConfiguration: function(initCallback) {
+                var self =this;
+                var lang = 'en';
+
+                if (self.locale &&
+                    self.locale.length > 2) {
+                    lang = self.locale.substr(0, 2);
+                }
+
+                self.hipaySdk = HiPay({
+                    username: self.apiUsernameTokenJs,
+                    password: self.apiPasswordTokenJs,
+                    environment: self.env,
+                    lang: lang
+                });
+
+                if (initCallback) {
+                    initCallback(self);
+                }
             },
 
             initialize: function() {
                 var self = this;
                 this._super();
+
+                this.initHiPayConfiguration();
 
                 //Set credit card number to credit card data object
                 this.creditCardNumber.subscribe(function(value) {
@@ -73,6 +101,7 @@ define(
                         return false;
                     }
                     if (result.card !== null) {
+                        self.showCVV(self.isCreditCardTypeNeedCVV(value));
                         self.selectedCardType(result.card.type);
                         creditCardData.creditCard = result.card;
                     }
@@ -97,6 +126,10 @@ define(
                 this.creditCardVerificationNumber.subscribe(function(value) {
                     creditCardData.cvvCode = value;
                 });
+            },
+
+            isCreditCardTypeNeedCVV: function(cardNumber) {
+                return !(new RegExp('^(6703)[0-9]{8,15}$').test(cardNumber));
             },
 
             getCode: function() {
@@ -125,11 +158,6 @@ define(
             },
             getCcAvailableTypes: function() {
                 return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
-            },
-            getIcons: function (type) {
-                return window.checkoutConfig.payment.hipayCc.icons.hasOwnProperty(type)
-                    ? window.checkoutConfig.payment.hipayCc.icons[type]
-                    : false
             },
             getCcMonths: function() {
                 return window.checkoutConfig.payment.ccform.months[this.getCode()];
@@ -187,6 +215,20 @@ define(
                     }
                 });
             },
+
+            /**
+             *  Get global fingerprint  on dom load of checkout
+             *
+             * @returns {*}
+             */
+            getFingerprint: function () {
+                if ($('#ioBB')) {
+                    return $('#ioBB').val();
+                } else {
+                    return '';
+                }
+            },
+
             isShowLegend: function() {
                 return false;
             },

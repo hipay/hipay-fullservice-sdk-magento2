@@ -40,7 +40,7 @@ namespace HiPay\FullserviceMagento\Model;
  * @method string getCclast4()
  * @method \HiPay\FullserviceMagento\Model\Card setCclast4(string $cclast4)
  * @method string getCcOwner()
- * @method \HiPay\FullserviceMagento\Model\Card setCcOwner((string $ccOwner)
+ * @method \HiPay\FullserviceMagento\Model\Card setCcOwner(string $ccOwner)
  * @method string getCcType()
  * @method \HiPay\FullserviceMagento\Model\Card setCcType(string $ccType)
  * @method string getCcNumberEnc()
@@ -62,28 +62,6 @@ class Card extends \Magento\Framework\Model\AbstractModel
     const STATUS_ENABLED = 1;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    )
-    {
-
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-
-    /**
      * Init resource model and id field
      */
     protected function _construct()
@@ -92,5 +70,4 @@ class Card extends \Magento\Framework\Model\AbstractModel
         $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\Card');
         $this->setIdFieldName('card_id');
     }
-
 }

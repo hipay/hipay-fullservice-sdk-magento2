@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="HiPay\FullserviceMagento\Test\TestCase\HostedNoIframeTest" summary="Guest Checkout Using HiPay fullservice Hosted Method and Offline Shipping Method"
->
-        <variation name="HostedNoIframeTestVariation1" summary="Guest Checkout Using HiPay fullservice Hosted Method and Offline Shipping Method">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="HiPay\FullserviceMagento\Test\TestCase\HostedNoIframeTest"
+              summary="Guest Checkout Using HiPay fullservice Hosted Method and Offline Shipping Method"
+    >
+        <variation name="HostedNoIframeTestVariation1"
+                   summary="Guest Checkout Using HiPay fullservice Hosted Method and Offline Shipping Method">
             <data name="product" xsi:type="string">catalogProductSimple::default</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="customer/dataset" xsi:type="string">default</data>
@@ -22,9 +25,9 @@
             </data>
             <data name="payment/method" xsi:type="string">hipay_hosted</data>
             <!-- <data name="configData" xsi:type="string">hipay_hosted</data> -->
-            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal"/>
+            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory"/>
         </variation>
     </testCase>
 </config>

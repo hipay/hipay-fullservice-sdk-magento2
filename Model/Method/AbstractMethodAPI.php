@@ -2,9 +2,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use Braintree\Exception;
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
-use HiPay\FullserviceMagento\Model\CcMethod;
 use Magento\Framework\Exception\LocalizedException;
 use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 
@@ -70,7 +67,6 @@ abstract class AbstractMethodAPI extends FullserviceMethod
         $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
         $stateObject->setStatus('pending_payment');
         $stateObject->setIsNotified(false);
-
     }
 
     /**
@@ -94,5 +90,4 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     {
         $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
     }
-
 }

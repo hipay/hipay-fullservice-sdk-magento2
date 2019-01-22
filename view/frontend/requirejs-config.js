@@ -19,10 +19,8 @@
 var config = {
     map: {
         '*': {
-            transparent: 'Magento_Payment/transparent',
-            hipay_tpp: 'HiPay_FullserviceMagento/js/hipay-tpp',
-            reqwest: 'HiPay_FullserviceMagento/js/reqwest',
-            card: 'HiPay_FullserviceMagento/card'
+            card: 'HiPay_FullserviceMagento/card',
+            validation: 'HiPay_FullserviceMagento/js/validation'
         }
     },
     config: {

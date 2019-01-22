@@ -1,3 +1,60 @@
+ # 1.4.2
+  - Fix multi_use for one-click
+  - Fix Magento 2.3 compliance
+  
+# 1.4.1
+  - Fix entity name for new magento checks
+  - Fix Magento 2.3 compliance
+  
+ # 1.4.0
+ - **Add Payment Method Hosted Fields** 
+ 
+ # 1.3.4
+ - Fix cvv not mandatory for Maestro card
+ - Add command to convert data serialized to json 
+ 
+If you are migrating Magento from 2.1.X to 2.2.X and have defined 3DS or OneClick rules, you will need to run the new command to perform the migration.
+See: https://devdocs.magento.com/guides/v2.2/release-notes/backward-incompatible-changes/
+
+After your magento upgrade, execute in your magento directory:
+  
+     php bin/magento hipay:upgradeToJson
+ 
+
+# 1.3.3
+- Fix the exception with manual captures
+- Fix compilation error
+
+# 1.3.2
+
+- [#114](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/114) Fix issue #114 : Fatal error on failure order (#114)
+- Fix : Split payment AI method cannot be displayed alone
+
+# 1.3.1
+
+- Fix : Change refund workflow
+- Fix : Split payment status
+
+# 1.3.0
+
+- Add proxy settings (gateway requests)
+- Fix : SEPA remove electronic signature
+- Fix : partial refund
+
+# 1.2.2
+
+- Fix : Astropay payment method bug
+- Fix : Category mapping bug
+- Code rework/reformatting
+
+# 1.2.1
+
+- Fix : Api call wrongly formatted (gender)
+- Fix : Issue [#107](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/107)
+- Fix : Error on DI compilation [#113](https://github.com/hipay/hipay-fullservice-sdk-magento2/pull/113)
+- Add casperJS tests
+- Improve CI
+
 # 1.2.0
 
 - Add support for multi-currency payments

@@ -15,6 +15,8 @@
  */
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
+use Magento\Backend\App\Action;
+
 /**
  * Delete payment profile
  *
@@ -27,6 +29,23 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 class Delete extends \Magento\Backend\App\Action
 {
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
+     */
+    private $paymentProfileFactory;
+
+    /**
+     * Delete constructor.
+     * @param Action\Context $context
+     * @param \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
+     */
+    public function __construct(
+        Action\Context $context,
+        \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
+    ) {
+        $this->paymentProfileFactory = $paymentProfileFactory;
+        parent::__construct($context);
+    }
 
     /**
      * Delete action
@@ -43,10 +62,10 @@ class Delete extends \Magento\Backend\App\Action
             $title = "";
             try {
                 // init model and delete
-                $model = $this->_objectManager->create('HiPay\FullserviceMagento\Model\PaymentProfile');
-                $model->load($id);
+                $model = $this->paymentProfileFactory->create();
+                $model->getResource()->load($model, $id);
                 $title = $model->getName();
-                $model->delete();
+                $model->getResource()->delete($model);
                 // display success message
                 $this->messageManager->addSuccess(__('The payment profile has been deleted.'));
                 // go to grid

@@ -86,24 +86,33 @@ class SplitPaymentActions extends Column
                 $name = $this->getData('name');
                 if (isset($item['split_payment_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['split_payment_id' => $item['split_payment_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            $this->editUrl,
+                            ['split_payment_id' => $item['split_payment_id']]
+                        ),
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_DELETE, ['split_payment_id' => $item['split_payment_id']]),
+                        'href' => $this->urlBuilder->getUrl(
+                            self::SPLIT_URL_PATH_DELETE,
+                            ['split_payment_id' => $item['split_payment_id']]
+                        ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete %1','${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?','${ $.$data.name }')
+                            'title' => __('Delete %1', '${ $.$data.name }'),
+                            'message' => __('Are you sure you wan\'t to delete a %1 record?', '${ $.$data.name }')
                         ]
                     ];
                     $item[$name]['pay'] = [
-                    		'href' => $this->urlBuilder->getUrl(self::SPLIT_URL_PATH_PAY, ['split_payment_id' => $item['split_payment_id']]),
-                    		'label' => __('Pay'),
-                    		'confirm' => [
-                    				'title' => __('Pay %1','${ $.$data.amount_to_pay }'),
-                    				'message' => __('Are you sure you wan\'t to pay %1 ?','${ $.$data.amount_to_pay }')
-                    		]
+                        'href' => $this->urlBuilder->getUrl(
+                            self::SPLIT_URL_PATH_PAY,
+                            ['split_payment_id' => $item['split_payment_id']]
+                        ),
+                        'label' => __('Pay'),
+                        'confirm' => [
+                            'title' => __('Pay %1', '${ $.$data.amount_to_pay }'),
+                            'message' => __('Are you sure you wan\'t to pay %1 ?', '${ $.$data.amount_to_pay }')
+                        ]
                     ];
                 }
             }

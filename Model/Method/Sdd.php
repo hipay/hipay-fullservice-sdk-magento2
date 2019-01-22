@@ -16,13 +16,9 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-use HiPay\FullserviceMagento\Model\FullserviceMethod;
-use \HiPay\FullserviceMagento\Logger\Logger;
 use Magento\Framework\Exception\LocalizedException;
-use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use Zend\Validator;
 use Magento\Directory\Model;
-use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**
  * SDD Method
@@ -81,49 +77,22 @@ class Sdd extends FullserviceMethod
         'cc_type'
     ];
 
-
     /**
+     * Get Additional Information Keys
      *
-     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
-     * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @return array|string[]
      */
-    public function __construct(
-        TransactionRepository $transactionRepository,
-        \HiPay\FullserviceMagento\Model\Method\Context $context,
-        \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    )
-    {
-        parent::__construct($transactionRepository, $context, $resource, $resourceCollection, $data);
-
-        if ($this->getConfigData('electronic_signature')) {
-            $this->setIsInitializeNeeded(true);
-        }
-    }
-
-
     protected function getAddtionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
     }
 
-    public function place(\Magento\Payment\Model\InfoInterface $payment)
-    {
-        return parent::place($payment);
-    }
-
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject|mixed $data
+     * @param \Magento\Framework\DataObject $additionalData
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function _assignAdditionalInformation(\Magento\Framework\DataObject $additionalData)
     {
@@ -142,88 +111,43 @@ class Sdd extends FullserviceMethod
      */
     public function validate()
     {
-        /*
-        * calling parent validate function
-        */
+        /**
+         * Calling parent validate function
+         */
         parent::validate();
         $info = $this->getInfoInstance();
 
-        if (!$this->getConfigData('electronic_signature')) {
-            $errorMsg = '';
+        $errorMsg = '';
 
-            // Get iso code from order or quote ( Validate is called twice per magento core )
-            $order = $info->getQuote();
-            if ($info->getOrder()) {
-                $order = $info->getOrder();
+        // Get iso code from order or quote ( Validate is called twice per magento core )
+        $order = $info->getQuote();
+        if ($info->getOrder()) {
+            $order = $info->getOrder();
+        }
+
+        // Instantiate validators for the model
+        $validatorIban = new \Zend\Validator\Iban(
+            array('country_code' => $order->getBillingAddress()->getCountryId())
+        );
+        $validatorEmpty = new \Zend\Validator\NotEmpty();
+
+        if (!$validatorIban->isValid($info->getAdditionalInformation('sdd_iban'))) {
+            $errorMsg = __('Iban is not correct, please enter a valid Iban.');
+        } else {
+            if (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_firstname'))) {
+                $errorMsg = __('Firstname is mandatory.');
+            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_lastname'))) {
+                $errorMsg = _('Lastname is mandatory.');
+            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_code_bic'))) {
+                $errorMsg = __('Code BIC is not correct, please enter a valid Code BIC.');
+            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_bank_name'))) {
+                $errorMsg = __('Bank name is not correct, please enter a valid Bank name.');
             }
+        }
 
-            // Instantiate validators for the model
-            $validatorIban = new \Zend\Validator\Iban(array('country_code' => $order->getBillingAddress()->getCountryId()));
-            $validatorEmpty = new \Zend\Validator\NotEmpty();
-
-            if (!$validatorIban->isValid($info->getAdditionalInformation('sdd_iban'))) {
-                $errorMsg = __('Iban is not correct, please enter a valid Iban.');
-            } else {
-                if (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_firstname'))) {
-                    $errorMsg = __('Firstname is mandatory.');
-                } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_lastname'))) {
-                    $errorMsg = _('Lastname is mandatory.');
-                } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_code_bic'))) {
-                    $errorMsg = __('Code BIC is not correct, please enter a valid Code BIC.');
-                } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_bank_name'))) {
-                    $errorMsg = __('Bank name is not correct, please enter a valid Bank name.');
-                }
-            }
-
-            if ($errorMsg) {
-                throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
-            }
+        if ($errorMsg) {
+            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
         }
         return $this;
     }
-
-    /**
-     * Instantiate state and set it to state object
-     *
-     * @param string $paymentAction
-     * @param \Magento\Framework\DataObject $stateObject
-     * @return void
-     */
-    public function initialize($paymentAction, $stateObject)
-    {
-
-        $payment = $this->getInfoInstance();
-        $order = $payment->getOrder();
-        $order->setCanSendNewEmailFlag(false);
-        $payment->setAmountAuthorized($order->getTotalDue());
-        $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
-
-        $this->_setHostedUrl($order);
-
-        $stateObject->setState(\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT);
-        $stateObject->setStatus('pending_payment');
-        $stateObject->setIsNotified(false);
-
-    }
-
-    protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
-    {
-        $gateway = $this->_gatewayManagerFactory->create($order);
-
-        //Call fullservice api to get hosted page url
-        $hppModel = $gateway->requestNewOrder();
-        $order->getPayment()->setAdditionalInformation('redirectUrl', $hppModel->getForwardUrl());
-    }
-
-    /**
-     * Set initialization requirement state
-     *
-     * @param bool $isInitializeNeeded
-     * @return void
-     */
-    public function setIsInitializeNeeded($isInitializeNeeded = true)
-    {
-        $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
-    }
-
 }

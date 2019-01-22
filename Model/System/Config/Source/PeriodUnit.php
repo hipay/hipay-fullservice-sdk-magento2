@@ -29,7 +29,7 @@ use HiPay\FullserviceMagento\Model\PaymentProfile as PaymentProfileModel;
 class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
 {
 
-/**
+    /**
      * Options getter
      *
      * @return array
@@ -37,14 +37,14 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         $options = [];
-        
-        foreach ($this->getAllPeriodUnits() as $unit=>$label){
-        	$options[] = array('value'=>$unit,'label'=>$label);
+
+        foreach ($this->getAllPeriodUnits() as $unit => $label) {
+            $options[] = array('value' => $unit, 'label' => $label);
         }
-        
+
         return $options;
     }
-    
+
     /**
      * Getter for available period units
      *
@@ -53,39 +53,44 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
      */
     public function getAllPeriodUnits($withLabels = true)
     {
-    	$units = [
-    			PaymentProfileModel::PERIOD_UNIT_DAY,
-    			PaymentProfileModel::PERIOD_UNIT_WEEK,
-    			PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH,
-    			PaymentProfileModel::PERIOD_UNIT_MONTH,
-    			PaymentProfileModel::PERIOD_UNIT_YEAR
-    	];
-    
-    	if ($withLabels) {
-    		$result = [];
-    		foreach ($units as $unit) {
-    			$result[$unit] = $this->getPeriodUnitLabel($unit);
-    		}
-    		return $result;
-    	}
-    	return $units;
+        $units = [
+            PaymentProfileModel::PERIOD_UNIT_DAY,
+            PaymentProfileModel::PERIOD_UNIT_WEEK,
+            PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH,
+            PaymentProfileModel::PERIOD_UNIT_MONTH,
+            PaymentProfileModel::PERIOD_UNIT_YEAR
+        ];
+
+        if ($withLabels) {
+            $result = [];
+            foreach ($units as $unit) {
+                $result[$unit] = $this->getPeriodUnitLabel($unit);
+            }
+            return $result;
+        }
+        return $units;
     }
-    
+
     /**
      * Render label for specified period unit
      *
-     * @param string $unit
+     * @param $unit
+     * @return \Magento\Framework\Phrase
      */
     public function getPeriodUnitLabel($unit)
     {
-    	switch ($unit) {
-    		case PaymentProfileModel::PERIOD_UNIT_DAY:  return __('Day');
-    		case PaymentProfileModel::PERIOD_UNIT_WEEK: return __('Week');
-    		case PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH: return __('Two Weeks');
-    		case PaymentProfileModel::PERIOD_UNIT_MONTH: return __('Month');
-    		case PaymentProfileModel::PERIOD_UNIT_YEAR:  return __('Year');
-    	}
-    	return $unit;
+        switch ($unit) {
+            case PaymentProfileModel::PERIOD_UNIT_DAY:
+                return __('Day');
+            case PaymentProfileModel::PERIOD_UNIT_WEEK:
+                return __('Week');
+            case PaymentProfileModel::PERIOD_UNIT_SEMI_MONTH:
+                return __('Two Weeks');
+            case PaymentProfileModel::PERIOD_UNIT_MONTH:
+                return __('Month');
+            case PaymentProfileModel::PERIOD_UNIT_YEAR:
+                return __('Year');
+        }
+        return $unit;
     }
-	
 }
