@@ -1,11 +1,12 @@
 {
-  "baseUrl": "http://127.0.0.1:8096/",
+  "baseUrl": "http://pi-mg2-develop.hipay-pos-platform.com/",
   "chromeWebSecurity": false,
   "viewportWidth": 1280,
   "viewportHeight": 720,
   "watchForFileChanges": false,
   "defaultCommandTimeout": 30000,
   "env": {
-    "completeProviderPayment": true
+    "completeProviderPayment": true,
+    "urlProvider" : ""
   }
 }
