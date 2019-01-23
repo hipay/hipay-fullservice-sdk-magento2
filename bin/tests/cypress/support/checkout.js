@@ -3,17 +3,45 @@ Cypress.Commands.add("goToFront", () => {
 });
 
 Cypress.Commands.add("selectItemAndGoToCart", () => {
-    cy.goToFront();
-
+    cy.visit('/fusion-backpack.html');
     cy.server();
     cy.route('/customer/section/load/**').as('getCustomerSection');
-
+    cy.route('/review/product/listAjax/**').as('getProduct');
+    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
+<<<<<<< HEAD
 
     cy.get(':nth-child(1) > .product-item-info > .product-item-details > .product-item-actions > .actions-primary > .action').click();
 
     cy.get('.message-success').contains("You added Fusion Backpack to your");
 
+=======
+    cy.get
+    Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {
+        cy.visit('/fusion-backpack.html('.message-success > div').contains('You added Fusion Backpack to your shopping cart.');
+});
+');
+    cy.server();
+    cy.route('/customer/section/load/**').as('getCustomerSection');
+    cy.route('/review/product/listAjax/**').as('getProduct');
+    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.get('#product-addtocart-button').click();
+    cy.wait('@getCustomerSection');
+    cy.get('.message-success > div').contains('to your shopping cart.');
+    cy.visit('/push-it-messenger-bag.html');
+    cy.route('/customer/section/load/**').as('getCustomerSection');
+    cy.route('/review/product/listAjax/**').as('getProduct');
+    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.get('#product-addtocart-button').click();
+    cy.wait('@getCustomerSection');
+    cy.visit('/hero-hoodie.html');
+    cy.route('/customer/section/load/**').as('getCustomerSection');
+    cy.route('/review/product/listAjax/**').as('getProduct');
+    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.get('#product-addtocart-button').click();
+    cy.wait('@getCustomerSection');
+>>>>>>> Update tests
 });
 
 Cypress.Commands.add("addProductQuantity", (qty) => {
@@ -29,17 +57,20 @@ Cypress.Commands.add("addProductQuantity", (qty) => {
 });
 
 Cypress.Commands.add("goToCheckout", () => {
+<<<<<<< HEAD
     cy.visit("/checkout/");
+=======
+    cy.visit("/checkout");
+>>>>>>> Update tests
 });
 
 Cypress.Commands.add("fillShippingForm", (country) => {
-
     cy.server();
     cy.route('POST', '/rest/default/V1/guest-carts/*/estimate-shipping-methods').as('getEstimateShippingMethods');
     cy.route('POST', '/rest/default/V1/guest-carts/*/shipping-information').as('postShippingInformation');
     cy.route('POST', '/rest/default/V1/customers/isEmailAvailable').as('isEmailAvailable');
 
-    cy.get('#customer-email').clear({force: true});
+    cy.get('#customer-email',{"timeout": 55000}).clear({force: true});
     cy.get('[name="firstname"]').clear({force: true});
     cy.get('[name="lastname"]').clear({force: true});
     cy.get('[name="street[0]"]').clear({force: true});
@@ -54,10 +85,10 @@ Cypress.Commands.add("fillShippingForm", (country) => {
         customerFixture = "customer" + country
     }
 
-    cy.wait('@getEstimateShippingMethods', {"timeout": 45000});
+    cy.wait('@getEstimateShippingMethods', {"timeout": 35000});
 
     cy.fixture(customerFixture).then((customer) => {
-        cy.get('#customer-email').type(customer.email);
+        cy.get('#customer-email', {"timeout": 55000}).type(customer.email);
         cy.wait('@isEmailAvailable', {"timeout": 35000});
 
         cy.get('[name="firstname"]').type(customer.firstName);
@@ -135,6 +166,6 @@ Cypress.Commands.add("processAnOrder", () => {
  * Process an order ( Checkout and pay with Hosted Fields)
  */
 Cypress.Commands.add("processAnOrderWithBasket", () => {
-    cy.activateOptionSendCart();
+    cy.setOptionSendCart("1");
     cy.processAnOrder();
 });
