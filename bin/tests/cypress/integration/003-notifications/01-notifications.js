@@ -42,7 +42,7 @@ describe('Pay by credit card and process notification', function () {
         cy.connectAndSelectAccountOnHipayBO();
         cy.openTransactionOnHipayBO(this.order.lastOrderId);
         cy.openNotificationOnHipayBO(116).then(() => {
-            cy.sendNotification(this.notification.url, {data: this.data, hash: "BAD HASH"},true);
+            cy.sendNotification(this.notification.url, {data: this.data, hash: this.hash},false);
         });
     });
 
@@ -52,7 +52,7 @@ describe('Pay by credit card and process notification', function () {
     it('Check order status and comments', function () {
         cy.logToAdmin();
         cy.get('#menu-magento-sales-sales > [onclick="return false;"]').click();
-        cy.get('.item-sales-order > a').click();
+        cy.get('.item-sales-order > a').click({force:true});
         cy.goToDetailOrder(this.order.lastOrderId);
         cy.get('#order_status').contains('Authorized');
         cy.get('ul.note-list :nth-child(1) > .note-list-comment').contains("Notification \"completed\" Authorized amount of");
@@ -76,7 +76,7 @@ describe('Pay by credit card and process notification', function () {
     it('Check order status and comments', function () {
         cy.logToAdmin();
         cy.get('#menu-magento-sales-sales > [onclick="return false;"]').click();
-        cy.get('.item-sales-order > a').click();
+        cy.get('.item-sales-order > a').click({force:true});
         cy.goToDetailOrder(this.order.lastOrderId);
         cy.get('#order_status').contains('Processing');
         cy.get('ul.note-list :nth-child(1) > .note-list-comment').contains("Notification \"completed\" Registered notification about captured amount of €64.00");

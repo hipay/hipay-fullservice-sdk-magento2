@@ -23,6 +23,7 @@ import '@hipay/hipay-cypress-utils/commands/bo-merchant/transaction'
 import '@hipay/hipay-cypress-utils/commands/payment-means/local/bnpp'
 import '@hipay/hipay-cypress-utils/commands/payment-means/local/ideal'
 import '@hipay/hipay-cypress-utils/commands/payment-means/local/paypal'
+import '@hipay/hipay-cypress-utils/commands/payment-means/local/oney'
 import '@hipay/hipay-cypress-utils/commands/payment-means/card/hostedpage'
 import '@hipay/hipay-cypress-utils/commands/payment-means/card/hostedfields'
 
