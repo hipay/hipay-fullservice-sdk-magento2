@@ -357,8 +357,7 @@ class Notify
                 }
 
                 if ($this->_order->getPayment()->getLastTransId() == null) {
-                    $this->orderResource->getConnection()->commit();
-                    throw new \Exception("Awaiting Authorization Notification");
+                    $this->_doTransactionAuthorization();
                 };
 
                 // Skip magento fraud checking
