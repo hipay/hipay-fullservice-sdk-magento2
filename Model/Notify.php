@@ -356,6 +356,10 @@ class Notify
                     break;
                 }
 
+                if ($this->_order->getPayment()->getLastTransId() == null) {
+                    $this->_doTransactionAuthorization();
+                };
+
                 // Skip magento fraud checking
                 $this->_doTransactionCapture(true);
                 /**
@@ -879,6 +883,7 @@ class Notify
         //Set custom order status
         $this->_order->setStatus(Config::STATUS_AUTHORIZED);
         $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+
         $this->_order->getResource()->save($this->_order);
     }
 
@@ -910,6 +915,7 @@ class Notify
         }
 
         $this->_order->setStatus($orderStatus);
+        $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
 
         $payment->registerCaptureNotification(
             $this->_transaction->getCapturedAmount(),
