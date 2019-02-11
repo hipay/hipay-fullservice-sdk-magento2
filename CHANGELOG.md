@@ -1,4 +1,8 @@
- # 1.4.2
+ # 1.4.3
+  - Fix bad require and bug with magento validation
+  - Improve notification capture with authorization
+
+# 1.4.2
   - Fix multi_use for one-click
   - Fix Magento 2.3 compliance
   
