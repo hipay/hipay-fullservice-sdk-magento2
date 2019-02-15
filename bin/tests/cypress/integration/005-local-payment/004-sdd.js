@@ -17,7 +17,7 @@ describe('Pay by sdd', function () {
     /**
      *  Paypal
      */
-    it('Pay with Ideal', function () {
+    it('Pay with SDD', function () {
         cy.setOptionSendCart("0");
         cy.goToFront();
         cy.selectItemAndGoToCart();

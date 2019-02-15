@@ -36,6 +36,7 @@ stages:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
+    - cp ./bin/tests/.npmrc.sample ./bin/tests/.npmrc
   tags:
     - pi-commerce-no-overlay
   artifacts:
