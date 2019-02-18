@@ -1,4 +1,4 @@
 {
-  "paypal": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-6XU14862SJ0865137",
+  "paypal": "https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_express-checkout&token=EC-3J622509GL124134U",
   "ideal": "https://stage-secure-gateway.hipay-tpp.com/payment/web/pay/8b57497a-4cba-4964-be37-ff3d84b04e13"
 }

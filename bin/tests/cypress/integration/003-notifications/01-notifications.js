@@ -81,7 +81,7 @@ describe('Pay by credit card and process notification', function () {
         cy.get('#order_status').contains('Processing');
         cy.get('ul.note-list :nth-child(1) > .note-list-comment').contains("Notification \"completed\" Registered notification about captured amount of €64.00");
         cy.get('#sales_order_view_tabs_order_transactions_content').click({force: true});
-        cy.get("#order_transactions_table tr").should('have.length', 2);
+        cy.get("#order_transactions_table tr").should('have.length', 4);
     });
 
 });

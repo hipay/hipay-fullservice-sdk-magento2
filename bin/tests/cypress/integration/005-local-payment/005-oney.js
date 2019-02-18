@@ -8,9 +8,10 @@ describe('Pay by oney', function () {
      * Before
      */
     before(function () {
+        cy.logToAdmin();
         cy.configureAndActivatePaymentMethod("hipay_facilypay3X");
-        cy.get('.account-signout').click({force: true});
         cy.configureAndActivatePaymentMethod("hipay_facilypay4X");
+        cy.setOptionSendCart("1");
         cy.get('.account-signout').click({force: true});
     });
 
@@ -18,7 +19,6 @@ describe('Pay by oney', function () {
      *  Paypal
      */
     it('Pay with Oney 3X', function () {
-        cy.setOptionSendCart("1");
         cy.goToFront();
         cy.selectItemAndGoToCart();
         cy.goToCheckout();

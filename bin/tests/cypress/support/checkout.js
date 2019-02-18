@@ -21,20 +21,20 @@ Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {
     cy.server();
     cy.route('/customer/section/load/**').as('getCustomerSection');
     cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.wait('@getProduct', {"timeout": 15000});
     cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
     cy.get('.message-success > div').contains('to your shopping cart.');
     cy.visit('/push-it-messenger-bag.html');
     cy.route('/customer/section/load/**').as('getCustomerSection');
     cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.wait('@getProduct', {"timeout": 15000});
     cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
     cy.visit('/hero-hoodie.html');
     cy.route('/customer/section/load/**').as('getCustomerSection');
     cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct',{"timeout" : 15000});
+    cy.wait('@getProduct', {"timeout": 15000});
     cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
 });
@@ -61,7 +61,7 @@ Cypress.Commands.add("fillShippingForm", (country) => {
     cy.route('POST', '/rest/default/V1/guest-carts/*/shipping-information').as('postShippingInformation');
     cy.route('POST', '/rest/default/V1/customers/isEmailAvailable').as('isEmailAvailable');
 
-    cy.get('#customer-email',{"timeout": 55000}).clear({force: true});
+    cy.get('#customer-email', {"timeout": 55000}).clear({force: true});
     cy.get('[name="firstname"]').clear({force: true});
     cy.get('[name="lastname"]').clear({force: true});
     cy.get('[name="street[0]"]').clear({force: true});
@@ -157,6 +157,7 @@ Cypress.Commands.add("processAnOrder", () => {
  * Process an order ( Checkout and pay with Hosted Fields)
  */
 Cypress.Commands.add("processAnOrderWithBasket", () => {
+    cy.logToAdmin();
     cy.setOptionSendCart("1");
     cy.processAnOrder();
 });

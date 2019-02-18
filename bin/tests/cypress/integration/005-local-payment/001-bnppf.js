@@ -4,9 +4,10 @@ describe('Pay by bnppf', function () {
      *
      */
     before(function () {
+        cy.logToAdmin();
         cy.configureAndActivatePaymentMethod("hipay_bnpp3X");
-        cy.get('.account-signout').click({force: true});
         cy.configureAndActivatePaymentMethod("hipay_bnpp4X");
+        cy.get('.account-signout').click({force: true});
     });
 
     /**
