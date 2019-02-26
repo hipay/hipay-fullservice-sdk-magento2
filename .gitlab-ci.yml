@@ -41,7 +41,8 @@ stages:
     - pi-commerce-no-overlay
   artifacts:
     paths:
-      - bin/tests/errors
+      - bin/tests/cypress/videos
+      - bin/tests/cypress/screenshots
     when: always
 
 build-test-2-1-10:
