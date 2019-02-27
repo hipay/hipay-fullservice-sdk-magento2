@@ -30,7 +30,12 @@ import '@hipay/hipay-cypress-utils/commands/payment-means/card/hostedfields'
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 Cypress.on('uncaught:exception', (err, runnable) => {
+    cy.log(err.message);
     // returning false here prevents Cypress from
     // failing the test
     return false;
 });
+
+Cypress.on('window:before:load', (win) => {
+    cy.spy(win.console, "log")
+})
