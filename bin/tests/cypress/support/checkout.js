@@ -3,19 +3,14 @@ Cypress.Commands.add("goToFront", () => {
 });
 
 Cypress.Commands.add("selectItemAndGoToCart", () => {
-    cy.goToFront();
-
+    cy.visit('/fusion-backpack.html');
     cy.server();
     cy.route('/customer/section/load/**').as('getCustomerSection');
-
+    cy.route('/review/product/listAjax/**').as('getProduct');
+    cy.wait('@getProduct', {"timeout": 15000});
+    cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
-    cy.wait(3000);
-
-    cy.get(':nth-child(1) > .product-item-info > .product-item-details > .product-item-actions > .actions-primary > .action').click();
-
-    cy.wait('@getCustomerSection');
-    cy.wait(3000);
-   // cy.get('.showcart').click();
+    cy.get('.message-success > div').contains('to your shopping cart.');
 });
 
 Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {
