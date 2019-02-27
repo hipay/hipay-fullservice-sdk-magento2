@@ -43,4 +43,10 @@ Cypress.on('window:before:load', win => {
     cy.stub(win.console, 'error', msg => {
         cy.task('log', `console.error --> ${msg}`)
     })
+    cy.stub(win.console, 'warn', msg => {
+        cy.task('log', `console.error --> ${msg}`)
+    })
+    cy.stub(win.console, 'info', msg => {
+        cy.task('log', `console.error --> ${msg}`)
+    })
 })
