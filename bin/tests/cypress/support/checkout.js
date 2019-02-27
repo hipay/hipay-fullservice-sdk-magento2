@@ -9,6 +9,7 @@ Cypress.Commands.add("selectItemAndGoToCart", () => {
     cy.route('/customer/section/load/**').as('getCustomerSection');
 
     cy.wait('@getCustomerSection');
+    cy.wait(3000);
 
     cy.get(':nth-child(1) > .product-item-info > .product-item-details > .product-item-actions > .actions-primary > .action').click();
 
