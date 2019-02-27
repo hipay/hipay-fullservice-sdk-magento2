@@ -13,7 +13,8 @@ Cypress.Commands.add("selectItemAndGoToCart", () => {
     cy.get(':nth-child(1) > .product-item-info > .product-item-details > .product-item-actions > .actions-primary > .action').click();
 
     cy.wait('@getCustomerSection');
-    cy.get('.showcart').click();
+    cy.wait(3000);
+   // cy.get('.showcart').click();
 });
 
 Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {

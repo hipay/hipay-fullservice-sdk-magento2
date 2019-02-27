@@ -10,7 +10,6 @@ describe('Pay by credit card hosted page', function () {
 
     beforeEach(function () {
         cy.selectItemAndGoToCart();
-        //     cy.addProductQuantity(2);
         cy.goToCheckout();
         cy.fillShippingForm("FR");
 
