@@ -8,7 +8,7 @@ Cypress.Commands.add("selectItemAndGoToCart", () => {
     cy.route('/customer/section/load/**').as('getCustomerSection');
     cy.route('/review/product/listAjax/**').as('getProduct');
     cy.wait('@getProduct', {"timeout": 15000});
-    cy.wait(5000);
+    cy.wait(15000);
     cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
     cy.get('.message-success > div').contains('to your shopping cart.');
