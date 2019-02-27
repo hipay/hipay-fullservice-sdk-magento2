@@ -36,6 +36,11 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     return false;
 });
 
-Cypress.on('window:before:load', (win) => {
-    cy.spy(win.console, "log")
+Cypress.on('window:before:load', win => {
+    cy.stub(win.console, 'log', msg => {
+        cy.task('log', `console.log --> ${msg}`)
+    })
+    cy.stub(win.console, 'error', msg => {
+        cy.task('log', `console.error --> ${msg}`)
+    })
 })
