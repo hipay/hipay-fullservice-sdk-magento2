@@ -12,7 +12,7 @@ Cypress.Commands.add("selectItemAndGoToCart", () => {
     cy.wait(15000);
     cy.get('#product-addtocart-button').click();
     cy.wait('@getCustomerSection');
-    cy.get('.message-success > div').contains('to your shopping cart.');
+    cy.get('.message-success > div').contains('to your shopping cart.', {"timeout": 55000});
 });
 
 Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {
