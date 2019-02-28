@@ -5,6 +5,7 @@
   "viewportHeight": 720,
   "watchForFileChanges": false,
   "defaultCommandTimeout": 30000,
+  "video": false,
   "env": {
     "completeProviderPayment": true,
     "urlProvider" : ""
