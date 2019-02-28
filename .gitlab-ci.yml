@@ -64,7 +64,7 @@ cypress-2-1-10:
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
     - cd bin/tests/codeceptjs
     - yarn install
-    - bash ./node_modules/.bin/codeceptjs run --steps --override $CODECEPTJS
+    - ./node_modules/.bin/codeceptjs run --steps --override $CODECEPTJS
  #    - cd bin/tests
  #   - yarn install
  #   - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/ --env $CYPRESS_ENV
