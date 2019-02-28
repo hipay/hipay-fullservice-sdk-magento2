@@ -55,16 +55,19 @@ build-test-2-1-10:
 cypress-2-1-10:
   <<: *test_definition
   stage: test-1
-  script:
+  script: >
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml stop
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml rm -fv
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml up -d
     - sleep 900
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
-    - cd bin/tests
+    - cd bin/tests/codeceptjs
     - yarn install
-    - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/ --env $CYPRESS_ENV
+    - ./node_modules/.bin/codeceptjs run --steps --override '{ "helpers": {"Puppeteer": {"url": "localhost:8080"}}}'
+ #    - cd bin/tests
+ #   - yarn install
+ #   - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/ --env $CYPRESS_ENV
 
   after_script:
     - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
