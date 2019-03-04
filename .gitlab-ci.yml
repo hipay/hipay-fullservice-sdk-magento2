@@ -62,12 +62,9 @@ cypress-2-1-10:
     - sleep 900
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
-    - cd bin/tests/codeceptjs
+    - cd bin/tests
     - yarn install
-    - ./node_modules/.bin/codeceptjs run --steps --override $CODECEPTJS
- #    - cd bin/tests
- #   - yarn install
- #   - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/ --env $CYPRESS_ENV
+    - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/ --env $CYPRESS_ENV
 
   after_script:
     - /tools/clean-job.sh $PROJECT_NAME_TEST_MG2_1 docker-compose.test.yml magento2 ${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
