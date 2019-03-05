@@ -37,7 +37,8 @@
                 'context': context(),
                 'gateway': getCode(),
             }, 'validation':[]}">
-            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
+            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]"
+                   data-bind="attr: {value: getFingerprint()}"/>
 
 
             <!--[if IE 9]>
@@ -75,6 +76,7 @@
                         <label class="hipay-label" for="hipay-card-holder">
                             <!-- ko i18n: 'Card Owner Name'--><!-- /ko --></label>
                         <div class="hipay-baseline"></div>
+                        <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cardHolder'></div>
                     </div>
                 </div>
                 <div class="hipay-row" data-bind="visible: showCcForm()">
@@ -84,6 +86,7 @@
                             <!-- ko i18n: 'Credit Card Number'--><!-- /ko -->
                         </label>
                         <div class="hipay-baseline"></div>
+                        <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cardNumber'></div>
                     </div>
                 </div>
                 <div class="hipay-row" data-bind="visible: showCcForm()">
@@ -92,12 +95,14 @@
                         <label class="hipay-label" for="hipay-date-expiry">
                             <!-- ko i18n: 'Expiration Date'--><!-- /ko --></label>
                         <div class="hipay-baseline"></div>
+                        <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-expiryDate'></div>
                     </div>
                     <div class="hipay-field-container hipay-field-container-half">
                         <div class="hipay-field" id="hipay-cvc"></div>
                         <label class="hipay-label" for="hipay-cvc">
                             <!-- ko i18n: 'Card Verification Number'--><!-- /ko --></label>
                         <div class="hipay-baseline"></div>
+                        <div class="hipay-field-error" data-hipay-id='hipay-card-field-error-cvc'></div>
                     </div>
                 </div>
 
@@ -142,11 +147,11 @@
                 </div>
             </div>
 
-         </form>
+        </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
+    </div>
 </div>
-

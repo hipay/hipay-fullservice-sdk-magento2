@@ -26,23 +26,63 @@ define(
         'Magento_Checkout/js/model/quote',
         'domReady!'
     ],
-    function (ko, $, Component, storage, fullScreenLoader,quote) {
+    function (ko, $, Component, storage, fullScreenLoader, quote) {
         'use strict';
 
         return Component.extend({
 
-            createHostedFields: function(context) {
+            createHostedFields: function (context) {
                 var self = this;
                 if (context) {
-                     self = context;
+                    self = context;
                 }
                 self.hipayHostedFields = self.hipaySdk.create("card", self.configHipay);
+
                 self.hipayHostedFields.on("change", function (data) {
                     if (!data.valid && data.error) {
-                        self.addError(data.error);
                         self.isPlaceOrderActionAllowed(false);
                     } else if (data.valid) {
                         self.isPlaceOrderActionAllowed(true);
+                    }
+                });
+
+                self.hipaySdk.injectBaseStylesheet();
+
+                self.hipayHostedFields.on("blur", function (data) {
+                    // Get error container
+                    var domElement = document.querySelector(
+                        "[data-hipay-id='hipay-card-field-error-" + data.element + "']"
+                    );
+
+                    // Finish function if no error DOM element
+                    if (!domElement) {
+                        return;
+                    }
+
+                    // If not valid & not empty add error
+                    if (!data.validity.valid && !data.validity.empty) {
+                        domElement.innerText = data.validity.error;
+                    } else {
+                        domElement.innerText = '';
+                    }
+                });
+
+                self.hipayHostedFields.on("inputChange", function (data) {
+                    // Get error container
+                    var domElement = document.querySelector(
+                        "[data-hipay-id='hipay-card-field-error-" + data.element + "']"
+                    );
+
+                    // Finish function if no error DOM element
+                    if (!domElement) {
+                        return;
+                    }
+
+                    // If not valid & not potentiallyValid add error (input is focused)
+                    if (!data.validity.valid && !data.validity.potentiallyValid) {
+                        domElement.innerText = data.validity.error;
+                    } else {
+                        domElement.innerText = '';
                     }
                 });
 
@@ -73,7 +113,7 @@ define(
                 caretColor: (window.checkoutConfig.payment.hipay_hosted_fields !== undefined) ? window.checkoutConfig.payment.hipay_hosted_fields.caretColor : "",
                 iconColor: (window.checkoutConfig.payment.hipay_hosted_fields !== undefined) ? window.checkoutConfig.payment.hipay_hosted_fields.iconColor : "",
                 locale: (window.checkoutConfig.payment.hiPayFullservice !== undefined) ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_hosted_fields : "",
-                sdkJsUrl:  (window.checkoutConfig.payment.hipay_hosted_fields !== undefined) ? window.checkoutConfig.payment.hipay_hosted_fields.sdkJsUrl : "",
+                sdkJsUrl: (window.checkoutConfig.payment.hipay_hosted_fields !== undefined) ? window.checkoutConfig.payment.hipay_hosted_fields.sdkJsUrl : "",
                 hipaySdk: ""
             },
 
@@ -196,7 +236,7 @@ define(
                 }
 
                 fullScreenLoader.startLoader();
-                this.hipayHostedFields.createToken()
+                this.hipayHostedFields.getPaymentData()
                     .then(function (response) {
                             self.creditCardToken(response.token);
 
@@ -205,8 +245,17 @@ define(
                             self.creditCardToken("");
                             fullScreenLoader.stopLoader();
                         },
-                        function (error) {
-                            self.addError(error);
+                        function (errors) {
+                            for (var error in errors) {
+                                var domElement = document.querySelector(
+                                    "[data-hipay-id='hipay-card-field-error-" + errors[error].field + "']"
+                                );
+
+                                // If DOM element add error inside
+                                if (domElement) {
+                                    domElement.innerText = errors[error].error;
+                                }
+                            }
                             fullScreenLoader.stopLoader();
                         }
                     );
