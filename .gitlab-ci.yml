@@ -59,7 +59,7 @@ cypress-2-1-10:
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml stop
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml rm -fv
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml up -d
-    - sleep 1800
+    - sleep 1400
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
     - cd bin/tests
