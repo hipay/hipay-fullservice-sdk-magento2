@@ -61,7 +61,7 @@ cypress-2-1-10:
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml up -d
     - sleep 1400
     - docker-compose -p $PROJECT_NAME_TEST_MG2_1 -f docker-compose.test.yml logs
-    - curl --retry 10 --retry-delay 20 -v http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/
+    - curl --retry 10 --retry-delay 20 -v http://127.0.0.1:8096/
     - cd bin/tests
     - yarn install
     - bash /tools/run-cypress-test.sh -f $TESTS_FOLDERS_1 -e $EXCLUDED_TEST_FILES --config baseUrl=http://127.0.0.1:8096/ --env $CYPRESS_ENV
