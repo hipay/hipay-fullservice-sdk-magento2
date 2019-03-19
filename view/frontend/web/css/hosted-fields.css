@@ -2,9 +2,14 @@
 /**
  *  HOSTED FIELDS
  */
+.hipay-field-error{
+    text-align: left !important;
+}
+
 .hosted-fields-form {
     text-align: center;
 }
+
 #hipay-container-hosted-fields {
     width: 500px;
     padding: 20px;
