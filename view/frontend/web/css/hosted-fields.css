@@ -1,9 +1,10 @@
-
 /**
  *  HOSTED FIELDS
  */
-.hipay-field-error{
+.hipay-field-error {
     text-align: left !important;
+    line-height: 14px !important;
+    bottom: -16px !important;
 }
 
 .hosted-fields-form {
@@ -15,8 +16,8 @@
     padding: 20px;
     display: inline-block;
     border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,.1);
-    margin:10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    margin: 10px;
 }
 
 #hipay-container-hosted-fields span.icon {
@@ -35,7 +36,7 @@
 
 @media (min-width: 768px) {
     #hipay-container-hosted-fields .actions-toolbar .primary {
-        width:100% !important;
+        width: 100% !important;
         margin-top: 10px !important;
         float: none !important;
     }
@@ -80,7 +81,7 @@
     width: 50%;
 }
 
-.ie9 .hipay-field-container-half{
+.ie9 .hipay-field-container-half {
     width: 100%;
     margin-bottom: 16px;
 }
@@ -159,7 +160,7 @@
 }
 
 .HiPayField--focused + .hipay-label,
-.hipay-field:not(.HiPayField--empty) + .hipay-label{
+.hipay-field:not(.HiPayField--empty) + .hipay-label {
     color: #aab7c4;
     -webkit-transform: scale(0.85) translateY(-25px);
     -ms-transform: scale(0.85) translateY(-25px);
@@ -206,7 +207,7 @@
     border-bottom: dotted 1px #cfd7df;
 }
 
-#hipay-help-cvc{
+#hipay-help-cvc {
     font-size: 14px;
     padding: .75rem 1.25rem;
     margin-top: 4px;
@@ -216,6 +217,7 @@
     border: solid 1px #ffeeba;
     display: none;
 }
-#hipay-help-cvc.visible{
+
+#hipay-help-cvc.visible {
     display: block;
 }
