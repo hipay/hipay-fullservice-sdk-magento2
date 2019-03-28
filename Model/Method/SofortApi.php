@@ -29,6 +29,14 @@ class SofortApi extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_sofortapi';
 
+    protected $_canCapture = false;
+
+    protected $_canCapturePartial = false;
+
+    protected $_canRefund = true;
+
+    protected $_canRefundInvoicePartial = true;
+
     /**
      * @var string
      */

@@ -34,6 +34,10 @@ class AbstractAstropay extends AbstractMethodAPI
     const IDENTIFICATION_CPF = 'cpf';
     const IDENTIFICATION_CPN = 'cpn';
 
+    protected $_canCapture = false;
+
+    protected $_canCapturePartial = false;
+
     /**
      * Payment Method feature
      *

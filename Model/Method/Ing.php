@@ -37,6 +37,10 @@ class Ing extends HostedMethod
      */
     protected $_code = self::HIPAY_METHOD_CODE;
 
+    protected $_canCapture = false;
+
+    protected $_canCapturePartial = false;
+
     /**
      * Payment Method feature
      *
