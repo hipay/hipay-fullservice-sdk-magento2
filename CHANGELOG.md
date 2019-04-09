@@ -1,3 +1,7 @@
+ # 1.5.0
+  - Add error message on field
+  - Update payment method configuration
+  
  # 1.4.3
   - Fix bad require and bug with magento validation
   - Improve notification capture with authorization
