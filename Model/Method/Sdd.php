@@ -41,6 +41,10 @@ class Sdd extends FullserviceMethod
      */
     protected $_code = self::HIPAY_METHOD_CODE;
 
+    protected $_canCapture = false;
+
+    protected $_canCapturePartial = false;
+
     /**
      * Payment Method feature Refund
      *

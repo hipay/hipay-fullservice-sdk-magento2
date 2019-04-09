@@ -29,6 +29,14 @@ class PostFinanceCard extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_postfinancecardapi';
 
+    protected $_canCapture = false;
+
+    protected $_canCapturePartial = false;
+
+    protected $_canRefund = true;
+
+    protected $_canRefundInvoicePartial = true;
+
     /**
      * @var string
      */

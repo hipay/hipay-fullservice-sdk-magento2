@@ -41,19 +41,5 @@ class Bnpp4X extends AbstractBnpp
      *
      * @var bool
      */
-    protected $_canRefund = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
     protected $_canUseInternal = false;
 }

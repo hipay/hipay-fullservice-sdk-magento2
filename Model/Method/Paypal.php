@@ -29,6 +29,14 @@ class Paypal extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_paypalapi';
 
+    protected $_canCapture = true;
+
+    protected $_canCapturePartial = true;
+
+    protected $_canRefund = true;
+
+    protected $_canRefundInvoicePartial = true;
+
     /**
      * @var string
      */
