@@ -38,10 +38,3 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
-  smtp:
-    image: schickling/mailcatcher
-    container_name: ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
-    networks:
-      magento2:
-        aliases:
-          - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_smtp
