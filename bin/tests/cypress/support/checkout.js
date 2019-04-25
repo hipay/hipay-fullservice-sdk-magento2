@@ -3,40 +3,19 @@ Cypress.Commands.add("goToFront", () => {
 });
 
 Cypress.Commands.add("selectItemAndGoToCart", () => {
-    cy.visit('/fusion-backpack.html');
+    cy.goToFront();
+
     cy.server();
     cy.route('/customer/section/load/**').as('getCustomerSection');
-    cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct', {"timeout": 15000});
+
     cy.wait('@getCustomerSection');
-    cy.wait(15000);
-    cy.get('#product-addtocart-button').click();
-    cy.wait('@getCustomerSection');
-    cy.get('.message-success > div').contains('to your shopping cart.', {"timeout": 55000});
+
+    cy.get(':nth-child(1) > .product-item-info > .product-item-details > .product-item-actions > .actions-primary > .action').click();
+
+    cy.get('.message-success').contains("You added Fusion Backpack to your");
+
 });
 
-Cypress.Commands.add("selectMultipleItemsAndGoToCart", () => {
-    cy.visit('/fusion-backpack.html');
-    cy.server();
-    cy.route('/customer/section/load/**').as('getCustomerSection');
-    cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct', {"timeout": 15000});
-    cy.get('#product-addtocart-button').click();
-    cy.wait('@getCustomerSection');
-    cy.get('.message-success > div').contains('to your shopping cart.');
-    cy.visit('/push-it-messenger-bag.html');
-    cy.route('/customer/section/load/**').as('getCustomerSection');
-    cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct', {"timeout": 15000});
-    cy.get('#product-addtocart-button').click();
-    cy.wait('@getCustomerSection');
-    cy.visit('/hero-hoodie.html');
-    cy.route('/customer/section/load/**').as('getCustomerSection');
-    cy.route('/review/product/listAjax/**').as('getProduct');
-    cy.wait('@getProduct', {"timeout": 15000});
-    cy.get('#product-addtocart-button').click();
-    cy.wait('@getCustomerSection');
-});
 
 Cypress.Commands.add("addProductQuantity", (qty) => {
 

@@ -35,18 +35,3 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     // failing the test
     return false;
 });
-
-Cypress.on('window:before:load', win => {
-    cy.stub(win.console, 'log', msg => {
-        cy.task('log', `console.log --> ${msg}`)
-    })
-    cy.stub(win.console, 'error', msg => {
-        cy.task('log', `console.error --> ${msg}`)
-    })
-    cy.stub(win.console, 'warn', msg => {
-        cy.task('log', `console.error --> ${msg}`)
-    })
-    cy.stub(win.console, 'info', msg => {
-        cy.task('log', `console.error --> ${msg}`)
-    })
-})
