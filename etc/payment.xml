@@ -136,5 +136,8 @@
         <method name="hipay_bnpp4X">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_mybank">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
     </methods>
 </payment>

@@ -164,6 +164,10 @@ define(
             {
                 type: 'hipay_bnpp3X',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bnpp3X'
+            },
+            {
+                type: 'hipay_mybank',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mybank'
             }
         );
         /** Add view logic here if needed */
