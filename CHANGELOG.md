@@ -1,3 +1,6 @@
+ # 1.6.0
+  - Add MyBank payment method
+  
  # 1.5.0
   - Add error message on field
   - Update payment method configuration
