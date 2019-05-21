@@ -31,8 +31,8 @@ if [ "$1" = 'init' ];then
         docker-compose -f docker-compose.dev.yml stop
         docker-compose -f docker-compose.dev.yml rm -fv
         rm -Rf data/ log/ web/
-        docker-compose -f docker-compose.dev.yml build --no-cache
-        docker-compose -f docker-compose.dev.yml up -d
+        docker-compose -f docker-compose.dev.yml build
+        COMPOSE_HTTP_TIMEOUT=200 docker-compose -f docker-compose.dev.yml up -d
         docker cp hipayfullservicesdkmagento2_web_1:/var/www/html/magento2 web/
         docker-compose -f docker-compose.dev.yml logs -f
     else
