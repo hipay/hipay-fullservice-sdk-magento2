@@ -35,7 +35,7 @@ class Data extends AbstractHelper
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\RuleFactory $_ruleFactory
+     * @var \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory
      */
     protected $ruleFactory;
 
@@ -80,8 +80,8 @@ class Data extends AbstractHelper
                     break;
                 case 2:
                 case 3:
-                    /** @var $rule Allopass_Hipay_Model_Rule **/
-                    $rule = $this->_ruleFactory->create();
+                    /** @var $rule Allopass_Hipay_Model_Rule * */
+                    $rule = $this->ruleFactory->create();
                     $rule->getResource()->load($rule, $config3dsRules);
                     if ($rule->getId() && $rule->validate($quote)) {
                         $params = 1;

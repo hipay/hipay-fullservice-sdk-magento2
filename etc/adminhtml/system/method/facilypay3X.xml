@@ -23,6 +23,11 @@
 	<label>HiPay Enterprise Oney Facily Pay 3X</label>
 	<comment></comment>
 	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+	<field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+		<label>Capture</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
+		<tooltip><![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. </br><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
+	</field>
 	<field id="payment_product_fees" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
 		<label>Facily Pay fees</label>
 		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ProductCode\Facilypay3X</source_model>

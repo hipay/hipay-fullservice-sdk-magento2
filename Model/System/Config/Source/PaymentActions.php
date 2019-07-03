@@ -50,8 +50,8 @@ class PaymentActions implements \Magento\Framework\Option\ArrayInterface
     public function getPaymentActions()
     {
         $paymentActions = [
-            self::PAYMENT_ACTION_AUTH => __('Authorization'),
-            self::PAYMENT_ACTION_SALE => __('Sale'),
+            self::PAYMENT_ACTION_AUTH => __('Manual'),
+            self::PAYMENT_ACTION_SALE => __('Automatic'),
         ];
 
         return $paymentActions;
