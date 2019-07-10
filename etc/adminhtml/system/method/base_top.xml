@@ -18,46 +18,51 @@
  *
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-<field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Title</label>
-                </field>
-                <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
-	                <label>Payment Action</label>
-	                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
-            	</field>
-            	<field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>New Order Status</label>
-                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
-                </field>
-                <field id="order_status_payment_accepted" translate="label" type="select" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment is accepted</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Accepted</source_model>
-                </field>
-                <field id="order_status_payment_refused" translate="label" type="select" sortOrder="44" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment is refused</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Refused</source_model>
-                </field>
-                 <field id="order_status_payment_canceled" translate="label" type="select" sortOrder="46" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Order status when payment is cancelled</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Canceled</source_model>
-                </field>
-                <field id="hipay_status_validate_order" translate="label" type="select" sortOrder="47" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Hipay status to validate order</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\StatusValidate</source_model>
-                </field>
-                <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Cancel pending order</label>
-                    <comment>Cancel orders stayed in pending because customer not validated payment</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="re_add_to_cart" translate="label comment" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="0">
-        			<label>Add product to cart</label>
-                	<comment>Fill cart when payment canceled or refused</comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
+    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+           showInStore="0">
+        <label>Enabled</label>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+    </field>
+    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>Title</label>
+    </field>
+    <field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1"
+           showInStore="0">
+        <label>New Order Status</label>
+        <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
+    </field>
+    <field id="order_status_payment_accepted" translate="label" type="select" sortOrder="42" showInDefault="1"
+           showInWebsite="1" showInStore="0">
+        <label>Order status when payment is accepted</label>
+        <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Accepted</source_model>
+    </field>
+    <field id="order_status_payment_refused" translate="label" type="select" sortOrder="44" showInDefault="1"
+           showInWebsite="1" showInStore="0">
+        <label>Order status when payment is refused</label>
+        <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Refused</source_model>
+    </field>
+    <field id="order_status_payment_canceled" translate="label" type="select" sortOrder="46" showInDefault="1"
+           showInWebsite="1" showInStore="0">
+        <label>Order status when payment is cancelled</label>
+        <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\Canceled</source_model>
+    </field>
+    <field id="hipay_status_validate_order" translate="label" type="select" sortOrder="47" showInDefault="1"
+           showInWebsite="1" showInStore="0">
+        <label>Hipay status to validate order</label>
+        <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\StatusValidate</source_model>
+    </field>
+    <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
+           showInStore="0">
+        <label>Cancel pending order</label>
+        <comment>Cancel orders stayed in pending because customer not validated payment</comment>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+    </field>
+    <field id="re_add_to_cart" translate="label comment" type="select" sortOrder="49" showInDefault="1"
+           showInWebsite="1" showInStore="0">
+        <label>Add product to cart</label>
+        <comment>Fill cart when payment canceled or refused</comment>
+        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+    </field>
 </include>

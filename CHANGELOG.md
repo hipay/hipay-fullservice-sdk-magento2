@@ -1,3 +1,7 @@
+ # 1.6.1
+  - Update payment method configuration form
+  - Fix issue [#119](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/119)
+  
  # 1.6.0
   - Add MyBank payment method
   
