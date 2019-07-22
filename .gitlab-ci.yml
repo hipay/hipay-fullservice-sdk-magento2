@@ -14,7 +14,6 @@ stages:
  - analysis
  - build
  - deploy
- - sync
 
 #########################
 ####  TEMPLATE      ####
@@ -185,11 +184,3 @@ stop_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-
-sync:
-  stage: sync
-  script:
-  - git clone --mirror https://$GITLAB_USER:$GITLAB_PASSWORD@gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git
-  - cd hipay-fullservice-sdk-magento2.git
-  - git push --mirror https://$GITHUB_USER:$GITHUB_PASSWORD@github.com/hipay/hipay-fullservice-sdk-magento2.git
-  allow_failure: true
