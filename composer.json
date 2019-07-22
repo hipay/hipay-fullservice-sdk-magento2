@@ -1,34 +1,37 @@
 {
-    "name":"hipay/hipay-fullservice-sdk-magento2",
-    "description":"The HiPay Fullservice module for Magento 2 is a PHP module which allows you to accept payments in your Magento 2 online store.",
-    "type":"magento2-module",
-    "version":"1.6.1",
-    "license":[
-        "Apache 2"
+  "name": "hipay/hipay-fullservice-sdk-magento2",
+  "description": "The HiPay Fullservice module for Magento 2 is a PHP module which allows you to accept payments in your Magento 2 online store.",
+  "type": "magento2-module",
+  "version": "1.6.1",
+  "license": [
+    "Apache-2.0"
+  ],
+  "require": {
+    "hipay/hipay-fullservice-sdk-php": "^1.10.1"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
+    ]
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
     ],
-    "require":{
-        "hipay/hipay-fullservice-sdk-php":"^1.10.1"
-    },
-     "scripts": {
-        "post-install-cmd": [
-            "if [ -d ../../../dev/tests/functional/test/app/ ]; then cp -r tests/functional/tests/app/*  ../../../dev/tests/functional/test/app/ ; fi"
-        ]
-    },
-    "autoload": {
-      "files": [
-          "registration.php"
-      ],
-      "psr-4": {
-        "HiPay\\FullserviceMagento\\": ""
-      }
-    },
-    "autoload-dev": {
-      "psr-4": {
-       "HiPay\\FullserviceMagento\\Test\\": "tests/functional/tests/app/HiPay/"
-      }
-    },
-     "archive":{
-         "exclude": ["/*","!/src"]
-     },
-     "minimum-stability": "stable"
+    "psr-4": {
+      "HiPay\\FullserviceMagento\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HiPay\\FullserviceMagento\\Test\\": "tests/functional/tests/app/HiPay/"
+    }
+  },
+  "archive": {
+    "exclude": [
+      "/*",
+      "!/src"
+    ]
+  },
+  "minimum-stability": "stable"
 }
