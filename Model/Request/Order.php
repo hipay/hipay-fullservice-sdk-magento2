@@ -283,12 +283,19 @@ class Order extends CommonRequest
         }
 
         $orderRequest->paymentMethod = $this->_paymentMethod;
+
         $orderRequest->customerBillingInfo = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
+
         $orderRequest->customerShippingInfo = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->account_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\AccountInfoFormatter',
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
@@ -333,7 +340,8 @@ class Order extends CommonRequest
          *
          * You can use these parameters to submit custom values
          * you wish to show in HiPay back office transaction details,
-         * receive back in the API response messages, in the notifications or to activate specific FPS rules.
+         * receive back in the API response messages,
+         * in the notifications or to activate specific FPS rules.
          *
          *  Please make an Magento 2 plugin which listen the method "getCustomData"
          *  of the class "HiPay\FullserviceMagento\Helper\Data"

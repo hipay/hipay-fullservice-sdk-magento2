@@ -44,7 +44,6 @@ class Decline extends Fullservice
      * @param \Magento\Framework\Session\Generic $hipaySession
      * @param \Psr\Log\LoggerInterface $logger
      * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
-     * @param \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
@@ -54,7 +53,6 @@ class Decline extends Fullservice
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
-        \HiPay\FullserviceMagento\Model\SecureVault\Factory $vaultManagerFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         $this->orderFactory = $orderFactory;
@@ -64,8 +62,7 @@ class Decline extends Fullservice
             $checkoutSession,
             $hipaySession,
             $logger,
-            $gatewayManagerFactory,
-            $vaultManagerFactory
+            $gatewayManagerFactory
         );
     }
 
