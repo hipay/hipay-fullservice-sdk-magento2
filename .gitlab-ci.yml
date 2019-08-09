@@ -131,7 +131,7 @@ build:
   before_script:
     - /tools/docker-rmi.sh ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
   script:
-    - docker-compose -f docker-compose.acceptance.yml build
+    - docker-compose -f docker-compose.acceptance.yml build --no-cache
     - docker-compose -f docker-compose.acceptance.yml push
   after_script:
     - docker rmi ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}

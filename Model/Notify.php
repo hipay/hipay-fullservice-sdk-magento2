@@ -574,6 +574,7 @@ class Notify
                 $card->setCcOwner($paymentMethod->getCardHolder());
                 $card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
                 $card->setName(sprintf(__('Card %s - %s'), $paymentMethod->getBrand(), $paymentMethod->getPan()));
+                $card->setCreatedAt(new \DateTime());
 
                 try {
                     return $card->getResource()->save($card);
@@ -1050,7 +1051,7 @@ class Notify
         $order->setBaseDiscountRefunded($order->getBaseDiscountRefunded() - $creditmemo->getBaseDiscountAmount());
 
         $order->getPayment()->setAmountRefunded(
-            $order->getPayment()->getAmountRefunded() -  $creditmemo->getGrandTotal()
+            $order->getPayment()->getAmountRefunded() - $creditmemo->getGrandTotal()
         );
         $order->getPayment()->setBaseAmountRefunded(
             $order->getPayment()->getBaseAmountRefunded() - $creditmemo->getBaseGrandTotal()

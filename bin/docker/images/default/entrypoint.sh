@@ -45,8 +45,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
 
         echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
         echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
-        echo "xdebug.remote_connect_back=On" >> /usr/local/etc/php/conf.d/xdebug.ini
-        echo "xdebug.idekey=magento2" >> /usr/local/etc/php/conf.d/xdebug.ini
     fi
 
     #==========================================
@@ -114,6 +112,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     chmod 775 /var/www/html/magento2/var/cache
     chown -R magento2:magento2 /var/www/html/magento2/var/cache
     chown -R magento2:www-data /var/www/html/magento2/generated
+    chmod 755 /var/www/html/magento2/auth.json
 fi
 
 printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"

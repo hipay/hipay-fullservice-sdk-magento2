@@ -110,9 +110,9 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     protected $_debugReplacePrivateDataKeys = [];
     /**
-     * @var string[] keys to import in payment additionnal informations
+     * @var string[] keys to import in payment additional information
      */
-    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint','cc_owner'];
+    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint','cc_owner', 'browser_info'];
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
@@ -196,7 +196,7 @@ abstract class FullserviceMethod extends AbstractMethod
     protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data)
     {
         $info = $this->getInfoInstance();
-        foreach ($this->getAddtionalInformationKeys() as $key) {
+        foreach ($this->getAdditionalInformationKeys() as $key) {
             if ($data->getData($key) !== null) {
                 $info->setAdditionalInformation($key, $data->getData($key));
             }
@@ -205,7 +205,7 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this;
     }
 
-    protected function getAddtionalInformationKeys()
+    protected function getAdditionalInformationKeys()
     {
         return $this->_additionalInformationKeys;
     }

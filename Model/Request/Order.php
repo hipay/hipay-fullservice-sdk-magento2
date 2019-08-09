@@ -16,10 +16,12 @@
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
+use HiPay\Fullservice\Enum\ThreeDSTwo\DeviceChannel;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
  * Order Request Object
@@ -52,6 +54,15 @@ class Order extends CommonRequest
         'AE' => 'american-express',
         'MC' => 'mastercard',
         'MI' => 'maestro'
+    );
+
+    protected $_cardPaymentMethod = array(
+        'hipay_cc',
+        'hipay_hostedsplit',
+        'hipay_ccsplit',
+        'hipay_hosted_fields',
+        'hipay_hosted',
+        'hipay_hostedmoto'
     );
 
     /**
@@ -191,7 +202,7 @@ class Order extends CommonRequest
     protected function isMOTO()
     {
         $eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
-        if ($eci == \HiPay\Fullservice\Enum\Transaction\ECI::MOTO) {
+        if ($eci == ECI::MOTO) {
             return true;
         }
 
@@ -228,7 +239,7 @@ class Order extends CommonRequest
     /**
      * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
      */
-    protected function mapRequest()
+    public function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
         $useOrderCurrency = $this->_config->useOrderCurrency();
@@ -267,7 +278,7 @@ class Order extends CommonRequest
         // url builder depend on context (admin or frontend)
         // if we send payment link to the customer
         // he/she must be redirect to frontend controller
-        if($this->_config->getValue('send_mail_to_customer')){
+        if ($this->_config->getValue('send_mail_to_customer')) {
             $this->_urlBuilder = $this->frontendUrlBuilder;
         }
 
@@ -294,15 +305,81 @@ class Order extends CommonRequest
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
+        // Add 3DSv2 information if payment method is a credit card
+        if (in_array($this->_order->getPayment()->getMethod(), $this->_cardPaymentMethod)) {
+            $this->mapThreeDsInformation($orderRequest);
+        }
+
+        // Extras information
+        $this->processExtraInformations($orderRequest, $useOrderCurrency);
+
+        return $orderRequest;
+    }
+
+    /**
+     * Map 3DSv2 information
+     * Use Classes from PHP SDK
+     *
+     * @param $orderRequest
+     */
+    protected function mapThreeDsInformation(&$orderRequest)
+    {
         $orderRequest->account_info = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\ThreeDS\AccountInfoFormatter',
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
-        // Extras informations
-        $this->processExtraInformations($orderRequest, $useOrderCurrency);
+        $orderRequest->previous_auth_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\PreviousAuthInfoFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
 
-        return $orderRequest;
+        $orderRequest->merchant_risk_statement = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\MerchantRiskStatementFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->browser_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\BrowserInfoFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->device_channel = $this->getDeviceChannel();
+
+        if ($this->isSplitPayment()) {
+            $orderRequest->recurring_info = $this->_requestFactory->create(
+                '\HiPay\FullserviceMagento\Model\Request\ThreeDS\RecurringInfoFormatter',
+                [
+                    'params' =>
+                        [
+                            'order' => $this->_order,
+                            'config' => $this->_config,
+                            'profile_id' => $this->_order->getPayment()->getAdditionalInformation('profile_id')
+                        ]
+                ]
+            )->getRequestObject();
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceChannel()
+    {
+        if ($this->isSplitPayment()) {
+            return DeviceChannel::THREE_DS_REQUESTOR_INITIATED;
+        }
+
+        return DeviceChannel::BROWSER;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSplitPayment()
+    {
+        return $this->_order->getPayment()->getAdditionalInformation('profile_id') !== null
+            && $this->_order->getForcedSplitId() !== null;
     }
 
     /**
