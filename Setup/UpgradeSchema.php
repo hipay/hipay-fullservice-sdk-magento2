@@ -108,86 +108,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->createTable($table);
         }
 
-        if (version_compare($context->getVersion(), '1.0.7', '<')) {
-            /**
-             * Create table 'hipay_customer_card'
-             *
-             */
-            $table = $setup->getConnection()
-                ->newTable($setup->getTable('hipay_customer_card'))
-                ->addColumn(
-                    'card_id',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    null,
-                    ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
-                    'Card Id'
-                )
-                ->addColumn(
-                    'customer_id',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    null,
-                    ['unsigned' => true, 'nullable' => false],
-                    'Customer Id'
-                )
-                ->addColumn(
-                    'name',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    100,
-                    ['nullable' => false],
-                    'Name of card'
-                )
-                ->addColumn(
-                    'cc_type',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    150,
-                    ['nullable' => false],
-                    'Card type'
-                )
-                ->addColumn(
-                    'cc_exp_month',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    2,
-                    ['nullable' => false],
-                    'Card expiration month'
-                )
-                ->addColumn(
-                    'cc_exp_year',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    4,
-                    ['nullable' => false],
-                    'Card expiration year'
-                )
-                ->addColumn(
-                    'cc_owner',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    100,
-                    [],
-                    'Card Owner'
-                )
-                ->addColumn(
-                    'cc_number_enc',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    40,
-                    ['nullable' => false],
-                    'Card Number Encrypted'
-                )
-                ->addColumn(
-                    'cc_status',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                    1,
-                    ['nullable' => false],
-                    'Card status'
-                )
-                ->addColumn(
-                    'cc_token',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    '2M',
-                    ['nullable' => false],
-                    'HiPay token'
-                );
-
-            $setup->getConnection()->createTable($table);
-        }
+        $this->installTokenTable($setup, $context);
 
         if (version_compare($context->getVersion(), '1.0.7', '<')) {
 
@@ -444,5 +365,120 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         $setup->endSetup();
+    }
+
+    /**
+     * Create table 'hipay_customer_card'
+     *
+     */
+    private function installTokenTable($setup, $context)
+    {
+        if (version_compare($context->getVersion(), '1.7.0', '<')) {
+
+            $tableName = $setup->getTable($setup->getTable('hipay_customer_card'));
+
+            if ($setup->getConnection()->isTableExists($tableName)) {
+                $columns = [
+                    'created_at' => [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                        'nullable' => false,
+                        'comment' => 'Creation date of token',
+                    ],
+                ];
+
+                $this->addColumns($columns, $tableName, $setup);
+            } else {
+
+                $table = $setup->getConnection()
+                    ->newTable($tableName)
+                    ->addColumn(
+                        'card_id',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        null,
+                        ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                        'Card Id'
+                    )
+                    ->addColumn(
+                        'customer_id',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                        null,
+                        ['unsigned' => true, 'nullable' => false],
+                        'Customer Id'
+                    )
+                    ->addColumn(
+                        'name',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        100,
+                        ['nullable' => false],
+                        'Name of card'
+                    )
+                    ->addColumn(
+                        'cc_type',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        150,
+                        ['nullable' => false],
+                        'Card type'
+                    )
+                    ->addColumn(
+                        'cc_exp_month',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        2,
+                        ['nullable' => false],
+                        'Card expiration month'
+                    )
+                    ->addColumn(
+                        'cc_exp_year',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        4,
+                        ['nullable' => false],
+                        'Card expiration year'
+                    )
+                    ->addColumn(
+                        'cc_owner',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        100,
+                        [],
+                        'Card Owner'
+                    )
+                    ->addColumn(
+                        'cc_number_enc',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        40,
+                        ['nullable' => false],
+                        'Card Number Encrypted'
+                    )
+                    ->addColumn(
+                        'cc_status',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                        1,
+                        ['nullable' => false],
+                        'Card status'
+                    )
+                    ->addColumn(
+                        'cc_token',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                        '2M',
+                        ['nullable' => false],
+                        'HiPay token'
+                    )
+                    ->addColumn(
+                        'created_at',
+                        \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                        null,
+                        ['nullable' => false],
+                        'Creation date of token'
+                    );
+
+                $setup->getConnection()->createTable($table);
+            }
+        }
+    }
+
+    private function addColumns($columns, $tableName, $setup)
+    {
+        $connection = $setup->getConnection();
+        foreach ($columns as $name => $definition) {
+            $connection->addColumn($tableName, $name, $definition);
+        }
     }
 }

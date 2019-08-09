@@ -239,7 +239,6 @@ define(
                 this.hipayHostedFields.getPaymentData()
                     .then(function (response) {
                             self.creditCardToken(response.token);
-
                             self.creditCardType(response.payment_product);
                             self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
                             self.creditCardToken("");

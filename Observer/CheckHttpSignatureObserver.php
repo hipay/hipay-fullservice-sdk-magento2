@@ -20,6 +20,7 @@ use Magento\Framework\Event\Observer as EventObserver;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * HiPay module observer
@@ -127,7 +128,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                     try {
                         $hash = $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $order->getStore());
                     } catch (Exception $e) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
+                        throw new LocalizedException(
                             __('Error with retry hashing configuration .'),
                             $e
                         );

@@ -76,7 +76,7 @@ class CcSplitMethod extends CcMethod
         $this->profileFactory = $profileFactory;
     }
 
-    protected function getAddtionalInformationKeys()
+    protected function getAdditionalInformationKeys()
     {
         return array_merge(['profile_id'], $this->_additionalInformationKeys);
     }
