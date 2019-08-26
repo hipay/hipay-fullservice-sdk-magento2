@@ -498,7 +498,9 @@ class Notify
                     $amount = $this->_order->getGrandTotal();
                 }
 
-                $splitAmounts = $profile->splitAmount($amount);
+                $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
+
+                $splitAmounts = $profile->splitAmount($amount, $orderCreatedAt);
 
                 /** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
                 for ($i = 0; $i < count($splitAmounts); $i++) {

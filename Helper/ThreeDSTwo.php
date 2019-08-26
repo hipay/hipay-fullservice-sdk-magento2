@@ -232,8 +232,7 @@ class ThreeDSTwo extends AbstractHelper
 
     /**
      * @param $orderId
-     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @throws LocalizedException
+     * @return bool|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getOrderSplitPaymentCollection($orderId)
     {
@@ -242,7 +241,7 @@ class ThreeDSTwo extends AbstractHelper
             ->setOrder('date_to_pay', 'asc');
 
         if (count($splitPayments->getItems()) === 0) {
-            throw new LocalizedException(__('Split payment not found.'));
+            return false;
         }
 
         return $splitPayments;

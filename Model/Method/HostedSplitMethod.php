@@ -13,6 +13,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -93,7 +94,9 @@ class HostedSplitMethod extends HostedMethod
             $amounts = $payment->getOrder()->getGrandTotal();
         }
 
-        $splitAmounts = $profile->splitAmount($amounts);
+        $orderCreatedAt = new \DateTime($order->getCreatedAt());
+
+        $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
 
         if (!is_array($splitAmounts) || empty($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
@@ -125,7 +128,9 @@ class HostedSplitMethod extends HostedMethod
                 $amounts = $payment->getOrder()->getGrandTotal();
             }
 
-            $splitAmounts = $profile->splitAmount($amounts);
+            $orderCreatedAt = new \DateTime($payment->getOrder()->getCreatedAt());
+
+            $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
             if (!is_array($splitAmounts) || empty($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }
@@ -139,8 +144,8 @@ class HostedSplitMethod extends HostedMethod
     /**
      *
      * @param int $profileId
-     * @throws LocalizedException
      * @return \HiPay\FullserviceMagento\Model\PaymentProfile
+     * @throws LocalizedException
      */
     protected function getProfile($profileId)
     {

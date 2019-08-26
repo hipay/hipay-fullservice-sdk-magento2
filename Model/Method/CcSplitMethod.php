@@ -94,7 +94,9 @@ class CcSplitMethod extends CcMethod
                 $amounts = $payment->getOrder()->getGrandTotal();
             }
 
-            $splitAmounts = $profile->splitAmount($amounts);
+            $orderCreatedAt = new \DateTime($payment->getOrder()->getCreatedAt());
+
+            $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
             if (!is_array($splitAmounts) || empty($splitAmounts)) {
                 throw new LocalizedException(__('Impossible to split the amount.'));
             }
@@ -135,7 +137,9 @@ class CcSplitMethod extends CcMethod
             $amounts = $payment->getOrder()->getGrandTotal();
         }
 
-        $splitAmounts = $profile->splitAmount($amounts);
+        $orderCreatedAt = new \DateTime($payment->getOrder()->getCreatedAt());
+
+        $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
         if (!is_array($splitAmounts) || empty($splitAmounts)) {
             throw new LocalizedException(__('Impossible to split the amount.'));
         }
