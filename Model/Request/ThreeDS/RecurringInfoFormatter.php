@@ -75,13 +75,31 @@ class RecurringInfoFormatter extends AbstractRequest
     {
         $recurringInfo = new RecurringInfo();
 
-        $lastSplitPayment = $this->_threeDSHelper->getLastOrderSplitPayment($this->_order->getId());
-
         $recurringInfo->frequency = $this->getFrequencyDays();
 
-        $recurringInfo->expiration_date = (int)date('Ymd', strtotime($lastSplitPayment->getDateToPay()));
+        $recurringInfo->expiration_date = $this->getExpirationDate();
 
         return $recurringInfo;
+    }
+
+    private function getExpirationDate()
+    {
+        if ($this->_threeDSHelper->getOrderSplitPaymentCollection($this->_order->getId())) {
+
+            $expirationDate = $this->_threeDSHelper->getLastOrderSplitPayment($this->_order->getId())->getDateToPay();
+
+            return (int)date('Ymd', strtotime($expirationDate));
+        }
+
+        $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
+
+        $paymentProfile = $this->_threeDSHelper->getPaymentProfile($this->_splitProfileId);
+
+        $splitsArray = $paymentProfile->splitAmount($this->_order->getGrandTotal(), $orderCreatedAt);
+
+        $lastSplit = end($splitsArray);
+
+        return (int)date('Ymd', strtotime($lastSplit["dateToPay"]));
     }
 
     private function getFrequencyDays()
@@ -108,6 +126,6 @@ class RecurringInfoFormatter extends AbstractRequest
                 break;
         }
 
-        return ($days !== null) ? settype($days, 'string') : null;
+        return ($days !== null) ? $days : null;
     }
 }

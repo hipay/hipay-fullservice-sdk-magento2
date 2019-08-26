@@ -366,7 +366,7 @@ class Order extends CommonRequest
      */
     public function getDeviceChannel()
     {
-        if ($this->isSplitPayment()) {
+        if ($this->isSplitPayment() && $this->_order->getForcedSplitId() !== null) {
             return DeviceChannel::THREE_DS_REQUESTOR_INITIATED;
         }
 
@@ -378,8 +378,7 @@ class Order extends CommonRequest
      */
     private function isSplitPayment()
     {
-        return $this->_order->getPayment()->getAdditionalInformation('profile_id') !== null
-            && $this->_order->getForcedSplitId() !== null;
+        return $this->_order->getPayment()->getAdditionalInformation('profile_id') !== null;
     }
 
     /**

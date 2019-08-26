@@ -114,9 +114,9 @@ class SplitConfigProvider extends CcConfigProvider
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
-        parent::__construct($ccConfig, $cctypeSource, $assetSource, $context,$logger,$hipayConfig);
+        parent::__construct($ccConfig, $cctypeSource, $assetSource, $context, $logger, $hipayConfig);
 
-        $this->methods= $methodCodes;
+        $this->methods = $methodCodes;
         $this->ppCollectionFactory = $ppCollectionFactory;
         $this->checkoutSession = $context->getCheckoutSession();
         $this->checkoutHelper = $checkoutHelper;
@@ -201,7 +201,7 @@ class SplitConfigProvider extends CcConfigProvider
                 $currency = null;
             }
 
-            $splitAmounts = $pp->splitAmount($amounts);
+            $splitAmounts = $pp->splitAmount($amounts, new \DateTime());
 
             foreach ($splitAmounts as $index => $split) {
                 $date = new \DateTime($split['dateToPay']);
