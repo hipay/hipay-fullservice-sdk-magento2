@@ -105,6 +105,20 @@ fi
     chmod 775 /var/www/html/magento2/var/cache
     chown -R magento2:magento2 /var/www/html/magento2/var/cache
 
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+printf "\n${COLOR_SUCCESS}        DEV API DATA CONFIGURATION       ${NC}\n"
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+sed -i 's/stage-data.hipay.com/'$PI_DATA_URL'/g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
+sed -i 's/data.hipay.com/'$PI_DATA_URL'/g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
+
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+printf "\n${COLOR_SUCCESS}           HOSTS CONFIGURATION           ${NC}\n"
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+cp /etc/hosts ~/hosts.bak
+sed -i 's/^127\.0\.0\.1\.*/127.0.0.1    localhost    data.hipay.com    stage-data.hipay.com/g' ~/hosts.bak
+cp  ~/hosts.bak /etc/hosts
+
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
