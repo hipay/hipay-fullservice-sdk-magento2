@@ -39,7 +39,8 @@ define(
                 creditCardOwner: '',
                 showCVV: true,
                 hipaySdk: null,
-                locale: ""
+                locale: "",
+                browserInfo: {}
             },
 
             initObservable: function () {
@@ -55,13 +56,14 @@ define(
                         'selectedCardType',
                         'creditCardOwner',
                         'showCVV',
-                        'domReady!'
+                        'domReady!',
+                        'browserInfo'
                     ]);
                 return this;
             },
 
-            initHiPayConfiguration: function(initCallback) {
-                var self =this;
+            initHiPayConfiguration: function (initCallback) {
+                var self = this;
                 var lang = 'en';
 
                 if (self.locale &&
@@ -79,16 +81,32 @@ define(
                 if (initCallback) {
                     initCallback(self);
                 }
+
+                if (self.hipaySdk.getDeviceFingerprint() === undefined) {
+                    let retryCounter = 0;
+                    let interval = setInterval(function timeoutFunc() {
+                        retryCounter++;
+                        // If global_info init send event
+                        if (self.hipaySdk.getDeviceFingerprint() !== undefined) {
+                            $("#ioBBCard").val(self.hipaySdk.getDeviceFingerprint());
+                            clearInterval(interval);
+                        }
+                        // Max retry = 3
+                        if (retryCounter > 3) {
+                            clearInterval(interval);
+                        }
+                    }, 1000);
+                }
             },
 
-            initialize: function() {
+            initialize: function () {
                 var self = this;
                 this._super();
 
                 this.initHiPayConfiguration();
 
                 //Set credit card number to credit card data object
-                this.creditCardNumber.subscribe(function(value) {
+                this.creditCardNumber.subscribe(function (value) {
                     var result;
                     self.selectedCardType(null);
 
@@ -113,102 +131,103 @@ define(
                 });
 
                 //Set expiration year to credit card data object
-                this.creditCardExpYear.subscribe(function(value) {
+                this.creditCardExpYear.subscribe(function (value) {
                     creditCardData.expirationYear = value;
                 });
 
                 //Set expiration month to credit card data object
-                this.creditCardExpMonth.subscribe(function(value) {
+                this.creditCardExpMonth.subscribe(function (value) {
                     creditCardData.expirationYear = value;
                 });
 
                 //Set cvv code to credit card data object
-                this.creditCardVerificationNumber.subscribe(function(value) {
+                this.creditCardVerificationNumber.subscribe(function (value) {
                     creditCardData.cvvCode = value;
                 });
             },
 
-            isCreditCardTypeNeedCVV: function(cardNumber) {
+            isCreditCardTypeNeedCVV: function (cardNumber) {
                 return !(new RegExp('^(6703)[0-9]{8,15}$').test(cardNumber));
             },
 
-            getCode: function() {
+            getCode: function () {
                 return 'cc';
             },
-            getData: function() {
-            	
-            	var parent = this._super();           
-            	var additionalData = {
-            			'additional_data':{            				
-            				'cc_cid': this.creditCardVerificationNumber(),
-                            'cc_ss_start_month': this.creditCardSsStartMonth(),
-                            'cc_ss_start_year': this.creditCardSsStartYear(),
-                            'cc_type': this.creditCardType(),
-                            'cc_exp_year': this.creditCardExpYear(),
-                            'cc_exp_month': this.creditCardExpMonth(),
-                            'cc_number': this.creditCardNumber(),
-                            'cc_owner': this.creditCardOwner()
-            			}
-            	}
-            	return $.extend(true, parent, additionalData);
+            getData: function () {
 
+                var parent = this._super();
+                var additionalData = {
+                    'additional_data': {
+                        'cc_cid': this.creditCardVerificationNumber(),
+                        'cc_ss_start_month': this.creditCardSsStartMonth(),
+                        'cc_ss_start_year': this.creditCardSsStartYear(),
+                        'cc_type': this.creditCardType(),
+                        'cc_exp_year': this.creditCardExpYear(),
+                        'cc_exp_month': this.creditCardExpMonth(),
+                        'cc_number': this.creditCardNumber(),
+                        'cc_owner': this.creditCardOwner(),
+                        'browser_info': JSON.stringify(this.hipaySdk.getBrowserInfo())
+                    }
+                };
+
+                return $.extend(true, parent, additionalData);
             },
-            getDisplayCardOwner: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.displayCardOwner[this.getCode()];
+            getDisplayCardOwner: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.displayCardOwner[this.getCode()];
             },
-            getCcAvailableTypes: function() {
+            getCcAvailableTypes: function () {
                 return window.checkoutConfig.payment.ccform.availableTypes[this.getCode()];
             },
-            getCcMonths: function() {
+            getCcMonths: function () {
                 return window.checkoutConfig.payment.ccform.months[this.getCode()];
             },
-            getCcYears: function() {
+            getCcYears: function () {
                 return window.checkoutConfig.payment.ccform.years[this.getCode()];
             },
-            hasVerification: function() {
+            hasVerification: function () {
                 return window.checkoutConfig.payment.ccform.hasVerification[this.getCode()];
             },
-            hasSsCardType: function() {
+            hasSsCardType: function () {
                 return window.checkoutConfig.payment.ccform.hasSsCardType[this.getCode()];
             },
-            getCvvImageUrl: function() {
+            getCvvImageUrl: function () {
                 return window.checkoutConfig.payment.ccform.cvvImageUrl[this.getCode()];
             },
-            getCvvImageHtml: function() {
+            getCvvImageHtml: function () {
                 return '<img src="' + this.getCvvImageUrl()
                     + '" alt="' + $t('Card Verification Number Visual Reference')
                     + '" title="' + $t('Card Verification Number Visual Reference')
                     + '" />';
             },
-            getSsStartYears: function() {
+            getSsStartYears: function () {
                 return window.checkoutConfig.payment.ccform.ssStartYears[this.getCode()];
             },
-            getCcAvailableTypesValues: function() {
-                return _.map(this.getCcAvailableTypes(), function(value, key) {
+            getCcAvailableTypesValues: function () {
+                return _.map(this.getCcAvailableTypes(), function (value, key) {
                     return {
                         'value': key,
                         'type': value
                     }
                 });
             },
-            getCcMonthsValues: function() {
-                return _.map(this.getCcMonths(), function(value, key) {
+            getCcMonthsValues: function () {
+                return _.map(this.getCcMonths(), function (value, key) {
                     return {
                         'value': key,
                         'month': value
                     }
                 });
             },
-            getCcYearsValues: function() {
-                return _.map(this.getCcYears(), function(value, key) {
+            getCcYearsValues: function () {
+                return _.map(this.getCcYears(), function (value, key) {
                     return {
                         'value': key,
                         'year': value
                     }
                 });
             },
-            getSsStartYearsValues: function() {
-                return _.map(this.getSsStartYears(), function(value, key) {
+            getSsStartYearsValues: function () {
+                return _.map(this.getSsStartYears(), function (value, key) {
                     return {
                         'value': key,
                         'year': value
@@ -229,10 +248,10 @@ define(
                 }
             },
 
-            isShowLegend: function() {
+            isShowLegend: function () {
                 return false;
             },
-            getCcTypeTitleByCode: function(code) {
+            getCcTypeTitleByCode: function (code) {
                 var title = '';
                 _.each(this.getCcAvailableTypesValues(), function (value) {
                     if (value['value'] == code) {
@@ -241,10 +260,10 @@ define(
                 });
                 return title;
             },
-            formatDisplayCcNumber: function(number) {
+            formatDisplayCcNumber: function (number) {
                 return 'xxxx-' + number.substr(-4);
             },
-            getInfo: function() {
+            getInfo: function () {
                 return [
                     {'name': 'Credit Card Type', value: this.getCcTypeTitleByCode(this.creditCardType())},
                     {'name': 'Credit Card Number', value: this.formatDisplayCcNumber(this.creditCardNumber())}

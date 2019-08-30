@@ -14,7 +14,6 @@ stages:
  - analysis
  - build
  - deploy
- - sync
 
 #########################
 ####  TEMPLATE      ####
@@ -39,6 +38,7 @@ stages:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
+    - sed -i -e "s@{PI_CI_DATA_URL\}@$PI_CI_DATA_URL@" ./bin/docker/conf/test/hipay.env.sample
   tags:
     - pi-commerce-no-overlay
   artifacts:
@@ -132,7 +132,7 @@ build:
   before_script:
     - /tools/docker-rmi.sh ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
   script:
-    - docker-compose -f docker-compose.acceptance.yml build
+    - docker-compose -f docker-compose.acceptance.yml build --no-cache
     - docker-compose -f docker-compose.acceptance.yml push
   after_script:
     - docker rmi ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
@@ -158,6 +158,7 @@ deploy2recette:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/acceptance/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s@{PI_CI_DATA_URL\}@$PI_CI_DATA_URL@" ./bin/docker/conf/acceptance/hipay.env.sample
     # Substitute env variables which doesn't exists on the distant machine
     - /tools/substitute-env-var.sh docker-compose.acceptance.yml
     # Change path for relative path to environment files
@@ -185,11 +186,3 @@ stop_review:
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-
-sync:
-  stage: sync
-  script:
-  - git clone --mirror https://$GITLAB_USER:$GITLAB_PASSWORD@gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git
-  - cd hipay-fullservice-sdk-magento2.git
-  - git push --mirror https://$GITHUB_USER:$GITHUB_PASSWORD@github.com/hipay/hipay-fullservice-sdk-magento2.git
-  allow_failure: true

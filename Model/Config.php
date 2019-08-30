@@ -142,7 +142,15 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if ($env == null) {
                 $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
             }
-            $this->_configSDK = new ConfigSDK($apiUsername, $apiPassword, $env, 'application/json', $this->getProxy());
+            $this->_configSDK = new ConfigSDK(
+                array(
+                    'apiUsername' => $apiUsername,
+                    'apiPassword' => $apiPassword,
+                    'apiEnv' => $env,
+                    'apiHTTPHeaderAccept' => 'application/json',
+                    'proxy' => $this->getProxy()
+                )
+            );
         } catch (\Exception $e) {
             $this->_configSDK = null;
         }
@@ -565,6 +573,30 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->_configSDK !== null ? $this->_configSDK->getSecureVaultEndpoint() : '';
     }
 
+    public function getCurlTimeout()
+    {
+        return $this->_configSDK !== null ? $this->_configSDK->getCurlTimeout() : '';
+    }
+
+    public function setCurlTimeout($curlTimeout)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setCurlTimeout($curlTimeout);
+        }
+    }
+
+    public function getCurlConnectTimeout()
+    {
+        return $this->_configSDK !== null ? $this->_configSDK->getCurlConnectTimeout() : '';
+    }
+
+    public function setCurlConnectTimeout($curlConnectTimeout)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setCurlConnectTimeout($curlConnectTimeout);
+        }
+    }
+
     public function getApiEnv()
     {
         return $this->getValue('env');
@@ -590,7 +622,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_order = $order;
     }
 
-    public function isPaymentMethodActive() {
+    public function isPaymentMethodActive()
+    {
         return $this->getValue("active");
     }
 
@@ -607,5 +640,113 @@ class Config extends AbstractConfig implements ConfigurationInterface
         );
 
         return is_array($result) ? $result : [];
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::setApiPassword()
+     */
+    public function setApiPassword($apiPassword)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setApiPassword($apiPassword);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::setApiUsername()
+     */
+    public function setApiUsername($apiUsername)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setApiUsername($apiUsername);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::setApiEnv()
+     */
+    public function setApiEnv($apiEnv)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setApiEnv($apiEnv);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::setProxy()
+     */
+    public function setProxy($proxy)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setProxy($proxy);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::setApiHTTPHeaderAccept()
+     */
+    public function setApiHTTPHeaderAccept($apiHTTPHeaderAccept)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setApiHTTPHeaderAccept($apiHTTPHeaderAccept);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpointProd()
+     */
+    public function getDataApiEndpointProd()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpointProd();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpointStage()
+     */
+    public function getDataApiEndpointStage()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpointStage();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpoint()
+     */
+    public function getDataApiEndpoint()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpoint();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiHttpUserAgent()
+     */
+    public function getDataApiHttpUserAgent()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiHttpUserAgent();
+        }
     }
 }
