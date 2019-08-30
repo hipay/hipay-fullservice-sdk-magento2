@@ -123,6 +123,13 @@ define(
             	return this.getCustomerCards().length > 0;
             },
             getData: function() {
+
+                var fingerprint = $('#ioBB').val();
+
+                if($('#ioBBCard').val()){
+                    fingerprint = $('#ioBBCard').val();
+                }
+
                 return {
                     'method': this.item.method,
                     'additional_data': {
@@ -130,7 +137,7 @@ define(
                         'card_token': this.creditCardToken(),
                         'eci': this.eci(),
                         'cc_type': this.creditCardType(),
-                        'fingerprint': $('#ioBB').val()
+                        'fingerprint': fingerprint
                     }
                 };
             },
