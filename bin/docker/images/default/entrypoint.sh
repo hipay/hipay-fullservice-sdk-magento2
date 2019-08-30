@@ -119,8 +119,8 @@ printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 printf "\n${COLOR_SUCCESS}        DEV API DATA CONFIGURATION       ${NC}\n"
 printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-sed -i 's/stage-data.hipay.com/'$PI_DATA_URL'/g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
-sed -i 's/data.hipay.com/'$PI_DATA_URL'/g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
+sed -i 's@https:\/\/stage-data.hipay.com@'$PI_DATA_URL'@g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
+sed -i 's@https:\/\/data.hipay.com@'$PI_DATA_URL'@g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
 
 printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 printf "\n${COLOR_SUCCESS}           HOSTS CONFIGURATION           ${NC}\n"

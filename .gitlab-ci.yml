@@ -38,6 +38,7 @@ stages:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}-web/" ./bin/docker/conf/test/mage.env.sample
+    - sed -i -e "s@{PI_CI_DATA_URL\}@$PI_CI_DATA_URL@" ./bin/docker/conf/test/hipay.env.sample
   tags:
     - pi-commerce-no-overlay
   artifacts:
@@ -157,6 +158,7 @@ deploy2recette:
     - sed -i -e "s/{DB_HOST\}/${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database/" ./bin/docker/conf/acceptance/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL\}/http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
     - sed -i -e "s/{MAGENTO_URL_SECURE\}/https:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/" ./bin/docker/conf/acceptance/mage.env.sample
+    - sed -i -e "s@{PI_CI_DATA_URL\}@$PI_CI_DATA_URL@" ./bin/docker/conf/acceptance/hipay.env.sample
     # Substitute env variables which doesn't exists on the distant machine
     - /tools/substitute-env-var.sh docker-compose.acceptance.yml
     # Change path for relative path to environment files
