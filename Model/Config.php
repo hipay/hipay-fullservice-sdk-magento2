@@ -701,4 +701,52 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $this->_configSDK->setApiHTTPHeaderAccept($apiHTTPHeaderAccept);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpointProd()
+     */
+    public function getDataApiEndpointProd()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpointProd();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpointStage()
+     */
+    public function getDataApiEndpointStage()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpointStage();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiEndpoint()
+     */
+    public function getDataApiEndpoint()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiEndpoint();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::getDataApiHttpUserAgent()
+     */
+    public function getDataApiHttpUserAgent()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->getDataApiHttpUserAgent();
+        }
+    }
 }
