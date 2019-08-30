@@ -1,3 +1,6 @@
+ # 1.7.0
+  - Init 3DS V2
+
  # 1.6.1
   - Update payment method configuration form
   - Fix issue [#119](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/119)
