@@ -45,6 +45,9 @@ services:
         - "3306"
       environment:
         - MYSQL_ROOT_PASSWORD=magento2
+        - MYSQL_DATABASE=magento2
+        - MYSQL_USER=magento2
+        - MYSQL_PASSWORD=magento2
       networks:
         magento2:
           aliases:

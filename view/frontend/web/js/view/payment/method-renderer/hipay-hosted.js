@@ -18,14 +18,14 @@
 
 define(
     [
-     	'jquery',
-     	'ko',
+        'jquery',
+        'ko',
         'HiPay_FullserviceMagento/js/view/payment',
         'HiPay_FullserviceMagento/js/model/iframe',
         'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/quote'
     ],
-    function ($, ko, Component,iframe, fullScreenLoader,quote) {
+    function ($, ko, Component, iframe, fullScreenLoader, quote) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -44,8 +44,8 @@ define(
              *
              * @returns {*}
              */
-            getWarningsMessages: function() {
-                    return '';
+            getWarningsMessages: function () {
+                return '';
             },
             /**
              *  Get global fingerprint  on dom load of checkout
@@ -55,11 +55,11 @@ define(
             getFingerprint: function () {
                 if ($('#ioBB')) {
                     return $('#ioBB').val();
-                }else{
+                } else {
                     return '';
                 }
             },
-            
+
             /**
              * @param {Function} handler
              */
@@ -88,50 +88,72 @@ define(
             /**
              * After place order callback
              */
-	        afterPlaceOrder: function () {
-	        	 var self = this;
+            afterPlaceOrder: function () {
+                var self = this;
 
-	        	if(this.isIframeMode() && !this.creditCardToken()){
-	        		self.paymentReady(true);
-	        	}
-	        	else{
-	        		
-	        	 $.mage.redirect(this.getAfterPlaceOrderUrl());
-	        	}
-	        },
-	        getData: function(){
-            	return this._super(); 
+                if (this.isIframeMode() && !this.creditCardToken()) {
+                    self.paymentReady(true);
+                } else {
+
+                    $.mage.redirect(this.getAfterPlaceOrderUrl());
+                }
             },
-	        getAfterPlaceOrderUrl: function(){
-	        	return this.afterPlaceOrderUrl[this.getCode()];
-	        },
-	        context: function() {
+            getData: function () {
+
+                var parent = this._super();
+
+                if (this.selectedCard() && this.useOneclick()) {
+
+                    var lang = 'en';
+
+                    // dirty tricks to get browser information
+                    // instance of hipaySdk is needed but we don't have credentials in this context
+                    var hipaySdk = HiPay({
+                        username: "hosted",
+                        password: "hosted",
+                        environment: "production",
+                        lang: lang
+                    });
+
+                    var additionalData = {
+                        'additional_data': {
+                            'browser_info': JSON.stringify(hipaySdk.getBrowserInfo())
+                        }
+                    };
+                }
+
+                return $.extend(true, parent, additionalData);
+            },
+            getAfterPlaceOrderUrl: function () {
+                return this.afterPlaceOrderUrl[this.getCode()];
+            },
+            context: function () {
                 return this;
             },
-	        getCode: function() {
-	            return 'hipay_hosted';
-	        },
-            isActive: function() {
+            getCode: function () {
+                return 'hipay_hosted';
+            },
+            isActive: function () {
                 return true;
             },
-            isIframeMode: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.isIframeMode[this.getCode()];
+            isIframeMode: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.isIframeMode[this.getCode()];
             },
-            getIframeWidth: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.iFrameWidth[this.getCode()];
+            getIframeWidth: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.iFrameWidth[this.getCode()];
             },
-            
-            getIframeHeight: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.iFrameHeight[this.getCode()];
+
+            getIframeHeight: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.iFrameHeight[this.getCode()];
             },
-            getIframeStyle: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.iFrameStyle[this.getCode()];
+            getIframeStyle: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.iFrameStyle[this.getCode()];
             },
-            getIframeWrapperStyle: function(){
-            	return window.checkoutConfig.payment.hiPayFullservice.iFrameWrapperStyle[this.getCode()];
+            getIframeWrapperStyle: function () {
+                return window.checkoutConfig.payment.hiPayFullservice.iFrameWrapperStyle[this.getCode()];
             },
-            getIFrameUrl: function(){
-            	return this.isInAction() ? this.getAfterPlaceOrderUrl() : '';
+            getIFrameUrl: function () {
+                return this.isInAction() ? this.getAfterPlaceOrderUrl() : '';
             },
             /**
              * Places order in pending payment status.
@@ -148,7 +170,7 @@ define(
              * Hide loader when iframe is fully loaded.
              * @returns {void}
              */
-            iframeLoaded: function() {
+            iframeLoaded: function () {
                 fullScreenLoader.stopLoader();
             }
         });

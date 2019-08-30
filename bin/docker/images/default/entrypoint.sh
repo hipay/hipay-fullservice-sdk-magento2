@@ -3,51 +3,58 @@
 set +e
 COLOR_SUCCESS='\033[0;32m'
 NC='\033[0m'
-MAGE_INSTALL=0
 PREFIX_STORE1=$RANDOM
 ENV_DEVELOPMENT="development"
 ENV_STAGE="stage"
 ENV_PROD="production"
+NEED_SETUP_CONFIG=0
 
-if [ $MAGE_REINSTALL = 1 ] || [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/magento2/app/etc/env.php ]; then
-    MAGE_INSTALL=1
+#==========================================
+# CHECK IF MAGENTO IS INSTALLED
+#==========================================
+if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/magento2/app/etc/env.php ]; then
+    NEED_SETUP_CONFIG="1"
+
+    #==========================================
+    # VCS AUTHENTICATION
+    #==========================================
+    printf "Set composer http-basic $GITLAB_API_TOKEN"
+    gosu magento2 composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
+
+    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN"
+    gosu magento2 composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 fi
 
 #==========================================
-# Install XDebug
-#==========================================
-if [ "$XDEBUG_ENABLED" = "1" ]; then
-    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    printf "\n${COLOR_SUCCESS}     INSTALLATION XDEBUG $ENVIRONMENT    ${NC}\n"
-    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-
-    echo '' && pecl install xdebug-2.5.0
-    echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini
-    echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
-    echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
-fi
-
-echo "mailhub=$SMTP_LINK\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
-
-printf "Set composer http-basic $GITLAB_API_TOKEN"
-gosu magento2 composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
-gosu magento2 composer config --list
-
-gosu magento2 chmod 755 auth.json
-
-#==========================================
-# Execute parent Entrypoint
+# PARENT ENTRYPOINT
 #==========================================
 /bin/bash /usr/local/bin/magento2-start "$@ --no-exec-apache"
 
 #==========================================
-# Add Hipay's configuration
+#  INIT HIPAY CONFIGURATION AND DEV
 #==========================================
-if [ "$MAGE_INSTALL" = "1" ]; then
+if [ "$NEED_SETUP_CONFIG" = "1" ]; then
+
+    #==========================================
+    # XDebug
+    #==========================================
+    if [[ "$XDEBUG_ENABLED" = "1" ]]; then
+        printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+        printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
+        printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+        echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
+        echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+    fi
+
+    #==========================================
+    # MAIL CONFIGURATION
+    #==========================================
+    echo "mailhub=$SMTP_LINK\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
+
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/api_username_test $HIPAY_API_USER_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials/api_password_test $HIPAY_API_PASSWORD_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
@@ -79,7 +86,7 @@ if [ "$MAGE_INSTALL" = "1" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/is_test_mode 1
         printf "${COLOR_SUCCESS} Method $code is activated in test mode ${NC}\n"
     done
-fi
+
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         UPDATE SEQUENCE ORDER           ${NC}\n"
@@ -104,6 +111,9 @@ fi
     gosu magento2 mkdir /var/www/html/magento2/var/cache
     chmod 775 /var/www/html/magento2/var/cache
     chown -R magento2:magento2 /var/www/html/magento2/var/cache
+    chown -R magento2:www-data /var/www/html/magento2/generated
+    chmod 755 /var/www/html/magento2/auth.json
+fi
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
@@ -119,5 +129,3 @@ printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $MAGE_VERSION                 
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
 
 exec apache2 -DFOREGROUND
-
-

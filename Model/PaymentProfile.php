@@ -102,9 +102,11 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
      * Split an amount by profile data
      *
      * @param $amount
+     * @param $startDate
      * @return array
+     * @throws \Exception
      */
-    public function splitAmount($amount)
+    public function splitAmount($amount, $startDate)
     {
         $paymentsSplit = array();
 
@@ -113,37 +115,35 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
         $periodFrequency = ( int )$this->getPeriodFrequency();
         $periodUnit = $this->getPeriodUnit();
 
-        $todayDate = new \DateTime();
-
         $part = ( int )($amount / $maxCycles);
         $fmod = fmod($amount, $maxCycles);
 
         for ($i = 0; $i <= ($maxCycles - 1); $i++) {
             $j = $i - 1;
-            $todayClone = clone $todayDate;
+            $startDateClone = clone $startDate;
             $frequencyValue = $periodFrequency + $j;
             switch ($periodUnit) {
                 case self::PERIOD_UNIT_MONTH:
                     $interval = new \DateInterval("P{$frequencyValue}M");
-                    $dateToPay = $todayClone->add($interval)->format("Y-m-d");
+                    $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
                 case self::PERIOD_UNIT_DAY:
                     $interval = new \DateInterval("P{$frequencyValue}D");
-                    $dateToPay = $todayClone->add($interval)->format("Y-m-d");
+                    $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
                 case self::PERIOD_UNIT_SEMI_MONTH:
                     $semiMonthFreq = 15 + $frequencyValue;
                     $interval = new \DateInterval("P{$semiMonthFreq}D");
-                    $dateToPay = $todayClone->add($interval)->format("Y-m-d");
+                    $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
                 case self::PERIOD_UNIT_WEEK:
                     $week = 7 + $frequencyValue;
                     $interval = new \DateInterval("P{$week}D");
-                    $dateToPay = $todayClone->add($interval)->format("Y-m-d");
+                    $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
                 case self::PERIOD_UNIT_YEAR:
                     $interval = new \DateInterval("P{$frequencyValue}Y");
-                    $dateToPay = $todayClone->add($interval)->format("Y-m-d");
+                    $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
             }
 

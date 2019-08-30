@@ -30,7 +30,7 @@ if [ "$1" = 'init' ];then
     if [ -f ./bin/docker/conf/development/auth.env ];then
         docker-compose -f docker-compose.dev.yml stop
         docker-compose -f docker-compose.dev.yml rm -fv
-        rm -Rf data/ log/ web/
+        rm -Rf log/ web/
         docker-compose -f docker-compose.dev.yml build
         COMPOSE_HTTP_TIMEOUT=200 docker-compose -f docker-compose.dev.yml up -d
         docker cp hipayfullservicesdkmagento2_web_1:/var/www/html/magento2 web/

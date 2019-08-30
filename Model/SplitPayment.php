@@ -167,6 +167,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
                 \HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions::PAYMENT_ACTION_SALE
             );
             $this->_order->setForcedCardToken($this->getCardToken());
+            $this->_order->setForcedSplitId($this->getId());
         }
 
         return $this->_order;

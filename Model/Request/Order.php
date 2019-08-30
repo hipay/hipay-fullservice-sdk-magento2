@@ -16,10 +16,12 @@
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
+use HiPay\Fullservice\Enum\ThreeDSTwo\DeviceChannel;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
  * Order Request Object
@@ -52,6 +54,15 @@ class Order extends CommonRequest
         'AE' => 'american-express',
         'MC' => 'mastercard',
         'MI' => 'maestro'
+    );
+
+    protected $_cardPaymentMethod = array(
+        'hipay_cc',
+        'hipay_hostedsplit',
+        'hipay_ccsplit',
+        'hipay_hosted_fields',
+        'hipay_hosted',
+        'hipay_hostedmoto'
     );
 
     /**
@@ -191,7 +202,7 @@ class Order extends CommonRequest
     protected function isMOTO()
     {
         $eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
-        if ($eci == \HiPay\Fullservice\Enum\Transaction\ECI::MOTO) {
+        if ($eci == ECI::MOTO) {
             return true;
         }
 
@@ -228,7 +239,7 @@ class Order extends CommonRequest
     /**
      * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
      */
-    protected function mapRequest()
+    public function mapRequest()
     {
         $payment_product = $this->getSpecifiedPaymentProduct();
         $useOrderCurrency = $this->_config->useOrderCurrency();
@@ -267,7 +278,7 @@ class Order extends CommonRequest
         // url builder depend on context (admin or frontend)
         // if we send payment link to the customer
         // he/she must be redirect to frontend controller
-        if($this->_config->getValue('send_mail_to_customer')){
+        if ($this->_config->getValue('send_mail_to_customer')) {
             $this->_urlBuilder = $this->frontendUrlBuilder;
         }
 
@@ -283,19 +294,91 @@ class Order extends CommonRequest
         }
 
         $orderRequest->paymentMethod = $this->_paymentMethod;
+
         $orderRequest->customerBillingInfo = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
+
         $orderRequest->customerShippingInfo = $this->_requestFactory->create(
             '\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
-        // Extras informations
+        // Add 3DSv2 information if payment method is a credit card
+        if (in_array($this->_order->getPayment()->getMethod(), $this->_cardPaymentMethod)) {
+            $this->mapThreeDsInformation($orderRequest);
+        }
+
+        // Extras information
         $this->processExtraInformations($orderRequest, $useOrderCurrency);
 
         return $orderRequest;
+    }
+
+    /**
+     * Map 3DSv2 information
+     * Use Classes from PHP SDK
+     *
+     * @param $orderRequest
+     */
+    protected function mapThreeDsInformation(&$orderRequest)
+    {
+        $orderRequest->account_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\AccountInfoFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->previous_auth_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\PreviousAuthInfoFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->merchant_risk_statement = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\MerchantRiskStatementFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->browser_info = $this->_requestFactory->create(
+            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\BrowserInfoFormatter',
+            ['params' => ['order' => $this->_order, 'config' => $this->_config]]
+        )->getRequestObject();
+
+        $orderRequest->device_channel = $this->getDeviceChannel();
+
+        if ($this->isSplitPayment()) {
+            $orderRequest->recurring_info = $this->_requestFactory->create(
+                '\HiPay\FullserviceMagento\Model\Request\ThreeDS\RecurringInfoFormatter',
+                [
+                    'params' =>
+                        [
+                            'order' => $this->_order,
+                            'config' => $this->_config,
+                            'profile_id' => $this->_order->getPayment()->getAdditionalInformation('profile_id')
+                        ]
+                ]
+            )->getRequestObject();
+        }
+    }
+
+    /**
+     * @return int
+     */
+    public function getDeviceChannel()
+    {
+        if ($this->isSplitPayment() && $this->_order->getForcedSplitId() !== null) {
+            return DeviceChannel::THREE_DS_REQUESTOR_INITIATED;
+        }
+
+        return DeviceChannel::BROWSER;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isSplitPayment()
+    {
+        return $this->_order->getPayment()->getAdditionalInformation('profile_id') !== null;
     }
 
     /**
@@ -333,7 +416,8 @@ class Order extends CommonRequest
          *
          * You can use these parameters to submit custom values
          * you wish to show in HiPay back office transaction details,
-         * receive back in the API response messages, in the notifications or to activate specific FPS rules.
+         * receive back in the API response messages,
+         * in the notifications or to activate specific FPS rules.
          *
          *  Please make an Magento 2 plugin which listen the method "getCustomData"
          *  of the class "HiPay\FullserviceMagento\Helper\Data"
