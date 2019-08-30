@@ -710,7 +710,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getDataApiEndpointProd()
     {
         if ($this->_configSDK !== null) {
-            $this->_configSDK->getDataApiEndpointProd();
+            return $this->_configSDK->getDataApiEndpointProd();
         }
     }
 
@@ -722,7 +722,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getDataApiEndpointStage()
     {
         if ($this->_configSDK !== null) {
-            $this->_configSDK->getDataApiEndpointStage();
+            return $this->_configSDK->getDataApiEndpointStage();
         }
     }
 
@@ -734,7 +734,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getDataApiEndpoint()
     {
         if ($this->_configSDK !== null) {
-            $this->_configSDK->getDataApiEndpoint();
+            return $this->_configSDK->getDataApiEndpoint();
         }
     }
 
@@ -746,7 +746,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function getDataApiHttpUserAgent()
     {
         if ($this->_configSDK !== null) {
-            $this->_configSDK->getDataApiHttpUserAgent();
+            return $this->_configSDK->getDataApiHttpUserAgent();
         }
     }
 }
