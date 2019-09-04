@@ -108,16 +108,22 @@ class Data extends AbstractHelper
      */
     public function useOneclick($allowUseOneclick, $filterOneclick, $quote)
     {
-        switch ((int)$allowUseOneclick) {
-            case 0:
-                return false;
-            case 1:
-                $rule = $this->ruleFactory->create();
-                $rule->getResource()->load($rule, $filterOneclick);
-                if ($rule->getId()) {
-                    return (int)$rule->validate($quote);
-                }
-                return true;
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $customerSession = $objectManager->get('Magento\Customer\Model\Session');
+
+        if ($customerSession->isLoggedIn()) {
+            switch ((int)$allowUseOneclick) {
+                case 0:
+                    return false;
+                case 1:
+                    $rule = $this->ruleFactory->create();
+                    $rule->getResource()->load($rule, $filterOneclick);
+                    if ($rule->getId()) {
+                        return (int)$rule->validate($quote);
+                    }
+                    return true;
+            }
+            return false;
         }
         return false;
     }
