@@ -477,4 +477,60 @@ class Order extends CommonRequest
     {
         return $this->_groupRepositoryInterface;
     }
+
+    /**
+     * @return \Magento\Customer\Model\Session
+     */
+    public function getCustomerSession()
+    {
+        return $this->_customerSession;
+    }
+
+    /**
+     * @return \Magento\Checkout\Helper\Data
+     */
+    public function getCheckoutData()
+    {
+        return $this->_checkoutData;
+    }
+
+    /**
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger()
+    {
+        return $this->_logger;
+    }
+
+    /**
+     * @return \Magento\Checkout\Model\Session
+     */
+    public function getCheckoutSession()
+    {
+        return $this->_checkoutSession;
+    }
+
+    /**
+     * @return \HiPay\Fullservice\Request\AbstractRequest
+     */
+    public function getPaymentMethod()
+    {
+        return $this->_paymentMethod;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCcTypes()
+    {
+        return $this->_ccTypes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCardPaymentMethod()
+    {
+        return $this->_cardPaymentMethod;
+    }
 }
