@@ -1,3 +1,6 @@
+ # 1.7.1
+  - Fix: wrong method declaration (PHP7.1 and less) [#122](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/122)
+  
  # 1.7.0
   - Init 3DS V2
 
