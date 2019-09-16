@@ -362,10 +362,6 @@ class Notify
 
                 // Skip magento fraud checking
                 $this->_doTransactionCapture(true);
-                /**
-                 * save token and credit card informations encryted
-                 */
-                $this->_saveCc();
 
                 /**
                  * save split payments
@@ -433,6 +429,14 @@ class Notify
                 // status : 161
                 $this->_doTransactionMessage();
                 break;
+        }
+
+        if($this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
+            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED){
+            /**
+             * save token and credit card informations encryted
+             */
+            $this->_saveCc();
         }
 
         //Save status infos
