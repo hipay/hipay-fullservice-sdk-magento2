@@ -343,7 +343,12 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $key = "api_username_test";
         }
 
-        return $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        $apiUsername = $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        if(empty($apiUsername)){
+            $apiUsername = $this->getGeneraleValue($key);
+        }
+
+        return $apiUsername;
     }
 
     public function getApiPasswordMoto()
@@ -353,7 +358,12 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $key = "api_password_test";
         }
 
-        return $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        $apiPassword = $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        if(empty($apiPassword)){
+            $apiPassword = $this->getGeneraleValue($key);
+        }
+
+        return $apiPassword;
     }
 
     public function getSecretPassphraseMoto()
@@ -363,7 +373,12 @@ class Config extends AbstractConfig implements ConfigurationInterface
             $key = "secret_passphrase_test";
         }
 
-        return $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        $apiPassphrase = $this->getGeneraleValue($key, 'hipay_credentials_moto');
+        if(empty($apiPassphrase)){
+            $apiPassphrase = $this->getGeneraleValue($key);
+        }
+
+        return $apiPassphrase;
     }
 
     public function getApiUsernameTokenJs()
