@@ -192,6 +192,11 @@ class Manager
             throw $e;
         }
 
+        if ($this->getConfiguration()->isAdminArea()) {
+            $this->_order->getPayment()->setAdditionalInformation('is_moto', 1);
+            $this->_order->getResource()->save($this->_order);
+        }
+
         return $hppModel;
     }
 
