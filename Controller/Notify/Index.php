@@ -57,6 +57,7 @@ class Index extends AppAction
             $request = $this->getRequest();
             if ($request instanceof HttpRequest && $request->isPost()) {
                 $request->setParam('isAjax', true);
+                $request->getHeaders()->addHeaderLine('X_REQUESTED_WITH', 'XMLHttpRequest');
             }
         }
     }
