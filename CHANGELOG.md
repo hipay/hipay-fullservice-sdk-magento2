@@ -1,3 +1,9 @@
+ # 1.7.2
+  - Fix: notification controller 302 HTTP code error (Magento 2.3.2) [#121](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/121)
+  - Fix: MO/TO credentials retrieval
+  - Fix: Disable oneclick when not logged-in
+  - Fix: Save oneclick cards on 116 and 118 notification
+  
  # 1.7.1
   - Fix: wrong method declaration (PHP7.1 and less) [#122](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/122)
   
