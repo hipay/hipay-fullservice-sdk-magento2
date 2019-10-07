@@ -344,7 +344,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         $apiUsername = $this->getGeneraleValue($key, 'hipay_credentials_moto');
-        if(empty($apiUsername)){
+        if (empty($apiUsername)) {
             $apiUsername = $this->getGeneraleValue($key);
         }
 
@@ -359,7 +359,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         $apiPassword = $this->getGeneraleValue($key, 'hipay_credentials_moto');
-        if(empty($apiPassword)){
+        if (empty($apiPassword)) {
             $apiPassword = $this->getGeneraleValue($key);
         }
 
@@ -374,7 +374,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         $apiPassphrase = $this->getGeneraleValue($key, 'hipay_credentials_moto');
-        if(empty($apiPassphrase)){
+        if (empty($apiPassphrase)) {
             $apiPassphrase = $this->getGeneraleValue($key);
         }
 
@@ -762,6 +762,29 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
         if ($this->_configSDK !== null) {
             return $this->_configSDK->getDataApiHttpUserAgent();
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see \HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface::isOverridePaymentProductSorting()
+     */
+    public function isOverridePaymentProductSorting()
+    {
+        return false;
+    }
+
+    /**
+     * Sets override sorting payment products parameter
+     *
+     * @param bool $overridePaymentProductSorting
+     */
+    public function setOverridePaymentProductSorting($overridePaymentProductSorting)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setOverridePaymentProductSorting($overridePaymentProductSorting);
         }
     }
 }

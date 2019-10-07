@@ -1,3 +1,7 @@
+ # 1.7.3
+  - Fix: Missing method for Config class
+  - Fix: Wrong version in request source
+  
  # 1.7.2
   - Fix: notification controller 302 HTTP code error (Magento 2.3.2) [#121](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/121)
   - Fix: MO/TO credentials retrieval
