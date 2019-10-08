@@ -496,3 +496,5 @@ Title,Title
 "Not applicable for Bancontact / Mister Cash, transaction with this payment method will be automatically captured","Non applicable pour Bancontact / Mister Cash, les transactions réalisées avec cette méthode de paiement seront automatiquement capturées"
 Manual,Manuelle
 Automatic,Automatique
+"We advise you to update the extension if you wish to get the latest fixes and evolutions. To update the extension, please click here : ","Nous vous conseillons d'effectuer la mise à jour si vous voulez profiter des derniers correctifs et évolutions. Pour l'installer, cliquez-ici : "
+"HiPay Enterprise %1 available","HiPay Enterprise %1 disponible"
