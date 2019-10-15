@@ -193,12 +193,12 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             $versionData[] = array(
                 'severity' => $this->getSeverity(),
                 'date_added' => $this->newVersionDate,
-                'title' => $title . '\n',
+                'title' => $title,
                 'description' => $message,
                 'url' => $this->readMeUrl,
             );
 
-            if(!$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])){
+            if($this->version != $this->newVersion && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])){
                 $this->_inbox->create()->parse(array_reverse($versionData));
             }
             /*
@@ -228,7 +228,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             "To update the extension, please click here : ") . "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
 
-        return __($title . '\n' . $message);
+        return __('<b>' . $title . '</b><br/>' . $message);
     }
 
     /**
