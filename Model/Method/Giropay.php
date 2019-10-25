@@ -30,28 +30,15 @@ class Giropay extends HostedMethod
 
     const HIPAY_METHOD_CODE = 'hipay_giropay';
 
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'giropay';
 
     /**
      * @var string
      */
     protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefund = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = false;
 
     /**
      * Payment Method feature

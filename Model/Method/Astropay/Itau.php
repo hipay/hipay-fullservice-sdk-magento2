@@ -34,6 +34,11 @@ class Itau extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'itau';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

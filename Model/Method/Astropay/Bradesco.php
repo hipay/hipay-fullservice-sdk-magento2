@@ -34,6 +34,11 @@ class Bradesco extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'bradesco';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

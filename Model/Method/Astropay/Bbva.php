@@ -34,6 +34,11 @@ class Bbva extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'bbva-bancomer';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

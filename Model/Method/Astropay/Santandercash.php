@@ -34,6 +34,11 @@ class Santandercash extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'santander-cash';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

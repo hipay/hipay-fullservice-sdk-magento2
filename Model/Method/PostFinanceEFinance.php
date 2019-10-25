@@ -29,13 +29,10 @@ class PostFinanceEFinance extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_postfinanceefinanceapi';
 
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    protected $_canRefund = true;
-
-    protected $_canRefundInvoicePartial = true;
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'postfinance-efinance';
 
     /**
      * @var string

@@ -34,6 +34,11 @@ class Aura extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'aura';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

@@ -35,25 +35,12 @@ class IDeal extends HostedMethod
     /**
      * @var string
      */
+    protected static $_technicalCode = 'ideal';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
-
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefund = true;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = true;
 
     /**
      * Payment Method feature

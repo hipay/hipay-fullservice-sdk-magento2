@@ -34,6 +34,11 @@ class Oxxo extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'oxxo';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

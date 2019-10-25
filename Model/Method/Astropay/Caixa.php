@@ -34,6 +34,11 @@ class Caixa extends AbstractAstropay
     /**
      * @var string
      */
+    protected static $_technicalCode = 'caixa';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

@@ -129,6 +129,17 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $transactionRepository;
 
     /**
+     * @var string code
+     */
+    protected $_code;
+
+    /**
+     * @var string $_technicalCode
+     */
+    protected static $_technicalCode;
+
+
+    /**
      * FullserviceMethod constructor.
      * @param TransactionRepository $transactionRepository
      * @param Method\Context $context
@@ -166,6 +177,15 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->priceCurrency = $context->getPriceCurrency();
 
         $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
+
+        $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
+
+        if($sdkConfig) {
+            $this->_canCapture = $sdkConfig->getCanManualCapture();
+            $this->_canCapturePartial = $sdkConfig->getCanManualCapturePartially();
+            $this->_canRefund = $sdkConfig->getCanRefund();
+            $this->_canRefundInvoicePartial = $sdkConfig->getCanRefundPartially();
+        }
     }
 
     /**
