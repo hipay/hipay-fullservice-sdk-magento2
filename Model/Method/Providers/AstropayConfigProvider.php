@@ -39,9 +39,14 @@ class AstropayConfigProvider implements ConfigProviderInterface
     protected $ccConfig;
 
     /**
-     * @var MethodInterface[]
+     * @var string[]
      */
     protected $methods = [];
+
+    /**
+     * @var string[]
+     */
+    protected $methodTypeIdentification = [];
 
     /**
      * Url Builder
@@ -98,6 +103,7 @@ class AstropayConfigProvider implements ConfigProviderInterface
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
      * @param array $methodCodes
+     * @param array $methodTypeIdentification
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -107,10 +113,12 @@ class AstropayConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
         Context $context,
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
-        array $methodCodes = []
+        array $methodCodes = [],
+        array $methodTypeIdentification = []
     ) {
         $this->ccConfig = $ccConfig;
         $this->methods= $methodCodes;
+        $this->methodTypeIdentification= $methodTypeIdentification;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->checkoutSession = $checkoutSession;
@@ -133,7 +141,7 @@ class AstropayConfigProvider implements ConfigProviderInterface
      */
     protected function getTypeIdentification($methodCode)
     {
-        return (string)$this->methods[$methodCode]->getTypeIdentification();
+        return (string)$this->methodTypeIdentification[$methodCode];
     }
 
     /**

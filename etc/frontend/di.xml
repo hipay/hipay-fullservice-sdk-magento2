@@ -51,6 +51,19 @@
                 <item name="hipay_santander" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santander::HIPAY_METHOD_CODE</item>
                 <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_CODE</item>
             </argument>
+            <argument name="methodTypeIdentification" xsi:type="array">
+                <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_banamex" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banamex::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_banco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banco::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_bradesco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bradesco::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_caixa" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Caixa::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_itau" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Itau::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_oxxo" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Oxxo::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_santander" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santander::HIPAY_METHOD_IDENTIFICATION</item>
+                <item name="hipay_santandercash" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Santandercash::HIPAY_METHOD_IDENTIFICATION</item>
+            </argument>
         </arguments>
     </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider">

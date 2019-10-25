@@ -30,6 +30,7 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 class Bbva extends AbstractAstropay
 {
     const HIPAY_METHOD_CODE = 'hipay_bbva';
+    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
 
     /**
      * @var string
@@ -46,5 +47,5 @@ class Bbva extends AbstractAstropay
      *
      * @var bool
      */
-    protected $_typeIdentification = parent::IDENTIFICATION_CPN;
+    protected $_typeIdentification = self::HIPAY_METHOD_IDENTIFICATION;
 }
