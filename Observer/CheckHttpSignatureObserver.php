@@ -19,6 +19,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -65,22 +66,30 @@ class CheckHttpSignatureObserver implements ObserverInterface
     protected $_hipayHelper;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * CheckHttpSignatureObserver constructor.
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param ConfigFactory $configFactory
      * @param GatewayFactory $gatewayFactory
      * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param LoggerInterface $logger
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         ConfigFactory $configFactory,
         GatewayFactory $gatewayFactory,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
+        LoggerInterface $logger
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_configFactory = $configFactory;
         $this->_gatewayFactory = $gatewayFactory;
         $this->_hipayHelper = $hipayHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -104,6 +113,9 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 if (!$order->getId()) {
                     throw new LocalizedException(__("Order not found for id: " . $orderId));
                 }
+
+                $this->logger->info('Order ' . $orderId . ' found');
+
                 /** @var $config \HiPay\FullserviceMagento\Model\Config */
                 $config = $this->_configFactory->create(
                     [
@@ -117,7 +129,13 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 );
                 $secretPassphrase = $config->getSecretPassphrase();
                 $hash = $config->getHashingAlgorithm();
+
+                $this->logger->info('Configured hash : ' . $hash);
+
                 if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+
+                    $this->logger->info('Invalid signature, recovering hash from Hipay BO...');
+
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
                         array(
@@ -133,7 +151,12 @@ class CheckHttpSignatureObserver implements ObserverInterface
                             $e
                         );
                     }
+
+                    $this->logger->info('Retry successful, new hash : ' . $hash);
+
                     if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+                        $this->logger->info('Invalid signature, failing');
+
                         $controller->getActionFlag()->set(
                             '',
                             \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
@@ -143,7 +166,11 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         $controller->getResponse()->setHttpResponseCode(500);
                     }
                 }
+
+                $this->logger->info('Valid signature !');
+
             } catch (\Exception $e) {
+                $this->logger->critical($e->getMessage() . ' --- ' . $e->getTraceAsString());
                 $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $controller->getResponse()->setBody("Exception during check signature.");
                 $controller->getResponse()->setHttpResponseCode(500);
@@ -159,6 +186,8 @@ class CheckHttpSignatureObserver implements ObserverInterface
      */
     protected function getOrderId(\Magento\Framework\App\RequestInterface $request)
     {
+        $this->logger->info('Getting order ID');
+
         $orderId = 0;
         if ($request->getParam('orderid', 0)) { //Redirection case
             $orderId = $request->getParam('orderid', 0);
@@ -169,6 +198,8 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 return explode("-", $o['id'])[0];
             }
         }
+
+        $this->logger->info('Found order ID : ' . $orderId);
         return $orderId;
     }
 }
