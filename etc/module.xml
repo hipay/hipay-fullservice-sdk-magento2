@@ -26,6 +26,7 @@
             <module name="Magento_Quote"/>
             <module name="Magento_Rule"/>
 			<module name="Magento_SalesRule"/>
+            <module name="Magento_AdminNotification"/>
         </sequence>
   </module>
 </config>

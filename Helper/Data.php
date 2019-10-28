@@ -20,6 +20,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ResourceInterface;
+use Magento\Framework\Module\ModuleListInterface;
 
 /**
  * Main Helper class
@@ -32,6 +33,8 @@ use Magento\Framework\Module\ResourceInterface;
  */
 class Data extends AbstractHelper
 {
+
+    const MODULE_NAME = 'HiPay_FullserviceMagento';
 
     /**
      *
@@ -49,16 +52,24 @@ class Data extends AbstractHelper
      */
     protected $productMetadata;
 
+    /**
+     * @var ModuleListInterface
+     */
+    protected $moduleList;
+
+
     public function __construct(
         Context $context,
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         ResourceInterface $moduleResource,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        ModuleListInterface $moduleList
     ) {
         parent::__construct($context);
         $this->ruleFactory = $ruleFactory;
         $this->moduleResource = $moduleResource;
         $this->productMetadata = $productMetadata;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -181,4 +192,30 @@ class Data extends AbstractHelper
         $store->resetConfig();
         return $hash;
     }
+
+    public function readVersionDataFromConf(
+        \HiPay\FullserviceMagento\Model\Config $config
+    ){
+        $info = $config->getVersionInfo();
+
+        if(!$info || !is_string($info)){
+            $info = new \stdClass();
+        } elseif(is_string($info)){
+            $info = json_decode($info);
+        }
+
+        $info->version = $this->getExtensionVersion();
+
+
+        return $info;
+    }
+
+    /**
+     * @return string
+     */
+    public function getExtensionVersion()
+    {
+        return $this->moduleList->getOne(self::MODULE_NAME)['setup_version'];
+    }
+
 }

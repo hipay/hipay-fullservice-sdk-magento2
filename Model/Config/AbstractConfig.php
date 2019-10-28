@@ -265,6 +265,7 @@ abstract class AbstractConfig implements ConfigInterface
             case 'hipay_proxy_user':
             case 'hipay_proxy_password':
             case 'sdk_js_url':
+            case 'github_module_version':
                 return "hipay/{$group}/{$fieldName}";
             default:
                 return null;
