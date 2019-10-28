@@ -109,7 +109,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
         $params = []
-    ) {
+    )
+    {
         parent::__construct($scopeConfig, $configWriter);
 
         $this->_storeManager = $storeManager;
@@ -557,6 +558,31 @@ class Config extends AbstractConfig implements ConfigurationInterface
     {
         return in_array($product_code, ['3xcb', '3xcb-no-fees', '4xcb-no-fees', '4xcb']);
     }
+
+    /**
+     *  Get current github version info
+     *
+     * @return \stdClass
+     */
+    public function getVersionInfo()
+    {
+        $key = "github_module_version";
+        $this->setStoreId(0);
+
+        return $this->getGeneraleValue($key, 'hipay_module');
+    }
+
+    /**
+     * @param $info module version info from github
+     */
+    public function setModuleVersionInfo($info)
+    {
+        $key = "github_module_version";
+        $this->setStoreId(0);
+        $this->setGeneralValue($key, $info, 'hipay_module', 'default');
+        $this->_storeManager->getStore(0)->resetConfig();
+    }
+
 
     public function getApiEndpoint()
     {
