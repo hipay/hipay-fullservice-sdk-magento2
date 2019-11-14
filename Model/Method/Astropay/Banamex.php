@@ -30,6 +30,12 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 class Banamex extends AbstractAstropay
 {
     const HIPAY_METHOD_CODE = 'hipay_banamex';
+    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
+
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'banamex';
 
     /**
      * @var string
@@ -41,5 +47,5 @@ class Banamex extends AbstractAstropay
      *
      * @var bool
      */
-    protected $_typeIdentification = parent::IDENTIFICATION_CPN;
+    protected $_typeIdentification = self::HIPAY_METHOD_IDENTIFICATION;
 }

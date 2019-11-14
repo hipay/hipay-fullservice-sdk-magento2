@@ -35,24 +35,6 @@ class QiwiWallet extends FullserviceMethod
      */
     protected $_code = self::HIPAY_METHOD_CODE;
 
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefund = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = false;
-
     /**
      * Payment Method feature
      *

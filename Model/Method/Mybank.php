@@ -28,25 +28,12 @@ class Mybank extends AbstractMethodAPI
 
     const HIPAY_METHOD_CODE = 'hipay_mybank';
 
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'mybank';
+
     protected $_code = self::HIPAY_METHOD_CODE;
-
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefund = true;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = true;
 
     /**
      * Payment Method feature

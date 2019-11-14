@@ -33,6 +33,11 @@ class Bnpp3X extends AbstractBnpp
     /**
      * @var string
      */
+    protected static $_technicalCode = 'bnpp-3xcb';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**

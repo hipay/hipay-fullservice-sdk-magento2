@@ -29,13 +29,10 @@ class WebmoneyApi extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_webmoneyapi';
 
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    protected $_canRefund = false;
-
-    protected $_canRefundInvoicePartial = false;
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'webmoney-transfer';
 
     /**
      * @var string

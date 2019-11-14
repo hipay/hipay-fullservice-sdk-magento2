@@ -19,15 +19,6 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 
 class AbstractBnpp extends AbstractMethodAPI
 {
-
-    protected $_canCapture = false;
-
-    protected $_canCapturePartial = false;
-
-    protected $_canRefund = true;
-
-    protected $_canRefundInvoicePartial = true;
-
     /**
      * Validate payment method information object
      *
