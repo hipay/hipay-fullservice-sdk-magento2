@@ -30,6 +30,12 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 class Santander extends AbstractAstropay
 {
     const HIPAY_METHOD_CODE = 'hipay_santander';
+    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
+
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'santander-home-banking';
 
     /**
      * @var string
@@ -41,5 +47,5 @@ class Santander extends AbstractAstropay
      *
      * @var bool
      */
-    protected $_typeIdentification = parent::IDENTIFICATION_CPN;
+    protected $_typeIdentification = self::HIPAY_METHOD_IDENTIFICATION;
 }

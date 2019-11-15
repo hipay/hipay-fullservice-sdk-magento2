@@ -34,21 +34,12 @@ class Facilypay4X extends AbstractMethodAPI
     /**
      * @var string
      */
+    protected static $_technicalCode = '4xcb';
+
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefund = true;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = true;
 
     /**
      * Payment Method feature

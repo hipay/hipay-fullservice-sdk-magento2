@@ -1,3 +1,7 @@
+ # 1.8.0
+  - **New**: Retreive configuration from PHP SDK
+  - **Fix**: Corrected Astropay
+  
  # 1.7.3
   - Fix: Missing method for Config class
   - Fix: Wrong version in request source

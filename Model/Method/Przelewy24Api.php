@@ -29,13 +29,10 @@ class Przelewy24Api extends AbstractMethodAPI
 {
     const HIPAY_METHOD_CODE = 'hipay_przelewy24api';
 
-    protected $_canCapture = true;
-
-    protected $_canCapturePartial = false;
-
-    protected $_canRefund = true;
-
-    protected $_canRefundInvoicePartial = true;
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'przelewy24';
 
     /**
      * @var string

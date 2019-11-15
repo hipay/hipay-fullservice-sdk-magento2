@@ -21,20 +21,6 @@ abstract class AbstractMethodAPI extends FullserviceMethod
 {
 
     /**
-     * Payment Method feature Refund
-     *
-     * @var bool
-     */
-    protected $_canRefund = false;
-
-    /**
-     * Payment Method feature Refund Invoice Partial
-     *
-     * @var bool
-     */
-    protected $_canRefundInvoicePartial = false;
-
-    /**
      * Payment Method feature
      *
      * @var bool

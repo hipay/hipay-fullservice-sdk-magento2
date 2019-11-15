@@ -30,6 +30,12 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 class Boleto extends AbstractAstropay
 {
     const HIPAY_METHOD_CODE = 'hipay_boleto';
+    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+
+    /**
+     * @var string
+     */
+    protected static $_technicalCode = 'boleto-bancario';
 
     /**
      * @var string
@@ -41,5 +47,5 @@ class Boleto extends AbstractAstropay
      *
      * @var bool
      */
-    protected $_typeIdentification = parent::IDENTIFICATION_CPF;
+    protected $_typeIdentification = self::HIPAY_METHOD_IDENTIFICATION;
 }
