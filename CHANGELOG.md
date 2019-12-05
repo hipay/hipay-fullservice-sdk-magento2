@@ -1,3 +1,6 @@
+ # 1.8.1
+  - **Fix**: Removed fake value for shipto_house_number
+
  # 1.8.0
   - **New**: Retreive configuration from PHP SDK
   - **Fix**: Corrected Astropay
