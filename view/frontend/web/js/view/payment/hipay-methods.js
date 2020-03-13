@@ -168,6 +168,10 @@ define(
             {
                 type: 'hipay_mybank',
                 component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mybank'
+            },
+            {
+                type: 'hipay_multibanco',
+                component: 'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-multibanco'
             }
         );
         /** Add view logic here if needed */

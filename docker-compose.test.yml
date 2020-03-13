@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   web:
-    image: gcr.io/pi-dev-sandbox/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
+    image: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
     build:
       context: .
       dockerfile: ./bin/docker/images/default/Dockerfile
