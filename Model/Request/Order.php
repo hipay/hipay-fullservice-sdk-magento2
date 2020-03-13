@@ -313,6 +313,13 @@ class Order extends CommonRequest
         // Extras information
         $this->processExtraInformations($orderRequest, $useOrderCurrency);
 
+        if($payment_product == 'multibanco') {
+            $timeLimit = $this->_config->getValue('multibanco_order_expiration_time');
+            if ($timeLimit && in_array($timeLimit, [3, 30, 90])) {
+                $orderRequest->expiration_limit = $timeLimit;
+            }
+        }
+
         return $orderRequest;
     }
 

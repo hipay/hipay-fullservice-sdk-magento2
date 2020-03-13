@@ -1,4 +1,4 @@
-image: gcr.io/pi-dev-sandbox/gitlab-ci-base:jessie
+image: $REGISTRY_CI/gitlab-ci-base:buster
 
 variables:
   DOCKER_HOST: tcp://localhost:2375/
@@ -36,7 +36,7 @@ stages:
     - sed -i "s/$(echo "{BRANCH}" | sed -e 's/\([[\/.*]\|\]\)/\\&/g')/$(echo $CI_COMMIT_REF_NAME | sed -e 's/[\/&]/\\&/g')/g" ./bin/docker/conf/test/module.env.sample
     - sed -i -e "s@{PI_CI_DATA_URL\}@$PI_CI_DATA_URL@" ./bin/docker/conf/test/hipay.env.sample
   tags:
-    - pi-commerce-no-overlay
+    - gcp-default-runner-prod
   artifacts:
     paths:
       - bin/tests/errors
@@ -48,7 +48,7 @@ build-test-2-1-10:
     - docker-compose -f docker-compose.test.yml build
     - docker-compose -f docker-compose.test.yml push
   tags:
-    - gcp-default-runner
+    - gcp-default-runner-prod
 
 casperjs-2-1-10:
   <<: *test_definition
@@ -61,7 +61,7 @@ casperjs-2-1-10:
     - curl --retry 10 --retry-delay 20 -v http:\/\/127.0.0.1:8096/
     - sh bin/tests/casper_run_circle.sh http:\/\/127.0.0.1:8096
   tags:
-    - gcp-cypress-runner
+    - gcp-high-load-runner-prod
 
 build:
   stage: build
@@ -74,7 +74,7 @@ build:
   after_script:
     - docker rmi ${REGISTRY_URL}/${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
   tags:
-    - pi-commerce-no-overlay
+    - gcp-default-runner-prod
 
 deploy2recette:
   stage: deploy
@@ -111,4 +111,4 @@ deploy2recette:
     name: review/$CI_COMMIT_REF_NAME
     url: http:\/\/${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.hipay-pos-platform.com/
   tags:
-    - pi-commerce-no-overlay
+    - gcp-default-runner-prod

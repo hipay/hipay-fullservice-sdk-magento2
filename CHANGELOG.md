@@ -1,3 +1,6 @@
+ # 1.9.0
+  - **New**: Added Multibanco payment method
+
  # 1.8.1
   - **Fix**: Removed fake value for shipto_house_number
 

@@ -72,6 +72,7 @@
             <include path="HiPay_FullserviceMagento::system/method/bnpp3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/mybank.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/multibanco.xml"/>
         </section>
     </system>
 </config>
