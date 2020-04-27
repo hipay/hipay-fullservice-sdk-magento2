@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: magento2-mysql-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: magento2-{{ .Release.Name }}
+    tier: mysql-{{ .Release.Name }}
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magento2-mysql-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  selector:
+    matchLabels:
+      app: magento2-{{ .Release.Name }}
+      tier: mysql-{{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: magento2-{{ .Release.Name }}
+        tier: mysql-{{ .Release.Name }}
+        cd-hipay: cron-delete
+    spec:
+      containers:
+      - image: {{ .Values.mysql_image }}:{{ .Values.mysql_tag }}
+        name: mysql-{{ .Release.Name }}
+        resources:
+          requests:
+            memory: "256M"
+            cpu: "500m"
+          limits:
+            memory: "512M"
+            cpu: "1000m"
+        envFrom:
+          - configMapRef:
+              name: magento2-configmap-{{ .Release.Name }}
+        ports:
+          - containerPort: 3306
+            name: mysql
+        volumeMounts:
+          - name: mysql-persistent-storage-{{ .Release.Name }}
+            mountPath: /var/lib/mysql
+            subPath: mysql
+      volumes:
+        - name: mysql-persistent-storage-{{ .Release.Name }}
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim-{{ .Release.Name }}
+      nodeSelector:
+        node_type: default
+      tolerations:
+        - key: cd_service
+          operator: Equal
+          value: only
+          effect: NoExecute
