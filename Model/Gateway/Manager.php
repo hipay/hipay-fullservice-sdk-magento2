@@ -377,20 +377,13 @@ class Manager
      */
     public function countByTransactionsType($transactionType, $paymentId)
     {
-        $filters[] = $this->_filterBuilder
-            ->setField(\Magento\Sales\Api\Data\TransactionInterface::TXN_TYPE)
-            ->setValue($transactionType)
+        $searchCriteria = $this->_searchCriteriaBuilder
+            ->addFilter(\Magento\Sales\Api\Data\TransactionInterface::TXN_TYPE, $transactionType)
+            ->addFilter(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID, $paymentId)
             ->create();
-        $filters[] = $this->_filterBuilder
-            ->setField(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID)
-            ->setValue($paymentId)
-            ->create();
-        $list = $this->_transactionRepositoryInterface->getList(
-            $this->_searchCriteriaBuilder
-                ->addFilters($filters)
-                ->create()
-        )->getItems();
 
-        return count($list);
+        $nbTrx = $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
+
+        return $nbTrx;
     }
 }
