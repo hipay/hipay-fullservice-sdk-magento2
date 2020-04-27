@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: magento2-configmap-{{ .Release.Name }}
+  labels:
+    cd-hipay: cron-delete
+data:
+  # Magento env var
+  MAGE_INSTALL_SAMPLE_DATA: --use-sample-data
+  MAGE_ADMIN_FIRSTNAME: John
+  MAGE_ADMIN_LASTNAME: Doe
+  MAGE_ADMIN_EMAIL: john.doe@yopmail.com
+  MAGE_ADMIN_USER: admin
+  MAGE_ADMIN_PWD: admin123
+  MAGE_BASE_URL: http://{{ .Values.magento2_url }}
+  MAGE_BASE_URL_SECURE: https://{{ .Values.magento2_url }}
+  MAGE_BACKEND_FRONTNAME: admin
+  MAGE_DB_HOST: magento2-mysql-{{ .Release.Name }}
+  MAGE_DB_PORT: "3306"
+  MAGE_DB_NAME: magento2
+  MAGE_DB_USER: magento2
+  MAGE_DB_PASSWORD: magento2
+  MAGE_DB_PREFIX: mage_
+  MAGE_LANGUAGE: en_US
+  MAGE_CURRENCY: EUR
+  MAGE_TIMEZONE: Europe/Paris
+  MAGE_USE_REWRITES: "1"
+  MAGE_USE_SECURE: "0"
+  MAGE_USE_SECURE_ADMIN: "0"
+  MAGE_ADMIN_USE_SECURITY_KEY: "0"
+  MAGE_SESSION_SAVE: files
+  MAGE_KEY: 69c60a47f9dca004e47bf8783f4b9408
+  # Mysql env var
+  MYSQL_ROOT_PASSWORD: magento2
+  MYSQL_DATABASE: magento2
+  MYSQL_USER: magento2
+  MYSQL_PASSWORD: magento2
+  # Auth env var
+  GITHUB_API_TOKEN: {{ .Values.github_api_token }}
+  MAGE_ACCOUNT_PUBLIC_KEY: {{ .Values.mage_account_public_key }}
+  MAGE_ACCOUNT_PRIVATE_KEY: {{ .Values.mage_account_private_key }}
+  GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
+  # HiPay env var
+  ENVIRONMENT: production
+  ACTIVE_METHODS: hipay_cc,hipay_hosted
+  HIPAY_API_USER_TEST: {{ .Values.hipay_api_user_test }}
+  HIPAY_API_PASSWORD_TEST: {{ .Values.hipay_api_password_test }}
+  HIPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_tokenjs_username_test }}
+  HIPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_tokenjs_publickey_test }}
+  HIPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_secret_passphrase_test }}
+  PI_DATA_URL: {{ .Values.pi_data_url }}
+  # Env var used after installation
+  MAGE_DB_INIT_STATEMENTS: SET NAMES utf8
+  MAGE_SALES_ORDER_INCREMENT_PREFIX: "0"
+  MAGE_RUN_REINDEX: "1"
+  MAGE_RUN_CACHE_CLEAN: "1"
+  MAGE_RUN_CACHE_FLUSH: "1"
+  MAGE_RUN_CACHE_DISABLE: "0"
+  MAGE_RUN_STATIC_CONTENT_DEPLOY: "1"
+  MAGE_RUN_SETUP_DI_COMPILE: "1"
+  MAGE_RUN_DEPLOY_MODE: production
+  # Modules env var
+  CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2
+  CUSTOM_MODULES: HiPay_FullserviceMagento
