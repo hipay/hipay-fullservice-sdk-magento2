@@ -50,7 +50,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     #==========================================
     # MAIL CONFIGURATION
     #==========================================
-    echo "mailhub=$SMTP_LINK\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
+    echo "sendmail_path = /usr/sbin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
