@@ -61,5 +61,5 @@ data:
   MAGE_RUN_DEPLOY_MODE: production
   # Modules env var
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-{{ .Values.branch }}
   CUSTOM_MODULES: HiPay_FullserviceMagento

@@ -53,10 +53,10 @@ spec:
         name: mysql-{{ .Release.Name }}
         resources:
           requests:
-            memory: "256M"
+            memory: "2G"
             cpu: "500m"
           limits:
-            memory: "512M"
+            memory: "2.5G"
             cpu: "1000m"
         envFrom:
           - configMapRef:
