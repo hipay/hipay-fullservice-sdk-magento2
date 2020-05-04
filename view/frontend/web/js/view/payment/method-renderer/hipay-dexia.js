@@ -19,7 +19,7 @@
 define(
     [
         'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted', //@override hipay-hosted
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
     ],
     function ($,Component) {
         'use strict';

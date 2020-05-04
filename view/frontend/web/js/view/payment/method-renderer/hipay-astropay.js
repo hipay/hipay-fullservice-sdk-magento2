@@ -18,7 +18,7 @@
 define(
     [
      	'jquery',
-        'Magento_Checkout/js/view/payment/default',
+        'Magento_Checkout/js/view/payment/default'
     ],
     function ($, Component) {
         'use strict';

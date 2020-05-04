@@ -1,3 +1,7 @@
+ # 1.9.1
+  - **Fix**: Fix Entity query
+  - **Fix**: Fix js minifying
+  
  # 1.9.0
   - **New**: Added Multibanco payment method
 
