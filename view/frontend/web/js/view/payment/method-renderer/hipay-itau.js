@@ -18,7 +18,7 @@
 define(
     [
         'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-astropay', //@override hipay-hosted
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-astropay'
     ],
     function ($,Component) {
         'use strict';
