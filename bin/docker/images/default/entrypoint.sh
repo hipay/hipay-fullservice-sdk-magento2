@@ -50,7 +50,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     #==========================================
     # MAIL CONFIGURATION
     #==========================================
-    echo "mailhub=$SMTP_LINK\nUseTLS=NO\nFromLineOverride=YES" > /etc/ssmtp/ssmtp.conf \
+    echo "sendmail_path = /usr/sbin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -135,7 +135,7 @@ printf "${COLOR_SUCCESS}    |                                                   
 printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY $ENVIRONMENT IS UP             ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
 printf "${COLOR_SUCCESS}    |   URL FRONT       : $MAGE_BASE_URL                                   ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL BACK        : $MAGE_BASE_URLadmin                             ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL BACK        : ${MAGE_BASE_URL}admin                             ${NC}\n"
 printf "${COLOR_SUCCESS}    |   URL MAIL CATCHER: $MAGENTO_URL:1095/                               ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
 printf "${COLOR_SUCCESS}    |   PHP VERSION     : $PHP_VERSION                                     ${NC}\n"

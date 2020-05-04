@@ -1,0 +1,20 @@
+mysql_image: "mysql"
+mysql_tag: "5.7"
+
+magento2_image: ""
+magento2_tag: ""
+
+magento2_url: ""
+
+github_api_token: ""
+gitlab_api_token: ""
+mage_account_public_key: ""
+mage_account_private_key: ""
+
+hipay_api_user_test: ""
+hipay_api_password_test: ""
+hipay_tokenjs_username_test: ""
+hipay_tokenjs_publickey_test: ""
+hipay_secret_passphrase_test: ""
+
+pi_data_url: ""
