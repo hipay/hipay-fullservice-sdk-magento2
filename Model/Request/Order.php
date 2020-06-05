@@ -313,11 +313,25 @@ class Order extends CommonRequest
         // Extras information
         $this->processExtraInformations($orderRequest, $useOrderCurrency);
 
-        if($payment_product == 'multibanco') {
+        if ($payment_product == 'multibanco') {
             $timeLimit = $this->_config->getValue('multibanco_order_expiration_time');
             if ($timeLimit && in_array($timeLimit, [3, 30, 90])) {
                 $orderRequest->expiration_limit = $timeLimit;
             }
+        }
+
+        if (preg_match("/[34]xcb-no-fees|[34]xcb/", $payment_product)) {
+            $merchantPromotion = $this->_config->getValue('merchant_promotion');
+            $orderRequest->payment_product_parameters = json_encode(
+                array(
+                    "merchantPromotion" => $merchantPromotion && !empty($merchantPromotion) ?
+                    $merchantPromotion :
+                    \HiPay\Fullservice\Helper\MerchantPromotionCalculator::calculate(
+                        $payment_product,
+                        $orderRequest->amount
+                    )
+                )
+            );
         }
 
         return $orderRequest;
