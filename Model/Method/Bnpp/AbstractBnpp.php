@@ -39,7 +39,7 @@ class AbstractBnpp extends AbstractMethodAPI
         }
 
         $phone = $order->getBillingAddress()->getTelephone();
-        if (!preg_match('"(0|\\+33|0033)[1-9][0-9]{8}"', $phone)) {
+        if (!preg_match('/(0|\+?33|0033)[1-9][0-9]{8}/', $phone)) {
             throw new \Magento\Framework\Exception\LocalizedException('Please check the phone number entered.');
         }
 

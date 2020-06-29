@@ -44,7 +44,7 @@ define(
             getWarningsMessages: function() {
                 var billingAddress = quote.billingAddress();
                 if (billingAddress) {
-                    var re = /(0|\\+33|0033)[1-9][0-9]{8}/;
+                    var re = /(0|\+?33|0033)[1-9][0-9]{8}/;
                     if (!re.exec(billingAddress.telephone))
                         return 'Please check the phone number entered.';
                 }
