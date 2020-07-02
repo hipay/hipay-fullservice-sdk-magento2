@@ -453,7 +453,7 @@ class Order extends CommonRequest
          */
         if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb') {
             $orderRequest->customerBillingInfo->phone = preg_replace(
-                '/^(\+33)|(33)/',
+                '/^\+?33/',
                 '0',
                 $orderRequest->customerBillingInfo->phone
             );
