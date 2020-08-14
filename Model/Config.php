@@ -173,7 +173,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
         }
 
         if ($hasOrder) {
-            $hasLastTransId = $this->getOrder()->getPayment()->getLastTransId() ? true : false;
+            $hasLastTransId = $this->getOrder()->getPayment()->getCcTransId() ? true : false;
             $isMoto = $this->isMoto();
         }
 

@@ -311,7 +311,7 @@ abstract class FullserviceMethod extends AbstractMethod
         parent::capture($payment, $amount);
         try {
             /** @var \Magento\Sales\Model\Order\Payment $payment */
-            if ($payment->getLastTransId()) {  //Is not the first transaction
+            if ($payment->getAuthorizationTransaction()) {  //Is not the first transaction
 
                 $this->manualCapture($payment, $amount);
             } else { //Ok, it's the first transaction, so we request a new order (MO/TO)
