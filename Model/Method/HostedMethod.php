@@ -118,7 +118,7 @@ class HostedMethod extends FullserviceMethod
 
         try {
             /** @var \Magento\Sales\Model\Order\Payment $payment */
-            if ($payment->getLastTransId()) {  //Is not the first transaction
+            if ($payment->getAuthorizationTransaction()) {  //Is not the first transaction
                 $this->manualCapture($payment, $amount);
             }
         } catch (\Exception $e) {

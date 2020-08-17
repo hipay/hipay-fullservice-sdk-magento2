@@ -65,6 +65,11 @@ class CheckHttpSignatureObserver implements ObserverInterface
     protected $_hipayHelper;
 
     /**
+     * @var \Psr\Log\LoggerInterface $logger
+     */
+    protected $_logger;
+
+    /**
      * CheckHttpSignatureObserver constructor.
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param ConfigFactory $configFactory
@@ -75,12 +80,14 @@ class CheckHttpSignatureObserver implements ObserverInterface
         \Magento\Sales\Model\OrderFactory $orderFactory,
         ConfigFactory $configFactory,
         GatewayFactory $gatewayFactory,
+        \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Helper\Data $hipayHelper
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_configFactory = $configFactory;
         $this->_gatewayFactory = $gatewayFactory;
         $this->_hipayHelper = $hipayHelper;
+        $this->_logger = $logger;
     }
 
     /**
@@ -144,6 +151,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                     }
                 }
             } catch (\Exception $e) {
+                $this->_logger->critical($e);
                 $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $controller->getResponse()->setBody("Exception during check signature.");
                 $controller->getResponse()->setHttpResponseCode(500);
