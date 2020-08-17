@@ -356,7 +356,7 @@ class Notify
                     break;
                 }
 
-                if ($this->_order->getPayment()->getLastTransId() == null) {
+                if (!$this->_order->getPayment()->getAuthorizationTransaction()) {
                     $this->_doTransactionAuthorization();
                 };
 

@@ -48,7 +48,7 @@ class OrderPaymentPlugin
     {
 
         if ($this->isHipayMethod($subject->getMethod())) {
-            $transactionId = $subject->getLastTransId();
+            $transactionId = $subject->getCcTransId();
 
             /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
             $method = $subject->getMethodInstance();
