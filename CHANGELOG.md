@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.10.1
+
+- **Fix**: Fixed some errors on capture and notifications
+
 ## 1.10.0
 
 - **New**: Added merchant promotion field for Oney With or Without Fees payment methods
