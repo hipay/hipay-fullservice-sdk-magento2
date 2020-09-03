@@ -83,6 +83,31 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
                 }
             }
         }
+
+        $options[] = array(
+            'value' => 'hipay_shipping_custom',
+            'label' => __('Custom shipping code')
+        );
+
         return $options;
+    }
+
+    public function getCarriers()
+    {
+        $carriersArray = [];
+        $carriers = $this->_config_shipping->getActiveCarriers();
+        foreach ($carriers as $carrier) {
+            $carrierTitle = $this->_scopeConfig->getValue(
+                'carriers/' . $carrier->getId() . '/title',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+
+            $carriersArray[] = array(
+                'label' => $carrierTitle,
+                'code' => $carrier->getId()
+            );
+        }
+
+        return $carriersArray;
     }
 }

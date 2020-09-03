@@ -291,3 +291,7 @@
 "<![CDATA[<strong style=""color:red"">Warning!</strong> If the hash configuration is different than the one set in your Hipay back office, then the notifications will not work. Check that both values match.]]>","<![CDATA[<strong style=""color:red"">Warning!</strong> If the hash configuration is different than the one set in your Hipay back office, then the notifications will not work. Check that both values match.]]>"
 "We advise you to update the extension if you wish to get the latest fixes and evolutions. To update the extension, please click here : ","We advise you to update the extension if you wish to get the latest fixes and evolutions. To update the extension, please click here : "
 "HiPay Enterprise %1 available","HiPay Enterprise %1 available"
+"Custom shipping method","Custom shipping method"
+"Custom shipping methods","Custom shipping methods"
+"Shipping method should be &lt;carrier_code&gt;_&lt;shipping_method_id&gt;. Available carriers are : %1","Shipping method should be &lt;carrier_code&gt;_&lt;shipping_method_id&gt;. Available carriers are : %1"
+"Custom shipping code","Custom shipping code"

@@ -71,18 +71,33 @@ class Save extends \Magento\Backend\App\Action
             if ($id) {
                 $model->getResource()->load($model, $id);
             } else {
-                $count = $this->_mappingShippingCollectionFactory->create()
-                    ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
-                    ->addFieldToFilter('hipay_shipping_id', $data['hipay_shipping_id'])
-                    ->count();
+                if($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
+                    $count = $this->_mappingShippingCollectionFactory->create()
+                        ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
+                        ->count();
 
-                if ($count > 1) {
-                    $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
-                    $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath(
-                        '*/*/edit',
-                        ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
-                    );
+                    if ($count > 0) {
+                        $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
+                        $this->_getSession()->setFormData($data);
+                        return $resultRedirect->setPath(
+                            '*/*/edit',
+                            ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+                        );
+                    }
+                } else {
+                    $count = $this->_mappingShippingCollectionFactory->create()
+                        ->addFieldToFilter('magento_shipping_code_custom', $data['magento_shipping_code_custom'])
+                        ->count();
+
+                    if ($count > 0) {
+                        $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
+                        $this->_getSession()->setFormData($data);
+                        return $resultRedirect->setPath(
+                            '*/*/edit',
+                            ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
+                        );
+                    }
+
                 }
             }
 
