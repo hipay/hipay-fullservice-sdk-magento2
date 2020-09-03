@@ -117,6 +117,11 @@ class Order extends CommonRequest
     protected $frontendUrlBuilder;
 
     /**
+     * @var \Magento\Framework\HTTP\Header
+     */
+    protected $_httpHeader;
+
+    /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
@@ -138,6 +143,7 @@ class Order extends CommonRequest
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
         \Magento\Framework\App\State $appState,
+        \Magento\Framework\HTTP\Header $httpHeader,
         $params = []
     ) {
         parent::__construct(
@@ -164,6 +170,7 @@ class Order extends CommonRequest
         $this->_productRepositoryInterface = $productRepositoryInterface;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
+        $this->_httpHeader = $httpHeader;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -333,6 +340,8 @@ class Order extends CommonRequest
                 )
             );
         }
+
+        $orderRequest->http_user_agent = $this->_httpHeader->getHttpUserAgent();
 
         return $orderRequest;
     }
