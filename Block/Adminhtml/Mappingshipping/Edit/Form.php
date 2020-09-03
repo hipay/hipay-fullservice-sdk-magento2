@@ -83,8 +83,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'name' => 'magento_shipping_code',
             'label' => __('Magento Shipping methods'),
             'title' => __('Magento Shipping methods'),
-            'required' => true,
-            'values' => $options
+            'values' => $options,
+            'onchange' => 'toggleCustomShipping()',
+            'required' => true
         ];
 
         if ($model != null) {
@@ -93,11 +94,42 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             }
         }
 
-        $fieldset->addField(
+        $selectField = $fieldset->addField(
             'magento_shipping_code',
             'select',
             $config
         );
+
+        $carrierList = [];
+        foreach($this->_shippingMethodsMagento->getCarriers() as $carrier){
+            $carrierList[] = $carrier['label'] . ' (code : ' . $carrier['code'] . ')';
+        }
+
+        $customField = $fieldset->addField(
+            'magento_shipping_code_custom',
+            'text',
+            [
+                'name' => 'magento_shipping_code_custom',
+                'label' => __('Custom shipping method'),
+                'title' => __('Custom shipping method'),
+                'note' => __('Shipping method should be [carrier_code]_[shipping_method_id]. Available carriers are : %1', implode(', ', $carrierList))
+            ]
+        );
+
+        $customField->setAfterElementHtml('
+            <script>
+            function toggleCustomShipping() {
+                if(jQuery("#cart_mappingshipping_magento_shipping_code").val() === "hipay_shipping_custom"){
+                    jQuery("#cart_mappingshipping_magento_shipping_code_custom").parents(".field").show();
+                } else {
+                    jQuery("#cart_mappingshipping_magento_shipping_code_custom").parents(".field").hide();
+                    jQuery("#cart_mappingshipping_magento_shipping_code_custom").val("");
+                }
+            }
+            
+            window.onload = toggleCustomShipping;
+            </script>
+        ');
 
         $options = $this->_shippingMethodsHipay->toOptionArray();
         $fieldset->addField(
