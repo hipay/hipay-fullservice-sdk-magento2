@@ -78,6 +78,7 @@ define(
                     'method': this.item.method,
                     'additional_data': {
                         'nationalIdentification': this.nationalIdentification(),
+                        'cc_type': 'astropay',
                     }
                 };
             },
