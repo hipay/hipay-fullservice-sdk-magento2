@@ -198,6 +198,10 @@ class CcMethod extends FullserviceMethod
 
         $info = $this->getInfoInstance();
 
+        if(!$info->getCcType()){
+            return $this;
+        }
+
         if ($info->getAdditionalInformation('card_token')) {
             return $this;
         }

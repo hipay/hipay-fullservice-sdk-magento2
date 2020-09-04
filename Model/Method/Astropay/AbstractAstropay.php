@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Model\Method\Astropay;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Abstract Model payment method
@@ -39,7 +40,23 @@ class AbstractAstropay extends AbstractMethodAPI
      *
      * @var array
      */
-    protected $_additionalInformationKeys = ['nationalIdentification'];
+    protected $_additionalInformationKeys = ['nationalIdentification', 'cc_type'];
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param \Magento\Framework\DataObject $additionalData
+     * @return $this
+     * @throws LocalizedException
+     */
+    public function _assignAdditionalInformation(\Magento\Framework\DataObject $additionalData)
+    {
+        parent::_assignAdditionalInformation($additionalData);
+        $info = $this->getInfoInstance();
+        $info->setCcType($additionalData->getCcType());
+
+        return $this;
+    }
 
     /**
      * Validate payment method information object
@@ -54,6 +71,10 @@ class AbstractAstropay extends AbstractMethodAPI
         */
         parent::validate();
         $info = $this->getInfoInstance();
+
+        if(!$info->getCcType()){
+            return $this;
+        }
 
         $nationalIdentificationNumber = $info->getAdditionalInformation('nationalIdentification');
         switch ($this->_typeIdentification) {

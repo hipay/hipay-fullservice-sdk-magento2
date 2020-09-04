@@ -16,9 +16,34 @@
 namespace HiPay\FullserviceMagento\Model\Method\Bnpp;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
+use Magento\Framework\Exception\LocalizedException;
 
 class AbstractBnpp extends AbstractMethodAPI
 {
+
+    /**
+     *  Additional datas
+     *
+     * @var array
+     */
+    protected $_additionalInformationKeys = ['cc_type'];
+
+    /**
+     * Assign data to info model instance
+     *
+     * @param \Magento\Framework\DataObject $additionalData
+     * @return $this
+     * @throws LocalizedException
+     */
+    public function _assignAdditionalInformation(\Magento\Framework\DataObject $additionalData)
+    {
+        parent::_assignAdditionalInformation($additionalData);
+        $info = $this->getInfoInstance();
+        $info->setCcType($additionalData->getCcType());
+
+        return $this;
+    }
+
     /**
      * Validate payment method information object
      *
@@ -32,6 +57,10 @@ class AbstractBnpp extends AbstractMethodAPI
         */
         parent::validate();
         $paymentInfo = $this->getInfoInstance();
+
+        if(!$paymentInfo->getCcType()){
+            return $this;
+        }
 
         $order = $paymentInfo->getQuote();
         if ($paymentInfo->getOrder()) {

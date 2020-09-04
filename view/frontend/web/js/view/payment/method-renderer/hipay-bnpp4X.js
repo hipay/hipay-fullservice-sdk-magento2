@@ -36,6 +36,16 @@ define(
             isActive: function() {
                 return true;
             },
+
+            getData: function() {
+                return {
+                    'method': this.item.method,
+                    'additional_data': {
+                        'cc_type':'bnpp4x',
+                    }
+                };
+            },
+
             /**
              *  Return warning messages for some provider rules
              *

@@ -71,7 +71,13 @@ class HostedFieldsMethod extends CcMethod
     public function validate()
     {
         $info = $this->getInfoInstance();
+
+        if(!$info->getCcType()){
+            return $this;
+        }
+
         $errorMsg = false;
+
         if (!$info->getAdditionalInformation('card_token')) {
             $errorMsg = __('We can\'t place the order.');
         }
