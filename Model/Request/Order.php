@@ -53,7 +53,11 @@ class Order extends CommonRequest
         'VI' => 'visa',
         'AE' => 'american-express',
         'MC' => 'mastercard',
-        'MI' => 'maestro'
+        'MI' => 'maestro',
+        'visa' => 'visa',
+        'american-express' => 'american-express',
+        'mastercard' => 'mastercard',
+        'maestro' => 'maestro'
     );
 
     protected $_cardPaymentMethod = array(
@@ -195,11 +199,12 @@ class Order extends CommonRequest
 
     protected function getCcTypeHipay($mageCcType)
     {
-        $hipayCcType = $mageCcType;
+
         if (in_array($mageCcType, array_keys($this->_ccTypes))) {
-            $hipayCcType = $this->_ccTypes[$mageCcType];
+            return $this->_ccTypes[$mageCcType];
         }
-        return $hipayCcType;
+
+        return false;
     }
 
     /**
