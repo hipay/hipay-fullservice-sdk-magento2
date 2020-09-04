@@ -108,6 +108,10 @@ class Sdd extends FullserviceMethod
         parent::validate();
         $info = $this->getInfoInstance();
 
+        if(!$info->getCcType()){
+            return $this;
+        }
+
         $errorMsg = '';
 
         // Get iso code from order or quote ( Validate is called twice per magento core )

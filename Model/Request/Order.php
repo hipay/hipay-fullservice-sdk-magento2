@@ -53,7 +53,11 @@ class Order extends CommonRequest
         'VI' => 'visa',
         'AE' => 'american-express',
         'MC' => 'mastercard',
-        'MI' => 'maestro'
+        'MI' => 'maestro',
+        'visa' => 'visa',
+        'american-express' => 'american-express',
+        'mastercard' => 'mastercard',
+        'maestro' => 'maestro'
     );
 
     protected $_cardPaymentMethod = array(
@@ -117,6 +121,11 @@ class Order extends CommonRequest
     protected $frontendUrlBuilder;
 
     /**
+     * @var \Magento\Framework\HTTP\Header
+     */
+    protected $_httpHeader;
+
+    /**
      * {@inheritDoc}
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
@@ -138,6 +147,7 @@ class Order extends CommonRequest
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
         \Magento\Framework\App\State $appState,
+        \Magento\Framework\HTTP\Header $httpHeader,
         $params = []
     ) {
         parent::__construct(
@@ -164,6 +174,7 @@ class Order extends CommonRequest
         $this->_productRepositoryInterface = $productRepositoryInterface;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
+        $this->_httpHeader = $httpHeader;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -188,11 +199,12 @@ class Order extends CommonRequest
 
     protected function getCcTypeHipay($mageCcType)
     {
-        $hipayCcType = $mageCcType;
+
         if (in_array($mageCcType, array_keys($this->_ccTypes))) {
-            $hipayCcType = $this->_ccTypes[$mageCcType];
+            return $this->_ccTypes[$mageCcType];
         }
-        return $hipayCcType;
+
+        return false;
     }
 
     /**
@@ -334,6 +346,8 @@ class Order extends CommonRequest
             );
         }
 
+        $orderRequest->http_user_agent = $this->_httpHeader->getHttpUserAgent();
+
         return $orderRequest;
     }
 
@@ -453,7 +467,7 @@ class Order extends CommonRequest
          */
         if ($orderRequest->payment_product == 'bnpp-3xcb' || $orderRequest->payment_product == 'bnpp-4xcb') {
             $orderRequest->customerBillingInfo->phone = preg_replace(
-                '/^(\+33)|(33)/',
+                '/^\+?33/',
                 '0',
                 $orderRequest->customerBillingInfo->phone
             );

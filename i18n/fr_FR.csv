@@ -499,3 +499,7 @@ Manual,Manuelle
 Automatic,Automatique
 "We advise you to update the extension if you wish to get the latest fixes and evolutions. To update the extension, please click here : ","Nous vous conseillons d'effectuer la mise à jour si vous voulez profiter des derniers correctifs et évolutions. Pour l'installer, cliquez-ici : "
 "HiPay Enterprise %1 available","HiPay Enterprise %1 disponible"
+"Custom shipping method","Méthode de livraison personnalisée"
+"Custom shipping methods","Méthodes de livraison personnalisées"
+"Shipping method should be [carrier_code]_[shipping_method_id]. Available carriers are : %1","Le format devrait être [code_transporteur]_[id_méthode_livraison]. Les transporteurs disponibles sont : %1"
+"Custom shipping code","Code de livraison personnalisé"

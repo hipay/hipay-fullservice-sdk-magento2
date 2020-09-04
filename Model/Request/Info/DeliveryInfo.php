@@ -63,7 +63,8 @@ class DeliveryInfo extends AbstractInfoRequest
         CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         $params = []
-    ) {
+    )
+    {
         parent::__construct(
             $logger,
             $checkoutData,
@@ -89,8 +90,16 @@ class DeliveryInfo extends AbstractInfoRequest
             $collection = $this->_mappingShippingCollectionFactory->create()
                 ->addFieldToFilter('magento_shipping_code', $this->_order->getShippingMethod())
                 ->load();
+
             if ($collection->getItems()) {
                 $this->_mappingDelivery = $collection->getFirstItem();
+            } else {
+                $collectionCustom = $this->_mappingShippingCollectionFactory->create()
+                    ->addFieldToFilter('magento_shipping_code_custom', $this->_order->getShippingMethod())
+                    ->load();
+                if ($collectionCustom->getItems()) {
+                    $this->_mappingDelivery = $collectionCustom->getFirstItem();
+                }
             }
         }
     }

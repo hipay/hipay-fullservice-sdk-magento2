@@ -36,6 +36,16 @@ define(
             isActive: function() {
                 return true;
             },
+
+            getData: function() {
+                return {
+                    'method': this.item.method,
+                    'additional_data': {
+                        'cc_type':'bnpp4x',
+                    }
+                };
+            },
+
             /**
              *  Return warning messages for some provider rules
              *
@@ -44,7 +54,7 @@ define(
             getWarningsMessages: function() {
                 var billingAddress = quote.billingAddress();
                 if (billingAddress) {
-                    var re = /(0|\\+33|0033)[1-9][0-9]{8}/;
+                    var re = /(0|\+?33|0033)[1-9][0-9]{8}/;
                     if (!re.exec(billingAddress.telephone))
                         return 'Please check the phone number entered.';
                 }

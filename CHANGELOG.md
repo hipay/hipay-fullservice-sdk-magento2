@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.10.2
+
+This release contains SQL changes, be sure to run the magento upgrade command:
+    
+     php bin/magento setup:upgrade
+
+- **Fix**: Fix 500 error on checkout
+- **Fix**: Corrected HTTP User Agent recovering
+- **Fix**: Add custom shipping methods in mappings for dynamic shipping methods
+
+
 ## 1.10.1
 
 - **Fix**: Fixed some errors on capture and notifications
