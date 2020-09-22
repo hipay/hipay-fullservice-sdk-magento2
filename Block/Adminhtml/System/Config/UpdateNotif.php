@@ -156,18 +156,15 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
          * https://www.php.net/manual/en/dateinterval.construct.php
          */
         if ($this->lastGithubPoll->add(new \DateInterval("PT1H")) < $curdate) {
-            // Headers to avoid 403 error from GitHub
-            $opts = [
-                'http' => [
-                    'method' => 'GET',
-                    'header' => [
-                        'User-Agent: PHP'
-                    ]
-                ]
-            ];
-            $context = stream_context_create($opts);
-            $gitHubInfo = json_decode(file_get_contents(self::HIPAY_GITHUB_MAGENTO2_LATEST, false, $context));
-
+            // Request GitHub with curl
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, self::HIPAY_GITHUB_MAGENTO2_LATEST);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);            
+            curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+            $res = curl_exec($ch);
+            curl_close($ch);
+            $gitHubInfo = @json_decode($res);
+            
             // If call is successful, reading from call
             if ($gitHubInfo) {
                 $this->newVersion = $gitHubInfo->tag_name;
