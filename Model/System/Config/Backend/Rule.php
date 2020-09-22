@@ -157,8 +157,8 @@ class Rule extends \Magento\Framework\App\Config\Value
         if ($this->_ruleData === null) {
             $post = $this->_request->getPost();
 
+            $this->_ruleData = array();
             if (isset($post['rule_' . $this->_getFieldName()]['conditions'])) {
-                $this->_ruleData = array();
                 $this->_ruleData['conditions'] = $post['rule_' . $this->_getFieldName()]['conditions'];
             }
         }
