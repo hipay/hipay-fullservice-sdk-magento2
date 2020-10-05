@@ -13,8 +13,11 @@ mage_account_private_key: ""
 
 hipay_api_user_test: ""
 hipay_api_password_test: ""
+hipay_secret_passphrase_test: ""
 hipay_tokenjs_username_test: ""
 hipay_tokenjs_publickey_test: ""
-hipay_secret_passphrase_test: ""
+hipay_applepay_username_test: ""
+hipay_applepay_password_test: ""
+hipay_applepay_secret_passphrase_test: ""
 
 pi_data_url: ""

@@ -20,10 +20,10 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-<group id="hipay_dexia" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-    <label>HiPay Enterprise Belfius / Dexia Direct Net</label>
-    <comment></comment>
-    <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-    <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-</group>
+    <group id="hipay_dexia" translate="label" type="text" sortOrder="51" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>HiPay Enterprise Belfius / Dexia Direct Net</label>
+        <comment></comment>
+        <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+        <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+    </group>
 </include>

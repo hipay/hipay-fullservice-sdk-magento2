@@ -19,7 +19,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-	<head>
+    <head>
         <css src="HiPay_FullserviceMagento::css/hipay.css"/>
         <css src="HiPay_FullserviceMagento::css/hosted-fields.css"/>
     </head>
@@ -31,7 +31,7 @@
             <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_fingerprint_js" ifconfig="hipay/configurations/fingerprint_enabled" template="additional/fingerprint_js.phtml"/>
         </referenceBlock>
         <referenceBlock name="head.additional">
-            <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_external_js"  template="additional/external_js.phtml"/>
+            <block class="HiPay\FullserviceMagento\Block\ExternalJS" name="hipay_external_js" template="additional/external_js.phtml"/>
         </referenceBlock>
         <referenceBlock name="checkout.root">
             <arguments>
@@ -61,10 +61,13 @@
                                                                         <item name="hipay_hostedsplit" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                       <item name="hipay_cc" xsi:type="array">
+                                                                        <item name="hipay_cc" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                         <item name="hipay_ccsplit" xsi:type="array">
+                                                                        <item name="hipay_ccsplit" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
+                                                                        <item name="hipay_applepay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_sisal" xsi:type="array">
@@ -80,17 +83,17 @@
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_giropay" xsi:type="array">
-                                                                              <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_ideal" xsi:type="array">
-                                                                              <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_ing" xsi:type="array">
-                                                                              <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                       <item name="hipay_postfinancecardapi" xsi:type="array">
-                                                                              <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
-                                                                          </item>
+                                                                        <item name="hipay_postfinancecardapi" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
                                                                         <item name="hipay_postfinanceefinanceapi" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>

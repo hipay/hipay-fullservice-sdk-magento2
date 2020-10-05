@@ -140,6 +140,12 @@ class GenericConfigProvider implements ConfigProviderInterface
                 $config = array_merge_recursive($config, [
                     'payment' => [
                         'hiPayFullservice' => [
+                            'placeOrderStatusUrl' => [
+                                $methodCode => $this->urlBuilder->getUrl(
+                                    'hipay/payment/placeOrderStatus',
+                                    ['_secure' => true]
+                                )
+                            ],
                             'afterPlaceOrderUrl' => [
                                 $methodCode => $this->urlBuilder->getUrl(
                                     'hipay/payment/afterPlaceOrder',

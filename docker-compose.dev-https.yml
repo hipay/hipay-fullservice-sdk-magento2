@@ -1,0 +1,49 @@
+web_https:
+  env_file:
+    - ./bin/docker/conf/development/mage.env.sample
+    - ./bin/docker/conf/development/auth.env
+    - ./bin/docker/conf/development/module.env.sample
+    - ./bin/docker/conf/development/hipay.env
+  environment:
+    MAGE_DB_HOST: database_https
+    MAGE_BASE_URL: http://<domain>.ngrok.io
+    MAGE_BASE_URL_SECURE: https://<domain>.ngrok.io
+    MAGE_USE_SECURE: 1
+    MAGE_USE_SECURE_ADMIN: 1
+  ports:
+    - '8097:80'
+  volumes:
+    - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block
+    - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller
+    - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc
+    - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper
+    - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model
+    - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console
+    - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer
+    - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin
+    - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui
+    - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view
+    - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup
+    - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron
+    - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n
+    - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger
+    - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test
+    - ./composer.json:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/composer.json
+    - ./registration.php:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/registration.php
+    - ./tests:/var/www/html/magento2/tests
+    - ./log:/home/magento2/var/log
+    - ./conf/sdk:/var/www/html/magento2/sdk
+  dockerfile: ./bin/docker/images/default/Dockerfile
+  build: .
+  links:
+    - database_https
+
+database_https:
+  image: mysql:5.7
+  environment:
+    - MYSQL_ROOT_PASSWORD=magento2
+    - MYSQL_DATABASE=magento2
+    - MYSQL_USER=magento2
+    - MYSQL_PASSWORD=magento2
+  ports:
+    - '3309:3306'

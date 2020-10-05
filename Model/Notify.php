@@ -321,9 +321,11 @@ class Notify
                 //115 Cancel order and transaction
             case TransactionStatus::AUTHORIZATION_REFUSED:
                 // status : 163
+                $this->_doTransactionFailure();
+                break;
             case TransactionStatus::CAPTURE_REFUSED:
                 // status : 173
-                $this->_doTransactionFailure();
+                $this->_doTransactionCaptureRefused();
                 break;
             case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
                 $this->_doTransactionVoid();
@@ -431,8 +433,8 @@ class Notify
                 break;
         }
 
-        if($this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
-            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED){
+        if ($this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
+            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED) {
             /**
              * save token and credit card informations encryted
              */
@@ -552,9 +554,9 @@ class Notify
     protected function _canSaveCc()
     {
         return (bool)in_array(
-                $this->_transaction->getPaymentProduct(),
-                ['visa', 'american-express', 'mastercard', 'cb']
-            )
+            $this->_transaction->getPaymentProduct(),
+            ['visa', 'american-express', 'mastercard', 'cb']
+        )
             && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
     }
 
@@ -674,7 +676,6 @@ class Notify
 
             /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-
                 if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
                 ) {
@@ -785,9 +786,7 @@ class Notify
         $this->_changeStatus(Config::STATUS_REFUND_REFUSED, 'Refund Refused.');
 
         if ($this->_order->hasCreditmemos()) {
-
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-
                 if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
                 ) {
@@ -807,7 +806,32 @@ class Notify
                     break;
                 }
             }
+        }
+    }
 
+    /**
+     * Process capture refused payment notification
+     *
+     * @throws \Exception
+     */
+    protected function _doTransactionCaptureRefused()
+    {
+        $this->_changeStatus(Config::STATUS_CAPTURE_REFUSED, 'Capture Refused.');
+
+        if ($this->_order->hasInvoices()) {
+            foreach ($this->_order->getInvoiceCollection() as $invoice) {
+                if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+                    && $this->_transaction->getOperation()->getId() == $invoice->getTransactionId()) {
+                    $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_CANCELED);
+
+                    $this->_transactionDB->addObject($invoice)
+                        ->addObject($this->_order);
+
+                    $this->_transactionDB->save();
+
+                    break;
+                }
+            }
         }
     }
 

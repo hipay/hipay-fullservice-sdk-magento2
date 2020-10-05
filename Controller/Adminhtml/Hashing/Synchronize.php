@@ -104,7 +104,9 @@ class Synchronize extends \Magento\Backend\App\Action
             ConfigFactory::PRODUCTION,
             ConfigFactory::STAGE,
             ConfigFactory::PRODUCTION_MOTO,
-            ConfigFactory::STAGE_MOTO
+            ConfigFactory::STAGE_MOTO,
+            ConfigFactory::PRODUCTION_APPLEPAY,
+            ConfigFactory::STAGE_APPLEPAY
         );
 
         $store = $this->_storeManager->getStore($storeId);
@@ -122,7 +124,9 @@ class Synchronize extends \Magento\Backend\App\Action
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (\HiPay\Fullservice\Exception\RuntimeException $e) {
+                } catch (\HiPay\Fullservice\Exception\RuntimeException |
+                    \HiPay\Fullservice\Exception\ApiErrorException $e
+                ) {
                     $this->messageManager->addErrorMessage(
                         __(
                             "We can't synchronize at least one of the account ("

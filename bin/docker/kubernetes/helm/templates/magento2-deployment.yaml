@@ -33,8 +33,6 @@ spec:
       services:
         - name: magento2-service-{{ .Release.Name }}
           port: 80
-      middlewares:
-        - name: hipay-ipwhitelist
   tls:
     certResolver: default
 ---
@@ -55,8 +53,6 @@ spec:
       services:
         - name: magento2-service-{{ .Release.Name }}
           port: 80
-      middlewares:
-        - name: hipay-ipwhitelist
 ---
 apiVersion: apps/v1
 kind: Deployment
