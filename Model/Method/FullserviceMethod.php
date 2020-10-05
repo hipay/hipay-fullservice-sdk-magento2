@@ -180,7 +180,7 @@ abstract class FullserviceMethod extends AbstractMethod
 
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 
-        if($sdkConfig) {
+        if ($sdkConfig) {
             $this->_canCapture = $sdkConfig->getCanManualCapture();
             $this->_canCapturePartial = $sdkConfig->getCanManualCapturePartially();
             $this->_canRefund = $sdkConfig->getCanRefund();
@@ -312,7 +312,6 @@ abstract class FullserviceMethod extends AbstractMethod
         try {
             /** @var \Magento\Sales\Model\Order\Payment $payment */
             if ($payment->getAuthorizationTransaction()) {  //Is not the first transaction
-
                 $this->manualCapture($payment, $amount);
             } else { //Ok, it's the first transaction, so we request a new order (MO/TO)
                 $this->place($payment);
@@ -403,6 +402,7 @@ abstract class FullserviceMethod extends AbstractMethod
             //always in pending, because only notification can change order/transaction statues
             $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
             $payment->getOrder()->setStatus($this->getConfigData('order_status'));
+            $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
         } catch (\Exception $e) {
             $this->_logger->critical($e);

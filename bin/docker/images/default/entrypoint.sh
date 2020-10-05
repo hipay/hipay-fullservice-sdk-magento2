@@ -3,7 +3,7 @@
 set +e
 COLOR_SUCCESS='\033[0;32m'
 NC='\033[0m'
-PREFIX_STORE1=$RANDOM
+PREFIX_STORE1=$RANDOM$RANDOM
 ENV_DEVELOPMENT="development"
 ENV_STAGE="stage"
 ENV_PROD="production"
@@ -43,14 +43,14 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini
-        echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+        echo "xdebug.remote_enable=on" >>/usr/local/etc/php/conf.d/xdebug.ini
+        echo "xdebug.remote_autostart=off" >>/usr/local/etc/php/conf.d/xdebug.ini
     fi
 
     #==========================================
     # MAIL CONFIGURATION
     #==========================================
-    echo "sendmail_path = /usr/sbin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini \
+    echo "sendmail_path = /usr/sbin/msmtp -t" >/usr/local/etc/php/conf.d/sendmail.ini
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -63,13 +63,16 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_moto/secret_passphrase_test $HIPAY_SECRET_PASSPHRASE_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_tokenjs/api_username_test $HIPAY_TOKENJS_USERNAME_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_tokenjs/api_password_test $HIPAY_TOKENJS_PUBLICKEY_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_applepay/api_username_test $HIPAY_APPLEPAY_USERNAME_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_applepay/api_password_test $HIPAY_APPLEPAY_PASSWORD_TEST
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_applepay/secret_passphrase_test $HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/hipay_cc/cctypes "VI,MC,AE,CB,MI"
 
-    if [ "$ENVIRONMENT" = "$ENV_PROD" ];then
+    if [ "$ENVIRONMENT" = "$ENV_PROD" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/configurations/send_notification_url 1
     fi
 
-    if [ "$ENVIRONMENT" != "$ENV_DEVELOPMENT" ];then
+    if [ "$ENVIRONMENT" != "$ENV_DEVELOPMENT" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
     fi
 
@@ -77,16 +80,14 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    methods=$(echo $ACTIVE_METHODS| tr "," "\n")
-    for code in $methods
-    do
+    methods=$(echo $ACTIVE_METHODS | tr "," "\n")
+    for code in $methods; do
         printf "\n"
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/active 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/debug 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/is_test_mode 1
         printf "${COLOR_SUCCESS} Method $code is activated in test mode ${NC}\n"
     done
-
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         UPDATE SEQUENCE ORDER           ${NC}\n"
@@ -97,11 +98,11 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         LINK WITH HIPAY'S SDK PHP        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    if [ -f /var/www/html/magento2/sdk/hipay-fullservice-sdk-php/composer.json ];then
-       cd /var/www/html/magento2/vendor/hipay/
-       rm -Rf hipay-fullservice-sdk-php
-       ln -sf /var/www/html/magento2/sdk/hipay-fullservice-sdk-php hipay-fullservice-sdk-php
-       printf "${COLOR_SUCCESS} HiPay's SDK php is now linked ${NC}\n"
+    if [ -f /var/www/html/magento2/sdk/hipay-fullservice-sdk-php/composer.json ]; then
+        cd /var/www/html/magento2/vendor/hipay/
+        rm -Rf hipay-fullservice-sdk-php
+        ln -sf /var/www/html/magento2/sdk/hipay-fullservice-sdk-php hipay-fullservice-sdk-php
+        printf "${COLOR_SUCCESS} HiPay's SDK php is now linked ${NC}\n"
     fi
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
@@ -127,7 +128,7 @@ printf "\n${COLOR_SUCCESS}           HOSTS CONFIGURATION           ${NC}\n"
 printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 cp /etc/hosts ~/hosts.bak
 sed -i 's/^127\.0\.0\.1\.*/127.0.0.1    localhost    data.hipay.com    stage-data.hipay.com/g' ~/hosts.bak
-cp  ~/hosts.bak /etc/hosts
+cp ~/hosts.bak /etc/hosts
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"

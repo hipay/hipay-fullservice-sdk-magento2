@@ -19,7 +19,8 @@ namespace HiPay\FullserviceMagento\Setup;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-
+use HiPay\FullserviceMagento\Model\Config;
+use Magento\Sales\Model\Order;
 
 /**
  * Upgrade data class
@@ -42,7 +43,7 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if (version_compare($context->getVersion(), '1.0.2') < 0) {
+        if (version_compare($context->getVersion(), '1.0.2', '<')) {
             $installer = $setup->createMigrationSetup();
             $installer->appendClassAliasReplace(
                 'hipay_rule',
@@ -60,6 +61,27 @@ class UpgradeData implements UpgradeDataInterface
             );
 
             $installer->doUpdateClassAliases();
+        }
+
+        if (version_compare($context->getVersion(), '1.10.3', '<')) {
+            $connection = $setup->getConnection();
+            $newStatus = [
+                'status' => Config::STATUS_CAPTURE_REFUSED,
+                'label' => __('Capture refused')
+            ];
+            $newStatusState = [
+                'status' => $newStatus['status'],
+                'state' => Order::STATE_PROCESSING,
+                'is_default' => 0,
+                'visible_on_front' => 1
+            ];
+            
+            $connection->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], [$newStatus]);
+            $connection->insertArray(
+                $setup->getTable('sales_order_status_state'),
+                ['status', 'state', 'is_default', 'visible_on_front'],
+                [$newStatusState]
+            );
         }
 
         $setup->endSetup();

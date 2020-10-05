@@ -66,6 +66,11 @@ abstract class Fullservice extends AppAction
     protected $_gatewayManagerFactory;
 
     /**
+     * @var \Magento\Framework\Controller\Result\JsonFactory
+     */
+    protected $resultJsonFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -75,6 +80,7 @@ abstract class Fullservice extends AppAction
      * @param Factory $requestfactory ,
      * @param \Psr\Log\LoggerInterface $logger
      * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * {@inheritDoc}
      *
      * @see \Magento\Backend\App\AbstractAction::__construct()
@@ -85,7 +91,8 @@ abstract class Fullservice extends AppAction
         \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
-        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
@@ -93,6 +100,8 @@ abstract class Fullservice extends AppAction
 
         $this->logger = $logger;
         $this->_gatewayManagerFactory = $gatewayManagerFactory;
+
+        $this->resultJsonFactory = $resultJsonFactory;
 
         parent::__construct($context);
     }

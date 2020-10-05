@@ -43,6 +43,7 @@ class Cancel extends Fullservice
      * @param \Magento\Framework\Session\Generic $hipaySession
      * @param \Psr\Log\LoggerInterface $logger
      * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      */
     public function __construct(
@@ -52,6 +53,7 @@ class Cancel extends Fullservice
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory
     ) {
         $this->orderFactory = $orderFactory;
@@ -61,7 +63,8 @@ class Cancel extends Fullservice
             $checkoutSession,
             $hipaySession,
             $logger,
-            $gatewayManagerFactory
+            $gatewayManagerFactory,
+            $resultJsonFactory
         );
     }
 

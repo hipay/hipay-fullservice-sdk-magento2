@@ -44,6 +44,7 @@ class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullser
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider $splitConfigProvider
     ) {
 
@@ -53,7 +54,8 @@ class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullser
             $checkoutSession,
             $hipaySession,
             $logger,
-            $gatewayManagerFactory
+            $gatewayManagerFactory,
+            $resultJsonFactory
         );
 
         $this->splitConfigProvider = $splitConfigProvider;

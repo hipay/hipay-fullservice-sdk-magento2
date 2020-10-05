@@ -18,9 +18,8 @@
  *
  */
 -->
-<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
-   <groups>
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <groups>
         <group id="hipay">
             <label>HiPay Fullservice</label>
         </group>
@@ -35,13 +34,16 @@
         <method name="hipay_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-         <method name="hipay_hostedsplit">
+        <method name="hipay_hostedsplit">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_cc">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_ccsplit">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_applepay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <!-- Local method -->
@@ -58,33 +60,33 @@
         <method name="hipay_dexia">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-       <method name="hipay_giropay">
+        <method name="hipay_giropay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_ing">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-         <method name="hipay_ideal">
-           <allow_multiple_address>0</allow_multiple_address>
-       </method>
+        <method name="hipay_ideal">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_postfinancecardapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_postfinanceefinanceapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-       <method name="hipay_paypalapi">
-           <allow_multiple_address>0</allow_multiple_address>
-       </method>
-       <method name="hipay_przelewy24api">
-           <allow_multiple_address>0</allow_multiple_address>
-       </method>
-       <method name="hipay_sofortapi">
-           <allow_multiple_address>0</allow_multiple_address>
-       </method>
-       <method name="hipay_webmoneyapi">
-           <allow_multiple_address>0</allow_multiple_address>
-       </method>
+        <method name="hipay_paypalapi">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_przelewy24api">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_sofortapi">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_webmoneyapi">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_yandexapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
