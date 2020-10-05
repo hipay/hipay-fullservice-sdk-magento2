@@ -78,6 +78,9 @@
         <method name="hipay_paypalapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_mbway">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_przelewy24api">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

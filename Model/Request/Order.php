@@ -57,7 +57,8 @@ class Order extends CommonRequest
         'visa' => 'visa',
         'american-express' => 'american-express',
         'mastercard' => 'mastercard',
-        'maestro' => 'maestro'
+        'maestro' => 'maestro',
+        'bcmc' => 'bcmc'
     );
 
     protected $_cardPaymentMethod = array(
