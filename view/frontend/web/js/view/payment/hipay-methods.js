@@ -118,6 +118,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-paypalapi'
     },
     {
+      type: 'hipay_mbway',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
+    },
+    {
       type: 'hipay_aura',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-aura'
