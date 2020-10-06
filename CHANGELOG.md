@@ -6,7 +6,7 @@ This release contains SQL changes, be sure to run the magento upgrade command:
 
      php bin/magento setup:upgrade
 
-- `[BETA]` **New**: Added ApplePay payment method
+- `[BETA]` **New**: ApplePay support
 - **New**: Added MB Way payment method
 - **New**: Added MB Way product method on Hosted Page
 - **New**: Added Illicado product payment on Hosted Page
