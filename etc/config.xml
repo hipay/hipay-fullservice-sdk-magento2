@@ -18,8 +18,7 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <hipay>
             <hipay_credentials>
@@ -42,6 +41,14 @@
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </hipay_credentials_tokenjs>
+            <hipay_credentials_applepay>
+                <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <secret_passphrase backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <secret_passphrase_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <hashing_algorithm>SHA1</hashing_algorithm>
+                <hashing_algorithm_test>SHA1</hashing_algorithm_test>
+            </hipay_credentials_applepay>
             <fraud_payment_review>
                 <enabled>0</enabled>
                 <template>hipay_fraud_payment_review_template</template>
@@ -254,11 +261,38 @@
                 <env>STAGE</env>
                 <group>hipay</group>
             </hipay_hostedsplit>
+            <hipay_applepay>
+                <model>HiPay\FullserviceMagento\Model\Method\ApplePay</model>
+                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Apple Pay</title>
+                <payment_action>Sale</payment_action>
+                <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
+                <display_name>Your display name</display_name>
+                <button_type>plain</button_type>
+                <button_colour>black</button_colour>
+                <payment_products>cb</payment_products>
+                <payment_products_categories></payment_products_categories>
+                <authentication_indicator>0</authentication_indicator>
+                <display_selector>0</display_selector>
+                <template>basic-js</template>
+                <css></css>
+                <allowspecific>0</allowspecific>
+                <debug>0</debug>
+                <env>STAGE</env>
+                <group>hipay</group>
+            </hipay_applepay>
             <hipay_sisal>
                 <model>HiPay\FullserviceMagento\Model\Method\Sisal</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
-                <title>Sisal</title>
+                <title>HiPay Sisal</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
@@ -274,17 +308,20 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
-                <payment_products>sisal
-                </payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>sisal</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <display_selector>0</display_selector>
-                <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+                <!-- Enable/Disable 3D secure -->
+                <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
                 <allowspecific>0</allowspecific>
-                <max_order_total>1000</max_order_total> <!-- Custom local configuration -->
-                <allowed_currencies>EUR</allowed_currencies> <!-- Custom local configuration -->
+                <!-- Custom local configuration -->
+                <max_order_total>1000</max_order_total>
+                <!-- Custom local configuration -->
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -302,13 +339,15 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
-                <payment_products>qiwi-wallet
-                </payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>qiwi-wallet</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
-                <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+                <!-- Enable/Disable 3D secure -->
+                <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>0</allowspecific>
-                <allowed_currencies>RUB</allowed_currencies> <!-- Custom local configuration -->
+                <!-- Custom local configuration -->
+                <allowed_currencies>RUB</allowed_currencies>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -327,8 +366,8 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <cctypes>dexia-directnet</cctypes>
-                <payment_products>dexia-directnet
-                </payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>dexia-directnet</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <display_selector>0</display_selector>
                 <template>basic-js</template>
@@ -383,10 +422,10 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
-                <payment_products>ideal</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>ideal</payment_products>                <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <display_selector>0</display_selector>
-                <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+                <authentication_indicator>0</authentication_indicator>                <!-- Enable/Disable 3D secure -->
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
@@ -409,10 +448,12 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <iframe_mode>0</iframe_mode>
-                <payment_products>ing-homepay</payment_products> <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>ing-homepay</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <display_selector>0</display_selector>
-                <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+                <!-- Enable/Disable 3D secure -->
+                <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
@@ -490,6 +531,30 @@
                 <env>stage</env>
                 <group>hipay</group>
             </hipay_paypalapi>
+            <hipay_mbway>
+                <model>HiPay\FullserviceMagento\Model\Method\Mbway</model>
+                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Hipay Enterprise MB Way</title>
+                <payment_action>Sale</payment_action>
+                <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <display_card_owner>0</display_card_owner>
+                <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
+                <payment_products>mbway</payment_products>
+                <payment_products_categories>ewallet</payment_products_categories>
+                <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <allowspecific>0</allowspecific>
+                <specificcountry>PT</specificcountry>
+                <debug>0</debug>
+                <env>stage</env>
+                <group>hipay</group>
+            </hipay_mbway>
             <hipay_przelewy24api>
                 <model>HiPay\FullserviceMagento\Model\Method\Przelewy24Api</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
@@ -974,7 +1039,8 @@
                 <payment_products>klarnainvoice</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <display_selector>0</display_selector>
-                <authentication_indicator>0</authentication_indicator> <!-- Enable/Disable 3D secure -->
+                <!-- Enable/Disable 3D secure -->
+                <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
@@ -1075,7 +1141,8 @@
                 <template>basic-js</template>
                 <allowspecific>1</allowspecific>
                 <specificcountry>PT</specificcountry>
-                <allowed_currencies>EUR</allowed_currencies> <!-- Custom local configuration -->
+                <!-- Custom local configuration -->
+                <allowed_currencies>EUR</allowed_currencies>
                 <css></css>
                 <debug>0</debug>
                 <env>STAGE</env>

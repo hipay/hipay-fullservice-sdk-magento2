@@ -33,9 +33,13 @@ class Factory
 
     const PRODUCTION_MOTO = "production_moto";
 
+    const PRODUCTION_APPLEPAY = "applepay";
+   
     const STAGE = "stage";
 
     const STAGE_MOTO = "stage_moto";
+
+    const STAGE_APPLEPAY = "stage_applepay";
 
     /**
      * Object Manager instance
@@ -71,6 +75,11 @@ class Factory
                 'forceMoto' => true,
                 'forceStage' => false
             ),
+            self::PRODUCTION_APPLEPAY => array(
+                'forceMoto' => false,
+                'forceStage' => false,
+                'isApplePay' => true
+            ),
             self::STAGE => array(
                 'forceMoto' => false,
                 'forceStage' => true
@@ -78,6 +87,11 @@ class Factory
             self::STAGE_MOTO => array(
                 'forceMoto' => true,
                 'forceStage' => true
+            ),
+            self::STAGE_APPLEPAY => array(
+                'forceMoto' => false,
+                'forceStage' => true,
+                'isApplePay' => true
             ),
         );
     }

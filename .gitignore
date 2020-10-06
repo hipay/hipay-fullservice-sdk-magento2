@@ -41,6 +41,7 @@ vendor/
 .idea
 .vscode
 bin/conf/sdk/*
+conf/sdk/*
 
 # Custom dev tools#
 ###################

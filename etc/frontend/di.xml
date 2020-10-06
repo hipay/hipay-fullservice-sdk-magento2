@@ -28,6 +28,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_applepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\ApplePay::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -75,6 +82,7 @@
                 <item name="hipay_hostedmoto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedMoto::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hostedsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedSplitMethod::HIPAY_METHOD_CODE</item>
+                <item name="hipay_applepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\ApplePay::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_qiwiwallet" xsi:type="const">HiPay\FullserviceMagento\Model\Method\QiwiWallet::HIPAY_METHOD_CODE</item>
                 <item name="hipay_dexia" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Dexia::HIPAY_METHOD_CODE</item>
@@ -88,6 +96,7 @@
                 <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
                 <item name="hipay_postfinancecardapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceCard::HIPAY_METHOD_CODE</item>
                 <item name="hipay_paypalapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Paypal::HIPAY_METHOD_CODE</item>
+                <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
                 <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_CODE</item>
                 <item name="hipay_banamex" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Banamex::HIPAY_METHOD_CODE</item>
@@ -117,6 +126,7 @@
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider</item>
                 <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider</item>
                 <item name="hipay_astropay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\AstropayConfigProvider</item>
+                <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
             </argument>
         </arguments>
     </type>

@@ -57,7 +57,9 @@ class Order extends CommonRequest
         'visa' => 'visa',
         'american-express' => 'american-express',
         'mastercard' => 'mastercard',
-        'maestro' => 'maestro'
+        'cb' => 'cb',
+        'maestro' => 'maestro',
+        'bcmc' => 'bcmc'
     );
 
     protected $_cardPaymentMethod = array(
@@ -260,8 +262,8 @@ class Order extends CommonRequest
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
         $orderRequest->operation = $this->_order->getForcedOperation() ?:
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
-        $orderRequest->payment_product = $this->getCcTypeHipay($this->_order->getPayment()->getCcType()) ?:
-            $payment_product;
+        $orderRequest->payment_product = $payment_product ?:
+            $this->getCcTypeHipay($this->_order->getPayment()->getCcType());
         $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf(
             "Order %s",
             $this->_order->getIncrementId()

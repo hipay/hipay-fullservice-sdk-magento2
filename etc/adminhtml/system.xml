@@ -18,17 +18,16 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="hipay" translate="label" type="text" sortOrder="345" showInDefault="1" showInWebsite="1"
-                 showInStore="1">
+        <section id="hipay" translate="label" type="text" sortOrder="345" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>HiPay Enterprise</label>
             <tab>sales</tab>
             <resource>HiPay_FullserviceMagento::hipay</resource>
             <include path="HiPay_FullserviceMagento::system/credentials.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_tokenjs.xml"/>
+            <include path="HiPay_FullserviceMagento::system/credentials_applepay.xml"/>
             <include path="HiPay_FullserviceMagento::system/hashing_algorithm.xml"/>
             <include path="HiPay_FullserviceMagento::system/emails.xml"/>
             <include path="HiPay_FullserviceMagento::system/proxy.xml"/>
@@ -41,6 +40,7 @@
             <include path="HiPay_FullserviceMagento::system/method/hosted-split.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/cc.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/cc-split.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/applepay.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/dexia.xml"/>
@@ -48,6 +48,7 @@
             <include path="HiPay_FullserviceMagento::system/method/ideal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ing.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/paypal.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/mbway.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/postfinance-card.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/postfinance-efinance.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/przelewy24.xml"/>

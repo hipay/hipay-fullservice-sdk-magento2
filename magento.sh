@@ -14,20 +14,21 @@ header="bin/tests/"
 pathPreFile=${header}000*/0_init/*.js
 pathDir=${header}0*
 
-if [ "$1" = '' ] || [ "$1" = '--help' ];then
+if [ "$1" = '' ] || [ "$1" = '--help' ]; then
     printf "\n                                                      "
     printf "\n ==================================================== "
     printf "\n                  HIPAY'S HELPER                      "
     printf "\n ==================================================== "
     printf "\n                                                      "
     printf "\n      - init      : Build images and run containers   "
-    printf "\n      - restart   : Run containers if they exist yet   "
+    printf "\n      - init      : Start containers on HTTPS mode    "
+    printf "\n      - restart   : Run containers if they exist yet  "
     printf "\n      - static    : Delete static files from Hipay's module and deploy them "
-    printf "\n      - command   : Send command to bin/magento      "
+    printf "\n      - command   : Send command to bin/magento       "
 fi
 
-if [ "$1" = 'init' ];then
-    if [ -f ./bin/docker/conf/development/auth.env ];then
+if [ "$1" = 'init' ]; then
+    if [ -f ./bin/docker/conf/development/auth.env ]; then
         docker-compose -f docker-compose.dev.yml stop
         docker-compose -f docker-compose.dev.yml rm -fv
         rm -Rf log/ web/
@@ -38,22 +39,24 @@ if [ "$1" = 'init' ];then
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"
     fi
-elif [ "$1" = 'restart' ];then
+elif [ "$1" = 'start_https' ]; then
+    docker-compose -f docker-compose.dev-https.yml up -d --build
+elif [ "$1" = 'restart' ]; then
     docker-compose -f docker-compose.dev.yml stop
     docker-compose -f docker-compose.dev.yml up -d
-elif [ "$1" = 'static' ];then
+elif [ "$1" = 'static' ]; then
     docker exec hipayfullservicesdkmagento2_web_1 rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 php bin/magento c:c
-elif [ "$1" = 'di' ];then
+elif [ "$1" = 'di' ]; then
     docker exec hipayfullservicesdkmagento2_web_1 rm -Rf /var/www/html/magento2/var/cache /var/www/html/magento2/var/di /var/www/html/magento2/var/generation /var/www/html/magento2/var/page_cache
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 php bin/magento setup:di:compile
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 php bin/magento c:c
-elif [ "$1" = 'command' ];then
+elif [ "$1" = 'command' ]; then
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 php bin/magento $2
-elif [ "$1" = 'l' ];then
+elif [ "$1" = 'l' ]; then
     docker-compose -f docker-compose.dev.yml logs -f
-elif [ "$1" = 'install' ];then
+elif [ "$1" = 'install' ]; then
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento setup:upgrade
     docker exec hipayfullservicesdkmagento2_web_1 gosu magento2 bin/magento c:c
@@ -62,7 +65,7 @@ elif [ "$1" = 'test' ]; then
     rm -rf bin/tests/errors/*
     cd bin/tests/000_lib
     npm install
-    cd ../../../;
+    cd ../../../
 
     if [ "$(ls -A ~/.local/share/Ofi\ Labs/PhantomJS/)" ]; then
         rm -rf ~/.local/share/Ofi\ Labs/PhantomJS/*
@@ -73,7 +76,7 @@ elif [ "$1" = 'test' ]; then
     fi
 
     #casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --login-backend=$LOGIN_BACKEND --pass-backend=$PASS_BACKEND --login-paypal=$LOGIN_PAYPAL --pass-paypal=$PASS_PAYPAL --xunit=${header}result.xml --ssl-protocol=any --fail-fast
-    casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER  --xunit=${header}result.xml --ssl-protocol=TLSv1.2 --engine=slimerjs --headless
+    casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --xunit=${header}result.xml --ssl-protocol=TLSv1.2 --engine=slimerjs --headless
 
 else
     docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
