@@ -1,15 +1,28 @@
 # Changelog
 
+## 1.11.0
+
+This release contains SQL changes, be sure to run the magento upgrade command:
+
+     php bin/magento setup:upgrade
+
+- `[BETA]` **New**: ApplePay support
+- **New**: Added MB Way payment method
+- **New**: Added MB Way product method on Hosted Page
+- **New**: Added Illicado product payment on Hosted Page
+- **Fix**: Notification processing on capture refused
+- **Fix**: Configuration import from UAT to live
+- **Fix**: MOTO email template redirect link
+
 ## 1.10.2
 
 This release contains SQL changes, be sure to run the magento upgrade command:
-    
+
      php bin/magento setup:upgrade
 
 - **Fix**: Fix 500 error on checkout
 - **Fix**: Corrected HTTP User Agent recovering
 - **Fix**: Add custom shipping methods in mappings for dynamic shipping methods
-
 
 ## 1.10.1
 
