@@ -6,7 +6,7 @@ This release contains SQL changes, be sure to run the magento upgrade command:
 
      php bin/magento setup:upgrade
 
-- **Add** ApplePay payment method
+- `[BETA]` **Add** ApplePay payment method
 - **Add** MB Way payment method
 - **Fix**: Notification processing on capture refused
 - **Fix**: Configuration import from UAT to live
