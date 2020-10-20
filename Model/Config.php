@@ -140,9 +140,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
         $this->_forceMoto = isset($params['forceMoto']) ? $params['forceMoto'] : false;
         $this->_forceStage = isset($params['forceStage']) ? $params['forceStage'] : false;
-        $this->_isApplePay =
-            isset($params['isApplePay']) ? $params['isApplePay'] :
-            $this->getMethodCode() === ApplePay::HIPAY_METHOD_CODE ? true : false;
+        $this->_isApplePay = isset($params['isApplePay']) ? $params['isApplePay'] :
+        $this->getMethodCode() === ApplePay::HIPAY_METHOD_CODE;
 
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
