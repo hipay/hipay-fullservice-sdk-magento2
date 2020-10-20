@@ -15,51 +15,47 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
-define(
-    [
-        'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
-        'Magento_Checkout/js/model/quote'
-    ],
-    function ($,Component,quote) {
-        'use strict';
-        return Component.extend({
-            defaults: {
-                template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-                warnings: window.checkoutConfig.payment.hiPayFullservice.warnings,
-                redirectAfterPlaceOrder: false
-            },
+define([
+  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
+  'Magento_Checkout/js/model/quote'
+], function (Component, quote) {
+  'use strict';
+  return Component.extend({
+    defaults: {
+      template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+      warnings: window.checkoutConfig.payment.hiPayFullservice.warnings,
+      redirectAfterPlaceOrder: false
+    },
 
-            getCode: function() {
-                return 'hipay_bnpp4X';
-            },
-            isActive: function() {
-                return true;
-            },
+    getCode: function () {
+      return 'hipay_bnpp4X';
+    },
+    isActive: function () {
+      return true;
+    },
 
-            getData: function() {
-                return {
-                    'method': this.item.method,
-                    'additional_data': {
-                        'cc_type':'bnpp4x',
-                    }
-                };
-            },
+    getData: function () {
+      return {
+        method: this.item.method,
+        additional_data: {
+          cc_type: 'bnpp4x'
+        }
+      };
+    },
 
-            /**
-             *  Return warning messages for some provider rules
-             *
-             * @returns {*}
-             */
-            getWarningsMessages: function() {
-                var billingAddress = quote.billingAddress();
-                if (billingAddress) {
-                    var re = /(0|\+?33|0033)[1-9][0-9]{8}/;
-                    if (!re.exec(billingAddress.telephone))
-                        return 'Please check the phone number entered.';
-                }
-                return '';
-            }
-        });
+    /**
+     *  Return warning messages for some provider rules
+     *
+     * @returns {*}
+     */
+    getWarningsMessages: function () {
+      var billingAddress = quote.billingAddress();
+      if (billingAddress) {
+        var re = /^((\+|00)33|0)[1-9][0-9]{8}$/;
+        if (!re.exec(billingAddress.telephone))
+          return 'Please check the phone number entered.';
+      }
+      return '';
     }
-);
+  });
+});

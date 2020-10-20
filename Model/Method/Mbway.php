@@ -15,6 +15,11 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method;
 
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
+use \Magento\Framework\Exception\LocalizedException;
+
 /**
  * MB Way payment method
  *
@@ -41,7 +46,6 @@ class Mbway extends AbstractMethodAPI
     public function validate()
     {
         parent::validate();
-        $errorMsg = false;
         $info = $this->getInfoInstance();
 
         $order = $info->getQuote();
@@ -49,13 +53,22 @@ class Mbway extends AbstractMethodAPI
             $order = $info->getOrder();
         }
 
-        $phone = $order->getBillingAddress()->getTelephone();
-        if (!preg_match("/^(351#)?(9[1236][0-9])([0-9]{3})?([0-9]{3})$/", $phone)) {
-            $errorMsg = __('The format of the phone number must match a Portuguese phone.');
-        }
+        $phoneExceptionMessage = 'The format of the phone number must match a Portuguese phone.';
+        $country = 'PT';
+        $billingAddress = $order->getBillingAddress();
 
-        if ($errorMsg) {
-            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
+        try {
+            $phoneNumberUtil = PhoneNumberUtil::getInstance();
+            $phoneNumber = $phoneNumberUtil->parse($billingAddress->getTelephone(), $country);
+
+            if (!$phoneNumberUtil->isValidNumber($phoneNumber)) {
+                throw new LocalizedException(__($phoneExceptionMessage));
+            }
+
+            $billingAddress->setTelephone($phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::E164));
+        } catch (NumberParseException | Exception $e) {
+            $this->_logger->critical($e);
+            throw new LocalizedException(__($phoneExceptionMessage));
         }
 
         return $this;
