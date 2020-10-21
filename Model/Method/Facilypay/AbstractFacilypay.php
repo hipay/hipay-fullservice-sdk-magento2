@@ -40,19 +40,19 @@ class AbstractFacilypay extends AbstractMethodAPI
             $order = $info->getOrder();
         }
 
-        $phoneExceptionMessage = 'The format of the phone number must match {COUNTRY} phone.';
+        $phoneExceptionMessage = 'The format of the phone number must match %s phone.';
         $billingAddress = $order->getBillingAddress();
         $country = $billingAddress->getCountryId();
 
         switch ($country) {
             case 'FR':
-                $phoneExceptionMessage = str_replace('{COUNTRY}', 'a French', $phoneExceptionMessage);
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a French');
                 break;
             case 'IT':
-                $phoneExceptionMessage = str_replace('{COUNTRY}', 'an Italian', $phoneExceptionMessage);
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'an Italian');
                 break;
             case 'BE':
-                $phoneExceptionMessage = str_replace('{COUNTRY}', 'a Belgian', $phoneExceptionMessage);
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a Belgian');
                 break;
         }
 
