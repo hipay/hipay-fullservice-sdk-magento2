@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.12.0
+
+- **New**: Add restrictions rules for Oney 3x, 4x
+- **Fix**: HiPay card mapping categories
+- **Fix**: PHP-7.4 compatibility
+
 ## 1.11.0
 
 This release contains SQL changes, be sure to run the magento upgrade command:
