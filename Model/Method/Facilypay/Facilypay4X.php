@@ -15,7 +15,7 @@
  */
 namespace HiPay\FullserviceMagento\Model\Method\Facilypay;
 
-use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
+use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
 
 /**
  * facily Pay payment method
@@ -26,7 +26,7 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Facilypay4X extends AbstractMethodAPI
+class Facilypay4X extends AbstractFacilypay
 {
 
     const HIPAY_METHOD_CODE = 'hipay_facilypay4X';

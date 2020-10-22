@@ -242,7 +242,6 @@ abstract class CommonRequest extends BaseRequest
                     );
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
-
             }
 
             if ($itemHipay) {
@@ -276,7 +275,7 @@ abstract class CommonRequest extends BaseRequest
 
                 // Mapping is on the First Level
                 if ($collection->getItems()) {
-                    $mapping_id = (int)$collection->getFirstItem()->getId();
+                    $mapping_id = (int)$collection->getFirstItem()->getCategoryHipayId();
                     break;
                 }
                 // Check if mapping exist with parent // Stop when parent is 1 (ROOT CATEGORIES)

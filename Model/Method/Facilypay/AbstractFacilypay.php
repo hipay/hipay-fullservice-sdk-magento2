@@ -13,39 +13,16 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\Method\Bnpp;
+namespace HiPay\FullserviceMagento\Model\Method\Facilypay;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use Magento\Framework\Exception\LocalizedException;
+use \Magento\Framework\Exception\LocalizedException;
 
-class AbstractBnpp extends AbstractMethodAPI
+class AbstractFacilypay extends AbstractMethodAPI
 {
-
-    /**
-     *  Additional datas
-     *
-     * @var array
-     */
-    protected $_additionalInformationKeys = ['cc_type'];
-
-    /**
-     * Assign data to info model instance
-     *
-     * @param \Magento\Framework\DataObject $additionalData
-     * @return $this
-     * @throws LocalizedException
-     */
-    public function _assignAdditionalInformation(\Magento\Framework\DataObject $additionalData)
-    {
-        parent::_assignAdditionalInformation($additionalData);
-        $info = $this->getInfoInstance();
-        $info->setCcType($additionalData->getCcType());
-
-        return $this;
-    }
 
     /**
      * Validate payment method information object
@@ -55,26 +32,31 @@ class AbstractBnpp extends AbstractMethodAPI
      */
     public function validate()
     {
-        /*
-         * calling parent validate function
-         */
         parent::validate();
-        $paymentInfo = $this->getInfoInstance();
+        $info = $this->getInfoInstance();
 
-        if (!$paymentInfo->getCcType()) {
-            return $this;
+        $order = $info->getQuote();
+        if ($info->getOrder()) {
+            $order = $info->getOrder();
         }
 
-        $order = $paymentInfo->getQuote();
-        if ($paymentInfo->getOrder()) {
-            $order = $paymentInfo->getOrder();
-        }
-
-        $phoneExceptionMessage = 'The format of the phone number must match a French phone.';
-        $country = 'FR';
+        $phoneExceptionMessage = 'The format of the phone number must match %s phone.';
         $billingAddress = $order->getBillingAddress();
-        $localizedException = new LocalizedException(__($phoneExceptionMessage));
+        $country = $billingAddress->getCountryId();
 
+        switch ($country) {
+            case 'FR':
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a French');
+                break;
+            case 'IT':
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'an Italian');
+                break;
+            case 'BE':
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a Belgian');
+                break;
+        }
+
+        $localizedException = new LocalizedException(__($phoneExceptionMessage));
         try {
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneNumberUtil->parse($billingAddress->getTelephone(), $country);
