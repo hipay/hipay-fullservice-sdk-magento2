@@ -56,18 +56,22 @@ class AbstractFacilypay extends AbstractMethodAPI
                 break;
         }
 
+        $localizedException = new LocalizedException(__($phoneExceptionMessage));
         try {
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneNumberUtil->parse($billingAddress->getTelephone(), $country);
 
             if (!$phoneNumberUtil->isValidNumber($phoneNumber)) {
-                throw new LocalizedException(__($phoneExceptionMessage));
+                throw $localizedException;
             }
 
             $billingAddress->setTelephone($phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::E164));
-        } catch (NumberParseException | Exception $e) {
+        } catch (NumberParseException $e) {
             $this->_logger->critical($e);
-            throw new LocalizedException(__($phoneExceptionMessage));
+            throw $localizedException;
+        } catch (Exception $e) {
+            $this->_logger->critical($e);
+            throw $localizedException;
         }
 
         return $this;
