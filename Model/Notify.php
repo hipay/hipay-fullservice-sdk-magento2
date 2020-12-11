@@ -21,6 +21,7 @@ use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
+use Magento\Framework\Webapi\Exception as WebApiException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
@@ -189,8 +190,9 @@ class Notify
             $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
 
             if (!$this->_order->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __(sprintf('Wrong order ID: "%s".', $this->_transaction->getOrder()->getId()))
+                throw new WebApiException(
+                    __(sprintf('Order ID not found: "%s".', $this->_transaction->getOrder()->getId())),
+                    0, WebApiException::HTTP_NOT_FOUND
                 );
             }
 
@@ -246,13 +248,27 @@ class Notify
                 }
                 break;
             case TransactionStatus::CAPTURE_REQUESTED:
-                // status : 117
-                if (!$this->_order->hasInvoices()
-                    || $this->_order->getBaseTotalDue() == $this->_order->getBaseGrandTotal()
-                ) {
+            case TransactionStatus::CAPTURED:
+                // status : 118 - We check the 116 has been received before handling
+                $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+                if(is_array($savedStatues) && $savedStatues[TransactionStatus::AUTHORIZED]){
                     $canProcess = true;
+                } else {
+                    throw new WebApiException(
+                        __(sprintf('Order "%s" was not authorized.', $this->_transaction->getOrder()->getId())),
+                        0, WebApiException::HTTP_BAD_REQUEST
+                    );
                 }
-                break;
+
+                // status : 117
+                if ($this->_transaction->getStatus() == TransactionStatus::CAPTURE_REQUESTED
+                    && $this->_order->hasInvoices()
+                    && $this->_order->getBaseTotalDue() != $this->_order->getBaseGrandTotal()
+                ) {
+                    $canProcess = false;
+                }
+
+            break;
             default:
                 $canProcess = true;
                 break;
@@ -357,10 +373,6 @@ class Notify
                 ) {
                     break;
                 }
-
-                if (!$this->_order->getPayment()->getAuthorizationTransaction()) {
-                    $this->_doTransactionAuthorization();
-                };
 
                 // Skip magento fraud checking
                 $this->_doTransactionCapture(true);
@@ -762,7 +774,6 @@ class Notify
     protected function _doTransactionCaptureRequested()
     {
         $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
-        $this->_changeStatus(Config::STATUS_CAPTURE_REQUESTED, 'Capture Requested.');
     }
 
     /**
