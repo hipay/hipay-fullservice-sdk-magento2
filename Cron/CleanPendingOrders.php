@@ -82,6 +82,7 @@ class CleanPendingOrders
     public function execute()
     {
         $methodCodes = $this->getHipayMethods();
+        $hostedMethodCodes = $this->getHostedHipayMethods();
 
         if (count($methodCodes) < 1) {
             return $this;
@@ -100,7 +101,7 @@ class CleanPendingOrders
         $collection = $orderModel->getCollection();
 
         $collection->addFieldToSelect(array('entity_id', 'increment_id', 'store_id', 'state'))
-            ->addFieldToFilter('main_table.state', \Magento\Sales\Model\Order::STATE_NEW)
+            ->addFieldToFilter('main_table.state', array('in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]))
             ->addFieldToFilter('op.method', array('in' => array_values($methodCodes)))
             ->addAttributeToFilter('created_at', array('to' => ($date->sub($interval)->format('Y-m-d H:i:s'))))
             ->join(
@@ -111,22 +112,24 @@ class CleanPendingOrders
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
-            if ($order->canCancel()) {
-                try {
-                    $order->cancel();
-                    // keep order status/state
-                    $order
-                        ->addStatusToHistory(
-                            $order->getStatus(),
-                            __(
-                                "Order canceled automatically by cron because order is pending since %1 minutes",
-                                $limitedTime
-                            )
-                        );
+            if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
+                if ($order->canCancel()) {
+                    try {
+                        $order->cancel();
+                        // keep order status/state
+                        $order
+                            ->addStatusToHistory(
+                                $order->getStatus(),
+                                __(
+                                    "Order canceled automatically by cron because order is pending since %1 minutes",
+                                    $limitedTime
+                                )
+                            );
 
-                    $order->save();
-                } catch (\Exception $e) {
-                    $this->logger->critical($e->getMessage());
+                        $order->save();
+                    } catch (\Exception $e) {
+                        $this->logger->critical($e->getMessage());
+                    }
                 }
             }
         }
@@ -148,4 +151,20 @@ class CleanPendingOrders
 
         return $methods;
     }
+
+    public function getHostedHipayMethods()
+    {
+        $methods = array();
+
+        foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
+            if (strpos($code, 'hipay') !== false && strpos($code, 'hipay_cc') === false) {
+                if ($this->_scopeConfig->getValue('payment/' . $code . "/cancel_pending_order")) {
+                    $methods[] = $code;
+                }
+            }
+        }
+
+        return $methods;
+    }
+
 }
