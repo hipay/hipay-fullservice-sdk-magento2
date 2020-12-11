@@ -21,6 +21,7 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Exception\LocalizedException;
+use \Magento\Framework\Webapi\Exception as WebApiException;
 
 /**
  * HiPay module observer
@@ -109,7 +110,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
 
                 if (!$order->getId()) {
-                    throw new LocalizedException(__("Order not found for id: " . $orderId));
+                    throw new WebApiException(__(sprintf('Order ID not found: "%s".', $orderId)), 0, WebApiException::HTTP_NOT_FOUND);
                 }
                 /** @var $config \HiPay\FullserviceMagento\Model\Config */
                 $config = $this->_configFactory->create(
@@ -150,9 +151,16 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         $controller->getResponse()->setHttpResponseCode(500);
                     }
                 }
+            } catch (WebApiException $e) {
+                $this->_logger->critical($e);
+                $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+
+                $controller->getResponse()->setBody($e->getMessage());
+                $controller->getResponse()->setHttpResponseCode($e->getHttpCode());
             } catch (\Exception $e) {
                 $this->_logger->critical($e);
                 $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+
                 $controller->getResponse()->setBody("Exception during check signature.");
                 $controller->getResponse()->setHttpResponseCode(500);
             }
