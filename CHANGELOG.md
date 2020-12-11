@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.12.1
+
+- **Fix**: Notification handling
+- **Fix**: Order expiration handling
+
 ## 1.12.0
 
 - **New**: Add restrictions rules for Oney 3x, 4x
