@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.12.2
+
+- **Fix**: Corrected too high logging levels on some errors
+
 ## 1.12.1
 
 - **Fix**: Notification handling
