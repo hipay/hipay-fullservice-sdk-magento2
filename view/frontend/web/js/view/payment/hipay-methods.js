@@ -188,6 +188,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay4X'
     },
     {
+      type: 'hipay_creditlong',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong'
+    },
+    {
       type: 'hipay_klarna',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'
