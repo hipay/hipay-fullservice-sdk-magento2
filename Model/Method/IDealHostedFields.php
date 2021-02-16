@@ -25,10 +25,10 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class IDeal extends HostedMethod
+class IDealHostedFields extends HostedMethod
 {
 
-    const HIPAY_METHOD_CODE = 'hipay_ideal_hosted_page';
+    const HIPAY_METHOD_CODE = 'hipay_ideal_hosted_fields';
 
     /**
      * @var string

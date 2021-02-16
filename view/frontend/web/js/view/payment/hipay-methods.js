@@ -93,9 +93,14 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ing'
     },
     {
-      type: 'hipay_ideal',
+      type: 'hipay_ideal_hosted_fields',
       component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal'
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal-hosted-fields'
+    },
+    {
+      type: 'hipay_ideal_hosted_page',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal-hosted-page'
     },
     {
       type: 'hipay_giropay',
