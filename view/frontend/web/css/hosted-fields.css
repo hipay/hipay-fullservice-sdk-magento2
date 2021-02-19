@@ -228,3 +228,9 @@
   flex-grow: 0;
   height: 100%;
 }
+
+#hipay-container-hosted-fields-local
+  [data-hipay-id='ideal-wrapper']
+  .hipay-field-container {
+  height: inherit;
+}

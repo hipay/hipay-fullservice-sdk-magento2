@@ -15,19 +15,19 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
-
-define([
-  'ko',
-  'jquery',
-  'Magento_Checkout/js/view/payment/default',
-  'Magento_Checkout/js/action/place-order',
-  'Magento_Checkout/js/model/quote',
-  'mage/storage'
-], function (ko, $, Component, placeOrderAction, quote, storage) {
+define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
+  $,
+  Component
+) {
   'use strict';
-
   return Component.extend({
     defaults: {
+      configHipay: null,
+      hipayHostedFields: null,
+      redirectAfterPlaceOrder: false,
+      afterPlaceOrderUrl:
+        window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
+          .hipay_ideal_hosted_fields,
       template: 'HiPay_FullserviceMagento/payment/hipay-hosted-fields-local',
       env: window.checkoutConfig.payment.hipay_ideal_hosted_fields
         ? window.checkoutConfig.payment.hipay_ideal_hosted_fields.env
@@ -47,135 +47,29 @@ define([
         : 'en_us'
     },
 
-    initHostedFields: function (self) {
-      return new HiPay({
+    initialize: function () {
+      var self = this;
+      self._super();
+
+      self.configHipay = {
+        selector: 'hipay-container-hosted-fields-local',
+        template: 'auto'
+      };
+    },
+
+    initHostedFields: function () {
+      var self = this;
+
+      self.hipaySdk = HiPay({
         username: self.apiUsernameTokenJs,
         password: self.apiPasswordTokenJs,
         environment: self.env,
         lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
       });
-    },
 
-    isApplePayAllowed: function () {
-      var self = this;
+      self.hipayHostedFields = self.hipaySdk.create('ideal', self.configHipay);
 
-      if (self.instanceApplePay) {
-        return true;
-      }
-
-      if (!self.displayName) {
-        return false;
-      }
-
-      if (self.merchantId) {
-        var hipaySdk = self.initHostedFields(self);
-
-        hipaySdk
-          .canMakePaymentsWithActiveCard(self.merchantId)
-          .then(function (canMakePayments) {
-            if (canMakePayments) {
-              self.initApplePayField(self, hipaySdk);
-            }
-          });
-        // Mandatory
-        return true;
-      } else {
-        var canMakePayments = false;
-        try {
-          canMakePayments = window.ApplePaySession.canMakePayments();
-        } catch (e) {
-          return false;
-        }
-        if (canMakePayments) {
-          return self.initApplePayField(self);
-        }
-      }
-    },
-
-    initApplePayField: function (self, hipaySdk) {
-      if (!hipaySdk) {
-        hipaySdk = self.initHostedFields(self);
-      }
-
-      var applePayConfig = {
-        displayName: self.displayName,
-        request: {
-          countryCode: quote.billingAddress().countryId,
-          currencyCode: quote.totals().quote_currency_code,
-          total: {
-            label: self.displayName,
-            amount: Number(quote.totals().base_grand_total).toFixed(2)
-          }
-        },
-        selector: 'hipay-apple-pay-button',
-        applePayStyle: {
-          type: self.buttonType,
-          color: self.buttonColour
-        }
-      };
-
-      self.instanceApplePay = hipaySdk.create(
-        'paymentRequestButton',
-        applePayConfig
-      );
-
-      if (self.instanceApplePay) {
-        canMakeApplePay(true);
-
-        self.totals.subscribe(function (newValue) {
-          if (
-            applePayConfig.request.total.amount != newValue.base_grand_total
-          ) {
-            applePayConfig.request.total.amount = Number(
-              newValue.base_grand_total
-            ).toFixed(2);
-            self.instanceApplePay.update(applePayConfig);
-          }
-        });
-
-        self.instanceApplePay.on('paymentAuthorized', function (token) {
-          self.paymentAuthorized(self, token);
-        });
-
-        return true;
-      }
-    },
-
-    paymentAuthorized: function (self, tokenHipay) {
-      var body = $('body');
-      self.creditCardToken(tokenHipay.token);
-      self.creditCardType(
-        tokenHipay.brand.toLowerCase().replace(/ /g, '-') || self.creditCardType
-      );
-
-      var deferred = $.Deferred();
-      $.when(placeOrderAction(self.getData(), self.messageContainer))
-        .fail(function (error) {
-          deferred.reject(Error(error));
-          self.instanceApplePay.completePaymentWithFailure();
-        })
-        .done(function () {
-          deferred.resolve(true);
-          storage
-            .get(self.placeOrderStatusUrl)
-            .done(function (response) {
-              if (response) {
-                if (response.redirectUrl && response.statusOK === true) {
-                  self.instanceApplePay.completePaymentWithSuccess();
-                } else {
-                  self.instanceApplePay.completePaymentWithFailure();
-                }
-                if (response.redirectUrl) {
-                  $.mage.redirect(response.redirectUrl);
-                }
-              }
-            })
-            .fail(function () {
-              self.instanceApplePay.completePaymentWithFailure();
-              $.mage.redirect(self.afterPlaceOrderUrl);
-            });
-        });
-      body.loader('hide');
+      return true;
     },
 
     /**
@@ -193,35 +87,47 @@ define([
     },
 
     initObservable: function () {
-      this._super().observe(['creditCardToken', 'creditCardType', 'eci']);
+      var self = this;
+      self._super().observe(['eci']);
 
-      return this;
+      return self;
     },
 
-    /**
-     * @returns {Boolean}
-     */
-    isShowLegend: function () {
-      return true;
+    place_order: function (data, event) {
+      var self = this;
+      if (event) {
+        event.preventDefault();
+      }
+
+      console.log(data);
+      console.log(self.hipayHostedFields);
+      console.log(self.getData());
+      // self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
     },
+
+    afterPlaceOrder: function () {
+      $.mage.redirect(this.afterPlaceOrderUrl);
+    },
+
     context: function () {
       return this;
     },
-    /**
-     * @override
-     */
     getCode: function () {
       return 'hipay_ideal_hosted_fields';
     },
     getData: function () {
-      return {
-        method: this.item.method,
+      var self = this;
+      var parent = self._super();
+      var data = {
+        method: self.item.method,
         additional_data: {
-          card_token: this.creditCardToken(),
-          eci: this.eci(),
-          cc_type: this.creditCardType()
+          browser_info: JSON.stringify(self.hipaySdk.getBrowserInfo())
         }
       };
+      return $.extend(true, parent, data);
+    },
+    isActive: function () {
+      return true;
     }
   });
 });
