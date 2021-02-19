@@ -621,7 +621,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function isDeliveryMethodRequired($product_code)
     {
-        return in_array($product_code, ['3xcb', '3xcb-no-fees', '4xcb-no-fees', '4xcb']);
+        return in_array($product_code, ['3xcb', '3xcb-no-fees', '4xcb-no-fees', '4xcb', 'credit-long']);
     }
 
     /**
