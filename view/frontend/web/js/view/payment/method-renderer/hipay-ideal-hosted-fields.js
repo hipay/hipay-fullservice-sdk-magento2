@@ -15,10 +15,11 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
-define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
-  $,
-  Component
-) {
+define([
+  'jquery',
+  'Magento_Checkout/js/view/payment/default',
+  'Magento_Checkout/js/model/full-screen-loader'
+], function ($, Component, fullScreenLoader) {
   'use strict';
   return Component.extend({
     defaults: {
@@ -60,7 +61,7 @@ define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
     initHostedFields: function () {
       var self = this;
 
-      self.hipaySdk = HiPay({
+      self.hipaySdk = new HiPay({
         username: self.apiUsernameTokenJs,
         password: self.apiPasswordTokenJs,
         environment: self.env,
@@ -68,6 +69,8 @@ define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
       });
 
       self.hipayHostedFields = self.hipaySdk.create('ideal', self.configHipay);
+
+      self.isPlaceOrderActionAllowed(true);
 
       return true;
     },
@@ -88,7 +91,9 @@ define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
 
     initObservable: function () {
       var self = this;
-      self._super().observe(['eci']);
+      self
+        ._super()
+        .observe(['creditCardType', 'issuer_bank_id', 'browser_info']);
 
       return self;
     },
@@ -99,10 +104,19 @@ define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
         event.preventDefault();
       }
 
-      console.log(data);
-      console.log(self.hipayHostedFields);
-      console.log(self.getData());
-      // self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+      fullScreenLoader.startLoader();
+      self.hipayHostedFields.getPaymentData().then(
+        function (response) {
+          self.creditCardType(response.payment_product);
+          self.issuer_bank_id(response.issuer_bank_id);
+          self.browser_info(JSON.stringify(response.browser_info));
+          self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+          fullScreenLoader.stopLoader();
+        },
+        function (errors) {
+          fullScreenLoader.stopLoader();
+        }
+      );
     },
 
     afterPlaceOrder: function () {
@@ -121,7 +135,9 @@ define(['jquery', 'Magento_Checkout/js/view/payment/default'], function (
       var data = {
         method: self.item.method,
         additional_data: {
-          browser_info: JSON.stringify(self.hipaySdk.getBrowserInfo())
+          cc_type: self.creditCardType(),
+          browser_info: self.browser_info(),
+          issuer_bank_id: self.issuer_bank_id()
         }
       };
       return $.extend(true, parent, data);
