@@ -26,7 +26,7 @@ define([
     },
 
     getCode: function () {
-      return 'hipay_ideal_hosted_page';
+      return 'hipay_ideal';
     },
     isActive: function () {
       return true;

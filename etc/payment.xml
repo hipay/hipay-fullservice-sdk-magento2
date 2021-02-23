@@ -69,7 +69,7 @@
         <method name="hipay_ideal_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="hipay_ideal_hosted_page">
+        <method name="hipay_ideal">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_postfinancecardapi">
