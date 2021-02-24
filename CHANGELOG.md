@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Add** iDeal Hosted Fields payment method
+
 ## 1.12.2
 
 - **Fix**: Corrected too high logging levels on some errors
