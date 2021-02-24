@@ -28,6 +28,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -91,6 +98,7 @@
                 <item name="hipay_webmoneyapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\WebmoneyApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sofortapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SofortApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ing" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Ing::HIPAY_METHOD_CODE</item>
+                <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ideal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDeal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_giropay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Giropay::HIPAY_METHOD_CODE</item>
                 <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
@@ -128,6 +136,7 @@
                 <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider</item>
                 <item name="hipay_astropay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\AstropayConfigProvider</item>
                 <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
+                <item name="hipay_local_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider</item>
             </argument>
         </arguments>
     </type>

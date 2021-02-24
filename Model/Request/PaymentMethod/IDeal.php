@@ -13,11 +13,12 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
-namespace HiPay\FullserviceMagento\Model\Method;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\IDealPaymentMethod;
 
 /**
- * iDEAL Model payment method
+ * IDeal Payment Method Request Object
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,25 +26,13 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class IDeal extends HostedMethod
+class IDeal extends AbstractPaymentMethod
 {
+    protected function mapRequest()
+    {
+        $iDealPaymentMethod = new IDealPaymentMethod();
+        $iDealPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('issuer_bank_id');
 
-    const HIPAY_METHOD_CODE = 'hipay_ideal';
-
-    /**
-     * @var string
-     */
-    protected static $_technicalCode = 'ideal';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canUseInternal = false;
+        return $iDealPaymentMethod;
+    }
 }
