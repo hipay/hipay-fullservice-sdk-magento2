@@ -21,6 +21,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <hipay>
+            <hipay_hostedpage>
+                <hostedpage_version>hpv1</hostedpage_version>
+            </hipay_hostedpage>
             <hipay_credentials>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
