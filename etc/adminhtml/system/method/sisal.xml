@@ -19,48 +19,52 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-<group id="hipay_sisal" translate="label" type="text" sortOrder="54" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Enterprise SISAL Hosted</label>
-				<comment></comment>
-				<!-- 
-					Include tag import configuration from another file.
-					base_top.xml contain configuration fields will be appear on top
-					like enabled, title, order statues etc ...
-				-->
-				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-                <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
-                
-                 <!-- custom fields or override of hosted/Cc -->
-                 <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Custom CSS url</label>
-                    <comment>Important, HTTPS protocol is required</comment>
-                </field> 
-                 <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Template type</label>
-                    <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
-                </field>
-                <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Display hosted page in Iframe</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                 <field id="iframe_width" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
-                	<label>iFrame Width</label>
-                </field>
-                <field id="iframe_height" translate="label" type="text" sortOrder="104" showInDefault="1" showInWebsite="1" showInStore="1">
-                	<label>iFrame Height</label>
-                </field>
-                <field id="iframe_style" translate="label" type="text" sortOrder="106" showInDefault="1" showInWebsite="1" showInStore="1">
-                	<label>iFrame Style</label>
-                </field>
-                <field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
-                	<label>Wrapper iFrame Style</label>
-                </field>
-                <!-- 
-					Include tag import configuration from another file.
-					base_bottom.xml contain configuration fields will be appear on bottom
-					like test mode, debug, sort order etc ..
-				-->
-                <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-                
-			</group>
+    <group id="hipay_sisal" translate="label" type="text" sortOrder="54" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>HiPay Enterprise SISAL Hosted</label>
+        <comment></comment>
+        <!-- 
+            Include tag import configuration from another file.
+            base_top.xml contain configuration fields will be appear on top
+            like enabled, title, order statues etc ...
+        -->
+        <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+        <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
+
+        <!-- custom fields or override of hosted/Cc -->
+        <field id="time_limit_to_pay" translate="label" type="text" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Period of validity of the payment page</label>
+            <comment>In hours</comment>
+        </field>
+        <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Custom CSS url</label>
+            <comment>Important, HTTPS protocol is required</comment>
+        </field>
+        <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Template type</label>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
+        </field>
+        <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Display hosted page in Iframe</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="iframe_width" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Width</label>
+        </field>
+        <field id="iframe_height" translate="label" type="text" sortOrder="104" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Height</label>
+        </field>
+        <field id="iframe_style" translate="label" type="text" sortOrder="106" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Style</label>
+        </field>
+        <field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Wrapper iFrame Style</label>
+        </field>
+        <!-- 
+            Include tag import configuration from another file.
+            base_bottom.xml contain configuration fields will be appear on bottom
+            like test mode, debug, sort order etc ..
+        -->
+        <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+
+    </group>
 </include>
