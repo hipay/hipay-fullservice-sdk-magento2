@@ -152,7 +152,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                     }
                 }
             } catch (WebApiException $e) {
-                $this->_logger->warn($e);
+                $this->_logger->warning($e);
                 $controller->getActionFlag()->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
 
                 $controller->getResponse()->setBody($e->getMessage());
