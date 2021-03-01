@@ -19,19 +19,19 @@
 -->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
-        <input type="radio"
-               name="payment[method]"
-               class="radio"
-               data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
+        <input type="radio" name="payment[method]" class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
         <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
         <!-- ko foreach: getRegion('messages') -->
-        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- ko template: getTemplate() -->
+        <!-- /ko -->
         <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
             <!--/ko-->
         </div>
         <form class="form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
@@ -39,15 +39,18 @@
                 'context': context(),
                 'gateway': getCode(),
             }, 'validation':[]}">
-            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]" data-bind="attr: {value: getFingerprint()}"/>
-         <!-- ko if: (useOneclick() && customerHasCard()) -->
-         <div>
-             <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
-                 <span><!-- ko i18n: 'Your credit cards'--><!-- /ko --></span>
-             </label>
-             <div class="control">
-                 <select name="payment[cc_token]" class="select"
-                         data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
+            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]"
+                data-bind="attr: {value: getFingerprint()}" />
+            <!-- ko if: (useOneclick() && customerHasCard()) -->
+            <div>
+                <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
+                    <span>
+                        <!-- ko i18n: 'Your credit cards'-->
+                        <!-- /ko -->
+                    </span>
+                </label>
+                <div class="control">
+                    <select name="payment[cc_token]" class="select" data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
                                      mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
                                      enable: true,
                                      options: getCustomerCards(),
@@ -55,87 +58,85 @@
                                      optionsText: 'name',
                                      optionsCaption: $t('Pay with a new card'),
                                      value: selectedCard">
-                 </select>
-             </div>
-         </div>
-         <div>&nbsp;</div>
-         <!-- /ko -->
-         <!-- ko if: (useOneclick())-->
-                <div class="field" data-bind="visible: showForm()">
-                    <label class="label">
-                        <span></span>
-                    </label>
-                    <div class="control">
-                        <input type="checkbox"
-                               name="payment[create_oneclick]"
-                               value="1"
-                               checked="checked"
-                               class="checkbox"
-                               data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}"/>
-                        <label class="label" for="create_oneclick">
-                            <span><!-- ko i18n: 'Save this card for future use'--><!-- /ko --></span>
-                        </label>
-                    </div>
+                    </select>
                 </div>
-                <!-- /ko -->
-         </form>
+            </div>
+            <div>&nbsp;</div>
+            <!-- /ko -->
+            <!-- ko if: (useOneclick())-->
+            <div class="field" data-bind="visible: showForm()">
+                <label class="label">
+                    <span></span>
+                </label>
+                <div class="control">
+                    <input type="checkbox" name="payment[create_oneclick]" value="1" checked="checked" class="checkbox"
+                        data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}" />
+                    <label class="label" for="create_oneclick">
+                        <span>
+                            <!-- ko i18n: 'Save this card for future use'-->
+                            <!-- /ko -->
+                        </span>
+                    </label>
+                </div>
+            </div>
+            <!-- /ko -->
+        </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
             <!--/ko-->
         </div>
 
         <div class="actions-toolbar" data-bind="visible: (!isIframeMode() || !showForm()) && !getWarningsMessages()">
             <div class="primary">
-                <button class="action primary checkout"
-                        type="submit"
-                        data-bind="
+                <button class="action primary checkout" type="submit" data-bind="
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
                         css: {disabled: !isPlaceOrderActionAllowed()},
                         enable: (getCode() == isChecked())
-                        "
-                        disabled>
+                        " disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>
         <!-- ko if: getWarningsMessages() -->
-            <div class="message notice" data-bind="text: $t(getWarningsMessages())"></div>
+        <div class="message notice" data-bind="text: $t(getWarningsMessages())"></div>
         <!-- /ko -->
 
-         <!-- ko if: !isIframeMode() && !getWarningsMessages() -->
-        	<div data-bind="visible: showForm()"><!-- ko i18n: 'You will be redirect to payment page after submit order.' --><!-- /ko --></div>
-		<!-- /ko -->
+        <!-- ko if: !isIframeMode() && !getWarningsMessages() -->
+        <div data-bind="visible: showForm()">
+            <!-- ko i18n: 'You will be redirect to payment page after submit order.' -->
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
         <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
             <div class="primary">
-                <button data-role="review-save"
-                        type="submit"
-                        data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
-                        class="button action primary checkout">
+                <button data-role="review-save" type="submit"
+                    data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
+                    class="button action primary checkout">
                     <span data-bind="i18n: 'Continue'"></span>
                 </button>
             </div>
         </div>
         <div data-bind="visible: isInAction()">
             <div id="iframe-warning" class="message notice">
-                <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
+                <div>
+                    <!-- ko i18n: 'Please do not refresh the page until you complete payment.' -->
+                    <!-- /ko -->
+                </div>
             </div>
             <!-- ko if: isPaymentReady() -->
             <div data-bind="attr:{style: getIframeWrapperStyle()}">
-	            <iframe data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
-	                    data-container="hipay-hosted-iframe"
-	                    class="hipay_hosted iframe"
-	                    scrolling="no"
-	                    frameborder="0"
-	                    border="0"
-	                    >
-	            </iframe>
+                <iframe
+                    data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
+                    data-container="hipay-hosted-iframe" class="hipay_hosted iframe" scrolling="yes" frameborder="0"
+                    border="0">
+                </iframe>
             </div>
             <!-- /ko -->
         </div>
-        
-        
+
+
     </div>
 </div>
-        

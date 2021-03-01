@@ -21,6 +21,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <hipay>
+            <hipay_hostedpage>
+                <hostedpage_version>hpv1</hostedpage_version>
+            </hipay_hostedpage>
             <hipay_credentials>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
@@ -301,6 +304,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
@@ -369,6 +373,14 @@
                 <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products>dexia-directnet</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
+                <iframe_mode>1</iframe_mode>
+                <iframe_width>80%</iframe_width>
+                <iframe_height>450px</iframe_height>
+                <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+                <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
+                    #BEBCB7; border-right: 1px solid #BEBCB7;
+                </iframe_wrapper_style>
                 <display_selector>0</display_selector>
                 <template>basic-js</template>
                 <css></css>
@@ -392,6 +404,14 @@
                 <re_add_to_cart>0</re_add_to_cart>
                 <payment_products>giropay</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
+                <iframe_mode>1</iframe_mode>
+                <iframe_width>80%</iframe_width>
+                <iframe_height>450px</iframe_height>
+                <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+                <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
+                    #BEBCB7; border-right: 1px solid #BEBCB7;
+                </iframe_wrapper_style>
                 <display_selector>0</display_selector>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -445,6 +465,7 @@
                 </iframe_wrapper_style>
                 <payment_products>ideal</payment_products>                <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products_categories>realtime-banking</payment_products_categories>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <display_selector>0</display_selector>
                 <authentication_indicator>0</authentication_indicator>                <!-- Enable/Disable 3D secure -->
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -472,6 +493,14 @@
                 <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products>ing-homepay</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
+                <iframe_mode>1</iframe_mode>
+                <iframe_width>80%</iframe_width>
+                <iframe_height>450px</iframe_height>
+                <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
+                <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
+                    #BEBCB7; border-right: 1px solid #BEBCB7;
+                </iframe_wrapper_style>
                 <display_selector>0</display_selector>
                 <!-- Enable/Disable 3D secure -->
                 <authentication_indicator>0</authentication_indicator>
@@ -1078,6 +1107,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <payment_products>klarnainvoice</payment_products>
                 <re_add_to_cart>0</re_add_to_cart>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <iframe_mode>0</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>

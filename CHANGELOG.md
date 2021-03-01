@@ -3,6 +3,8 @@
 ## Unreleased
 
 - **Add** iDeal Hosted Fields payment method
+- **Add** Hosted Page v2 option on HostedPage parameters
+- **Add** missing fields for Hosted payment methods
 
 ## 1.12.2
 
