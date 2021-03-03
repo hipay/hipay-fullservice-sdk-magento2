@@ -5,6 +5,9 @@
 - **Add** iDeal Hosted Fields payment method
 - **Add** Hosted Page v2 option on HostedPage parameters
 - **Add** missing fields for Hosted payment methods
+- **Fix**: placeOrder button blocking due to other active payment methods [#132](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/132)
+- **Fix**: deprecated method from a Magento dependency
+- **Fix**: payment product problem with _hipay_hostedsplit_ payment method
 
 ## 1.12.2
 
