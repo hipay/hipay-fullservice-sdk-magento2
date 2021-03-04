@@ -157,6 +157,7 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
+                <is_multi_payment_products>1</is_multi_payment_products>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -191,6 +192,7 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
+                <is_multi_payment_products>1</is_multi_payment_products>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -252,6 +254,7 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
+                <is_multi_payment_products>1</is_multi_payment_products>
                 <payment_products>american-express,visa,mastercard</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>

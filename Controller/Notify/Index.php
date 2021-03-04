@@ -78,12 +78,11 @@ class Index extends AppAction
                 ['params' => ['response' => $params]]
             );
             $notify->processTransaction();
-        } catch(WebApiException $e){
-            $this->_logger->warn($e);
+        } catch (WebApiException $e) {
+            $this->_logger->warning($e);
 
             $this->getResponse()->setStatusHeader($e->getHttpCode());
             $this->getResponse()->setBody($e->getMessage())->sendResponse();
-
         } catch (\Exception $e) {
             $this->_logger->critical($e);
 

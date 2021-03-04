@@ -160,8 +160,7 @@
                 <button class="action primary checkout" type="submit" data-bind="
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
-                        css: {disabled: !isPlaceOrderActionAllowed()},
-                        enable: (getCode() == isChecked())
+                        enable: isPlaceOrderActionAllowed()
                         " disabled>
                     <span data-bind="i18n: 'Place Order'"></span>
                 </button>
@@ -176,8 +175,8 @@
         <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
             <div class="primary">
                 <button data-role="review-save" type="submit"
-                    data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
-                    class="button action primary checkout">
+                    data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, enable: isPlaceOrderActionAllowed()"
+                    class="button action primary checkout" disabled>
                     <span data-bind="i18n: 'Continue'"></span>
                 </button>
             </div>

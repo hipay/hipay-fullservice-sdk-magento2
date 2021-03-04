@@ -16,10 +16,11 @@
  *
  */
 define([
+  'ko',
   'jquery',
   'Magento_Checkout/js/view/payment/default',
   'Magento_Checkout/js/model/full-screen-loader'
-], function ($, Component, fullScreenLoader) {
+], function (ko, $, Component, fullScreenLoader) {
   'use strict';
   return Component.extend({
     defaults: {
@@ -44,9 +45,11 @@ define([
             .apiPasswordTokenJs
         : '',
       locale: window.checkoutConfig.payment.hiPayFullservice.locale
-        ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
+        ? window.checkoutConfig.payment.hiPayFullservice.locale
+            .hipay_ideal_hosted_fields
         : 'en_us'
     },
+    isPlaceOrderAllowed: ko.observable(false),
 
     initialize: function () {
       var self = this;
@@ -70,7 +73,7 @@ define([
 
       self.hipayHostedFields = self.hipaySdk.create('ideal', self.configHipay);
 
-      self.isPlaceOrderActionAllowed(true);
+      self.isPlaceOrderAllowed(true);
 
       return true;
     },

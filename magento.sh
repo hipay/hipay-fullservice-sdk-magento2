@@ -40,6 +40,10 @@ if [ "$1" = 'init' ]; then
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"
     fi
+elif [ "$1" = 'kill' ]; then
+    docker-compose -f docker-compose.dev.yml stop
+    docker-compose -f docker-compose.dev.yml rm -fv
+    rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker-compose -f docker-compose.dev-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then
