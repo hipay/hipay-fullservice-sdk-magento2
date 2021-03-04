@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.13.0
 
 - **Add** iDeal Hosted Fields payment method
 - **Add** Hosted Page v2 option on HostedPage parameters
