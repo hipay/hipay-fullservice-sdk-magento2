@@ -262,7 +262,9 @@ class Order extends CommonRequest
         $orderRequest->orderid = $this->_order->getForcedOrderId() ?: $this->_order->getIncrementId();
         $orderRequest->operation = $this->_order->getForcedOperation() ?:
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_action');
-        $orderRequest->payment_product = $payment_product ?:
+        $orderRequest->payment_product = $payment_product &&
+            !$this->_order->getPayment()->getMethodInstance()->getConfigData('is_multi_payment_products') ?
+            $payment_product :
             $this->getCcTypeHipay($this->_order->getPayment()->getCcType());
         $orderRequest->description = $this->_order->getForcedDescription() ?: sprintf(
             "Order %s",
@@ -334,7 +336,7 @@ class Order extends CommonRequest
             }
         }
 
-        if (preg_match("/[34]xcb-no-fees|[34]xcb/", $payment_product)) {
+        if (preg_match("/[34]xcb-no-fees|[34]xcb|credit-long/", $payment_product)) {
             $merchantPromotion = $this->_config->getValue('merchant_promotion');
             $orderRequest->payment_product_parameters = json_encode(
                 array(

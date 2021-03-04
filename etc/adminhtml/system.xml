@@ -24,6 +24,7 @@
             <label>HiPay Enterprise</label>
             <tab>sales</tab>
             <resource>HiPay_FullserviceMagento::hipay</resource>
+            <include path="HiPay_FullserviceMagento::system/hostedpage.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_tokenjs.xml"/>
@@ -45,6 +46,7 @@
             <include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/dexia.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/giropay.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/ideal_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ideal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ing.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/paypal.xml"/>
@@ -69,6 +71,7 @@
             <include path="HiPay_FullserviceMagento::system/method/santandercash.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay4X.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/creditlong.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/klarna.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp4X.xml"/>

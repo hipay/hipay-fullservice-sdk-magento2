@@ -16,8 +16,9 @@
  *
  */
 define([
+  'jquery',
   'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
-], function (Component) {
+], function ($, Component) {
   'use strict';
   return Component.extend({
     defaults: {
@@ -26,7 +27,7 @@ define([
     },
 
     getCode: function () {
-      return 'hipay_ideal';
+      return 'hipay_creditlong';
     },
     isActive: function () {
       return true;

@@ -247,6 +247,7 @@ abstract class AbstractConfig implements ConfigInterface
     protected function _mapGeneralFieldset($fieldName, $group = 'hipay_credentials')
     {
         switch ($fieldName) {
+            case 'hostedpage_version':
             case 'api_username':
             case 'api_password':
             case 'secret_passphrase':

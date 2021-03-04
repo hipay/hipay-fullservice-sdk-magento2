@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 /**
- * iDEAL Model payment method
+ * iDEAL Hosted Fields Model payment method
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,10 +25,10 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class IDeal extends HostedMethod
+class IDealHostedFields extends LocalHostedFields
 {
 
-    const HIPAY_METHOD_CODE = 'hipay_ideal';
+    const HIPAY_METHOD_CODE = 'hipay_ideal_hosted_fields';
 
     /**
      * @var string
@@ -41,9 +41,7 @@ class IDeal extends HostedMethod
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
-     * Payment Method feature
-     *
-     * @var bool
+     * @var string[] keys to import in payment additionnal informations
      */
-    protected $_canUseInternal = false;
+    protected $_additionalInformationKeys = ['issuer_bank_id', 'browser_info', 'cc_type'];
 }

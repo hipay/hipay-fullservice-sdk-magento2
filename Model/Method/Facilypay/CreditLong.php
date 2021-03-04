@@ -13,11 +13,12 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+namespace HiPay\FullserviceMagento\Model\Method\Facilypay;
 
-namespace HiPay\FullserviceMagento\Model\Method;
+use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
 
 /**
- * iDEAL Model payment method
+ * Credit Long payment method
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,15 +26,15 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class IDeal extends HostedMethod
+class CreditLong extends AbstractFacilypay
 {
 
-    const HIPAY_METHOD_CODE = 'hipay_ideal';
+    const HIPAY_METHOD_CODE = 'hipay_creditlong';
 
     /**
      * @var string
      */
-    protected static $_technicalCode = 'ideal';
+    protected static $_technicalCode = 'credit-long';
 
     /**
      * @var string

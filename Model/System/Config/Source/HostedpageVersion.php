@@ -13,11 +13,10 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 /**
- * iDEAL Model payment method
+ * Source model for hostedpage versions
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,25 +24,21 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class IDeal extends HostedMethod
+class HostedpageVersion implements \Magento\Framework\Option\ArrayInterface
 {
-
-    const HIPAY_METHOD_CODE = 'hipay_ideal';
-
-    /**
-     * @var string
-     */
-    protected static $_technicalCode = 'ideal';
+    const V1 = 'hpv1';
+    const V2 = 'hpv2';
 
     /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
+     * Options getter
      *
-     * @var bool
+     * @return array
      */
-    protected $_canUseInternal = false;
+    public function toOptionArray()
+    {
+        return [
+            ['value' => self::V1, 'label' => __('Hosted Page v1')],
+            ['value' => self::V2, 'label' => __('Hosted Page v2')],
+        ];
+    }
 }

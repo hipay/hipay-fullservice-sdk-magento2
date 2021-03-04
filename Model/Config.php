@@ -19,6 +19,7 @@ namespace HiPay\FullserviceMagento\Model;
 use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
 use HiPay\FullserviceMagento\Model\Method\ApplePay;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
+use HiPay\FullserviceMagento\Model\System\Config\Source\HostedpageVersion;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
@@ -146,6 +147,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
 
+        $hostedpagev2 = $this->getHostedpageVersion() === HostedpageVersion::V2 ? true : false;
+
         try {
             $env = $this->getApiEnv();
             if ($env == null) {
@@ -158,7 +161,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
                     'apiEnv' => $env,
                     'apiHTTPHeaderAccept' => 'application/json',
                     'proxy' => $this->getProxy(),
-                    'timeout' => 30
+                    'timeout' => 30,
+                    'hostedPageV2' => $hostedpagev2
                 ]
             );
         } catch (\Exception $e) {
@@ -621,7 +625,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function isDeliveryMethodRequired($product_code)
     {
-        return in_array($product_code, ['3xcb', '3xcb-no-fees', '4xcb-no-fees', '4xcb']);
+        return in_array($product_code, ['3xcb', '3xcb-no-fees', '4xcb-no-fees', '4xcb', 'credit-long']);
     }
 
     /**
@@ -653,14 +657,29 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->_configSDK !== null ? $this->_configSDK->getApiEndpoint() : '';
     }
 
+    public function getApiEndpointV2()
+    {
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointV2() : '';
+    }
+
     public function getApiEndpointProd()
     {
         return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointProd() : '';
     }
 
+    public function getApiEndpointV2Prod()
+    {
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointV2Prod() : '';
+    }
+
     public function getApiEndpointStage()
     {
         return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointStage() : '';
+    }
+
+    public function getApiEndpointV2Stage()
+    {
+        return $this->_configSDK !== null ? $this->_configSDK->getApiEndpointV2Stage() : '';
     }
 
     public function getSecureVaultEndpointProd()
@@ -875,5 +894,35 @@ class Config extends AbstractConfig implements ConfigurationInterface
         if ($this->_configSDK !== null) {
             $this->_configSDK->setOverridePaymentProductSorting($overridePaymentProductSorting);
         }
+    }
+
+    /**
+     * Returns hostedpage v2 parameter
+     *
+     * @return bool
+     */
+    public function isHostedPageV2()
+    {
+        if ($this->_configSDK !== null) {
+            return $this->_configSDK->isHostedPageV2();
+        }
+    }
+
+    /**
+     * Sets hostedpage v2 parameter
+     *
+     * @param bool $hostedPageV2
+     */
+    public function setHostedPageV2($hostedPageV2)
+    {
+        if ($this->_configSDK !== null) {
+            $this->_configSDK->setHostedPageV2($hostedPageV2);
+        }
+    }
+
+    public function getHostedpageVersion()
+    {
+        $key = 'hostedpage_version';
+        return $this->getGeneraleValue($key, 'hipay_hostedpage');
     }
 }

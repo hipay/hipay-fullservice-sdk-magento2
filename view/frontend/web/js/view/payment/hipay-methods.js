@@ -93,6 +93,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ing'
     },
     {
+      type: 'hipay_ideal_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal-hosted-fields'
+    },
+    {
       type: 'hipay_ideal',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal'
@@ -186,6 +191,11 @@ define([
       type: 'hipay_facilypay4X',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay4X'
+    },
+    {
+      type: 'hipay_creditlong',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong'
     },
     {
       type: 'hipay_klarna',
