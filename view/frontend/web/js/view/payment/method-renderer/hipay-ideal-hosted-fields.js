@@ -45,7 +45,8 @@ define([
             .apiPasswordTokenJs
         : '',
       locale: window.checkoutConfig.payment.hiPayFullservice.locale
-        ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
+        ? window.checkoutConfig.payment.hiPayFullservice.locale
+            .hipay_ideal_hosted_fields
         : 'en_us'
     },
     isPlaceOrderAllowed: ko.observable(false),
