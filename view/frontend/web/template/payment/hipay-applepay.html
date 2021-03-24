@@ -41,6 +41,12 @@
         <div class="hipay-field-container">
             <div class="hipay-payment-request-button" id="hipay-apple-pay-button"></div>
         </div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+            <!--/ko-->
+        </div>
     </div>
 </div>
 <!--/ko-->
