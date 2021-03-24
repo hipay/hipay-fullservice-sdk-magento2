@@ -43,6 +43,13 @@
             }, 'validation':[]}">
             <div id="hipay-container-hosted-fields-local" data-bind="visible: initHostedFields()"></div>
         </form>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+            <!--/ko-->
+        </div>
+
         <div class="actions-toolbar">
             <div class="primary">
                 <button class="action primary checkout" type="submit" data-bind="
