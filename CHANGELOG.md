@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.1
+
+- **Fix**: iDEAL Hosted Fields template
+
 ## 1.13.0
 
 - **Add** iDeal Hosted Fields payment method
