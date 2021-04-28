@@ -76,7 +76,7 @@ build:
   image: $REGISTRY_CI/gitlab-ci-base:deployment
   when: manual
   script:
-    - docker build -f bin/docker/images/default/Dockerfile . -t ${REGISTRY_C}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}
+    - docker build -f bin/docker/images/default/Dockerfile . -t ${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}
     - /tools/auth-as-end-user.sh
     - docker push ${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}
     - /tools/logout-end-user.sh
