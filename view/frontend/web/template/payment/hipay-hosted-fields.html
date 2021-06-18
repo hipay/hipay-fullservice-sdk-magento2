@@ -125,7 +125,7 @@
                     <div class="control">
                         <input type="checkbox" name="payment[create_oneclick]" value="1" checked="checked"
                             class="checkbox"
-                            data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}" />
+                            data-bind="checked: createOneclick, event: {change: changeOneClick}, attr: {id:  getCode() + '_create_oneclick'}" />
                         <label class="label" for="create_oneclick">
                             <span>
                                 <!-- ko i18n: 'Save this card for future use'-->

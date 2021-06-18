@@ -161,6 +161,16 @@ define([
       this.validateHandler = handler;
     },
 
+    allowMultiUse: function () {
+      var self = this;
+      return self.allowOneclick.hipay_hosted_fields && self.createOneclick();
+    },
+
+    changeOneClick: function () {
+      var self = this;
+      self.hipayHostedFields.setMultiUse(self.allowMultiUse());
+    },
+
     initialize: function () {
       var self = this;
       var customerFirstName = '';
@@ -176,7 +186,7 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
-        multi_use: self.allowOneclick.hipay_hosted_fields,
+        multi_use: self.allowMultiUse(),
         fields: {
           cardHolder: {
             selector: 'hipay-card-holder',
@@ -220,7 +230,7 @@ define([
      */
     initObservable: function () {
       var self = this;
-      self._super();
+      self._super().observe(['createOneclick']);
 
       self.showCcForm = ko.computed(function () {
         var showCC =
