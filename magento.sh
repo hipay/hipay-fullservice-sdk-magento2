@@ -84,5 +84,5 @@ elif [ "$1" = 'test' ]; then
     casperjs test $pathPreFile ${pathDir}/[0-1]*/[0-9][4][0-9][0-9]-*.js --url=$BASE_URL --url-mailcatcher=$URL_MAILCATCHER --xunit=${header}result.xml --ssl-protocol=TLSv1.2 --engine=slimerjs --headless
 
 else
-    docker exec magento2-hipay-fullservice gosu magento2 php bin/magento $1
+    docker exec -ti $containerMG2 bash
 fi
