@@ -35,10 +35,13 @@ define([
       self.hipayHostedFields = self.hipaySdk.create('card', self.configHipay);
 
       self.hipayHostedFields.on('change', function (data) {
-        if (!data.valid || data.error) {
-          self.isPlaceOrderAllowed(false);
-        } else if (data.valid) {
-          self.isPlaceOrderAllowed(true);
+        if (self.showCcForm()) {
+          if (!data.valid || data.error) {
+            self.hipayHFstatus = false;
+          } else if (data.valid) {
+            self.hipayHFstatus = true;
+          }
+          self.isPlaceOrderAllowed(self.hipayHFstatus);
         }
       });
 
@@ -152,6 +155,7 @@ define([
 
     hipayHostedFields: null,
     configHipay: null,
+    hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
 
     /**
@@ -169,6 +173,15 @@ define([
     changeOneClick: function () {
       var self = this;
       self.hipayHostedFields.setMultiUse(self.allowMultiUse());
+    },
+
+    changeCard: function () {
+      var self = this;
+      if (!self.showCcForm()) {
+        self.isPlaceOrderAllowed(true);
+      } else {
+        self.isPlaceOrderAllowed(self.hipayHFstatus);
+      }
     },
 
     initialize: function () {
