@@ -1033,7 +1033,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <allowspecific>1</allowspecific>
-                <specificcountry>FR,BE,IT</specificcountry>
+                <specificcountry>FR,BE,IT,PT</specificcountry>
                 <css></css>
                 <debug>0</debug>
                 <env>STAGE</env>
@@ -1062,7 +1062,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <allowspecific>1</allowspecific>
-                <specificcountry>FR,BE,IT</specificcountry>
+                <specificcountry>FR,BE,IT,PT</specificcountry>
                 <css></css>
                 <debug>0</debug>
                 <env>STAGE</env>
@@ -1090,7 +1090,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <allowspecific>1</allowspecific>
-                <specificcountry>FR</specificcountry>
+                <specificcountry>FR,IT,PT</specificcountry>
                 <css></css>
                 <debug>0</debug>
                 <env>STAGE</env>
