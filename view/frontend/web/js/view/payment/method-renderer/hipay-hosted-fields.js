@@ -35,10 +35,13 @@ define([
       self.hipayHostedFields = self.hipaySdk.create('card', self.configHipay);
 
       self.hipayHostedFields.on('change', function (data) {
-        if (!data.valid || data.error) {
-          self.isPlaceOrderAllowed(false);
-        } else if (data.valid) {
-          self.isPlaceOrderAllowed(true);
+        if (self.showCcForm()) {
+          if (!data.valid || data.error) {
+            self.hipayHFstatus = false;
+          } else if (data.valid) {
+            self.hipayHFstatus = true;
+          }
+          self.isPlaceOrderAllowed(self.hipayHFstatus);
         }
       });
 
@@ -152,6 +155,7 @@ define([
 
     hipayHostedFields: null,
     configHipay: null,
+    hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
 
     /**
@@ -159,6 +163,25 @@ define([
      */
     setValidateHandler: function (handler) {
       this.validateHandler = handler;
+    },
+
+    allowMultiUse: function () {
+      var self = this;
+      return self.allowOneclick.hipay_hosted_fields && self.createOneclick();
+    },
+
+    changeOneClick: function () {
+      var self = this;
+      self.hipayHostedFields.setMultiUse(self.allowMultiUse());
+    },
+
+    changeCard: function () {
+      var self = this;
+      if (!self.showCcForm()) {
+        self.isPlaceOrderAllowed(true);
+      } else {
+        self.isPlaceOrderAllowed(self.hipayHFstatus);
+      }
     },
 
     initialize: function () {
@@ -176,7 +199,7 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
-        multi_use: self.allowOneclick.hipay_hosted_fields,
+        multi_use: self.allowMultiUse(),
         fields: {
           cardHolder: {
             selector: 'hipay-card-holder',
@@ -220,7 +243,7 @@ define([
      */
     initObservable: function () {
       var self = this;
-      self._super();
+      self._super().observe(['createOneclick']);
 
       self.showCcForm = ko.computed(function () {
         var showCC =
