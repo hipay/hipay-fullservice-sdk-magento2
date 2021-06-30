@@ -215,7 +215,7 @@ class Cart extends \Magento\Payment\Model\Cart
             $description,
             $taxPercent,
             0,
-            $type,
+            $type
         );
     }
 
