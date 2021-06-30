@@ -47,13 +47,21 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray()
     {
-        $rootId = $this->storeManager->getStore()->getRootCategoryId();
-        $storeId = $this->storeManager->getStore()->getId();
-        $collection = $this->getCategoryTree($storeId, $rootId);
+
+        $stores = $this->storeManager->getStores(true);
         $options = [];
-        foreach ($collection as $category) {
-            $options[] = array('value' => $category->getId(), 'label' => $category->getName());
+
+        foreach ($stores as $store){
+            $rootId = $store->getRootCategoryId();
+            $storeId = $store->getId();
+
+            $collection = $this->getCategoryTree($storeId, $rootId);
+
+            foreach ($collection as $category) {
+                $options[] = array('value' => $category->getId(), 'label' =>  $category->getName() . ' ('.$store->getName().')');
+            }
         }
+
         return $options;
     }
 
