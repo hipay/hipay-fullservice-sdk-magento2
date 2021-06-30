@@ -186,6 +186,7 @@ abstract class CommonRequest extends BaseRequest
         foreach ($items as $item) {
             $itemHipay = null;
             $reference = $item->getDataUsingMethod('reference');
+            $productId = $item->getDataUsingMethod('product_id');
             $name = $item->getDataUsingMethod('name');
             $amount = $item->getDataUsingMethod('amount');
             $price = $item->getDataUsingMethod('price');
@@ -196,7 +197,7 @@ abstract class CommonRequest extends BaseRequest
             /** @var \HiPay\Fullservice\Gateway\Model\Cart\Item */
             switch ($item->getType()) {
                 case TypeItems::GOOD:
-                    $product = $this->_productRepositoryInterface->get($reference);
+                    $product = $this->_productRepositoryInterface->getById($productId);
                     $description = $product->getCustomAttribute('description');
                     $itemHipay = new Item();
                     $itemHipay->setName($name);
