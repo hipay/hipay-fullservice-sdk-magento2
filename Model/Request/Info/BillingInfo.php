@@ -43,35 +43,46 @@ class BillingInfo extends AbstractInfoRequest
      *
      * {@inheritDoc}
      *
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
-     * @return \HiPay\FullserviceMagento\Model\Request\Info\BillingInfo
+     * @return CustomerBillingInfoRequest
+     *@see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
+        $billingAddress = $this->_order->getBillingAddress();
         $customerBillingInfo = new CustomerBillingInfoRequest();
-        $customerBillingInfo->email = $this->_order->getCustomerEmail();
-        $dob = $this->_order->getCustomerDob();
-        if ($dob !== null && !empty($dob)) {
-            try {
-                $dob = new \DateTime($dob);
-                $customerBillingInfo->birthdate = $dob->format('Ymd');
-            } catch (Exception $e) {
-                $customerBillingInfo->birthdate = null;
-            }
+
+        // Using guest email address if billing info is not set
+        $additionalInformation = $this->_order->getPayment()->getAdditionalInformation();
+        if (!empty($additionalData['guestEmail'])) {
+            $customerBillingInfo->email = $additionalInformation['guestEmail'];
         }
 
-        $customerBillingInfo->gender = $this->getHipayGender($this->_order->getCustomerGender());
-        $billingAddress = $this->_order->getBillingAddress();
-        $this->mapCardHolder($customerBillingInfo, $billingAddress);
-        $customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);
-        $customerBillingInfo->streetaddress2 = $billingAddress->getStreetLine(2);
-        $customerBillingInfo->city = $billingAddress->getCity();
-        $customerBillingInfo->zipcode = $billingAddress->getPostcode();
-        $customerBillingInfo->country = $billingAddress->getCountryId();
-        $customerBillingInfo->phone = $billingAddress->getTelephone();
-        $customerBillingInfo->msisdn = $billingAddress->getTelephone();
-        $customerBillingInfo->state = $billingAddress->getRegion();
-        $customerBillingInfo->recipientinfo = $billingAddress->getCompany();
+        if (!empty($billingAddress)) {
+            if ($customerEmail = $billingAddress->getEmail()) {
+                $customerBillingInfo->email = $this->_order->getCustomerEmail();
+            }
+            $dob = $this->_order->getCustomerDob();
+            if ($dob !== null && !empty($dob)) {
+                try {
+                    $dob = new \DateTime($dob);
+                    $customerBillingInfo->birthdate = $dob->format('Ymd');
+                } catch (Exception $e) {
+                    $customerBillingInfo->birthdate = null;
+                }
+            }
+
+            $customerBillingInfo->gender = $this->getHipayGender($this->_order->getCustomerGender());
+            $this->mapCardHolder($customerBillingInfo, $billingAddress);
+            $customerBillingInfo->streetaddress = $billingAddress->getStreetLine(1);
+            $customerBillingInfo->streetaddress2 = $billingAddress->getStreetLine(2);
+            $customerBillingInfo->city = $billingAddress->getCity();
+            $customerBillingInfo->zipcode = $billingAddress->getPostcode();
+            $customerBillingInfo->country = $billingAddress->getCountryId();
+            $customerBillingInfo->phone = $billingAddress->getTelephone();
+            $customerBillingInfo->msisdn = $billingAddress->getTelephone();
+            $customerBillingInfo->state = $billingAddress->getRegion();
+            $customerBillingInfo->recipientinfo = $billingAddress->getCompany();
+        }
 
         return $customerBillingInfo;
     }

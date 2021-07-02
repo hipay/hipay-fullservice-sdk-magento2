@@ -97,6 +97,12 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     protected $paymentHelper;
 
     /**
+     *
+     * @var \Magento\Quote\Model\QuoteFactory $quoteFactory
+     */
+    protected $quoteFactory;
+
+    /**
      * SplitPayment constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -105,6 +111,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
      * @param array $data
      */
     public function __construct(
@@ -113,6 +120,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         PaymentHelper $paymentHelper,
         \Magento\Sales\Model\OrderFactory $orderF,
         \Magento\Checkout\Helper\Data $checkoutHelper,
+        \Magento\Quote\Model\QuoteFactory $quoteFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -123,6 +131,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
         $this->paymentHelper = $paymentHelper;
         $this->orderF = $orderF;
         $this->checkoutHelper = $checkoutHelper;
+        $this->quoteFactory = $quoteFactory;
     }
 
     /**
@@ -190,6 +199,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
             throw new LocalizedException(__('Split Payment not found!'));
         }
 
+        $exception = false;
         try {
             //Call TPP api
             $op = $this->getMethodInstance()->getGatewayManager($this->getOrder())->requestNewOrder();
@@ -208,13 +218,18 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
                     $this->sendErrorEmail();
                     break;
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
             $this->sendErrorEmail();
+
+            $exception = $e;
         }
         $this->setAttempts($this->getAttempts() + 1);
-
         $this->getResource()->save($this);
+
+        if($exception){
+            throw $exception;
+        };
 
         return $this;
     }
@@ -222,6 +237,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
     public function sendErrorEmail()
     {
         $message = __("Error on request split Payment HIPAY. Split Payment Id: " . $this->getId());
-        $this->checkoutHelper->sendPaymentFailedEmail($this->getOrder(), $message, __('Split Payment Hipay'));
+        $quote = $this->quoteFactory->create()->load($this->getOrder()->getQuoteId());
+        $this->checkoutHelper->sendPaymentFailedEmail($quote, $message, __('Split Payment Hipay'));
     }
 }

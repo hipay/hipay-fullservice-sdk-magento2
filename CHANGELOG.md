@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.13.2
+
+- **Fix**: Expired Authorization notification handling
+- **Fix**: Added option to restore the basket when user clicks on back button
+- **Fix**: E-mail recovring method
+- **Fix**: Split payment error handling
+- **Fix**: Multisite category mapping
+- **Fix**: SKU handling when making ONEY requests
+
 ## 1.13.1
 
 - **Fix**: iDEAL Hosted Fields template

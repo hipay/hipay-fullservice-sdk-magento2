@@ -200,6 +200,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * @param string $description
      * @param string $taxPercent
      * @param string $type
+     * @param string $productId
      * @return void
      * @api
      */
@@ -334,6 +335,7 @@ class Cart extends \Magento\Payment\Model\Cart
             }
 
             $sku = $originalItem->getSku();
+            $productId = $originalItem->getProductId();
             $description = $originalItem->getDescription();
             $taxPercent = $originalItem->getTaxPercent();
             if ($useOrderCurrency) {
@@ -390,7 +392,8 @@ class Cart extends \Magento\Payment\Model\Cart
                     $description,
                     $taxPercent,
                     -1.00 * $discount,
-                    TypeItems::GOOD
+                    TypeItems::GOOD,
+                    $productId
                 );
             }
         }
@@ -435,6 +438,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * @param float $taxPercent
      * @param float discount
      * @param string type
+     * @param string $productId
      * @return \Magento\Framework\DataObject
      */
     protected function _createItemHipayFromData(
@@ -446,7 +450,8 @@ class Cart extends \Magento\Payment\Model\Cart
         $description,
         $taxPercent,
         $discount,
-        $type
+        $type,
+        $productId = null
     ) {
         $item = new \Magento\Framework\DataObject(
             [
@@ -458,7 +463,8 @@ class Cart extends \Magento\Payment\Model\Cart
                 'description' => $description,
                 'tax_percent' => $taxPercent,
                 'discount' => $discount,
-                'type' => $type
+                'type' => $type,
+                'product_id' => $productId
             ]
         );
 

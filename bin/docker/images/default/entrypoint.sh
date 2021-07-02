@@ -43,8 +43,13 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        echo "xdebug.remote_enable=on" >>/usr/local/etc/php/conf.d/xdebug.ini
-        echo "xdebug.remote_autostart=off" >>/usr/local/etc/php/conf.d/xdebug.ini
+        xdebugFile=/usr/local/etc/php/conf.d/xdebug.ini
+
+        echo "xdebug.mode=debug" >>$xdebugFile
+        echo "xdebug.idekey=PHPSTORM" >>$xdebugFile
+
+        echo "xdebug.remote_enable=on" >>$xdebugFile
+        echo "xdebug.remote_autostart=off" >>$xdebugFile
     fi
 
     #==========================================

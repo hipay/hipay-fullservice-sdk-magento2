@@ -161,7 +161,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
                     'apiEnv' => $env,
                     'apiHTTPHeaderAccept' => 'application/json',
                     'proxy' => $this->getProxy(),
-                    'timeout' => 30,
                     'hostedPageV2' => $hostedpagev2
                 ]
             );

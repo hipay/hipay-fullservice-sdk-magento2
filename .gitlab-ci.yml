@@ -96,7 +96,7 @@ deploy2recette:
       helm install $RELEASE_NAME ./bin/docker/kubernetes/helm/
       --set magento2_image="${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web"
       --set magento2_tag="${CI_COMMIT_REF_SLUG}"
-      --set magento2_url="${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${PI_CD_URL}"
+      --set magento2_url="${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${URL_CD}"
       --set github_api_token="${GITHUB_TOKEN}"
       --set gitlab_api_token="${GITLAB_API_TOKEN}"
       --set mage_account_public_key="${MAGE_ACCOUNT_PUBLIC_KEY}"
@@ -115,7 +115,7 @@ deploy2recette:
   allow_failure: true
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
-    url: https://${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${PI_CD_URL}
+    url: https://${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${URL_CD}
     on_stop: stop_review
   only:
     - branches

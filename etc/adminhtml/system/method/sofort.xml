@@ -28,7 +28,7 @@
 		like enabled, title, order statues etc ...
 	-->
 	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-
+	<include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
 	<!--
 		Include tag import configuration from another file.
 		base_bottom.xml contain configuration fields will be appear on bottom
