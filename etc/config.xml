@@ -18,7 +18,8 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <hipay>
             <hipay_hostedpage>
@@ -78,7 +79,8 @@
             </hosted_payment_link>
             <configurations>
                 <fingerprint_enabled>1</fingerprint_enabled>
-                <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint</fingerprint_js_url>
+                <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint
+                </fingerprint_js_url>
                 <sdk_js_url>https://libs.hipay.com/js/sdkjs.js</sdk_js_url>
                 <basket_enabled>0</basket_enabled>
                 <currency_transaction>0</currency_transaction>
@@ -106,6 +108,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -128,6 +131,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>AE,VI,MC</cctypes>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -150,6 +154,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
@@ -185,6 +190,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
@@ -231,7 +237,8 @@
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
-                <cctypes_mapper><![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP", "bcmc" : "MI", "cb": "VI"}]]></cctypes_mapper>
+                <cctypes_mapper>
+                    <![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP", "bcmc" : "MI", "cb": "VI"}]]></cctypes_mapper>
             </hipay_hosted_fields>
             <hipay_hostedsplit>
                 <model>HiPay\FullserviceMagento\Model\Method\HostedSplitMethod</model>
@@ -247,6 +254,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
@@ -280,6 +288,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <display_name>Your display name</display_name>
                 <button_type>plain</button_type>
                 <button_colour>black</button_colour>
@@ -307,6 +316,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <iframe_mode>1</iframe_mode>
                 <iframe_width>80%</iframe_width>
@@ -346,6 +356,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products>qiwi-wallet</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
@@ -372,6 +383,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>dexia-directnet</cctypes>
                 <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products>dexia-directnet</payment_products>
@@ -405,6 +417,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>giropay</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
@@ -438,6 +451,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>ideal</payment_products>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
@@ -459,6 +473,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>0</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
@@ -466,7 +481,8 @@
                 <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid
                     #BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
-                <payment_products>ideal</payment_products>                <!-- Enter payment code value see payment products collection in SDK PHP -->
+                <payment_products>ideal
+                </payment_products>                <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <display_selector>0</display_selector>
@@ -492,6 +508,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>0</iframe_mode>
                 <!-- Enter payment code value see payment products collection in SDK PHP -->
                 <payment_products>ing-homepay</payment_products>
@@ -529,6 +546,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>postfinance-card</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -552,6 +570,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>postfinance-efinance</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -575,6 +594,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>paypal</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -597,6 +617,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>mbway</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -621,6 +642,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>przelewy24</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -633,7 +655,8 @@
             </hipay_przelewy24api>
             <hipay_sdd>
                 <model>HiPay\FullserviceMagento\Model\Method\Sdd</model>
-                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\SEPADirectDebitPayment</payment_method>
+                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\SEPADirectDebitPayment
+                </payment_method>
                 <active>0</active>
                 <title>HiPay Enterprise SEPA Direct Debit</title>
                 <payment_action>Sale</payment_action>
@@ -644,6 +667,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>sdd</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -667,6 +691,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>yandex</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -691,6 +716,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>webmoney-transfert</payment_products>
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -715,6 +741,7 @@
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>sofort-uberweisung</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -737,6 +764,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>aura</cctypes>
                 <payment_products>aura</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -763,6 +791,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>banamex</cctypes>
                 <payment_products>banamex</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -789,6 +818,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>banco-do-brasil</cctypes>
                 <payment_products>banco-do-brasil</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -815,6 +845,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>bbva-bancomer</cctypes>
                 <payment_products>bbva-bancomer</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -841,6 +872,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>boleto-bancario</cctypes>
                 <payment_products>boleto-bancario</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -867,6 +899,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>bradesco</cctypes>
                 <payment_products>bradesco</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -893,6 +926,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>caixa</cctypes>
                 <payment_products>caixa</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -919,6 +953,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>itau</cctypes>
                 <payment_products>itau</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -945,6 +980,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>oxxo</cctypes>
                 <payment_products>oxxo</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -971,6 +1007,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>santander-home-banking</cctypes>
                 <payment_products>santander-home-banking</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -997,6 +1034,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <cctypes>santander-cash</cctypes>
                 <payment_products>santander-cash</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -1026,6 +1064,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>3xcb</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -1055,6 +1094,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>4xcb</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -1083,6 +1123,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>credit-long</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
@@ -1110,12 +1151,14 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <payment_products>klarnainvoice</payment_products>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <iframe_mode>0</iframe_mode>
                 <iframe_width>80%</iframe_width>
                 <iframe_height>450px</iframe_height>
                 <iframe_style>margin: 10px 0; border: 1px solid #BEBCB7;</iframe_style>
-                <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px solid#BEBCB7; border-right: 1px solid #BEBCB7;
+                <iframe_wrapper_style>text-align: center; border-bottom: 1px solid #BEBCB7; border-left: 1px
+                    solid#BEBCB7; border-right: 1px solid #BEBCB7;
                 </iframe_wrapper_style>
                 <payment_products>klarnainvoice</payment_products>
                 <payment_products_categories>realtime-banking</payment_products_categories>
@@ -1145,6 +1188,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>bnpp-4xcb</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>
@@ -1169,6 +1213,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>bnpp-3xcb</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>
@@ -1193,6 +1238,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>mybank</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>
@@ -1217,6 +1263,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>hipay_multibanco</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>

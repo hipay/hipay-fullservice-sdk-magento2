@@ -1005,6 +1005,8 @@ class Notify
      */
     protected function _doTransactionVoid()
     {
+        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        $payment = $this->_order->getPayment();
         $parentTransactionId = $payment->getLastTransId();
 
         $this->_order->getPayment()
