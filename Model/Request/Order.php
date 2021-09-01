@@ -340,7 +340,7 @@ class Order extends CommonRequest
             $merchantPromotion = $this->_config->getValue('merchant_promotion');
             $orderRequest->payment_product_parameters = json_encode(
                 array(
-                    "merchantPromotion" => $merchantPromotion && !empty($merchantPromotion) ?
+                    "merchant_promotion" => $merchantPromotion && !empty($merchantPromotion) ?
                     $merchantPromotion :
                     \HiPay\Fullservice\Helper\MerchantPromotionCalculator::calculate(
                         $payment_product,

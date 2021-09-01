@@ -112,7 +112,8 @@ class CleanPendingOrders
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
-            if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
+            if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
+            in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
                 if ($order->canCancel()) {
                     try {
                         $order->cancel();

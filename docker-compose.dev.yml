@@ -7,26 +7,26 @@ web:
   ports:
     - "8096:80"
   volumes:
-    - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block
-    - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller
-    - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc
-    - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper
-    - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model
-    - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console
-    - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer
-    - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin
-    - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui
-    - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view
-    - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup
-    - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron
-    - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n
-    - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger
-    - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test
+    - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block:delegated
+    - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller:delegated
+    - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc:delegated
+    - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper:delegated
+    - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model:delegated
+    - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console:delegated
+    - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer:delegated
+    - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin:delegated
+    - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui:delegated
+    - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view:delegated
+    - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup:delegated
+    - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron:delegated
+    - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n:delegated
+    - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger:delegated
+    - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test:delegated
     - ./composer.json:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/composer.json
     - ./registration.php:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/registration.php
-    - ./tests:/var/www/html/magento2/tests
-    - ./log:/home/magento2/var/log
-    - ./conf/sdk:/var/www/html/magento2/sdk
+    - ./tests:/var/www/html/magento2/tests:delegated
+    - ./log:/home/magento2/var/log:delegated
+    - ./conf/sdk:/var/www/html/magento2/sdk:delegated
   dockerfile: ./bin/docker/images/default/Dockerfile
   build: .
   links:

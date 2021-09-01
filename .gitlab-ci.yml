@@ -55,6 +55,9 @@ build-test-2-1-10:
   script:
     - docker-compose -f docker-compose.test.yml build
     - docker-compose -f docker-compose.test.yml push
+  except:
+    variables:
+      - $ACCESS_TOKEN
   tags:
     - gcp-default-runner-prod
 
@@ -68,13 +71,19 @@ casperjs-2-1-10:
     - docker-compose -f docker-compose.test.yml logs
     - curl --retry 10 --retry-delay 20 -v http:\/\/127.0.0.1:8096/
     - sh bin/tests/casper_run_circle.sh http:\/\/127.0.0.1:8096
+  except:
+    variables:
+      - $ACCESS_TOKEN
   tags:
     - gcp-high-load-runner-prod
 
 build:
   stage: build
   image: $REGISTRY_CI/gitlab-ci-base:deployment
-  when: manual
+  rules:
+    - if: $ACCESS_TOKEN
+      when: on_success
+    - when: manual
   script:
     - docker build -f bin/docker/images/default/Dockerfile . -t ${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}
     - /tools/auth-as-end-user.sh
@@ -86,7 +95,10 @@ build:
 deploy2recette:
   stage: deploy
   image: $REGISTRY_CI/gitlab-ci-base:deployment
-  when: manual
+  rules:
+    - if: $ACCESS_TOKEN
+      when: on_success
+    - when: manual
   variables:
     GPC_ACCOUNT: ''
   script:
@@ -117,8 +129,6 @@ deploy2recette:
     name: review/${CI_COMMIT_REF_SLUG}
     url: https://${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${URL_CD}
     on_stop: stop_review
-  only:
-    - branches
   tags:
     - gcp-default-runner-prod
 

@@ -241,7 +241,7 @@ abstract class CommonRequest extends BaseRequest
                         $discount,
                         $amount
                     );
-                    $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
+                    $itemHipay->setProductCategory(11);
                     break;
             }
 

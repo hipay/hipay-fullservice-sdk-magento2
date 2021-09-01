@@ -25,6 +25,9 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
     gosu magento2 composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 fi
 
+
+export COMPOSER_MEMORY_LIMIT=-1
+
 #==========================================
 # PARENT ENTRYPOINT
 #==========================================
@@ -120,20 +123,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     chown -R magento2:www-data /var/www/html/magento2/generated
     chmod 755 /var/www/html/magento2/auth.json
 fi
-
-printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-printf "\n${COLOR_SUCCESS}        DEV API DATA CONFIGURATION       ${NC}\n"
-printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-
-sed -i 's@https:\/\/stage-data.hipay.com@'$PI_DATA_URL'@g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
-sed -i 's@https:\/\/data.hipay.com@'$PI_DATA_URL'@g' /var/www/html/magento2/vendor/hipay/hipay-fullservice-sdk-php/lib/HiPay/Fullservice/HTTP/Configuration/Configuration.php
-
-printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-printf "\n${COLOR_SUCCESS}           HOSTS CONFIGURATION           ${NC}\n"
-printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-cp /etc/hosts ~/hosts.bak
-sed -i 's/^127\.0\.0\.1\.*/127.0.0.1    localhost    data.hipay.com    stage-data.hipay.com/g' ~/hosts.bak
-cp ~/hosts.bak /etc/hosts
 
 printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
