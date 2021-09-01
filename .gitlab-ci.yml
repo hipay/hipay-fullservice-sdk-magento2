@@ -141,10 +141,7 @@ stop_review:
     - /tools/auth-to-cd-cluster.sh
     - helm uninstall $RELEASE_NAME
     - /tools/logout-end-user.sh
-  rules:
-    - if: $ACCESS_TOKEN
-      when: on_success
-    - when: manual
+  when: manual
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: stop

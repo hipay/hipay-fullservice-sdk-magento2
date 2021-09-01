@@ -66,7 +66,9 @@ class Mbway extends AbstractMethodAPI
                 throw $localizedException;
             }
 
-            $billingAddress->setTelephone($phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::E164));
+            $billingAddress->setTelephone(str_replace(' ','',
+                $phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::NATIONAL)));
+
         } catch (NumberParseException $e) {
             $this->_logger->critical($e);
             throw $localizedException;
