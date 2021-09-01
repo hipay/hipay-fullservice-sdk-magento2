@@ -36,7 +36,6 @@ if [ "$1" = 'init' ]; then
         docker-compose -f docker-compose.dev.yml build
         COMPOSE_HTTP_TIMEOUT=200 docker-compose -f docker-compose.dev.yml up -d
         docker cp $containerMG2:/var/www/html/magento2 web/
-        docker-compose -f docker-compose.dev.yml logs -f
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose.dev to link this files"
     fi

@@ -25,6 +25,9 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
     gosu magento2 composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 fi
 
+
+export COMPOSER_MEMORY_LIMIT=-1
+
 #==========================================
 # PARENT ENTRYPOINT
 #==========================================
