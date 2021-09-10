@@ -1,11 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- **Fix**: Enabled HostedPage v2 by default
+
 ## 1.13.3
 
 - **Fix**: Merchant promotion oney
 - **Fix**: Mbway phone
 - **Fix**: Cancel order cron
-
 
 ## 1.13.2
 
