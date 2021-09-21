@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **Fix**: Enabled HostedPage v2 by default
+- **Fix**: notifications for retried orders on Hosted Page v2
 
 ## 1.13.3
 
