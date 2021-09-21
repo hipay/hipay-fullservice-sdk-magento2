@@ -457,7 +457,7 @@ Title,Title
 "You notified customer about invoice #%1.","Notification du client de la facture"
 "You saved this payment profile.","Sauvegarde de ce profil de paiement."
 "You saved this split payment.","Sauvegarde de votre paiement en plusieurs fois"
-"You will be redirect to payment page after submit order.","Vous allez être rediriger vers la page de paiement après validation de la commande."
+"You will be redirect to payment page after submit order.","Vous allez être redirigé vers la page de paiement après validation de la commande."
 "Your Order <span class=""no-link"">#%increment_id</span>","Votre commande <span class=""no-link"">#%increment_id</span>"
 "Your order is in payment review.","Votre commande est en attente de paiement."
 "Your order was canceled.","Votre commande a été annulée."
