@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.13.4
 
 - **Fix**: Enabled HostedPage v2 by default
 - **Fix**: notifications for retried orders on Hosted Page v2
