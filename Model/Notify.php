@@ -192,7 +192,8 @@ class Notify
             if (!$this->_order->getId()) {
                 throw new WebApiException(
                     __(sprintf('Order ID not found: "%s".', $this->_transaction->getOrder()->getId())),
-                    0, WebApiException::HTTP_NOT_FOUND
+                    0,
+                    WebApiException::HTTP_NOT_FOUND
                 );
             }
 
@@ -251,12 +252,13 @@ class Notify
             case TransactionStatus::CAPTURED:
                 // status : 118 - We check the 116 has been received before handling
                 $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
-                if(is_array($savedStatues) && $savedStatues[TransactionStatus::AUTHORIZED]){
+                if (is_array($savedStatues) && isset($savedStatues[TransactionStatus::AUTHORIZED])) {
                     $canProcess = true;
                 } else {
                     throw new WebApiException(
                         __(sprintf('Order "%s" was not authorized.', $this->_transaction->getOrder()->getId())),
-                        0, WebApiException::HTTP_BAD_REQUEST
+                        0,
+                        WebApiException::HTTP_BAD_REQUEST
                     );
                 }
 
@@ -268,7 +270,7 @@ class Notify
                     $canProcess = false;
                 }
 
-            break;
+                break;
             default:
                 $canProcess = true;
                 break;
@@ -331,8 +333,6 @@ class Notify
                 // status : 142
                 $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
                 break;
-            case TransactionStatus::REFUSED:
-                // status : 113
             case TransactionStatus::CANCELLED:
                 //115 Cancel order and transaction
             case TransactionStatus::AUTHORIZATION_REFUSED:
@@ -415,6 +415,8 @@ class Notify
                 // status : 108
             case TransactionStatus::AUTHENTICATION_FAILED:
                 // status : 109
+            case TransactionStatus::REFUSED:
+                // status : 113
             case TransactionStatus::COLLECTED:
                 // status : 120
             case TransactionStatus::PARTIALLY_COLLECTED:

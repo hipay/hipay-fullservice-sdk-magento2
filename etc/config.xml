@@ -18,12 +18,11 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <hipay>
             <hipay_hostedpage>
-                <hostedpage_version>hpv1</hostedpage_version>
+                <hostedpage_version>hpv2</hostedpage_version>
             </hipay_hostedpage>
             <hipay_credentials>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
@@ -307,7 +306,7 @@
                 <model>HiPay\FullserviceMagento\Model\Method\Sisal</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
-                <title>HiPay Sisal</title>
+                <title>HiPay Mooney</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
