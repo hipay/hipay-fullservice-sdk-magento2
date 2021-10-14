@@ -38,4 +38,9 @@ class Paypal extends AbstractMethodAPI
      * @var string
      */
     protected $_code = self::HIPAY_METHOD_CODE;
+
+    /**
+     * @var int
+     */
+    public $overridePendingTimeout = 240;
 }
