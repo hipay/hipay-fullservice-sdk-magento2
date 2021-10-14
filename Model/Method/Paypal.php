@@ -42,5 +42,5 @@ class Paypal extends AbstractMethodAPI
     /**
      * @var int
      */
-    public $overridePendingTimeout = 240;
+    public $overridePendingTimeout = 500;
 }
