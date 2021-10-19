@@ -100,7 +100,7 @@ class CleanPendingOrders
         /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
         $collection = $orderModel->getCollection();
 
-        $collection->addFieldToSelect(array('entity_id', 'increment_id', 'store_id', 'state'))
+        $collection->addFieldToSelect(array('entity_id', 'increment_id', 'store_id', 'state', 'created_at'))
             ->addFieldToFilter('main_table.state', array('in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]))
             ->addFieldToFilter('op.method', array('in' => array_values($methodCodes)))
             ->addAttributeToFilter('created_at', array('to' => ($date->sub($interval)->format('Y-m-d H:i:s'))))
@@ -112,9 +112,27 @@ class CleanPendingOrders
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
+            $this->logger->critical($order->getState());
+
             if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
-                if ($order->canCancel()) {
+                $orderCreationTimeIsCancellable = true;
+
+                $orderMethodInstance = $order->getPayment()->getMethodInstance();
+                $messageInterval = $interval;
+
+                if(isset($orderMethodInstance->overridePendingTimeout)){
+                    $messageInterval = $orderMethodInstance->overridePendingTimeout;
+                    $intervalMethod = new \DateInterval("PT{$orderMethodInstance->overridePendingTimeout}M");
+                    $cancellationTime = $date->sub($intervalMethod);
+                    $orderDate = \DateTime::createFromFormat('Y-m-d H:i:s', $order->getCreatedAt());
+
+                    if($orderDate > $cancellationTime){
+                        $orderCreationTimeIsCancellable = false;
+                    }
+                }
+
+                if ($orderCreationTimeIsCancellable && $order->canCancel()) {
                     try {
                         $order->cancel();
                         // keep order status/state
@@ -123,7 +141,7 @@ class CleanPendingOrders
                                 $order->getStatus(),
                                 __(
                                     "Order canceled automatically by cron because order is pending since %1 minutes",
-                                    $limitedTime
+                                    $messageInterval
                                 )
                             );
 
