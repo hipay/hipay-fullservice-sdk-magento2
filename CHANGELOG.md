@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.13.5
+
+- **Fix**: Fixed auto-cancel timer on Paypal payment product
+- **Fix**: Update PHP SDK to fix PSD2 parameter recovering
+
 ## 1.13.4
 
 - **Fix**: Enabled HostedPage v2 by default
