@@ -112,8 +112,6 @@ class CleanPendingOrders
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
-            $this->logger->critical($order->getState());
-
             if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
                 $orderCreationTimeIsCancellable = true;
