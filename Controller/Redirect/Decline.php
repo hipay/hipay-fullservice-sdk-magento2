@@ -88,6 +88,8 @@ class Decline extends Fullservice
                 foreach ($items as $item) {
                     try {
                         $cart->addOrderItem($item);
+
+                        $cart->save();
                     } catch (\Magento\Framework\Exception\LocalizedException $e) {
                         if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
                             $this->messageManager->addNotice($e->getMessage());
@@ -101,8 +103,6 @@ class Decline extends Fullservice
                         );
                     }
                 }
-
-                $cart->save();
             }
         }
         //MO/TO case
