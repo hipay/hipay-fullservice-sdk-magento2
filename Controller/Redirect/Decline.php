@@ -83,25 +83,25 @@ class Decline extends Fullservice
             $order->getResource()->load($order, $lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /** @var $cart \Magento\Checkout\Model\Cart **/
-                $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+                $cart  = $this->_objectManager->get('Magento\Checkout\Model\Cart');
                 $items = $order->getItemsCollection();
-                foreach ($items as $item) {
-                    try {
+                try {
+                    foreach ($items as $item) {
                         $cart->addOrderItem($item);
-
-                        $cart->save();
-                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-                            $this->messageManager->addNotice($e->getMessage());
-                        } else {
-                            $this->messageManager->addError($e->getMessage());
-                        }
-                    } catch (\Exception $e) {
-                        $this->messageManager->addException(
-                            $e,
-                            __('We can\'t add this item to your shopping cart right now.')
-                        );
                     }
+
+                    $cart->save();
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
+                        $this->messageManager->addNotice($e->getMessage());
+                    } else {
+                        $this->messageManager->addError($e->getMessage());
+                    }
+                } catch (\Exception $e) {
+                    $this->messageManager->addException(
+                        $e,
+                        __('We can\'t add this item to your shopping cart right now.')
+                    );
                 }
             }
         }
