@@ -36,7 +36,9 @@ class CardToken extends AbstractPaymentMethod
         //Token can be empty
         $cardtoken = $this->_order->getForcedCardToken() ?:
             $this->_order->getPayment()->getAdditionalInformation('card_token');
-        $eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
+        $eci = $this->_order->getForcedEci() ?:
+            $this->_config->getValue('send_mail_to_customer') ? ECI::SECURE_ECOMMERCE :
+            $this->_order->getPayment()->getAdditionalInformation('eci');
         $authentication_indicator = $this->_order->getForcedAuthenticationIndicator() ?: $this->_helper->is3dSecure(
             $this->_config->getValue('authentication_indicator'),
             $this->_config->getValue('config_3ds_rules'),

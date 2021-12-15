@@ -3,6 +3,7 @@ FROM hipay/hipay-magento2:2.3.6
 LABEL maintainer="Support Enterprise"
 LABEL maintainer_email="support.tpp@hipay.com"
 
+COPY ./bin/docker/conf/development/msmtprc /etc/
 #====================================================
 # OVERRIDE PARENT ENTRYPOINT
 #=====================================================
