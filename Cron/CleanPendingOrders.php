@@ -114,20 +114,22 @@ class CleanPendingOrders
         foreach ($collection as $order) {
             $this->logger->critical($order->getState());
 
-            if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
-            in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
+            if ($order->getState() === \Magento\Sales\Model\Order::STATE_NEW ||
+                $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
+                in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
+            ) {
                 $orderCreationTimeIsCancellable = true;
 
                 $orderMethodInstance = $order->getPayment()->getMethodInstance();
-                $messageInterval = $interval;
+                $messageInterval = $interval->i;
 
-                if(isset($orderMethodInstance->overridePendingTimeout)){
+                if (isset($orderMethodInstance->overridePendingTimeout)) {
                     $messageInterval = $orderMethodInstance->overridePendingTimeout;
                     $intervalMethod = new \DateInterval("PT{$orderMethodInstance->overridePendingTimeout}M");
                     $cancellationTime = $date->sub($intervalMethod);
                     $orderDate = \DateTime::createFromFormat('Y-m-d H:i:s', $order->getCreatedAt());
 
-                    if($orderDate > $cancellationTime){
+                    if ($orderDate > $cancellationTime) {
                         $orderCreationTimeIsCancellable = false;
                     }
                 }
@@ -185,5 +187,4 @@ class CleanPendingOrders
 
         return $methods;
     }
-
 }
