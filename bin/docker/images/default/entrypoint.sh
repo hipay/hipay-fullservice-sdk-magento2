@@ -25,7 +25,6 @@ if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/ma
     gosu magento2 composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 fi
 
-
 export COMPOSER_MEMORY_LIMIT=-1
 
 #==========================================
@@ -58,7 +57,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     #==========================================
     # MAIL CONFIGURATION
     #==========================================
-    echo "sendmail_path = /usr/sbin/msmtp -t" >/usr/local/etc/php/conf.d/sendmail.ini
+    echo "sendmail_path = /usr/bin/msmtp -t" >/usr/local/etc/php/conf.d/sendmail.ini
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
