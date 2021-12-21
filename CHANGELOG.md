@@ -1,6 +1,6 @@
 # Changelog
 
-## Unrelease
+## 1.13.6
 
 - **Fix**: Fixed notification on Capture Refused for orders via API
 - **Fix**: Fixed ECI value for orders via Mail Ordering (MO)
