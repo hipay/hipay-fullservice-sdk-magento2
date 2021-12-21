@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
@@ -85,24 +87,24 @@ class Decline extends Fullservice
                 /** @var $cart \Magento\Checkout\Model\Cart **/
                 $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
                 $items = $order->getItemsCollection();
-                foreach ($items as $item) {
-                    try {
+                try {
+                    foreach ($items as $item) {
                         $cart->addOrderItem($item);
-                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                        if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-                            $this->messageManager->addNotice($e->getMessage());
-                        } else {
-                            $this->messageManager->addError($e->getMessage());
-                        }
-                    } catch (\Exception $e) {
-                        $this->messageManager->addException(
-                            $e,
-                            __('We can\'t add this item to your shopping cart right now.')
-                        );
                     }
-                }
 
-                $cart->save();
+                    $cart->save();
+                } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
+                        $this->messageManager->addNotice($e->getMessage());
+                    } else {
+                        $this->messageManager->addError($e->getMessage());
+                    }
+                } catch (\Exception $e) {
+                    $this->messageManager->addException(
+                        $e,
+                        __('We can\'t add this item to your shopping cart right now.')
+                    );
+                }
             }
         }
         //MO/TO case

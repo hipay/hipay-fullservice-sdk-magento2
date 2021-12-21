@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.13.6
+
+- **Fix**: Fixed notification on Capture Refused for orders via API
+- **Fix**: Fixed ECI value for orders via Mail Ordering (MO)
+- **Fix**: Fixed cancel pending orders CRON
+- **Fix**: Fixed auto-cancel timer on Oney payment products
+
 ## 1.13.5
 
 - **Fix**: Fixed auto-cancel timer on Paypal payment product

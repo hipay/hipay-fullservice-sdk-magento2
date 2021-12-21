@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -100,34 +101,34 @@ class CleanPendingOrders
         /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
         $collection = $orderModel->getCollection();
 
-        $collection->addFieldToSelect(array('entity_id', 'increment_id', 'store_id', 'state', 'created_at'))
-            ->addFieldToFilter('main_table.state', array('in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]))
-            ->addFieldToFilter('op.method', array('in' => array_values($methodCodes)))
-            ->addAttributeToFilter('created_at', array('to' => ($date->sub($interval)->format('Y-m-d H:i:s'))))
+        $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at'])
+            ->addFieldToFilter('main_table.state', ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]])
+            ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
+            ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format('Y-m-d H:i:s'))])
             ->join(
-                array('op' => $orderModel->getResource()->getTable('sales_order_payment')),
+                ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
                 'main_table.entity_id=op.parent_id',
-                array('method')
+                ['method']
             );
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
-            $this->logger->critical($order->getState());
-
-            if($order->getState() === \Magento\Sales\Model\Order::STATE_NEW || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
-            in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))) {
+            if ($order->getState() === \Magento\Sales\Model\Order::STATE_NEW ||
+                $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
+                in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
+            ) {
                 $orderCreationTimeIsCancellable = true;
 
                 $orderMethodInstance = $order->getPayment()->getMethodInstance();
-                $messageInterval = $interval;
+                $messageInterval = $interval->i;
 
-                if(isset($orderMethodInstance->overridePendingTimeout)){
+                if (isset($orderMethodInstance->overridePendingTimeout)) {
                     $messageInterval = $orderMethodInstance->overridePendingTimeout;
                     $intervalMethod = new \DateInterval("PT{$orderMethodInstance->overridePendingTimeout}M");
                     $cancellationTime = $date->sub($intervalMethod);
                     $orderDate = \DateTime::createFromFormat('Y-m-d H:i:s', $order->getCreatedAt());
 
-                    if($orderDate > $cancellationTime){
+                    if ($orderDate > $cancellationTime) {
                         $orderCreationTimeIsCancellable = false;
                     }
                 }
@@ -140,7 +141,7 @@ class CleanPendingOrders
                             ->addStatusToHistory(
                                 $order->getStatus(),
                                 __(
-                                    "Order canceled automatically by cron because order is pending since %1 minutes",
+                                    'Order canceled automatically by cron because order is pending since %1 minutes',
                                     $messageInterval
                                 )
                             );
@@ -158,11 +159,11 @@ class CleanPendingOrders
 
     public function getHipayMethods()
     {
-        $methods = array();
+        $methods = [];
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . "/cancel_pending_order")) {
+                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order')) {
                     $methods[] = $code;
                 }
             }
@@ -173,11 +174,11 @@ class CleanPendingOrders
 
     public function getHostedHipayMethods()
     {
-        $methods = array();
+        $methods = [];
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false && strpos($code, 'hipay_cc') === false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . "/cancel_pending_order")) {
+                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order')) {
                     $methods[] = $code;
                 }
             }
@@ -185,5 +186,4 @@ class CleanPendingOrders
 
         return $methods;
     }
-
 }

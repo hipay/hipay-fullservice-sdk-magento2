@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\CardTokenPaymentMethod;
@@ -34,7 +36,9 @@ class CardToken extends AbstractPaymentMethod
         //Token can be empty
         $cardtoken = $this->_order->getForcedCardToken() ?:
             $this->_order->getPayment()->getAdditionalInformation('card_token');
-        $eci = $this->_order->getForcedEci() ?: $this->_order->getPayment()->getAdditionalInformation('eci');
+        $eci = $this->_order->getForcedEci() ?:
+            $this->_config->getValue('send_mail_to_customer') ? ECI::SECURE_ECOMMERCE :
+            $this->_order->getPayment()->getAdditionalInformation('eci');
         $authentication_indicator = $this->_order->getForcedAuthenticationIndicator() ?: $this->_helper->is3dSecure(
             $this->_config->getValue('authentication_indicator'),
             $this->_config->getValue('config_3ds_rules'),

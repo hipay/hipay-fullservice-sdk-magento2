@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -25,6 +26,7 @@ use Magento\Framework\Webapi\Exception as WebApiException;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use HiPay\FullserviceMagento\Model\Method\HostedMethod;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -172,7 +174,7 @@ class Notify
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
             if (strpos($incrementId, '-split-') !== false) {
-                list($realIncrementId, , $splitPaymentId) = explode("-", $incrementId);
+                list($realIncrementId,, $splitPaymentId) = explode("-", $incrementId);
                 $params['response']['order']['id'] = $realIncrementId;
                 $this->isSplitPayment = true;
                 $this->splitPayment = $this->spFactory->create();
@@ -317,7 +319,7 @@ class Notify
             case TransactionStatus::BLOCKED:
                 // status : 110
                 $this->_setFraudDetected();
-            // no break
+                // no break
             case TransactionStatus::DENIED:
                 // status : 111
                 $this->_doTransactionDenied();
@@ -332,6 +334,14 @@ class Notify
             case TransactionStatus::AUTHORIZATION_REQUESTED:
                 // status : 142
                 $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
+                break;
+            case TransactionStatus::REFUSED:
+                // status 113 : Fail transaction if not via hosted page
+                if ($this->_order->getPayment()->getMethodInstance() instanceof HostedMethod) {
+                    $this->_doTransactionMessage();
+                } else {
+                    $this->_doTransactionFailure();
+                }
                 break;
             case TransactionStatus::CANCELLED:
                 //115 Cancel order and transaction
@@ -355,11 +365,11 @@ class Notify
                 $this->_doTransactionCaptureRequested();
                 //If status Capture Requested is not configured to validate the order, we break.
                 if (((int)$this->_order->getPayment()->getMethodInstance()
-                            ->getConfigData('hipay_status_validate_order') == 117) === false
+                        ->getConfigData('hipay_status_validate_order') == 117) === false
                 ) {
                     break;
                 }
-            // no break
+                // no break
             case TransactionStatus::CAPTURED:
                 // status : 118
             case TransactionStatus::PARTIALLY_CAPTURED:
@@ -367,7 +377,7 @@ class Notify
                 //If status Capture Requested is configured to validate the order and is a direct capture notification
                 // (118), we break because order is already validate.
                 if (((int)$this->_order->getPayment()->getMethodInstance()
-                            ->getConfigData('hipay_status_validate_order') == 117) === true
+                        ->getConfigData('hipay_status_validate_order') == 117) === true
                     && (int)$this->_transaction->getStatus() == 118
                     && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
                 ) {
@@ -398,7 +408,7 @@ class Notify
             case TransactionStatus::REFUND_REFUSED:
                 // status : 165
                 $this->_doTransactionRefundRefused();
-            // no break
+                // no break
             case TransactionStatus::CREATED:
                 // status : 101
             case TransactionStatus::CARD_HOLDER_ENROLLED:
@@ -415,8 +425,6 @@ class Notify
                 // status : 108
             case TransactionStatus::AUTHENTICATION_FAILED:
                 // status : 109
-            case TransactionStatus::REFUSED:
-                // status : 113
             case TransactionStatus::COLLECTED:
                 // status : 120
             case TransactionStatus::PARTIALLY_COLLECTED:
@@ -448,7 +456,8 @@ class Notify
         }
 
         if ($this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
-            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED) {
+            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
+        ) {
             /**
              * save token and credit card informations encryted
              */
@@ -834,7 +843,8 @@ class Notify
         if ($this->_order->hasInvoices()) {
             foreach ($this->_order->getInvoiceCollection() as $invoice) {
                 if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
-                    && $this->_transaction->getOperation()->getId() == $invoice->getTransactionId()) {
+                    && $this->_transaction->getOperation()->getId() == $invoice->getTransactionId()
+                ) {
                     $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_CANCELED);
 
                     $this->_transactionDB->addObject($invoice)
