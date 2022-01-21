@@ -45,6 +45,12 @@ class CleanPendingOrders
 
     /**
      *
+     * @var \Magento\Sales\Api\OrderManagementInterface $_orderManagement
+     */
+    protected $_orderManagement;
+
+    /**
+     *
      * @var \Psr\Log\LoggerInterface $logger
      */
     protected $logger;
@@ -57,22 +63,33 @@ class CleanPendingOrders
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
+     */
+    protected $_dateTimeFactory;
+
+    /**
      *
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Payment\Helper\Data $paymentHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
+     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Payment\Helper\Data $paymentHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
+        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
         $this->logger = $logger;
         $this->_scopeConfig = $scopeConfig;
+        $this->_orderManagement = $orderManagement;
+        $this->_dateTimeFactory = $dateTimeFactory;
     }
 
     /**
@@ -92,7 +109,10 @@ class CleanPendingOrders
         //Limited time in minutes
         $limitedTime = 30;
 
-        $date = new \DateTime();
+        $dateFormat = 'Y-m-d H:i:s';
+        $dateObject = $this->_dateTimeFactory->create();
+        $gmtDate = $dateObject->gmtDate($dateFormat);
+        $date = new \DateTime($gmtDate);
         $interval = new \DateInterval("PT{$limitedTime}M");
 
         /** @var \Magento\Sales\Model\Order $orderModel */
@@ -104,7 +124,7 @@ class CleanPendingOrders
         $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at'])
             ->addFieldToFilter('main_table.state', ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]])
             ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
-            ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format('Y-m-d H:i:s'))])
+            ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format($dateFormat))])
             ->join(
                 ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
                 'main_table.entity_id=op.parent_id',
@@ -124,11 +144,14 @@ class CleanPendingOrders
 
                 if (isset($orderMethodInstance->overridePendingTimeout)) {
                     $messageInterval = $orderMethodInstance->overridePendingTimeout;
-                    $intervalMethod = new \DateInterval("PT{$orderMethodInstance->overridePendingTimeout}M");
+                    $dateObject = $this->_dateTimeFactory->create();
+                    $gmtDate = $dateObject->gmtDate($dateFormat);
+                    $date = new \DateTime($gmtDate);
+                    $intervalMethod = new \DateInterval("PT{$messageInterval}M");
                     $cancellationTime = $date->sub($intervalMethod);
-                    $orderDate = \DateTime::createFromFormat('Y-m-d H:i:s', $order->getCreatedAt());
+                    $orderDate = \DateTime::createFromFormat($dateFormat, $order->getCreatedAt());
 
-                    if ($orderDate > $cancellationTime) {
+                    if ($orderDate->format($dateFormat) > $cancellationTime->format($dateFormat)) {
                         $orderCreationTimeIsCancellable = false;
                     }
                 }
@@ -147,6 +170,8 @@ class CleanPendingOrders
                             );
 
                         $order->save();
+
+                        $this->_orderManagement->cancel($order->getId());
                     } catch (\Exception $e) {
                         $this->logger->critical($e->getMessage());
                     }
@@ -163,7 +188,7 @@ class CleanPendingOrders
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order')) {
+                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order', 'store')) {
                     $methods[] = $code;
                 }
             }
@@ -178,7 +203,7 @@ class CleanPendingOrders
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false && strpos($code, 'hipay_cc') === false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order')) {
+                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order', 'store')) {
                     $methods[] = $code;
                 }
             }
