@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.7
+
+- **Fix**: Fixed CRON for cleaning pending orders
+
 ## 1.13.6
 
 - **Fix**: Fixed notification on Capture Refused for orders via API
