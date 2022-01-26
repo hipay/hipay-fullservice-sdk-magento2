@@ -562,7 +562,7 @@ class Notify
                         if ($this->_order->canHold()) {
                             $this->_order->hold();
                         }
-                        $this->_doTransactionMessage(__('Order held because an error occurred while saving one of the slip payments'));
+                        $this->_doTransactionMessage(__('Order held because an error occurred while saving one of the split payments'));
                     }
                 }
             } else {
