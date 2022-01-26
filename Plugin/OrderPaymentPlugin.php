@@ -81,16 +81,12 @@ class OrderPaymentPlugin
     public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
     {
 
-        if ($this->isHipayMethod($subject->getMethod())) {
-            if ($isOnline) {
-                /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
+        if ($this->isHipayMethod($subject->getMethod()) && $isOnline) {
+            /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
 
-                $method = $subject->getMethodInstance();
-                $method->setStore($subject->getOrder()->getStoreId());
-                $method->denyPayment($subject);
-            } else {
-                $proceed($isOnline);
-            }
+            $method = $subject->getMethodInstance();
+            $method->setStore($subject->getOrder()->getStoreId());
+            $method->denyPayment($subject);
         } else {
             $proceed($isOnline);
         }

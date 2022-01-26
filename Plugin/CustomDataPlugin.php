@@ -36,14 +36,12 @@ class CustomDataPlugin
         // Shipping description
         $result['shipping_description'] = $order->getShippingDescription();
 
+        $customerId = $order->getCustomerId();
         // Customer information
-        if ($order->getCustomerId()) {
-            $customerId = $order->getCustomerId();
-            if ($subject->getCustomerRepositoryInterface() && $subject->getGroupRepositoryInterface()) {
-                $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
-                $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
-                $result['customer_code'] = $group->getCode();
-            }
+        if ($customerId && $subject->getCustomerRepositoryInterface() && $subject->getGroupRepositoryInterface()) {
+            $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
+            $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
+            $result['customer_code'] = $group->getCode();
         }
 
         // Method payment information
