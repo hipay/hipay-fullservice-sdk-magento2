@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -16,7 +17,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 /**
  * Dexia Model payment method
  *
@@ -28,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Dexia extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_dexia';
 
     /**

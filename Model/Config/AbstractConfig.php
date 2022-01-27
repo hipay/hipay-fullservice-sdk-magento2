@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -33,7 +34,6 @@ use Magento\Store\Model\ScopeInterface;
  */
 abstract class AbstractConfig implements ConfigInterface
 {
-
     /**
      * Current payment method code
      *

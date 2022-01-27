@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -57,7 +58,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class Card extends \Magento\Framework\Model\AbstractModel
 {
-
     const STATUS_DISABLED = 0;
     const STATUS_ENABLED = 1;
 

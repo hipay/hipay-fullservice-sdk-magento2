@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -16,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Request\ThreeDS;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
-use \HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
+use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
 
 /**
  *
@@ -28,7 +29,6 @@ use \HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
  */
 class BrowserInfoFormatter extends AbstractRequest
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Helper\ThreeDSTwo
      */

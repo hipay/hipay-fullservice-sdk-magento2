@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -33,7 +34,6 @@ use Magento\Framework\Module\ModuleListInterface;
  */
 class Data extends AbstractHelper
 {
-
     const MODULE_NAME = 'HiPay_FullserviceMagento';
 
     /**
@@ -195,12 +195,12 @@ class Data extends AbstractHelper
 
     public function readVersionDataFromConf(
         \HiPay\FullserviceMagento\Model\Config $config
-    ){
+    ) {
         $info = $config->getVersionInfo();
 
-        if(!$info || !is_string($info)){
+        if (!$info || !is_string($info)) {
             $info = new \stdClass();
-        } elseif(is_string($info)){
+        } elseif (is_string($info)) {
             $info = json_decode($info);
         }
 
@@ -217,5 +217,4 @@ class Data extends AbstractHelper
     {
         return $this->moduleList->getOne(self::MODULE_NAME)['setup_version'];
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -32,7 +33,6 @@ use Magento\Framework\Event\Observer as EventObserver;
  */
 class SendHostedPaymentLinkObserver implements ObserverInterface
 {
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender ;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -108,7 +109,7 @@ class Sdd extends FullserviceMethod
         parent::validate();
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 

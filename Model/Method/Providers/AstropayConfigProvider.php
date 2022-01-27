@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use HiPay\FullserviceMagento\Model\Method\Context;
@@ -32,7 +34,6 @@ use Magento\Payment\Model\CcConfig;
  */
 class AstropayConfigProvider implements ConfigProviderInterface
 {
-
     /**
      * @var CcConfig
      */
@@ -117,8 +118,8 @@ class AstropayConfigProvider implements ConfigProviderInterface
         array $methodTypeIdentification = []
     ) {
         $this->ccConfig = $ccConfig;
-        $this->methods= $methodCodes;
-        $this->methodTypeIdentification= $methodTypeIdentification;
+        $this->methods = $methodCodes;
+        $this->methodTypeIdentification = $methodTypeIdentification;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->checkoutSession = $checkoutSession;

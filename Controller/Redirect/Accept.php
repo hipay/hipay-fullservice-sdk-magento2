@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
@@ -30,7 +32,6 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  */
 class Accept extends Fullservice
 {
-
     /**
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

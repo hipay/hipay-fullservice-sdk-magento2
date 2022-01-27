@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -33,7 +34,6 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\AccountInfo\Customer as C
  */
 class AccountInfoFormatter extends AbstractRequest
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Helper\ThreeDSTwo
      */
@@ -193,7 +193,6 @@ class AccountInfoFormatter extends AbstractRequest
         $shippingInfo = new ShippingInfo();
 
         if ($this->_threeDSHelper->isCustomerLoggedIn()) {
-
             $shippingInfo->shipping_used_date = $this->_threeDSHelper->getDateAddressFirstUsed(
                 $this->getCustomerAddressId(),
                 $this->_customerId,

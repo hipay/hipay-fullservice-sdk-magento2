@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Backend;
 
 use Magento\Framework\DataObject;
@@ -29,7 +31,6 @@ use Magento\Framework\Phrase;
  */
 class Rule extends \Magento\Framework\App\Config\Value
 {
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface $_objectManager
      */

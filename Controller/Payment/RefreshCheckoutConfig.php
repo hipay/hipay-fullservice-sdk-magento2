@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Payment;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
@@ -30,7 +32,6 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  */
 class RefreshCheckoutConfig extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Method\SplitConfigProvider $splitConfigProvider

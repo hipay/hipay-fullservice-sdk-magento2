@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -36,7 +37,6 @@ use Magento\Sales\Model\Order as SalesOrder;
  */
 class CaptureCommandPlugin
 {
-
     /**
      * Run HiPay capture command
      * Used to set custom status and state when order is captured

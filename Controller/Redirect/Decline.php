@@ -32,7 +32,6 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  */
 class Decline extends Fullservice
 {
-
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */

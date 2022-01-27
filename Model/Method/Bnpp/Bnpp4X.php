@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Bnpp;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
@@ -28,7 +30,6 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Bnpp4X extends AbstractBnpp
 {
-
     const HIPAY_METHOD_CODE = 'hipay_bnpp4X';
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -34,7 +35,6 @@ use HiPay\FullserviceMagento\Model\Config;
  */
 class OrderPaymentPlugin
 {
-
     /**
      * Run HiPay accept payment
      * Used to set custom status and state when order is accepted

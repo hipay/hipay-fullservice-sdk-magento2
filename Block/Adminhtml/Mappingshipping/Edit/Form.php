@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -101,7 +102,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $carrierList = [];
-        foreach($this->_shippingMethodsMagento->getCarriers() as $carrier){
+        foreach ($this->_shippingMethodsMagento->getCarriers() as $carrier) {
             $carrierList[] = $carrier['label'] . ' (code : ' . $carrier['code'] . ')';
         }
 
@@ -112,7 +113,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'magento_shipping_code_custom',
                 'label' => __('Custom shipping method'),
                 'title' => __('Custom shipping method'),
-                'note' => __('Shipping method should be [carrier_code]_[shipping_method_id]. Available carriers are : %1', implode(', ', $carrierList))
+                'note' => __(
+                    'Shipping method should be [carrier_code]_[shipping_method_id]. Available carriers are : %1',
+                    implode(', ', $carrierList)
+                )
             ]
         );
 

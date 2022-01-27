@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -17,7 +18,7 @@
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Maintenance\MaintenanceRequest as MaintenanceRequest;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Maintenance Request Object
@@ -30,7 +31,6 @@ use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFa
  */
 class Maintenance extends CommonRequest
 {
-
     /**
      * Order
      *
@@ -126,7 +126,8 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -28,7 +29,8 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
  */
 class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 {
-    const HIPAY_GITHUB_MAGENTO2_LATEST = "https://api.github.com/repos/hipay/hipay-fullservice-sdk-magento2/releases/latest";
+    const HIPAY_GITHUB_MAGENTO2_LATEST =
+        "https://api.github.com/repos/hipay/hipay-fullservice-sdk-magento2/releases/latest";
 
     /**
      * Message identity
@@ -88,8 +90,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
         \HiPay\FullserviceMagento\Helper\Notification $hipayNotificationHelper,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-    )
-    {
+    ) {
         $this->_authSession = $authSession;
         $this->_helper = $hipayHelper;
         $this->_notifHelper = $hipayNotificationHelper;
@@ -159,13 +160,13 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             // Request GitHub with curl
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, self::HIPAY_GITHUB_MAGENTO2_LATEST);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);            
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, 3);
             curl_setopt($ch, CURLOPT_USERAGENT, 'PHP');
             $res = curl_exec($ch);
             curl_close($ch);
             $gitHubInfo = @json_decode($res);
-            
+
             // If call is successful, reading from call
             if ($gitHubInfo) {
                 $this->newVersion = $gitHubInfo->tag_name;
@@ -183,27 +184,34 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             }
         }
         try {
-
             $message = __("We advise you to update the extension if you wish to get the " .
                 "latest fixes and evolutions. " .
                 "To update the extension, please click here : ") .  $this->readMeUrl;
             $title = __("HiPay Enterprise %1 available", $this->newVersion);
-            $versionData[] = array(
-                'severity' => $this->getSeverity(),
-                'date_added' => $this->newVersionDate,
-                'title' => $title,
-                'description' => $message,
-                'url' => $this->readMeUrl,
+            $versionData = array(
+                array(
+                    'severity' => $this->getSeverity(),
+                    'date_added' => $this->newVersionDate,
+                    'title' => $title,
+                    'description' => $message,
+                    'url' => $this->readMeUrl,
+                )
             );
 
-            if($this->version != $this->newVersion && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])){
+            if (
+                $this->version != $this->newVersion
+                && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
+            ) {
                 $this->_inbox->create()->parse(array_reverse($versionData));
             }
             /*
              * This will compare the currently installed version with the latest available one.
              * A message will appear after the login if the two are not matching.
              */
-            if ($this->version != $this->newVersion && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])) {
+            if (
+                $this->version != $this->newVersion
+                && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
+            ) {
                 return true;
             }
         } catch (\Exception $e) {
@@ -223,7 +231,8 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
     {
         $message = __("We advise you to update the extension if you wish to get the " .
             "latest fixes and evolutions. " .
-            "To update the extension, please click here : ") . "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
+            "To update the extension, please click here : ") .
+            "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
 
         return __('<b>' . $title . '</b><br/>' . $message);

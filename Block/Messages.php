@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Block;
  */
 class Messages extends \Magento\Framework\View\Element\Messages
 {
-
     /**
      *
      * @var \Magento\Customer\Model\Session $customerSession

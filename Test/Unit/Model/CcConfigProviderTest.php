@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -16,6 +17,7 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
+
 namespace HiPay\FullserviceMagento\Test\Unit\Model;
 
 use Magento\Payment\Helper\Data;

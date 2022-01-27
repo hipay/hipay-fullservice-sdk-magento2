@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Hashing;
 
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
@@ -31,7 +33,6 @@ use Psr\Log\LoggerInterface;
  */
 class Synchronize extends \Magento\Backend\App\Action
 {
-
     /**
      * @var string
      */
@@ -124,7 +125,8 @@ class Synchronize extends \Magento\Backend\App\Action
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (\HiPay\Fullservice\Exception\RuntimeException |
+                } catch (
+                    \HiPay\Fullservice\Exception\RuntimeException |
                     \HiPay\Fullservice\Exception\ApiErrorException $e
                 ) {
                     $this->messageManager->addErrorMessage(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
 /**
@@ -26,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel;
  */
 class MappingShipping extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-
     /**
      * Initialize main table and table id field
      *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -37,8 +38,6 @@ use Magento\Framework\View\Asset\Source;
  */
 class CcConfigProvider implements ConfigProviderInterface
 {
-
-
     /**
      * @var MethodInterface[]
      */
@@ -94,8 +93,7 @@ class CcConfigProvider implements ConfigProviderInterface
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
-    )
-    {
+    ) {
         $this->urlBuilder = $context->urlBuilder;
         $this->_cctypeSource = $cctypeSource;
         $this->ccConfig = $ccConfig;
@@ -115,6 +113,9 @@ class CcConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $config = [];
+        /**
+         * @var string $methodCode
+         */
         foreach ($this->methods as $methodCode) {
             $this->_hipayConfig->setMethodCode($methodCode);
             if ($this->_hipayConfig->isPaymentMethodActive()) {
@@ -124,39 +125,29 @@ class CcConfigProvider implements ConfigProviderInterface
                         'env' => $this->_hipayConfig->getApiEnv(),
                         'apiUsernameTokenJs' => $this->_hipayConfig->getApiUsernameTokenJs(),
                         'apiPasswordTokenJs' => $this->_hipayConfig->getApiPasswordTokenJs(),
-                        'icons' => $this->getIcons($methodCode),
+                        'icons' => $this->getIcons(),
                         'sdkJsUrl' => $this->_hipayConfig->getSdkJsUrl()
                     ]
                 ];
 
                 if ($methodCode == HostedFieldsMethod::HIPAY_METHOD_CODE) {
-                    $conf = array_merge_recursive(
-                        $conf, [
-                        $methodCode => [
-                            'color' => $this->_hipayConfig->getValue('color'),
-                            'fontFamily' => $this->_hipayConfig->getValue('font_family'),
-                            'fontSize' => $this->_hipayConfig->getValue('font_size'),
-                            'fontWeight' => $this->_hipayConfig->getValue('font_weight'),
-                            'placeholderColor' => $this->_hipayConfig->getValue('placeholder_color'),
-                            'caretColor' => $this->_hipayConfig->getValue('caret_color'),
-                            'iconColor' => $this->_hipayConfig->getValue('icon_color'),
-                        ]
-                    ]);
+                    $conf[$methodCode]['color'] = $this->_hipayConfig->getValue('color');
+                    $conf[$methodCode]['fontFamily'] = $this->_hipayConfig->getValue('font_family');
+                    $conf[$methodCode]['fontSize'] = $this->_hipayConfig->getValue('font_size');
+                    $conf[$methodCode]['fontWeight'] = $this->_hipayConfig->getValue('font_weight');
+                    $conf[$methodCode]['placeholderColor'] = $this->_hipayConfig->getValue('placeholder_color');
+                    $conf[$methodCode]['caretColor'] = $this->_hipayConfig->getValue('caret_color');
+                    $conf[$methodCode]['iconColor'] = $this->_hipayConfig->getValue('icon_color');
                 } else {
-                    $config = array_merge_recursive($config, [
-                        'payment' => [
-                            'ccform' => [
-                                'months' => [$methodCode => $this->getCcMonths()],
-                                'years' => [$methodCode => $this->getCcYears()],
-                                'hasVerification' => [$methodCode => $this->hasVerification()],
-                                'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
-                            ]
-                        ]
-                    ]);
+                    $config['payment']['ccform']['months'][$methodCode] = $this->getCcMonths();
+                    $config['payment']['ccform']['years'][$methodCode] = $this->getCcYears();
+                    $config['payment']['ccform']['hasVerification'][$methodCode] = $this->hasVerification();
+                    $config['payment']['ccform']['cvvImageUrl'][$methodCode] = $this->getCvvImageUrl();
                 }
 
                 $config = array_merge_recursive(
-                    $config, [
+                    $config,
+                    [
                         'payment' => $conf
                     ]
                 );

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 /**
@@ -26,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * CategoriesMagento constructor.
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
@@ -51,14 +52,17 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
         $stores = $this->storeManager->getStores(true);
         $options = [];
 
-        foreach ($stores as $store){
+        foreach ($stores as $store) {
             $rootId = $store->getRootCategoryId();
             $storeId = $store->getId();
 
             $collection = $this->getCategoryTree($storeId, $rootId);
 
             foreach ($collection as $category) {
-                $options[] = array('value' => $category->getId(), 'label' =>  $category->getName() . ' ('.$store->getName().')');
+                $options[] = array(
+                    'value' => $category->getId(),
+                    'label' =>  $category->getName() . ' (' . $store->getName() . ')'
+                );
             }
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,10 +14,11 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\Exception\LocalizedException;
-use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 
 /**

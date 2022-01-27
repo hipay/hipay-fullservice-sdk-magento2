@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class IDeal extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_ideal';
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class ShippingMethodsHipay implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Options getter
      *

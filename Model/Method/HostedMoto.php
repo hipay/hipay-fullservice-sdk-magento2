@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -16,7 +17,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 /**
  * Hosted Mo/To Model payment method
  *
@@ -28,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class HostedMoto extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hostedmoto';
 
     /**

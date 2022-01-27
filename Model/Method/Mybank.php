@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -15,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
 /**
  * Mybank Model payment method
  *
@@ -25,7 +25,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Mybank extends AbstractMethodAPI
 {
-
     const HIPAY_METHOD_CODE = 'hipay_mybank';
 
     /**

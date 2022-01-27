@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 use HiPay\FullserviceMagento\Model\PaymentProfile as PaymentProfileModel;
@@ -28,7 +30,6 @@ use HiPay\FullserviceMagento\Model\PaymentProfile as PaymentProfileModel;
  */
 class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Options getter
      *

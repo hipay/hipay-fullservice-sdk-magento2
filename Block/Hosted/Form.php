@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Block\Hosted;
  */
 class Form extends \Magento\Payment\Block\Form
 {
-
     /**
      * @var string
      */

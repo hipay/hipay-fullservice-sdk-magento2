@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,8 +14,8 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\Method;
 
+namespace HiPay\FullserviceMagento\Model\Method;
 
 /**
  * Qiwiwallet Model payment method
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class QiwiWallet extends FullserviceMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_qiwiwallet';
 
     /**

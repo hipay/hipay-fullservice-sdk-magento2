@@ -6,7 +6,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session\Proxy;
 
-
 class RestoreBasketObserver implements ObserverInterface
 {
     /**
@@ -14,9 +13,7 @@ class RestoreBasketObserver implements ObserverInterface
      */
     private $checkoutSession;
 
-    public function __construct(
-        Proxy $checkoutSession
-    )
+    public function __construct(Proxy $checkoutSession)
     {
         $this->checkoutSession = $checkoutSession;
     }
@@ -29,7 +26,8 @@ class RestoreBasketObserver implements ObserverInterface
         if (
             $lastRealOrder->getPayment()
             && $lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
-            && $lastRealOrder->getData('state') === 'pending_payment' && $lastRealOrder->getData('status') === 'pending_payment'
+            && $lastRealOrder->getData('state') === 'pending_payment'
+            && $lastRealOrder->getData('status') === 'pending_payment'
         ) {
             $this->checkoutSession->restoreQuote();
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -43,7 +44,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 {
-
     /**
      * Period units
      *
@@ -110,12 +110,12 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     {
         $paymentsSplit = array();
 
-        $maxCycles = ( int )$this->getPeriodMaxCycles();
+        $maxCycles = (int)$this->getPeriodMaxCycles();
 
-        $periodFrequency = ( int )$this->getPeriodFrequency();
+        $periodFrequency = (int)$this->getPeriodFrequency();
         $periodUnit = $this->getPeriodUnit();
 
-        $part = ( int )($amount / $maxCycles);
+        $part = (int)($amount / $maxCycles);
         $fmod = fmod($amount, $maxCycles);
 
         for ($i = 0; $i <= ($maxCycles - 1); $i++) {
@@ -145,6 +145,8 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
                     $interval = new \DateInterval("P{$frequencyValue}Y");
                     $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
+                default:
+                    throw new \Exception('Unknown split payment period unit "' . $periodUnit . '"');
             }
 
             $amountToPay = $i == 0 ? ($part + $fmod) : $part;

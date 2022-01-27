@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
@@ -29,7 +31,6 @@ use HiPay\Fullservice\Enum\Customer\Gender as HipayGender;
  */
 abstract class AbstractInfoRequest extends BaseRequest
 {
-
     /**
      * Order
      *
@@ -54,8 +55,17 @@ abstract class AbstractInfoRequest extends BaseRequest
         $params = []
     ) {
 
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver,
-            $requestFactory, $urlBuilder, $helper, $params);
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $params
+        );
 
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
@@ -63,8 +73,6 @@ abstract class AbstractInfoRequest extends BaseRequest
         } else {
             throw new \Exception('Order instance is required.');
         }
-
-
     }
 
     /**
@@ -74,15 +82,14 @@ abstract class AbstractInfoRequest extends BaseRequest
     protected function getHipayGender($magentoGender)
     {
         switch ($magentoGender) {
-            case 1 :
-            case 'M' :
+            case 1:
+            case 'M':
                 return HipayGender::MALE;
-            case 'F' :
-            case 2 :
+            case 'F':
+            case 2:
                 return HipayGender::FEMALE;
-            default :
+            default:
                 return HipayGender::UNKNOWN;
         }
     }
-
 }

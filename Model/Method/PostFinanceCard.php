@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,8 +14,8 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
-namespace HiPay\FullserviceMagento\Model\Method;
 
+namespace HiPay\FullserviceMagento\Model\Method;
 
 /**
  * PostFinance Card Model payment method

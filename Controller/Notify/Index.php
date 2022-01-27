@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use Magento\Framework\App\Action\Action as AppAction;
@@ -34,7 +36,6 @@ use Magento\Framework\Webapi\Exception as WebApiException;
  */
 class Index extends AppAction
 {
-
     /**
      *
      * @var  \Psr\Log\LoggerInterface $_logger

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,12 +14,13 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * MB Way payment method
@@ -66,9 +68,11 @@ class Mbway extends AbstractMethodAPI
                 throw $localizedException;
             }
 
-            $billingAddress->setTelephone(str_replace(' ','',
-                $phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::NATIONAL)));
-
+            $billingAddress->setTelephone(str_replace(
+                ' ',
+                '',
+                $phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::NATIONAL)
+            ));
         } catch (NumberParseException $e) {
             $this->_logger->critical($e);
             throw $localizedException;

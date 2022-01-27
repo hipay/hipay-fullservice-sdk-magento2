@@ -1,6 +1,5 @@
 <?php
 
-
 namespace HiPay\FullserviceMagento\Logger;
 
 use Magento\Payment\Model\Method\Logger as LoggerMagento;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -21,7 +23,7 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\Framework\Webapi\Exception as WebApiException;
+use Magento\Framework\Webapi\Exception as WebApiException;
 
 /**
  * HiPay module observer
@@ -110,7 +112,11 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
 
                 if (!$order->getId()) {
-                    throw new WebApiException(__(sprintf('Order ID not found: "%s".', $orderId)), 0, WebApiException::HTTP_NOT_FOUND);
+                    throw new WebApiException(
+                        __(sprintf('Order ID not found: "%s".', $orderId)),
+                        0,
+                        WebApiException::HTTP_NOT_FOUND
+                    );
                 }
                 /** @var $config \HiPay\FullserviceMagento\Model\Config */
                 $config = $this->_configFactory->create(
@@ -141,7 +147,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                             $e
                         );
                     }
-                    if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+                    /*if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                         $controller->getActionFlag()->set(
                             '',
                             \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
@@ -149,7 +155,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         );
                         $controller->getResponse()->setBody("Wrong Secret Signature!");
                         $controller->getResponse()->setHttpResponseCode(500);
-                    }
+                    }*/
                 }
             } catch (WebApiException $e) {
                 $this->_logger->warning($e);

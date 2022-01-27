@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
@@ -28,7 +30,6 @@ use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
-
     /**
      *
      * @var ManagerFactory $_gatewayManagerFactory

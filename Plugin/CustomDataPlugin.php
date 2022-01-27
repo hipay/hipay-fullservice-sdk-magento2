@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Plugin
  *
@@ -15,11 +16,10 @@
 
 namespace HiPay\FullserviceMagento\Plugin;
 
-use \HiPay\FullserviceMagento\Model\Request\Order as Order;
+use HiPay\FullserviceMagento\Model\Request\Order as Order;
 
 class CustomDataPlugin
 {
-
     /**
      *  Complete general getCustomData with HiPay'datas
      *

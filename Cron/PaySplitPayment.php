@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento
  *
@@ -31,7 +32,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
  */
 class PaySplitPayment
 {
-
     const MAX_ATTEMPTS = 3;
 
     /**

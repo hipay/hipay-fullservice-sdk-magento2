@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -29,7 +30,6 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
  */
 class Cancel extends \Magento\Backend\App\Action
 {
-
     /**
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

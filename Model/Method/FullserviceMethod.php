@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -112,7 +113,15 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * @var string[] keys to import in payment additional information
      */
-    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint','cc_owner', 'browser_info'];
+    protected $_additionalInformationKeys = [
+        'card_token',
+        'create_oneclick',
+        'eci',
+        'cc_type',
+        'fingerprint',
+        'cc_owner',
+        'browser_info'
+    ];
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
@@ -258,7 +267,8 @@ abstract class FullserviceMethod extends AbstractMethod
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+            if (
+                (int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
                 !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;

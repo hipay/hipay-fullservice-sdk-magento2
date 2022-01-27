@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Card;
 
 use HiPay\FullserviceMagento\Controller\Card\Customer as CustomerController;
@@ -38,14 +40,17 @@ class Index extends CustomerController
     {
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        if ($navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation')) {
+
+        $navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation');
+        if ($navigationBlock) {
             $navigationBlock->setActive('hipay/card');
         }
 
-        if ($block = $resultPage->getLayout()->getBlock('card_customer_list')) {
+        $block = $resultPage->getLayout()->getBlock('card_customer_list');
+        if ($block) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
-        
+
         $resultPage->getConfig()->getTitle()->set(__('My Credit Cards'));
         return $resultPage;
     }

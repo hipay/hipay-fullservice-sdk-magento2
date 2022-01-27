@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -16,8 +17,6 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
-
-
 /**
  * Ing Model payment method
  *
@@ -27,9 +26,9 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
+
 class Ing extends HostedMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_ing';
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class Attributes extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Core store config
      *
@@ -66,7 +66,12 @@ class Attributes extends \Magento\Framework\DataObject implements \Magento\Frame
      */
     public function toOptionArray()
     {
-        $list[] = ['value' => '', 'label' => ''];
+        $list = array(
+            array(
+                'value' => '',
+                'label' => ''
+            )
+        );
         $attributes = $this->_productAttributeRepository->getList($this->_searchCriteriaBuilder->create());
         foreach ($attributes->getItems() as $attribute) {
             $list[] = ['value' => $attribute->getAttributeCode(), 'label' => $attribute->getDefaultFrontendLabel()];

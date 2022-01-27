@@ -3,7 +3,7 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\Exception\LocalizedException;
-use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 
 /**
  * Abstract Method for API
@@ -19,7 +19,6 @@ use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
  */
 abstract class AbstractMethodAPI extends FullserviceMethod
 {
-
     /**
      * Payment Method feature
      *

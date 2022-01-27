@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
 use Magento\Backend\App\Action;
@@ -44,7 +46,7 @@ class Edit extends \Magento\Backend\App\Action
      * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
      */
     private $paymentProfileFactory;
-    
+
     /**
      * Edit constructor.
      * @param Action\Context $context
