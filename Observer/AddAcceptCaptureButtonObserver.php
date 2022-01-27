@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -33,7 +34,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  */
 class AddAcceptCaptureButtonObserver implements ObserverInterface
 {
-
     /**
      * Core registry
      *
@@ -83,7 +83,8 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     {
         $controller = $observer->getControllerAction();
         if (($order = $this->getOrder($controller))) {
-            if ((strpos($order->getPayment()->getMethod(), 'hipay') !== false)
+            if (
+                (strpos($order->getPayment()->getMethod(), 'hipay') !== false)
                 && $order->canReviewPayment()
             ) {
 

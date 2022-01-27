@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice SDK
  *
@@ -18,7 +19,6 @@ namespace HiPay\FullserviceMagento\Block\Redirect;
 
 class Pending extends \Magento\Framework\View\Element\Template
 {
-
     /**
      * @var \Magento\Checkout\Model\Session
      */

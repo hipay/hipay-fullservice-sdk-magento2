@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model;
 
 /**
@@ -30,7 +32,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class MappingShipping extends \Magento\Framework\Model\AbstractModel
 {
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory

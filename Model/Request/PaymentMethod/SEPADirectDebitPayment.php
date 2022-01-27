@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -29,7 +30,6 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
  */
 class SEPADirectDebitPayment extends AbstractPaymentMethod
 {
-
     /**
      *  Map Request for specific SEPADirectDebitPaymentMethod
      *

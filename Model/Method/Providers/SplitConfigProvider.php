@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -34,7 +35,6 @@ use HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider;
  */
 class SplitConfigProvider extends CcConfigProvider
 {
-
     /**
      * @var string $methodCode
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -32,7 +33,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class CartCategories extends \Magento\Framework\Model\AbstractModel
 {
-
     /**
      * Init resource model and id field
      */

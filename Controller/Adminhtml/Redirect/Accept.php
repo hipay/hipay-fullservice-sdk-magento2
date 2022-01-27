@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -29,7 +30,6 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
  */
 class Accept extends \Magento\Backend\App\Action
 {
-
     protected $orderFactory;
 
     public function __construct(

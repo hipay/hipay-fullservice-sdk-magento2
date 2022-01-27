@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
@@ -32,7 +34,6 @@ use Magento\Framework\Controller\ResultFactory;
  */
 class Pending extends Fullservice
 {
-
     /**
      * @return \Magento\Framework\View\Result\Page
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

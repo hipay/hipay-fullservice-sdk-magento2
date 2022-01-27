@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class ApplePay extends LocalHostedFields
 {
-
     const HIPAY_METHOD_CODE = 'hipay_applepay';
 
     /**
@@ -43,6 +43,7 @@ class ApplePay extends LocalHostedFields
      */
     public function isActive($storeId = null)
     {
-        return (bool) (int) $this->getConfigData('active', $storeId) && $this->_hipayConfig->hasCredentials(false, true);
+        return $this->getConfigData('active', $storeId)
+            && $this->_hipayConfig->hasCredentials(false, true);
     }
 }

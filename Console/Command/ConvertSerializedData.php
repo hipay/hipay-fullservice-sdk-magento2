@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -23,7 +24,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ConvertSerializedData extends Command
 {
-
     public $input;
     public $output;
 
@@ -47,8 +47,7 @@ class ConvertSerializedData extends Command
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         ProductMetadataInterface $productMetadata,
         \Magento\Framework\App\State $state
-    )
-    {
+    ) {
         parent::__construct();
         $this->ruleFactory = $ruleFactory;
         $this->productMetadata = $productMetadata;
@@ -86,10 +85,14 @@ class ConvertSerializedData extends Command
                     $model = $this->ruleFactory->create();
                     $model->getResource()->load($model, $item->getData()["rule_id"]);
                     if ($isSerializedConditions) {
-                        $model->setConditionsSerialized(json_encode(unserialize($item->getData()["conditions_serialized"])));
+                        $model->setConditionsSerialized(
+                            json_encode(unserialize($item->getData()["conditions_serialized"]))
+                        );
                     }
                     if ($isSerializedActions) {
-                        $model->setActionsSerialized(json_encode(unserialize($item->getData()["actions_serialized"])));
+                        $model->setActionsSerialized(
+                            json_encode(unserialize($item->getData()["actions_serialized"]))
+                        );
                     }
                     $model->save();
                     $dataSerialized = true;
@@ -112,7 +115,6 @@ class ConvertSerializedData extends Command
      */
     private function isSerialized($value)
     {
-        return (boolean)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
+        return (bool)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
     }
-
 }

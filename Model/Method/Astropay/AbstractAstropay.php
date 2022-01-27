@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Astropay;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
@@ -72,17 +74,18 @@ class AbstractAstropay extends AbstractMethodAPI
         parent::validate();
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 
         $nationalIdentificationNumber = $info->getAdditionalInformation('nationalIdentification');
         switch ($this->_typeIdentification) {
             case self::IDENTIFICATION_CPF:
-                if (!preg_match(
-                    "/(\d{2}[.]?\d{3}[.]?\d{3}[\/]?\d{4}[-]?\d{2})|(\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2})$/",
-                    $nationalIdentificationNumber
-                )
+                if (
+                    !preg_match(
+                        "/(\d{2}[.]?\d{3}[.]?\d{3}[\/]?\d{4}[-]?\d{2})|(\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2})$/",
+                        $nationalIdentificationNumber
+                    )
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('CPF is not correct, please enter a valid CPF.')

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -45,7 +46,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
@@ -28,7 +30,6 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
  */
 abstract class AbstractPaymentMethod extends AbstractRequest
 {
-
     /**
      * Order
      *

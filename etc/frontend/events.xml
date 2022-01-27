@@ -24,6 +24,6 @@
         <observer name="check_signature" instance="HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver"/>
     </event>
     <event name="controller_action_predispatch_checkout_index_index">
-        <observer name="reload_cart" instance="HiPay\FullserviceMagento\Observer\RestoreBasketObserver" shared="false" />
+        <observer name="reload_cart" instance="HiPay\FullserviceMagento\Observer\RestoreBasketObserver"/>
     </event>
 </config>

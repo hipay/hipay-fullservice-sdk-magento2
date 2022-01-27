@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -32,7 +34,6 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  */
 class GenericConfigProvider implements ConfigProviderInterface
 {
-
     /**
      * @var CcConfig
      */
@@ -114,7 +115,7 @@ class GenericConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
-        $this->methods= $methodCodes;
+        $this->methods = $methodCodes;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->resolver = $resolver;
@@ -203,7 +204,8 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     protected function getCustomerCards()
     {
-        if (!($customerId = $this->customerSession->getCustomerId())) {
+        $customerId = $this->customerSession->getCustomerId();
+        if (!$customerId) {
             return [];
         }
         if (!$this->_collection) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 /**
@@ -26,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class ThreeDs implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Options getter
      *

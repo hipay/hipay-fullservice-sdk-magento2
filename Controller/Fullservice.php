@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -32,7 +33,6 @@ use HiPay\FullserviceMagento\Model\Request\Type\Factory;
  */
 abstract class Fullservice extends AppAction
 {
-
     /**
      * @var \Magento\Customer\Model\Session
      */

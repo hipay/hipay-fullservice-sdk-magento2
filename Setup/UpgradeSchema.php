@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -19,7 +20,6 @@ namespace HiPay\FullserviceMagento\Setup;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-
 
 /**
  * Upgrade Schema class
@@ -310,7 +310,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'category_hipay_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     null,
-                    ['nullable' => true, 'unsigned' => true, 'nullable' => true],
+                    ['nullable' => true, 'unsigned' => true],
                     'HiPay category'
                 )->addIndex(
                     $installer->getIdxName(
@@ -321,8 +321,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['category_magento_id'],
                     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
                 )->addForeignKey(
-                    $installer->getFkName('hipay_cart_mapping_categories', 'category_magento_id',
-                        'catalog_category_entity', 'entity_id'),
+                    $installer->getFkName(
+                        'hipay_cart_mapping_categories',
+                        'category_magento_id',
+                        'catalog_category_entity',
+                        'entity_id'
+                    ),
                     'category_magento_id',
                     $installer->getTable('catalog_category_entity'),
                     'entity_id'
@@ -336,12 +340,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $setup->endSetup();
     }
 
-    private function installShippingMappingTable(SchemaSetupInterface $setup, ModuleContextInterface $context){
+    private function installShippingMappingTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
         $tableName = $setup->getTable($setup->getTable('hipay_cart_mapping_shipping'));
 
         if ($setup->getConnection()->isTableExists($tableName)) {
             if (version_compare($context->getVersion(), '1.10.2', '<')) {
-
                 $columns = [
                     'magento_shipping_code_custom' => [
                         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -414,7 +418,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function installTokenTable($setup, $context)
     {
         if (version_compare($context->getVersion(), '1.7.0', '<')) {
-
             $tableName = $setup->getTable($setup->getTable('hipay_customer_card'));
 
             if ($setup->getConnection()->isTableExists($tableName)) {
@@ -428,7 +431,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
                 $this->addColumns($columns, $tableName, $setup);
             } else {
-
                 $table = $setup->getConnection()
                     ->newTable($tableName)
                     ->addColumn(

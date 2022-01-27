@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -35,7 +36,6 @@ use Magento\Sales\Model\Order;
  */
 class InstallData implements InstallDataInterface
 {
-
     /**
      * {@inheritdoc}
      */

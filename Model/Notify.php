@@ -46,7 +46,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  */
 class Notify
 {
-
     /**
      *
      * @var \Magento\Sales\Model\OrderFactory $_orderFactory
@@ -242,7 +241,8 @@ class Notify
                 break;
             case TransactionStatus::AUTHORIZED:
                 // status : 116
-                if ($this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
+                if (
+                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
                     $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
                     $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
                     in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
@@ -265,7 +265,8 @@ class Notify
                 }
 
                 // status : 117
-                if ($this->_transaction->getStatus() == TransactionStatus::CAPTURE_REQUESTED
+                if (
+                    $this->_transaction->getStatus() == TransactionStatus::CAPTURE_REQUESTED
                     && $this->_order->hasInvoices()
                     && $this->_order->getBaseTotalDue() != $this->_order->getBaseGrandTotal()
                 ) {
@@ -364,7 +365,8 @@ class Notify
                 // status : 117
                 $this->_doTransactionCaptureRequested();
                 //If status Capture Requested is not configured to validate the order, we break.
-                if (((int)$this->_order->getPayment()->getMethodInstance()
+                if (
+                    ((int)$this->_order->getPayment()->getMethodInstance()
                         ->getConfigData('hipay_status_validate_order') == 117) === false
                 ) {
                     break;
@@ -376,7 +378,8 @@ class Notify
                 // status : 119
                 //If status Capture Requested is configured to validate the order and is a direct capture notification
                 // (118), we break because order is already validate.
-                if (((int)$this->_order->getPayment()->getMethodInstance()
+                if (
+                    ((int)$this->_order->getPayment()->getMethodInstance()
                         ->getConfigData('hipay_status_validate_order') == 117) === true
                     && (int)$this->_transaction->getStatus() == 118
                     && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
@@ -455,7 +458,8 @@ class Notify
                 break;
         }
 
-        if ($this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
+        if (
+            $this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
             $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
         ) {
             /**
@@ -518,7 +522,8 @@ class Notify
     protected function insertSplitPayment()
     {
         //Check if it is split payment and insert it
-        if (($profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id'))) {
+        $profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id');
+        if ($profileId) {
             $profile = $this->ppFactory->create();
             $profile->getResource()->load($profile, $profileId);
             if ($profile->getId()) {
@@ -562,7 +567,9 @@ class Notify
                         if ($this->_order->canHold()) {
                             $this->_order->hold();
                         }
-                        $this->_doTransactionMessage(__('Order held because an error occurred while saving one of the split payments'));
+                        $this->_doTransactionMessage(
+                            __('Order held because an error occurred while saving one of the split payments')
+                        );
                     }
                 }
             } else {
@@ -630,7 +637,8 @@ class Notify
      */
     protected function _setFraudDetected()
     {
-        if (($fraudSreening = $this->_transaction->getFraudScreening()) !== null) {
+        $fraudSreening = $this->_transaction->getFraudScreening();
+        if ($fraudSreening !== null) {
             if ($fraudSreening->getResult()) {
                 $payment = $this->_order->getPayment();
                 $payment->setIsFraudDetected(true);
@@ -699,7 +707,8 @@ class Notify
 
             /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-                if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
+                if (
+                    $creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
                 ) {
                     $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
@@ -809,7 +818,8 @@ class Notify
 
         if ($this->_order->hasCreditmemos()) {
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-                if ($creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
+                if (
+                    $creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
                 ) {
                     $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
@@ -842,7 +852,8 @@ class Notify
 
         if ($this->_order->hasInvoices()) {
             foreach ($this->_order->getInvoiceCollection() as $invoice) {
-                if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+                if (
+                    $invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $invoice->getTransactionId()
                 ) {
                     $invoice->setState(\Magento\Sales\Model\Order\Invoice::STATE_CANCELED);
@@ -1175,7 +1186,8 @@ class Notify
             }
         }
         foreach ($order->getInvoiceCollection() as $invoice) {
-            if ($invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
+            if (
+                $invoice->getState() == \Magento\Sales\Model\Order\Invoice::STATE_OPEN
                 && $invoice->getResource()->load($invoice, $invoice->getId())
             ) {
                 $invoice->setTransactionId($transactionId);

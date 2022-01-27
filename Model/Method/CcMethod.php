@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -35,7 +36,6 @@ use Magento\Framework\DataObject;
  */
 class CcMethod extends FullserviceMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_cc';
 
     /**
@@ -198,7 +198,7 @@ class CcMethod extends FullserviceMethod
 
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 
@@ -219,9 +219,12 @@ class CcMethod extends FullserviceMethod
 
         if (in_array($info->getCcType(), $availableTypes)) {
             // Other credit card type number validation
-            if ($this->validateCcNum($ccNumber)
-                || $this->otherCcType($info->getCcType())
-                && $this->validateCcNumOther($ccNumber)
+            if (
+                $this->validateCcNum($ccNumber)
+                || (
+                    $this->otherCcType($info->getCcType())
+                    && $this->validateCcNumOther($ccNumber)
+                )
             ) {
                 $ccTypeRegExpList = [
                     //Solo, Switch or Maestro. International safe
@@ -251,8 +254,10 @@ class CcMethod extends FullserviceMethod
                         '|5[0-9]{14}))$/',
                 ];
 
-                $ccNumAndTypeMatches = isset($ccTypeRegExpList[$info->getCcType()])
-                    && preg_match($ccTypeRegExpList[$info->getCcType()], $ccNumber);
+                $ccNumAndTypeMatches = (
+                    isset($ccTypeRegExpList[$info->getCcType()])
+                    && preg_match($ccTypeRegExpList[$info->getCcType()], $ccNumber)
+                );
                 $ccType = $ccNumAndTypeMatches ? $info->getCcType() : 'OT';
 
                 if (!$ccNumAndTypeMatches && !$this->otherCcType($info->getCcType())) {
@@ -326,11 +331,14 @@ class CcMethod extends FullserviceMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (!$expYear
+        if (
+            !$expYear
             || !$expMonth
             || (int)$date->format('Y') > $expYear
-            || (int)$date->format('Y') == $expYear
-            && (int)$date->format('m') > $expMonth
+            || (
+                (int)$date->format('Y') == $expYear
+                && (int)$date->format('m') > $expMonth
+            )
         ) {
             return false;
         }

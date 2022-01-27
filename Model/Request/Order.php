@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -20,7 +21,7 @@ use HiPay\Fullservice\Enum\ThreeDSTwo\DeviceChannel;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 
 /**
@@ -34,7 +35,6 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  */
 class Order extends CommonRequest
 {
-
     /**
      * Order
      *
@@ -188,7 +188,8 @@ class Order extends CommonRequest
             $this->_operation = $params['operation'];
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

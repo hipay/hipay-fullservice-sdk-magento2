@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source\ProductCode;
 
 use Magento\Framework\Data\OptionSourceInterface;
@@ -29,7 +31,6 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
  */
 class Facilypay3X implements OptionSourceInterface
 {
-
     /**
      * Get options
      *

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Payment;
 
 /**
@@ -28,7 +30,6 @@ namespace HiPay\FullserviceMagento\Controller\Payment;
  */
 class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
-
     /**
      * Submit the order
      *
@@ -47,7 +48,9 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
             }
 
             $payment = $order->getPayment();
-            if (($redirectUrl = $payment->getAdditionalInformation('redirectUrl')) != "") {
+
+            $redirectUrl = $payment->getAdditionalInformation('redirectUrl');
+            if ($redirectUrl != "") {
                 $this->getResponse()->setRedirect($redirectUrl);
             } else {
                 $this->_redirect('checkout/cart');

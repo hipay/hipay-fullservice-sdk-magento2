@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Card;
 
 use Magento\Framework\App\Action\Context;
@@ -31,7 +33,6 @@ use Magento\Framework\Controller\ResultFactory;
  */
 class Delete extends CustomerController
 {
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\CardFactory $_cardFactory

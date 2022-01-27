@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
@@ -28,7 +30,6 @@ use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
  */
 abstract class AbstractRequest implements RequestInterface
 {
-
     /**
      * @var \Magento\Customer\Model\Session $_customerSession
      */

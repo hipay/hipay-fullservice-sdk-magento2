@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -31,7 +32,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Notification extends AbstractHelper
 {
-
     /**
      * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\CollectionFactory $inboxFactory
      */
@@ -46,8 +46,7 @@ class Notification extends AbstractHelper
         Context $context,
         \Magento\Customer\Model\Session $session,
         \Magento\AdminNotification\Model\ResourceModel\Inbox\CollectionFactory $inboxFactory
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->_session = $session;
         $this->_inboxFactory = $inboxFactory;
@@ -64,7 +63,7 @@ class Notification extends AbstractHelper
          * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
-        $notificationCollection->addFieldToSelect('*');
+        $notificationCollection->addFieldToSelect(['notification_id']);
         $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
 
         return $notificationCollection->count() > 0;
@@ -76,20 +75,19 @@ class Notification extends AbstractHelper
          * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
-        $notificationCollection->addFieldToSelect('*');
+        $notificationCollection->addFieldToSelect(['notification_id']);
         $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
         $notificationCollection->addFieldToFilter(
             array(
                 'is_read',
                 'is_remove'
-            ), array(
+            ),
+            array(
                 array("eq" => 1),
                 array("eq" => 1)
             )
         );
 
         return $notificationCollection->count() > 0;
-
     }
-
 }

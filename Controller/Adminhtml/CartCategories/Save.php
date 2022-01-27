@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
 use Magento\Backend\App\Action;
@@ -28,7 +30,6 @@ use Magento\Backend\App\Action;
  */
 class Save extends \Magento\Backend\App\Action
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
      */

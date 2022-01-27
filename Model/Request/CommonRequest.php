@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -24,7 +25,7 @@ use HiPay\Fullservice\Gateway\Model\Cart\Item as Item;
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use Magento\Setup\Exception;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Commmon Request Object
@@ -37,7 +38,6 @@ use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFa
  */
 abstract class CommonRequest extends BaseRequest
 {
-
     /**
      * FAKE DEFAULT PRODUCT CATEGORY
      * @deprecated
@@ -141,7 +141,8 @@ abstract class CommonRequest extends BaseRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

@@ -28,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class AbstractFactory
 {
-
     /**
      * Object Manager instance
      *

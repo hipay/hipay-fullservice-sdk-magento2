@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -16,7 +17,7 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Cartcategories\Edit;
 
-use \HiPay\Fullservice\Data\Category\Collection as collection;
+use HiPay\Fullservice\Data\Category\Collection as collection;
 
 /**
  * Adminhtml Cart Categories edit form block

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -16,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Request\ThreeDS;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
-use \HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\RecurringInfo;
+use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\RecurringInfo;
 use HiPay\FullserviceMagento\Model\PaymentProfile;
 
 /**
@@ -85,7 +86,6 @@ class RecurringInfoFormatter extends AbstractRequest
     private function getExpirationDate()
     {
         if ($this->_threeDSHelper->getOrderSplitPaymentCollection($this->_order->getId())) {
-
             $expirationDate = $this->_threeDSHelper->getLastOrderSplitPayment($this->_order->getId())->getDateToPay();
 
             return (int)date('Ymd', strtotime($expirationDate));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento
  *
@@ -16,11 +17,11 @@
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  */
+
 namespace HiPay\FullserviceMagento\Test\Unit\Block\Hosted;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -68,8 +69,5 @@ class FormTest extends \PHPUnit_Framework_TestCase
     public function testTemplateFileCanBeRetrieve()
     {
         $this->assertNotNull($this->form->getTemplate());
-
     }
-
-
 }

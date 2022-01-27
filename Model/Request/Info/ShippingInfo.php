@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
@@ -28,7 +30,6 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerShippingInfoRequest;
  */
 class ShippingInfo extends AbstractInfoRequest
 {
-
     /**
      *
      * {@inheritDoc}

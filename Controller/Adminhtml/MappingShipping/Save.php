@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,10 +14,11 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
 use Magento\Backend\App\Action;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Save Mapping Shipping
@@ -71,7 +73,7 @@ class Save extends \Magento\Backend\App\Action
             if ($id) {
                 $model->getResource()->load($model, $id);
             } else {
-                if($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
+                if ($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
                     $count = $this->_mappingShippingCollectionFactory->create()
                         ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
                         ->count();
@@ -97,7 +99,6 @@ class Save extends \Magento\Backend\App\Action
                             ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
                         );
                     }
-
                 }
             }
 

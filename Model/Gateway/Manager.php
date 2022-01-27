@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -41,7 +42,6 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
  */
 class Manager
 {
-
     /**
      *   Additional Field to save and generate an operation id
      */
@@ -347,7 +347,7 @@ class Manager
 
         $this->_getPayment()->setTransactionId($operationId);
 
-        if ($operationType== Operation::REFUND) {
+        if ($operationType == Operation::REFUND) {
             $this->_getPayment()->getCreditMemo()->setTransactionId($operationId);
         }
 

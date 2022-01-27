@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://opensource.org/licenses/mit-license.php MIT License
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
 /**
@@ -26,7 +28,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class CcType extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
-
     /**
      * Allowed CC types
      *
@@ -111,7 +112,8 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
             if (in_array($code, $allowed) || empty($allowed)) {
                 if ($withCustomLabel && isset($this->_codeToLabel[$code])) {
                     $name = $this->_codeToLabel[$code];
-                } elseif (strpos(strtolower($name), "maestro") !== false
+                } elseif (
+                    strpos(strtolower($name), "maestro") !== false
                 ) {
                     //Special case due to wrong comparison in
                     // magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36

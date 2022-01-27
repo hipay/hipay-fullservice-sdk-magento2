@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Controller\Payment;
 
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
@@ -30,7 +32,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
  */
 class PlaceOrderStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
-
     /**
      * Submit the order
      *

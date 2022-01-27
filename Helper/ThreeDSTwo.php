@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -34,7 +35,6 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  */
 class ThreeDSTwo extends AbstractHelper
 {
-
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Block\Adminhtml\SplitPayment;
 
 /**
@@ -86,7 +88,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             $this->buttonList->remove('delete');
         }
 
-        if ($this->_isAllowedAction('HiPay_FullserviceMagento::split_pay')
+        if (
+            $this->_isAllowedAction('HiPay_FullserviceMagento::split_pay')
             && $this->_coreRegistry->registry('split_payment')->canPay()
         ) {
             $this->buttonList->add(

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,10 +14,11 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\DeliveryShippingInfoRequest;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Delivery info Request Object
@@ -63,8 +65,7 @@ class DeliveryInfo extends AbstractInfoRequest
         CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         $params = []
-    )
-    {
+    ) {
         parent::__construct(
             $logger,
             $checkoutData,

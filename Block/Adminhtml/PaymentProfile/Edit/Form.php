@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -27,7 +28,6 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\PaymentProfile\Edit;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\System\Config\Source\PeriodUnit $periodUnitSource

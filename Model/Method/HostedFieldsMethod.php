@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -34,7 +35,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedFieldsMethod extends CcMethod
 {
-
     const HIPAY_METHOD_CODE = 'hipay_hosted_fields';
 
     /**
@@ -72,7 +72,7 @@ class HostedFieldsMethod extends CcMethod
     {
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 

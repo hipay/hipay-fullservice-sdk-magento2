@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field;
@@ -29,7 +31,6 @@ use Magento\Config\Block\System\Config\Form\Field;
  */
 class CheckboxesSortable extends Field
 {
-
     /**
      * Add js to sort checkboxes
      *

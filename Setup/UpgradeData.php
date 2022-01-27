@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -35,7 +36,6 @@ use Magento\Sales\Model\Order;
  */
 class UpgradeData implements UpgradeDataInterface
 {
-
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -75,7 +75,7 @@ class UpgradeData implements UpgradeDataInterface
                 'is_default' => 0,
                 'visible_on_front' => 1
             ];
-            
+
             $connection->insertArray($setup->getTable('sales_order_status'), ['status', 'label'], [$newStatus]);
             $connection->insertArray(
                 $setup->getTable('sales_order_status_state'),

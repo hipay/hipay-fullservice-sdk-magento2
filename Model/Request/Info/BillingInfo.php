@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
@@ -28,7 +30,6 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
  */
 class BillingInfo extends AbstractInfoRequest
 {
-
     /**
      * @var string
      */
@@ -53,12 +54,13 @@ class BillingInfo extends AbstractInfoRequest
 
         // Using guest email address if billing info is not set
         $additionalInformation = $this->_order->getPayment()->getAdditionalInformation();
-        if (!empty($additionalData['guestEmail'])) {
+        if (!empty($additionalInformation['guestEmail'])) {
             $customerBillingInfo->email = $additionalInformation['guestEmail'];
         }
 
         if (!empty($billingAddress)) {
-            if ($customerEmail = $billingAddress->getEmail()) {
+            $customerEmail = $billingAddress->getEmail();
+            if ($customerEmail) {
                 $customerBillingInfo->email = $this->_order->getCustomerEmail();
             }
             $dob = $this->_order->getCustomerDob();
@@ -102,9 +104,11 @@ class BillingInfo extends AbstractInfoRequest
         $firstName = $billingAddress->getFirstname();
         $lastName = $billingAddress->getLastname();
         $theoricCardHolder = $firstName . ' ' . $lastName;
-        if (( $ccType == 'AE' || $ccType == 'american-express')
+        if (
+            ( $ccType == 'AE' || $ccType == 'american-express')
             && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
-            && count($partsCardOwner) > 1 ) {
+            && count($partsCardOwner) > 1
+        ) {
             $firstName = $this->extractPartOfCardHolder($cardOwner, self::KEY_FIRSTNAME);
             $lastName = $this->extractPartOfCardHolder($cardOwner, self::KEY_LASTNAME);
         }
@@ -125,7 +129,7 @@ class BillingInfo extends AbstractInfoRequest
         $split = explode(' ', trim($cardOwner));
         switch ($key) {
             case 'firstname':
-                 return $split[0];
+                return $split[0];
             case 'lastname':
                 return trim(preg_replace('/' . $split[0] . '/', "", $cardOwner, 1));
             default:
@@ -140,6 +144,10 @@ class BillingInfo extends AbstractInfoRequest
      */
     private static function stripAccents($str)
     {
-        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+        return strtr(
+            utf8_decode($str),
+            utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'),
+            'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY'
+        );
     }
 }

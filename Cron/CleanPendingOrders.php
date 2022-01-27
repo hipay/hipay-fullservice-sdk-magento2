@@ -30,7 +30,6 @@ namespace HiPay\FullserviceMagento\Cron;
  */
 class CleanPendingOrders
 {
-
     /**
      *
      * @var \Magento\Payment\Helper\Data $paymentHelper ;
@@ -122,7 +121,13 @@ class CleanPendingOrders
         $collection = $orderModel->getCollection();
 
         $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at'])
-            ->addFieldToFilter('main_table.state', ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]])
+            ->addFieldToFilter(
+                'main_table.state',
+                ['in' => [
+                    \Magento\Sales\Model\Order::STATE_NEW,
+                    \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
+                ]]
+            )
             ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
             ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format($dateFormat))])
             ->join(
@@ -133,7 +138,8 @@ class CleanPendingOrders
 
         /** @var \Magento\Sales\Model\Order $order */
         foreach ($collection as $order) {
-            if ($order->getState() === \Magento\Sales\Model\Order::STATE_NEW ||
+            if (
+                $order->getState() === \Magento\Sales\Model\Order::STATE_NEW ||
                 $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
                 in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
             ) {
