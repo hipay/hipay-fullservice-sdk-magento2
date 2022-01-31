@@ -19,13 +19,12 @@ namespace HiPay\FullserviceMagento\Controller\Card;
 
 use Magento\Framework\App\Action\Context;
 use HiPay\FullserviceMagento\Controller\Card\Customer as CustomerController;
-use Magento\Customer\Model\Session\Proxy as CustomerSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Delete registered card
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

@@ -18,10 +18,8 @@
 namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
 
 /**
-/**
  * Update notification block
- *
- * @package HiPay\FullserviceMagento\Block\Adminhtml\System\Config
+ * \Block\Adminhtml\System\Config
  * @author Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -32,9 +30,6 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
     const HIPAY_GITHUB_MAGENTO2_LATEST =
         "https://api.github.com/repos/hipay/hipay-fullservice-sdk-magento2/releases/latest";
 
-    /**
-     * Message identity
-     */
     const MESSAGE_IDENTITY = 'HipPay Version Notification';
 
     protected $_authSession;
@@ -129,7 +124,6 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
         }
     }
 
-
     /**
      * Retrieve unique system message identity
      *
@@ -220,7 +214,6 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 
         return false;
     }
-
 
     /**
      * Retrieve system message text

@@ -17,10 +17,11 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Hipay Payment profile data model
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -108,7 +109,7 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
      */
     public function splitAmount($amount, $startDate)
     {
-        $paymentsSplit = array();
+        $paymentsSplit = [];
 
         $maxCycles = (int)$this->getPeriodMaxCycles();
 
@@ -146,7 +147,7 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
                     $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
                 default:
-                    throw new \Exception('Unknown split payment period unit "' . $periodUnit . '"');
+                    throw new \LocalizedException('Unknown split payment period unit "' . $periodUnit . '"');
             }
 
             $amountToPay = $i == 0 ? ($part + $fmod) : $part;

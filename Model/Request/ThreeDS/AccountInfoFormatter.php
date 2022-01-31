@@ -26,7 +26,6 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\AccountInfo\Customer as C
 
 /**
  *
- * @package HiPay\FullserviceMagento
  * @author HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

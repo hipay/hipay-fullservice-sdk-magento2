@@ -22,7 +22,6 @@ use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 /**
  * Class Context for payments methods
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -152,7 +151,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {

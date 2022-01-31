@@ -27,7 +27,6 @@ use HiPay\FullserviceMagento\Model\Config;
  *
  * Used to set custom state and status to the order
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -44,7 +43,7 @@ class OrderPaymentPlugin
      *
      * @return \Magento\Sales\Model\Order\Payment
      */
-    public function aroundAccept(\Magento\Sales\Model\Order\Payment $subject, callable $proceed)
+    public function afterAccept(\Magento\Sales\Model\Order\Payment $subject, callable $proceed)
     {
 
         if ($this->isHipayMethod($subject->getMethod())) {
@@ -53,9 +52,9 @@ class OrderPaymentPlugin
             /** @var \Magento\Payment\Model\Method\AbstractMethod $method */
             $method = $subject->getMethodInstance();
             $method->setStore($subject->getOrder()->getStoreId());
-            if ($method->acceptPayment($subject)) {
-                //Do nothing let notification to change status order
-            } else {
+
+            // If accept request is sent, use notification to update state
+            if (!$method->acceptPayment($subject)) {
                 $message = $subject->_appendTransactionToMessage(
                     $transactionId,
                     $subject->prependMessage(__('There is no need to approve this payment.'))
@@ -78,7 +77,7 @@ class OrderPaymentPlugin
      * @param bool $isOnline
      * @return Order\Payment
      */
-    public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
+    public function afterDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
     {
 
         if ($this->isHipayMethod($subject->getMethod()) && $isOnline) {
@@ -99,7 +98,7 @@ class OrderPaymentPlugin
      * @param string $method
      * @return bool
      */
-    protected function isHipayMethod($method)
+    private function isHipayMethod($method)
     {
         if (strpos($method, 'hipay') !== false) {
             return true;

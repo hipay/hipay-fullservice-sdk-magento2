@@ -30,7 +30,6 @@ use Magento\Framework\View\Asset\Source;
  * Class CC config provider
  * Can bu used by all Cc API payment method
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -74,7 +73,6 @@ class CcConfigProvider implements ConfigProviderInterface
      * @var \Magento\Framework\View\Asset\Source
      */
     protected $assetSource;
-
 
     protected $context;
 
@@ -195,7 +193,7 @@ class CcConfigProvider implements ConfigProviderInterface
                 );
                 $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
                 if ($placeholder) {
-                    list($width, $height) = getimagesize($asset->getSourceFile());
+                    list($width, $height) = getimagesizefromstring($asset->getSourceFile());
                     $icons[$code] = [
                         'url' => $asset->getUrl(),
                         'width' => $width,

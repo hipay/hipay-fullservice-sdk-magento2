@@ -20,7 +20,6 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\SplitPayment\Edit;
 /**
  * Adminhtml split payment edit form block
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

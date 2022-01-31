@@ -29,7 +29,6 @@ use Magento\Sales\Model\Order as SalesOrder;
  *
  * Used to set custom state and status to the order
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -48,7 +47,7 @@ class CaptureCommandPlugin
      * @param OrderInterface $order
      * @return \Magento\Framework\Phrase|string
      */
-    public function aroundExecute(
+    public function afterExecute(
         \Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject,
         callable $proceed,
         OrderPaymentInterface $payment,

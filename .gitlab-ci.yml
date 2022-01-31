@@ -50,6 +50,16 @@ stages:
 ####      JOBS      ####
 ########################
 
+code-quality:
+  stage: build-test
+  script:
+    - cd tools/phpcs
+    - composer install
+    - ./vendor/bin/phpcs --standard=ruleset.xml
+  tags:
+    - small
+
+
 build-test-2-1-10:
   stage: build-test
   script:

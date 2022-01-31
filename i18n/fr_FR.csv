@@ -71,6 +71,7 @@
 "Payment Profile not found.","Payment Profile not found."
 "Iban is not correct, please enter a valid Iban.","L'iban n'est pas correct, merci de saisir un iban valide."
 "Firstname is mandatory.","Le prénom est obligatoire."
+"Lastname is mandatory.","Le nom de famille est obligatoire."
 "Code BIC is not correct, please enter a valid Code BIC.","Le code bic n'est correct, merci de saisir un code bic valide."
 "Bank name is not correct, please enter a valid Bank name.","Le nom de la banque n'est pas correct,merci de saisir un code bic correct."
 "Card %s - %s","Card %s - %s"

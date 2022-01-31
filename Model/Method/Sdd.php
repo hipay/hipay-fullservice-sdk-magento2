@@ -24,7 +24,6 @@ use Magento\Directory\Model;
 /**
  * SDD Method
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -123,7 +122,7 @@ class Sdd extends FullserviceMethod
 
         // Instantiate validators for the model
         $validatorIban = new \Zend\Validator\Iban(
-            array('country_code' => $order->getBillingAddress()->getCountryId())
+            [ 'country_code' => $order->getBillingAddress()->getCountryId() ]
         );
         $validatorEmpty = new \Zend\Validator\NotEmpty();
 
@@ -133,7 +132,7 @@ class Sdd extends FullserviceMethod
             if (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_firstname'))) {
                 $errorMsg = __('Firstname is mandatory.');
             } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_lastname'))) {
-                $errorMsg = _('Lastname is mandatory.');
+                $errorMsg = __('Lastname is mandatory.');
             } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_code_bic'))) {
                 $errorMsg = __('Code BIC is not correct, please enter a valid Code BIC.');
             } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_bank_name'))) {

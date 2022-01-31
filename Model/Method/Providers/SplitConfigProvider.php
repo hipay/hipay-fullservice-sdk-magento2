@@ -27,7 +27,6 @@ use HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider;
  * Class Generic config provider
  * Can bu used by all SPLIT payment method
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -178,7 +177,10 @@ class SplitConfigProvider extends CcConfigProvider
                 $ppIds = explode(',', $ppIds);
             }
             $this->paymentProfiles[$methodCode] = $this->ppCollectionFactory->create();
-            $this->paymentProfiles[$methodCode]->addFieldToFilter('profile_id', array('IN' => $ppIds));
+            $this->paymentProfiles[$methodCode]->addFieldToFilter(
+                'profile_id',
+                [ 'IN' => $ppIds ]
+            );
         }
 
         return $this->paymentProfiles[$methodCode];

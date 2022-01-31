@@ -22,7 +22,6 @@ use HiPay\FullserviceMagento\Model\AbstractFactory;
 /**
  * Factory class for rule
  *
- * @package HiPay\FullserviceMagento
  * @author      HiPay <support.tpp@hipay.com>
  * @copyright   Copyright (c) 2018 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

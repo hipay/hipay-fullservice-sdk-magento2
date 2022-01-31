@@ -26,7 +26,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  * Add button "Accept and capture" in admin order view
  * When the order status is in pending review
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

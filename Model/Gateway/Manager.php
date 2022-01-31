@@ -34,7 +34,6 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
  * HiPay Fullservice SDK is used by the manager
  * So, all api call are centralized here
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

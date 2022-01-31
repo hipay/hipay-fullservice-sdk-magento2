@@ -29,7 +29,6 @@ use HiPay\FullserviceMagento\Model\Email\Container\HostedPaymentLinkIdentity;
 /**
  * Class Sender for Hosted link sended to customer in payment MO/TO (admin)
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

@@ -38,7 +38,6 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * Proceed all notifications
  * In construct method Order Model is loaded and Transation Model (SDK) is created
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -537,14 +536,14 @@ class Notify
                 $splitAmounts = $profile->splitAmount($amount, $orderCreatedAt);
 
                 /** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
-                for ($i = 0; $i < count($splitAmounts); $i++) {
+                foreach ($splitAmounts as $i => $splitAmount) {
                     $splitPayment = $this->spFactory->create();
 
-                    $splitPayment->setAmountToPay($splitAmounts[$i]['amountToPay']);
+                    $splitPayment->setAmountToPay($splitAmount['amountToPay']);
                     $splitPayment->setAttempts($i == 0 ? 1 : 0);
                     $splitPayment->setCardToken($this->_transaction->getPaymentMethod()->getToken());
                     $splitPayment->setCustomerId($this->_order->getCustomerId());
-                    $splitPayment->setDateToPay($splitAmounts[$i]['dateToPay']);
+                    $splitPayment->setDateToPay($splitAmount['dateToPay']);
                     $splitPayment->setMethodCode($this->_order->getPayment()->getMethod());
                     $splitPayment->setRealOrderId($this->_order->getIncrementId());
                     $splitPayment->setOrderId($this->_order->getId());

@@ -13,7 +13,6 @@ use Monolog\Logger as MonologLogger;
  *
  * @see  HiPay\FullserviceMagento\Model\Config.php
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

@@ -36,7 +36,6 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
         );
     }
 
-
     /**
      * Return hosted fields URL
      *

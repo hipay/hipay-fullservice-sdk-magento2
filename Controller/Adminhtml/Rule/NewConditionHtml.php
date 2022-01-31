@@ -23,7 +23,6 @@ use Magento\Rule\Model\Condition\AbstractCondition;
  * Add new condition html on rule edition
  * Used for 3ds and oneclick in payment configuration
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
