@@ -31,7 +31,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  * Abstract Payment Method Class
  * All HiPay Fullservice payment methods inherit from her
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -147,7 +146,6 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     protected static $_technicalCode;
 
-
     /**
      * FullserviceMethod constructor.
      * @param TransactionRepository $transactionRepository
@@ -185,7 +183,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->_cardFactory = $context->getCardFactory();
         $this->priceCurrency = $context->getPriceCurrency();
 
-        $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
+        $this->_debugReplacePrivateDataKeys = [ 'token', 'cardtoken', 'card_number', 'cvc' ];
 
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 

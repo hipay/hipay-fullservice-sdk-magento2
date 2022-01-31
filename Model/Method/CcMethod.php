@@ -24,7 +24,6 @@ use Magento\Framework\DataObject;
 /**
  * Class API PaymentMethod
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -367,7 +366,8 @@ class CcMethod extends FullserviceMethod
         $cardNumber = strrev($ccNumber);
         $numSum = 0;
 
-        for ($i = 0; $i < strlen($cardNumber); $i++) {
+        $cardNumberLength = strlen($cardNumber);
+        for ($i = 0; $i < $cardNumberLength; $i++) {
             $currentNum = substr($cardNumber, $i, 1);
 
             /**

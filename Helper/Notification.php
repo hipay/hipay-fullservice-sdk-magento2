@@ -24,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Notification Helper class
  *
- * @package HiPay\FullserviceMagento
  * @author Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

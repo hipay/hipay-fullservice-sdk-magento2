@@ -21,7 +21,6 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
 
 /**
  *
- * @package HiPay\FullserviceMagento
  * @author HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -93,7 +92,6 @@ class BrowserInfoFormatter extends AbstractRequest
         $browserInfo = new BrowserInfo();
 
         $browserData = json_decode($this->_order->getPayment()->getAdditionalInformation('browser_info'));
-
 
         $browserInfo->ipaddr = $this->_order->getRemoteIp();
         $browserInfo->http_accept = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : null;

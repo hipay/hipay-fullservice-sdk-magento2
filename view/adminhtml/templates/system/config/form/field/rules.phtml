@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,7 +10,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -17,11 +17,15 @@
  *
  */
 
-$_element = $block->getElement() 
+$_element = $block->getElement();
 ?>
 <input type="hidden" value="<?php echo $_element->getRule()->getId() ?>" name="<?php echo $_element->getName() ?>" />
 <div class="rule-tree">
-    <fieldset id="<?php echo $_element->getHtmlId() ?>" <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?> class="fieldset">
+    <fieldset
+            id="<?php echo $_element->getHtmlId() ?>"
+            <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?>
+            class="fieldset"
+    >
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span></legend>
         <br>
     <?php if ($_element->getComment()): ?>
@@ -32,8 +36,8 @@ $_element = $block->getElement()
     <div class="rule-tree-wrapper">
         <?php //echo $_element->getChildrenHtml() ?>
         <?php if ($_element->getRule() && $_element->getRule()->getConditions()): ?> 
-			<?php echo $_element->getRule()->getConditions()->asHtmlRecursive(); ?> 
-		<?php endif; ?>
+            <?php echo $_element->getRule()->getConditions()->asHtmlRecursive(); ?>
+        <?php endif; ?>
     </div>
     </fieldset>
 </div>
@@ -43,7 +47,10 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm(
+  '<?php echo $_element->getHtmlId() ?>',
+  '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>'
+);
 <?php if ($_element->getReadonly()): ?>
     <?php echo $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>

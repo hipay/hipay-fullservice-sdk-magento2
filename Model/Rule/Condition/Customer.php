@@ -22,7 +22,6 @@ use Magento\Framework\Convert\DataObject;
 /**
  * Rule Customer Class
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -189,11 +188,11 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
         $billingAddress = $quote->getBillingAddress();
         $shippingAddress = $quote->getShippingAddress();
-        $methods = array('getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId');
+        $methods = [ 'getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId' ];
 
         foreach ($methods as $method_name) {
-            $billingValue = call_user_func(array($billingAddress, $method_name));
-            $shippingValue = call_user_func(array($shippingAddress, $method_name));
+            $billingValue = call_user_func([ $billingAddress, $method_name ]);
+            $shippingValue = call_user_func([ $shippingAddress, $method_name ]);
             if ($billingValue != $shippingValue) {
                 $isDifferent = 1;
                 break;

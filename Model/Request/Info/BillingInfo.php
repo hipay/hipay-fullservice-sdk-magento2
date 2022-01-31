@@ -22,7 +22,6 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 /**
  * Billing info Request Object
  *
- * @package HiPay\FullserviceMagento
  * @author Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -45,7 +44,7 @@ class BillingInfo extends AbstractInfoRequest
      * {@inheritDoc}
      *
      * @return CustomerBillingInfoRequest
-     *@see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
@@ -138,7 +137,7 @@ class BillingInfo extends AbstractInfoRequest
     }
 
     /**
-     *
+     * *
      * @param $str
      * @return string
      */

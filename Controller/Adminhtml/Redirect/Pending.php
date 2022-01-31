@@ -22,7 +22,6 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
  *
  * Used to redirect the customer when payment is accepted
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -39,7 +38,6 @@ class Pending extends \Magento\Backend\App\Action
         parent::__construct($context);
         $this->orderFactory = $orderFactory;
     }
-
 
     /**
      * @return $this

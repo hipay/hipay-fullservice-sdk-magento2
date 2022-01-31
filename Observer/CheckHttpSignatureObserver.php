@@ -32,7 +32,6 @@ use Magento\Framework\Webapi\Exception as WebApiException;
  *
  * Redirections haven't checked because http params can be not present (Depend of TPP config)
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -134,9 +133,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
-                        array(
-                            'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto')
-                        )
+                        [ 'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto') ]
                     );
 
                     try {

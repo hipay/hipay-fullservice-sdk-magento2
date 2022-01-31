@@ -12,7 +12,6 @@ use Psr\Log\LoggerInterface;
  *
  * @see  HiPay\FullserviceMagento\Model\Config.php
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -60,7 +59,7 @@ class Logger extends LoggerMagento
      */
     private function getDebugReplaceFields()
     {
-        if ($this->config and $this->config->getValue('debugReplaceKeys')) {
+        if ($this->config && $this->config->getValue('debugReplaceKeys')) {
             return explode(',', $this->config->getValue('debugReplaceKeys'));
         }
         return [];
@@ -73,7 +72,7 @@ class Logger extends LoggerMagento
      */
     private function isDebugOn()
     {
-        return $this->config and (bool)$this->config->getValue('debug');
+        return $this->config && (bool)$this->config->getValue('debug');
     }
 
     /**

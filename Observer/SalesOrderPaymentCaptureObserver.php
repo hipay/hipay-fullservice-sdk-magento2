@@ -30,7 +30,6 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  *
  * Redirections haven't checked because http params can be not present (Depend of TPP config)
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -41,8 +40,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * HiPay module observer
  *
  * Add invoice to payment info on capture to send real amount to the gateway (multi-currency)
- *
- * @package HiPay\FullserviceMagento\Observer
+ * \Observer
  * @author      HiPay <support.tpp@hipay.com>
  * @copyright   Copyright (c) 2018 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

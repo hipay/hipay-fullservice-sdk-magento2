@@ -26,7 +26,6 @@ use Magento\Framework\Module\ModuleListInterface;
 /**
  * Main Helper class
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -56,7 +55,6 @@ class Data extends AbstractHelper
      * @var ModuleListInterface
      */
     protected $moduleList;
-
 
     public function __construct(
         Context $context,
@@ -205,7 +203,6 @@ class Data extends AbstractHelper
         }
 
         $info->version = $this->getExtensionVersion();
-
 
         return $info;
     }

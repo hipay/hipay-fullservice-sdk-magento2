@@ -23,7 +23,6 @@ use HiPay\Fullservice\Enum\Customer\Gender as HipayGender;
 /**
  * Abstract Info Request Object
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -37,7 +36,6 @@ abstract class AbstractInfoRequest extends BaseRequest
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
-
 
     /**
      * {@inheritDoc}
@@ -67,11 +65,10 @@ abstract class AbstractInfoRequest extends BaseRequest
             $params
         );
 
-
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException('Order instance is required.');
         }
     }
 
