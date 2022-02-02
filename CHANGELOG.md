@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.13.8
+
+- **Fix**: PHP-7.4 compatibility
+
 ## 1.13.7
 
 - **Fix**: Fixed CRON for cleaning pending orders
