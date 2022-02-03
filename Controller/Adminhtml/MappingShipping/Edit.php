@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
@@ -22,10 +21,10 @@ use Magento\Backend\App\Action;
 /**
  * Edit Mappin Shipping
  *
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Edit extends \Magento\Backend\App\Action
 {
@@ -48,9 +47,10 @@ class Edit extends \Magento\Backend\App\Action
 
     /**
      * Edit constructor.
-     * @param Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Registry $registry
+     *
+     * @param Action\Context                                          $context
+     * @param \Magento\Framework\View\Result\PageFactory              $resultPageFactory
+     * @param \Magento\Framework\Registry                             $registry
      * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
@@ -73,7 +73,9 @@ class Edit extends \Magento\Backend\App\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Page $resultPage
+*/
         $resultPage = $this->resultPageFactory->create();
 
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories')
@@ -86,7 +88,7 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit Mapping Shipping page
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return                                  \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
@@ -100,7 +102,9 @@ class Edit extends \Magento\Backend\App\Action
             $model->getResource()->load($model, $id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This mapping no longer exists.'));
-                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /**
+ * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+*/
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');
@@ -117,7 +121,9 @@ class Edit extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('cart_mapping_shipping', $model);
 
         // 5. Build edit form
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Page $resultPage
+*/
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
             $id ? __('Edit Mapping Shipping') : __('New Mapping Shipping Methods'),

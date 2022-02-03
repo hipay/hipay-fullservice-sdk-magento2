@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -25,10 +24,10 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
 /**
  * Hipay Split Payment data model
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment _getResource()
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment getResource()
@@ -103,15 +102,16 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 
     /**
      * SplitPayment constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param PaymentHelper $paymentHelper
-     * @param \Magento\Sales\Model\OrderFactory $orderF
-     * @param \Magento\Checkout\Helper\Data $checkoutHelper
+     *
+     * @param \Magento\Framework\Model\Context                             $context
+     * @param \Magento\Framework\Registry                                  $registry
+     * @param PaymentHelper                                                $paymentHelper
+     * @param \Magento\Sales\Model\OrderFactory                            $orderF
+     * @param \Magento\Checkout\Helper\Data                                $checkoutHelper
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param \Magento\Quote\Model\QuoteFactory                            $quoteFactory
+     * @param array                                                        $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

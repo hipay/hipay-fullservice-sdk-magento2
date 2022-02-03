@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -24,10 +23,10 @@ use Magento\Directory\Model;
 /**
  * SDD Method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @author                                           Kassim Belghait <kassim@sirateck.com>
+ * @copyright                                        Copyright (c) 2016 - HiPay
+ * @license                                          http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link                                             https://github.com/hipay/hipay-fullservice-sdk-magento2
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -81,7 +80,7 @@ class Sdd extends FullserviceMethod
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject $additionalData
+     * @param  \Magento\Framework\DataObject $additionalData
      * @return $this
      * @throws LocalizedException
      */
@@ -122,7 +121,7 @@ class Sdd extends FullserviceMethod
 
         // Instantiate validators for the model
         $validatorIban = new \Zend\Validator\Iban(
-            [ 'country_code' => $order->getBillingAddress()->getCountryId() ]
+            array('country_code' => $order->getBillingAddress()->getCountryId())
         );
         $validatorEmpty = new \Zend\Validator\NotEmpty();
 

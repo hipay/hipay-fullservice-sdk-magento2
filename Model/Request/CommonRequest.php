@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request;
@@ -30,17 +29,17 @@ use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFac
 /**
  * Commmon Request Object
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class CommonRequest extends BaseRequest
 {
     /**
      * FAKE DEFAULT PRODUCT CATEGORY
-     * @deprecated because it should not be used
      *
+     * @deprecated should not be used
      */
     const DEFAULT_PRODUCT_CATEGORY = 1;
 
@@ -81,7 +80,7 @@ abstract class CommonRequest extends BaseRequest
     protected $_cartFactory;
 
     /**
-     * @var  \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $_productRepositoryInterface;
 
@@ -97,13 +96,14 @@ abstract class CommonRequest extends BaseRequest
 
     /**
      * {@inheritDoc}
+     *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Checkout\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\UrlInterface $urlBuilder,
@@ -155,7 +155,7 @@ abstract class CommonRequest extends BaseRequest
     /**
      *  Escape Html String to json embed
      *
-     * @param string $string
+     * @param  string $string
      * @return string
      */
     private function escapeHtmlToJson($string)
@@ -166,8 +166,8 @@ abstract class CommonRequest extends BaseRequest
     /**
      *  Build an Cart Json
      *
-     * @param null $operation
-     * @param bool $useOrderCurrency
+     * @param  null $operation
+     * @param  bool $useOrderCurrency
      * @return mixed
      * @throws \Exception
      */
@@ -194,7 +194,9 @@ abstract class CommonRequest extends BaseRequest
             $qty = $item->getDataUsingMethod('qty');
             $discount = $item->getDataUsingMethod('discount');
 
-            /** @var \HiPay\Fullservice\Gateway\Model\Cart\Item */
+            /**
+ * @var \HiPay\Fullservice\Gateway\Model\Cart\Item
+*/
             switch ($item->getType()) {
                 case TypeItems::GOOD:
                     $product = $this->_productRepositoryInterface->getById($productId);
@@ -260,7 +262,7 @@ abstract class CommonRequest extends BaseRequest
     /**
      *  Get mapping from Magento category for Hipay compliance
      *
-     * @param $product
+     * @param  $product
      * @return int|null code category Hipay
      */
     protected function getMappingCategory($product)

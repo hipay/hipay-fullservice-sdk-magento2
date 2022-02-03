@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Console\Command;
@@ -68,8 +67,8 @@ class ConvertSerializedData extends Command
      * Convert data
      * from serialized to JSON format
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -90,9 +89,7 @@ class ConvertSerializedData extends Command
                         );
                     }
                     if ($isSerializedActions) {
-                        $model->setActionsSerialized(
-                            json_encode(unserialize($item->getData()["actions_serialized"]))
-                        );
+                        $model->setActionsSerialized(json_encode(unserialize($item->getData()["actions_serialized"])));
                     }
                     $model->save();
                     $dataSerialized = true;
@@ -110,7 +107,7 @@ class ConvertSerializedData extends Command
     /**
      * Check if value is serialized string
      *
-     * @param string $value
+     * @param  string $value
      * @return boolean
      */
     private function isSerialized($value)

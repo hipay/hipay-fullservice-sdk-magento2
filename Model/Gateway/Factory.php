@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Gateway;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 /**
  * Factory class for HiPay\FullserviceMagento\Model\Gateway\Manager
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Factory
 {
@@ -47,11 +46,11 @@ class Factory
     /**
      * Create class instance with order object
      *
-     * @param \Magento\Sales\Model\Order $order
-     * @param array $params
+     * @param  \Magento\Sales\Model\Order $order
+     * @param  array                      $params
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function create($order, $params = [])
+    public function create($order, $params = array())
     {
         return $this->_objectManager->create(
             '\HiPay\FullserviceMagento\Model\Gateway\Manager',

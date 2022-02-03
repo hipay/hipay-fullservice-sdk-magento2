@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Cartcategories\Edit;
@@ -22,10 +21,10 @@ use HiPay\Fullservice\Data\Category\Collection as collection;
 /**
  * Adminhtml Cart Categories edit form block
  *
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -41,12 +40,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Form constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
+     *
+     * @param \Magento\Backend\Block\Template\Context                                $context
+     * @param \Magento\Framework\Registry                                            $registry
+     * @param \Magento\Framework\Data\FormFactory                                    $formFactory
      * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesMagento $categoriesMagento
-     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesHipay $categoriesHipay
-     * @param array $data
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CategoriesHipay   $categoriesHipay
+     * @param array                                                                  $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -68,7 +68,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /**
+ * @var \Magento\Framework\Data\Form $form
+*/
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );

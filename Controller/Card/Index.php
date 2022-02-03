@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller\Card;
@@ -23,10 +22,10 @@ use Magento\Framework\Controller\ResultFactory;
 /**
  * Card list
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Index extends CustomerController
 {
@@ -37,16 +36,15 @@ class Index extends CustomerController
      */
     public function execute()
     {
-        /** @var \Magento\Framework\View\Result\Page $resultPage */
+        /**
+ * @var \Magento\Framework\View\Result\Page $resultPage
+*/
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-
-        $navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation');
-        if ($navigationBlock) {
+        if ($navigationBlock = $resultPage->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('hipay/card');
         }
 
-        $block = $resultPage->getLayout()->getBlock('card_customer_list');
-        if ($block) {
+        if ($block = $resultPage->getLayout()->getBlock('card_customer_list')) {
             $block->setRefererUrl($this->_redirect->getRefererUrl());
         }
 

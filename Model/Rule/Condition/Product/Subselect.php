@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition\Product;
@@ -20,18 +19,19 @@ namespace HiPay\FullserviceMagento\Model\Rule\Condition\Product;
 /**
  * Product Subselect Class
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Subselect extends Combine
 {
     /**
      * Subselect constructor.
-     * @param \Magento\Rule\Model\Condition\Context $context
+     *
+     * @param \Magento\Rule\Model\Condition\Context                  $context
      * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct
-     * @param array $data
+     * @param array                                                  $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -45,8 +45,8 @@ class Subselect extends Combine
     /**
      * Load array
      *
-     * @param array $arr
-     * @param string $key
+     * @param  array  $arr
+     * @param  string $key
      * @return $this
      */
     public function loadArray($arr, $key = 'conditions')
@@ -60,8 +60,8 @@ class Subselect extends Combine
     /**
      * Return as xml
      *
-     * @param string $containerKey
-     * @param string $itemKey
+     * @param  string $containerKey
+     * @param  string $itemKey
      * @return string
      */
     public function asXml($containerKey = 'conditions', $itemKey = 'condition')
@@ -156,7 +156,7 @@ class Subselect extends Combine
     /**
      * Validate
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param  \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)

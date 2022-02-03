@@ -53,7 +53,7 @@ stages:
 code-quality:
   stage: build-test
   script:
-    - cd ci-tools/phpcs
+    - cd tools/phpcs
     - composer install
     - ./vendor/bin/phpcs --standard=ruleset.xml
   tags:

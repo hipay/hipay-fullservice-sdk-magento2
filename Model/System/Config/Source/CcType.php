@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * CcType source model
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CcType extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
@@ -59,8 +58,9 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
 
     /**
      * CcType constructor.
-     * @param \Magento\Payment\Model\Config $paymentConfig
-     * @param PaymentProduct $paymentProductSource
+     *
+     * @param \Magento\Payment\Model\Config                      $paymentConfig
+     * @param PaymentProduct                                     $paymentProductSource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
@@ -88,7 +88,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
     /**
      * Setter for allowed types
      *
-     * @param array $values
+     * @param  array $values
      * @return $this
      */
     public function setAllowedTypes(array $values)

@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
@@ -26,10 +25,10 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  * Class Generic config provider
  * Can be used by all payment method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class GenericConfigProvider implements ConfigProviderInterface
 {
@@ -95,12 +94,13 @@ class GenericConfigProvider implements ConfigProviderInterface
 
     /**
      * GenericConfigProvider constructor.
-     * @param CcConfig $ccConfig
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     *
+     * @param CcConfig                                                             $ccConfig
+     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
+     * @param \Magento\Customer\Model\Session                                      $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param Context $context
-     * @param array $methodCodes
+     * @param Context                                                              $context
+     * @param array                                                                $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -136,35 +136,42 @@ class GenericConfigProvider implements ConfigProviderInterface
         foreach ($this->methods as $methodCode) {
             $this->_hipayConfig->setMethodCode($methodCode);
             if ($this->_hipayConfig->isPaymentMethodActive()) {
-                $config = array_merge_recursive($config, [
-                    'payment' => [
-                        'hiPayFullservice' => [
-                            'placeOrderStatusUrl' => [
-                                $methodCode => $this->urlBuilder->getUrl(
-                                    'hipay/payment/placeOrderStatus',
-                                    ['_secure' => true]
-                                )
-                            ],
-                            'afterPlaceOrderUrl' => [
-                                $methodCode => $this->urlBuilder->getUrl(
-                                    'hipay/payment/afterPlaceOrder',
-                                    ['_secure' => true]
-                                )
-                            ],
-                            'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
-                            'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
-                            'displayCardOwner' => [$methodCode => $this->displayCardOwner($methodCode)],
-                            'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
-                            'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
-                            'iFrameStyle' => [$methodCode => $this->getIframeProp($methodCode, 'style')],
-                            'iFrameWrapperStyle' => [$methodCode => $this->getIframeProp($methodCode, 'wrapper_style')],
-                            'locale' => [$methodCode => strtolower($this->resolver->getLocale())]
+                $config = array_merge_recursive(
+                    $config,
+                    [
+                        'payment' => [
+                            'hiPayFullservice' => [
+                                'placeOrderStatusUrl' => [
+                                    $methodCode => $this->urlBuilder->getUrl(
+                                        'hipay/payment/placeOrderStatus',
+                                        ['_secure' => true]
+                                    )
+                                ],
+                                'afterPlaceOrderUrl' => [
+                                    $methodCode => $this->urlBuilder->getUrl(
+                                        'hipay/payment/afterPlaceOrder',
+                                        ['_secure' => true]
+                                    )
+                                ],
+                                'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
+                                'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
+                                'displayCardOwner' => [$methodCode => $this->displayCardOwner($methodCode)],
+                                'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
+                                'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
+                                'iFrameStyle' => [$methodCode => $this->getIframeProp($methodCode, 'style')],
+                                'iFrameWrapperStyle' => [
+                                    $methodCode => $this->getIframeProp($methodCode, 'wrapper_style')
+                                ],
+                                'locale' => [$methodCode => strtolower($this->resolver->getLocale())]
+                            ]
                         ]
                     ]
-                ]);
+                );
             }
         }
-        /** @var $card \HiPay\FullserviceMagento\Model\Card */
+        /**
+         * @var $card \HiPay\FullserviceMagento\Model\Card
+        */
         $cards = [];
         foreach ($this->getCustomerCards() as $card) {
             $cards[] = [
@@ -175,17 +182,20 @@ class GenericConfigProvider implements ConfigProviderInterface
             ];
         }
 
-        $config = array_merge_recursive($config, [
-            'payment' => [
-                'hiPayFullservice' => [
-                    'customerCards' => $cards,
-                    'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
-                    'defaultEci' => ECI::SECURE_ECOMMERCE,
-                    'recurringEci' => ECI::RECURRING_ECOMMERCE,
-                    'useOrderCurrency' => (bool)$this->_hipayConfig->useOrderCurrency()
+        $config = array_merge_recursive(
+            $config,
+            [
+                'payment' => [
+                    'hiPayFullservice' => [
+                        'customerCards' => $cards,
+                        'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
+                        'defaultEci' => ECI::SECURE_ECOMMERCE,
+                        'recurringEci' => ECI::RECURRING_ECOMMERCE,
+                        'useOrderCurrency' => (bool)$this->_hipayConfig->useOrderCurrency()
+                    ]
                 ]
             ]
-        ]);
+        );
 
         return $config;
     }
@@ -202,8 +212,7 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     protected function getCustomerCards()
     {
-        $customerId = $this->customerSession->getCustomerId();
-        if (!$customerId) {
+        if (!($customerId = $this->customerSession->getCustomerId())) {
             return [];
         }
         if (!$this->_collection) {

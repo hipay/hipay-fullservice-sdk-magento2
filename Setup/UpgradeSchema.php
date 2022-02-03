@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Setup;
@@ -26,10 +25,10 @@ use Magento\Framework\Setup\SchemaSetupInterface;
  *
  * @codeCoverageIgnore
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -43,7 +42,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '1.0.7', '<')) {
             /**
              * Create table 'hipay_rule'
-             *
              */
             $table = $setup->getConnection()
                 ->newTable($setup->getTable('hipay_rule'))
@@ -113,7 +111,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             /**
              * Create table 'hipay_payment_profile'
-             *
              */
             $table = $setup->getConnection()
                 ->newTable($setup->getTable('hipay_payment_profile'))
@@ -167,7 +164,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             /**
              * Create table 'hipay_split_payment'
-             *
              */
             $table = $setup->getConnection()
                 ->newTable($setup->getTable('hipay_split_payment'))
@@ -288,7 +284,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             /**
              * Create table 'hipay_cart_mapping_categories'
-             *
              */
             $table = $setup->getConnection()
                 ->newTable($setup->getTable('hipay_cart_mapping_categories'))
@@ -309,7 +304,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'category_hipay_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     null,
-                    ['nullable' => true, 'unsigned' => true],
+                    ['nullable' => true, 'unsigned' => true, 'nullable' => true],
                     'HiPay category'
                 )->addIndex(
                     $installer->getIdxName(
@@ -363,7 +358,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
              * Create table 'hipay_cart_mapping_shipping
              *
              * This table is use to save the mapping for the shipping
-             *
              */
             $table = $setup->getConnection()
                 ->newTable($setup->getTable('hipay_cart_mapping_shipping'))
@@ -412,7 +406,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     /**
      * Create table 'hipay_customer_card'
-     *
      */
     private function installTokenTable($setup, $context)
     {

@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping\Edit;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping\Edit;
 /**
  * Adminhtml Cart Categories edit form block
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -39,12 +38,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     /**
      * Form constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
+     *
+     * @param \Magento\Backend\Block\Template\Context                                     $context
+     * @param \Magento\Framework\Registry                                                 $registry
+     * @param \Magento\Framework\Data\FormFactory                                         $formFactory
      * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento $shippingMethodsMagento
-     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay
-     * @param array $data
+     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay   $shippingMethodsHipay
+     * @param array                                                                       $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -66,7 +66,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /**
+ * @var \Magento\Framework\Data\Form $form
+*/
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -119,7 +121,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $customField->setAfterElementHtml('
+        $customField->setAfterElementHtml(
+            '
             <script>
             function toggleCustomShipping() {
                 if(jQuery("#cart_mappingshipping_magento_shipping_code").val() === "hipay_shipping_custom"){
@@ -132,7 +135,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             
             window.onload = toggleCustomShipping;
             </script>
-        ');
+        '
+        );
 
         $options = $this->_shippingMethodsHipay->toOptionArray();
         $fieldset->addField(

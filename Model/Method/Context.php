@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -22,10 +21,10 @@ use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 /**
  * Class Context for payments methods
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
@@ -68,6 +67,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * Config factory
+     *
      * @var \HiPay\FullserviceMagento\Model\Config\Factory $configFactor
      */
     protected $_configFactory;
@@ -121,21 +121,22 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      * Context constructor.
-     * @param \Magento\Framework\Model\Context $modelContext
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Payment\Model\Method\Logger $logger
-     * @param ManagerFactory $gatewayManagerFactory
-     * @param \Magento\Framework\Url $urlBuilder
-     * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+     *
+     * @param \Magento\Framework\Model\Context                               $modelContext
+     * @param \Magento\Framework\Registry                                    $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory              $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory                   $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data                                   $paymentData
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface             $scopeConfig
+     * @param \Magento\Payment\Model\Method\Logger                           $logger
+     * @param ManagerFactory                                                 $gatewayManagerFactory
+     * @param \Magento\Framework\Url                                         $urlBuilder
+     * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender   $fraudDenySender
      * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
-     * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param \HiPay\FullserviceMagento\Model\Config\Factory                 $configFactory
+     * @param \Magento\Checkout\Model\Session                                $checkoutSession
+     * @param \HiPay\FullserviceMagento\Model\CardFactory                    $cardFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface              $priceCurrency
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -151,7 +152,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
         \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {

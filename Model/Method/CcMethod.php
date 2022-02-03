@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -24,10 +23,10 @@ use Magento\Framework\DataObject;
 /**
  * Class API PaymentMethod
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,7 +80,7 @@ class CcMethod extends FullserviceMethod
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject|mixed $data
+     * @param  \Magento\Framework\DataObject|mixed $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -117,8 +116,8 @@ class CcMethod extends FullserviceMethod
     /**
      * Instantiate state and set it to state object
      *
-     * @param string $paymentAction
-     * @param \Magento\Framework\DataObject $stateObject
+     * @param  string                        $paymentAction
+     * @param  \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -138,8 +137,8 @@ class CcMethod extends FullserviceMethod
     /**
      * Perform actions based on passed action name
      *
-     * @param string $action
-     * @param Magento\Payment\Model\InfoInterface $payment
+     * @param  string                              $action
+     * @param  Magento\Payment\Model\InfoInterface $payment
      * @return void
      */
     protected function processAction($action, $payment)
@@ -166,10 +165,10 @@ class CcMethod extends FullserviceMethod
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws LocalizedException
+     * @param                                         \Magento\Payment\Model\InfoInterface $payment
+     * @param                                         float                                $amount
+     * @return                                        $this
+     * @throws                                        LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -183,8 +182,8 @@ class CcMethod extends FullserviceMethod
     /**
      * Validate payment method information object
      *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return                                       $this
+     * @throws                                       \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -220,10 +219,8 @@ class CcMethod extends FullserviceMethod
             // Other credit card type number validation
             if (
                 $this->validateCcNum($ccNumber)
-                || (
-                    $this->otherCcType($info->getCcType())
-                    && $this->validateCcNumOther($ccNumber)
-                )
+                || $this->otherCcType($info->getCcType())
+                && $this->validateCcNumOther($ccNumber)
             ) {
                 $ccTypeRegExpList = [
                     //Solo, Switch or Maestro. International safe
@@ -253,10 +250,8 @@ class CcMethod extends FullserviceMethod
                         '|5[0-9]{14}))$/',
                 ];
 
-                $ccNumAndTypeMatches = (
-                    isset($ccTypeRegExpList[$info->getCcType()])
-                    && preg_match($ccTypeRegExpList[$info->getCcType()], $ccNumber)
-                );
+                $ccNumAndTypeMatches = isset($ccTypeRegExpList[$info->getCcType()])
+                    && preg_match($ccTypeRegExpList[$info->getCcType()], $ccNumber);
                 $ccType = $ccNumAndTypeMatches ? $info->getCcType() : 'OT';
 
                 if (!$ccNumAndTypeMatches && !$this->otherCcType($info->getCcType())) {
@@ -323,8 +318,8 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
-     * @param string $expYear
-     * @param string $expMonth
+     * @param  string $expYear
+     * @param  string $expMonth
      * @return bool
      */
     protected function _validateExpDate($expYear, $expMonth)
@@ -334,10 +329,8 @@ class CcMethod extends FullserviceMethod
             !$expYear
             || !$expMonth
             || (int)$date->format('Y') > $expYear
-            || (
-                (int)$date->format('Y') == $expYear
-                && (int)$date->format('m') > $expMonth
-            )
+            || (int)$date->format('Y') == $expYear
+            && (int)$date->format('m') > $expMonth
         ) {
             return false;
         }
@@ -345,7 +338,7 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return bool
      * @api
      */
@@ -357,8 +350,8 @@ class CcMethod extends FullserviceMethod
     /**
      * Validate credit card number
      *
-     * @param   string $ccNumber
-     * @return  bool
+     * @param  string $ccNumber
+     * @return bool
      * @api
      */
     public function validateCcNum($ccNumber)
@@ -367,6 +360,7 @@ class CcMethod extends FullserviceMethod
         $numSum = 0;
 
         $cardNumberLength = strlen($cardNumber);
+
         for ($i = 0; $i < $cardNumberLength; $i++) {
             $currentNum = substr($cardNumber, $i, 1);
 
@@ -398,7 +392,7 @@ class CcMethod extends FullserviceMethod
     /**
      * Other credit cart type number validation
      *
-     * @param string $ccNumber
+     * @param  string $ccNumber
      * @return bool
      * @api
      */
@@ -410,7 +404,7 @@ class CcMethod extends FullserviceMethod
     /**
      * Check whether there are CC types set in configuration
      *
-     * @param \Magento\Quote\Api\Data\CartInterface|null $quote
+     * @param  \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
@@ -421,7 +415,7 @@ class CcMethod extends FullserviceMethod
     /**
      * Is active
      *
-     * @param int|null $storeId
+     * @param  int|null $storeId
      * @return bool
      */
     public function isActive($storeId = null)

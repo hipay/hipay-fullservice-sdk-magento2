@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -38,10 +37,10 @@ use Magento\Sales\Api\Data\OrderPaymentInterface;
  * Proceed all notifications
  * In construct method Order Model is loaded and Transation Model (SDK) is created
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Notify
 {
@@ -241,10 +240,10 @@ class Notify
             case TransactionStatus::AUTHORIZED:
                 // status : 116
                 if (
-                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW ||
-                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
-                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW ||
-                    in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
+                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW
+                    || $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
+                    || $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
+                    || in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
                 ) {
                     $canProcess = true;
                 }
@@ -365,8 +364,11 @@ class Notify
                 $this->_doTransactionCaptureRequested();
                 //If status Capture Requested is not configured to validate the order, we break.
                 if (
-                    ((int)$this->_order->getPayment()->getMethodInstance()
-                        ->getConfigData('hipay_status_validate_order') == 117) === false
+                    !(
+                        (int)$this->_order->getPayment()
+                            ->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order') == 117
+                    )
                 ) {
                     break;
                 }
@@ -378,8 +380,8 @@ class Notify
                 //If status Capture Requested is configured to validate the order and is a direct capture notification
                 // (118), we break because order is already validate.
                 if (
-                    ((int)$this->_order->getPayment()->getMethodInstance()
-                        ->getConfigData('hipay_status_validate_order') == 117) === true
+                    (int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order')
+                    == 117
                     && (int)$this->_transaction->getStatus() == 118
                     && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
                 ) {
@@ -458,8 +460,8 @@ class Notify
         }
 
         if (
-            $this->_transaction->getStatus() == TransactionStatus::CAPTURED ||
-            $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
+            $this->_transaction->getStatus() == TransactionStatus::CAPTURED
+            || $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
         ) {
             /**
              * save token and credit card informations encryted
@@ -507,7 +509,9 @@ class Notify
 
     protected function orderAlreadySplit()
     {
-        /** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
+        /**
+ * @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection
+*/
         $splitPayments = $this->spFactory->create()->getCollection()->addFieldToFilter(
             'order_id',
             $this->_order->getId()
@@ -521,8 +525,7 @@ class Notify
     protected function insertSplitPayment()
     {
         //Check if it is split payment and insert it
-        $profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id');
-        if ($profileId) {
+        if (($profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id'))) {
             $profile = $this->ppFactory->create();
             $profile->getResource()->load($profile, $profileId);
             if ($profile->getId()) {
@@ -534,16 +537,19 @@ class Notify
                 $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
 
                 $splitAmounts = $profile->splitAmount($amount, $orderCreatedAt);
+                $splitAmountsCount = count($splitAmounts);
 
-                /** @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment */
-                foreach ($splitAmounts as $i => $splitAmount) {
+                /**
+                 * @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment
+                */
+                for ($i = 0; $i < $splitAmountsCount; $i++) {
                     $splitPayment = $this->spFactory->create();
 
-                    $splitPayment->setAmountToPay($splitAmount['amountToPay']);
+                    $splitPayment->setAmountToPay($splitAmounts[$i]['amountToPay']);
                     $splitPayment->setAttempts($i == 0 ? 1 : 0);
                     $splitPayment->setCardToken($this->_transaction->getPaymentMethod()->getToken());
                     $splitPayment->setCustomerId($this->_order->getCustomerId());
-                    $splitPayment->setDateToPay($splitAmount['dateToPay']);
+                    $splitPayment->setDateToPay($splitAmounts[$i]['dateToPay']);
                     $splitPayment->setMethodCode($this->_order->getPayment()->getMethod());
                     $splitPayment->setRealOrderId($this->_order->getIncrementId());
                     $splitPayment->setOrderId($this->_order->getId());
@@ -552,7 +558,9 @@ class Notify
                             SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
                     );
                     $splitPayment->setProfileId($profileId);
-                    if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
+                    if (
+                        $this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()
+                    ) {
                         $splitPayment->setBaseGrandTotal($this->_order->getGrandTotal());
                         $splitPayment->setBaseCurrencyCode($this->_transaction->getCurrency());
                     } else {
@@ -597,9 +605,13 @@ class Notify
         if ($this->_canSaveCc()) {
             $token = $this->_transaction->getPaymentMethod()->getToken();
             if (!$this->_cardTokenExist($token)) {
-                /** @var $card \HiPay\FullserviceMagento\Model\Card */
+                /**
+ * @var $card \HiPay\FullserviceMagento\Model\Card
+*/
                 $card = $this->_cardFactory->create();
-                /** @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod */
+                /**
+ * @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod
+*/
                 $paymentMethod = $this->_transaction->getPaymentMethod();
                 $paymentProduct = $this->_transaction->getPaymentProduct();
                 $card->setCcToken($token);
@@ -636,8 +648,7 @@ class Notify
      */
     protected function _setFraudDetected()
     {
-        $fraudSreening = $this->_transaction->getFraudScreening();
-        if ($fraudSreening !== null) {
+        if (($fraudSreening = $this->_transaction->getFraudScreening()) !== null) {
             if ($fraudSreening->getResult()) {
                 $payment = $this->_order->getPayment();
                 $payment->setIsFraudDetected(true);
@@ -691,7 +702,9 @@ class Notify
     {
         $amount = (float)$this->_transaction->getRefundedAmount();
         if ($this->_order->hasCreditmemos()) {
-            /** @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo */
+            /**
+ * @var $creditmemo  \Magento\Sales\Model\Order\Creditmemo
+*/
 
             if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
                 $remain_amount = round($this->_order->getGrandTotal() - $amount, 2);
@@ -704,7 +717,9 @@ class Notify
                 $status = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
             }
 
-            /** @var $creditmemo Mage_Sales_Model_Order_Creditmemo */
+            /**
+ * @var $creditmemo Mage_Sales_Model_Order_Creditmemo
+*/
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
                 if (
                     $creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
@@ -908,11 +923,14 @@ class Notify
 
     /**
      * Register authorized payment
+     *
      * @return void
      */
     protected function _doTransactionAuthorization()
     {
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        /**
+ * @var $payment \Magento\Sales\Model\Order\Payment
+*/
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $payment->setPreparedMessage($this->_generateComment(''))
@@ -954,12 +972,14 @@ class Notify
     /**
      * Process completed payment (either full or partial)
      *
-     * @param bool $skipFraudDetection
+     * @param  bool $skipFraudDetection
      * @return void
      */
     protected function _doTransactionCapture($skipFraudDetection = false)
     {
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        /**
+ * @var $payment \Magento\Sales\Model\Order\Payment
+*/
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $parentTransactionId = $payment->getLastTransId();
@@ -1027,7 +1047,9 @@ class Notify
      */
     protected function _doTransactionVoid()
     {
-        /** @var $payment \Magento\Sales\Model\Order\Payment */
+        /**
+ * @var $payment \Magento\Sales\Model\Order\Payment
+*/
         $payment = $this->_order->getPayment();
         $parentTransactionId = $payment->getLastTransId();
 
@@ -1042,8 +1064,9 @@ class Notify
     /**
      * Generate an "Notification" comment with additional explanation.
      * Returns the generated comment or order status history object
-     * @param string $comment
-     * @param bool $addToHistory
+     *
+     * @param  string $comment
+     * @param  bool   $addToHistory
      * @return string|\Magento\Sales\Model\Order\Status\History
      */
     protected function _generateComment($comment = '', $addToHistory = false)
@@ -1066,7 +1089,7 @@ class Notify
      * Creditmemo is in pending and wait for notification
      * So, we reset all totals refunded
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @param  \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
      */
     protected function resetOrderRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
@@ -1143,7 +1166,7 @@ class Notify
     /**
      * Reset invoice data for refund
      *
-     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @param  \Magento\Sales\Model\Order\Creditmemo $creditmemo
      * @return void
      */
     protected function resetInvoiceRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
@@ -1158,7 +1181,7 @@ class Notify
     /**
      *  Generate transaction ID for partial capture/refund
      *
-     * @param string $type
+     * @param  string $type
      * @return string Id transaction
      */
     protected function generateTransactionId($type)
@@ -1173,8 +1196,8 @@ class Notify
     /**
      * Return invoice model for transaction
      *
-     * @param OrderInterface $order
-     * @param string $transactionId
+     * @param  OrderInterface $order
+     * @param  string         $transactionId
      * @return false|Invoice
      */
     protected function getInvoiceForTransactionId(OrderInterface $order, $transactionId)

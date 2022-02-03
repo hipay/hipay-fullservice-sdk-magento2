@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace HiPay\FullserviceMagento\Observer;
@@ -27,22 +26,24 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
  *
  * Check if order can be refund with HiPay Fullservice Payment Method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class OrderCanRefundObserver implements ObserverInterface
 {
     /**
      * Add accept and capture buuton to order view toolbar
      *
-     * @param EventObserver $observer
+     * @param  EventObserver $observer
      * @return $this
      */
     public function execute(EventObserver $observer)
     {
-        /** @var $order \Magento\Sales\Model\Order */
+        /**
+         * @var $order \Magento\Sales\Model\Order
+        */
         $order = $observer->getOrder();
         if ($order->getStatus() == Config::STATUS_CAPTURE_REQUESTED) {
             $order->setForcedCanCreditmemo(false);
@@ -57,7 +58,7 @@ class OrderCanRefundObserver implements ObserverInterface
             // we disallow refund
             if (
                 (int)$order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order')
-                    == TransactionStatus::CAPTURE_REQUESTED
+                == TransactionStatus::CAPTURE_REQUESTED
             ) {
                 $savedStatues = $order->getPayment()->getAdditionalInformation('saved_statues');
                 if (!is_array($savedStatues) || !isset($savedStatues[TransactionStatus::CAPTURED])) {

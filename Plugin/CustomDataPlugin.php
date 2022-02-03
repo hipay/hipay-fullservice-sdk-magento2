@@ -7,10 +7,10 @@
  *
  * Used to customize custom data field
  *
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 
 namespace HiPay\FullserviceMagento\Plugin;
@@ -22,9 +22,9 @@ class CustomDataPlugin
     /**
      *  Complete general getCustomData with HiPay'datas
      *
-     * @see \HiPay\FullserviceMagento\Helper\Data
-     * @param \HiPay\FullserviceMagento\Model\Request\Order $subject
-     * @param $result
+     * @see    \HiPay\FullserviceMagento\Helper\Data
+     * @param  \HiPay\FullserviceMagento\Model\Request\Order $subject
+     * @param  $result
      * @return array
      */
     public function afterGetCustomData(Order $subject, $result)

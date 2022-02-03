@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request\Info;
@@ -22,10 +21,10 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 /**
  * Billing info Request Object
  *
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class BillingInfo extends AbstractInfoRequest
 {
@@ -40,11 +39,10 @@ class BillingInfo extends AbstractInfoRequest
     const KEY_LASTNAME = 'lastname';
 
     /**
-     *
      * {@inheritDoc}
      *
      * @return CustomerBillingInfoRequest
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
@@ -53,13 +51,12 @@ class BillingInfo extends AbstractInfoRequest
 
         // Using guest email address if billing info is not set
         $additionalInformation = $this->_order->getPayment()->getAdditionalInformation();
-        if (!empty($additionalInformation['guestEmail'])) {
+        if (!empty($additionalData['guestEmail'])) {
             $customerBillingInfo->email = $additionalInformation['guestEmail'];
         }
 
         if (!empty($billingAddress)) {
-            $customerEmail = $billingAddress->getEmail();
-            if ($customerEmail) {
+            if ($customerEmail = $billingAddress->getEmail()) {
                 $customerBillingInfo->email = $this->_order->getCustomerEmail();
             }
             $dob = $this->_order->getCustomerDob();
@@ -119,8 +116,8 @@ class BillingInfo extends AbstractInfoRequest
     /**
      * Extract FirstName et LastName from cardOwner
      *
-     * @param string $cardOwner
-     * @param string $key
+     * @param  string $cardOwner
+     * @param  string $key
      * @return string
      */
     private function extractPartOfCardHolder($cardOwner, $key)
@@ -137,8 +134,8 @@ class BillingInfo extends AbstractInfoRequest
     }
 
     /**
-     * *
-     * @param $str
+     *
+     * @param  $str
      * @return string
      */
     private static function stripAccents($str)

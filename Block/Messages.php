@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Block;
 /**
  * Hipay Fullservice messages block
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Messages extends \Magento\Framework\View\Element\Messages
 {
@@ -35,13 +34,14 @@ class Messages extends \Magento\Framework\View\Element\Messages
 
     /**
      * Messages constructor.
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Message\Factory $messageFactory
-     * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     *
+     * @param \Magento\Framework\View\Element\Template\Context                        $context
+     * @param \Magento\Framework\Message\Factory                                      $messageFactory
+     * @param \Magento\Framework\Message\CollectionFactory                            $collectionFactory
+     * @param \Magento\Framework\Message\ManagerInterface                             $messageManager
      * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Customer\Model\Session\Proxy $customerSession
-     * @param array $data
+     * @param \Magento\Customer\Model\Session\Proxy                                   $customerSession
+     * @param array                                                                   $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,7 +49,7 @@ class Messages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
         array $data = []
     ) {
         parent::__construct(

@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -31,10 +30,10 @@ use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
  * Main Config Class
  * Retrieve general configuration and sources
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Config extends AbstractConfig implements ConfigurationInterface
 {
@@ -99,14 +98,15 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     /**
      * Config constructor.
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface    $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface            $storeManager
+     * @param \Magento\Framework\App\State                          $appState
+     * @param \Psr\Log\LoggerInterface                              $logger
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
-     * @param array $params
+     * @param \Magento\Framework\App\Cache\TypeListInterface        $cacheTypeList
+     * @param \Magento\Framework\App\Cache\Frontend\Pool            $cacheFrontendPool
+     * @param array                                                 $params
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -172,6 +172,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Check if we must to use MO/TO credentials
      * Essentially, Admin operations
+     *
      * @return bool
      */
     public function mustUseMotoCredentials()
@@ -194,6 +195,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     /**
      * Return if current store is admin
+     *
      * @return bool
      */
     public function isAdminArea()
@@ -519,7 +521,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Get other configuration
      *
-     * @param $key
+     * @param  $key
      * @return boolean
      */
     private function getOtherConfiguration($key)
@@ -572,7 +574,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Check if sending Cart items is necessary
      *
-     * @param $product_code
+     * @param  $product_code
      * @return bool
      */
     public function isNecessaryToSendCartItems($product_code)
@@ -596,7 +598,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Check if basket is required for the payment product
      *
-     * @param $product_code
+     * @param  $product_code
      * @return boolean True if basket is required/ False if method doesn't exist
      */
     private function isBasketRequired($product_code)
@@ -619,7 +621,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Delivery information are mandatory for some payment product
      *
-     * @param string $product_code
+     * @param  string $product_code
      * @return boolean
      */
     public function isDeliveryMethodRequired($product_code)

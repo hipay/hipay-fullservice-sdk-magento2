@@ -4,7 +4,7 @@ namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session\Proxy;
 
 class RestoreBasketObserver implements ObserverInterface
 {
@@ -13,8 +13,9 @@ class RestoreBasketObserver implements ObserverInterface
      */
     private $checkoutSession;
 
-    public function __construct(Session $checkoutSession)
-    {
+    public function __construct(
+        Proxy $checkoutSession
+    ) {
         $this->checkoutSession = $checkoutSession;
     }
 
