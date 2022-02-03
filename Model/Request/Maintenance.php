@@ -78,8 +78,8 @@ class Maintenance extends CommonRequest
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,

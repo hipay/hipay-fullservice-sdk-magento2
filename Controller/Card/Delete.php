@@ -18,7 +18,7 @@ namespace HiPay\FullserviceMagento\Controller\Card;
 
 use Magento\Framework\App\Action\Context;
 use HiPay\FullserviceMagento\Controller\Card\Customer as CustomerController;
-use Magento\Customer\Model\Session\Proxy as CustomerSession;
+use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
