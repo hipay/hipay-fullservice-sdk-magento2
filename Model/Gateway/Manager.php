@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Gateway;
@@ -34,10 +33,10 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
  * HiPay Fullservice SDK is used by the manager
  * So, all api call are centralized here
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Manager
 {
@@ -160,7 +159,7 @@ class Manager
     }
 
     /**
-     * @return  \HiPay\FullserviceMagento\Model\Config
+     * @return \HiPay\FullserviceMagento\Model\Config
      */
     public function getConfiguration()
     {
@@ -177,11 +176,15 @@ class Manager
         $params = $this->_getRequestParameters();
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
 
-        /** @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest */
+        /**
+         * @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
+        */
         $hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage', $params);
         $this->_debug($this->_requestToArray($hpp));
 
-        /** @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage */
+        /**
+         * @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage
+        */
         try {
             $hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
             $this->_debug($hppModel->toArray());
@@ -230,7 +233,7 @@ class Manager
     }
 
     /**
-     * @param null $amount
+     * @param  null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationCapture($amount = null)
@@ -239,7 +242,7 @@ class Manager
     }
 
     /**
-     * @param null $amount
+     * @param  null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     public function requestOperationRefund($amount = null)
@@ -289,7 +292,7 @@ class Manager
     }
 
     /**
-     * @param \HiPay\Fullservice\Request\RequestInterface $request
+     * @param  \HiPay\Fullservice\Request\RequestInterface $request
      * @return array
      */
     protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request)
@@ -327,9 +330,9 @@ class Manager
 
     /**
      *
-     * @param string $operationType
-     * @param float|null $amount
-     * @param string|null $operationId
+     * @param  string      $operationType
+     * @param  float|null  $amount
+     * @param  string|null $operationId
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
     protected function _requestOperation($operationType, $amount = null, $operationId = null)
@@ -369,8 +372,8 @@ class Manager
     }
 
     /**
-     * @param int $transactionType
-     * @param int $paymentId
+     * @param  int $transactionType
+     * @param  int $paymentId
      * @return int
      * @throws \Magento\Framework\Exception\InputException
      */

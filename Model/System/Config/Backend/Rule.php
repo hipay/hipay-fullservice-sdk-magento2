@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Backend;
@@ -23,10 +22,10 @@ use Magento\Framework\Phrase;
 /**
  * Rule Backend Model
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Rule extends \Magento\Framework\App\Config\Value
 {
@@ -50,16 +49,17 @@ class Rule extends \Magento\Framework\App\Config\Value
 
     /**
      * Rule constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\RequestInterface $httpRequest
-     * @param \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory
+     *
+     * @param \Magento\Framework\Model\Context                             $context
+     * @param \Magento\Framework\Registry                                  $registry
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface           $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface               $cacheTypeList
+     * @param \Magento\Framework\ObjectManagerInterface                    $objectManager
+     * @param \Magento\Framework\App\RequestInterface                      $httpRequest
+     * @param \HiPay\FullserviceMagento\Model\RuleFactory                  $ruleFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param array                                                        $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -87,7 +87,9 @@ class Rule extends \Magento\Framework\App\Config\Value
      */
     public function beforeSave()
     {
-        /** @var $rule \HiPay\FullserviceMagento\Model\Rule */
+        /**
+ * @var $rule \HiPay\FullserviceMagento\Model\Rule
+*/
         $rule = $this->ruleFactory->create();
         $rule->getResource()->load($rule, $this->getValue());
 
@@ -118,7 +120,9 @@ class Rule extends \Magento\Framework\App\Config\Value
 
         parent::_afterload();
 
-        /** @var $rule \HiPay\FullserviceMagento\Model\Rule */
+        /**
+ * @var $rule \HiPay\FullserviceMagento\Model\Rule
+*/
         $rule = $this->ruleFactory->create();
 
         if ($this->getValue()) {

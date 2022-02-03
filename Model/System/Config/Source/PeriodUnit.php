@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
@@ -22,10 +21,10 @@ use HiPay\FullserviceMagento\Model\PaymentProfile as PaymentProfileModel;
 /**
  * Source model for period unit
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
 {
@@ -48,7 +47,7 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     /**
      * Getter for available period units
      *
-     * @param bool $withLabels
+     * @param  bool $withLabels
      * @return array
      */
     public function getAllPeriodUnits($withLabels = true)
@@ -74,7 +73,7 @@ class PeriodUnit implements \Magento\Framework\Option\ArrayInterface
     /**
      * Render label for specified period unit
      *
-     * @param $unit
+     * @param  $unit
      * @return \Magento\Framework\Phrase
      */
     public function getPeriodUnitLabel($unit)

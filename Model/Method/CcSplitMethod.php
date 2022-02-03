@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -24,10 +23,10 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 /**
  * Class Cc Split Payment Method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @author                                           Kassim Belghait <kassim@sirateck.com>
+ * @copyright                                        Copyright (c) 2016 - HiPay
+ * @license                                          http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link                                             https://github.com/hipay/hipay-fullservice-sdk-magento2
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -56,12 +55,13 @@ class CcSplitMethod extends CcMethod
 
     /**
      * CcSplitMethod constructor.
-     * @param TransactionRepository $transactionRepository
-     * @param Context $context
-     * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory $profileFactory
+     *
+     * @param TransactionRepository                                        $transactionRepository
+     * @param Context                                                      $context
+     * @param \HiPay\FullserviceMagento\Model\PaymentProfileFactory        $profileFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param array                                                        $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -110,7 +110,7 @@ class CcSplitMethod extends CcMethod
 
     /**
      *
-     * @param int $profileId
+     * @param  int $profileId
      * @throws LocalizedException
      * @return \HiPay\FullserviceMagento\Model\PaymentProfile
      */

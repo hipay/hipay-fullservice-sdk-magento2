@@ -10,22 +10,19 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Hipay Payment profile data model
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile _getResource()
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile getResource()
@@ -70,12 +67,13 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 
     /**
      * PaymentProfile constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param PaymentProfile\Type\Factory $typeFactory
+     *
+     * @param \Magento\Framework\Model\Context                             $context
+     * @param \Magento\Framework\Registry                                  $registry
+     * @param PaymentProfile\Type\Factory                                  $typeFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param array                                                        $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -102,14 +100,14 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     /**
      * Split an amount by profile data
      *
-     * @param $amount
-     * @param $startDate
+     * @param  $amount
+     * @param  $startDate
      * @return array
      * @throws \Exception
      */
     public function splitAmount($amount, $startDate)
     {
-        $paymentsSplit = [];
+        $paymentsSplit = array();
 
         $maxCycles = (int)$this->getPeriodMaxCycles();
 
@@ -146,8 +144,6 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
                     $interval = new \DateInterval("P{$frequencyValue}Y");
                     $dateToPay = $startDateClone->add($interval)->format("Y-m-d");
                     break;
-                default:
-                    throw new \LocalizedException('Unknown split payment period unit "' . $periodUnit . '"');
             }
 
             $amountToPay = $i == 0 ? ($part + $fmod) : $part;

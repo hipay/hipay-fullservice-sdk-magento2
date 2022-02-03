@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller\Card;
@@ -25,10 +24,10 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Customer card controller
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class Customer extends Action
 {
@@ -41,7 +40,7 @@ abstract class Customer extends Action
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Model\Session       $customerSession
      */
     public function __construct(
         Context $context,
@@ -54,7 +53,7 @@ abstract class Customer extends Action
     /**
      * Check customer authentication for some actions
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param  \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
     public function dispatch(RequestInterface $request)

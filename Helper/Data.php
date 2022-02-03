@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Helper;
@@ -26,10 +25,10 @@ use Magento\Framework\Module\ModuleListInterface;
 /**
  * Main Helper class
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Data extends AbstractHelper
 {
@@ -72,9 +71,9 @@ class Data extends AbstractHelper
 
     /**
      *
-     * @param bool $use3dSecure
-     * @param int $config3dsRules
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param  bool                       $use3dSecure
+     * @param  int                        $config3dsRules
+     * @param  \Magento\Quote\Model\Quote $quote
      * @return int
      */
     public function is3dSecure($use3dSecure, $config3dsRules, $quote = null)
@@ -89,7 +88,9 @@ class Data extends AbstractHelper
                     break;
                 case 2:
                 case 3:
-                    /** @var $rule Allopass_Hipay_Model_Rule * */
+                    /**
+     * @var $rule Allopass_Hipay_Model_Rule *
+*/
                     $rule = $this->ruleFactory->create();
                     $rule->getResource()->load($rule, $config3dsRules);
                     if ($rule->getId() && $rule->validate($quote)) {
@@ -110,9 +111,9 @@ class Data extends AbstractHelper
 
     /**
      *
-     * @param bool $allowUseOneclick Method config Data
-     * @param int $filterOneclick Rule's id in configuration
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param  bool                       $allowUseOneclick Method config Data
+     * @param  int                        $filterOneclick   Rule's id in configuration
+     * @param  \Magento\Quote\Model\Quote $quote
      * @return boolean
      */
     public function useOneclick($allowUseOneclick, $filterOneclick, $quote)
@@ -173,10 +174,10 @@ class Data extends AbstractHelper
     }
 
     /**
-     * @param \HiPay\FullserviceMagento\Model\Config $config
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient
-     * @param $store
-     * @param string $scope
+     * @param  \HiPay\FullserviceMagento\Model\Config          $config
+     * @param  \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient
+     * @param  $store
+     * @param  string                                          $scope
      * @return mixed
      */
     public function updateHashAlgorithm(

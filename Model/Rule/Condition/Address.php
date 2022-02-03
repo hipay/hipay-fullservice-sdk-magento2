@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 /**
  * Rule Address Class
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 {
@@ -62,13 +61,14 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * Address constructor.
-     * @param \Magento\Rule\Model\Condition\Context $context
-     * @param \Magento\Directory\Model\Config\Source\Country $directoryCountry
-     * @param \Magento\Directory\Model\Config\Source\Allregion $directoryAllregion
-     * @param \Magento\Shipping\Model\Config\Source\Allmethods $shippingAllmethods
-     * @param \Magento\Payment\Model\Config\Source\Allmethods $paymentAllmethods
+     *
+     * @param \Magento\Rule\Model\Condition\Context               $context
+     * @param \Magento\Directory\Model\Config\Source\Country      $directoryCountry
+     * @param \Magento\Directory\Model\Config\Source\Allregion    $directoryAllregion
+     * @param \Magento\Shipping\Model\Config\Source\Allmethods    $shippingAllmethods
+     * @param \Magento\Payment\Model\Config\Source\Allmethods     $paymentAllmethods
      * @param \Magento\Config\Model\Config\Source\Locale\Currency $currencies
-     * @param array $data
+     * @param array                                               $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -217,7 +217,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     /**
      * Validate Address Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param  \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)

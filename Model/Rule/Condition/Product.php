@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
@@ -20,10 +19,10 @@ namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 /**
  * Product rule condition data model
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
@@ -32,7 +31,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Add special attributes
      *
-     * @param array $attributes
+     * @param  array $attributes
      * @return void
      */
     protected function _addSpecialAttributes(array &$attributes)
@@ -46,12 +45,14 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     /**
      * Validate Product Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param  \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /**
+         * @var \Magento\Catalog\Model\Product $product
+        */
         $product = $model->getProduct();
         if (!$product instanceof \Magento\Catalog\Model\Product) {
             $product = $this->productRepository->getById($model->getProductId());

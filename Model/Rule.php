@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -20,11 +19,10 @@ namespace HiPay\FullserviceMagento\Model;
 /**
  * Hipay Rule data model
  *
- *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\Rule _getResource()
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\Rule getResource()
@@ -58,15 +56,15 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory
+     * @param \Magento\Framework\Model\Context                                      $context
+     * @param \Magento\Framework\Registry                                           $registry
+     * @param \Magento\Framework\Data\FormFactory                                   $formFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface                  $localeDate
+     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory         $condCombineFactory
      * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource               $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb                         $resourceCollection
+     * @param array                                                                 $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,

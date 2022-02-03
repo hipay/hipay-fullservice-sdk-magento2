@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
@@ -25,11 +24,10 @@ use Magento\Payment\Model\CcConfig;
 /**
  * Astropay config provider
  *
- *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AstropayConfigProvider implements ConfigProviderInterface
 {
@@ -95,15 +93,16 @@ class AstropayConfigProvider implements ConfigProviderInterface
 
     /**
      * AstropayConfigProvider constructor.
-     * @param CcConfig $ccConfig
-     * @param PaymentHelper $paymentHelper
-     * @param \Magento\Framework\Url $urlBuilder
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
+     *
+     * @param CcConfig                                                             $ccConfig
+     * @param PaymentHelper                                                        $paymentHelper
+     * @param \Magento\Framework\Url                                               $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
+     * @param \Magento\Checkout\Model\Session                                      $checkoutSession
+     * @param \Magento\Customer\Model\Session                                      $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param array $methodCodes
-     * @param array $methodTypeIdentification
+     * @param array                                                                $methodCodes
+     * @param array                                                                $methodTypeIdentification
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -136,7 +135,7 @@ class AstropayConfigProvider implements ConfigProviderInterface
     /**
      * Get Type identification
      *
-     * @param $methodCode
+     * @param  $methodCode
      * @return string
      */
     protected function getTypeIdentification($methodCode)
@@ -153,13 +152,16 @@ class AstropayConfigProvider implements ConfigProviderInterface
         foreach ($this->methods as $methodCode) {
             $this->_hipayConfig->setMethodCode($methodCode);
             if ($this->_hipayConfig->isPaymentMethodActive()) {
-                $config = array_merge_recursive($config, [
-                    'payment' => [
-                        'hiPayFullservice' => [
-                            'typeIdentification' => [$methodCode => $this->getTypeIdentification($methodCode)],
+                $config = array_merge_recursive(
+                    $config,
+                    [
+                        'payment' => [
+                            'hiPayFullservice' => [
+                                'typeIdentification' => [$methodCode => $this->getTypeIdentification($methodCode)],
+                            ]
                         ]
                     ]
-                ]);
+                );
             }
         }
         return $config;

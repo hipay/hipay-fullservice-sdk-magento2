@@ -8,30 +8,33 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
- *
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 
-define([
+define(
+    [
         "jquery",
         "Magento_Rule/rules"
-], function(jQuery,VarienRulesForm){
+    ],
+    function (jQuery,VarienRulesForm) {
 
-    VarienRulesForm.prototype.addRuleNewChild = function (elem) {
+        VarienRulesForm.prototype.addRuleNewChild = function (elem) {
             var parent_id = elem.id.replace(/^.*__(.*)__.*$/, '$1');
             var children_ul = $(elem.id.replace(/__/g, ':').replace(/[^:]*$/, 'children').replace(/:/g, '__'));
             var max_id = 0, i;
             var children_inputs = Selector.findChildElements(children_ul, $A(['input.hidden']));
             if (children_inputs.length) {
-                children_inputs.each(function(el){
-                    if (el.id.match(/__type$/)) {
-                        i = 1 * el.id.replace(/^.*__.*?([0-9]+)_.*__.*$/, '$1');// modified form clean payment method name
-                        max_id = i > max_id ? i : max_id;
+                children_inputs.each(
+                    function (el) {
+                        if (el.id.match(/__type$/)) {
+                            i = 1 * el.id.replace(/^.*__.*?([0-9]+)_.*__.*$/, '$1');// modified form clean payment method name
+                            max_id = i > max_id ? i : max_id;
+                        }
                     }
-                });
+                );
             }
             var new_id = parent_id + '--' + (max_id + 1);
             var new_type = elem.value;
@@ -40,18 +43,22 @@ define([
             new_elem.innerHTML = jQuery.mage.__('This won\'t take long . . .');
             children_ul.insertBefore(new_elem, $(elem).up('li'));
 
-            new Ajax.Request(this.newChildUrl, {
-                evalScripts: true,
-                parameters: {form_key: FORM_KEY, type:new_type.replace('/','-'), id:new_id },
-                onComplete: this.onAddNewChildComplete.bind(this, new_elem),
-                onSuccess: function(transport) {
-                    if(this._processSuccess(transport)) {
-                        $(new_elem).update(transport.responseText);
-                    }
-                }.bind(this),
-                onFailure: this._processFailure.bind(this)
-            });
+            new Ajax.Request(
+                this.newChildUrl,
+                {
+                    evalScripts: true,
+                    parameters: {form_key: FORM_KEY, type:new_type.replace('/','-'), id:new_id },
+                    onComplete: this.onAddNewChildComplete.bind(this, new_elem),
+                    onSuccess: function (transport) {
+                        if (this._processSuccess(transport)) {
+                            $(new_elem).update(transport.responseText);
+                        }
+                    }.bind(this),
+                    onFailure: this._processFailure.bind(this)
+                }
+            );
         };
-    
-    return VarienRulesForm;
-});
+
+        return VarienRulesForm;
+    }
+);

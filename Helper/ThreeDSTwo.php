@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Helper;
@@ -27,10 +26,10 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
 /**
  * ThreeDS v2 Helper class
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class ThreeDSTwo extends AbstractHelper
 {
@@ -201,7 +200,7 @@ class ThreeDSTwo extends AbstractHelper
     }
 
     /**
-     * @param $profileId
+     * @param  $profileId
      * @return mixed
      * @throws LocalizedException
      */
@@ -218,7 +217,7 @@ class ThreeDSTwo extends AbstractHelper
     }
 
     /**
-     * @param $orderId
+     * @param  $orderId
      * @return \Magento\Framework\DataObject
      * @throws LocalizedException
      */
@@ -230,7 +229,7 @@ class ThreeDSTwo extends AbstractHelper
     }
 
     /**
-     * @param $orderId
+     * @param  $orderId
      * @return bool|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getOrderSplitPaymentCollection($orderId)

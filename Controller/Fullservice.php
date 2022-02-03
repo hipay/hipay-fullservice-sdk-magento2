@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller;
@@ -25,10 +24,10 @@ use HiPay\FullserviceMagento\Model\Request\Type\Factory;
  *
  * Abstract to all payment controllers
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class Fullservice extends AppAction
 {
@@ -70,15 +69,15 @@ abstract class Fullservice extends AppAction
     protected $resultJsonFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Session\Generic $hipaySession ,
-     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Framework\App\Action\Context            $context
+     * @param \Magento\Customer\Model\Session                  $customerSession
+     * @param \Magento\Checkout\Model\Session                  $checkoutSession
+     * @param \Magento\Framework\Session\Generic               $hipaySession          ,
+     * @param \Magento\Framework\Url\Helper\Data               $urlHelper
      * @param \HiPay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory
-     * @param Factory $requestfactory ,
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param Factory                                          $requestfactory        ,
+     * @param \Psr\Log\LoggerInterface                         $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * {@inheritDoc}
      *
@@ -86,8 +85,8 @@ abstract class Fullservice extends AppAction
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,

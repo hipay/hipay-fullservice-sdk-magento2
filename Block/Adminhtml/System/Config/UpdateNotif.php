@@ -10,20 +10,20 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
 
 /**
+/**
  * Update notification block
- * \Block\Adminhtml\System\Config
- * @author Hipay
+ *
+ * @author    Hipay
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 {
@@ -178,18 +178,18 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             }
         }
         try {
-            $message = __("We advise you to update the extension if you wish to get the " .
+            $message = __(
+                "We advise you to update the extension if you wish to get the " .
                 "latest fixes and evolutions. " .
-                "To update the extension, please click here : ") .  $this->readMeUrl;
+                "To update the extension, please click here : "
+            ) .  $this->readMeUrl;
             $title = __("HiPay Enterprise %1 available", $this->newVersion);
-            $versionData = array(
-                array(
-                    'severity' => $this->getSeverity(),
-                    'date_added' => $this->newVersionDate,
-                    'title' => $title,
-                    'description' => $message,
-                    'url' => $this->readMeUrl,
-                )
+            $versionData[] = array(
+                'severity' => $this->getSeverity(),
+                'date_added' => $this->newVersionDate,
+                'title' => $title,
+                'description' => $message,
+                'url' => $this->readMeUrl,
             );
 
             if (
@@ -222,10 +222,11 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
      */
     public function getText()
     {
-        $message = __("We advise you to update the extension if you wish to get the " .
+        $message = __(
+            "We advise you to update the extension if you wish to get the " .
             "latest fixes and evolutions. " .
-            "To update the extension, please click here : ") .
-            "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
+            "To update the extension, please click here : "
+        ) . "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
 
         return __('<b>' . $title . '</b><br/>' . $message);

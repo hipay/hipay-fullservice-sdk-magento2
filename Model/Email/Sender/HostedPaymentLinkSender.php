@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Email\Sender;
@@ -29,10 +28,10 @@ use HiPay\FullserviceMagento\Model\Email\Container\HostedPaymentLinkIdentity;
 /**
  * Class Sender for Hosted link sended to customer in payment MO/TO (admin)
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class HostedPaymentLinkSender extends Sender
 {
@@ -67,15 +66,15 @@ class HostedPaymentLinkSender extends Sender
 
     /**
      *
-     * @param Template $templateContainer
-     * @param HostedPaymentLinkIdentity $identityContainer
+     * @param Template                                              $templateContainer
+     * @param HostedPaymentLinkIdentity                             $identityContainer
      * @param \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param Renderer $addressRenderer
-     * @param PaymentHelper $paymentHelper
-     * @param OrderResource $orderResource
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param ManagerInterface $eventManager
+     * @param \Psr\Log\LoggerInterface                              $logger
+     * @param Renderer                                              $addressRenderer
+     * @param PaymentHelper                                         $paymentHelper
+     * @param OrderResource                                         $orderResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface    $globalConfig
+     * @param ManagerInterface                                      $eventManager
      */
     public function __construct(
         Template $templateContainer,
@@ -101,7 +100,7 @@ class HostedPaymentLinkSender extends Sender
      *
      * Email will be sent immediately
      *
-     * @param Order $order
+     * @param  Order $order
      * @return bool
      */
     public function send(Order $order)
@@ -117,7 +116,7 @@ class HostedPaymentLinkSender extends Sender
     /**
      * Prepare email template with variables
      *
-     * @param Order $order
+     * @param  Order $order
      * @return void
      */
     protected function prepareTemplate(Order $order)
@@ -140,7 +139,7 @@ class HostedPaymentLinkSender extends Sender
     /**
      * Get payment info block as html
      *
-     * @param Order $order
+     * @param  Order $order
      * @return string
      */
     protected function getPaymentHtml(Order $order)

@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller\Notify;
@@ -28,22 +27,23 @@ use Magento\Framework\Webapi\Exception as WebApiException;
  *
  * Is protected by secret passphare (See \HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver.php)
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Index extends AppAction
 {
     /**
      *
-     * @var  \Psr\Log\LoggerInterface $_logger
+     * @var \Psr\Log\LoggerInterface $_logger
      */
     protected $_logger;
 
     /**
      * Index constructor.
-     * @param Context $context
+     *
+     * @param Context                  $context
      * @param \Psr\Log\LoggerInterface $_logger
      */
     public function __construct(
@@ -64,7 +64,7 @@ class Index extends AppAction
     }
 
     /**
-     * @return void
+     * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * */
     public function execute()
@@ -72,7 +72,9 @@ class Index extends AppAction
         $params = $this->getRequest()->getPost()->toArray();
 
         try {
-            /** @var $notify \HiPay\FullserviceMagento\Model\Notify **/
+            /**
+ * @var $notify \HiPay\FullserviceMagento\Model\Notify
+**/
             $notify = $this->_objectManager->create(
                 '\HiPay\FullserviceMagento\Model\Notify',
                 ['params' => ['response' => $params]]

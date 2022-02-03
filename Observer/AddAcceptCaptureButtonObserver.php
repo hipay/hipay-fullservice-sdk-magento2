@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Observer;
@@ -26,10 +25,10 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  * Add button "Accept and capture" in admin order view
  * When the order status is in pending review
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AddAcceptCaptureButtonObserver implements ObserverInterface
 {
@@ -58,9 +57,10 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 
     /**
      * AddAcceptCaptureButtonObserver constructor.
+     *
      * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param OrderRepositoryInterface $orderRepository
+     * @param \Magento\Framework\Registry           $registry
+     * @param OrderRepositoryInterface              $orderRepository
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -75,7 +75,7 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     /**
      * Add accept and capture buuton to order view toolbar
      *
-     * @param EventObserver $observer
+     * @param  EventObserver $observer
      * @return $this
      */
     public function execute(EventObserver $observer)
@@ -87,18 +87,23 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
                 && $order->canReviewPayment()
             ) {
 
-                /** @var $controller \Magento\Sales\Controller\Adminhtml\Order\View */
+                /**
+                 * @var $controller \Magento\Sales\Controller\Adminhtml\Order\View
+                */
                 $message = __('Are you sure you want to accept this payment?');
                 $actionUrl = $controller->getUrl(
                     'hipay/order/acceptAndCapturePayment',
                     ['order_id' => $order->getEntityId()]
                 );
-                $this->buttonList->add('accept_capture_payment', [
-                    'label' => __('Accept and Capture Payment'),
-                    'onclick' => "confirmSetLocation('{$message}', '{$actionUrl}')",
-                    "sort_order" => 10,
-                    "class" => "primary"
-                ]);
+                $this->buttonList->add(
+                    'accept_capture_payment',
+                    [
+                        'label' => __('Accept and Capture Payment'),
+                        'onclick' => "confirmSetLocation('{$message}', '{$actionUrl}')",
+                        "sort_order" => 10,
+                        "class" => "primary"
+                    ]
+                );
             } else {
                 $this->buttonList->remove('accept_capture_payment');
             }
@@ -109,7 +114,8 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
 
     /**
      * Retrieve order model object
-     * @param \Magento\Sales\Controller\Adminhtml\Order\View $controller
+     *
+     * @param  \Magento\Sales\Controller\Adminhtml\Order\View $controller
      * @return \Magento\Sales\Model\Order
      */
     public function getOrder($controller)

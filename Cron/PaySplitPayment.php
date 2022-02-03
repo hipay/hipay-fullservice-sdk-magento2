@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Cron;
@@ -24,10 +23,10 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
  * HiPay module crontab
  * Used to pay all split payments in pending with day frequency
  *
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class PaySplitPayment
 {
@@ -62,14 +61,19 @@ class PaySplitPayment
     {
         $date = new \DateTime();
 
-        /** @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection */
+        /**
+ * @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection
+*/
         $splitPayments = $this->spFactory->create()->getCollection()
-            ->addFieldToFilter('status', array(
+            ->addFieldToFilter(
+                'status',
+                array(
                 'in' => array(
                     SplitPayment::SPLIT_PAYMENT_STATUS_PENDING,
                     SplitPayment::SPLIT_PAYMENT_STATUS_FAILED
                 )
-            ))
+                )
+            )
             ->addFieldTofilter('attempts', array('lt' => 3))
             ->addFieldTofilter('date_to_pay', array('to' => $date->format('Y-m-d 00:00:00')));
 

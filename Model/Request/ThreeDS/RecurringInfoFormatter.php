@@ -11,7 +11,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright Copyright (c) 2019 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request\ThreeDS;
@@ -22,10 +22,10 @@ use HiPay\FullserviceMagento\Model\PaymentProfile;
 
 /**
  *
- * @author HiPay <support@hipay.com>
+ * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class RecurringInfoFormatter extends AbstractRequest
 {
@@ -69,7 +69,7 @@ class RecurringInfoFormatter extends AbstractRequest
      *
      * @return RecurringInfo|\HiPay\Fullservice\Request\AbstractRequest
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
