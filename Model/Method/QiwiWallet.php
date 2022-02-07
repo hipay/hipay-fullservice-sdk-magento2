@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class QiwiWallet extends FullserviceMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_qiwiwallet';
+    public const HIPAY_METHOD_CODE = 'hipay_qiwiwallet';
 
     /**
      * @var string

@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Aura extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_aura';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+    public const HIPAY_METHOD_CODE = 'hipay_aura';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
 
     /**
      * @var string

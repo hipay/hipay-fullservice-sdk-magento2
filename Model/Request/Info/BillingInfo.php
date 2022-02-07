@@ -31,12 +31,12 @@ class BillingInfo extends AbstractInfoRequest
     /**
      * @var string
      */
-    const KEY_FIRSTNAME = 'firstname';
+    protected const KEY_FIRSTNAME = 'firstname';
 
     /**
      * @var string
      */
-    const KEY_LASTNAME = 'lastname';
+    protected const KEY_LASTNAME = 'lastname';
 
     /**
      * {@inheritDoc}

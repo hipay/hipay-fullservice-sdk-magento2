@@ -56,8 +56,8 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class Card extends \Magento\Framework\Model\AbstractModel
 {
-    const STATUS_DISABLED = 0;
-    const STATUS_ENABLED = 1;
+    public const STATUS_DISABLED = 0;
+    public const STATUS_ENABLED = 1;
 
     /**
      * Init resource model and id field

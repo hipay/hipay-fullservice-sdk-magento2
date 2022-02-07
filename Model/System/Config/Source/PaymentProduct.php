@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\Framework\Option\ArrayInterface
 {
-    const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
+    protected const PAYMENT_PRODUCT_FIELD = 'payment_products_categories';
 
     /**
      * Payment config model

@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class HostedMoto extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_hostedmoto';
+    public const HIPAY_METHOD_CODE = 'hipay_hostedmoto';
 
     /**
      * @var string

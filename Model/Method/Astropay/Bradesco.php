@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Bradesco extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_bradesco';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+    public const HIPAY_METHOD_CODE = 'hipay_bradesco';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
 
     /**
      * @var string

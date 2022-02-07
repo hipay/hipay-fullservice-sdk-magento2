@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Santander extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_santander';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
+    public const HIPAY_METHOD_CODE = 'hipay_santander';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
 
     /**
      * @var string

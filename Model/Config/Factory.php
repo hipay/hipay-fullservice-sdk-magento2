@@ -26,17 +26,17 @@ namespace HiPay\FullserviceMagento\Model\Config;
  */
 class Factory
 {
-    const PRODUCTION = "production";
+    public const PRODUCTION = "production";
 
-    const PRODUCTION_MOTO = "production_moto";
+    public const PRODUCTION_MOTO = "production_moto";
 
-    const PRODUCTION_APPLEPAY = "applepay";
+    public const PRODUCTION_APPLEPAY = "applepay";
 
-    const STAGE = "stage";
+    public const STAGE = "stage";
 
-    const STAGE_MOTO = "stage_moto";
+    public const STAGE_MOTO = "stage_moto";
 
-    const STAGE_APPLEPAY = "stage_applepay";
+    public const STAGE_APPLEPAY = "stage_applepay";
 
     /**
      * Object Manager instance

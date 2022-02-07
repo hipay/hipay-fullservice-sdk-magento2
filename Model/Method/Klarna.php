@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Klarna extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_klarna';
+    public const HIPAY_METHOD_CODE = 'hipay_klarna';
 
     /**
      * @var string

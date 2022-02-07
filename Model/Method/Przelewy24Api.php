@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Przelewy24Api extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_przelewy24api';
+    public const HIPAY_METHOD_CODE = 'hipay_przelewy24api';
 
     /**
      * @var string

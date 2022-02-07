@@ -29,9 +29,9 @@ class PaymentActions implements \Magento\Framework\Option\ArrayInterface
     /**
      * Payment actions
      */
-    const PAYMENT_ACTION_SALE = 'Sale';
+    public const PAYMENT_ACTION_SALE = 'Sale';
 
-    const PAYMENT_ACTION_AUTH = 'Authorization';
+    public const PAYMENT_ACTION_AUTH = 'Authorization';
 
     /**
      * {@inheritdoc}

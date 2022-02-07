@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Oxxo extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_oxxo';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
+    public const HIPAY_METHOD_CODE = 'hipay_oxxo';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPN;
 
     /**
      * @var string

@@ -28,7 +28,7 @@ use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
  */
 class CreditLong extends AbstractFacilypay
 {
-    const HIPAY_METHOD_CODE = 'hipay_creditlong';
+    public const HIPAY_METHOD_CODE = 'hipay_creditlong';
 
     /**
      * @var string

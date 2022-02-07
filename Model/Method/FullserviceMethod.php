@@ -41,7 +41,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 abstract class FullserviceMethod extends AbstractMethod
 {
-    const SLEEP_TIME = 5;
+    protected const SLEEP_TIME = 5;
     /**
      * Payment Method feature
      *

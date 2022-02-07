@@ -34,7 +34,7 @@ use Magento\Framework\DataObject;
  */
 class CcMethod extends FullserviceMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_cc';
+    public const HIPAY_METHOD_CODE = 'hipay_cc';
 
     /**
      * @var string

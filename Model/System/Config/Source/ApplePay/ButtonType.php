@@ -26,13 +26,13 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
  */
 class ButtonType implements \Magento\Framework\Option\ArrayInterface
 {
-    const PLAIN = 'plain';
-    const BUY = 'buy';
-    const SET_UP = 'set-up';
-    const DONATE = 'donate';
-    const CHECK_OUT = 'check-out';
-    const BOOK = 'book';
-    const SUBSCRIBE = 'subscribe';
+    protected const PLAIN = 'plain';
+    protected const BUY = 'buy';
+    protected const SET_UP = 'set-up';
+    protected const DONATE = 'donate';
+    protected const CHECK_OUT = 'check-out';
+    protected const BOOK = 'book';
+    protected const SUBSCRIBE = 'subscribe';
 
     /**
      * Options getter

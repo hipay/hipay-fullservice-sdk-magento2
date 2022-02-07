@@ -33,7 +33,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 class CcSplitMethod extends CcMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_ccsplit';
+    public const HIPAY_METHOD_CODE = 'hipay_ccsplit';
 
     /**
      * @var string

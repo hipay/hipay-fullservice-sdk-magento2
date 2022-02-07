@@ -34,10 +34,10 @@ use Magento\Framework\UrlInterface;
 class MappingShippingActions extends Column
 {
     /**
- * Url path
-*/
-    const PROFILE_URL_PATH_EDIT = 'hipay/mappingshipping/edit';
-    const PROFILE_URL_PATH_DELETE = 'hipay/mappingshipping/delete';
+     * Url path
+     */
+    protected const PROFILE_URL_PATH_EDIT = 'hipay/mappingshipping/edit';
+    protected const PROFILE_URL_PATH_DELETE = 'hipay/mappingshipping/delete';
 
     /**
      * @var UrlBuilder

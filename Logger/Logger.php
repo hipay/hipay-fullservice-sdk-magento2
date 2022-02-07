@@ -19,7 +19,7 @@ use Psr\Log\LoggerInterface;
  */
 class Logger extends LoggerMagento
 {
-    const DEBUG_KEYS_MASK = '****';
+    private const DEBUG_KEYS_MASK = '****';
 
     /**
      * @var LoggerInterface

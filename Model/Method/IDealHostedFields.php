@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class IDealHostedFields extends LocalHostedFields
 {
-    const HIPAY_METHOD_CODE = 'hipay_ideal_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_ideal_hosted_fields';
 
     /**
      * @var string

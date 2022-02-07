@@ -31,11 +31,11 @@ class HostedPaymentLinkIdentity extends Container
     /**
      * Configuration paths
      */
-    const XML_PATH_EMAIL_COPY_METHOD = 'hipay/hosted_payment_link/copy_method';
-    const XML_PATH_EMAIL_COPY_TO = 'hipay/hosted_payment_link/copy_to';
-    const XML_PATH_EMAIL_IDENTITY = 'hipay/hosted_payment_link/identity';
-    const XML_PATH_EMAIL_TEMPLATE = 'hipay/hosted_payment_link/template';
-    const XML_PATH_EMAIL_ENABLED = 'hipay/hosted_payment_link/enabled';
+    protected const XML_PATH_EMAIL_COPY_METHOD = 'hipay/hosted_payment_link/copy_method';
+    protected const XML_PATH_EMAIL_COPY_TO = 'hipay/hosted_payment_link/copy_to';
+    protected const XML_PATH_EMAIL_IDENTITY = 'hipay/hosted_payment_link/identity';
+    protected const XML_PATH_EMAIL_TEMPLATE = 'hipay/hosted_payment_link/template';
+    protected const XML_PATH_EMAIL_ENABLED = 'hipay/hosted_payment_link/enabled';
 
     /**
      * @return bool

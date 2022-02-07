@@ -31,11 +31,11 @@ class FraudReviewIdentity extends Container
     /**
      * Configuration paths
      */
-    const XML_PATH_EMAIL_COPY_METHOD = 'hipay/fraud_payment_review/copy_method';
-    const XML_PATH_EMAIL_COPY_TO = 'hipay/fraud_payment_review/copy_to';
-    const XML_PATH_EMAIL_IDENTITY = 'hipay/fraud_payment_review/identity';
-    const XML_PATH_EMAIL_TEMPLATE = 'hipay/fraud_payment_review/template';
-    const XML_PATH_EMAIL_ENABLED = 'hipay/fraud_payment_review/enabled';
+    protected const XML_PATH_EMAIL_COPY_METHOD = 'hipay/fraud_payment_review/copy_method';
+    protected const XML_PATH_EMAIL_COPY_TO = 'hipay/fraud_payment_review/copy_to';
+    protected const XML_PATH_EMAIL_IDENTITY = 'hipay/fraud_payment_review/identity';
+    protected const XML_PATH_EMAIL_TEMPLATE = 'hipay/fraud_payment_review/template';
+    protected const XML_PATH_EMAIL_ENABLED = 'hipay/fraud_payment_review/enabled';
 
     /**
      * @return bool

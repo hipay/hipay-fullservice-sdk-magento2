@@ -37,19 +37,19 @@ use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
  */
 class Config extends AbstractConfig implements ConfigurationInterface
 {
-    const STATUS_AUTHORIZED = 'hipay_authorized';
-    const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
-    const STATUS_AUTHORIZED_PENDING = 'hipay_authorized_pending';
-    const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
-    const STATUS_CAPTURE_REFUSED = 'hipay_capture_refused';
-    const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
-    const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
-    const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
-    const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
-    const STATUS_EXPIRED = 'hipay_expired';
-    const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
+    public const STATUS_AUTHORIZED = 'hipay_authorized';
+    public const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
+    public const STATUS_AUTHORIZED_PENDING = 'hipay_authorized_pending';
+    public const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
+    public const STATUS_CAPTURE_REFUSED = 'hipay_capture_refused';
+    public const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
+    public const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
+    public const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
+    public const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
+    public const STATUS_EXPIRED = 'hipay_expired';
+    public const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
 
-    const CONFIG_HIPAY_KEY_CC_TYPE = 'cctypes_mapper';
+    protected const CONFIG_HIPAY_KEY_CC_TYPE = 'cctypes_mapper';
 
     /**
      *

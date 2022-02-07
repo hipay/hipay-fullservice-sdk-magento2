@@ -24,7 +24,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Mybank extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_mybank';
+    public const HIPAY_METHOD_CODE = 'hipay_mybank';
 
     /**
      * @var string

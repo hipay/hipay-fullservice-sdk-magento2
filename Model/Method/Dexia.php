@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Dexia extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_dexia';
+    public const HIPAY_METHOD_CODE = 'hipay_dexia';
 
     /**
      * @var string

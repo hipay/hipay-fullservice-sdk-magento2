@@ -47,17 +47,17 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
      *
      * @var string
      */
-    const PERIOD_UNIT_DAY = 'day';
-    const PERIOD_UNIT_WEEK = 'week';
-    const PERIOD_UNIT_SEMI_MONTH = 'semi_month';
-    const PERIOD_UNIT_MONTH = 'month';
-    const PERIOD_UNIT_YEAR = 'year';
+    public const PERIOD_UNIT_DAY = 'day';
+    public const PERIOD_UNIT_WEEK = 'week';
+    public const PERIOD_UNIT_SEMI_MONTH = 'semi_month';
+    public const PERIOD_UNIT_MONTH = 'month';
+    public const PERIOD_UNIT_YEAR = 'year';
 
     /**
      * Payment types
      */
-    const PAYMENT_TYPE_SPLIT = '\HiPay\FullserviceMagento\Model\SplitPayment';
-    const PAYMENT_TYPE_RECURRING = 'recurring_payment';
+    public const PAYMENT_TYPE_SPLIT = '\HiPay\FullserviceMagento\Model\SplitPayment';
+    protected const PAYMENT_TYPE_RECURRING = 'recurring_payment';
 
     /**
      *

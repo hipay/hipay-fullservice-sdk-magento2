@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Sisal extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_sisal';
+    public const HIPAY_METHOD_CODE = 'hipay_sisal';
 
     /**
      * @var string

@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class YandexApi extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_yandexapi';
+    public const HIPAY_METHOD_CODE = 'hipay_yandexapi';
 
     /**
      * @var string
