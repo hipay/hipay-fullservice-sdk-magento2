@@ -31,7 +31,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Mbway extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_mbway';
+    public const HIPAY_METHOD_CODE = 'hipay_mbway';
 
     /**
      * @var string

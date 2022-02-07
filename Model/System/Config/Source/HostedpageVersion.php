@@ -26,8 +26,8 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
  */
 class HostedpageVersion implements \Magento\Framework\Option\ArrayInterface
 {
-    const V1 = 'hpv1';
-    const V2 = 'hpv2';
+    public const V1 = 'hpv1';
+    public const V2 = 'hpv2';
 
     /**
      * Options getter

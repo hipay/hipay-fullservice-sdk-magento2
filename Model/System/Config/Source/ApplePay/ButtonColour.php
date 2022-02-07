@@ -26,9 +26,9 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
  */
 class ButtonColour implements \Magento\Framework\Option\ArrayInterface
 {
-    const BLACK = 'black';
-    const WHITE = 'white';
-    const WHITE_WITH_LINE = 'white-with-line';
+    protected const BLACK = 'black';
+    protected const WHITE = 'white';
+    protected const WHITE_WITH_LINE = 'white-with-line';
 
     /**
      * Options getter

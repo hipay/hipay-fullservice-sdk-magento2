@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Giropay extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_giropay';
+    public const HIPAY_METHOD_CODE = 'hipay_giropay';
 
     /**
      * @var string

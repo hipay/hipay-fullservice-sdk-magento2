@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Ing extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_ing';
+    public const HIPAY_METHOD_CODE = 'hipay_ing';
 
     /**
      * @var string

@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Itau extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_itau';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+    public const HIPAY_METHOD_CODE = 'hipay_itau';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
 
     /**
      * @var string

@@ -33,7 +33,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedMethod extends FullserviceMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_hosted';
+    public const HIPAY_METHOD_CODE = 'hipay_hosted';
 
     /**
      * @var string

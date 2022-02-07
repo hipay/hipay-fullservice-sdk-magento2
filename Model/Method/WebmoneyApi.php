@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class WebmoneyApi extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_webmoneyapi';
+    public const HIPAY_METHOD_CODE = 'hipay_webmoneyapi';
 
     /**
      * @var string

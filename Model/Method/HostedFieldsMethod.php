@@ -33,7 +33,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedFieldsMethod extends CcMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_hosted_fields';
 
     /**
      * @var string

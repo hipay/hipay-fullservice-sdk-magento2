@@ -27,10 +27,10 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
  */
 class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 {
-    const HIPAY_GITHUB_MAGENTO2_LATEST =
+    protected const HIPAY_GITHUB_MAGENTO2_LATEST =
         "https://api.github.com/repos/hipay/hipay-fullservice-sdk-magento2/releases/latest";
 
-    const MESSAGE_IDENTITY = 'HipPay Version Notification';
+    protected const MESSAGE_IDENTITY = 'HipPay Version Notification';
 
     protected $_authSession;
 

@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class ApplePay extends LocalHostedFields
 {
-    const HIPAY_METHOD_CODE = 'hipay_applepay';
+    public const HIPAY_METHOD_CODE = 'hipay_applepay';
 
     /**
      * @var string

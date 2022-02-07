@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class PostFinanceEFinance extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_postfinanceefinanceapi';
+    public const HIPAY_METHOD_CODE = 'hipay_postfinanceefinanceapi';
 
     /**
      * @var string

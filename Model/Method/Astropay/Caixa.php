@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Caixa extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_caixa';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+    public const HIPAY_METHOD_CODE = 'hipay_caixa';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
 
     /**
      * @var string

@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Paypal extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_paypalapi';
+    public const HIPAY_METHOD_CODE = 'hipay_paypalapi';
 
     /**
      * @var string

@@ -43,7 +43,7 @@ class Manager
     /**
      *   Additional Field to save and generate an operation id
      */
-    const TRANSACTION_INCREMENT = 'increment_id';
+    protected const TRANSACTION_INCREMENT = 'increment_id';
 
     /**
      * Order

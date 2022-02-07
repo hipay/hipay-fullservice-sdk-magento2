@@ -28,7 +28,7 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Bnpp4X extends AbstractBnpp
 {
-    const HIPAY_METHOD_CODE = 'hipay_bnpp4X';
+    public const HIPAY_METHOD_CODE = 'hipay_bnpp4X';
 
     /**
      * @var string

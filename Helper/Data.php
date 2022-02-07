@@ -32,7 +32,7 @@ use Magento\Framework\Module\ModuleListInterface;
  */
 class Data extends AbstractHelper
 {
-    const MODULE_NAME = 'HiPay_FullserviceMagento';
+    protected const MODULE_NAME = 'HiPay_FullserviceMagento';
 
     /**
      *

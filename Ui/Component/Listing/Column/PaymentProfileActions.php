@@ -34,10 +34,10 @@ use Magento\Framework\UrlInterface;
 class PaymentProfileActions extends Column
 {
     /**
- * Url path
-*/
-    const PROFILE_URL_PATH_EDIT = 'hipay/paymentprofile/edit';
-    const PROFILE_URL_PATH_DELETE = 'hipay/paymentprofile/delete';
+     * Url path
+     */
+    protected const PROFILE_URL_PATH_EDIT = 'hipay/paymentprofile/edit';
+    protected const PROFILE_URL_PATH_DELETE = 'hipay/paymentprofile/delete';
 
     /**
      * @var UrlBuilder

@@ -34,10 +34,10 @@ use Magento\Framework\UrlInterface;
 class CartCategoriesActions extends Column
 {
     /**
- * Url path
-*/
-    const PROFILE_URL_PATH_EDIT = 'hipay/cartcategories/edit';
-    const PROFILE_URL_PATH_DELETE = 'hipay/cartcategories/delete';
+     * Url path
+     */
+    protected const PROFILE_URL_PATH_EDIT = 'hipay/cartcategories/edit';
+    protected const PROFILE_URL_PATH_DELETE = 'hipay/cartcategories/delete';
 
     /**
      * @var UrlBuilder

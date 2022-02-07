@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class SofortApi extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_sofortapi';
+    public const HIPAY_METHOD_CODE = 'hipay_sofortapi';
 
     /**
      * @var string

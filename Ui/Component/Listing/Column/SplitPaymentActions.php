@@ -34,11 +34,11 @@ use Magento\Framework\UrlInterface;
 class SplitPaymentActions extends Column
 {
     /**
- * Url path
-*/
-    const SPLIT_URL_PATH_EDIT = 'hipay/splitpayment/edit';
-    const SPLIT_URL_PATH_DELETE = 'hipay/splitpayment/delete';
-    const SPLIT_URL_PATH_PAY = 'hipay/splitpayment/pay';
+     * Url path
+     */
+    protected const SPLIT_URL_PATH_EDIT = 'hipay/splitpayment/edit';
+    protected const SPLIT_URL_PATH_DELETE = 'hipay/splitpayment/delete';
+    protected const SPLIT_URL_PATH_PAY = 'hipay/splitpayment/pay';
 
     /**
      * @var UrlBuilder

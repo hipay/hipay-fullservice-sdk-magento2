@@ -61,9 +61,9 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  */
 class SplitPayment extends \Magento\Framework\Model\AbstractModel
 {
-    const SPLIT_PAYMENT_STATUS_PENDING = 'pending';
-    const SPLIT_PAYMENT_STATUS_FAILED = 'failed';
-    const SPLIT_PAYMENT_STATUS_COMPLETE = 'complete';
+    public const SPLIT_PAYMENT_STATUS_PENDING = 'pending';
+    public const SPLIT_PAYMENT_STATUS_FAILED = 'failed';
+    public const SPLIT_PAYMENT_STATUS_COMPLETE = 'complete';
 
     /**
      * @var \HiPay\FullserviceMagento\Model\FullserviceMethod

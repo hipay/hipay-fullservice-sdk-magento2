@@ -33,7 +33,7 @@ use Magento\Directory\Model;
  */
 class Sdd extends FullserviceMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_sdd';
+    public const HIPAY_METHOD_CODE = 'hipay_sdd';
 
     /**
      * @var string

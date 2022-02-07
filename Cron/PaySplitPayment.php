@@ -30,7 +30,7 @@ use HiPay\FullserviceMagento\Model\SplitPayment;
  */
 class PaySplitPayment
 {
-    const MAX_ATTEMPTS = 3;
+    protected const MAX_ATTEMPTS = 3;
 
     /**
      *

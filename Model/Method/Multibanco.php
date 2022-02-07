@@ -26,7 +26,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  */
 class Multibanco extends AbstractMethodAPI
 {
-    const HIPAY_METHOD_CODE = 'hipay_multibanco';
+    public const HIPAY_METHOD_CODE = 'hipay_multibanco';
 
     /**
      * @var string

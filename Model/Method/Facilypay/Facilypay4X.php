@@ -28,7 +28,7 @@ use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
  */
 class Facilypay4X extends AbstractFacilypay
 {
-    const HIPAY_METHOD_CODE = 'hipay_facilypay4X';
+    public const HIPAY_METHOD_CODE = 'hipay_facilypay4X';
 
     /**
      * @var string

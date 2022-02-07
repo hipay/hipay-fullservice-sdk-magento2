@@ -34,7 +34,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 class HostedSplitMethod extends HostedMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_hostedsplit';
+    public const HIPAY_METHOD_CODE = 'hipay_hostedsplit';
 
     /**
      * @var string

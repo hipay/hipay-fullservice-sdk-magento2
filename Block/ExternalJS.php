@@ -18,8 +18,8 @@ namespace HiPay\FullserviceMagento\Block;
 
 class ExternalJS extends \Magento\Framework\View\Element\Template
 {
-    const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
-    const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
+    protected const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
+    protected const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
 
     /**
      * Return figerprint URL

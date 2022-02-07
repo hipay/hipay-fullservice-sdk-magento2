@@ -29,8 +29,8 @@ use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
  */
 class Banco extends AbstractAstropay
 {
-    const HIPAY_METHOD_CODE = 'hipay_banco';
-    const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
+    public const HIPAY_METHOD_CODE = 'hipay_banco';
+    public const HIPAY_METHOD_IDENTIFICATION = parent::IDENTIFICATION_CPF;
 
     /**
      * @var string

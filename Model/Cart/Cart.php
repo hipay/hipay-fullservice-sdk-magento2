@@ -15,7 +15,7 @@ use HiPay\Fullservice\Enum\Transaction\Operation;
  */
 class Cart extends \Magento\Payment\Model\Cart
 {
-    const GENERIC_DISCOUNT = 'Discount';
+    protected const GENERIC_DISCOUNT = 'Discount';
 
     /**
      * @var \Magento\Weee\Helper\Data
