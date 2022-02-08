@@ -74,8 +74,8 @@ class Edit extends \Magento\Backend\App\Action
     {
         // load layout, set active menu and breadcrumbs
         /**
- * @var \Magento\Backend\Model\View\Result\Page $resultPage
-*/
+         * @var \Magento\Backend\Model\View\Result\Page $resultPage
+         */
         $resultPage = $this->resultPageFactory->create();
 
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories')
@@ -103,8 +103,8 @@ class Edit extends \Magento\Backend\App\Action
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This mapping no longer exists.'));
                 /**
- * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+                 * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+                 */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');
@@ -122,8 +122,8 @@ class Edit extends \Magento\Backend\App\Action
 
         // 5. Build edit form
         /**
- * @var \Magento\Backend\Model\View\Result\Page $resultPage
-*/
+         * @var \Magento\Backend\Model\View\Result\Page $resultPage
+         */
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
             $id ? __('Edit Mapping Shipping') : __('New Mapping Shipping Methods'),
