@@ -62,7 +62,7 @@ class Notification extends AbstractHelper
          * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
-        $notificationCollection->addFieldToSelect('*');
+        $notificationCollection->addFieldToSelect(['notification_id']);
         $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
 
         return $notificationCollection->count() > 0;
@@ -74,7 +74,7 @@ class Notification extends AbstractHelper
          * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
-        $notificationCollection->addFieldToSelect('*');
+        $notificationCollection->addFieldToSelect(['notification_id']);
         $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
         $notificationCollection->addFieldToFilter(
             array(

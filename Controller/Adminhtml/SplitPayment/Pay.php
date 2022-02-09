@@ -65,8 +65,8 @@ class Pay extends \Magento\Backend\App\Action
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('split_payment_id');
         /**
- * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+         * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {

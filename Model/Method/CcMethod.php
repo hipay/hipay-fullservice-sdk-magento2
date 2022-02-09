@@ -219,8 +219,10 @@ class CcMethod extends FullserviceMethod
             // Other credit card type number validation
             if (
                 $this->validateCcNum($ccNumber)
-                || $this->otherCcType($info->getCcType())
-                && $this->validateCcNumOther($ccNumber)
+                || (
+                    $this->otherCcType($info->getCcType())
+                    && $this->validateCcNumOther($ccNumber)
+                )
             ) {
                 $ccTypeRegExpList = [
                     //Solo, Switch or Maestro. International safe
@@ -329,8 +331,10 @@ class CcMethod extends FullserviceMethod
             !$expYear
             || !$expMonth
             || (int)$date->format('Y') > $expYear
-            || (int)$date->format('Y') == $expYear
-            && (int)$date->format('m') > $expMonth
+            || (
+                (int)$date->format('Y') == $expYear
+                && (int)$date->format('m') > $expMonth
+            )
         ) {
             return false;
         }

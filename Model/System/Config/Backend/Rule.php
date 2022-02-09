@@ -88,8 +88,8 @@ class Rule extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         /**
- * @var $rule \HiPay\FullserviceMagento\Model\Rule
-*/
+         * @var $rule \HiPay\FullserviceMagento\Model\Rule
+         */
         $rule = $this->ruleFactory->create();
         $rule->load($this->getValue());
 
@@ -121,8 +121,8 @@ class Rule extends \Magento\Framework\App\Config\Value
         parent::_afterload();
 
         /**
- * @var $rule \HiPay\FullserviceMagento\Model\Rule
-*/
+         * @var $rule \HiPay\FullserviceMagento\Model\Rule
+         */
         $rule = $this->ruleFactory->create();
 
         if ($this->getValue()) {

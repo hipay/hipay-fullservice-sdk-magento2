@@ -101,7 +101,7 @@ class OrderPaymentPlugin
      * @param  string $method
      * @return bool
      */
-    protected function isHipayMethod($method)
+    private function isHipayMethod($method)
     {
         if (strpos($method, 'hipay') !== false) {
             return true;

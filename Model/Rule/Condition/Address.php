@@ -196,7 +196,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                     $options = $this->_paymentAllmethods->toOptionArray();
                     break;
                 case 'base_currency_code':
-                    $options = $this->_currencies->toOptionArray(false);
+                    $options = $this->_currencies->toOptionArray();
                     break;
                 case 'created_at':
                     $options = [
