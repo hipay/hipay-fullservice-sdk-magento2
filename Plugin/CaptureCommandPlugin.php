@@ -46,7 +46,7 @@ class CaptureCommandPlugin
      * @param  OrderInterface                          $order
      * @return \Magento\Framework\Phrase|string
      */
-    public function afterExecute(
+    public function aroundExecute(
         \Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject,
         callable $proceed,
         OrderPaymentInterface $payment,
