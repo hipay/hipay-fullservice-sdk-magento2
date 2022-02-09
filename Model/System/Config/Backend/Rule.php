@@ -91,7 +91,7 @@ class Rule extends \Magento\Framework\App\Config\Value
  * @var $rule \HiPay\FullserviceMagento\Model\Rule
 */
         $rule = $this->ruleFactory->create();
-        $rule->getResource()->load($rule, $this->getValue());
+        $rule->load($this->getValue());
 
         if ($errors = $rule->validateData(new DataObject($this->_getRuleData())) !== true) {
             $exception = new \Magento\Framework\Validator\Exception(
@@ -108,7 +108,7 @@ class Rule extends \Magento\Framework\App\Config\Value
 
         $rule->loadPost($this->_getRuleData());
 
-        $rule->getResource()->save($rule);
+        $rule->save();
 
         $this->setValue($rule->getId());
 
@@ -126,7 +126,7 @@ class Rule extends \Magento\Framework\App\Config\Value
         $rule = $this->ruleFactory->create();
 
         if ($this->getValue()) {
-            $rule->getResource()->load($rule, $this->getValue());
+            $rule->load($this->getValue());
             if (!$rule->getId()) {
                 $rule->setMethodCode($this->_getMethodCode());
                 if ($rule->getConfigPath() == "") {

@@ -77,7 +77,7 @@ abstract class AbstractPaymentMethod extends AbstractRequest
             $this->_order = $params['order'];
             if ($this->_order->getQuote() === null) {
                 $this->_quote = $this->_quoteFactory->create();
-                $this->_quote->getResource()->load($this->_quote, $this->_order->getQuoteId());
+                $this->_quote->load($this->_order->getQuoteId());
             }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));

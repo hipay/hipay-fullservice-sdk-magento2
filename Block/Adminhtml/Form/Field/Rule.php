@@ -88,7 +88,7 @@ class Rule extends Field
         $rule->setMethodCode($methodCode);
 
         if ($element->getValue()) {
-            $rule->getResource()->load($rule, $element->getValue());
+            $rule->load($element->getValue());
         }
 
         if ($rule->getConfigPath() == "") {

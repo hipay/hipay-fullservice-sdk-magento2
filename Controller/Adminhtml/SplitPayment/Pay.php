@@ -72,7 +72,7 @@ class Pay extends \Magento\Backend\App\Action
             try {
                 // init model and delete
                 $model = $this->splitPaymentFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
 
                 //Pay this split payment
                 $model->pay();

@@ -46,7 +46,7 @@ class CaptureCommandPlugin
      * @param  OrderInterface                          $order
      * @return \Magento\Framework\Phrase|string
      */
-    public function aroundExecute(
+    public function afterExecute(
         \Magento\Sales\Model\Order\Payment\State\CaptureCommand $subject,
         callable $proceed,
         OrderPaymentInterface $payment,
@@ -74,8 +74,8 @@ class CaptureCommandPlugin
 
             //Set payment to pending, to not paid the invoice
             /**
- * @see Magento\Sales\Model\Order\Payment\Operations\CaptureOperation
-*/
+             * @see Magento\Sales\Model\Order\Payment\Operations\CaptureOperation
+             */
             $payment->setIsTransactionPending(true);
         } else {
             $message = $proceed($payment, $amount, $order);

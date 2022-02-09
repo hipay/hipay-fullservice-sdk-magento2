@@ -72,7 +72,7 @@ class Save extends \Magento\Backend\App\Action
             $model = $this->mappingShippingFactory->create();
             $id = $this->getRequest()->getParam('mapping_shipping_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             } else {
                 if ($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
                     $count = $this->_mappingShippingCollectionFactory->create()
@@ -110,7 +110,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

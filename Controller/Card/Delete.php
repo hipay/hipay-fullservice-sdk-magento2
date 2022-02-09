@@ -59,21 +59,21 @@ class Delete extends CustomerController
     public function execute()
     {
         /**
- * @var $card \HiPay\FullserviceMagento\Model\Card
-*/
+         * @var $card \HiPay\FullserviceMagento\Model\Card
+         */
         $card = $this->cardFactory->create();
-        $card->getResource()->load($card, $this->getRequest()->getParam('id'));
+        $card->load($this->getRequest()->getParam('id'));
         if ($card->getCustomerId() != $this->customerSession->getCustomerId()) {
             /**
- * @var \Magento\Framework\Controller\Result\Forward $resultForward
-*/
+             * @var \Magento\Framework\Controller\Result\Forward $resultForward
+             */
             $resultForward = $this->resultFactory->create(ResultFactory::TYPE_FORWARD);
             $resultForward->forward('noroute');
             return $resultForward;
         }
 
         try {
-            $card->getResource()->delete($card);
+            $card->delete();
             $this->messageManager->addSuccess(__('You deleted your credit card.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());

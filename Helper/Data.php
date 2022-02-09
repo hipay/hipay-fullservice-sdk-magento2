@@ -89,10 +89,10 @@ class Data extends AbstractHelper
                 case 2:
                 case 3:
                     /**
-     * @var $rule Allopass_Hipay_Model_Rule *
-*/
+                     * @var $rule Allopass_Hipay_Model_Rule *
+                     */
                     $rule = $this->ruleFactory->create();
-                    $rule->getResource()->load($rule, $config3dsRules);
+                    $rule->load($config3dsRules);
                     if ($rule->getId() && $rule->validate($quote)) {
                         $params = 1;
                         //case for force 3ds if rules are validated
@@ -127,7 +127,7 @@ class Data extends AbstractHelper
                     return false;
                 case 1:
                     $rule = $this->ruleFactory->create();
-                    $rule->getResource()->load($rule, $filterOneclick);
+                    $rule->load($filterOneclick);
                     if ($rule->getId()) {
                         return (int)$rule->validate($quote);
                     }

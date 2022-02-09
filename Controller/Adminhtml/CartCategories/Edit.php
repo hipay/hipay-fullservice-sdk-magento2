@@ -99,12 +99,12 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($id) {
-            $model->getResource()->load($model, $id);
+            $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This mapping no longer exists.'));
                 /**
- * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+                 * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+                 */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');

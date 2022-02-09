@@ -158,7 +158,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 
         if ($this->_order === null) {
             $this->_order = $this->orderF->create();
-            $this->_order->getResource()->load($this->_order, $this->getOrderId());
+            $this->_order->load($this->getOrderId());
 
             //set custom data before call api
             $desc = sprintf(
@@ -224,7 +224,7 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
             $exception = $e;
         }
         $this->setAttempts($this->getAttempts() + 1);
-        $this->getResource()->save($this);
+        $this->save();
 
         if ($exception) {
             throw $exception;

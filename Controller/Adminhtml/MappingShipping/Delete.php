@@ -56,17 +56,17 @@ class Delete extends \Magento\Backend\App\Action
     {
         $id = $this->getRequest()->getParam('mapping_shipping_id');
         /**
- * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+         * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             $title = "";
             try {
                 // init model and delete
                 $model = $this->mappingShippingFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
                 $title = $model->getName();
-                $model->getResource()->delete($model);
+                $model->delete();
                 // display success message
                 $this->messageManager->addSuccess(__('The mapping shipping has been deleted.'));
                 // go to grid

@@ -79,7 +79,7 @@ class Save extends \Magento\Backend\App\Action
 
             $id = $this->getRequest()->getParam('profile_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             }
 
             $model->setData($data);
@@ -90,7 +90,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this payment profile.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
