@@ -177,39 +177,36 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
                 $this->_config->setModuleVersionInfo(json_encode($infoFormatted));
             }
         }
-        try {
-            $message = __(
-                "We advise you to update the extension if you wish to get the " .
-                "latest fixes and evolutions. " .
-                "To update the extension, please click here : "
-            ) .  $this->readMeUrl;
-            $title = __("HiPay Enterprise %1 available", $this->newVersion);
-            $versionData[] = array(
-                'severity' => $this->getSeverity(),
-                'date_added' => $this->newVersionDate,
-                'title' => $title,
-                'description' => $message,
-                'url' => $this->readMeUrl,
-            );
 
-            if (
-                $this->version != $this->newVersion
-                && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
-            ) {
-                $this->_inbox->create()->parse(array_reverse($versionData));
-            }
-            /*
-             * This will compare the currently installed version with the latest available one.
-             * A message will appear after the login if the two are not matching.
-             */
-            if (
-                $this->version != $this->newVersion
-                && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
-            ) {
-                return true;
-            }
-        } catch (\Exception $e) {
-            return false;
+        $message = __(
+            "We advise you to update the extension if you wish to get the " .
+            "latest fixes and evolutions. " .
+            "To update the extension, please click here : "
+        ) .  $this->readMeUrl;
+        $title = __("HiPay Enterprise %1 available", $this->newVersion);
+        $versionData[] = array(
+            'severity' => $this->getSeverity(),
+            'date_added' => $this->newVersionDate,
+            'title' => $title,
+            'description' => $message,
+            'url' => $this->readMeUrl,
+        );
+
+        if (
+            $this->version != $this->newVersion
+            && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
+        ) {
+            $this->_inbox->create()->parse(array_reverse($versionData));
+        }
+        /*
+         * This will compare the currently installed version with the latest available one.
+         * A message will appear after the login if the two are not matching.
+         */
+        if (
+            $this->version != $this->newVersion
+            && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
+        ) {
+            return true;
         }
 
         return false;

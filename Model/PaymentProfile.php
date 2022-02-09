@@ -121,6 +121,7 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
             $j = $i - 1;
             $startDateClone = clone $startDate;
             $frequencyValue = $periodFrequency + $j;
+            $dateToPay = "";
             switch ($periodUnit) {
                 case self::PERIOD_UNIT_MONTH:
                     $interval = new \DateInterval("P{$frequencyValue}M");

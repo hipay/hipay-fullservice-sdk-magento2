@@ -21,6 +21,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class ConvertSerializedData
+ * Add json serialization command
+ */
 class ConvertSerializedData extends Command
 {
     public $input;
@@ -38,7 +42,7 @@ class ConvertSerializedData extends Command
     protected $productMetadata;
 
     /**
-     * @var
+     * @var \Magento\Framework\App\State
      */
     protected $state;
 
@@ -54,7 +58,7 @@ class ConvertSerializedData extends Command
     }
 
     /**
-     *
+     * Configure command
      */
     protected function configure()
     {
