@@ -63,9 +63,9 @@ class Save extends \Magento\Backend\App\Action
             $model = $this->cartCategoriesFactory->create();
             $id = $this->getRequest()->getParam('mapping_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             } else {
-                $model->getResource()->load($model, $data['category_magento_id'], 'category_magento_id');
+                $model->load($data['category_magento_id'], 'category_magento_id');
                 if ($model->getId()) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
@@ -83,7 +83,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this mapping category.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

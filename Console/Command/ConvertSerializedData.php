@@ -82,7 +82,7 @@ class ConvertSerializedData extends Command
                 $isSerializedActions = $this->isSerialized($item->getData()["actions_serialized"]);
                 if ($isSerializedConditions || $isSerializedActions) {
                     $model = $this->ruleFactory->create();
-                    $model->getResource()->load($model, $item->getData()["rule_id"]);
+                    $model->load($item->getData()["rule_id"]);
                     if ($isSerializedConditions) {
                         $model->setConditionsSerialized(
                             json_encode(unserialize($item->getData()["conditions_serialized"]))

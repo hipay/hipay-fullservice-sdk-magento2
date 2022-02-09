@@ -65,9 +65,9 @@ class Delete extends \Magento\Backend\App\Action
             try {
                 // init model and delete
                 $model = $this->cartCategoriesFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
                 $title = $model->getName();
-                $model->getResource()->delete($model);
+                $model->delete();
                 // display success message
                 $this->messageManager->addSuccess(__('The mapping has been deleted.'));
                 // go to grid

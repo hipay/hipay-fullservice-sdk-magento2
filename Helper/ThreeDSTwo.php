@@ -207,7 +207,7 @@ class ThreeDSTwo extends AbstractHelper
     public function getPaymentProfile($profileId)
     {
         $profile = $this->_ppFactory->create();
-        $profile->getResource()->load($profile, $profileId);
+        $profile->load($profileId);
 
         if (!$profile->getId()) {
             throw new LocalizedException(__('Payment Profile not found.'));

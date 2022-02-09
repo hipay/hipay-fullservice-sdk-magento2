@@ -153,7 +153,7 @@ class HostedSplitMethod extends HostedMethod
             throw new LocalizedException(__('Payment Profile not found.'));
         }
         $profile = $this->profileFactory->create();
-        $profile->getResource()->load($profile, $profileId);
+        $profile->load($profileId);
         if (!$profile->getId()) {
             throw new LocalizedException(__('Payment Profile not found.'));
         }

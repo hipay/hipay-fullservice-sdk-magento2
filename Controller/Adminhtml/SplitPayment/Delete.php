@@ -72,8 +72,8 @@ class Delete extends \Magento\Backend\App\Action
             try {
                 // init model and delete
                 $model = $this->splitPaymentFactory->create();
-                $model->getResource()->load($model, $id);
-                $model->getResource()->delete($model);
+                $model->load($id);
+                $model->delete();
                 // display success message
                 $this->messageManager->addSuccess(__('The split payment has been deleted.'));
                 // go to grid

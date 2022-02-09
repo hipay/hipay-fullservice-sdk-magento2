@@ -74,7 +74,7 @@ class Save extends \Magento\Backend\App\Action
 
             $id = $this->getRequest()->getParam('split_payment_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             }
 
             $model->setData($data);
@@ -85,7 +85,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this split payment.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

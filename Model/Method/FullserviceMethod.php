@@ -514,7 +514,7 @@ abstract class FullserviceMethod extends AbstractMethod
         if ($cardToken && $eci == 9) {
             //Check if current customer is owner of card token
             $card = $this->_cardFactory->create();
-            $card->getResource()->load($card, $cardToken, 'cc_token');
+            $card->load($cardToken, 'cc_token');
 
             if (!$card->getId() || ($card->getCustomerId() != $this->_checkoutSession->getQuote()->getCustomerId())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Card does not exist!'));

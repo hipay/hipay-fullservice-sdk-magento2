@@ -111,8 +111,8 @@ class Edit extends \Magento\Backend\App\Action
             $this->messageManager->addError(__("You can't create a split payment."));
 
             /**
- * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+             * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+             */
             $resultRedirect = $this->resultRedirectFactory->create();
 
             return $resultRedirect->setPath('*/*/');
@@ -120,12 +120,12 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($id) {
-            $model->getResource()->load($model, $id);
+            $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This split payment no longer exists.'));
                 /**
- * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+                 * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+                 */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');

@@ -42,7 +42,7 @@ class OrderPaymentPlugin
      *
      * @return \Magento\Sales\Model\Order\Payment
      */
-    public function aroundAccept(\Magento\Sales\Model\Order\Payment $subject, callable $proceed)
+    public function afterAccept(\Magento\Sales\Model\Order\Payment $subject, callable $proceed)
     {
 
         if ($this->isHipayMethod($subject->getMethod())) {
@@ -78,7 +78,7 @@ class OrderPaymentPlugin
      * @param  bool          $isOnline
      * @return Order\Payment
      */
-    public function aroundDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
+    public function afterDeny(\Magento\Sales\Model\Order\Payment $subject, callable $proceed, $isOnline = true)
     {
 
         if ($this->isHipayMethod($subject->getMethod()) && $isOnline) {

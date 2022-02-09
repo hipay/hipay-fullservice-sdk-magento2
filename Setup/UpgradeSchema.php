@@ -265,12 +265,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'entity_id'
                 )
                 ->addForeignKey(
-                    'fk_mage_hipay_split_payment_mage_customer_entity_customer_id',
-                    'customer_id',
-                    'mage_customer_entity',
-                    'entity_id'
-                )
-                ->addForeignKey(
                     'fk_mage_hipay_split_payment_hipay_payment_profile_profile_id',
                     'profile_id',
                     'mage_hipay_payment_profile',
@@ -501,12 +495,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         null,
                         ['nullable' => false],
                         'Creation date of token'
-                    )
-                    ->addForeignKey(
-                        'fk_mage_hipay_customer_card_mage_customer_entity_customer_id',
-                        'customer_id',
-                        'mage_customer_entity',
-                        'entity_id'
                     );
 
                 $setup->getConnection()->createTable($table);

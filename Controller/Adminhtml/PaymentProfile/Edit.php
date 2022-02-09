@@ -99,7 +99,7 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($id) {
-            $model->getResource()->load($model, $id);
+            $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This payment profile no longer exists.'));
                 /**

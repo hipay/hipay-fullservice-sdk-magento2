@@ -57,17 +57,17 @@ class Delete extends \Magento\Backend\App\Action
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('profile_id');
         /**
- * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+         * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             $title = "";
             try {
                 // init model and delete
                 $model = $this->paymentProfileFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
                 $title = $model->getName();
-                $model->getResource()->delete($model);
+                $model->delete();
                 // display success message
                 $this->messageManager->addSuccess(__('The payment profile has been deleted.'));
                 // go to grid

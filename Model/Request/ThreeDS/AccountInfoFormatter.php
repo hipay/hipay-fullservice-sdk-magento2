@@ -174,7 +174,7 @@ class AccountInfoFormatter extends AbstractRequest
 
         if ($this->_threeDSHelper->isCustomerLoggedIn() && $this->_threeDSHelper->isRecurring($this->_checkoutData)) {
             $card = $this->_cardFactory->create();
-            $card->getResource()->load($card, $this->getCardToken(), 'cc_token');
+            $card->load($this->getCardToken(), 'cc_token');
 
             if ($card->getId()) {
                 $paymentInfo->enrollment_date = (int)date('Ymd', strtotime($card->getCreatedAt()));

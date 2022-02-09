@@ -196,7 +196,7 @@ class Manager
 
         if ($this->getConfiguration()->isAdminArea()) {
             $this->_order->getPayment()->setAdditionalInformation('is_moto', 1);
-            $this->_order->getResource()->save($this->_order);
+            $this->_order->save();
         }
 
         return $hppModel;
@@ -226,7 +226,7 @@ class Manager
         //If is admin area set mo/to value to payment additionnal informations
         if ($this->getConfiguration()->isAdminArea()) {
             $this->_order->getPayment()->setAdditionalInformation('is_moto', 1);
-            $this->_order->getResource()->save($this->_order);
+            $this->_order->save();
         }
 
         return $transaction;
