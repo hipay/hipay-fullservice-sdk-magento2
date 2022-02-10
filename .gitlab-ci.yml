@@ -59,7 +59,6 @@ code-quality:
   tags:
     - small
 
-
 build-test-2-1-10:
   stage: build-test
   script:
