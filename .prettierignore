@@ -1,3 +1,5 @@
+.prettierignore
 **/*.php
 **/*.csv
 **/*.xml
+**/*.phtml
