@@ -50,6 +50,7 @@
             <include path="HiPay_FullserviceMagento::system/method/ideal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ing.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/paypal.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/mbway_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/mbway.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/postfinance-card.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/postfinance-efinance.xml"/>

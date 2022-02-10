@@ -32,6 +32,7 @@
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
+                <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -104,6 +105,7 @@
                 <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
                 <item name="hipay_postfinancecardapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceCard::HIPAY_METHOD_CODE</item>
                 <item name="hipay_paypalapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Paypal::HIPAY_METHOD_CODE</item>
+                <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
                 <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_CODE</item>

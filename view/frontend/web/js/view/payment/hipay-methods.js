@@ -123,6 +123,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-paypalapi'
     },
     {
+      type: 'hipay_mbway_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway-hosted-fields'
+    },
+    {
       type: 'hipay_mbway',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
