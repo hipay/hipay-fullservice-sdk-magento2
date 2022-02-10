@@ -15,36 +15,34 @@
 var id = 0;
 var x = require('casper').selectXPath;
 
-function setId(pending)
-{
-    id = getOrderIdFromPage(pending);
-    casper.echo("Order Id : " + id, "COMMENT");
+function setId(pending) {
+  id = getOrderIdFromPage(pending);
+  casper.echo('Order Id : ' + id, 'COMMENT');
 }
 
-function getId()
-{
-    return id;
+function getId() {
+  return id;
 }
 
-function getOrderIdFromPage(pending)
-{
-    var orderID;
+function getOrderIdFromPage(pending) {
+  var orderID;
 
-    if (pending) {
-        orderID = casper.fetchText(x('//p[contains(., "Order #")]')).split('#')[1];
-    } else {
-        var text = casper.fetchText(x('//p[contains(., "Your order # is:")]')).split(':')[1];
-        orderID = text.substring(1, text.length - 1);
-    }
-    return orderID;
+  if (pending) {
+    orderID = casper.fetchText(x('//p[contains(., "Order #")]')).split('#')[1];
+  } else {
+    var text = casper
+      .fetchText(x('//p[contains(., "Your order # is:")]'))
+      .split(':')[1];
+    orderID = text.substring(1, text.length - 1);
+  }
+  return orderID;
 }
-function setCasper(casperInstance)
-{
-    casper = casperInstance;
-};
+function setCasper(casperInstance) {
+  casper = casperInstance;
+}
 
 module.exports = {
-    setId: setId,
-    getId: getId,
-    setCasper: setCasper
+  setId: setId,
+  getId: getId,
+  setCasper: setCasper
 };

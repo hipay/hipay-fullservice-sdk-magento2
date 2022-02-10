@@ -15,17 +15,17 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            card: 'HiPay_FullserviceMagento/card',
-            validation: 'HiPay_FullserviceMagento/js/validation'
-        }
-    },
-    config: {
-        mixins: {
-            'Magento_Tax/js/view/checkout/summary/grand-total': {
-                'HiPay_FullserviceMagento/js/grand-total-mixin': true
-            }
-        }
+  map: {
+    '*': {
+      card: 'HiPay_FullserviceMagento/card',
+      validation: 'HiPay_FullserviceMagento/js/validation'
     }
+  },
+  config: {
+    mixins: {
+      'Magento_Tax/js/view/checkout/summary/grand-total': {
+        'HiPay_FullserviceMagento/js/grand-total-mixin': true
+      }
+    }
+  }
 };

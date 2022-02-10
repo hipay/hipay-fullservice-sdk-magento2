@@ -14,28 +14,22 @@
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 
-define(
-    [
-        'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
-    ],
-    function ($,Component) {
-        'use strict';
-        return Component.extend(
-            {
-                defaults: {
-                    template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-                    redirectAfterPlaceOrder: false
-                },
+define([
+  'jquery',
+  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
+], function ($, Component) {
+  'use strict';
+  return Component.extend({
+    defaults: {
+      template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+      redirectAfterPlaceOrder: false
+    },
 
-                getCode: function () {
-                    return 'hipay_dexia';
-                },
-                isActive: function () {
-                    return true;
-                }
-            }
-        );
+    getCode: function () {
+      return 'hipay_dexia';
+    },
+    isActive: function () {
+      return true;
     }
-);
-
+  });
+});

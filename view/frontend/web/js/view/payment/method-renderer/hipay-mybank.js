@@ -13,33 +13,25 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define(
-    [
-        'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
-        'Magento_Checkout/js/model/quote'
-    ],
-    function (
-        $,
-        Component,
-        quote
-    ) {
-        'use strict';
-        return Component.extend(
-            {
-                defaults: {
-                    template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-                    afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
-                    redirectAfterPlaceOrder: false
-                },
+define([
+  'jquery',
+  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
+  'Magento_Checkout/js/model/quote'
+], function ($, Component, quote) {
+  'use strict';
+  return Component.extend({
+    defaults: {
+      template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+      afterPlaceOrderUrl:
+        window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
+      redirectAfterPlaceOrder: false
+    },
 
-                getCode: function () {
-                    return 'hipay_mybank';
-                },
-                isActive: function () {
-                    return true;
-                }
-            }
-        );
+    getCode: function () {
+      return 'hipay_mybank';
+    },
+    isActive: function () {
+      return true;
     }
-);
+  });
+});

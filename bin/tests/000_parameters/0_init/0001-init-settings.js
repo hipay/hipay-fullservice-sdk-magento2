@@ -15,40 +15,34 @@
 /**********************************************************************************************
  *                       Init settings
  /**********************************************************************************************/
-casper.test.begin(
-    'Init settings', function (test) {
-        phantom.clearCookies();
+casper.test.begin('Init settings', function (test) {
+  phantom.clearCookies();
 
-        casper.start(baseURL)
-        .thenOpen(
-            urlBackend, function () {
-                backendLibHiPay.logToHipayBackend(test, loginBackend, passBackend);
-            }
-        )
-        .then(
-            function () {
-                backendLibHiPay.selectAccountBackend(test, "OGONE_DEV");
-            }
-        )
-        /* Open Integration tab */
-        .then(
-            function () {
-                this.echo("Open Integration nav", "INFO");
-                this.waitForUrl(
-                    /maccount/, function success()
-                    {
-                        backendLibHiPay.selectHashingAlgorithm(test, "SHA1");
-                    }, function fail()
-                    {
-                        test.assertUrlMatch(/maccount/, "Dashboard page with account ID exists");
-                    }
-                )
-            }
-        )
-        .run(
-            function () {
-                test.done();
-            }
-        );
-    }
-);
+  casper
+    .start(baseURL)
+    .thenOpen(urlBackend, function () {
+      backendLibHiPay.logToHipayBackend(test, loginBackend, passBackend);
+    })
+    .then(function () {
+      backendLibHiPay.selectAccountBackend(test, 'OGONE_DEV');
+    })
+    /* Open Integration tab */
+    .then(function () {
+      this.echo('Open Integration nav', 'INFO');
+      this.waitForUrl(
+        /maccount/,
+        function success() {
+          backendLibHiPay.selectHashingAlgorithm(test, 'SHA1');
+        },
+        function fail() {
+          test.assertUrlMatch(
+            /maccount/,
+            'Dashboard page with account ID exists'
+          );
+        }
+      );
+    })
+    .run(function () {
+      test.done();
+    });
+});

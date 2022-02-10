@@ -13,54 +13,49 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define(
-    [
-    'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
-    'Magento_Checkout/js/model/quote'
-    ],
-    function (Component, quote) {
-        'use strict';
-        return Component.extend(
-            {
-                defaults: {
-                    template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-                    afterPlaceOrderUrl:
-                      window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
-                    redirectAfterPlaceOrder: false
-                },
+define([
+  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
+  'Magento_Checkout/js/model/quote'
+], function (Component, quote) {
+  'use strict';
+  return Component.extend({
+    defaults: {
+      template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
+      afterPlaceOrderUrl:
+        window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl,
+      redirectAfterPlaceOrder: false
+    },
 
-                getCode: function () {
-                    return 'hipay_bnpp3X';
-                },
-                isActive: function () {
-                    return true;
-                },
+    getCode: function () {
+      return 'hipay_bnpp3X';
+    },
+    isActive: function () {
+      return true;
+    },
 
-                getData: function () {
-                    return {
-                        method: this.item.method,
-                        additional_data: {
-                            cc_type: 'bnpp3x'
-                        }
-                    };
-                },
+    getData: function () {
+      return {
+        method: this.item.method,
+        additional_data: {
+          cc_type: 'bnpp3x'
+        }
+      };
+    },
 
-                /**
-                 *  Return warning messages for some provider rules
-                 *
-                 * @returns {*}
-                 */
-                getWarningsMessages: function () {
-                    var billingAddress = quote.billingAddress();
-                    if (billingAddress) {
-                        var re = /^((\+|00)33|0)[1-9][0-9]{8}$/;
-                        if (!re.exec(billingAddress.telephone)) {
-                            return 'Please check the phone number entered.';
-                        }
-                    }
-                    return '';
-                }
-            }
-        );
+    /**
+     *  Return warning messages for some provider rules
+     *
+     * @returns {*}
+     */
+    getWarningsMessages: function () {
+      var billingAddress = quote.billingAddress();
+      if (billingAddress) {
+        var re = /^((\+|00)33|0)[1-9][0-9]{8}$/;
+        if (!re.exec(billingAddress.telephone)) {
+          return 'Please check the phone number entered.';
+        }
+      }
+      return '';
     }
-);
+  });
+});

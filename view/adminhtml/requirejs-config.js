@@ -15,9 +15,9 @@
  */
 
 var config = {
-    map: {
-        '*': {
-            fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form'
-        }
+  map: {
+    '*': {
+      fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form'
     }
+  }
 };
