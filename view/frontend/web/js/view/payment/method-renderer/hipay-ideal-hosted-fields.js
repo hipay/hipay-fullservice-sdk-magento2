@@ -56,7 +56,7 @@ define([
       self._super();
 
       self.configHipay = {
-        selector: 'hipay-container-hosted-fields-local',
+        selector: `hipay-container-hosted-fields-${self.getProductCode()}`,
         template: 'auto'
       };
     },
@@ -128,6 +128,9 @@ define([
 
     context: function () {
       return this;
+    },
+    getProductCode: function () {
+      return 'ideal';
     },
     getCode: function () {
       return 'hipay_ideal_hosted_fields';

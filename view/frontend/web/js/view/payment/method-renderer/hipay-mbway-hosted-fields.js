@@ -56,7 +56,7 @@ define([
       self._super();
 
       self.configHipay = {
-        selector: 'hipay-container-hosted-fields-local',
+        selector: `hipay-container-hosted-fields-${self.getProductCode()}`,
         template: 'auto'
       };
     },
@@ -71,7 +71,7 @@ define([
         lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
       });
 
-      self.hipayHostedFields = self.hipaySdk.create('ideal', self.configHipay);
+      self.hipayHostedFields = self.hipaySdk.create('mbway', self.configHipay);
 
       self.isPlaceOrderAllowed(true);
 
@@ -94,9 +94,7 @@ define([
 
     initObservable: function () {
       var self = this;
-      self
-        ._super()
-        .observe(['creditCardType', 'issuer_bank_id', 'browser_info']);
+      self._super().observe(['creditCardType', 'phone', 'browser_info']);
 
       return self;
     },
@@ -111,7 +109,7 @@ define([
       self.hipayHostedFields.getPaymentData().then(
         function (response) {
           self.creditCardType(response.payment_product);
-          self.issuer_bank_id(response.issuer_bank_id);
+          self.phone(response.phone);
           self.browser_info(JSON.stringify(response.browser_info));
           self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
           fullScreenLoader.stopLoader();
@@ -129,6 +127,9 @@ define([
     context: function () {
       return this;
     },
+    getProductCode: function () {
+      return 'mbway';
+    },
     getCode: function () {
       return 'hipay_mbway_hosted_fields';
     },
@@ -140,7 +141,7 @@ define([
         additional_data: {
           cc_type: self.creditCardType(),
           browser_info: self.browser_info(),
-          issuer_bank_id: self.issuer_bank_id()
+          phone: self.phone()
         }
       };
       return $.extend(true, parent, data);

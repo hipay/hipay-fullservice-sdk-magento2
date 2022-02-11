@@ -41,7 +41,9 @@
                 'context': context(),
                 'gateway': getCode(),
             }, 'validation':[]}">
-            <div id="hipay-container-hosted-fields-local" data-bind="visible: initHostedFields()"></div>
+            <div class="hipay-container-hosted-fields-local"
+                data-bind="attr: {'id': 'hipay-container-hosted-fields-' + getProductCode()}, visible: initHostedFields()">
+            </div>
         </form>
         <div class="checkout-agreements-block">
             <!-- ko foreach: $parent.getRegion('before-place-order') -->

@@ -13,11 +13,12 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
-namespace HiPay\FullserviceMagento\Model\Method;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\PhonePaymentMethod;
 
 /**
- * MB Way Hosted Fields Model payment method
+ * MB Way Payment Method Request Object
  *
  * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
@@ -25,23 +26,13 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class MbwayHostedFields extends LocalHostedFields
+class Mbway extends AbstractPaymentMethod
 {
+    protected function mapRequest()
+    {
+        $phonePaymentMethod = new PhonePaymentMethod();
+        $phonePaymentMethod->phone = $this->_order->getPayment()->getAdditionalInformation('phone');
 
-    const HIPAY_METHOD_CODE = 'hipay_mbway_hosted_fields';
-
-    /**
-     * @var string
-     */
-    protected static $_technicalCode = 'mbway';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * @var string[] keys to import in payment additionnal informations
-     */
-    protected $_additionalInformationKeys = ['phone', 'browser_info', 'cc_type'];
+        return $phonePaymentMethod;
+    }
 }
