@@ -37,37 +37,44 @@
       </p>
       <p>
         {{trans "Thank you for your order from %store_name."
-        store_name=$store.getFrontendName()}}<br />
+        store_name=$store.getFrontendName()}}
+        <br />
         {{trans "To validate it, please click on link below. It redirect you on
         credit card form."}}
       </p>
       <p style="font-size: 16px">
-        <b
-          >{{trans '<a href="%redirect_url">I pay my order now!</a>.'
+        <b>
+          {{trans '
+          <a href="%redirect_url">I pay my order now!</a>
+          .'
           redirect_url=$order.getPayment().getAdditionalInformation('redirectUrl')
-          |raw}}</b
-        >
+          |raw}}
+        </b>
       </p>
       <p>
         {{trans 'If you have questions about your order, you can email us at
-        <a href="mailto:%store_email">%store_email</a>' store_email=$store_email
-        |raw}}{{depend store_phone}} {{trans 'or call us at
-        <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone
-        |raw}}{{/depend}}. {{depend store_hours}} {{trans 'Our hours are
-        <span class="no-link">%store_hours</span>.' store_hours=$store_hours
-        |raw}} {{/depend}}
+        <a href="mailto:%store_email">%store_email</a>
+        ' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call
+        us at
+        <a href="tel:%store_phone">%store_phone</a>
+        ' store_phone=$store_phone |raw}}{{/depend}}. {{depend store_hours}}
+        {{trans 'Our hours are
+        <span class="no-link">%store_hours</span>
+        .' store_hours=$store_hours |raw}} {{/depend}}
       </p>
     </td>
   </tr>
   <tr class="email-summary">
     <td>
       <h1>
-        {{trans 'Your Order <span class="no-link">#%increment_id</span>'
-        increment_id=$order.increment_id |raw}}
+        {{trans 'Your Order
+        <span class="no-link">#%increment_id</span>
+        ' increment_id=$order.increment_id |raw}}
       </h1>
       <p>
-        {{trans 'Placed on <span class="no-link">%created_at</span>'
-        created_at=$order.getCreatedAtFormatted(2) |raw}}
+        {{trans 'Placed on
+        <span class="no-link">%created_at</span>
+        ' created_at=$order.getCreatedAtFormatted(2) |raw}}
       </p>
     </td>
   </tr>
