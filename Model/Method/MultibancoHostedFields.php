@@ -16,6 +16,8 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
+use HiPay\Fullservice\Enum\Transaction\TransactionState;
+
 /**
  * Multibanco Hosted Fields Model payment method
  *
@@ -44,4 +46,32 @@ class MultibancoHostedFields extends LocalHostedFields
      * @var string[] keys to import in payment additionnal informations
      */
     protected $_additionalInformationKeys = ['browser_info', 'cc_type'];
+
+    /**
+     * Set pending state if transaction state if forwarding & get pending url
+     * @param \HiPay\Fullservice\Gateway\Model\Transaction $response
+     * @return string Redirect URL
+     * @throws LocalizedException
+     */
+    protected function processResponse($response)
+    {
+        if ($response->getState() === TransactionState::FORWARDING) {
+            $response->setState(TransactionState::PENDING);
+        }
+        
+        return parent::processResponse($response);
+    }
+
+    /**
+     * Place order & set reference to pay information
+     * @param \Magento\Payment\Model\InfoInterface $payment
+     */
+    public function place(\Magento\Payment\Model\InfoInterface $payment)
+    {
+        parent::place($payment);
+
+        $payment->setAdditionalInformation('reference_to_pay', $payment->getAdditionalInformation('response')['reference_to_pay']);
+
+        return $this;
+    }
 }

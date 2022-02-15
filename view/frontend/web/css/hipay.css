@@ -62,3 +62,17 @@
 .control.hipay-ccsplit-number {
   padding-top: 15px;
 }
+
+#hipay-container-hosted-fields-multibanco {
+  display: none;
+}
+
+.magento-table-hipay-multibanco {
+  margin: 0 0 1.41575em;
+  max-width: 50%;
+}
+
+.magento-table-hipay-multibanco .magento-table-hipay-title,
+.magento-table-hipay-multibanco .magento-table-hipay-logo {
+  text-align: center;
+}

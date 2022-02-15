@@ -352,7 +352,7 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      *  According the status provide a correct URL FOWARD
      *
-     * @param $response
+     * @param \HiPay\Fullservice\Gateway\Model\Transaction $response
      * @return string Redirect URL
      * @throws LocalizedException
      */
@@ -402,6 +402,7 @@ abstract class FullserviceMethod extends AbstractMethod
             //always in pending, because only notification can change order/transaction statues
             $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
             $payment->getOrder()->setStatus($this->getConfigData('order_status'));
+            $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
         } catch (\Exception $e) {

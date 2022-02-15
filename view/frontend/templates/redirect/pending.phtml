@@ -23,6 +23,44 @@
     <h1><?php /* @escapeNotVerified */ echo __('Your payment is in pending.') ?></h1>
 </div>
 
-<?php if ($block->getRealOrderId()) : ?><p><?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
+<?php if ($block->getRealOrderId()) : ?><p>
+    <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
-<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?></p>
+<?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
+<table aria-label="magento-mutlibanco" class="magento-table magento-table-hipay-multibanco">
+    <thead>
+        <tr>
+            <th colspan="2" scope="col" class="magento-table-hipay-title">
+                <?php echo __('Pay the reference at an ATM or with your Homebanking account.')?>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th colspan="2" scope="col" class="magento-table-hipay-logo"><img id="multibanco-hipay" alt="multibanco"
+                    width="200px" src="<?php echo $referenceToPay['logo'] ?>" /></th>
+        </tr>
+        <tr>
+            <th class="magento-table-hipay-field" scope="col"><?php echo __("ENTITY") ?>:</th>
+            <th class="third-column" scope="col"><?php /* @escapeNotVerified */ echo $referenceToPay['entity'] ?></th>
+        </tr>
+        <tr>
+            <th class="magento-table-hipay-field" scope="col"><?php echo __("REFERENCE") ?>:</th>
+            <th class="magento-table-hipay-field-value" scope="col">
+                <?php /* @escapeNotVerified */ echo $referenceToPay['reference'] ?></th>
+        </tr>
+        <tr>
+            <th class="magento-table-hipay-field" scope="col"><?php echo __("AMOUNT") ?>:</th>
+            <th class="magento-table-hipay-field-value" scope="col">
+                <?php /* @escapeNotVerified */ echo $referenceToPay['amount'] ?> &euro;</th>
+        </tr>
+        <tr>
+            <th class="magento-table-hipay-field" scope="col"><?php echo __("EXPIRATION DATE") ?>:</th>
+            <th class="magento-table-hipay-field-value" scope="col">
+                <?php /* @escapeNotVerified */ echo $referenceToPay['expirationDate'] ?></th>
+        </tr>
+    </tbody>
+</table>
+<?php endif ?>
+<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?>
+</p>

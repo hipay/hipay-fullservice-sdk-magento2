@@ -20,6 +20,11 @@ class Pending extends \Magento\Framework\View\Element\Template
 {
 
     /**
+     * @var \Magento\Sales\Model\OrderFactory
+     */
+    private $_orderFactory;
+
+    /**
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -28,41 +33,60 @@ class Pending extends \Magento\Framework\View\Element\Template
      * Pending constructor.
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session\Proxy $checkoutSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_checkoutSession = $checkoutSession;
+        $this->_orderFactory = $orderFactory;
     }
 
+    /**
+     * Order ID
+     * @return string
+     */
     public function getRealOrderId()
     {
-
         return $this->_checkoutSession->getLastRealOrderId();
     }
 
     /**
-     *  Payment custom error message
-     *
-     * @return      string
+     * Payment custom error message
+     * @return string
      */
     public function getErrorMessage()
     {
-        $error = $this->_checkoutSession->getErrorMessage();
-        return $error;
+        return $this->_checkoutSession->getErrorMessage();
     }
 
     /**
      * Continue shopping URL
-     *
-     * @return      string
+     * @return string
      */
     public function getContinueShoppingUrl()
     {
         return $this->_urlBuilder->getUrl('checkout/cart');
+    }
+
+    public function getReferenceToPay()
+    {
+        $lastOrderId = $this->_checkoutSession->getLastOrderId();
+        if ($lastOrderId) {
+            /** @var $order  \Magento\Sales\Model\Order **/
+            $order = $this->_orderFactory->create();
+            $order->getResource()->load($order, $lastOrderId);
+            $referenceToPay = $order->getPayment()->getAdditionalInformation('reference_to_pay');
+            if ($referenceToPay) {
+                $referenceToPay['logo'] = $this->getViewFileUrl('HiPay_FullserviceMagento::images/local/multibanco.png');
+                return $referenceToPay;
+            }
+        }
+        return null;
     }
 }

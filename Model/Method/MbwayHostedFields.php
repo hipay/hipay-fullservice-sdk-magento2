@@ -16,6 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
+use libphonenumber\NumberParseException;
+use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
+use \Magento\Framework\Exception\LocalizedException;
+
 /**
  * MB Way Hosted Fields Model payment method
  *
@@ -44,4 +49,45 @@ class MbwayHostedFields extends LocalHostedFields
      * @var string[] keys to import in payment additionnal informations
      */
     protected $_additionalInformationKeys = ['phone', 'browser_info', 'cc_type'];
+
+    public function validate()
+    {
+        parent::validate();
+        $info = $this->getInfoInstance();
+
+        $order = $info->getQuote();
+        if ($info->getOrder()) {
+            $order = $info->getOrder();
+        }
+
+        $phoneExceptionMessage = 'The format of the phone number must match a Portuguese phone.';
+        $country = 'PT';
+        $localizedException = new LocalizedException(__($phoneExceptionMessage));
+
+        try {
+            $phoneNumberUtil = PhoneNumberUtil::getInstance();
+            $phoneNumber = $phoneNumberUtil->parse($order->getPayment()->getAdditionalInformation('phone'), $country);
+
+            if (!$phoneNumberUtil->isValidNumber($phoneNumber)) {
+                throw $localizedException;
+            }
+
+            $order->getPayment()->setAdditionalInformation(
+                'phone',
+                str_replace(
+                    ' ',
+                    '',
+                    $phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::NATIONAL)
+                )
+            );
+        } catch (NumberParseException $e) {
+            $this->_logger->critical($e);
+            throw $localizedException;
+        } catch (Exception $e) {
+            $this->_logger->critical($e);
+            throw $localizedException;
+        }
+
+        return $this;
+    }
 }
