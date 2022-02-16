@@ -7,10 +7,13 @@
 
 	<exclude-pattern>*/web/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/conf/*</exclude-pattern>
 
 	<arg name="extensions" value="php" />
 	<arg value="sp"/>
 
+	<rule ref="PEAR.Commenting.FunctionComment.SpacingAfterParamType"/>
+	<rule ref="Squiz.Commenting.DocCommentAlignment.SpaceBeforeStar"/>
 	<rule ref="PSR12">
 		<exclude name="Generic.PHP.NoSilencedErrors.Discouraged"/>
 		<exclute name="Generic.Arrays.DisallowLongArraySyntax.Found"/>

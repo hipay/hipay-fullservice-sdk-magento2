@@ -27,7 +27,7 @@ class Pending extends \Magento\Framework\View\Element\Template
      * Pending constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Model\Session            $checkoutSession
+     * @param \Magento\Checkout\Model\Session                  $checkoutSession
      * @param array                                            $data
      */
     public function __construct(
