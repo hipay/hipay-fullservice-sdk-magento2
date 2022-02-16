@@ -24,6 +24,8 @@ stages:
   allow_failure: false
   variables:
     MYSQL_ROOT_PASSWORD: magento2
+    MYSQL_USER: magento2
+    MYSQL_PASSWORD: magento2
     
     GITHUB_API_TOKEN: $GITHUB_TOKEN
     MAGE_ACCOUNT_PUBLIC_KEY: $MAGE_ACCOUNT_PUBLIC_KEY
