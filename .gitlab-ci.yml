@@ -163,7 +163,7 @@ build:
     - /kaniko/executor
       --cache=true
       --context "dir://${CI_PROJECT_DIR}"
-      --dockerfile "./bin/docker/images/woocommerce/Dockerfile"
+      --dockerfile "./bin/docker/images/default/Dockerfile"
       --destination "${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}"
   tags:
     - small
