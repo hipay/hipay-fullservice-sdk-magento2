@@ -93,7 +93,7 @@ stages:
     - small
   except:
     variables:
-      - $ACCESS_TOKEN
+      - $ONLY_DEPLOY
       - $CI_COMMIT_MESSAGE =~ /skip-tests/
 
 .login_to_registry: &login-to-registry
@@ -130,7 +130,7 @@ build-test-2-1-10:
       --destination "$REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}"
   except:
     variables:
-      - $ACCESS_TOKEN
+      - $ONLY_DEPLOY
   tags:
     - small
 
@@ -142,7 +142,7 @@ casperjs-2-1-10:
     - sh bin/tests/casper_run_circle.sh http://web:8096
   except:
     variables:
-      - $ACCESS_TOKEN
+      - $ONLY_DEPLOY
   tags:
     - medium
 
@@ -152,7 +152,7 @@ build:
   image:
     name: gcr.io/kaniko-project/executor:v1.6.0-debug
   rules:
-    - if: $ACCESS_TOKEN
+    - if: $ONLY_DEPLOY
       when: on_success
     - when: manual
   script:
@@ -169,7 +169,7 @@ deploy2recette:
   stage: deploy
   image: $REGISTRY_CI/gitlab-ci-base:deployment
   rules:
-    - if: $ACCESS_TOKEN
+    - if: $ONLY_DEPLOY
       when: on_success
     - when: manual
   variables:
