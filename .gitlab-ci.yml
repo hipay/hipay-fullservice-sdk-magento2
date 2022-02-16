@@ -3,12 +3,8 @@ image: $REGISTRY_CI/gitlab-ci-base:buster
 variables:
   DOCKER_HOST: tcp://localhost:2375/
   DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ''
   GIT_DEPTH: 10
   RELEASE_NAME: ${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}
-
-services:
-  - docker:19.03.1-dind
 
 stages:
   - build-test
