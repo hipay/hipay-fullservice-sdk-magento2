@@ -124,7 +124,6 @@ casperjs-2-1-10:
   <<: *test_definition
   stage: test
   script:
-    - sleep 1000
     - curl --retry 100 --retry-delay 10 --retry-connrefused --output /dev/null http://web
     - sh bin/tests/casper_run_circle.sh http://web:8096
   except:
