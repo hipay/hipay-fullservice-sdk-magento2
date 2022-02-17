@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -16,6 +17,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
+use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 
 /**
@@ -29,7 +31,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
  */
 class MultibancoHostedFields extends LocalHostedFields
 {
-
     const HIPAY_METHOD_CODE = 'hipay_multibanco_hosted_fields';
 
     /**
@@ -56,7 +57,9 @@ class MultibancoHostedFields extends LocalHostedFields
     protected function processResponse($response)
     {
         if ($response->getState() === TransactionState::FORWARDING) {
-            $response->setState(TransactionState::PENDING);
+            $transaction = $response->toArray();
+            $transaction['state'] = TransactionState::PENDING;
+            $response = (new TransactionMapper($transaction))->getModelObjectMapped();
         }
         
         return parent::processResponse($response);
