@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Controller\Redirect;
@@ -24,15 +23,13 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  *
  * Used to redirect the customer when payment is declined
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Decline extends Fullservice
 {
-
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
@@ -40,19 +37,20 @@ class Decline extends Fullservice
 
     /**
      * Decline constructor.
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Session\Generic $hipaySession
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     *
+     * @param \Magento\Framework\App\Action\Context            $context
+     * @param \Magento\Customer\Model\Session                  $customerSession
+     * @param \Magento\Checkout\Model\Session                  $checkoutSession
+     * @param \Magento\Framework\Session\Generic               $hipaySession
+     * @param \Psr\Log\LoggerInterface                         $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Sales\Model\OrderFactory                $orderFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Session\Generic $hipaySession,
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
@@ -72,7 +70,7 @@ class Decline extends Fullservice
     }
 
     /**
-     * @return $this
+     * @return                                       $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -80,11 +78,15 @@ class Decline extends Fullservice
 
         $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
         if ($lastOrderId) {
-            /** @var $order  \Magento\Sales\Model\Order **/
+            /**
+ * @var $order  \Magento\Sales\Model\Order
+**/
             $order = $this->orderFactory->create();
-            $order->getResource()->load($order, $lastOrderId);
+            $order->load($lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
-                /** @var $cart \Magento\Checkout\Model\Cart **/
+                /**
+ * @var $cart \Magento\Checkout\Model\Cart
+**/
                 $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
                 $items = $order->getItemsCollection();
                 try {

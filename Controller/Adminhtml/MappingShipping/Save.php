@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,23 +10,22 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
 use Magento\Backend\App\Action;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Save Mapping Shipping
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Save extends \Magento\Backend\App\Action
 {
@@ -41,8 +41,9 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Save constructor.
-     * @param Action\Context $context
-     * @param CollectionFactory $mappingShippingCollectionFactory
+     *
+     * @param Action\Context                                          $context
+     * @param CollectionFactory                                       $mappingShippingCollectionFactory
      * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
      */
     public function __construct(
@@ -63,15 +64,17 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+*/
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $model = $this->mappingShippingFactory->create();
             $id = $this->getRequest()->getParam('mapping_shipping_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             } else {
-                if($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
+                if ($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
                     $count = $this->_mappingShippingCollectionFactory->create()
                         ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
                         ->count();
@@ -97,7 +100,6 @@ class Save extends \Magento\Backend\App\Action
                             ['profile_id' => $this->getRequest()->getParam('mapping_shipping_id')]
                         );
                     }
-
                 }
             }
 
@@ -108,7 +110,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

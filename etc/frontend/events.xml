@@ -10,7 +10,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -24,6 +23,6 @@
         <observer name="check_signature" instance="HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver"/>
     </event>
     <event name="controller_action_predispatch_checkout_index_index">
-        <observer name="reload_cart" instance="HiPay\FullserviceMagento\Observer\RestoreBasketObserver" shared="false" />
+        <observer name="reload_cart" instance="HiPay\FullserviceMagento\Observer\RestoreBasketObserver"/>
     </event>
 </config>

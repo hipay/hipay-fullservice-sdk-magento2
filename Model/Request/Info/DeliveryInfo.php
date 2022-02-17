@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -9,23 +10,22 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\DeliveryShippingInfoRequest;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 
 /**
  * Delivery info Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class DeliveryInfo extends AbstractInfoRequest
 {
@@ -36,6 +36,7 @@ class DeliveryInfo extends AbstractInfoRequest
 
     /**
      *  A record frpm Mapping Between Hipay and Magento
+     *
      * @var
      */
     protected $_mappingDelivery;
@@ -49,13 +50,14 @@ class DeliveryInfo extends AbstractInfoRequest
 
     /**
      * {@inheritDoc}
+     *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -63,8 +65,7 @@ class DeliveryInfo extends AbstractInfoRequest
         CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
         $params = []
-    )
-    {
+    ) {
         parent::__construct(
             $logger,
             $checkoutData,
@@ -105,10 +106,9 @@ class DeliveryInfo extends AbstractInfoRequest
     }
 
     /**
-     *
      * {@inheritDoc}
      *
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      * @return \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo
      */
     protected function mapRequest()

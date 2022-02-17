@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
 use Magento\Backend\App\Action;
@@ -20,15 +21,13 @@ use Magento\Backend\App\Action;
 /**
  * Save Mapping category
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Save extends \Magento\Backend\App\Action
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
      */
@@ -36,7 +35,8 @@ class Save extends \Magento\Backend\App\Action
 
     /**
      * Save constructor.
-     * @param Action\Context $context
+     *
+     * @param Action\Context                                         $context
      * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
      */
     public function __construct(
@@ -55,15 +55,17 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+*/
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $model = $this->cartCategoriesFactory->create();
             $id = $this->getRequest()->getParam('mapping_id');
             if ($id) {
-                $model->getResource()->load($model, $id);
+                $model->load($id);
             } else {
-                $model->getResource()->load($model, $data['category_magento_id'], 'category_magento_id');
+                $model->load($data['category_magento_id'], 'category_magento_id');
                 if ($model->getId()) {
                     $this->messageManager->addErrorMessage(__('You have already done this mapping.'));
                     $this->_getSession()->setFormData($data);
@@ -81,7 +83,7 @@ class Save extends \Magento\Backend\App\Action
             );
 
             try {
-                $model->getResource()->save($model);
+                $model->save();
                 $this->messageManager->addSuccess(__('You saved this mapping category.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {

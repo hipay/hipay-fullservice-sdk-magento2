@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -19,11 +19,10 @@ namespace HiPay\FullserviceMagento\Model\Method;
 /**
  * Local Hosted Fields Model payment method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class LocalHostedFields extends FullserviceMethod
 {
@@ -44,8 +43,8 @@ class LocalHostedFields extends FullserviceMethod
     /**
      * Instantiate state and set it to state object
      *
-     * @param string $paymentAction
-     * @param \Magento\Framework\DataObject $stateObject
+     * @param  string                        $paymentAction
+     * @param  \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -64,8 +63,8 @@ class LocalHostedFields extends FullserviceMethod
     /**
      * Perform actions based on passed action name
      *
-     * @param string $action
-     * @param Magento\Payment\Model\InfoInterface $payment
+     * @param  string                              $action
+     * @param  Magento\Payment\Model\InfoInterface $payment
      * @return void
      */
     protected function processAction($action, $payment)
@@ -92,10 +91,10 @@ class LocalHostedFields extends FullserviceMethod
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws LocalizedException
+     * @param                                         \Magento\Payment\Model\InfoInterface $payment
+     * @param                                         float                                $amount
+     * @return                                        $this
+     * @throws                                        LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -109,7 +108,7 @@ class LocalHostedFields extends FullserviceMethod
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject $additionalData
+     * @param  \Magento\Framework\DataObject $additionalData
      * @return $this
      * @throws LocalizedException
      */

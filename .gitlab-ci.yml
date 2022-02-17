@@ -7,6 +7,7 @@ variables:
   RELEASE_NAME: ${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}
 
 stages:
+  - quality
   - build-test
   - test
   - build
@@ -117,6 +118,15 @@ stages:
 #########################
 ####      JOBS      ####
 ########################
+
+code-quality:
+  stage: quality
+  script:
+    - cd ci-tools/phpcs
+    - composer install
+    - ./vendor/bin/phpcs --standard=ruleset.xml
+  tags:
+    - small
 
 build-test-2-1-10:
   stage: build-test

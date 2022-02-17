@@ -8,12 +8,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
- *
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 define([
   'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
@@ -53,8 +51,9 @@ define([
       var billingAddress = quote.billingAddress();
       if (billingAddress) {
         var re = /^((\+|00)33|0)[1-9][0-9]{8}$/;
-        if (!re.exec(billingAddress.telephone))
+        if (!re.exec(billingAddress.telephone)) {
           return 'Please check the phone number entered.';
+        }
       }
       return '';
     }

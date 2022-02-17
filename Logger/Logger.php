@@ -1,6 +1,5 @@
 <?php
 
-
 namespace HiPay\FullserviceMagento\Logger;
 
 use Magento\Payment\Model\Method\Logger as LoggerMagento;
@@ -11,17 +10,16 @@ use Psr\Log\LoggerInterface;
  *
  * Manage log
  *
- * @see  HiPay\FullserviceMagento\Model\Config.php
+ * @see HiPay\FullserviceMagento\Model\Config.php
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Logger extends LoggerMagento
 {
-    const DEBUG_KEYS_MASK = '****';
+    private const DEBUG_KEYS_MASK = '****';
 
     /**
      * @var LoggerInterface
@@ -36,9 +34,9 @@ class Logger extends LoggerMagento
     /**
      * Logs payment related information used for debug
      *
-     * @param array $data
-     * @param array|null $maskKeys
-     * @param bool|null $forceDebug
+     * @param  array      $data
+     * @param  array|null $maskKeys
+     * @param  bool|null  $forceDebug
      * @return void
      */
     public function debug(array $data, array $maskKeys = null, $forceDebug = null)
@@ -61,7 +59,7 @@ class Logger extends LoggerMagento
      */
     private function getDebugReplaceFields()
     {
-        if ($this->config and $this->config->getValue('debugReplaceKeys')) {
+        if ($this->config && $this->config->getValue('debugReplaceKeys')) {
             return explode(',', $this->config->getValue('debugReplaceKeys'));
         }
         return [];
@@ -74,14 +72,14 @@ class Logger extends LoggerMagento
      */
     private function isDebugOn()
     {
-        return $this->config and (bool)$this->config->getValue('debug');
+        return $this->config && (bool)$this->config->getValue('debug');
     }
 
     /**
      * Recursive filter data by private conventions
      *
-     * @param array $debugData
-     * @param array $debugReplacePrivateDataKeys
+     * @param  array $debugData
+     * @param  array $debugReplacePrivateDataKeys
      * @return array
      */
     protected function filterDebugData(array $debugData, array $debugReplacePrivateDataKeys)

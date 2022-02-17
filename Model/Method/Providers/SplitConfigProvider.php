@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
@@ -26,15 +26,13 @@ use HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider;
  * Class Generic config provider
  * Can bu used by all SPLIT payment method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class SplitConfigProvider extends CcConfigProvider
 {
-
     /**
      * @var string $methodCode
      */
@@ -89,17 +87,18 @@ class SplitConfigProvider extends CcConfigProvider
 
     /**
      * SplitConfigProvider constructor.
-     * @param \Magento\Payment\Model\CcConfig $ccConfig
-     * @param \Magento\Payment\Helper\Data $paymentHelper
-     * @param \Magento\Framework\Url $urlBuilder
-     * @param \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $cctypeSource
-     * @param \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
-     * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory
-     * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param Context $context
-     * @param array $methodCodes
+     *
+     * @param  \Magento\Payment\Model\CcConfig                                                $ccConfig
+     * @param  \Magento\Payment\Helper\Data                                                   $paymentHelper
+     * @param  \Magento\Framework\Url                                                         $urlBuilder
+     * @param  \HiPay\FullserviceMagento\Model\System\Config\Source\CcType                    $cctypeSource
+     * @param  \HiPay\FullserviceMagento\Model\Config\Factory                                 $configFactory
+     * @param  \Magento\Framework\View\Asset\Source                                           $assetSource
+     * @param  \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\CollectionFactory $ppCollectionFactory
+     * @param  \Magento\Checkout\Helper\Data                                                  $checkoutHelper
+     * @param  \HiPay\FullserviceMagento\Helper\Data                                          $hipayHelper
+     * @param  Context                                                                        $context
+     * @param  array                                                                          $methodCodes
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -167,7 +166,7 @@ class SplitConfigProvider extends CcConfigProvider
 
     /**
      *
-     * @param string $methodCode
+     * @param  string $methodCode
      * @return \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile\Collection
      */
     protected function getPaymentProfiles($methodCode)
@@ -185,14 +184,16 @@ class SplitConfigProvider extends CcConfigProvider
     }
 
     /**
-     * @param $methodCode
+     * @param  $methodCode
      * @return array
      */
     protected function getPaymentProfilesAsArray($methodCode)
     {
         $pProfiles = [];
 
-        /** @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile */
+        /**
+         * @var $pp \HiPay\FullserviceMagento\Model\PaymentProfile
+        */
         foreach ($this->getPaymentProfiles($methodCode) as $pp) {
             $amounts = $this->checkoutSession->getQuote()->getBaseGrandTotal();
             $currency = $this->checkoutSession->getQuote()->getStore()->getBaseCurrency();

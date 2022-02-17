@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Block\Card\Customer;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -21,11 +22,10 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 /**
  * Customer Cards list block
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class ListCard extends \Magento\Customer\Block\Account\Dashboard
 {
@@ -50,18 +50,19 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
 
     /**
      * ListCard constructor.
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Model\Session\Proxy $customerSession
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param AccountManagementInterface $customerAccountManagement
-     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
+     *
+     * @param \Magento\Framework\View\Element\Template\Context                     $context
+     * @param \Magento\Customer\Model\Session                                      $customerSession
+     * @param \Magento\Newsletter\Model\SubscriberFactory                          $subscriberFactory
+     * @param CustomerRepositoryInterface                                          $customerRepository
+     * @param AccountManagementInterface                                           $customerAccountManagement
+     * @param \Magento\Customer\Helper\Session\CurrentCustomer                     $currentCustomer
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param array $data
+     * @param array                                                                $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
+        \Magento\Customer\Model\Session $customerSession,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $customerAccountManagement,
@@ -144,7 +145,7 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
     /**
      * Format date in short format
      *
-     * @param string $date
+     * @param  string $date
      * @return string
      */
     public function dateFormat($date)

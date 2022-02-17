@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -19,11 +19,10 @@ namespace HiPay\FullserviceMagento\Model;
 /**
  * Hipay Payment profile data model
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile _getResource()
  * @method \HiPay\FullserviceMagento\Model\ResourceModel\PaymentProfile getResource()
@@ -43,23 +42,22 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 {
-
     /**
      * Period units
      *
      * @var string
      */
-    const PERIOD_UNIT_DAY = 'day';
-    const PERIOD_UNIT_WEEK = 'week';
-    const PERIOD_UNIT_SEMI_MONTH = 'semi_month';
-    const PERIOD_UNIT_MONTH = 'month';
-    const PERIOD_UNIT_YEAR = 'year';
+    public const PERIOD_UNIT_DAY = 'day';
+    public const PERIOD_UNIT_WEEK = 'week';
+    public const PERIOD_UNIT_SEMI_MONTH = 'semi_month';
+    public const PERIOD_UNIT_MONTH = 'month';
+    public const PERIOD_UNIT_YEAR = 'year';
 
     /**
      * Payment types
      */
-    const PAYMENT_TYPE_SPLIT = '\HiPay\FullserviceMagento\Model\SplitPayment';
-    const PAYMENT_TYPE_RECURRING = 'recurring_payment';
+    public const PAYMENT_TYPE_SPLIT = '\HiPay\FullserviceMagento\Model\SplitPayment';
+    protected const PAYMENT_TYPE_RECURRING = 'recurring_payment';
 
     /**
      *
@@ -69,12 +67,13 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
 
     /**
      * PaymentProfile constructor.
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param PaymentProfile\Type\Factory $typeFactory
+     *
+     * @param \Magento\Framework\Model\Context                             $context
+     * @param \Magento\Framework\Registry                                  $registry
+     * @param PaymentProfile\Type\Factory                                  $typeFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param array                                                        $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -101,8 +100,8 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     /**
      * Split an amount by profile data
      *
-     * @param $amount
-     * @param $startDate
+     * @param  $amount
+     * @param  $startDate
      * @return array
      * @throws \Exception
      */
@@ -110,18 +109,19 @@ class PaymentProfile extends \Magento\Framework\Model\AbstractModel
     {
         $paymentsSplit = array();
 
-        $maxCycles = ( int )$this->getPeriodMaxCycles();
+        $maxCycles = (int)$this->getPeriodMaxCycles();
 
-        $periodFrequency = ( int )$this->getPeriodFrequency();
+        $periodFrequency = (int)$this->getPeriodFrequency();
         $periodUnit = $this->getPeriodUnit();
 
-        $part = ( int )($amount / $maxCycles);
+        $part = (int)($amount / $maxCycles);
         $fmod = fmod($amount, $maxCycles);
 
         for ($i = 0; $i <= ($maxCycles - 1); $i++) {
             $j = $i - 1;
             $startDateClone = clone $startDate;
             $frequencyValue = $periodFrequency + $j;
+            $dateToPay = "";
             switch ($periodUnit) {
                 case self::PERIOD_UNIT_MONTH:
                     $interval = new \DateInterval("P{$frequencyValue}M");
