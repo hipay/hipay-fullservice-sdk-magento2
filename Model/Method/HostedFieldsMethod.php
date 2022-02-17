@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -22,11 +22,10 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Hosted Fields Payment Method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,8 +33,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedFieldsMethod extends CcMethod
 {
-
-    const HIPAY_METHOD_CODE = 'hipay_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_hosted_fields';
 
     /**
      * @var string
@@ -52,7 +50,6 @@ class HostedFieldsMethod extends CcMethod
      */
     protected $_code = self::HIPAY_METHOD_CODE;
 
-
     /**
      * Payment Method feature
      *
@@ -63,8 +60,8 @@ class HostedFieldsMethod extends CcMethod
     /**
      * Validate payment method information object
      *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return                                       $this
+     * @throws                                       \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -72,7 +69,7 @@ class HostedFieldsMethod extends CcMethod
     {
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -25,23 +26,28 @@ use Magento\Framework\UrlInterface;
  * Ui Column Class
  * Split payment Actions
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class SplitPaymentActions extends Column
 {
-    /** Url path */
-    const SPLIT_URL_PATH_EDIT = 'hipay/splitpayment/edit';
-    const SPLIT_URL_PATH_DELETE = 'hipay/splitpayment/delete';
-    const SPLIT_URL_PATH_PAY = 'hipay/splitpayment/pay';
+    /**
+     * Url path
+     */
+    protected const SPLIT_URL_PATH_EDIT = 'hipay/splitpayment/edit';
+    protected const SPLIT_URL_PATH_DELETE = 'hipay/splitpayment/delete';
+    protected const SPLIT_URL_PATH_PAY = 'hipay/splitpayment/pay';
 
-    /** @var UrlBuilder */
+    /**
+     * @var UrlBuilder
+     */
     protected $actionUrlBuilder;
 
-    /** @var UrlInterface */
+    /**
+     * @var UrlInterface
+     */
     protected $urlBuilder;
 
     /**
@@ -50,13 +56,13 @@ class SplitPaymentActions extends Column
     private $editUrl;
 
     /**
-     * @param ContextInterface $context
+     * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param UrlBuilder $actionUrlBuilder
-     * @param UrlInterface $urlBuilder
-     * @param array $components
-     * @param array $data
-     * @param string $editUrl
+     * @param UrlBuilder         $actionUrlBuilder
+     * @param UrlInterface       $urlBuilder
+     * @param array              $components
+     * @param array              $data
+     * @param string             $editUrl
      */
     public function __construct(
         ContextInterface $context,
@@ -76,7 +82,7 @@ class SplitPaymentActions extends Column
     /**
      * Prepare Data Source
      *
-     * @param array $dataSource
+     * @param  array $dataSource
      * @return array
      */
     public function prepareDataSource(array $dataSource)

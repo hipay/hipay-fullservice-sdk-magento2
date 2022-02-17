@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -24,15 +25,13 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
  * Class Generic config provider
  * Can be used by all payment method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class GenericConfigProvider implements ConfigProviderInterface
 {
-
     /**
      * @var CcConfig
      */
@@ -93,15 +92,15 @@ class GenericConfigProvider implements ConfigProviderInterface
      */
     private $resolver;
 
-
     /**
      * GenericConfigProvider constructor.
-     * @param CcConfig $ccConfig
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     *
+     * @param CcConfig                                                             $ccConfig
+     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
+     * @param \Magento\Customer\Model\Session                                      $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param Context $context
-     * @param array $methodCodes
+     * @param Context                                                              $context
+     * @param array                                                                $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -114,7 +113,7 @@ class GenericConfigProvider implements ConfigProviderInterface
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
     ) {
-        $this->methods= $methodCodes;
+        $this->methods = $methodCodes;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->resolver = $resolver;

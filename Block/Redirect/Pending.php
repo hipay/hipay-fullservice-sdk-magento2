@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice SDK
  *
@@ -9,16 +10,14 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block\Redirect;
 
 class Pending extends \Magento\Framework\View\Element\Template
 {
-
     /**
      * @var \Magento\Sales\Model\OrderFactory
      */
@@ -31,14 +30,15 @@ class Pending extends \Magento\Framework\View\Element\Template
 
     /**
      * Pending constructor.
+     *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Checkout\Model\Session\Proxy $checkoutSession
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param array $data
+     * @param \Magento\Checkout\Model\Session                  $checkoutSession
+     * @param \Magento\Sales\Model\OrderFactory                $orderFactory
+     * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         array $data = []
     ) {
@@ -57,7 +57,8 @@ class Pending extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Payment custom error message
+     *  Payment custom error message
+     *
      * @return string
      */
     public function getErrorMessage()
@@ -67,6 +68,7 @@ class Pending extends \Magento\Framework\View\Element\Template
 
     /**
      * Continue shopping URL
+     *
      * @return string
      */
     public function getContinueShoppingUrl()

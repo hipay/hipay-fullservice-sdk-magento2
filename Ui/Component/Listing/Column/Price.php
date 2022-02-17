@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -23,11 +24,10 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 /**
  * Price Ui Column Class
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Price extends Column
 {
@@ -39,11 +39,11 @@ class Price extends Column
     /**
      * Constructor
      *
-     * @param ContextInterface $context
-     * @param UiComponentFactory $uiComponentFactory
+     * @param ContextInterface       $context
+     * @param UiComponentFactory     $uiComponentFactory
      * @param PriceCurrencyInterface $priceFormatter
-     * @param array $components
-     * @param array $data
+     * @param array                  $components
+     * @param array                  $data
      */
     public function __construct(
         ContextInterface $context,
@@ -59,7 +59,7 @@ class Price extends Column
     /**
      * Prepare Data Source
      *
-     * @param array $dataSource
+     * @param  array $dataSource
      * @return array
      */
     public function prepareDataSource(array $dataSource)

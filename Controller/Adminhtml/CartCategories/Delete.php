@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
 use Magento\Backend\App\Action;
@@ -20,15 +21,13 @@ use Magento\Backend\App\Action;
 /**
  * Delete payment profile
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Delete extends \Magento\Backend\App\Action
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
      */
@@ -36,7 +35,8 @@ class Delete extends \Magento\Backend\App\Action
 
     /**
      * Delete constructor.
-     * @param Action\Context $context
+     *
+     * @param Action\Context                                         $context
      * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
      */
     public function __construct(
@@ -56,16 +56,18 @@ class Delete extends \Magento\Backend\App\Action
     {
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('mapping_id');
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+*/
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             $title = "";
             try {
                 // init model and delete
                 $model = $this->cartCategoriesFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
                 $title = $model->getName();
-                $model->getResource()->delete($model);
+                $model->delete();
                 // display success message
                 $this->messageManager->addSuccess(__('The mapping has been deleted.'));
                 // go to grid

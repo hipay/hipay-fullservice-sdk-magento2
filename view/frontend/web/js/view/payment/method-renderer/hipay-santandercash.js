@@ -8,32 +8,27 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
- *
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define(
-    [
-        'jquery',
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-astropay'
-    ],
-    function ($,Component) {
-        'use strict';
-        return Component.extend({
-            defaults: {
-                template: 'HiPay_FullserviceMagento/payment/hipay-astropay',
-                redirectAfterPlaceOrder: false
-            },
+define([
+  'jquery',
+  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-astropay'
+], function ($, Component) {
+  'use strict';
+  return Component.extend({
+    defaults: {
+      template: 'HiPay_FullserviceMagento/payment/hipay-astropay',
+      redirectAfterPlaceOrder: false
+    },
 
-            getCode: function() {
-                return 'hipay_santandercash';
-            },
-            isActive: function() {
-                return true;
-            }
-        });
+    getCode: function () {
+      return 'hipay_santandercash';
+    },
+    isActive: function () {
+      return true;
     }
-);
+  });
+});

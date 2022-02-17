@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
@@ -20,31 +21,28 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 /**
  * Billing info Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class BillingInfo extends AbstractInfoRequest
 {
+    /**
+     * @var string
+     */
+    protected const KEY_FIRSTNAME = 'firstname';
 
     /**
      * @var string
      */
-    const KEY_FIRSTNAME = 'firstname';
+    protected const KEY_LASTNAME = 'lastname';
 
     /**
-     * @var string
-     */
-    const KEY_LASTNAME = 'lastname';
-
-    /**
-     *
      * {@inheritDoc}
      *
      * @return CustomerBillingInfoRequest
-     *@see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
@@ -102,9 +100,11 @@ class BillingInfo extends AbstractInfoRequest
         $firstName = $billingAddress->getFirstname();
         $lastName = $billingAddress->getLastname();
         $theoricCardHolder = $firstName . ' ' . $lastName;
-        if (( $ccType == 'AE' || $ccType == 'american-express')
+        if (
+            ( $ccType == 'AE' || $ccType == 'american-express')
             && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
-            && count($partsCardOwner) > 1 ) {
+            && count($partsCardOwner) > 1
+        ) {
             $firstName = $this->extractPartOfCardHolder($cardOwner, self::KEY_FIRSTNAME);
             $lastName = $this->extractPartOfCardHolder($cardOwner, self::KEY_LASTNAME);
         }
@@ -116,8 +116,8 @@ class BillingInfo extends AbstractInfoRequest
     /**
      * Extract FirstName et LastName from cardOwner
      *
-     * @param string $cardOwner
-     * @param string $key
+     * @param  string $cardOwner
+     * @param  string $key
      * @return string
      */
     private function extractPartOfCardHolder($cardOwner, $key)
@@ -125,7 +125,7 @@ class BillingInfo extends AbstractInfoRequest
         $split = explode(' ', trim($cardOwner));
         switch ($key) {
             case 'firstname':
-                 return $split[0];
+                return $split[0];
             case 'lastname':
                 return trim(preg_replace('/' . $split[0] . '/', "", $cardOwner, 1));
             default:
@@ -135,11 +135,15 @@ class BillingInfo extends AbstractInfoRequest
 
     /**
      *
-     * @param $str
+     * @param  $str
      * @return string
      */
     private static function stripAccents($str)
     {
-        return strtr(utf8_decode($str), utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'), 'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY');
+        return strtr(
+            utf8_decode($str),
+            utf8_decode('àáâãäçèéêëìíîïñòóôõöùúûüýÿÀÁÂÃÄÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝ'),
+            'aaaaaceeeeiiiinooooouuuuyyAAAAACEEEEIIIINOOOOOUUUUY'
+        );
     }
 }

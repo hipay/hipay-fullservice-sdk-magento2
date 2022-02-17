@@ -10,14 +10,12 @@ use Monolog\Logger as MonologLogger;
 /**
  * Handler Request for gateway
  *
+ * @see HiPay\FullserviceMagento\Model\Config.php
  *
- * @see  HiPay\FullserviceMagento\Model\Config.php
- *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class RequestHandler extends \Magento\Framework\Logger\Handler\Base
 {

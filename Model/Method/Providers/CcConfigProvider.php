@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
@@ -29,16 +29,13 @@ use Magento\Framework\View\Asset\Source;
  * Class CC config provider
  * Can bu used by all Cc API payment method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CcConfigProvider implements ConfigProviderInterface
 {
-
-
     /**
      * @var MethodInterface[]
      */
@@ -76,15 +73,15 @@ class CcConfigProvider implements ConfigProviderInterface
      */
     protected $assetSource;
 
-
     protected $context;
 
     /**
      * CcConfigProvider constructor.
-     * @param CcConfig $ccConfig
+     *
+     * @param CcConfig                    $ccConfig
      * @param System\Config\Source\CcType $cctypeSource
-     * @param Config\Factory $configFactory
-     * @param Source $assetSource
+     * @param Config\Factory              $configFactory
+     * @param Source                      $assetSource
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -94,8 +91,7 @@ class CcConfigProvider implements ConfigProviderInterface
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Config $hipayConfig,
         array $methodCodes = []
-    )
-    {
+    ) {
         $this->urlBuilder = $context->urlBuilder;
         $this->_cctypeSource = $cctypeSource;
         $this->ccConfig = $ccConfig;
@@ -131,32 +127,38 @@ class CcConfigProvider implements ConfigProviderInterface
 
                 if ($methodCode == HostedFieldsMethod::HIPAY_METHOD_CODE) {
                     $conf = array_merge_recursive(
-                        $conf, [
-                        $methodCode => [
-                            'color' => $this->_hipayConfig->getValue('color'),
-                            'fontFamily' => $this->_hipayConfig->getValue('font_family'),
-                            'fontSize' => $this->_hipayConfig->getValue('font_size'),
-                            'fontWeight' => $this->_hipayConfig->getValue('font_weight'),
-                            'placeholderColor' => $this->_hipayConfig->getValue('placeholder_color'),
-                            'caretColor' => $this->_hipayConfig->getValue('caret_color'),
-                            'iconColor' => $this->_hipayConfig->getValue('icon_color'),
-                        ]
-                    ]);
-                } else {
-                    $config = array_merge_recursive($config, [
-                        'payment' => [
-                            'ccform' => [
-                                'months' => [$methodCode => $this->getCcMonths()],
-                                'years' => [$methodCode => $this->getCcYears()],
-                                'hasVerification' => [$methodCode => $this->hasVerification()],
-                                'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
+                        $conf,
+                        [
+                            $methodCode => [
+                                'color' => $this->_hipayConfig->getValue('color'),
+                                'fontFamily' => $this->_hipayConfig->getValue('font_family'),
+                                'fontSize' => $this->_hipayConfig->getValue('font_size'),
+                                'fontWeight' => $this->_hipayConfig->getValue('font_weight'),
+                                'placeholderColor' => $this->_hipayConfig->getValue('placeholder_color'),
+                                'caretColor' => $this->_hipayConfig->getValue('caret_color'),
+                                'iconColor' => $this->_hipayConfig->getValue('icon_color'),
                             ]
                         ]
-                    ]);
+                    );
+                } else {
+                    $config = array_merge_recursive(
+                        $config,
+                        [
+                            'payment' => [
+                                'ccform' => [
+                                    'months' => [$methodCode => $this->getCcMonths()],
+                                    'years' => [$methodCode => $this->getCcYears()],
+                                    'hasVerification' => [$methodCode => $this->hasVerification()],
+                                    'cvvImageUrl' => [$methodCode => $this->getCvvImageUrl()]
+                                ]
+                            ]
+                        ]
+                    );
                 }
 
                 $config = array_merge_recursive(
-                    $config, [
+                    $config,
+                    [
                         'payment' => $conf
                     ]
                 );
@@ -204,7 +206,7 @@ class CcConfigProvider implements ConfigProviderInterface
                 );
                 $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
                 if ($placeholder) {
-                    list($width, $height) = getimagesize($asset->getSourceFile());
+                    list($width, $height) = getimagesizefromstring($asset->getSourceFile());
                     $icons[$code] = [
                         'url' => $asset->getUrl(),
                         'width' => $width,

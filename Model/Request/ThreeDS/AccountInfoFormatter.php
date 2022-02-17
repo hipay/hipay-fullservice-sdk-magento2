@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -10,7 +11,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * @copyright Copyright (c) 2019 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request\ThreeDS;
@@ -25,15 +26,13 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\AccountInfo\Customer as C
 
 /**
  *
- * @package HiPay\FullserviceMagento
- * @author HiPay <support@hipay.com>
+ * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AccountInfoFormatter extends AbstractRequest
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Helper\ThreeDSTwo
      */
@@ -46,17 +45,18 @@ class AccountInfoFormatter extends AbstractRequest
 
     /**
      * AccountInfoFormatter constructor.
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Checkout\Helper\Data $checkoutData
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param \HiPay\FullserviceMagento\Helper\ThreeDSTwo $threeDSHelper
-     * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
-     * @param array $params
+     *
+     * @param  \Psr\Log\LoggerInterface                             $logger
+     * @param  \Magento\Checkout\Helper\Data                        $checkoutData
+     * @param  \Magento\Customer\Model\Session                      $customerSession
+     * @param  \Magento\Checkout\Model\Session                      $checkoutSession
+     * @param  \Magento\Framework\Locale\ResolverInterface          $localeResolver
+     * @param  \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory
+     * @param  \Magento\Framework\UrlInterface                      $urlBuilder
+     * @param  \HiPay\FullserviceMagento\Helper\Data                $helper
+     * @param  \HiPay\FullserviceMagento\Helper\ThreeDSTwo          $threeDSHelper
+     * @param  \HiPay\FullserviceMagento\Model\CardFactory          $cardFactory
+     * @param  array                                                $params
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -89,12 +89,11 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
-     *
      * {@inheritDoc}
      *
      * @return AccountInfo
      * @throws \Exception
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
+     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
@@ -175,7 +174,7 @@ class AccountInfoFormatter extends AbstractRequest
 
         if ($this->_threeDSHelper->isCustomerLoggedIn() && $this->_threeDSHelper->isRecurring($this->_checkoutData)) {
             $card = $this->_cardFactory->create();
-            $card->getResource()->load($card, $this->getCardToken(), 'cc_token');
+            $card->load($this->getCardToken(), 'cc_token');
 
             if ($card->getId()) {
                 $paymentInfo->enrollment_date = (int)date('Ymd', strtotime($card->getCreatedAt()));
@@ -193,7 +192,6 @@ class AccountInfoFormatter extends AbstractRequest
         $shippingInfo = new ShippingInfo();
 
         if ($this->_threeDSHelper->isCustomerLoggedIn()) {
-
             $shippingInfo->shipping_used_date = $this->_threeDSHelper->getDateAddressFirstUsed(
                 $this->getCustomerAddressId(),
                 $this->_customerId,

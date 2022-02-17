@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -20,12 +21,10 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 /**
  * Applepay config provider
  *
- *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class ApplepayConfigProvider implements ConfigProviderInterface
 {
@@ -84,12 +83,13 @@ class ApplepayConfigProvider implements ConfigProviderInterface
 
     /**
      * ApplePayConfigProvider constructor.
-     * @param \Magento\Payment\Model\CcConfig $ccConfig
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
-     * @param \Magento\Customer\Model\Session $customerSession
+     *
+     * @param \Magento\Payment\Model\CcConfig                                      $ccConfig
+     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
+     * @param \Magento\Customer\Model\Session                                      $customerSession
      * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param Context $context
-     * @param array $methodCodes
+     * @param Context                                                              $context
+     * @param array                                                                $methodCodes
      */
     public function __construct(
         \Magento\Payment\Model\CcConfig $ccConfig,
@@ -125,20 +125,23 @@ class ApplepayConfigProvider implements ConfigProviderInterface
         foreach ($this->methods as $methodCode) {
             $this->hipayConfig->setMethodCode($methodCode);
             if ($this->hipayConfig->isPaymentMethodActive()) {
-                $config = array_merge_recursive($config, [
-                    'payment' => [
-                        $methodCode => [
-                            'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameTokenJs(),
-                            'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordTokenJs(),
-                            'env' => $this->hipayConfig->getApiEnv(),
-                            'sdkJsUrl' => $this->hipayConfig->getSdkJsUrl(),
-                            'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
-                            'display_name' => $this->hipayConfig->getValue('display_name'),
-                            'button_type' => $this->hipayConfig->getValue('button_type'),
-                            'button_colour' => $this->hipayConfig->getValue('button_colour'),
+                $config = array_merge_recursive(
+                    $config,
+                    [
+                        'payment' => [
+                            $methodCode => [
+                                'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameTokenJs(),
+                                'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordTokenJs(),
+                                'env' => $this->hipayConfig->getApiEnv(),
+                                'sdkJsUrl' => $this->hipayConfig->getSdkJsUrl(),
+                                'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
+                                'display_name' => $this->hipayConfig->getValue('display_name'),
+                                'button_type' => $this->hipayConfig->getValue('button_type'),
+                                'button_colour' => $this->hipayConfig->getValue('button_colour'),
+                            ],
                         ],
-                    ],
-                ]);
+                    ]
+                );
             }
         }
 

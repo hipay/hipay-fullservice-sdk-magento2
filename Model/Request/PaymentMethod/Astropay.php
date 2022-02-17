@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod;
@@ -20,11 +21,10 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod;
 /**
  * Astropay Payment Method Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Astropay extends AbstractPaymentMethod
 {
@@ -34,7 +34,9 @@ class Astropay extends AbstractPaymentMethod
      */
     protected function mapRequest()
     {
-        /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod */
+        /**
+ * @var HiPay\Fullservice\Gateway\Request\PaymentMethod\AstropayPaymentMethod
+*/
         $astropayPaymentMethod = new AstropayPaymentMethod();
         $astropayPaymentMethod->national_identification_number = $this->_order
             ->getPayment()->getAdditionalInformation('nationalIdentification');

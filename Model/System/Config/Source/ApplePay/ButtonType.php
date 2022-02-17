@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,30 +10,29 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
 
 /**
  * Source model for available 3ds values
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class ButtonType implements \Magento\Framework\Option\ArrayInterface
 {
-    const PLAIN = 'plain';
-    const BUY = 'buy';
-    const SET_UP = 'set-up';
-    const DONATE = 'donate';
-    const CHECK_OUT = 'check-out';
-    const BOOK = 'book';
-    const SUBSCRIBE = 'subscribe';
+    protected const PLAIN = 'plain';
+    protected const BUY = 'buy';
+    protected const SET_UP = 'set-up';
+    protected const DONATE = 'donate';
+    protected const CHECK_OUT = 'check-out';
+    protected const BOOK = 'book';
+    protected const SUBSCRIBE = 'subscribe';
 
     /**
      * Options getter

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Plugin
  *
@@ -6,26 +7,24 @@
  *
  * Used to customize custom data field
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 
 namespace HiPay\FullserviceMagento\Plugin;
 
-use \HiPay\FullserviceMagento\Model\Request\Order as Order;
+use HiPay\FullserviceMagento\Model\Request\Order as Order;
 
 class CustomDataPlugin
 {
-
     /**
      *  Complete general getCustomData with HiPay'datas
      *
-     * @see \HiPay\FullserviceMagento\Helper\Data
-     * @param \HiPay\FullserviceMagento\Model\Request\Order $subject
-     * @param $result
+     * @see    \HiPay\FullserviceMagento\Helper\Data
+     * @param  \HiPay\FullserviceMagento\Model\Request\Order $subject
+     * @param  $result
      * @return array
      */
     public function afterGetCustomData(Order $subject, $result)
@@ -36,14 +35,12 @@ class CustomDataPlugin
         // Shipping description
         $result['shipping_description'] = $order->getShippingDescription();
 
+        $customerId = $order->getCustomerId();
         // Customer information
-        if ($order->getCustomerId()) {
-            $customerId = $order->getCustomerId();
-            if ($subject->getCustomerRepositoryInterface() && $subject->getGroupRepositoryInterface()) {
-                $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
-                $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
-                $result['customer_code'] = $group->getCode();
-            }
+        if ($customerId && $subject->getCustomerRepositoryInterface() && $subject->getGroupRepositoryInterface()) {
+            $customer = $subject->getCustomerRepositoryInterface()->getById($customerId);
+            $group = $subject->getGroupRepositoryInterface()->getById($customer->getGroupId());
+            $result['customer_code'] = $group->getCode();
         }
 
         // Method payment information

@@ -4,20 +4,18 @@ namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Checkout\Model\Session\Proxy;
-
+use Magento\Checkout\Model\Session;
 
 class RestoreBasketObserver implements ObserverInterface
 {
     /**
-     * @var Proxy
+     * @var Session
      */
     private $checkoutSession;
 
     public function __construct(
-        Proxy $checkoutSession
-    )
-    {
+        Session $checkoutSession
+    ) {
         $this->checkoutSession = $checkoutSession;
     }
 
@@ -26,12 +24,13 @@ class RestoreBasketObserver implements ObserverInterface
 
         $lastRealOrder = $this->checkoutSession->getLastRealOrder();
 
-        if ($lastRealOrder->getPayment()) {
-            if ($lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')) {
-                if ($lastRealOrder->getData('state') === 'pending_payment' && $lastRealOrder->getData('status') === 'pending_payment') {
-                    $this->checkoutSession->restoreQuote();
-                }
-            }
+        if (
+            $lastRealOrder->getPayment()
+            && $lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
+            && $lastRealOrder->getData('state') === 'pending_payment'
+            && $lastRealOrder->getData('status') === 'pending_payment'
+        ) {
+            $this->checkoutSession->restoreQuote();
         }
         return true;
     }

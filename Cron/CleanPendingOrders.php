@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/mit-license.php
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://opensource.org/licenses/mit-license.php MIT License
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
 
 namespace HiPay\FullserviceMagento\Cron;
@@ -22,15 +21,13 @@ namespace HiPay\FullserviceMagento\Cron;
  *
  * Used to clean orders in pending or pending review since more than 30 minutes
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CleanPendingOrders
 {
-
     /**
      *
      * @var \Magento\Payment\Helper\Data $paymentHelper ;
@@ -69,11 +66,11 @@ class CleanPendingOrders
 
     /**
      *
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @param \Magento\Sales\Model\OrderFactory                  $orderFactory
+     * @param \Magento\Payment\Helper\Data                       $paymentHelper
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Sales\Api\OrderManagementInterface $orderManagement
+     * @param \Psr\Log\LoggerInterface                           $logger
+     * @param \Magento\Sales\Api\OrderManagementInterface        $orderManagement
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
      */
     public function __construct(
@@ -115,14 +112,21 @@ class CleanPendingOrders
         $date = new \DateTime($gmtDate);
         $interval = new \DateInterval("PT{$limitedTime}M");
 
-        /** @var \Magento\Sales\Model\Order $orderModel */
+        /**
+ * @var \Magento\Sales\Model\Order $orderModel
+*/
         $orderModel = $this->_orderFactory->create();
 
-        /** @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection */
+        /**
+ * @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection
+*/
         $collection = $orderModel->getCollection();
 
         $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at'])
-            ->addFieldToFilter('main_table.state', ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]])
+            ->addFieldToFilter(
+                'main_table.state',
+                ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]]
+            )
             ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
             ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format($dateFormat))])
             ->join(
@@ -131,11 +135,14 @@ class CleanPendingOrders
                 ['method']
             );
 
-        /** @var \Magento\Sales\Model\Order $order */
+        /**
+ * @var \Magento\Sales\Model\Order $order
+*/
         foreach ($collection as $order) {
-            if ($order->getState() === \Magento\Sales\Model\Order::STATE_NEW ||
-                $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
-                in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
+            if (
+                $order->getState() === \Magento\Sales\Model\Order::STATE_NEW
+                || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
+                || in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
             ) {
                 $orderCreationTimeIsCancellable = true;
 
