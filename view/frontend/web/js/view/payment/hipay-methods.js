@@ -121,6 +121,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-paypalapi'
     },
     {
+      type: 'hipay_mbway_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway-hosted-fields'
+    },
+    {
       type: 'hipay_mbway',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
@@ -214,6 +219,11 @@ define([
       type: 'hipay_mybank',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mybank'
+    },
+    {
+      type: 'hipay_multibanco_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-multibanco-hosted-fields'
     },
     {
       type: 'hipay_multibanco',

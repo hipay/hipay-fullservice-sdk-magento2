@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
-use HiPay\Fullservice\Gateway\Request\PaymentMethod\IDealPaymentMethod;
+use HiPay\Fullservice\Gateway\Request\PaymentMethod\IssuerBankIDPaymentMethod;
 
 /**
  * IDeal Payment Method Request Object
@@ -30,9 +30,9 @@ class IDeal extends AbstractPaymentMethod
 {
     protected function mapRequest()
     {
-        $iDealPaymentMethod = new IDealPaymentMethod();
-        $iDealPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('issuer_bank_id');
+        $issueBankIdPaymentMethod = new IssuerBankIDPaymentMethod();
+        $issueBankIdPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('issuer_bank_id');
 
-        return $iDealPaymentMethod;
+        return $issueBankIdPaymentMethod;
     }
 }

@@ -80,6 +80,9 @@
         <method name="hipay_paypalapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_mbway_hosted_fields">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_mbway">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -147,6 +150,9 @@
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_mybank">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_multibanco_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_multibanco">

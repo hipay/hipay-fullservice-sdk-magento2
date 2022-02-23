@@ -55,8 +55,8 @@
             }, 'validation':[]}"
     >
       <div
-        id="hipay-container-hosted-fields-local"
-        data-bind="visible: initHostedFields()"
+        class="hipay-container-hosted-fields-local"
+        data-bind="attr: {'id': 'hipay-container-hosted-fields-' + getProductCode()}, visible: initHostedFields()"
       ></div>
     </form>
     <div class="checkout-agreements-block">

@@ -8,10 +8,12 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
+ * @package HiPay\FullserviceMagento
+ * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ *
  */
 define([
   'ko',
@@ -27,24 +29,24 @@ define([
       redirectAfterPlaceOrder: false,
       afterPlaceOrderUrl:
         window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
-          .hipay_ideal_hosted_fields,
+          .hipay_mbway_hosted_fields,
       template: 'HiPay_FullserviceMagento/payment/hipay-hosted-fields-local',
-      env: window.checkoutConfig.payment.hipay_ideal_hosted_fields
-        ? window.checkoutConfig.payment.hipay_ideal_hosted_fields.env
+      env: window.checkoutConfig.payment.hipay_mbway_hosted_fields
+        ? window.checkoutConfig.payment.hipay_mbway_hosted_fields.env
         : 'stage',
       apiUsernameTokenJs: window.checkoutConfig.payment
-        .hipay_ideal_hosted_fields
-        ? window.checkoutConfig.payment.hipay_ideal_hosted_fields
+        .hipay_mbway_hosted_fields
+        ? window.checkoutConfig.payment.hipay_mbway_hosted_fields
             .apiUsernameTokenJs
         : '',
       apiPasswordTokenJs: window.checkoutConfig.payment
-        .hipay_ideal_hosted_fields
-        ? window.checkoutConfig.payment.hipay_ideal_hosted_fields
+        .hipay_mbway_hosted_fields
+        ? window.checkoutConfig.payment.hipay_mbway_hosted_fields
             .apiPasswordTokenJs
         : '',
       locale: window.checkoutConfig.payment.hiPayFullservice.locale
         ? window.checkoutConfig.payment.hiPayFullservice.locale
-            .hipay_ideal_hosted_fields
+            .hipay_mbway_hosted_fields
         : 'en_us'
     },
     isPlaceOrderAllowed: ko.observable(false),
@@ -69,7 +71,7 @@ define([
         lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
       });
 
-      self.hipayHostedFields = self.hipaySdk.create('ideal', self.configHipay);
+      self.hipayHostedFields = self.hipaySdk.create('mbway', self.configHipay);
 
       self.isPlaceOrderAllowed(true);
 
@@ -92,9 +94,7 @@ define([
 
     initObservable: function () {
       var self = this;
-      self
-        ._super()
-        .observe(['creditCardType', 'issuer_bank_id', 'browser_info']);
+      self._super().observe(['creditCardType', 'phone', 'browser_info']);
 
       return self;
     },
@@ -109,7 +109,7 @@ define([
       self.hipayHostedFields.getPaymentData().then(
         function (response) {
           self.creditCardType(response.payment_product);
-          self.issuer_bank_id(response.issuer_bank_id);
+          self.phone(response.phone);
           self.browser_info(JSON.stringify(response.browser_info));
           self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
           fullScreenLoader.stopLoader();
@@ -128,10 +128,10 @@ define([
       return this;
     },
     getProductCode: function () {
-      return 'ideal';
+      return 'mbway';
     },
     getCode: function () {
-      return 'hipay_ideal_hosted_fields';
+      return 'hipay_mbway_hosted_fields';
     },
     getData: function () {
       var self = this;
@@ -141,7 +141,7 @@ define([
         additional_data: {
           cc_type: self.creditCardType(),
           browser_info: self.browser_info(),
-          issuer_bank_id: self.issuer_bank_id()
+          phone: self.phone()
         }
       };
       return $.extend(true, parent, data);
