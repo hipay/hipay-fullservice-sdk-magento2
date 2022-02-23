@@ -933,6 +933,7 @@ class Notify
 */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
+        $payment->setTransactionAdditionalInfo('authorization_code', $this->_transaction->getAuthorizationCode());
         $payment->setPreparedMessage($this->_generateComment(''))
             ->setTransactionId($this->_transaction->getTransactionReference() . "-auth")
             ->setCcTransId($this->_transaction->getTransactionReference())
