@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -19,7 +20,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * MB Way Hosted Fields Model payment method
@@ -32,7 +33,6 @@ use \Magento\Framework\Exception\LocalizedException;
  */
 class MbwayHostedFields extends LocalHostedFields
 {
-
     const HIPAY_METHOD_CODE = 'hipay_mbway_hosted_fields';
 
     /**
