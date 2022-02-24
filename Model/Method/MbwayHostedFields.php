@@ -25,7 +25,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * MB Way Hosted Fields Model payment method
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -33,7 +32,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class MbwayHostedFields extends LocalHostedFields
 {
-    const HIPAY_METHOD_CODE = 'hipay_mbway_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_mbway_hosted_fields';
 
     /**
      * @var string

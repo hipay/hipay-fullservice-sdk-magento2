@@ -23,7 +23,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
 /**
  * Multibanco Hosted Fields Model payment method
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -31,7 +30,7 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
  */
 class MultibancoHostedFields extends LocalHostedFields
 {
-    const HIPAY_METHOD_CODE = 'hipay_multibanco_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_multibanco_hosted_fields';
 
     /**
      * @var string
@@ -73,7 +72,10 @@ class MultibancoHostedFields extends LocalHostedFields
     {
         parent::place($payment);
 
-        $payment->setAdditionalInformation('reference_to_pay', $payment->getAdditionalInformation('response')['reference_to_pay']);
+        $payment->setAdditionalInformation(
+            'reference_to_pay',
+            $payment->getAdditionalInformation('response')['reference_to_pay']
+        );
 
         return $this;
     }

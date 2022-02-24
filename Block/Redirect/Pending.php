@@ -85,7 +85,8 @@ class Pending extends \Magento\Framework\View\Element\Template
             $order->load($lastOrderId);
             $referenceToPay = $order->getPayment()->getAdditionalInformation('reference_to_pay');
             if ($order->getPayment()->getCcType() === 'multibanco' && $referenceToPay) {
-                $referenceToPay['logo'] = $this->getViewFileUrl('HiPay_FullserviceMagento::images/local/multibanco.png');
+                $referenceToPay['logo'] =
+                    $this->getViewFileUrl('HiPay_FullserviceMagento::images/local/multibanco.png');
                 return $referenceToPay;
             }
         }

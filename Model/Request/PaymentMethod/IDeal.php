@@ -31,7 +31,8 @@ class IDeal extends AbstractPaymentMethod
     protected function mapRequest()
     {
         $issueBankIdPaymentMethod = new IssuerBankIDPaymentMethod();
-        $issueBankIdPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('issuer_bank_id');
+        $issueBankIdPaymentMethod->issuer_bank_id =
+            $this->_order->getPayment()->getAdditionalInformation('issuer_bank_id');
 
         return $issueBankIdPaymentMethod;
     }
