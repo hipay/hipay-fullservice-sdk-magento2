@@ -130,8 +130,8 @@ class ApplepayConfigProvider implements ConfigProviderInterface
                     [
                         'payment' => [
                             $methodCode => [
-                                'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameTokenJs(),
-                                'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordTokenJs(),
+                                'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameApplePayTokenJs(),
+                                'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordApplePayTokenJs(),
                                 'env' => $this->hipayConfig->getApiEnv(),
                                 'sdkJsUrl' => $this->hipayConfig->getSdkJsUrl(),
                                 'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
