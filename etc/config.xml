@@ -51,6 +51,10 @@
                 <hashing_algorithm>SHA1</hashing_algorithm>
                 <hashing_algorithm_test>SHA1</hashing_algorithm_test>
             </hipay_credentials_applepay>
+            <hipay_credentials_applepay_tokenjs>
+                <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+            </hipay_credentials_applepay_tokenjs>
             <fraud_payment_review>
                 <enabled>0</enabled>
                 <template>hipay_fraud_payment_review_template</template>

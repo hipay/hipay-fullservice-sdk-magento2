@@ -467,6 +467,25 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getGeneraleValue($key, 'hipay_credentials_applepay');
     }
 
+    public function getApiUsernameApplePayTokenJs()
+    {
+        $key = 'api_username';
+        if ($this->isStageMode()) {
+            $key = 'api_username_test';
+        }
+        return $this->getGeneraleValue($key, 'hipay_credentials_applepay_tokenjs');
+    }
+
+    public function getApiPasswordApplePayTokenJs()
+    {
+        $key = 'api_password';
+        if ($this->isStageMode()) {
+            $key = 'api_password_test';
+        }
+
+        return $this->getGeneraleValue($key, 'hipay_credentials_applepay_tokenjs');
+    }
+
     public function getHashingAlgorithm()
     {
         $group = 'hipay_credentials';

@@ -23,7 +23,7 @@ stages:
     MYSQL_ROOT_PASSWORD: magento2
     MYSQL_USER: magento2
     MYSQL_PASSWORD: magento2
-    
+
     GITHUB_API_TOKEN: $GITHUB_TOKEN
     MAGE_ACCOUNT_PUBLIC_KEY: $MAGE_ACCOUNT_PUBLIC_KEY
     MAGE_ACCOUNT_PRIVATE_KEY: $MAGE_ACCOUNT_PRIVATE_KEY
@@ -42,6 +42,8 @@ stages:
     HIPAY_APPLEPAY_USERNAME_TEST: $HIPAY_APPLEPAY_USERNAME_TEST
     HIPAY_APPLEPAY_PASSWORD_TEST: $HIPAY_APPLEPAY_PASSWORD_TEST
     HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST: $HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST
+    HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST: $HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST
+    HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: $HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST
     SMTP_LINK: common-smtp:1025
     ACTIVE_METHODS: $ACTIVE_METHODS
     XDEBUG_ENABLED: 0
@@ -99,10 +101,10 @@ stages:
 
 .login_to_registry: &login-to-registry
   before_script:
-    - "mkdir /tmp"
-    - "touch /tmp/credentials.json"
-    - "echo ${SA_REGISTRY_CD} > /tmp/credentials.json"
-    - "export GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json"
+    - 'mkdir /tmp'
+    - 'touch /tmp/credentials.json'
+    - 'echo ${SA_REGISTRY_CD} > /tmp/credentials.json'
+    - 'export GOOGLE_APPLICATION_CREDENTIALS=/tmp/credentials.json'
 
 .login_to_cd: &login-to-cd
   before_script:
@@ -204,6 +206,8 @@ deploy2recette:
       --set hipay_applepay_username_test="$HIPAY_APPLEPAY_USERNAME_RE7"
       --set hipay_applepay_password_test="$HIPAY_APPLEPAY_PASSWORD_RE7"
       --set hipay_applepay_secret_passphrase_test="$HIPAY_APPLEPAY_SECRET_PASSPHRASE_RE7"
+      --set hipay_applepay_tokenjs_username_test="$HIPAY_APPLEPAY_TOKENJS_USERNAME_RE7"
+      --set hipay_applepay_tokenjs_publickey_test="$HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_RE7"
       --set pi_data_url="$PI_CI_DATA_URL"
       --set branch="$CI_COMMIT_REF_NAME"
   allow_failure: true

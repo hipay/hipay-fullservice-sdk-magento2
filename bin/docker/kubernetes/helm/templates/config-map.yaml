@@ -51,6 +51,8 @@ data:
   HIPAY_APPLEPAY_USERNAME_TEST: {{ .Values.hipay_applepay_username_test }}
   HIPAY_APPLEPAY_PASSWORD_TEST: {{ .Values.hipay_applepay_password_test }}
   HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_applepay_secret_passphrase_test }}
+  HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_applepay_tokenjs_username_test }}
+  HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Env var used after installation
   MAGE_DB_INIT_STATEMENTS: SET NAMES utf8

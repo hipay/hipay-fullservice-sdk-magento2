@@ -154,6 +154,12 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             // Request GitHub with curl
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, self::HIPAY_GITHUB_MAGENTO2_LATEST);
+            if ($github_token = getenv('GITHUB_API_TOKEN')) {
+                curl_setopt($ch, CURLOPT_HEADER, 1);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [
+                    'Authorization' => 'token ' . $github_token
+                ]);
+            }
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_TIMEOUT, 3);
             curl_setopt($ch, CURLOPT_USERAGENT, 'PHP');

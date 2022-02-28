@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -13,6 +14,7 @@
  * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\Fullservice\Gateway\Request\PaymentMethod\PhonePaymentMethod;
@@ -20,7 +22,6 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\PhonePaymentMethod;
 /**
  * MB Way Payment Method Request Object
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
