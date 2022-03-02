@@ -267,7 +267,7 @@ abstract class CommonRequest extends BaseRequest
      */
     protected function getMappingCategory($product)
     {
-        $mapping_id = null;
+        $mapping_id = 1;
         $categories = $product->getCategoryIds();
         if (!empty($categories) && !empty($idCategory = $categories[0])) {
             $mappingNotFound = true;
