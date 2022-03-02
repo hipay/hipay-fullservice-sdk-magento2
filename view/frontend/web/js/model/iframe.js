@@ -8,28 +8,21 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
- *
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define(
-    [
-        'ko'
-    ],
-    function (ko) {
-        'use strict';
+define(['ko'], function (ko) {
+  'use strict';
 
-        var isInAction = ko.observable(false);
+  var isInAction = ko.observable(false);
 
-        return {
-            isInAction: isInAction,
-            stopEventPropagation: function (event) {
-                event.stopImmediatePropagation();
-                event.preventDefault();
-            }
-        };
+  return {
+    isInAction: isInAction,
+    stopEventPropagation: function (event) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
     }
-);
+  };
+});

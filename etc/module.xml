@@ -10,7 +10,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -19,7 +18,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-  <module name="HiPay_FullserviceMagento" setup_version="1.13.8">
+  <module name="HiPay_FullserviceMagento" setup_version="1.14.0">
     <sequence>
       <module name="Magento_Checkout"/>
       <module name="Magento_Sales"/>

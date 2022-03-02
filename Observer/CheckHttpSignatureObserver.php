@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
@@ -21,7 +22,7 @@ use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\Framework\Webapi\Exception as WebApiException;
+use Magento\Framework\Webapi\Exception as WebApiException;
 
 /**
  * HiPay module observer
@@ -30,11 +31,10 @@ use \Magento\Framework\Webapi\Exception as WebApiException;
  *
  * Redirections haven't checked because http params can be not present (Depend of TPP config)
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CheckHttpSignatureObserver implements ObserverInterface
 {
@@ -72,9 +72,10 @@ class CheckHttpSignatureObserver implements ObserverInterface
 
     /**
      * CheckHttpSignatureObserver constructor.
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param ConfigFactory $configFactory
-     * @param GatewayFactory $gatewayFactory
+     *
+     * @param \Magento\Sales\Model\OrderFactory     $orderFactory
+     * @param ConfigFactory                         $configFactory
+     * @param GatewayFactory                        $gatewayFactory
      * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
      */
     public function __construct(
@@ -94,14 +95,18 @@ class CheckHttpSignatureObserver implements ObserverInterface
     /**
      * Check if signature and dispatch only if is valid
      *
-     * @param EventObserver $observer
+     * @param  EventObserver $observer
      * @return $this
      */
     public function execute(EventObserver $observer)
     {
-        /** @var $controller \HiPay\FullserviceMagento\Controller\Fullservice */
+        /**
+         * @var $controller \HiPay\FullserviceMagento\Controller\Fullservice
+        */
         $controller = $observer->getControllerAction();
-        /** @var $request \Magento\Framework\App\Request\Http */
+        /**
+         * @var $request \Magento\Framework\App\Request\Http
+        */
         $request = $observer->getRequest();
 
         if (in_array($request->getFullActionName(), $this->_actionsToCheck)) {
@@ -110,9 +115,15 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 $order = $this->_orderFactory->create()->loadByIncrementId($orderId);
 
                 if (!$order->getId()) {
-                    throw new WebApiException(__(sprintf('Order ID not found: "%s".', $orderId)), 0, WebApiException::HTTP_NOT_FOUND);
+                    throw new WebApiException(
+                        __(sprintf('Order ID not found: "%s".', $orderId)),
+                        0,
+                        WebApiException::HTTP_NOT_FOUND
+                    );
                 }
-                /** @var $config \HiPay\FullserviceMagento\Model\Config */
+                /**
+                 * @var $config \HiPay\FullserviceMagento\Model\Config
+                */
                 $config = $this->_configFactory->create(
                     [
                         'params' => [
@@ -170,7 +181,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
     }
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param  \Magento\Framework\App\RequestInterface $request
      * @return int|mixed
      */
     protected function getOrderId(\Magento\Framework\App\RequestInterface $request)

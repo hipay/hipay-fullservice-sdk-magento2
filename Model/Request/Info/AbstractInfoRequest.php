@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
@@ -21,15 +22,13 @@ use HiPay\Fullservice\Enum\Customer\Gender as HipayGender;
 /**
  * Abstract Info Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class AbstractInfoRequest extends BaseRequest
 {
-
     /**
      * Order
      *
@@ -37,9 +36,9 @@ abstract class AbstractInfoRequest extends BaseRequest
      */
     protected $_order;
 
-
     /**
      * {@inheritDoc}
+     *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
@@ -54,35 +53,40 @@ abstract class AbstractInfoRequest extends BaseRequest
         $params = []
     ) {
 
-        parent::__construct($logger, $checkoutData, $customerSession, $checkoutSession, $localeResolver,
-            $requestFactory, $urlBuilder, $helper, $params);
-
+        parent::__construct(
+            $logger,
+            $checkoutData,
+            $customerSession,
+            $checkoutSession,
+            $localeResolver,
+            $requestFactory,
+            $urlBuilder,
+            $helper,
+            $params
+        );
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Exception('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException('Order instance is required.');
         }
-
-
     }
 
     /**
-     * @param int $magentoGender
+     * @param  int $magentoGender
      * @return string
      */
     protected function getHipayGender($magentoGender)
     {
         switch ($magentoGender) {
-            case 1 :
-            case 'M' :
+            case 1:
+            case 'M':
                 return HipayGender::MALE;
-            case 'F' :
-            case 2 :
+            case 'F':
+            case 2:
                 return HipayGender::FEMALE;
-            default :
+            default:
                 return HipayGender::UNKNOWN;
         }
     }
-
 }

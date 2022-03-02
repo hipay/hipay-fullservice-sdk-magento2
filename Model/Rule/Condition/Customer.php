@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 
 use Magento\Framework\Convert\DataObject;
@@ -20,15 +21,13 @@ use Magento\Framework\Convert\DataObject;
 /**
  * Rule Customer Class
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 {
-
     /**
      *
      * @var \Magento\Config\Model\Config\Source\Yesno $_yesNo
@@ -51,11 +50,12 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * Customer constructor.
-     * @param \Magento\Rule\Model\Condition\Context $context
+     *
+     * @param \Magento\Rule\Model\Condition\Context                   $context
      * @param \Magento\Customer\Model\Config\Source\Group\Multiselect $customerGroups
-     * @param \Magento\Config\Model\Config\Source\Yesno $yesNo
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param array $data
+     * @param \Magento\Config\Model\Config\Source\Yesno               $yesNo
+     * @param \Magento\Sales\Model\OrderFactory                       $orderFactory
+     * @param array                                                   $data
      */
     public function __construct(
         \Magento\Rule\Model\Condition\Context $context,
@@ -154,12 +154,14 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     /**
      * Validate Address Rule Condition
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param  \Magento\Framework\Model\AbstractModel $model
      * @return bool
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        /** @var $quote \Magento\Quote\Model\Quote */
+        /**
+         * @var $quote \Magento\Quote\Model\Quote
+        */
         $quote = $model;
         $toValidate = new DataObject();
 
@@ -176,7 +178,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
+     * @param  \Magento\Quote\Model\Quote $quote
      * @return boolean $isDifferent
      */
     protected function _addressesesAreDifferent($quote)

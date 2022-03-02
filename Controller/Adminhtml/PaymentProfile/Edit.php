@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\PaymentProfile;
 
 use Magento\Backend\App\Action;
@@ -20,11 +21,10 @@ use Magento\Backend\App\Action;
 /**
  * Edit payment profile
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Edit extends \Magento\Backend\App\Action
 {
@@ -44,12 +44,13 @@ class Edit extends \Magento\Backend\App\Action
      * @var \HiPay\FullserviceMagento\Model\PaymentProfile\Factory
      */
     private $paymentProfileFactory;
-    
+
     /**
      * Edit constructor.
-     * @param Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Registry $registry
+     *
+     * @param Action\Context                                         $context
+     * @param \Magento\Framework\View\Result\PageFactory             $resultPageFactory
+     * @param \Magento\Framework\Registry                            $registry
      * @param \HiPay\FullserviceMagento\Model\PaymentProfile\Factory $paymentProfileFactory
      */
     public function __construct(
@@ -72,7 +73,9 @@ class Edit extends \Magento\Backend\App\Action
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Page $resultPage
+*/
         $resultPage = $this->resultPageFactory->create();
 
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_payment_profile')
@@ -85,7 +88,7 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit Payment Profile page
      *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return                                  \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
@@ -96,10 +99,12 @@ class Edit extends \Magento\Backend\App\Action
 
         // 2. Initial checking
         if ($id) {
-            $model->getResource()->load($model, $id);
+            $model->load($id);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This payment profile no longer exists.'));
-                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                /**
+ * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+*/
                 $resultRedirect = $this->resultRedirectFactory->create();
 
                 return $resultRedirect->setPath('*/*/');
@@ -116,7 +121,9 @@ class Edit extends \Magento\Backend\App\Action
         $this->_coreRegistry->register('payment_profile', $model);
 
         // 5. Build edit form
-        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        /**
+ * @var \Magento\Backend\Model\View\Result\Page $resultPage
+*/
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
             $id ? __('Edit Payment Profile') : __('New Payment Profile'),

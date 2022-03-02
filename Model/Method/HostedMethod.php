@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -22,11 +22,10 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Hosted Payment Method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -34,7 +33,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class HostedMethod extends FullserviceMethod
 {
-    const HIPAY_METHOD_CODE = 'hipay_hosted';
+    public const HIPAY_METHOD_CODE = 'hipay_hosted';
 
     /**
      * @var string
@@ -68,8 +67,8 @@ class HostedMethod extends FullserviceMethod
     /**
      * Instantiate state and set it to state object
      *
-     * @param string $paymentAction
-     * @param \Magento\Framework\DataObject $stateObject
+     * @param  string                        $paymentAction
+     * @param  \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -103,10 +102,10 @@ class HostedMethod extends FullserviceMethod
     /**
      * Capture payment method
      *
-     * @param \Magento\Payment\Model\InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws LocalizedException
+     * @param                                         \Magento\Payment\Model\InfoInterface $payment
+     * @param                                         float                                $amount
+     * @return                                        $this
+     * @throws                                        LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -117,7 +116,9 @@ class HostedMethod extends FullserviceMethod
         }
 
         try {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
+            /**
+             * @var \Magento\Sales\Model\Order\Payment $payment
+            */
             if ($payment->getAuthorizationTransaction()) {  //Is not the first transaction
                 $this->manualCapture($payment, $amount);
             }

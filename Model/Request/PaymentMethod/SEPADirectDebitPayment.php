@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
@@ -21,15 +21,13 @@ use HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
 /**
  * SEPADirectDebitPaymentMethod Payment Method Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class SEPADirectDebitPayment extends AbstractPaymentMethod
 {
-
     /**
      *  Map Request for specific SEPADirectDebitPaymentMethod
      *
@@ -40,7 +38,9 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod
         $sddPaymentMethod = new SEPADirectDebitPaymentMethod();
         $sddPaymentMethod->recurring_payment = 0;
 
-        /** @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod */
+        /**
+ * @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
+*/
         $sddPaymentMethod->bank_name = $this->_order->getPayment()->getAdditionalInformation('sdd_bank_name');
         $sddPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('sdd_bic');
         $sddPaymentMethod->iban = $this->_order->getPayment()->getAdditionalInformation('sdd_iban');

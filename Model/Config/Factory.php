@@ -10,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Config;
@@ -20,26 +19,24 @@ namespace HiPay\FullserviceMagento\Model\Config;
 /**
  * Factory class for payment config
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Factory
 {
+    public const PRODUCTION = "production";
 
-    const PRODUCTION = "production";
+    public const PRODUCTION_MOTO = "production_moto";
 
-    const PRODUCTION_MOTO = "production_moto";
+    public const PRODUCTION_APPLEPAY = "applepay";
 
-    const PRODUCTION_APPLEPAY = "applepay";
-   
-    const STAGE = "stage";
+    public const STAGE = "stage";
 
-    const STAGE_MOTO = "stage_moto";
+    public const STAGE_MOTO = "stage_moto";
 
-    const STAGE_APPLEPAY = "stage_applepay";
+    public const STAGE_APPLEPAY = "stage_applepay";
 
     /**
      * Object Manager instance
@@ -99,7 +96,7 @@ class Factory
     /**
      * Create class instance with specified parameters
      *
-     * @param array $data
+     * @param  array $data
      * @return mixed
      */
     public function create(array $data = [])
@@ -111,7 +108,7 @@ class Factory
     }
 
     /**
-     * @param string $platform
+     * @param  string $platform
      * @return array
      */
     protected function _getPlatformConfig($platform)

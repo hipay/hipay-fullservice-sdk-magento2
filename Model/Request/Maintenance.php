@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,28 +10,25 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Maintenance\MaintenanceRequest as MaintenanceRequest;
-use \HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Maintenance Request Object
  *
- * @package HiPay\FullserviceMagento
- * @author Aymeric Berthelot <aberthelot@hipay.com>
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Maintenance extends CommonRequest
 {
-
     /**
      * Order
      *
@@ -68,19 +66,20 @@ class Maintenance extends CommonRequest
     protected $_cartFactory;
 
     /**
-     * @var  \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
      */
     protected $_productRepositoryInterface;
 
     /**
      * {@inheritDoc}
+     *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session\Proxy $customerSession,
-        \Magento\Checkout\Model\Session\Proxy $checkoutSession,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
@@ -126,7 +125,8 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

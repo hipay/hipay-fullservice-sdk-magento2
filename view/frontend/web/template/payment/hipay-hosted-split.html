@@ -9,7 +9,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -17,188 +16,250 @@
  *
  */
 -->
-<div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
-    <div class="payment-method-title field choice">
-        <input type="radio" name="payment[method]" class="radio"
-            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
-        <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
+<div
+  class="payment-method"
+  data-bind="css: {'_active': (getCode() == isChecked())}"
+>
+  <div class="payment-method-title field choice">
+    <input
+      type="radio"
+      name="payment[method]"
+      class="radio"
+      data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
+    />
+    <label data-bind="attr: {'for': getCode()}" class="label">
+      <span data-bind="text: getTitle()"></span>
+    </label>
+  </div>
+  <div class="payment-method-content">
+    <!-- ko foreach: getRegion('messages') -->
+    <!-- ko template: getTemplate() -->
+    <!-- /ko -->
+    <!--/ko-->
+    <div class="payment-method-billing-address">
+      <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+      <!-- ko template: getTemplate() -->
+      <!-- /ko -->
+      <!--/ko-->
     </div>
-    <div class="payment-method-content">
-        <!-- ko foreach: getRegion('messages') -->
-        <!-- ko template: getTemplate() -->
-        <!-- /ko -->
-        <!--/ko-->
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() -->
-            <!-- /ko -->
-            <!--/ko-->
-        </div>
-        <form class="form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
+    <form
+      class="form"
+      id="co-transparent-form"
+      action="#"
+      method="post"
+      data-bind="mageInit: {
             'transparent':{
                 'context': context(),
                 'gateway': getCode(),
-            }, 'validation':[]}">
-            <input type="hidden" id="ioBBFingerPrint" name="payment[device_fingerprint]"
-                data-bind="attr: {value: getFingerprint()}" />
+            }, 'validation':[]}"
+    >
+      <input
+        type="hidden"
+        id="ioBBFingerPrint"
+        name="payment[device_fingerprint]"
+        data-bind="attr: {value: getFingerprint()}"
+      />
 
-            <!-- ko if: (hasPaymentProfiles()) -->
+      <!-- ko if: (hasPaymentProfiles()) -->
 
-            <!-- ko if: (getPaymentProfiles().length > 1) -->
-            <div>
-                <label data-bind="attr: {for: getCode() + '_cc_payment_profile'}" class="label">
-                    <span>
-                        <!-- ko i18n: 'Select a split payment profile'-->
-                        <!-- /ko -->
-                    </span>
-                </label>
-                <div class="control">
-                    <select name="payment[cc_payment_profile]" class="select" data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'}
+      <!-- ko if: (getPaymentProfiles().length > 1) -->
+      <div>
+        <label
+          data-bind="attr: {for: getCode() + '_cc_payment_profile'}"
+          class="label"
+        >
+          <span>
+            <!-- ko i18n: 'Select a split payment profile'-->
+            <!-- /ko -->
+          </span>
+        </label>
+        <div class="control">
+          <select
+            name="payment[cc_payment_profile]"
+            class="select"
+            data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'}
 		                                            enable: true,
 		                                            options: getPaymentProfiles(),
 		                                            optionsValue: 'profileId',
 		                                            optionsText: 'name',
-		                                            value: selectedPaymentProfile">
-                    </select>
-                </div>
-            </div>
+		                                            value: selectedPaymentProfile"
+          ></select>
+        </div>
+      </div>
+      <!-- /ko -->
+
+      <!-- ko if: (getPaymentProfiles().length == 1) -->
+      <div>
+        <h3>
+          <!-- ko i18n: getFirstPaymentProfile().name -->
+          <!-- /ko -->
+        </h3>
+        <input
+          type="hidden"
+          data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'},
+		                    							value: selectedPaymentProfile"
+          name="payment[cc_payment_profile]"
+        />
+      </div>
+      <!-- /ko -->
+      <div class="field type">
+        <div class="table-wrapper">
+          <table
+            class="data table"
+            data-bind="attr: {id: 'split_amounts_' + getCode()}"
+          >
+            <caption class="table-caption">
+              <!-- ko i18n: 'Split payments' -->
+              <!-- /ko -->
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" class="col date">
+                  <!-- ko i18n: 'Date to pay' -->
+                  <!-- /ko -->
+                </th>
+                <th scope="col" class="col amount">
+                  <!-- ko i18n: 'Amount' -->
+                  <!-- /ko -->
+                </th>
+              </tr>
+            </thead>
+            <tbody data-bind="foreach: splitAmounts()">
+              <tr>
+                <td
+                  data-bind="text: dateToPayFormatted"
+                  data-th="<!-- ko i18n: 'Date to pay' --><!-- /ko -->"
+                  class="col date"
+                ></td>
+                <td
+                  data-bind="html: amountToPayFormatted"
+                  data-th="<!-- ko i18n: 'Amount' --><!-- /ko -->"
+                  class="col amount"
+                ></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- /ko -->
+
+      <!-- ko if: (useOneclick() && customerHasCard()) -->
+      <div>
+        <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
+          <span>
+            <!-- ko i18n: 'Your credit cards'-->
             <!-- /ko -->
-
-            <!-- ko if: (getPaymentProfiles().length == 1) -->
-            <div>
-                <h3>
-                    <!-- ko i18n: getFirstPaymentProfile().name -->
-                    <!-- /ko -->
-                </h3>
-                <input type="hidden" data-bind="attr: {id: getCode() + '_cc_payment_profile', 'data-container': getCode() + '-cc-payment-profile'},
-		                    							value: selectedPaymentProfile" name="payment[cc_payment_profile]" />
-            </div>
-            <!-- /ko -->
-            <div class="field type">
-                <div class="table-wrapper">
-                    <table class="data table" data-bind="attr: {id: 'split_amounts_' + getCode()}">
-                        <caption class="table-caption">
-                            <!-- ko i18n: 'Split payments' -->
-                            <!-- /ko -->
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th scope="col" class="col date">
-                                    <!-- ko i18n: 'Date to pay' -->
-                                    <!-- /ko -->
-                                </th>
-                                <th scope="col" class="col amount">
-                                    <!-- ko i18n: 'Amount' -->
-                                    <!-- /ko -->
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody data-bind="foreach: splitAmounts()">
-                            <tr>
-                                <td data-bind="text: dateToPayFormatted"
-                                    data-th="<!-- ko i18n: 'Date to pay' --><!-- /ko -->" class="col date"></td>
-                                <td data-bind="html: amountToPayFormatted"
-                                    data-th="<!-- ko i18n: 'Amount' --><!-- /ko -->" class="col amount"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- /ko -->
-
-
-            <!-- ko if: (useOneclick() && customerHasCard()) -->
-            <div>
-                <label data-bind="attr: {for: getCode() + '_cc_token'}" class="label">
-                    <span>
-                        <!-- ko i18n: 'Your credit cards'-->
-                        <!-- /ko -->
-                    </span>
-                </label>
-                <div class="control">
-                    <select name="payment[cc_token]" class="select" data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
+          </span>
+        </label>
+        <div class="control">
+          <select
+            name="payment[cc_token]"
+            class="select"
+            data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
                                      mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
                                      enable: true,
                                      options: getCustomerCards(),
                                      optionsValue: 'ccToken',
                                      optionsText: 'name',
                                      optionsCaption: $t('Pay with a new card'),
-                                     value: selectedCard">
-                    </select>
-                </div>
-            </div>
-            <div>&nbsp;</div>
-            <!-- /ko -->
-            <!-- ko if: (useOneclick())-->
-            <div class="field" data-bind="visible: showForm()">
-                <label class="label">
-                    <span></span>
-                </label>
-                <div class="control">
-                    <input type="checkbox" name="payment[create_oneclick]" value="1" checked="checked" class="checkbox"
-                        data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}" />
-                    <label class="label" for="create_oneclick">
-                        <span>
-                            <!-- ko i18n: 'Save this card for future use'-->
-                            <!-- /ko -->
-                        </span>
-                    </label>
-                </div>
-            </div>
-            <!-- /ko -->
-        </form>
-        <div class="checkout-agreements-block">
-            <!-- ko foreach: $parent.getRegion('before-place-order') -->
-            <!-- ko template: getTemplate() -->
-            <!-- /ko -->
-            <!--/ko-->
+                                     value: selectedCard"
+          ></select>
         </div>
+      </div>
+      <div>&nbsp;</div>
+      <!-- /ko -->
+      <!-- ko if: (useOneclick())-->
+      <div class="field" data-bind="visible: showForm()">
+        <label class="label">
+          <span></span>
+        </label>
+        <div class="control">
+          <input
+            type="checkbox"
+            name="payment[create_oneclick]"
+            value="1"
+            checked="checked"
+            class="checkbox"
+            data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}"
+          />
+          <label class="label" for="create_oneclick">
+            <span>
+              <!-- ko i18n: 'Save this card for future use'-->
+              <!-- /ko -->
+            </span>
+          </label>
+        </div>
+      </div>
+      <!-- /ko -->
+    </form>
+    <div class="checkout-agreements-block">
+      <!-- ko foreach: $parent.getRegion('before-place-order') -->
+      <!-- ko template: getTemplate() -->
+      <!-- /ko -->
+      <!--/ko-->
+    </div>
 
-        <div class="actions-toolbar" data-bind="visible: !isIframeMode() || !showForm()">
-            <div class="primary">
-                <button class="action primary checkout" type="submit" data-bind="
+    <div
+      class="actions-toolbar"
+      data-bind="visible: !isIframeMode() || !showForm()"
+    >
+      <div class="primary">
+        <button
+          class="action primary checkout"
+          type="submit"
+          data-bind="
                         click: placeOrder,
                         attr: {title: $t('Place Order')},
                         enable: isPlaceOrderActionAllowed()
-                        " disabled>
-                    <span data-bind="i18n: 'Place Order'"></span>
-                </button>
-            </div>
-        </div>
-        <!-- ko if: !isIframeMode() -->
-        <div data-bind="visible: showForm()">
-            <!-- ko i18n: 'You will be redirect to payment page after submit order.' -->
-            <!-- /ko -->
-        </div>
-        <!-- /ko -->
-        <div class="actions-toolbar" data-bind="visible: isIframeMode() && !isInAction() && showForm()">
-            <div class="primary">
-                <button data-role="review-save" type="submit"
-                    data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, enable: isPlaceOrderActionAllowed()"
-                    class="button action primary checkout" disabled>
-                    <span data-bind="i18n: 'Continue'"></span>
-                </button>
-            </div>
-        </div>
-        <div data-bind="visible: isInAction()">
-            <div id="iframe-warning" class="message notice">
-                <div>
-                    <!-- ko i18n: 'Please do not refresh the page until you complete payment.' -->
-                    <!-- /ko -->
-                </div>
-            </div>
-            <!-- ko if: isPaymentReady() -->
-            <div data-bind="attr:{style: getIframeWrapperStyle()}">
-                <iframe
-                    data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
-                    data-container="hipay-hosted-iframe" class="hipay_hosted iframe" scrolling="yes" frameborder="0"
-                    border="0">
-                </iframe>
-            </div>
-            <!-- /ko -->
-        </div>
-
-
+                        "
+          disabled
+        >
+          <span data-bind="i18n: 'Place Order'"></span>
+        </button>
+      </div>
     </div>
+    <!-- ko if: !isIframeMode() -->
+    <div data-bind="visible: showForm()">
+      <!-- ko i18n: 'You will be redirect to payment page after submit order.' -->
+      <!-- /ko -->
+    </div>
+    <!-- /ko -->
+    <div
+      class="actions-toolbar"
+      data-bind="visible: isIframeMode() && !isInAction() && showForm()"
+    >
+      <div class="primary">
+        <button
+          data-role="review-save"
+          type="submit"
+          data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, enable: isPlaceOrderActionAllowed()"
+          class="button action primary checkout"
+          disabled
+        >
+          <span data-bind="i18n: 'Continue'"></span>
+        </button>
+      </div>
+    </div>
+    <div data-bind="visible: isInAction()">
+      <div id="iframe-warning" class="message notice">
+        <div>
+          <!-- ko i18n: 'Please do not refresh the page until you complete payment.' -->
+          <!-- /ko -->
+        </div>
+      </div>
+      <!-- ko if: isPaymentReady() -->
+      <div data-bind="attr:{style: getIframeWrapperStyle()}">
+        <iframe
+          data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
+          data-container="hipay-hosted-iframe"
+          class="hipay_hosted iframe"
+          scrolling="yes"
+          frameborder="0"
+          border="0"
+        ></iframe>
+      </div>
+      <!-- /ko -->
+    </div>
+  </div>
 </div>

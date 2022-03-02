@@ -10,7 +10,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -81,6 +80,9 @@
         <method name="hipay_paypalapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_mbway_hosted_fields">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_mbway">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -148,6 +150,9 @@
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_mybank">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_multibanco_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_multibanco">

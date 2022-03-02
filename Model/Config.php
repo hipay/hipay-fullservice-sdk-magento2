@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model;
@@ -30,27 +30,26 @@ use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
  * Main Config Class
  * Retrieve general configuration and sources
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Config extends AbstractConfig implements ConfigurationInterface
 {
-    const STATUS_AUTHORIZED = 'hipay_authorized';
-    const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
-    const STATUS_AUTHORIZED_PENDING = 'hipay_authorized_pending';
-    const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
-    const STATUS_CAPTURE_REFUSED = 'hipay_capture_refused';
-    const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
-    const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
-    const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
-    const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
-    const STATUS_EXPIRED = 'hipay_expired';
-    const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
+    public const STATUS_AUTHORIZED = 'hipay_authorized';
+    public const STATUS_AUTHORIZATION_REQUESTED = 'hipay_authorization_requested';
+    public const STATUS_AUTHORIZED_PENDING = 'hipay_authorized_pending';
+    public const STATUS_CAPTURE_REQUESTED = 'hipay_capture_requested';
+    public const STATUS_CAPTURE_REFUSED = 'hipay_capture_refused';
+    public const STATUS_PARTIALLY_CAPTURED = 'hipay_partially_captured';
+    public const STATUS_REFUND_REQUESTED = 'hipay_refund_requested';
+    public const STATUS_REFUND_REFUSED = 'hipay_refund_refused';
+    public const STATUS_PARTIALLY_REFUNDED = 'hipay_partially_refunded';
+    public const STATUS_EXPIRED = 'hipay_expired';
+    public const STATUS_AUTHENTICATION_REQUESTED = 'hipay_authentication_requested';
 
-    const CONFIG_HIPAY_KEY_CC_TYPE = 'cctypes_mapper';
+    protected const CONFIG_HIPAY_KEY_CC_TYPE = 'cctypes_mapper';
 
     /**
      *
@@ -99,14 +98,15 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     /**
      * Config constructor.
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
-     * @param \Psr\Log\LoggerInterface $logger
+     *
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface    $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface            $storeManager
+     * @param \Magento\Framework\App\State                          $appState
+     * @param \Psr\Log\LoggerInterface                              $logger
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
-     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
-     * @param array $params
+     * @param \Magento\Framework\App\Cache\TypeListInterface        $cacheTypeList
+     * @param \Magento\Framework\App\Cache\Frontend\Pool            $cacheFrontendPool
+     * @param array                                                 $params
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -172,6 +172,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Check if we must to use MO/TO credentials
      * Essentially, Admin operations
+     *
      * @return bool
      */
     public function mustUseMotoCredentials()
@@ -194,6 +195,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     /**
      * Return if current store is admin
+     *
      * @return bool
      */
     public function isAdminArea()
@@ -465,6 +467,25 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getGeneraleValue($key, 'hipay_credentials_applepay');
     }
 
+    public function getApiUsernameApplePayTokenJs()
+    {
+        $key = 'api_username';
+        if ($this->isStageMode()) {
+            $key = 'api_username_test';
+        }
+        return $this->getGeneraleValue($key, 'hipay_credentials_applepay_tokenjs');
+    }
+
+    public function getApiPasswordApplePayTokenJs()
+    {
+        $key = 'api_password';
+        if ($this->isStageMode()) {
+            $key = 'api_password_test';
+        }
+
+        return $this->getGeneraleValue($key, 'hipay_credentials_applepay_tokenjs');
+    }
+
     public function getHashingAlgorithm()
     {
         $group = 'hipay_credentials';
@@ -519,7 +540,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Get other configuration
      *
-     * @param $key
+     * @param  $key
      * @return boolean
      */
     private function getOtherConfiguration($key)
@@ -572,7 +593,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Check if sending Cart items is necessary
      *
-     * @param $product_code
+     * @param  $product_code
      * @return bool
      */
     public function isNecessaryToSendCartItems($product_code)
@@ -596,7 +617,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Check if basket is required for the payment product
      *
-     * @param $product_code
+     * @param  $product_code
      * @return boolean True if basket is required/ False if method doesn't exist
      */
     private function isBasketRequired($product_code)
@@ -619,7 +640,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      *  Delivery information are mandatory for some payment product
      *
-     * @param string $product_code
+     * @param  string $product_code
      * @return boolean
      */
     public function isDeliveryMethodRequired($product_code)

@@ -207,6 +207,12 @@
   border-bottom: dotted 1px #cfd7df;
 }
 
+.hipay-container-hosted-fields-local
+  [data-hipay-id='ideal-wrapper']
+  .hipay-field-container {
+  height: inherit;
+}
+
 #hipay-help-cvc {
   font-size: 14px;
   padding: 0.75rem 1.25rem;
@@ -227,10 +233,4 @@
   margin: auto;
   flex-grow: 0;
   height: 100%;
-}
-
-#hipay-container-hosted-fields-local
-  [data-hipay-id='ideal-wrapper']
-  .hipay-field-container {
-  height: inherit;
 }

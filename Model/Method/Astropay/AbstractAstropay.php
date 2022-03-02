@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Method\Astropay;
 
 use HiPay\FullserviceMagento\Model\Method\AbstractMethodAPI;
@@ -21,19 +22,18 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Abstract Model payment method
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AbstractAstropay extends AbstractMethodAPI
 {
     /**
      *  Use per Astropay' smethods payment
      */
-    const IDENTIFICATION_CPF = 'cpf';
-    const IDENTIFICATION_CPN = 'cpn';
+    protected const IDENTIFICATION_CPF = 'cpf';
+    protected const IDENTIFICATION_CPN = 'cpn';
 
     /**
      *  Extra informations
@@ -45,7 +45,7 @@ class AbstractAstropay extends AbstractMethodAPI
     /**
      * Assign data to info model instance
      *
-     * @param \Magento\Framework\DataObject $additionalData
+     * @param  \Magento\Framework\DataObject $additionalData
      * @return $this
      * @throws LocalizedException
      */
@@ -72,17 +72,18 @@ class AbstractAstropay extends AbstractMethodAPI
         parent::validate();
         $info = $this->getInfoInstance();
 
-        if(!$info->getCcType()){
+        if (!$info->getCcType()) {
             return $this;
         }
 
         $nationalIdentificationNumber = $info->getAdditionalInformation('nationalIdentification');
         switch ($this->_typeIdentification) {
             case self::IDENTIFICATION_CPF:
-                if (!preg_match(
-                    "/(\d{2}[.]?\d{3}[.]?\d{3}[\/]?\d{4}[-]?\d{2})|(\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2})$/",
-                    $nationalIdentificationNumber
-                )
+                if (
+                    !preg_match(
+                        "/(\d{2}[.]?\d{3}[.]?\d{3}[\/]?\d{4}[-]?\d{2})|(\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2})$/",
+                        $nationalIdentificationNumber
+                    )
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('CPF is not correct, please enter a valid CPF.')
@@ -99,7 +100,7 @@ class AbstractAstropay extends AbstractMethodAPI
         return $this;
     }
 
-    /*
+    /**
      *  Get type identification required for payment
      *
      * @return string cpf|cpn

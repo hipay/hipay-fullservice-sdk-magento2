@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.14.0
+
+- **Add**: Added Mutlibanco and MB Way payment methods using Hosted Fields
+- **Add**: Added ApplePay public credentials in HiPay configuration
+- **Add**: Added `authorization_code` to additional_information in sales_payment_transaction
+- **Fix**: Fixed DND Audit feedback
+
 ## 1.13.8
 
 - **Fix**: PHP-7.4 compatibility

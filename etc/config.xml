@@ -10,7 +10,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -52,6 +51,10 @@
                 <hashing_algorithm>SHA1</hashing_algorithm>
                 <hashing_algorithm_test>SHA1</hashing_algorithm_test>
             </hipay_credentials_applepay>
+            <hipay_credentials_applepay_tokenjs>
+                <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <api_password_test backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+            </hipay_credentials_applepay_tokenjs>
             <fraud_payment_review>
                 <enabled>0</enabled>
                 <template>hipay_fraud_payment_review_template</template>
@@ -603,6 +606,29 @@
                 <env>stage</env>
                 <group>hipay</group>
             </hipay_paypalapi>
+            <hipay_mbway_hosted_fields>
+                <model>HiPay\FullserviceMagento\Model\Method\MbwayHostedFields</model>
+                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\Mbway</payment_method>
+                <active>0</active>
+                <title>Hipay Enterprise MB Way Hosted Fields</title>
+                <payment_action>Authorization</payment_action>
+                <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
+                <payment_products>mbway</payment_products>
+                <authentication_indicator>0</authentication_indicator>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <allowspecific>1</allowspecific>
+                <specificcountry>PT</specificcountry>
+                <debug>0</debug>
+                <env>stage</env>
+                <group>hipay</group>
+            </hipay_mbway_hosted_fields>
             <hipay_mbway>
                 <model>HiPay\FullserviceMagento\Model\Method\Mbway</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
@@ -1248,6 +1274,29 @@
                 <env>STAGE</env>
                 <group>hipay</group>
             </hipay_mybank>
+            <hipay_multibanco_hosted_fields>
+                <model>HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields</model>
+                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
+                <active>0</active>
+                <title>Hipay Enterprise Multibanco Hosted Fields</title>
+                <payment_action>Authorization</payment_action>
+                <order_status>pending</order_status>
+                <order_status_payment_accepted>processing</order_status_payment_accepted>
+                <order_status_payment_refused>holded</order_status_payment_refused>
+                <order_status_payment_canceled>canceled</order_status_payment_canceled>
+                <hipay_status_validate_order>118</hipay_status_validate_order>
+                <cancel_pending_order>0</cancel_pending_order>
+                <re_add_to_cart>0</re_add_to_cart>
+                <restore_cart_on_back>0</restore_cart_on_back>
+                <payment_products>multibanco</payment_products>
+                <allow_use_oneclick>0</allow_use_oneclick>
+                <allowspecific>1</allowspecific>
+                <specificcountry>PT</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
+                <debug>0</debug>
+                <env>stage</env>
+                <group>hipay</group>
+            </hipay_multibanco_hosted_fields>
             <hipay_multibanco>
                 <model>HiPay\FullserviceMagento\Model\Method\Multibanco</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
@@ -1263,7 +1312,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
-                <payment_products>hipay_multibanco</payment_products>
+                <payment_products>multibanco</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>
                 <allowspecific>1</allowspecific>

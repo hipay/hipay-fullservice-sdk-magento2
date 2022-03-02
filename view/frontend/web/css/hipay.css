@@ -8,7 +8,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -61,4 +60,18 @@
 
 .control.hipay-ccsplit-number {
   padding-top: 15px;
+}
+
+#hipay-container-hosted-fields-multibanco {
+  display: none;
+}
+
+.magento-table-hipay-multibanco {
+  margin: 0 0 1.41575em;
+  max-width: 50%;
+}
+
+.magento-table-hipay-multibanco .magento-table-hipay-title,
+.magento-table-hipay-multibanco .magento-table-hipay-logo {
+  text-align: center;
 }

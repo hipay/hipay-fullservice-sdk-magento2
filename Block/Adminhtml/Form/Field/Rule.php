@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay fullservice Magento2
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
 use Magento\Config\Block\System\Config\Form\Field;
@@ -21,15 +22,13 @@ use Magento\Config\Block\System\Config\Form\Field;
  * Block sortable checkboxes
  * used for 3ds and oneclick on payment methods configuration
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Rule extends Field
 {
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -44,10 +43,11 @@ class Rule extends Field
      * Check if columns are defined, set template
      *
      * Rule constructor.
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     *
+     * @param \Magento\Backend\Block\Template\Context      $context
+     * @param \Magento\Framework\ObjectManagerInterface    $objectManager
      * @param \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory
-     * @param array $data
+     * @param array                                        $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -74,7 +74,7 @@ class Rule extends Field
     /**
      * Retrieve element HTML markup
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
@@ -88,7 +88,7 @@ class Rule extends Field
         $rule->setMethodCode($methodCode);
 
         if ($element->getValue()) {
-            $rule->getResource()->load($rule, $element->getValue());
+            $rule->load($element->getValue());
         }
 
         if ($rule->getConfigPath() == "") {

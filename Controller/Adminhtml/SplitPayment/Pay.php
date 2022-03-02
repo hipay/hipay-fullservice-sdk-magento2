@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\SplitPayment;
 
 use Magento\Backend\App\Action;
@@ -20,15 +21,13 @@ use Magento\Backend\App\Action;
 /**
  * Pay a split payment
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Pay extends \Magento\Backend\App\Action
 {
-
     /**
      * @var \HiPay\FullserviceMagento\Model\SplitPayment\Factory
      */
@@ -36,7 +35,8 @@ class Pay extends \Magento\Backend\App\Action
 
     /**
      * Delete constructor.
-     * @param Action\Context $context
+     *
+     * @param Action\Context                                       $context
      * @param \HiPay\FullserviceMagento\Model\SplitPayment\Factory $splitPaymentFactory
      */
     public function __construct(
@@ -64,13 +64,15 @@ class Pay extends \Magento\Backend\App\Action
     {
         // check if we know what should be deleted
         $id = $this->getRequest()->getParam('split_payment_id');
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        /**
+         * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
                 // init model and delete
                 $model = $this->splitPaymentFactory->create();
-                $model->getResource()->load($model, $id);
+                $model->load($id);
 
                 //Pay this split payment
                 $model->pay();

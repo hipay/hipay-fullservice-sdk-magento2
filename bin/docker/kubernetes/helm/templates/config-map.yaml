@@ -25,8 +25,8 @@ data:
   MAGE_CURRENCY: EUR
   MAGE_TIMEZONE: Europe/Paris
   MAGE_USE_REWRITES: "1"
-  MAGE_USE_SECURE: "0"
-  MAGE_USE_SECURE_ADMIN: "0"
+  MAGE_USE_SECURE: "1"
+  MAGE_USE_SECURE_ADMIN: "1"
   MAGE_ADMIN_USE_SECURITY_KEY: "0"
   MAGE_SESSION_SAVE: files
   MAGE_KEY: 69c60a47f9dca004e47bf8783f4b9408
@@ -51,6 +51,8 @@ data:
   HIPAY_APPLEPAY_USERNAME_TEST: {{ .Values.hipay_applepay_username_test }}
   HIPAY_APPLEPAY_PASSWORD_TEST: {{ .Values.hipay_applepay_password_test }}
   HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_applepay_secret_passphrase_test }}
+  HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_applepay_tokenjs_username_test }}
+  HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Env var used after installation
   MAGE_DB_INIT_STATEMENTS: SET NAMES utf8

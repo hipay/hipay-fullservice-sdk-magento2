@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Config;
@@ -23,17 +23,15 @@ use Magento\Store\Model\ScopeInterface;
  * Abstract configuration
  * Manage configuration getter
  *
- * @see  HiPay\FullserviceMagento\Model\Config.php
+ * @see HiPay\FullserviceMagento\Model\Config.php
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 abstract class AbstractConfig implements ConfigInterface
 {
-
     /**
      * Current payment method code
      *
@@ -74,7 +72,8 @@ abstract class AbstractConfig implements ConfigInterface
 
     /**
      * AbstractConfig constructor.
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     *
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface    $scopeConfig
      * @param \Magento\Framework\App\Config\Storage\WriterInterface $configWriter
      */
     public function __construct(
@@ -88,7 +87,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Sets method instance used for retrieving method specific data
      *
-     * @param MethodInterface $method
+     * @param  MethodInterface $method
      * @return $this
      */
     public function setMethodInstance($method)
@@ -100,8 +99,8 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Returns payment configuration value
      *
-     * @param string $key
-     * @param null $storeId
+     * @param  string $key
+     * @param  null   $storeId
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -130,7 +129,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Method code setter
      *
-     * @param string|MethodInterface $method
+     * @param  string|MethodInterface $method
      * @return $this
      */
     public function setMethod($method)
@@ -146,7 +145,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Sets method code
      *
-     * @param string $methodCode
+     * @param  string $methodCode
      * @return void
      */
     public function setMethodCode($methodCode)
@@ -167,7 +166,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Sets path pattern
      *
-     * @param string $pathPattern
+     * @param  string $pathPattern
      * @return void
      */
     public function setPathPattern($pathPattern)
@@ -201,7 +200,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Store ID setter
      *
-     * @param int $storeId
+     * @param  int $storeId
      * @return $this
      */
     public function setStoreId($storeId)
@@ -213,7 +212,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Map any supported payment method into a config path by specified field name
      *
-     * @param string $fieldName
+     * @param  string $fieldName
      * @return string|null
      */
     protected function _getSpecificConfigPath($fieldName)
@@ -228,8 +227,8 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Perform additional config value preparation and return new value if needed
      *
-     * @param string $key Underscored key
-     * @param string $value Old value
+     * @param  string $key   Underscored key
+     * @param  string $value Old value
      * @return string Modified value or old value
      */
     protected function _prepareValue($key, $value)
@@ -240,8 +239,8 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Map HiPay General Settings
      *
-     * @param $fieldName
-     * @param string $group
+     * @param  $fieldName
+     * @param  string $group
      * @return null|string
      */
     protected function _mapGeneralFieldset($fieldName, $group = 'hipay_credentials')

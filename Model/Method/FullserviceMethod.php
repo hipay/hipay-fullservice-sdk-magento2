@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Model\Method;
@@ -30,11 +30,10 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  * Abstract Payment Method Class
  * All HiPay Fullservice payment methods inherit from her
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,7 +41,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 abstract class FullserviceMethod extends AbstractMethod
 {
-    const SLEEP_TIME = 5;
+    protected const SLEEP_TIME = 5;
     /**
      * Payment Method feature
      *
@@ -112,7 +111,15 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * @var string[] keys to import in payment additional information
      */
-    protected $_additionalInformationKeys = ['card_token', 'create_oneclick', 'eci', 'cc_type', 'fingerprint','cc_owner', 'browser_info'];
+    protected $_additionalInformationKeys = [
+        'card_token',
+        'create_oneclick',
+        'eci',
+        'cc_type',
+        'fingerprint',
+        'cc_owner',
+        'browser_info'
+    ];
     /**
      *
      * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
@@ -138,14 +145,14 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     protected static $_technicalCode;
 
-
     /**
      * FullserviceMethod constructor.
-     * @param TransactionRepository $transactionRepository
-     * @param Method\Context $context
+     *
+     * @param TransactionRepository                                        $transactionRepository
+     * @param Method\Context                                               $context
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
+     * @param array                                                        $data
      */
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -191,7 +198,7 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\DataObject $data
+     * @param  array|\Magento\Framework\DataObject $data
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
@@ -233,8 +240,8 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Check method for processing with base currency
      *
-     * @param string $currencyCode
-     * @return bool
+     * @param                                         string $currencyCode
+     * @return                                        bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canUseForCurrency($currencyCode)
@@ -247,18 +254,22 @@ abstract class FullserviceMethod extends AbstractMethod
 
     /**
      * Whether this method can accept or deny payment
+     *
      * @return bool
      * @api
      */
     public function canReviewPayment()
     {
         $orderCanReview = true;
-        /** @var $currentOrder \Magento\Sales\Model\Order */
+        /**
+         * @var $currentOrder \Magento\Sales\Model\Order
+        */
         $currentOrder = $this->_registry->registry('current_order') ?: $this->_registry->registry(
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+            if (
+                (int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
                 !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;
@@ -271,7 +282,7 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Is active
      *
-     * @param int|null $storeId
+     * @param  int|null $storeId
      * @return bool
      */
     public function isActive($storeId = null)
@@ -299,10 +310,10 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Capture payment method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         \Magento\Framework\DataObject|InfoInterface $payment
+     * @param                                         float                                       $amount
+     * @return                                        $this
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -310,7 +321,9 @@ abstract class FullserviceMethod extends AbstractMethod
     {
         parent::capture($payment, $amount);
         try {
-            /** @var \Magento\Sales\Model\Order\Payment $payment */
+            /**
+             * @var \Magento\Sales\Model\Order\Payment $payment
+            */
             if ($payment->getAuthorizationTransaction()) {  //Is not the first transaction
                 $this->manualCapture($payment, $amount);
             } else { //Ok, it's the first transaction, so we request a new order (MO/TO)
@@ -341,7 +354,7 @@ abstract class FullserviceMethod extends AbstractMethod
 
     /**
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param  \Magento\Sales\Model\Order $order
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
     public function getGatewayManager($order)
@@ -352,7 +365,7 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      *  According the status provide a correct URL FOWARD
      *
-     * @param $response
+     * @param  \HiPay\Fullservice\Gateway\Model\Transaction $response
      * @return string Redirect URL
      * @throws LocalizedException
      */
@@ -402,6 +415,7 @@ abstract class FullserviceMethod extends AbstractMethod
             //always in pending, because only notification can change order/transaction statues
             $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
             $payment->getOrder()->setStatus($this->getConfigData('order_status'));
+            $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
         } catch (\Exception $e) {
@@ -414,10 +428,10 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         \Magento\Framework\DataObject|InfoInterface $payment
+     * @param                                         float                                       $amount
+     * @return                                        $this
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -442,6 +456,7 @@ abstract class FullserviceMethod extends AbstractMethod
          * Creditmemo repository object is not used because we want to save only the state
          * If we call Creditmemo repository save method, it's do a recall of process relation
          * and potentially cause an infinite loop
+         *
          * @see https://github.com/magento/magento2/blob/2.1/app/code/Magento/Sales/Model/ResourceModel/Order/Creditmemo/Relation/Refund.php#L53
          */
         $payment->getCreditmemo()->save();
@@ -452,9 +467,9 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Attempt to accept a payment that us under review
      *
-     * @param InfoInterface $payment
-     * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         InfoInterface $payment
+     * @return                                        false
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -469,9 +484,9 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Attempt to deny a payment that us under review
      *
-     * @param InfoInterface $payment
-     * @return false
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         InfoInterface $payment
+     * @return                                        false
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -500,7 +515,7 @@ abstract class FullserviceMethod extends AbstractMethod
         if ($cardToken && $eci == 9) {
             //Check if current customer is owner of card token
             $card = $this->_cardFactory->create();
-            $card->getResource()->load($card, $cardToken, 'cc_token');
+            $card->load($cardToken, 'cc_token');
 
             if (!$card->getId() || ($card->getCustomerId() != $this->_checkoutSession->getQuote()->getCustomerId())) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Card does not exist!'));
@@ -527,7 +542,7 @@ abstract class FullserviceMethod extends AbstractMethod
     }
 
     /**
-     * @param InfoInterface $payment
+     * @param  InfoInterface $payment
      * @return float
      */
     public function isDifferentCurrency(\Magento\Payment\Model\InfoInterface $payment)

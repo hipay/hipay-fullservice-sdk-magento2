@@ -3,23 +3,21 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\Exception\LocalizedException;
-use \HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 
 /**
  * Abstract Method for API
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @author                                           Kassim Belghait <kassim@sirateck.com>
+ * @copyright                                        Copyright (c) 2016 - HiPay
+ * @license                                          http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link                                             https://github.com/hipay/hipay-fullservice-sdk-magento2
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 abstract class AbstractMethodAPI extends FullserviceMethod
 {
-
     /**
      * Payment Method feature
      *
@@ -36,8 +34,8 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     /**
      * Instantiate state and set it to state object
      *
-     * @param string $paymentAction
-     * @param \Magento\Framework\DataObject $stateObject
+     * @param  string                        $paymentAction
+     * @param  \Magento\Framework\DataObject $stateObject
      * @return void
      */
     public function initialize($paymentAction, $stateObject)
@@ -69,7 +67,7 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     /**
      * Set initialization requirement state
      *
-     * @param bool $isInitializeNeeded
+     * @param  bool $isInitializeNeeded
      * @return void
      */
     public function setIsInitializeNeeded($isInitializeNeeded = true)

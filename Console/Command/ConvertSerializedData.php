@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,9 +10,8 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Console\Command;
@@ -21,9 +21,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class ConvertSerializedData
+ * Add json serialization command
+ */
 class ConvertSerializedData extends Command
 {
-
     public $input;
     public $output;
 
@@ -39,7 +42,7 @@ class ConvertSerializedData extends Command
     protected $productMetadata;
 
     /**
-     * @var
+     * @var \Magento\Framework\App\State
      */
     protected $state;
 
@@ -47,8 +50,7 @@ class ConvertSerializedData extends Command
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         ProductMetadataInterface $productMetadata,
         \Magento\Framework\App\State $state
-    )
-    {
+    ) {
         parent::__construct();
         $this->ruleFactory = $ruleFactory;
         $this->productMetadata = $productMetadata;
@@ -56,7 +58,7 @@ class ConvertSerializedData extends Command
     }
 
     /**
-     *
+     * Configure command
      */
     protected function configure()
     {
@@ -69,8 +71,8 @@ class ConvertSerializedData extends Command
      * Convert data
      * from serialized to JSON format
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * @param  InputInterface  $input
+     * @param  OutputInterface $output
      * @return int|null|void
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -84,9 +86,11 @@ class ConvertSerializedData extends Command
                 $isSerializedActions = $this->isSerialized($item->getData()["actions_serialized"]);
                 if ($isSerializedConditions || $isSerializedActions) {
                     $model = $this->ruleFactory->create();
-                    $model->getResource()->load($model, $item->getData()["rule_id"]);
+                    $model->load($item->getData()["rule_id"]);
                     if ($isSerializedConditions) {
-                        $model->setConditionsSerialized(json_encode(unserialize($item->getData()["conditions_serialized"])));
+                        $model->setConditionsSerialized(
+                            json_encode(unserialize($item->getData()["conditions_serialized"]))
+                        );
                     }
                     if ($isSerializedActions) {
                         $model->setActionsSerialized(json_encode(unserialize($item->getData()["actions_serialized"])));
@@ -107,12 +111,11 @@ class ConvertSerializedData extends Command
     /**
      * Check if value is serialized string
      *
-     * @param string $value
+     * @param  string $value
      * @return boolean
      */
     private function isSerialized($value)
     {
-        return (boolean)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
+        return (bool)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
     }
-
 }

@@ -9,7 +9,6 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @package HiPay\FullserviceMagento
  * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
@@ -17,49 +16,71 @@
  *
  */
 -->
-<div id="payment-method-hosted-fields" class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
-    <div class="payment-method-title field choice">
-        <input type="radio" name="payment[method]" class="radio"
-            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()" />
-        <label data-bind="attr: {'for': getCode()}" class="label">
-            <span data-bind="text: getTitle()"></span>
-        </label>
+<div
+  id="payment-method-hosted-fields"
+  class="payment-method"
+  data-bind="css: {'_active': (getCode() == isChecked())}"
+>
+  <div class="payment-method-title field choice">
+    <input
+      type="radio"
+      name="payment[method]"
+      class="radio"
+      data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
+    />
+    <label data-bind="attr: {'for': getCode()}" class="label">
+      <span data-bind="text: getTitle()"></span>
+    </label>
+  </div>
+  <div class="payment-method-content">
+    <!-- ko foreach: getRegion('messages') -->
+    <!-- ko template: getTemplate() -->
+    <!-- /ko -->
+    <!--/ko-->
+    <div class="payment-method-billing-address">
+      <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+      <!-- ko template: getTemplate() -->
+      <!-- /ko -->
+      <!--/ko-->
     </div>
-    <div class="payment-method-content">
-        <!-- ko foreach: getRegion('messages') -->
-        <!-- ko template: getTemplate() -->
-        <!-- /ko -->
-        <!--/ko-->
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() -->
-            <!-- /ko -->
-            <!--/ko-->
-        </div>
-        <form class="form hosted-fields-local-form" id="co-transparent-form" action="#" method="post" data-bind="mageInit: {
+    <form
+      class="form hosted-fields-local-form"
+      id="co-transparent-form"
+      action="#"
+      method="post"
+      data-bind="mageInit: {
             'transparent':{
                 'context': context(),
                 'gateway': getCode(),
-            }, 'validation':[]}">
-            <div id="hipay-container-hosted-fields-local" data-bind="visible: initHostedFields()"></div>
-        </form>
-        <div class="checkout-agreements-block">
-            <!-- ko foreach: $parent.getRegion('before-place-order') -->
-            <!-- ko template: getTemplate() -->
-            <!-- /ko -->
-            <!--/ko-->
-        </div>
+            }, 'validation':[]}"
+    >
+      <div
+        class="hipay-container-hosted-fields-local"
+        data-bind="attr: {'id': 'hipay-container-hosted-fields-' + getProductCode()}, visible: initHostedFields()"
+      ></div>
+    </form>
+    <div class="checkout-agreements-block">
+      <!-- ko foreach: $parent.getRegion('before-place-order') -->
+      <!-- ko template: getTemplate() -->
+      <!-- /ko -->
+      <!--/ko-->
+    </div>
 
-        <div class="actions-toolbar">
-            <div class="primary">
-                <button class="action primary checkout" type="submit" data-bind="
+    <div class="actions-toolbar">
+      <div class="primary">
+        <button
+          class="action primary checkout"
+          type="submit"
+          data-bind="
                 click: place_order,
                 attr: {title: $t('Place Order')},
                 enable: isPlaceOrderActionAllowed() && isPlaceOrderAllowed()
-                " disabled>
-                    <span data-bind="i18n: 'Place Order'"></span>
-                </button>
-            </div>
-        </div>
+                "
+          disabled
+        >
+          <span data-bind="i18n: 'Place Order'"></span>
+        </button>
+      </div>
     </div>
+  </div>
 </div>

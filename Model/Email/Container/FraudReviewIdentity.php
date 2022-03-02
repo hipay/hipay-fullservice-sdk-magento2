@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\Email\Container;
 
 use Magento\Sales\Model\Order\Email\Container\Container;
@@ -20,22 +21,21 @@ use Magento\Sales\Model\Order\Email\Container\Container;
 /**
  * Class Identity Container for Reviexed fraud email
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class FraudReviewIdentity extends Container
 {
     /**
      * Configuration paths
      */
-    const XML_PATH_EMAIL_COPY_METHOD = 'hipay/fraud_payment_review/copy_method';
-    const XML_PATH_EMAIL_COPY_TO = 'hipay/fraud_payment_review/copy_to';
-    const XML_PATH_EMAIL_IDENTITY = 'hipay/fraud_payment_review/identity';
-    const XML_PATH_EMAIL_TEMPLATE = 'hipay/fraud_payment_review/template';
-    const XML_PATH_EMAIL_ENABLED = 'hipay/fraud_payment_review/enabled';
+    protected const XML_PATH_EMAIL_COPY_METHOD = 'hipay/fraud_payment_review/copy_method';
+    protected const XML_PATH_EMAIL_COPY_TO = 'hipay/fraud_payment_review/copy_to';
+    protected const XML_PATH_EMAIL_IDENTITY = 'hipay/fraud_payment_review/identity';
+    protected const XML_PATH_EMAIL_TEMPLATE = 'hipay/fraud_payment_review/template';
+    protected const XML_PATH_EMAIL_ENABLED = 'hipay/fraud_payment_review/enabled';
 
     /**
      * @return bool

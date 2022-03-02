@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,17 +10,16 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
 namespace HiPay\FullserviceMagento\Block;
 
 class ExternalJS extends \Magento\Framework\View\Element\Template
 {
-    const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
-    const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
+    protected const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
+    protected const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
 
     /**
      * Return figerprint URL
@@ -34,7 +34,6 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
             null
         );
     }
-
 
     /**
      * Return hosted fields URL

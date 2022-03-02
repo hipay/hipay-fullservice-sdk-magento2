@@ -10,6 +10,7 @@ The **HiPay Fullservice module for Magento 2** is a PHP module which allows you 
 Read the **[project documentation][doc-home]** for comprehensive information about the requirements, general workflow and installation procedure.
 
 ## Resources
+
 - [Full project documentation][doc-home] — To have a comprehensive understanding of the workflow and get the installation procedure
 - [HiPay Support Center][hipay-help] — To get technical help from HiPay
 - [Issues][project-issues] — To report issues, submit pull requests and get involved (see [Apache 2.0 License][project-license])
@@ -33,10 +34,8 @@ Read the **[project documentation][doc-home]** for comprehensive information abo
 
 The **HiPay Fullservice module for Magento 2** is available under the **Apache 2.0 License**. Check out the [license file][project-license] for more information.
 
-[doc-home]: https://developer.hipay.com/doc/hipay-fullservice-sdk-magento2/
-
+[doc-home]: https://developer.hipay.com/cms-modules/magento/magento-2-enterprise
 [hipay-help]: http://help.hipay.com
-
 [project-issues]: https://github.com/hipay/hipay-fullservice-sdk-magento2/issues
 [project-license]: LICENSE.md
 [project-changelog]: CHANGELOG.md

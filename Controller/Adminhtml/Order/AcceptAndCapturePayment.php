@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -9,10 +10,10 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- *
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -20,11 +21,10 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Controller to Accept and capture payment in pending review
  *
- * @package HiPay\FullserviceMagento
- * @author Kassim Belghait <kassim@sirateck.com>
+ * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
- * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
@@ -39,12 +39,16 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
-            /** @var $order \Magento\Sales\Model\Order **/
+            /**
+ * @var $order \Magento\Sales\Model\Order
+**/
             $order = $this->_initOrder();
             if ($order) {
                 //1. Authorize the payment
                 $order->getPayment()->accept();
-                /** @var $orderService \Magento\Sales\Model\Service\OrderService **/
+                /**
+ * @var $orderService \Magento\Sales\Model\Service\OrderService
+**/
                 $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
                 $orderService->setState(
                     $order,
