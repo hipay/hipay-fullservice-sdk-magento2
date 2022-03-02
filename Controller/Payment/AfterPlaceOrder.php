@@ -66,6 +66,6 @@ class AfterPlaceOrder extends \HiPay\FullserviceMagento\Controller\Fullservice
                 __('We can\'t place the order.')
             );
         }
-        $this->_redirect('checkout/payment');
+        $this->_redirect('checkout/#payment');
     }
 }
