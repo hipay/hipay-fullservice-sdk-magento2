@@ -38,8 +38,6 @@ abstract class CommonRequest extends BaseRequest
 {
     /**
      * FAKE DEFAULT PRODUCT CATEGORY
-     *
-     * @deprecated should not be used
      */
     protected const DEFAULT_PRODUCT_CATEGORY = 1;
 
@@ -267,7 +265,7 @@ abstract class CommonRequest extends BaseRequest
      */
     protected function getMappingCategory($product)
     {
-        $mapping_id = 1;
+        $mapping_id = self::DEFAULT_PRODUCT_CATEGORY;
         $categories = $product->getCategoryIds();
         if (!empty($categories) && !empty($idCategory = $categories[0])) {
             $mappingNotFound = true;
