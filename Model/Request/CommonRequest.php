@@ -43,6 +43,9 @@ abstract class CommonRequest extends BaseRequest
      */
     protected const DEFAULT_PRODUCT_CATEGORY = 1;
 
+    protected const DEFAULT_PRODUCT_DESCRIPTION = 'no description';
+
+
     /**
      * Order
      *
@@ -200,12 +203,6 @@ abstract class CommonRequest extends BaseRequest
             switch ($item->getType()) {
                 case TypeItems::GOOD:
                     $product = $this->_productRepositoryInterface->getById($productId);
-                    try {
-                        $description = $product->getCustomAttribute('description');
-                        $description = $this->escapeHtmlToJson($description->getValue());
-                    } catch (\Exception $e) {
-                        $description = 'product description.';
-                    }
                     $itemHipay = new Item();
                     $itemHipay->setName($name);
                     $itemHipay->setProductReference($reference);
@@ -215,7 +212,7 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setTaxRate($taxPercent);
                     $itemHipay->setDiscount($discount);
                     $itemHipay->setTotalAmount($amount);
-                    $itemHipay->setProductDescription($description);
+                    $itemHipay->setProductDescription($this->getDescription($product));
                     $itemHipay->setProductCategory($this->getMappingCategory($product));
 
                     // Set Specifics informations as EAN
@@ -299,5 +296,19 @@ abstract class CommonRequest extends BaseRequest
             }
         }
         return $mapping_id;
+    }
+
+    /**
+     * Retrieve description from product or use default description instead
+     *
+     * @param $product
+     * @return int|null code category Hipay
+     */
+    public function getDescription($product) {
+        $description = $product->getCustomAttribute('description');
+        if ($description != null) {
+            return $this->escapeHtmlToJson($description->getValue());
+        }
+        return self::DEFAULT_PRODUCT_DESCRIPTION;
     }
 }
