@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.1
+
+- **Fix**: Fixed Magento compiling
+
 ## 1.14.0
 
 - **Add**: Added Mutlibanco and MB Way payment methods using Hosted Fields
