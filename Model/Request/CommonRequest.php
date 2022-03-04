@@ -302,7 +302,7 @@ abstract class CommonRequest extends BaseRequest
      * Retrieve description from product or use default description instead
      *
      * @param $product
-     * @return int|null code category Hipay
+     * @return string product description
      */
     public function getDescription($product) {
         $description = $product->getCustomAttribute('description');
