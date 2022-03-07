@@ -127,6 +127,9 @@ code-quality:
     - cd ci-tools/phpcs
     - composer install
     - ./vendor/bin/phpcs --standard=ruleset.xml
+  except:
+    variables:
+      - $ONLY_DEPLOY
   tags:
     - small
 
@@ -166,7 +169,8 @@ build:
   rules:
     - if: $ONLY_DEPLOY
       when: on_success
-    - when: manual
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: manual
   script:
     - /kaniko/executor
       --cache=true
@@ -183,7 +187,8 @@ deploy2recette:
   rules:
     - if: $ONLY_DEPLOY
       when: on_success
-    - when: manual
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: manual
   variables:
     GPC_ACCOUNT: ''
   script:
