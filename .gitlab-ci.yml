@@ -53,8 +53,8 @@ stages:
     MAGE_ADMIN_FIRSTNAME: John
     MAGE_ADMIN_LASTNAME: Doe
     MAGE_ADMIN_EMAIL: john.doe@yopmail.com
-    MAGE_ADMIN_USER: admin
-    MAGE_ADMIN_PWD: admin123
+    MAGE_ADMIN_USER: demo@hipay.com
+    MAGE_ADMIN_PWD: hipay123
     MAGE_BASE_URL: http://127.0.0.1:8096/
     MAGE_BASE_URL_SECURE: https://127.0.0.1:8096/
     MAGE_BACKEND_FRONTNAME: admin
