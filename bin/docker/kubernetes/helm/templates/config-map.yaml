@@ -10,8 +10,8 @@ data:
   MAGE_ADMIN_FIRSTNAME: John
   MAGE_ADMIN_LASTNAME: Doe
   MAGE_ADMIN_EMAIL: john.doe@yopmail.com
-  MAGE_ADMIN_USER: admin
-  MAGE_ADMIN_PWD: admin123
+  MAGE_ADMIN_USER: demo@hipay.com
+  MAGE_ADMIN_PWD: hipay123
   MAGE_BASE_URL: http://{{ .Values.magento2_url }}
   MAGE_BASE_URL_SECURE: https://{{ .Values.magento2_url }}
   MAGE_BACKEND_FRONTNAME: admin
