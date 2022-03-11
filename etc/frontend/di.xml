@@ -31,8 +31,6 @@
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
-                <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
-                <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -105,7 +103,6 @@
                 <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
                 <item name="hipay_postfinancecardapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceCard::HIPAY_METHOD_CODE</item>
                 <item name="hipay_paypalapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Paypal::HIPAY_METHOD_CODE</item>
-                <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
                 <item name="hipay_aura" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Aura::HIPAY_METHOD_CODE</item>
@@ -126,7 +123,6 @@
                 <item name="hipay_bnpp4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Bnpp\Bnpp4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_bnpp3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Bnpp\Bnpp3X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mybank" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mybank::HIPAY_METHOD_CODE</item>
-                <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Multibanco::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
