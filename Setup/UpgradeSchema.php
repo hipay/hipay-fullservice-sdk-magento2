@@ -261,13 +261,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ->addForeignKey(
                     'fk_mage_hipay_split_payment_mage_sales_order_order_id',
                     'order_id',
-                    'mage_sales_order',
+                    $setup->getTable('sales_order'),
                     'entity_id'
                 )
                 ->addForeignKey(
                     'fk_mage_hipay_split_payment_hipay_payment_profile_profile_id',
                     'profile_id',
-                    'mage_hipay_payment_profile',
+                    $setup->getTable('hipay_payment_profile'),
                     'profile_id'
                 );
 
@@ -310,9 +310,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
                 )->addForeignKey(
                     $installer->getFkName(
-                        'hipay_cart_mapping_categories',
+                        $setup->getTable('hipay_cart_mapping_categories'),
                         'category_magento_id',
-                        'catalog_category_entity',
+                        $setup->getTable('catalog_category_entity'),
                         'entity_id'
                     ),
                     'category_magento_id',
@@ -330,7 +330,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     private function installShippingMappingTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $tableName = $setup->getTable($setup->getTable('hipay_cart_mapping_shipping'));
+        $tableName = $setup->getTable('hipay_cart_mapping_shipping');
 
         if ($setup->getConnection()->isTableExists($tableName)) {
             if (version_compare($context->getVersion(), '1.10.2', '<')) {
@@ -404,7 +404,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private function installTokenTable($setup, $context)
     {
         if (version_compare($context->getVersion(), '1.7.0', '<')) {
-            $tableName = $setup->getTable($setup->getTable('hipay_customer_card'));
+            $tableName = $setup->getTable('hipay_customer_card');
 
             if ($setup->getConnection()->isTableExists($tableName)) {
                 $columns = [
