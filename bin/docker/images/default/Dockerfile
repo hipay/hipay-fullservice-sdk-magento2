@@ -1,4 +1,4 @@
-FROM hipay/hipay-magento2:2.3.7
+FROM hipay/hipay-magento2:2.4.3
 
 LABEL maintainer="Support Enterprise"
 LABEL maintainer_email="support.tpp@hipay.com"
