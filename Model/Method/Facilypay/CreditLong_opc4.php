@@ -26,7 +26,7 @@ use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class CreditLong extends AbstractFacilypay
+class CreditLong_opc4 extends AbstractFacilypay
 {
     public const HIPAY_METHOD_CODE = 'hipay_creditlong';
 
