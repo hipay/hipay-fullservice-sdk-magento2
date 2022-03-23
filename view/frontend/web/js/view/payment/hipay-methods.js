@@ -201,6 +201,21 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong'
     },
     {
+      type: 'hipay_creditlong_opc2',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong_opc2'
+    },
+    {
+      type: 'hipay_creditlong_opc3',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong_opc3'
+    },
+    {
+      type: 'hipay_creditlong_opc4',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong_opc4'
+    },
+    {
       type: 'hipay_klarna',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'

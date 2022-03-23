@@ -73,6 +73,9 @@
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/creditlong_opc2.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/creditlong_opc3.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/creditlong_opc4.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/klarna.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp4X.xml"/>
