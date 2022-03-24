@@ -721,8 +721,6 @@ class Notify
              * @var $creditmemo Mage_Sales_Model_Order_Creditmemo
              */
             foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-
-                $this->_logger->warning('testTheo');
                 if (
                     $creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
                     && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
