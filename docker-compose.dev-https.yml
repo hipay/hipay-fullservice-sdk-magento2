@@ -37,6 +37,7 @@ web_https:
   build: .
   links:
     - database_https
+    - elasticsearch_https
 
 database_https:
   image: mysql:5.7
@@ -47,3 +48,12 @@ database_https:
     - MYSQL_PASSWORD=magento2
   ports:
     - '3309:3306'
+
+elasticsearch_https:
+  image: elasticsearch:7.13.2
+  environment:
+    - cluster.name=docker-cluster
+    - discovery.type=single-node
+    - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+  ports:
+    - "9202:9200"

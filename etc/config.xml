@@ -1163,7 +1163,7 @@
                 <group>hipay</group>
             </hipay_creditlong>
             <hipay_creditlong_opc2>
-                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong_opc2</model>
+                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc2</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>Hipay Entreprise Oney Credit Long OPC 2</title>
@@ -1192,7 +1192,7 @@
                 <group>hipay</group>
             </hipay_creditlong_opc2>
             <hipay_creditlong_opc3>
-                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong_opc3</model>
+                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc3</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>Hipay Entreprise Oney Credit Long OPC 3</title>
@@ -1221,7 +1221,7 @@
                 <group>hipay</group>
             </hipay_creditlong_opc3>
             <hipay_creditlong_opc4>
-                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong_opc4</model>
+                <model>HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc4</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>Hipay Entreprise Oney Credit Long OPC 4</title>

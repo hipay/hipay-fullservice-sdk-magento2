@@ -52,3 +52,16 @@ services:
         magento2:
           aliases:
             - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_database
+
+  elasticsearch:
+    image: elasticsearch:7.13.2
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ports:
+      - "9202:9200"
+    networks:
+      magento2:
+        aliases:
+          - ${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}-${CI_JOB_ID}_elasticsearch

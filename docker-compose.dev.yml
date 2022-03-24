@@ -49,6 +49,7 @@ elasticsearch:
     - cluster.name=docker-cluster
     - discovery.type=single-node
     - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    - http.port=9202
 #smtp:
 #  container_name: magento2-hipay-smtp
 #  image: hipay/mailcatcher:1.0.0
