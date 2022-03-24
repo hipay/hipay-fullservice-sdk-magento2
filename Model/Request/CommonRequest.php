@@ -200,7 +200,11 @@ abstract class CommonRequest extends BaseRequest
             switch ($item->getType()) {
                 case TypeItems::GOOD:
                     $product = $this->_productRepositoryInterface->getById($productId);
-                    $description = $product->getCustomAttribute('description');
+                    $descriptionAttribute = $product->getCustomAttribute('description');
+                    $description = $descriptionAttribute !== null
+                        ? $descriptionAttribute->getValue()
+                        : $product->getDescription();
+
                     $itemHipay = new Item();
                     $itemHipay->setName($name);
                     $itemHipay->setProductReference($reference);
@@ -210,7 +214,7 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setTaxRate($taxPercent);
                     $itemHipay->setDiscount($discount);
                     $itemHipay->setTotalAmount($amount);
-                    $itemHipay->setProductDescription($this->escapeHtmlToJson($description->getValue()));
+                    $itemHipay->setProductDescription($this->escapeHtmlToJson($description));
                     $itemHipay->setProductCategory($this->getMappingCategory($product));
 
                     // Set Specifics informations as EAN
