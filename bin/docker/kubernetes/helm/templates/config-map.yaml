@@ -71,3 +71,9 @@ data:
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
   CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-{{ .Values.branch }},giggsey/libphonenumber-for-php
   CUSTOM_MODULES: HiPay_FullserviceMagento
+
+  keys: |
+    cluster.name=docker-cluster
+    discovery.type=single-node
+    'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    http.port=9202
