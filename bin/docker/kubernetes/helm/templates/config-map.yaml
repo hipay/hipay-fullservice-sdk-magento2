@@ -31,8 +31,8 @@ data:
   MAGE_SESSION_SAVE: files
   MAGE_KEY: 69c60a47f9dca004e47bf8783f4b9408
   MAGE_SEARCH_ENGINE: elasticsearch7
-  MAGE_ELASTICSEARCH_HOST: elasticsearch
-  MAGE_ELASTICSEARCH_PORT: 9202
+  MAGE_ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
+  MAGE_ELASTICSEARCH_PORT: "9202"
   # Mysql env var
   MYSQL_ROOT_PASSWORD: magento2
   MYSQL_DATABASE: magento2
