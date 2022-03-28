@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.2
+
+- **Fix** : ECPO-958 - Fixed upgrade script for non prefixed installations
+
 ## 1.14.1
 
 - **Fix**: Fixed Magento compiling
