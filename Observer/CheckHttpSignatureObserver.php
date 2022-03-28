@@ -152,7 +152,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                             $e
                         );
                     }
-                    /*if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+                    if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                         $controller->getActionFlag()->set(
                             '',
                             \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
@@ -160,7 +160,7 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         );
                         $controller->getResponse()->setBody("Wrong Secret Signature!");
                         $controller->getResponse()->setHttpResponseCode(500);
-                    }*/
+                    }
                 }
             } catch (WebApiException $e) {
                 $this->_logger->warning($e);
