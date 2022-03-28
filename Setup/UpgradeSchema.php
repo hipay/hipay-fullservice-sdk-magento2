@@ -109,11 +109,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '1.0.7', '<')) {
 
+            $paymentProfileTable = $setup->getTable('hipay_payment_profile');
             /**
              * Create table 'hipay_payment_profile'
              */
             $table = $setup->getConnection()
-                ->newTable($setup->getTable('hipay_payment_profile'))
+                ->newTable($paymentProfileTable)
                 ->addColumn(
                     'profile_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -162,11 +163,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
             $setup->getConnection()->createTable($table);
 
+            $splitPaymentTable = $setup->getTable('hipay_split_payment');
+            $salesOrderTable = $setup->getTable('sales_order');
+
             /**
              * Create table 'hipay_split_payment'
              */
             $table = $setup->getConnection()
-                ->newTable($setup->getTable('hipay_split_payment'))
+                ->newTable($splitPaymentTable)
                 ->addColumn(
                     'split_payment_id',
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -259,15 +263,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'Attempts'
                 )
                 ->addForeignKey(
-                    'fk_mage_hipay_split_payment_mage_sales_order_order_id',
+                    'fk_'.$splitPaymentTable.'_'.$salesOrderTable.'_order_id',
                     'order_id',
-                    'mage_sales_order',
+                    $salesOrderTable,
                     'entity_id'
                 )
                 ->addForeignKey(
-                    'fk_mage_hipay_split_payment_hipay_payment_profile_profile_id',
+                    'fk_'.$splitPaymentTable.'_'.$paymentProfileTable.'_profile_id',
                     'profile_id',
-                    'mage_hipay_payment_profile',
+                    $paymentProfileTable,
                     'profile_id'
                 );
 
