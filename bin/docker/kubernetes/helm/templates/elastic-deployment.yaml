@@ -64,10 +64,6 @@ spec:
         ports:
           - containerPort: 9202
             name: elastic
-        volumeMounts:
-          - name: elastic-persistent-storage-{{ .Release.Name }}
-            mountPath: /var/lib/mysql
-            subPath: elastic
       volumes:
         - name: elastic-persistent-storage-{{ .Release.Name }}
           persistentVolumeClaim:
