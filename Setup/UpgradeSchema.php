@@ -263,13 +263,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'Attempts'
                 )
                 ->addForeignKey(
-                    'fk_'.$splitPaymentTable.'_'.$salesOrderTable.'_order_id',
+                    'fk_' . $splitPaymentTable . '_' . $salesOrderTable . '_order_id',
                     'order_id',
                     $salesOrderTable,
                     'entity_id'
                 )
                 ->addForeignKey(
-                    'fk_'.$splitPaymentTable.'_'.$paymentProfileTable.'_profile_id',
+                    'fk_' . $splitPaymentTable . '_' . $paymentProfileTable . '_profile_id',
                     'profile_id',
                     $paymentProfileTable,
                     'profile_id'
