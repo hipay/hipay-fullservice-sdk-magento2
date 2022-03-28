@@ -61,6 +61,14 @@ spec:
         envFrom:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
+        extraEnv:
+          - name: cluster.name
+            value: "docker-cluster"
+          - name: discovery.type
+            value: "single-node"
+          - value: "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+          - name: http.port
+            value: "9202"
         ports:
           - containerPort: 9202
             name: elastic
