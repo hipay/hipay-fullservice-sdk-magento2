@@ -108,7 +108,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->installTokenTable($setup, $context);
 
         if (version_compare($context->getVersion(), '1.0.7', '<')) {
-
             $paymentProfileTable = $setup->getTable('hipay_payment_profile');
             /**
              * Create table 'hipay_payment_profile'
