@@ -268,7 +268,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'entity_id'
                 )
                 ->addForeignKey(
-                    'fk_' . $splitPaymentTable . '_' . $paymentProfileTable . '_profile_id',
+                    'fk_hipay_split_payment_hipay_payment_profile_profile_id',
                     'profile_id',
                     $paymentProfileTable,
                     'profile_id'
