@@ -64,10 +64,6 @@ spec:
         ports:
           - containerPort: 9202
             name: elastic
-        lifecycle:
-          postStart:
-            exec:
-              command: ["sysctl -w vm.max_map_count=262144"]
       volumes:
         - name: elastic-persistent-storage-{{ .Release.Name }}
           persistentVolumeClaim:
