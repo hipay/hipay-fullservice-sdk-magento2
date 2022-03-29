@@ -140,6 +140,15 @@
         <method name="hipay_creditlong">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_creditlong_opc2">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_creditlong_opc3">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_creditlong_opc4">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_klarna">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

@@ -18,8 +18,8 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-	<group id="hipay_creditlong" translate="label" type="text" sortOrder="181" showInDefault="1" showInWebsite="1" showInStore="1">
-		<label>Hipay Entreprise Oney Credit Long OPC 1</label>
+	<group id="hipay_creditlong_opc4" translate="label" type="text" sortOrder="184" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Hipay Entreprise Oney Credit Long OPC 4</label>
 		<comment></comment>
 		<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
 		<field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">

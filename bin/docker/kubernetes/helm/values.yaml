@@ -1,6 +1,9 @@
 mysql_image: 'mysql'
 mysql_tag: '5.7'
 
+elastic_image: 'elasticsearch'
+elastic_tag: '7.13.2'
+
 magento2_image: ''
 magento2_tag: ''
 

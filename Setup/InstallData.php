@@ -65,6 +65,7 @@ class InstallData implements InstallDataInterface
                 'state' => Order::STATE_PROCESSING
             ],
             Config::STATUS_REFUND_REQUESTED => ["label" => __('Refund requested'), 'state' => Order::STATE_PROCESSING],
+            Config::STATUS_REFUNDED => ["label" => __('Refunded'), 'state' => Order::STATE_PROCESSING],
             Config::STATUS_REFUND_REFUSED => ["label" => __('Refund refused'), 'state' => Order::STATE_PROCESSING],
             Config::STATUS_PARTIALLY_REFUNDED => [
                 "label" => __('Partially refunded'),

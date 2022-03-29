@@ -53,8 +53,8 @@ stages:
     MAGE_ADMIN_FIRSTNAME: John
     MAGE_ADMIN_LASTNAME: Doe
     MAGE_ADMIN_EMAIL: john.doe@yopmail.com
-    MAGE_ADMIN_USER: admin
-    MAGE_ADMIN_PWD: admin123
+    MAGE_ADMIN_USER: demo@hipay.com
+    MAGE_ADMIN_PWD: hipay123
     MAGE_BASE_URL: http://127.0.0.1:8096/
     MAGE_BASE_URL_SECURE: https://127.0.0.1:8096/
     MAGE_BACKEND_FRONTNAME: admin
@@ -83,10 +83,16 @@ stages:
     MAGE_RUN_SETUP_DI_COMPILE: 0
     MAGE_RUN_DEPLOY_MODE: production
 
+    MAGE_SEARCH_ENGINE: elasticsearch7
+    MAGE_ELASTICSEARCH_HOST: elasticsearch
+    MAGE_ELASTICSEARCH_PORT: 9200
+
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: web
     - name: mysql:5.7
+      alias: database
+    - name: elasticsearch:7.13.2
       alias: database
   artifacts:
     paths:
@@ -127,6 +133,9 @@ code-quality:
     - cd ci-tools/phpcs
     - composer install
     - ./vendor/bin/phpcs --standard=ruleset.xml
+  except:
+    variables:
+      - $ONLY_DEPLOY
   tags:
     - small
 
@@ -166,7 +175,8 @@ build:
   rules:
     - if: $ONLY_DEPLOY
       when: on_success
-    - when: manual
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: manual
   script:
     - /kaniko/executor
       --cache=true
@@ -183,7 +193,8 @@ deploy2recette:
   rules:
     - if: $ONLY_DEPLOY
       when: on_success
-    - when: manual
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: manual
   variables:
     GPC_ACCOUNT: ''
   script:
