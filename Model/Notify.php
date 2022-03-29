@@ -712,7 +712,7 @@ class Notify
                 $remain_amount = round($this->_order->getBaseGrandTotal() - $amount, 2);
             }
 
-            $status = $this->_order->getStatus();
+            $status = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUNDED;
             if ($remain_amount > 0) {
                 $status = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;
             }
@@ -755,7 +755,7 @@ class Notify
                 ->setIsTransactionClosed($isCompleteRefund)
                 ->registerRefundNotification(-1 * $amount);
 
-            $orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUND_REQUESTED;
+            $orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUNDED;
 
             if ($this->_transaction->getStatus() == TransactionStatus::PARTIALLY_REFUNDED) {
                 $orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_PARTIALLY_REFUNDED;

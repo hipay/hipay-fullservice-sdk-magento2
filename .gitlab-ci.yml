@@ -83,10 +83,16 @@ stages:
     MAGE_RUN_SETUP_DI_COMPILE: 0
     MAGE_RUN_DEPLOY_MODE: production
 
+    MAGE_SEARCH_ENGINE: elasticsearch7
+    MAGE_ELASTICSEARCH_HOST: elasticsearch
+    MAGE_ELASTICSEARCH_PORT: 9200
+
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: web
     - name: mysql:5.7
+      alias: database
+    - name: elasticsearch:7.13.2
       alias: database
   artifacts:
     paths:

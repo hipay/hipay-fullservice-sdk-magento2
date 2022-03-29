@@ -8,6 +8,7 @@ services:
       dockerfile: ./bin/docker/images/default/Dockerfile
     depends_on:
       - database
+      - elasticsearch
     env_file:
       - ./bin/docker/conf/test/hipay.env.sample
       - ./bin/docker/conf/test/auth.env.sample
@@ -26,3 +27,12 @@ services:
       retries: 10
     ports:
       - "3308:3306"
+
+  elasticsearch:
+    image: elasticsearch:7.13.2
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+    ports:
+      - "9202:9200"
