@@ -2,7 +2,9 @@
 
 ## 1.14.2
 
-- **Fix** : ECPO-958 - Fixed upgrade script for non prefixed installations
+- **Fix** : Fixed upgrade script for non prefixed installations
+- **Add** : Handle multiple OPC on the Credit Long payment method
+- **Fix** : Fixed payment status of refunded orders
 
 ## 1.14.1
 
