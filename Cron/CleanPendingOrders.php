@@ -113,16 +113,16 @@ class CleanPendingOrders
         $interval = new \DateInterval("PT{$limitedTime}M");
 
         /**
- * @var \Magento\Sales\Model\Order $orderModel
-*/
+         * @var \Magento\Sales\Model\Order $orderModel
+        */
         $orderModel = $this->_orderFactory->create();
 
         /**
- * @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection
-*/
+         * @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection
+        */
         $collection = $orderModel->getCollection();
 
-        $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at'])
+        $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at', 'customer_id'])
             ->addFieldToFilter(
                 'main_table.state',
                 ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]]
@@ -136,8 +136,8 @@ class CleanPendingOrders
             );
 
         /**
- * @var \Magento\Sales\Model\Order $order
-*/
+         * @var \Magento\Sales\Model\Order $order
+        */
         foreach ($collection as $order) {
             if (
                 $order->getState() === \Magento\Sales\Model\Order::STATE_NEW
