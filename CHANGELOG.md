@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.14.4
 
 - **Fix** : Payment product for Oney Credit Long payment methods during order
 
