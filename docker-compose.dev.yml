@@ -1,58 +1,62 @@
-web:
-  env_file:
-    - ./bin/docker/conf/development/mage.env.sample
-    - ./bin/docker/conf/development/auth.env
-    - ./bin/docker/conf/development/module.env.sample
-    - ./bin/docker/conf/development/hipay.env
-  ports:
-    - "8096:80"
-  volumes:
-    - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block:delegated
-    - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller:delegated
-    - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc:delegated
-    - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper:delegated
-    - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model:delegated
-    - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console:delegated
-    - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer:delegated
-    - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin:delegated
-    - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui:delegated
-    - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view:delegated
-    - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup:delegated
-    - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron:delegated
-    - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n:delegated
-    - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger:delegated
-    - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test:delegated
-    - ./composer.json:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/composer.json
-    - ./registration.php:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/registration.php
-    - ./tests:/var/www/html/magento2/tests:delegated
-    - ./log:/home/magento2/var/log:delegated
-    - ./conf/sdk:/var/www/html/magento2/sdk:delegated
-  dockerfile: ./bin/docker/images/default/Dockerfile
-  build: .
-  links:
-    - database
-    - elasticsearch
-#    - smtp
-database:
-  image: mysql:5.7
-  environment:
-    - MYSQL_ROOT_PASSWORD=magento2
-    - MYSQL_DATABASE=magento2
-    - MYSQL_USER=magento2
-    - MYSQL_PASSWORD=magento2
-  ports:
-    - "3308:3306"
+version: '3'
 
-elasticsearch:
-  image: elasticsearch:7.13.2
-  environment:
-    - cluster.name=docker-cluster
-    - discovery.type=single-node
-    - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    - http.port=9202
-#smtp:
-#  container_name: magento2-hipay-smtp
-#  image: hipay/mailcatcher:1.0.0
-#  ports:
-#    - "1096:80"
+services:
+  web:
+    env_file:
+      - ./bin/docker/conf/development/mage.env.sample
+      - ./bin/docker/conf/development/auth.env
+      - ./bin/docker/conf/development/module.env.sample
+      - ./bin/docker/conf/development/hipay.env
+    ports:
+      - '8096:80'
+    volumes:
+      - ./Block:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Block:delegated
+      - ./Controller:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Controller:delegated
+      - ./etc:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/etc:delegated
+      - ./Helper:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Helper:delegated
+      - ./Model:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Model:delegated
+      - ./Console:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Console:delegated
+      - ./Observer:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Observer:delegated
+      - ./Plugin:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Plugin:delegated
+      - ./Ui:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Ui:delegated
+      - ./view:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/view:delegated
+      - ./Setup:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Setup:delegated
+      - ./Cron:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Cron:delegated
+      - ./i18n:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/i18n:delegated
+      - ./Logger:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Logger:delegated
+      - ./Test:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/Test:delegated
+      - ./composer.json:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/composer.json
+      - ./registration.php:/var/www/html/magento2/app/code/HiPay/FullserviceMagento/registration.php
+      - ./tests:/var/www/html/magento2/tests:delegated
+      - ./log:/home/magento2/var/log:delegated
+      - ./conf/sdk:/var/www/html/magento2/sdk:delegated
+    build:
+      context: .
+      dockerfile: ./bin/docker/images/default/Dockerfile
+    links:
+      - database
+      - elasticsearch
+      # - smtp
+  database:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=magento2
+      - MYSQL_DATABASE=magento2
+      - MYSQL_USER=magento2
+      - MYSQL_PASSWORD=magento2
+    ports:
+      - '3308:3306'
 
+  elasticsearch:
+    image: elasticsearch:7.13.2
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - http.port=9202
+
+  # smtp:
+  #   container_name: magento2-hipay-smtp
+  #   image: hipay/mailcatcher:1.0.0
+  #   ports:
+  #     - '1096:80'

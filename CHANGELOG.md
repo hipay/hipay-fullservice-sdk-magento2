@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.14.4
+
+- **Fix** : Payment product for Oney Credit Long payment methods during order
+
 ## 1.14.3
 
 - **Fix** : Fixed redirection on checkout error
