@@ -28,17 +28,17 @@ use HiPay\FullserviceMagento\Model\Method\Facilypay\AbstractFacilypay;
  */
 class CreditLongOpc2 extends AbstractFacilypay
 {
-    public const HIPAY_METHOD_CODE = 'hipay_creditlong';
+    public const HIPAY_METHOD_CODE = 'hipay_creditlong_opc2';
 
     /**
      * @var string
      */
-    protected static $_technicalCode = 'credit-long_opc2';
+    protected static $_technicalCode = 'credit-long';
 
     /**
      * @var string
      */
-    protected $_code = self::HIPAY_METHOD_CODE . '_opc2';
+    protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
      * Payment Method feature

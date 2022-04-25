@@ -13,7 +13,7 @@ URL_MAILCATCHER="http://localhost:1096/"
 header="bin/tests/"
 pathPreFile=${header}000*/0_init/*.js
 pathDir=${header}0*
-containerMG2=hipay-fullservice-sdk-magento2_web_1
+containerMG2=hipay-fullservice-sdk-magento2-web-1
 
 if [ "$1" = '' ] || [ "$1" = '--help' ]; then
     printf "\n                                                      "

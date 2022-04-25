@@ -155,7 +155,7 @@ build-test-2-1-10:
   tags:
     - small
 
-casperjs-2-1-10:
+.casperjs-2-1-10:
   <<: *test_definition
   stage: test
   script:
@@ -190,6 +190,8 @@ deploy2recette:
   <<: *login-to-cd
   stage: deploy
   image: $REGISTRY_CI/gitlab-ci-base:deployment
+  needs:
+    - build
   rules:
     - if: $ONLY_DEPLOY
       when: on_success
@@ -233,11 +235,18 @@ stop_review:
   <<: *login-to-cd
   stage: deploy
   image: $REGISTRY_CI/gitlab-ci-base:deployment
+  needs:
+    - deploy2recette
+  rules:
+    - if: $ONLY_DEPLOY
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: manual
   variables:
     GIT_STRATEGY: none
   script:
     - helm uninstall $RELEASE_NAME --namespace=default
-  when: manual
+  allow_failure: true
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: stop
