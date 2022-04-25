@@ -139,6 +139,11 @@ class Notify
      */
     protected $transactionRepository;
 
+    /**
+     * @var \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender TransactionRepository
+     */
+    protected $creditmemoSender;
+
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -152,6 +157,7 @@ class Notify
         ResourceOrder $orderResource,
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -167,6 +173,8 @@ class Notify
         $this->_transactionDB = $_transactionDB;
         $this->priceCurrency = $priceCurrency;
         $this->transactionRepository = $transactionRepository;
+
+        $this->creditmemoSender = $creditmemoSender;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -753,7 +761,7 @@ class Notify
                 ->setCcTransId($this->_transaction->getTransactionReference())
                 ->setParentTransactionId($parentTransactionId)
                 ->setIsTransactionClosed($isCompleteRefund)
-                ->registerRefundNotification(-1 * $amount);
+                ->registerRefundNotification($amount);
 
             $orderStatus = \HiPay\FullserviceMagento\Model\Config::STATUS_REFUNDED;
 

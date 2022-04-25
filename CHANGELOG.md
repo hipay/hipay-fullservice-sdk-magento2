@@ -4,6 +4,14 @@
 
 - **Fix** : Payment product for Oney Credit Long payment methods during order
 
+## 1.14.3
+
+- **Fix** : Fixed redirection on checkout error
+- **Fix** : Fixed order auto cancellation if it's not paid until timeout
+- **Fix** : Fixed credit memo generation when triggered from HiPay's back office
+- **Fix** : Fixed cart generation for items without descriptions
+- **Fix** : Fixed cart reloading on payment error
+
 ## 1.14.2
 
 - **Fix** : Fixed upgrade script for non prefixed installations
