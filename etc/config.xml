@@ -1178,7 +1178,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
-                <payment_products>credit-long_opc2</payment_products>
+                <payment_products>credit-long</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
                 <authentication_indicator>0</authentication_indicator>
@@ -1207,7 +1207,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
-                <payment_products>credit-long_opc3</payment_products>
+                <payment_products>credit-long</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
                 <authentication_indicator>0</authentication_indicator>
@@ -1236,7 +1236,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
-                <payment_products>credit-long_opc4</payment_products>
+                <payment_products>credit-long</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <display_selector>1</display_selector>
                 <authentication_indicator>0</authentication_indicator>

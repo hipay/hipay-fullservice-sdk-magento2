@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fix** : Payment product for Oney Credit Long payment methods during order
+
 ## 1.14.2
 
 - **Fix** : Fixed upgrade script for non prefixed installations
