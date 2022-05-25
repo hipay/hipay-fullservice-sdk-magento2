@@ -13,8 +13,23 @@
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://opensource.org/licenses/mit-license.php MIT License
  */
-
+ 
 namespace HiPay\FullserviceMagento\Cron;
+
+use Magento\Payment\Helper\Data;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Store\Api\StoreWebsiteRelationInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
+use Magento\Sales\Model\Order;
+use DateTime;
+use DateInterval;
+use Exception;
+use Psr\Log\LoggerInterface;
 
 /**
  * HiPay module crontab
@@ -28,58 +43,69 @@ namespace HiPay\FullserviceMagento\Cron;
  */
 class CleanPendingOrders
 {
-    /**
-     *
-     * @var \Magento\Payment\Helper\Data $paymentHelper ;
+	/**
+     * @var Data $paymentHelper
      */
     protected $paymentHelper;
 
     /**
-     *
-     * @var \Magento\Sales\Model\OrderFactory $_orderFactory
+     * @var OrderFactory $_orderFactory
      */
     protected $_orderFactory;
 
     /**
-     *
-     * @var \Magento\Sales\Api\OrderManagementInterface $_orderManagement
+     * @var OrderManagementInterface $_orderManagement
      */
     protected $_orderManagement;
 
     /**
-     *
-     * @var \Psr\Log\LoggerInterface $logger
+     * @var LoggerInterface $logger
      */
     protected $logger;
 
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFactory
+     * @var DateTimeFactory
      */
     protected $_dateTimeFactory;
+	
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
+     * @var StoreWebsiteRelationInterface
+     */
+    protected $storeWebsiteRelation;
+
+    /**
+     * CleanPendingOrders constructor
      *
-     * @param \Magento\Sales\Model\OrderFactory                  $orderFactory
-     * @param \Magento\Payment\Helper\Data                       $paymentHelper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Psr\Log\LoggerInterface                           $logger
-     * @param \Magento\Sales\Api\OrderManagementInterface        $orderManagement
-     * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
+     * @param OrderFactory                  $orderFactory
+     * @param Data                          $paymentHelper
+     * @param ScopeConfigInterface          $scopeConfig
+     * @param LoggerInterface               $logger
+     * @param OrderManagementInterface      $orderManagement
+     * @param DateTimeFactory               $dateTimeFactory
+     * @param StoreManagerInterface         $storeManager
+     * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Payment\Helper\Data $paymentHelper,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Sales\Api\OrderManagementInterface $orderManagement,
-        \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateTimeFactory
+        OrderFactory $orderFactory,
+        Data $paymentHelper,
+        ScopeConfigInterface $scopeConfig,
+        LoggerInterface $logger,
+        OrderManagementInterface $orderManagement,
+        DateTimeFactory $dateTimeFactory,
+        StoreManagerInterface $storeManager,
+        StoreWebsiteRelationInterface $storeWebsiteRelation
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -87,6 +113,8 @@ class CleanPendingOrders
         $this->_scopeConfig = $scopeConfig;
         $this->_orderManagement = $orderManagement;
         $this->_dateTimeFactory = $dateTimeFactory;
+        $this->storeManager = $storeManager;
+        $this->storeWebsiteRelation = $storeWebsiteRelation;
     }
 
     /**
@@ -96,91 +124,99 @@ class CleanPendingOrders
      */
     public function execute()
     {
-        $methodCodes = $this->getHipayMethods();
-        $hostedMethodCodes = $this->getHostedHipayMethods();
+        $websites = $this->storeManager->getWebsites();
 
-        if (count($methodCodes) < 1) {
-            return $this;
-        }
+        foreach ($websites as $website) {
+            $websiteId = $website->getId();
+            $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
 
-        //Limited time in minutes
-        $limitedTime = 30;
+            $methodCodes = $this->getHipayMethods($websiteId);
+            $hostedMethodCodes = $this->getHostedHipayMethods($websiteId);
 
-        $dateFormat = 'Y-m-d H:i:s';
-        $dateObject = $this->_dateTimeFactory->create();
-        $gmtDate = $dateObject->gmtDate($dateFormat);
-        $date = new \DateTime($gmtDate);
-        $interval = new \DateInterval("PT{$limitedTime}M");
+            if (count($methodCodes) < 1) {
+                return $this;
+            }
 
-        /**
-         * @var \Magento\Sales\Model\Order $orderModel
-        */
-        $orderModel = $this->_orderFactory->create();
+            //Limited time in minutes
+            $limitedTime = 30;
 
-        /**
-         * @var $collection \Magento\Sales\Model\ResourceModel\Order\Collection
-        */
-        $collection = $orderModel->getCollection();
+            $dateFormat = 'Y-m-d H:i:s';
+            $dateObject = $this->_dateTimeFactory->create();
+            $gmtDate = $dateObject->gmtDate($dateFormat);
+            $date = new DateTime($gmtDate);
+            $interval = new DateInterval("PT{$limitedTime}M");
 
-        $collection->addFieldToSelect(['entity_id', 'increment_id', 'store_id', 'state', 'created_at', 'customer_id'])
-            ->addFieldToFilter(
-                'main_table.state',
-                ['in' => [\Magento\Sales\Model\Order::STATE_NEW, \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT]]
-            )
-            ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
-            ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format($dateFormat))])
-            ->join(
-                ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
-                'main_table.entity_id=op.parent_id',
-                ['method']
-            );
+            /**
+             * @var Order $orderModel
+             */
+            $orderModel = $this->_orderFactory->create();
 
-        /**
-         * @var \Magento\Sales\Model\Order $order
-        */
-        foreach ($collection as $order) {
-            if (
-                $order->getState() === \Magento\Sales\Model\Order::STATE_NEW
-                || $order->getState() === \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
-                || in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
-            ) {
-                $orderCreationTimeIsCancellable = true;
+            /**
+             * @var $collection OrderCollection
+             */
+            $collection = $orderModel->getCollection();
 
-                $orderMethodInstance = $order->getPayment()->getMethodInstance();
-                $messageInterval = $interval->i;
+            $collection->addFieldToSelect('*')
+                ->addFieldToFilter(
+                    'main_table.state',
+                    ['in' => [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT]]
+                )
+                ->addFieldToFilter('op.method', ['in' => array_values($methodCodes)])
+                ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
+                ->addAttributeToFilter('created_at', ['to' => ($date->sub($interval)->format($dateFormat))])
+                ->join(
+                    ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
+                    'main_table.entity_id=op.parent_id',
+                    ['method']
+                );
 
-                if (isset($orderMethodInstance->overridePendingTimeout)) {
-                    $messageInterval = $orderMethodInstance->overridePendingTimeout;
-                    $dateObject = $this->_dateTimeFactory->create();
-                    $gmtDate = $dateObject->gmtDate($dateFormat);
-                    $date = new \DateTime($gmtDate);
-                    $intervalMethod = new \DateInterval("PT{$messageInterval}M");
-                    $cancellationTime = $date->sub($intervalMethod);
-                    $orderDate = \DateTime::createFromFormat($dateFormat, $order->getCreatedAt());
+            /**
+             * @var Order $order
+             */
+            foreach ($collection as $order) {
+                if (
+                    $order->getState() === Order::STATE_NEW
+                    || $order->getState() === Order::STATE_PENDING_PAYMENT
+                    || in_array($order->getPayment()->getMethod(), array_values($hostedMethodCodes))
+                ) {
+                    $orderCreationTimeIsCancellable = true;
 
-                    if ($orderDate->format($dateFormat) > $cancellationTime->format($dateFormat)) {
-                        $orderCreationTimeIsCancellable = false;
+                    $orderMethodInstance = $order->getPayment()->getMethodInstance();
+                    $messageInterval = $interval->i;
+
+                    if (isset($orderMethodInstance->overridePendingTimeout)) {
+                        $messageInterval = $orderMethodInstance->overridePendingTimeout;
+                        $dateObject = $this->_dateTimeFactory->create();
+                        $gmtDate = $dateObject->gmtDate($dateFormat);
+                        $date = new DateTime($gmtDate);
+                        $intervalMethod = new DateInterval("PT{$messageInterval}M");
+                        $cancellationTime = $date->sub($intervalMethod);
+                        $orderDate = DateTime::createFromFormat($dateFormat, $order->getCreatedAt());
+
+                        if ($orderDate->format($dateFormat) > $cancellationTime->format($dateFormat)) {
+                            $orderCreationTimeIsCancellable = false;
+                        }
                     }
-                }
 
-                if ($orderCreationTimeIsCancellable && $order->canCancel()) {
-                    try {
-                        $order->cancel();
-                        // keep order status/state
-                        $order
-                            ->addStatusToHistory(
-                                $order->getStatus(),
-                                __(
-                                    'Order canceled automatically by cron because order is pending since %1 minutes',
-                                    $messageInterval
-                                )
-                            );
+                    if ($orderCreationTimeIsCancellable && $order->canCancel()) {
+                        try {
+                            $order->cancel();
+                            // keep order status/state
+                            $order
+                                ->addStatusToHistory(
+                                    $order->getStatus(),
+                                    __(
+                                        'Order canceled automatically by cron because order is pending since %1 minutes',
+                                        $messageInterval
+                                    )
+                                );
 
-                        $order->save();
+                            $order->save();
 
-                        $this->_orderManagement->cancel($order->getId());
-                    } catch (\Exception $e) {
-                        $this->logger->critical($e->getMessage());
+                            $this->_orderManagement->cancel($order->getId());
+                        } catch (Exception $e) {
+                            $this->logger->critical($e->getMessage());
+                        }
                     }
                 }
             }
@@ -189,13 +225,23 @@ class CleanPendingOrders
         return $this;
     }
 
-    public function getHipayMethods()
+    /**
+     * Retrieve enable hipay method
+     *
+     * @param int|null $websiteId
+     * @return array
+     */
+    public function getHipayMethods(?int $websiteId = null)
     {
         $methods = [];
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order', 'store')) {
+                if ($this->_scopeConfig->getValue(
+                    'payment/' . $code . '/cancel_pending_order',
+                    ScopeInterface::SCOPE_WEBSITE,
+                    $websiteId
+                )) {
                     $methods[] = $code;
                 }
             }
@@ -204,13 +250,23 @@ class CleanPendingOrders
         return $methods;
     }
 
-    public function getHostedHipayMethods()
+    /**
+     * Retrieve enable hosted hipay method
+     *
+     * @param int|null $websiteId
+     * @return array
+     */
+    public function getHostedHipayMethods(?int $websiteId = null)
     {
         $methods = [];
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
             if (strpos($code, 'hipay') !== false && strpos($code, 'hipay_cc') === false) {
-                if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order', 'store')) {
+                if ($this->_scopeConfig->getValue(
+                    'payment/' . $code . '/cancel_pending_order',
+                    ScopeInterface::SCOPE_WEBSITE,
+                    $websiteId
+                )) {
                     $methods[] = $code;
                 }
             }
