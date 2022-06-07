@@ -1,0 +1,70 @@
+version: '2'
+services:
+  mariadb:
+    image: docker.io/bitnami/mariadb:10.4
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_USER=bn_magento
+      - MARIADB_DATABASE=bitnami_magento
+    volumes:
+      - 'mariadb_data:/bitnami/mariadb'
+  magento:
+    build:
+      context: .
+      dockerfile: ./bin/docker/images/default/Dockerfile_bitnami
+    ports:
+      - '8096:8080'
+      - '8443:8443'
+    env_file:
+      - ./bin/docker/conf/development/hipay.env
+    environment:
+      - MAGENTO_HOST=localhost
+      - MAGENTO_EXTERNAL_HTTP_PORT_NUMBER=8096
+      - MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER=8443
+      - MAGENTO_DATABASE_HOST=mariadb
+      - MAGENTO_DATABASE_PORT_NUMBER=3306
+      - MAGENTO_DATABASE_USER=bn_magento
+      - MAGENTO_DATABASE_NAME=bitnami_magento
+      - ELASTICSEARCH_HOST=elasticsearch
+      - ELASTICSEARCH_PORT_NUMBER=9200
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - MAGENTO_PASSWORD=hipay123
+    volumes:
+      - './web:/bitnami/magento'
+      - ./Block:/bitnami/magento/app/code/HiPay/FullserviceMagento/Block
+      - ./Controller:/bitnami/magento/app/code/HiPay/FullserviceMagento/Controller
+      - ./etc:/bitnami/magento/app/code/HiPay/FullserviceMagento/etc
+      - ./Helper:/bitnami/magento/app/code/HiPay/FullserviceMagento/Helper
+      - ./Model:/bitnami/magento/app/code/HiPay/FullserviceMagento/Model
+      - ./Console:/bitnami/magento/app/code/HiPay/FullserviceMagento/Console
+      - ./Observer:/bitnami/magento/app/code/HiPay/FullserviceMagento/Observer
+      - ./Plugin:/bitnami/magento/app/code/HiPay/FullserviceMagento/Plugin
+      - ./Ui:/bitnami/magento/app/code/HiPay/FullserviceMagento/Ui
+      - ./view:/bitnami/magento/app/code/HiPay/FullserviceMagento/view
+      - ./Setup:/bitnami/magento/app/code/HiPay/FullserviceMagento/Setup
+      - ./Cron:/bitnami/magento/app/code/HiPay/FullserviceMagento/Cron
+      - ./i18n:/bitnami/magento/app/code/HiPay/FullserviceMagento/i18n
+      - ./Logger:/bitnami/magento/app/code/HiPay/FullserviceMagento/Logger
+      - ./Test:/bitnami/magento/app/code/HiPay/FullserviceMagento/Test
+      - ./composer.json:/bitnami/magento/app/code/HiPay/FullserviceMagento/composer.json
+      - ./registration.php:/bitnami/magento/app/code/HiPay/FullserviceMagento/registration.php
+      - ./tests:/bitnami/magento/tests
+      - ./log:/bitnami/magento/var/log
+      - ./conf/sdk:/bitnami/magento/sdk
+    depends_on:
+      - mariadb
+      - elasticsearch
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:7
+    volumes:
+      - 'elasticsearch_data:/bitnami/elasticsearch/data'
+
+volumes:
+  mariadb_data:
+    driver: local
+  magento_data:
+    driver: local
+  elasticsearch_data:
+    driver: local

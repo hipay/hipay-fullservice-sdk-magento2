@@ -1,0 +1,19 @@
+FROM bitnami/magento:2.4.4
+
+RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
+    && chmod +x ./n98-magerun2.phar \
+    && cp ./n98-magerun2.phar /usr/local/bin/ \
+    && rm ./n98-magerun2.phar
+
+#====================================================
+# OVERRIDE PARENT ENTRYPOINT
+#=====================================================
+
+RUN echo "is_app_initialized() { false; }" >> /opt/bitnami/scripts/libpersistence.sh
+RUN mkdir -p /usr/sbin/.composer/ && echo '{"http-basic":{"repo.magento.com":{"username":"e3b8d4033c8f6440aec19950253a8cb3","password":"8a297c071a7c3085ea0630283c96f002"}}}' > /usr/sbin/.composer/auth.json && chown -R daemon: /usr/sbin/.composer/
+
+COPY ./bin/docker/images/default/entrypoint_bitnami.sh /usr/local/bin/
+RUN  chmod u+x /usr/local/bin/entrypoint_bitnami.sh
+
+ENTRYPOINT ["/usr/local/bin/entrypoint_bitnami.sh"]
+CMD [ "/opt/bitnami/scripts/magento/run.sh" ]
