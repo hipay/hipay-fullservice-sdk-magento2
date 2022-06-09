@@ -35,7 +35,10 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        xdebugFile=/usr/local/etc/php/conf.d/xdebug.ini
+        pecl install xdebug
+        xdebugFile=/opt/bitnami/php/etc/conf.d/xdebug.ini
+
+        echo 'zend_extension=xdebug' >>$xdebugFile
 
         echo "xdebug.mode=debug" >>$xdebugFile
         echo "xdebug.idekey=PHPSTORM" >>$xdebugFile
@@ -55,6 +58,8 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
       php bin/magento setup:di:compile && \
       php bin/magento setup:static-content:deploy -f && \
       php bin/magento cache:flush' daemon -s /bin/bash
+
+#    su -c 'rm -rf /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2 && ln -s /tmp/HiPay/FullserviceMagento /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2'
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -126,4 +131,5 @@ printf "${COLOR_SUCCESS}    |   PHP VERSION     : $(php -r 'echo PHP_VERSION;') 
 printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $(grep -Po '"version": "\K.*(?=")' $MAGENTO_ROOT/composer.json)   ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================                 ${NC}\n"
 
+chmod -R a+rw $MAGENTO_ROOT
 exec "$@"
