@@ -200,7 +200,7 @@ class Data extends AbstractHelper
         if (!$info || !is_string($info)) {
             $info = new \stdClass();
         } elseif (is_string($info)) {
-            $info = json_decode($info);
+            $info = json_decode($info ?: '');
         }
 
         $info->version = $this->getExtensionVersion();

@@ -279,7 +279,7 @@ class Manager
 
     private function cleanTransactionValue($transactionReference)
     {
-        list($tr) = explode("-", $transactionReference);
+        list($tr) = explode("-", $transactionReference ?: '');
         return $tr;
     }
 

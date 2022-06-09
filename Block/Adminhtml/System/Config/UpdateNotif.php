@@ -165,7 +165,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             curl_setopt($ch, CURLOPT_USERAGENT, 'PHP');
             $res = curl_exec($ch);
             curl_close($ch);
-            $gitHubInfo = @json_decode($res);
+            $gitHubInfo = @json_decode($res ?: '');
 
             // If call is successful, reading from call
             if ($gitHubInfo) {

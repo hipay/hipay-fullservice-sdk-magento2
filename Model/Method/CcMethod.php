@@ -205,7 +205,7 @@ class CcMethod extends FullserviceMethod
         }
 
         $errorMsg = false;
-        $availableTypes = explode(',', $this->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getConfigData('cctypes') ?: '');
 
         $ccNumber = $info->getCcNumber();
 

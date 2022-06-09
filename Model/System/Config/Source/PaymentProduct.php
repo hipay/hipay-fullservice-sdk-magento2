@@ -66,13 +66,13 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
 
         if ($this->getPath()) {
             list($section_locale, $method) = explode("/", $this->getPath());
-            list($section) = explode("_", $section_locale);
+            list($section) = explode("_", $section_locale ?: '');
 
             $categories = $this->_scopeConfig->getValue(implode('/', [$section, $method, self::PAYMENT_PRODUCT_FIELD]))
                 ?: null;
 
             if (!empty($categories)) {
-                $categories = explode(',', $categories);
+                $categories = explode(',', $categories ?: '');
             }
         }
 

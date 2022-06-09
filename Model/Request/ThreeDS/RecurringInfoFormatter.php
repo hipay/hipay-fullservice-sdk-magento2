@@ -87,7 +87,7 @@ class RecurringInfoFormatter extends AbstractRequest
         if ($this->_threeDSHelper->getOrderSplitPaymentCollection($this->_order->getId())) {
             $expirationDate = $this->_threeDSHelper->getLastOrderSplitPayment($this->_order->getId())->getDateToPay();
 
-            return (int)date('Ymd', strtotime($expirationDate));
+            return (int)date('Ymd', strtotime($expirationDate ?: ''));
         }
 
         $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
@@ -98,7 +98,7 @@ class RecurringInfoFormatter extends AbstractRequest
 
         $lastSplit = end($splitsArray);
 
-        return (int)date('Ymd', strtotime($lastSplit["dateToPay"]));
+        return (int)date('Ymd', strtotime($lastSplit["dateToPay"] ?: ''));
     }
 
     private function getFrequencyDays()

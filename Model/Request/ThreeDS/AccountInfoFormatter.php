@@ -119,9 +119,9 @@ class AccountInfoFormatter extends AbstractRequest
             $rpTokenCreatedAt = $this->_customerSession->getCustomer()->getData('rp_token_created_at');
             $timestampCreated = $this->_customerSession->getCustomer()->getCreatedAtTimestamp();
 
-            $customerInfo->account_change = (int)date('Ymd', strtotime($accountChange));
-            $customerInfo->opening_account_date = (int)date('Ymd', $timestampCreated);
-            $customerInfo->password_change = (int)date('Ymd', strtotime($rpTokenCreatedAt));
+            $customerInfo->account_change = (int)date('Ymd', strtotime($accountChange ?: ''));
+            $customerInfo->opening_account_date = (int)date('Ymd', $timestampCreated ?: '');
+            $customerInfo->password_change = (int)date('Ymd', strtotime($rpTokenCreatedAt ?: ''));
         }
 
         return $customerInfo;

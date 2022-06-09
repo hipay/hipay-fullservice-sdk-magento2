@@ -95,7 +95,7 @@ class BillingInfo extends AbstractInfoRequest
     {
         $ccType = $this->_order->getPayment()->getCcType();
         $cardOwner = $this->_order->getPayment()->getCcOwner();
-        $partsCardOwner = explode(' ', trim($cardOwner));
+        $partsCardOwner = explode(' ', trim($cardOwner ?: ''));
 
         $firstName = $billingAddress->getFirstname();
         $lastName = $billingAddress->getLastname();
@@ -122,12 +122,12 @@ class BillingInfo extends AbstractInfoRequest
      */
     private function extractPartOfCardHolder($cardOwner, $key)
     {
-        $split = explode(' ', trim($cardOwner));
+        $split = explode(' ', trim($cardOwner ?: ''));
         switch ($key) {
             case 'firstname':
                 return $split[0];
             case 'lastname':
-                return trim(preg_replace('/' . $split[0] . '/', "", $cardOwner, 1));
+                return trim(preg_replace('/' . $split[0] . '/', "", $cardOwner ?: '', 1));
             default:
                 return "";
         }

@@ -227,7 +227,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentProductsList()
     {
-        $list = explode(',', $this->getValue('payment_products'));
+        $list = explode(',', $this->getValue('payment_products') ?: '');
         return $list;
     }
 
@@ -258,7 +258,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getAllowedPaymentProductCategories()
     {
-        return explode(',', $this->getValue('payment_products_categories'));
+        return explode(',', $this->getValue('payment_products_categories') ?: '');
     }
 
     /**
