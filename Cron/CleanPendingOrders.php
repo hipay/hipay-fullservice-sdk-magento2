@@ -209,7 +209,7 @@ class CleanPendingOrders
         $methods = [];
 
         foreach ($this->paymentHelper->getPaymentMethods() as $code => $data) {
-            if (strpos($code, 'hipay') !== false && strpos($code, 'hipay_cc') === false) {
+            if (strpos($code, 'hipay') !== false) {
                 if ($this->_scopeConfig->getValue('payment/' . $code . '/cancel_pending_order', 'store')) {
                     $methods[] = $code;
                 }

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Add** : Removed Credit Card payment methods using Direct Post integration
+
 ## 1.14.4
 
 - **Fix** : Payment product for Oney Credit Long payment methods during order

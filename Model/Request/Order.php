@@ -61,9 +61,7 @@ class Order extends CommonRequest
     );
 
     protected $_cardPaymentMethod = array(
-        'hipay_cc',
         'hipay_hostedsplit',
-        'hipay_ccsplit',
         'hipay_hosted_fields',
         'hipay_hosted',
         'hipay_hostedmoto'
