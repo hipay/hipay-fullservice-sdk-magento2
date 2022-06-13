@@ -65,13 +65,6 @@ class OrderCanRefundObserver implements ObserverInterface
                     $order->setForcedCanCreditmemo(false);
                 }
             }
-
-            if (
-                $order->getPayment()->getMethod() == 'hipay_cc'
-                && strtolower($order->getPayment()->getCcType()) == 'bcmc'
-            ) {
-                $order->setForcedCanCreditmemo(false);
-            }
         }
 
         return $this;

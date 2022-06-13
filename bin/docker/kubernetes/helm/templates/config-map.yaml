@@ -45,7 +45,7 @@ data:
   GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
   # HiPay env var
   ENVIRONMENT: production
-  ACTIVE_METHODS: hipay_cc,hipay_hosted
+  ACTIVE_METHODS: hipay_hosted_fields,hipay_hosted
   HIPAY_API_USER_TEST: {{ .Values.hipay_api_user_test }}
   HIPAY_API_PASSWORD_TEST: {{ .Values.hipay_api_password_test }}
   HIPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_secret_passphrase_test }}
