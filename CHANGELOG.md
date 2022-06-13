@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- **Add** : Removed Credit Card payment methods using Direct Post integration
+- **Add** : Removed Credit Card payment methods using Direct Post integration. Use instead Credit Card payment methods using Hosted Fields or Hosted Page
 
 ## 1.14.4
 
