@@ -52,13 +52,14 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
     cd /bitnami/magento
+    cp /usr/sbin/.composer/auth.json /bitnami/magento/var/composer_home/auth.json && chown -R daemon: /bitnami/magento/var/composer_home/auth.json
     su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
       php bin/magento module:enable HiPay_FullserviceMagento && \
+      php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
       php bin/magento setup:upgrade && \
       php bin/magento setup:di:compile && \
       php bin/magento setup:static-content:deploy -f && \
-      php bin/magento cache:flush && \
-       php bin/magento sampledata:deploy' daemon -s /bin/bash
+      php bin/magento cache:flush' daemon -s /bin/bash
 
 #    su -c 'rm -rf /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2 && ln -s /tmp/HiPay/FullserviceMagento /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2'
 

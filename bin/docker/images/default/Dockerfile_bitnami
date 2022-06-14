@@ -10,7 +10,7 @@ RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
 #=====================================================
 
 RUN echo "is_app_initialized() { false; }" >> /opt/bitnami/scripts/libpersistence.sh
-RUN mkdir -p /usr/sbin/.composer/ && echo '{"http-basic":{"repo.magento.com":{"username":"e3b8d4033c8f6440aec19950253a8cb3","password":"8a297c071a7c3085ea0630283c96f002"}}}' > /usr/sbin/.composer/auth.json && chown -R daemon: /usr/sbin/.composer/ && mkdir -p /bitnami/magento/var/composer_home && cp /usr/sbin/.composer/auth.json /bitnami/magento/var/composer_home/auth.json && chown -R daemon: /bitnami/magento/var/composer_home/auth.json
+RUN mkdir -p /usr/sbin/.composer/ && echo '{"http-basic":{"repo.magento.com":{"username":"e3b8d4033c8f6440aec19950253a8cb3","password":"8a297c071a7c3085ea0630283c96f002"}}}' > /usr/sbin/.composer/auth.json && chown -R daemon: /usr/sbin/.composer/ && mkdir -p /bitnami/magento/var/composer_home
 
 COPY ./bin/docker/images/default/entrypoint_bitnami.sh /usr/local/bin/
 RUN  chmod u+x /usr/local/bin/entrypoint_bitnami.sh
