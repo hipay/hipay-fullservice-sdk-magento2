@@ -7,6 +7,8 @@ services:
       - ALLOW_EMPTY_PASSWORD=yes
       - MARIADB_USER=bn_magento
       - MARIADB_DATABASE=bitnami_magento
+    ports:
+      - '3308:3306'
     volumes:
       - 'mariadb_data:/bitnami/mariadb'
   magento:

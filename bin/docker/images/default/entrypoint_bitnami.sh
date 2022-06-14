@@ -92,6 +92,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/active 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/debug 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/is_test_mode 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/env stage
         printf "${COLOR_SUCCESS} Method $code is activated in test mode ${NC}\n"
     done
 
