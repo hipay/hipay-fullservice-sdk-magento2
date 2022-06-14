@@ -14,29 +14,14 @@ services:
   magento:
     build:
       context: .
-      dockerfile: ./bin/docker/images/default/Dockerfile_bitnami
+      dockerfile: ./bin/docker/images/default/Dockerfile
     ports:
       - '8096:8080'
       - '8443:8443'
     env_file:
       - ./bin/docker/conf/development/hipay.env
-    environment:
-      - MAGENTO_HOST=localhost
-      - MAGENTO_EXTERNAL_HTTP_PORT_NUMBER=8096
-      - MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER=8443
-      - MAGENTO_DATABASE_HOST=mariadb
-      - MAGENTO_DATABASE_PORT_NUMBER=3306
-      - MAGENTO_DATABASE_USER=bn_magento
-      - MAGENTO_DATABASE_NAME=bitnami_magento
-      - ELASTICSEARCH_HOST=elasticsearch
-      - ELASTICSEARCH_PORT_NUMBER=9200
-      # ALLOW_EMPTY_PASSWORD is recommended only for development.
-      - ALLOW_EMPTY_PASSWORD=yes
-      - MAGENTO_USERNAME=demo
-      - MAGENTO_EMAIL=demo@hipay.com
-      - MAGENTO_PASSWORD=hipay123
-      - MAGENTO_MODE=developer
-      - PHP_ENABLE_OPCACHE=false
+      - ./bin/docker/conf/development/mage.env
+      - ./bin/docker/conf/development/module.env
     volumes:
       - './web:/bitnami/magento'
       - ./Block:/bitnami/magento/app/code/HiPay/FullserviceMagento/Block

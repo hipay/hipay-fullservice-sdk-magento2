@@ -52,7 +52,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
     cd /bitnami/magento
-    cp /usr/sbin/.composer/auth.json /bitnami/magento/var/composer_home/auth.json && chown -R daemon: /bitnami/magento/var/composer_home/auth.json
     su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
       php bin/magento module:enable HiPay_FullserviceMagento && \
       php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
@@ -60,8 +59,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
       php bin/magento setup:di:compile && \
       php bin/magento setup:static-content:deploy -f && \
       php bin/magento cache:flush' daemon -s /bin/bash
-
-#    su -c 'rm -rf /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2 && ln -s /tmp/HiPay/FullserviceMagento /bitnami/magento/vendor/hipay/hipay-fullservice-sdk-magento2'
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -101,6 +98,13 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     n98-magerun2.phar db:query "INSERT INTO ${MAGE_DB_PREFIX}sequence_order_1 values ('$PREFIX_STORE1')"
     printf "${COLOR_SUCCESS} Order sequence is $PREFIX_STORE1${NC}\n"
+
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}         FINAL MAGENTO CONFIG        ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set currency/options/base EUR
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set currency/options/default EUR
+    printf "${COLOR_SUCCESS} Default currency set to EUR${NC}\n"
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         LINK WITH HIPAY'S SDK PHP        ${NC}\n"

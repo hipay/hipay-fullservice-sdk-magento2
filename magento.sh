@@ -30,24 +30,24 @@ fi
 
 if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
-        docker compose -f docker-compose-bitnami.yml stop
-        docker compose -f docker-compose-bitnami.yml rm -fv
+        docker compose -f docker-compose.yml stop
+        docker compose -f docker-compose.yml rm -fv
         sudo rm -Rf log/ web/
-        docker compose -f docker-compose-bitnami.yml build
-        COMPOSE_HTTP_TIMEOUT=200 docker compose -f docker-compose-bitnami.yml up -d
+        docker compose -f docker-compose.yml build
+        COMPOSE_HTTP_TIMEOUT=200 docker compose -f docker-compose.yml up -d
 #        docker cp $containerMG2:/var/www/html/magento2 web/
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose-bitnami to link this files"
     fi
 elif [ "$1" = 'kill' ]; then
-    docker compose -f docker-compose-bitnami.yml stop
-    docker compose -f docker-compose-bitnami.yml rm -fv
+    docker compose -f docker-compose.yml stop
+    docker compose -f docker-compose.yml rm -fv
     rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then
-    docker compose -f docker-compose-bitnami.yml stop
-    docker compose -f docker-compose-bitnami.yml up -d
+    docker compose -f docker-compose.yml stop
+    docker compose -f docker-compose.yml up -d
 elif [ "$1" = 'static' ]; then
     docker exec $containerMG2 rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
     docker exec $containerMG2 gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
@@ -59,7 +59,7 @@ elif [ "$1" = 'di' ]; then
 elif [ "$1" = 'command' ]; then
     docker exec $containerMG2 gosu magento2 php bin/magento $2
 elif [ "$1" = 'l' ]; then
-    docker compose -f docker-compose-bitnami.yml logs -f
+    docker compose -f docker-compose.yml logs -f
 elif [ "$1" = 'install' ]; then
     docker exec $containerMG2 gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
     docker exec $containerMG2 gosu magento2 bin/magento setup:upgrade
