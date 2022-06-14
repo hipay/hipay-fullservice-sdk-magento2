@@ -51,6 +51,11 @@ services:
     image: docker.io/bitnami/elasticsearch:7
     volumes:
       - 'elasticsearch_data:/bitnami/elasticsearch/data'
+    environment:
+      - cluster.name=docker-cluster
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - http.port=9202
 
 volumes:
   mariadb_data:
