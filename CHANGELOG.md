@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.15.0
 
 - **Add** : Removed Credit Card payment methods using Direct Post integration. Use instead Credit Card payment methods using Hosted Fields or Hosted Page
+- **Fix** : Fixed deprecation issues with PHP 8 version
 
 ## 1.14.4
 
