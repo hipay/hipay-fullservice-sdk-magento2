@@ -17,7 +17,6 @@ data:
   MAGENTO_PASSWORD: hipay123
   MAGENTO_EMAIL: demo@hipaycom
   MAGENTO_MODE: developer
-  ALLOW_EMPTY_PASSWORD: yes
   ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
   ELASTICSEARCH_PORT_NUMBER: 9202
   PHP_ENABLE_OPCACHE: false
