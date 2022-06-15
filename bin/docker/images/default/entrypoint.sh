@@ -8,21 +8,10 @@ ENV_DEVELOPMENT="development"
 ENV_STAGE="stage"
 ENV_PROD="production"
 NEED_SETUP_CONFIG=0
+MAGENTO_ROOT=/bitnami/magento/
 
-#==========================================
-# CHECK IF MAGENTO IS INSTALLED
-#==========================================
-if [ ! -f /var/www/html/magento2/app/etc/config.php ] && [ ! -f /var/www/html/magento2/app/etc/env.php ]; then
+if [ ! -f $MAGENTO_ROOT/app/etc/config.php ] && [ ! -f $MAGENTO_ROOT/app/etc/env.php ]; then
     NEED_SETUP_CONFIG="1"
-
-    #==========================================
-    # VCS AUTHENTICATION
-    #==========================================
-    printf "Set composer http-basic $GITLAB_API_TOKEN"
-    gosu magento2 composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
-
-    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN"
-    gosu magento2 composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 fi
 
 export COMPOSER_MEMORY_LIMIT=-1
@@ -30,7 +19,8 @@ export COMPOSER_MEMORY_LIMIT=-1
 #==========================================
 # PARENT ENTRYPOINT
 #==========================================
-/bin/bash /usr/local/bin/magento2-start "$@ --no-exec-apache"
+sed -i '/exec "$@"/d' /opt/bitnami/scripts/magento/entrypoint.sh
+/bin/bash /opt/bitnami/scripts/magento/entrypoint.sh "$@"
 
 #==========================================
 #  INIT HIPAY CONFIGURATION AND DEV
@@ -45,7 +35,10 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        xdebugFile=/usr/local/etc/php/conf.d/xdebug.ini
+        pecl install xdebug
+        xdebugFile=/opt/bitnami/php/etc/conf.d/xdebug.ini
+
+        echo 'zend_extension=xdebug' >>$xdebugFile
 
         echo "xdebug.mode=debug" >>$xdebugFile
         echo "xdebug.idekey=PHPSTORM" >>$xdebugFile
@@ -54,10 +47,18 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         echo "xdebug.remote_autostart=off" >>$xdebugFile
     fi
 
-    #==========================================
-    # MAIL CONFIGURATION
-    #==========================================
-    echo "sendmail_path = /usr/bin/msmtp -t" >/usr/local/etc/php/conf.d/sendmail.ini
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+    cd /bitnami/magento
+    su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
+      php bin/magento module:enable HiPay_FullserviceMagento && \
+      php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
+      php bin/magento setup:upgrade && \
+      php bin/magento setup:di:compile && \
+      php bin/magento setup:static-content:deploy -f && \
+      php bin/magento cache:flush' daemon -s /bin/bash
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -76,14 +77,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_applepay_tokenjs/api_username_test $HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_applepay_tokenjs/api_password_test $HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/hipay_cc/cctypes "VI,MC,AE,CB,MI"
-
-    if [ "$ENVIRONMENT" = "$ENV_PROD" ]; then
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/configurations/send_notification_url 1
-    fi
-
-    if [ "$ENVIRONMENT" != "$ENV_DEVELOPMENT" ]; then
-        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
-    fi
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         ACTIVATE PAYMENT METHODS        ${NC}\n"
@@ -95,47 +89,54 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/active 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/debug 1
         n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/is_test_mode 1
+        n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/$code/env stage
         printf "${COLOR_SUCCESS} Method $code is activated in test mode ${NC}\n"
     done
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         UPDATE SEQUENCE ORDER           ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    n98-magerun2.phar db:query "INSERT INTO mage_sequence_order_1 values ('$PREFIX_STORE1')"
+    n98-magerun2.phar db:query "INSERT INTO ${MAGE_DB_PREFIX}sequence_order_1 values ('$PREFIX_STORE1')"
     printf "${COLOR_SUCCESS} Order sequence is $PREFIX_STORE1${NC}\n"
+
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}         FINAL MAGENTO CONFIG        ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set currency/options/base EUR
+    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set currency/options/default EUR
+    printf "${COLOR_SUCCESS} Default currency set to EUR${NC}\n"
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}         LINK WITH HIPAY'S SDK PHP        ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    if [ -f /var/www/html/magento2/sdk/hipay-fullservice-sdk-php/composer.json ]; then
-        cd /var/www/html/magento2/vendor/hipay/
+    if [ -f $MAGENTO_ROOT/sdk/hipay-fullservice-sdk-php/composer.json ]; then
+        cd $MAGENTO_ROOT/vendor/hipay/
         rm -Rf hipay-fullservice-sdk-php
-        ln -sf /var/www/html/magento2/sdk/hipay-fullservice-sdk-php hipay-fullservice-sdk-php
+        ln -sf $MAGENTO_ROOT/sdk/hipay-fullservice-sdk-php hipay-fullservice-sdk-php
         printf "${COLOR_SUCCESS} HiPay's SDK php is now linked ${NC}\n"
     fi
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}              FOLDER CACHE               ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-    rm -Rf /var/www/html/magento2/var/cache
-    gosu magento2 mkdir /var/www/html/magento2/var/cache
-    chmod 775 /var/www/html/magento2/var/cache
-    chown -R magento2:magento2 /var/www/html/magento2/var/cache
-    chown -R magento2:www-data /var/www/html/magento2/generated
-    chmod 755 /var/www/html/magento2/auth.json
+    rm -Rf $MAGENTO_ROOT/var/cache
+    gosu daemon mkdir $MAGENTO_ROOT/var/cache
+    chmod 775 $MAGENTO_ROOT/var/cache
+    chown -R daemon: $MAGENTO_ROOT/var/cache
+    chown -R daemon: $MAGENTO_ROOT/generated
 fi
 
-printf "${COLOR_SUCCESS}                                                                            ${NC}\n"
-printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
-printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
-printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY $ENVIRONMENT IS UP             ${NC}\n"
-printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL FRONT       : $MAGE_BASE_URL                                   ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL BACK        : ${MAGE_BASE_URL}admin                             ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL MAIL CATCHER: $MAGENTO_URL:1095/                               ${NC}\n"
-printf "${COLOR_SUCCESS}    |                                                                      ${NC}\n"
-printf "${COLOR_SUCCESS}    |   PHP VERSION     : $PHP_VERSION                                     ${NC}\n"
-printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $MAGE_VERSION                                    ${NC}\n"
-printf "${COLOR_SUCCESS}    |======================================================================${NC}\n"
+printf "${COLOR_SUCCESS}                                                                                            ${NC}\n"
+printf "${COLOR_SUCCESS}    |======================================================================                 ${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
+printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY $ENVIRONMENT IS UP                              ${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL FRONT       : http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}       ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL BACK        : http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/admin ${NC}\n"
+printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
+printf "${COLOR_SUCCESS}    |   PHP VERSION     : $(php -r 'echo PHP_VERSION;')                                     ${NC}\n"
+printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $(grep -Po '"version": "\K.*(?=")' $MAGENTO_ROOT/composer.json)   ${NC}\n"
+printf "${COLOR_SUCCESS}    |======================================================================                 ${NC}\n"
 
-exec apache2 -DFOREGROUND
+chmod -R a+rw $MAGENTO_ROOT
+exec "$@"

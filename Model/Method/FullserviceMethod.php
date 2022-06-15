@@ -247,7 +247,7 @@ abstract class FullserviceMethod extends AbstractMethod
     public function canUseForCurrency($currencyCode)
     {
         if ($this->getConfigData('allowed_currencies') != "") {
-            return in_array($currencyCode, explode(",", $this->getConfigData('allowed_currencies')));
+            return in_array($currencyCode, explode(",", $this->getConfigData('allowed_currencies') ?: ''));
         }
         return true;
     }

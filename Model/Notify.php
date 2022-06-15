@@ -179,7 +179,7 @@ class Notify
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
             if (strpos($incrementId, '-split-') !== false) {
-                list($realIncrementId,, $splitPaymentId) = explode("-", $incrementId);
+                list($realIncrementId,, $splitPaymentId) = explode("-", $incrementId ?: '');
                 $params['response']['order']['id'] = $realIncrementId;
                 $this->isSplitPayment = true;
                 $this->splitPayment = $this->spFactory->create();

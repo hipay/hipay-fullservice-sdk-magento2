@@ -41,9 +41,9 @@ class NewConditionHtml extends \Magento\Backend\App\Action
 
         if (preg_match('/_([a-z0-9_]*)--/', $id, $marker)) {
             $customId = $marker[1];
-            $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
+            $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type') ?: ''));
             $type = $typeArr[0];
-            list($section, $m1, $m2) = explode('_', $customId);
+            list($section, $m1, $m2) = explode('_', $customId ?: '');
             $methodCode = $m1 . '_' . $m2;
             $field = substr($customId, (strpos($customId, $m2 . '_') + strlen($m2 . '_')));
             $configPath = implode('/', array($section, $methodCode, $field));

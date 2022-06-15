@@ -132,12 +132,12 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
         $ordered = array();
 
         if ($this->getPath()) {
-            list($section_locale, $method, $field) = explode("/", $this->getPath());
-            list($section) = explode("_", $section_locale);
+            list($section_locale, $method, $field) = explode("/", $this->getPath() ?: '');
+            list($section) = explode("_", $section_locale ?: '');
 
             $configData = $this->_scopeConfig->getValue(implode("/", [$section, $method, $field]));
 
-            $availableTypes = explode(",", $configData);
+            $availableTypes = explode(",", $configData ?: '');
 
             foreach ($availableTypes as $key) {
                 if (array_key_exists($key, $options)) {

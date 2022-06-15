@@ -124,7 +124,7 @@ class ThreeDSTwo extends AbstractHelper
         if ($orderCollection->count() > 0) {
             $order = $orderCollection->getFirstItem();
 
-            return (int)date('Ymd', strtotime($order->getCreatedAt()));
+            return (int)date('Ymd', strtotime($order->getCreatedAt() ?: ''));
         }
 
         return null;

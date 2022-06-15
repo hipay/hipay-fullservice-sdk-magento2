@@ -227,7 +227,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function getPaymentProductsList()
     {
-        $list = explode(',', $this->getValue('payment_products'));
+        $list = explode(',', $this->getValue('payment_products') ?: '');
         return $list;
     }
 
@@ -258,7 +258,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function getAllowedPaymentProductCategories()
     {
-        return explode(',', $this->getValue('payment_products_categories'));
+        return explode(',', $this->getValue('payment_products_categories') ?: '');
     }
 
     /**
@@ -612,7 +612,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function isBasketForcedDisabled()
     {
-        return in_array($this->_methodCode, ['hipay_ccsplit', 'hipay_hostedsplit']);
+        return in_array($this->_methodCode, ['hipay_hostedsplit']);
     }
 
     /**

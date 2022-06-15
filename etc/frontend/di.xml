@@ -21,8 +21,6 @@
     <type name="Magento\Payment\Model\Method\Providers\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcMethod::HIPAY_METHOD_CODE</item>
-                <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
@@ -46,7 +44,6 @@
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hostedsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedSplitMethod::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
@@ -84,8 +81,6 @@
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="hipay_cc" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcMethod::HIPAY_METHOD_CODE</item>
-                <item name="hipay_ccsplit" xsi:type="const">HiPay\FullserviceMagento\Model\Method\CcSplitMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hostedmoto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedMoto::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod::HIPAY_METHOD_CODE</item>

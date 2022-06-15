@@ -82,7 +82,7 @@ class Rule extends Field
         $rule = $this->ruleFactory->create();
 
         $field = $element->getFieldConfig()['id'];
-        list(, $methodCode) = explode('/', $element->getFieldConfig()['path']);
+        list(, $methodCode) = explode('/', $element->getFieldConfig()['path'] ?: '');
         $configPath = 'payment/' . $methodCode . '/' . $field;
 
         $rule->setMethodCode($methodCode);
