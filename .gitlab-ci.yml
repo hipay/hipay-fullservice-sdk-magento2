@@ -20,18 +20,31 @@ stages:
 .test_template: &test_definition
   allow_failure: false
   variables:
-    MYSQL_ROOT_PASSWORD: magento2
-    MYSQL_USER: magento2
-    MYSQL_PASSWORD: magento2
+    ALLOW_EMPTY_PASSWORD: yes
+    MARIADB_USER: bn_magento
+    MARIADB_DATABASE: bitnami_magento
 
     GITHUB_API_TOKEN: $GITHUB_TOKEN
-    MAGE_ACCOUNT_PUBLIC_KEY: $MAGE_ACCOUNT_PUBLIC_KEY
-    MAGE_ACCOUNT_PRIVATE_KEY: $MAGE_ACCOUNT_PRIVATE_KEY
     GITLAB_API_TOKEN: $GITLAB_API_TOKEN
 
     CUSTOM_REPOSITORIES: vcs https://gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
     CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME
     CUSTOM_MODULES: HiPay_FullserviceMagento
+
+    MAGENTO_HOST: 127.0.0.1
+    MAGENTO_EXTERNAL_HTTP_PORT_NUMBER: 8096
+    MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER: 8096
+    MAGENTO_DATABASE_HOST: mariadb
+    MAGENTO_DATABASE_PORT_NUMBER: 3306
+    MAGENTO_DATABASE_USER: bn_magento
+    MAGENTO_DATABASE_NAME: bitnami_magento
+    MAGENTO_USERNAME: demo
+    MAGENTO_PASSWORD: hipay123
+    MAGENTO_EMAIL: demo@hipaycom
+    MAGENTO_MODE: developer
+    ELASTICSEARCH_HOST: elasticsearch
+    ELASTICSEARCH_PORT_NUMBER: 9200
+    PHP_ENABLE_OPCACHE: false
 
     ENVIRONMENT: stage
     HIPAY_API_USER_TEST: $HIPAY_API_USER_TEST
@@ -49,51 +62,13 @@ stages:
     XDEBUG_ENABLED: 0
     PI_DATA_URL: $PI_CI_DATA_URL
 
-    MAGE_INSTALL_SAMPLE_DATA: --use-sample-data
-    MAGE_ADMIN_FIRSTNAME: John
-    MAGE_ADMIN_LASTNAME: Doe
-    MAGE_ADMIN_EMAIL: john.doe@yopmail.com
-    MAGE_ADMIN_USER: demo@hipay.com
-    MAGE_ADMIN_PWD: hipay123
-    MAGE_BASE_URL: http://127.0.0.1:8096/
-    MAGE_BASE_URL_SECURE: https://127.0.0.1:8096/
-    MAGE_BACKEND_FRONTNAME: admin
-    MAGE_DB_HOST: database
-    MAGE_DB_PORT: 3306
-    MAGE_DB_NAME: magento2
-    MAGE_DB_USER: magento2
-    MAGE_DB_PASSWORD: magento2
-    MAGE_DB_PREFIX: mage_
-    MAGE_LANGUAGE: en_US
-    MAGE_CURRENCY: EUR
-    MAGE_TIMEZONE: Europe/Paris
-    MAGE_USE_REWRITES: 1
-    MAGE_USE_SECURE: 0
-    MAGE_USE_SECURE_ADMIN: 0
-    MAGE_ADMIN_USE_SECURITY_KEY: 0
-    MAGE_SESSION_SAVE: files
-    MAGE_KEY: 69c60a47f9dca004e47bf8783f4b9408
-    MAGE_DB_INIT_STATEMENTS: SET NAMES utf8;
-    MAGE_SALES_ORDER_INCREMENT_PREFIX: 0
-    MAGE_RUN_REINDEX: 0
-    MAGE_RUN_CACHE_CLEAN: 0
-    MAGE_RUN_CACHE_FLUSH: 0
-    MAGE_RUN_CACHE_DISABLE: 0
-    MAGE_RUN_STATIC_CONTENT_DEPLOY: 0
-    MAGE_RUN_SETUP_DI_COMPILE: 0
-    MAGE_RUN_DEPLOY_MODE: production
-
-    MAGE_SEARCH_ENGINE: elasticsearch7
-    MAGE_ELASTICSEARCH_HOST: elasticsearch
-    MAGE_ELASTICSEARCH_PORT: 9200
-
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: web
-    - name: mysql:5.7
-      alias: database
-    - name: elasticsearch:7.13.2
-      alias: database
+    - name: docker.io/bitnami/mariadb:10.4
+      alias: mariadb
+    - name: docker.io/bitnami/elasticsearch:7
+      alias: elasticsearch
   artifacts:
     paths:
       - bin/tests/errors
@@ -144,6 +119,9 @@ build-test-2-1-10:
   image:
     name: gcr.io/kaniko-project/executor:v1.6.0-debug
   script:
+    - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
+    - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
+    - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --cache=true
       --context "dir://${CI_PROJECT_DIR}"
@@ -178,6 +156,9 @@ build:
     - if: $CI_PIPELINE_SOURCE == "push"
       when: manual
   script:
+    - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
+    - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
+    - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --cache=true
       --context "dir://${CI_PROJECT_DIR}"
@@ -209,8 +190,6 @@ deploy2recette:
       --set magento2_url="${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${URL_CD}"
       --set github_api_token="${GITHUB_TOKEN}"
       --set gitlab_api_token="${GITLAB_API_TOKEN}"
-      --set mage_account_public_key="${MAGE_ACCOUNT_PUBLIC_KEY}"
-      --set mage_account_private_key="${MAGE_ACCOUNT_PRIVATE_KEY}"
       --set hipay_api_user_test="$HIPAY_API_USER_RE7"
       --set hipay_api_password_test="$HIPAY_API_PASSWORD_RE7"
       --set hipay_secret_passphrase_test="$HIPAY_SECRET_PASSPHRASE_RE7"

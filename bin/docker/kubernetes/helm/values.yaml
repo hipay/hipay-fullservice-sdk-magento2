@@ -1,8 +1,8 @@
-mysql_image: 'mysql'
-mysql_tag: '5.7'
+mysql_image: 'docker.io/bitnami/mariadb'
+mysql_tag: '10.4'
 
-elastic_image: 'elasticsearch'
-elastic_tag: '7.13.2'
+elastic_image: 'docker.io/bitnami/elasticsearch'
+elastic_tag: '7'
 
 magento2_image: ''
 magento2_tag: ''
@@ -11,8 +11,6 @@ magento2_url: ''
 
 github_api_token: ''
 gitlab_api_token: ''
-mage_account_public_key: ''
-mage_account_private_key: ''
 
 hipay_api_user_test: ''
 hipay_api_password_test: ''
