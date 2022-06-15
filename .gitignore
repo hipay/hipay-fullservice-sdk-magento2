@@ -51,3 +51,4 @@ tools/
 # Env vars #
 ############
 *.env
+bin/docker/conf/**/*.json

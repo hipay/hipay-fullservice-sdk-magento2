@@ -79,7 +79,7 @@ class HostedFieldsMethod extends CcMethod
             $errorMsg = __('We can\'t place the order.');
         }
 
-        $availableTypes = explode(',', $this->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getConfigData('cctypes') ?: '');
         $paymentProduct =  $this->_hipayConfig->getCcTypesMapper();
 
         if (!in_array($paymentProduct[strtolower($info->getCcType())], $availableTypes)) {

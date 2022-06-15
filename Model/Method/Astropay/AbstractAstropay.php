@@ -82,7 +82,7 @@ class AbstractAstropay extends AbstractMethodAPI
                 if (
                     !preg_match(
                         "/(\d{2}[.]?\d{3}[.]?\d{3}[\/]?\d{4}[-]?\d{2})|(\d{3}[.]?\d{3}[.]?\d{3}[-]?\d{2})$/",
-                        $nationalIdentificationNumber
+                        $nationalIdentificationNumber ?: ''
                     )
                 ) {
                     throw new \Magento\Framework\Exception\LocalizedException(
@@ -91,7 +91,7 @@ class AbstractAstropay extends AbstractMethodAPI
                 }
                 break;
             case self::IDENTIFICATION_CPN:
-                if (!preg_match("/^[a-zA-Z]{4}\d{6}[a-zA-Z]{6}\d{2}$/", $nationalIdentificationNumber)) {
+                if (!preg_match("/^[a-zA-Z]{4}\d{6}[a-zA-Z]{6}\d{2}$/", $nationalIdentificationNumber ?: '')) {
                     throw new \Magento\Framework\Exception\LocalizedException(
                         __('CPN is not correct, please enter a valid CPN.')
                     );

@@ -142,7 +142,7 @@ class Rule extends \Magento\Framework\App\Config\Value
 
     protected function _getMethodCode()
     {
-        list(, $group) = explode("/", $this->getData('path'));
+        list(, $group) = explode("/", $this->getData('path') ?: '');
         return $group;
     }
 

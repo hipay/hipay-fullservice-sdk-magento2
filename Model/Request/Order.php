@@ -335,7 +335,7 @@ class Order extends CommonRequest
             }
         }
 
-        if (preg_match("/[34]xcb-no-fees|[34]xcb|credit-long/", $payment_product)) {
+        if (preg_match("/[34]xcb-no-fees|[34]xcb|credit-long/", $payment_product ?: '')) {
             $merchantPromotion = $this->_config->getValue('merchant_promotion');
             $orderRequest->payment_product_parameters = json_encode(
                 array(

@@ -80,7 +80,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
      */
     public function hasSsCardType()
     {
-        $availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes'));
+        $availableTypes = explode(',', $this->getMethod()->getConfigData('cctypes') ?: '');
         $ssPresenations = array_intersect(['SS', 'SO'], $availableTypes);
         if ($availableTypes && !empty($ssPresenations)) {
             return true;

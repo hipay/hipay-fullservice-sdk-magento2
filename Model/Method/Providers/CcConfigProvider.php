@@ -178,7 +178,7 @@ class CcConfigProvider implements ConfigProviderInterface
         $types = $this->_cctypeSource->toKeyValue();
         $availableTypes = $this->_hipayConfig->getValue('cctypes');
         if (!is_array($availableTypes)) {
-            $availableTypes = explode(",", $availableTypes);
+            $availableTypes = explode(",", $availableTypes ?: '');
         }
         $ordered = [];
         foreach ($availableTypes as $key) {
