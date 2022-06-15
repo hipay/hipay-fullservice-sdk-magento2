@@ -19,11 +19,11 @@ data:
   MAGENTO_MODE: developer
   ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
   ELASTICSEARCH_PORT_NUMBER: "9202"
-  PHP_ENABLE_OPCACHE: false
+  PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
   MARIADB_DATABASE: bitnami_magento
   MARIADB_USER: bn_magento
-  ALLOW_EMPTY_PASSWORD: yes
+  ALLOW_EMPTY_PASSWORD: "yes"
   # Auth env var
   GITHUB_API_TOKEN: {{ .Values.github_api_token }}
   GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
