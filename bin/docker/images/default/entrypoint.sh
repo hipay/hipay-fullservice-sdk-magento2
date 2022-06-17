@@ -9,6 +9,55 @@ ENV_STAGE="stage"
 ENV_PROD="production"
 NEED_SETUP_CONFIG=0
 MAGENTO_ROOT=/bitnami/magento/
+MAGENTO_DIR_USER=daemon
+
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+printf "\n${COLOR_SUCCESS}           DATABASE CONNECTION           ${NC}\n"
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+countDB=0
+statusDB=0
+# Wait max 1min
+until [ "$countDB" -gt 5 ]; do
+    if mysql -u $MAGENTO_DATABASE_USER -h $MAGENTO_DATABASE_HOST -P $MAGENTO_DATABASE_PORT_NUMBER -D $MAGENTO_DATABASE_NAME -e "SHOW TABLES;" >/dev/null; then
+        statusDB=1
+        printf "Database is ready !\n"
+        break
+    else
+        countDB=$((countDB + 1))
+        if [ "$countDB" -le 5 ]; then
+            sleep 10
+        fi
+    fi
+done
+if [ "$statusDB" -ne 1 ]; then
+    printf "Database is not ready !"
+    exit 1
+fi
+
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+printf "\n${COLOR_SUCCESS}        ELASTICSEARCH CONNECTION         ${NC}\n"
+printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+countES=0
+statusES=0
+# Wait max 1min
+until [ "$countES" -gt 5 ]; do
+    if curl $ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT_NUMBER; then
+        statusES=1
+        printf "ElasticSearch is ready !\n"
+        break
+    else
+        countES=$((countES + 1))
+        if [ "$countES" -le 5 ]; then
+            sleep 10
+        fi
+    fi
+done
+if [ "$statusES" -ne 1 ]; then
+    printf "Database is not ready !"
+    exit 1
+fi
+
+cd $MAGENTO_ROOT
 
 if [ ! -f $MAGENTO_ROOT/app/etc/config.php ] && [ ! -f $MAGENTO_ROOT/app/etc/env.php ]; then
     NEED_SETUP_CONFIG="1"
@@ -26,6 +75,15 @@ sed -i '/exec "$@"/d' /opt/bitnami/scripts/magento/entrypoint.sh
 #  INIT HIPAY CONFIGURATION AND DEV
 #==========================================
 if [ "$NEED_SETUP_CONFIG" = "1" ]; then
+
+    #==========================================
+    # VCS AUTHENTICATION
+    #==========================================
+    printf "Set composer http-basic $GITLAB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
+
+    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 
     #==========================================
     # XDebug
@@ -47,18 +105,46 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         echo "xdebug.remote_autostart=off" >>$xdebugFile
     fi
 
+    # Transform string vars to array
+    OLDIFS=$IFS
+    IFS=','
+    read -r -a CUSTOM_REPOSITORIES <<<"$CUSTOM_REPOSITORIES"
+    read -r -a CUSTOM_PACKAGES <<<"$CUSTOM_PACKAGES"
+    read -r -a CUSTOM_MODULES <<<"$CUSTOM_MODULES"
+    IFS=$OLDIFS
+
+    # Add custom repositories to composer config
+    if [ ! ${#CUSTOM_REPOSITORIES[*]} = 0 ]; then
+        cnt_repo=$((${#CUSTOM_REPOSITORIES[*]} - 1))
+        for i in $(seq 0 $cnt_repo); do
+            j=$(($i + 100)) # increase j to not erase magento repo
+            repo="$(echo ${CUSTOM_REPOSITORIES[$i]} | sed 's/^[ \t]*//;s/[ \t]*$//')"
+            printf "\nAdd Repository $repo to composer.json"
+            gosu $MAGENTO_DIR_USER composer config repositories.$j $repo
+        done
+    fi
+
+    # Add required packages
+    if [ ! ${#CUSTOM_PACKAGES[*]} = 0 ]; then
+        cnt_package=$((${#CUSTOM_PACKAGES[*]} - 1))
+        for i in $(seq 0 $cnt_package); do
+            package=$(echo ${CUSTOM_PACKAGES[$i]} | sed 's/^[ \t]*//;s/[ \t]*$//')
+            printf "\nInstall package $package"
+            gosu $MAGENTO_DIR_USER composer require $package
+        done
+    fi
+
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    cd /bitnami/magento
     su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
       php bin/magento module:enable HiPay_FullserviceMagento && \
       php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
       php bin/magento setup:upgrade && \
       php bin/magento setup:di:compile && \
       php bin/magento setup:static-content:deploy -f && \
-      php bin/magento cache:flush' daemon -s /bin/bash
+      php bin/magento cache:flush' $MAGENTO_DIR_USER -s /bin/bash
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
@@ -120,7 +206,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS}              FOLDER CACHE               ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     rm -Rf $MAGENTO_ROOT/var/cache
-    gosu daemon mkdir $MAGENTO_ROOT/var/cache
+    gosu $MAGENTO_DIR_USER mkdir $MAGENTO_ROOT/var/cache
     chmod 775 $MAGENTO_ROOT/var/cache
     chown -R daemon: $MAGENTO_ROOT/var/cache
     chown -R daemon: $MAGENTO_ROOT/generated
