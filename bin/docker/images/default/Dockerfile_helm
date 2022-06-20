@@ -1,5 +1,7 @@
 FROM bitnami/magento:2.4.4
 
+RUN apt-get update && apt-get install -y git unzip
+
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \
     && cp ./n98-magerun2.phar /usr/local/bin/ \
