@@ -59,6 +59,9 @@
         <method name="hipay_ing">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_bancontact_hosted_fields">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_ideal_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

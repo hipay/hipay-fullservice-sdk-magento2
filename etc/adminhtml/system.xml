@@ -44,6 +44,7 @@
             <include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/dexia.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/giropay.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/bancontact_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ideal_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ideal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/ing.xml"/>
