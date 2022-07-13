@@ -179,7 +179,7 @@ class Notify
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
             if (strpos($incrementId, '-split-') !== false) {
-                list($realIncrementId,, $splitPaymentId) = explode("-", $incrementId ?: '');
+                list($realIncrementId, , $splitPaymentId) = explode("-", $incrementId ?: '');
                 $params['response']['order']['id'] = $realIncrementId;
                 $this->isSplitPayment = true;
                 $this->splitPayment = $this->spFactory->create();
@@ -241,7 +241,7 @@ class Notify
         switch ($this->_transaction->getStatus()) {
             case TransactionStatus::EXPIRED:
                 // status : 114
-                if (in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZED))) {
+                if (in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZED, Config::STATUS_AUTHORIZATION_REQUESTED))) {
                     $canProcess = true;
                 }
                 break;
@@ -361,7 +361,7 @@ class Notify
                 $this->_doTransactionCaptureRefused();
                 break;
             case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
-                $this->_doTransactionVoid();
+                $this->_doTransactionFailure();
                 break;
             case TransactionStatus::AUTHORIZED:
                 // status : 116
@@ -372,11 +372,9 @@ class Notify
                 $this->_doTransactionCaptureRequested();
                 //If status Capture Requested is not configured to validate the order, we break.
                 if (
-                    !(
-                        (int)$this->_order->getPayment()
-                            ->getMethodInstance()
-                            ->getConfigData('hipay_status_validate_order') == 117
-                    )
+                    (int)$this->_order->getPayment()
+                        ->getMethodInstance()
+                        ->getConfigData('hipay_status_validate_order') != 117
                 ) {
                     break;
                 }
@@ -835,7 +833,6 @@ class Notify
      */
     protected function _doTransactionRefundRefused()
     {
-
         $this->_changeStatus(Config::STATUS_REFUND_REFUSED, 'Refund Refused.');
 
         if ($this->_order->hasCreditmemos()) {
@@ -920,7 +917,7 @@ class Notify
     {
         $this->_order->registerCancellation($this->_generateComment(''));
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
-        if ($this->_transaction->getStatus() == TransactionStatus::CANCELLED) {
+        if (in_array($this->_transaction->getStatus(), array(TransactionStatus::CANCELLED, TransactionStatus::EXPIRED))) {
             $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData(
                 'order_status_payment_canceled'
             );
@@ -1103,7 +1100,6 @@ class Notify
      */
     protected function resetOrderRefund(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {
-
         $order = $this->_order;
         $baseOrderRefund = $this->priceCurrency->round(
             $order->getBaseTotalRefunded() - $creditmemo->getBaseGrandTotal()
