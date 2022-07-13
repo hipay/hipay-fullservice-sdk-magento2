@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.16.0
+
+- **Add** : Added **Bancontact Credit Card / QR code** payment method
+- **Fix** : Fixed order status as *Cancelled* when *Expired* notification (114) is received
+- **Fix** : Fixed deprecation issues on recent PHP version
+
 ## 1.15.0
 
 - **Add** : Removed Credit Card payment methods using Direct Post integration. Use instead Credit Card payment methods using Hosted Fields or Hosted Page
@@ -86,7 +92,7 @@
 - **Add** missing fields for Hosted payment methods
 - **Fix**: placeOrder button blocking due to other active payment methods [#132](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/132)
 - **Fix**: deprecated method from a Magento dependency
-- **Fix**: payment product problem with _hipay_hostedsplit_ payment method
+- **Fix**: payment product problem with *hipay_hostedsplit* payment method
 
 ## 1.12.2
 
