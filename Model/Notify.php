@@ -241,7 +241,12 @@ class Notify
         switch ($this->_transaction->getStatus()) {
             case TransactionStatus::EXPIRED:
                 // status : 114
-                if (in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZED, Config::STATUS_AUTHORIZATION_REQUESTED))) {
+                if (
+                    in_array(
+                        $this->_order->getStatus(),
+                        array(Config::STATUS_AUTHORIZED, Config::STATUS_AUTHORIZATION_REQUESTED)
+                    )
+                ) {
                     $canProcess = true;
                 }
                 break;
@@ -917,7 +922,12 @@ class Notify
     {
         $this->_order->registerCancellation($this->_generateComment(''));
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
-        if (in_array($this->_transaction->getStatus(), array(TransactionStatus::CANCELLED, TransactionStatus::EXPIRED))) {
+        if (
+            in_array(
+                $this->_transaction->getStatus(),
+                array(TransactionStatus::CANCELLED, TransactionStatus::EXPIRED)
+            )
+        ) {
             $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData(
                 'order_status_payment_canceled'
             );
