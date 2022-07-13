@@ -18,7 +18,7 @@ data:
   MAGENTO_EMAIL: demo@hipaycom
   MAGENTO_MODE: developer
   ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
-  ELASTICSEARCH_PORT_NUMBER: "9202"
+  ELASTICSEARCH_PORT_NUMBER: "9200"
   PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
   MARIADB_DATABASE: bitnami_magento
@@ -50,4 +50,4 @@ data:
     cluster.name=docker-cluster
     discovery.type=single-node
     'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    http.port=9202
+    http.port=9200

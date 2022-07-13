@@ -7,7 +7,7 @@ metadata:
     cd-hipay: cron-delete
 spec:
   ports:
-    - port: 9202
+    - port: 9200
   selector:
     app: magento2-{{ .Release.Name }}
     tier: elastic-{{ .Release.Name }}
@@ -62,7 +62,7 @@ spec:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
         ports:
-          - containerPort: 9202
+          - containerPort: 9200
             name: elastic
       volumes:
         - name: elastic-persistent-storage-{{ .Release.Name }}

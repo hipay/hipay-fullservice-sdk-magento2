@@ -78,6 +78,9 @@
                                                                         <item name="hipay_giropay" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
+                                                                        <item name="hipay_bancontact_hosted_fields" xsi:type="array">
+                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
+                                                                        </item>
                                                                         <item name="hipay_ideal_hosted_fields" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
