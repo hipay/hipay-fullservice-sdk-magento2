@@ -37,8 +37,8 @@ COPY ./Test /tmp/app/code/HiPay/FullserviceMagento/Test
 COPY ./composer.json /tmp/app/code/HiPay/FullserviceMagento/composer.json
 COPY ./registration.php /tmp/app/code/HiPay/FullserviceMagento/registration.php
 
-COPY ./bin/docker/images/default/entrypoint.sh /usr/local/bin/
-RUN  chmod u+x /usr/local/bin/entrypoint.sh
+COPY ./bin/docker/images/default/entrypoint_helm.sh /usr/local/bin/
+RUN  chmod u+x /usr/local/bin/entrypoint_helm.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint_helm.sh"]
 CMD [ "/opt/bitnami/scripts/magento/run.sh" ]
