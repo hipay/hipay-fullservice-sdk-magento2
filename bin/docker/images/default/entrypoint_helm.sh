@@ -68,13 +68,13 @@ export COMPOSER_MEMORY_LIMIT=-1
 #==========================================
 # PARENT ENTRYPOINT
 #==========================================
-ls -ali /opt/bitnami/magento
-
 sed -i '/exec "$@"/d' /opt/bitnami/scripts/magento/entrypoint.sh
 /bin/bash /opt/bitnami/scripts/magento/entrypoint.sh "$@"
 
 mkdir -p $MAGENTO_ROOT/app/code/
 cp -R /tmp/app/code/HiPay $MAGENTO_ROOT/app/code/HiPay
+
+echo "AFTER MAGE INSTALL"
 
 #==========================================
 #  INIT HIPAY CONFIGURATION AND DEV
