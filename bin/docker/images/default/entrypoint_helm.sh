@@ -68,6 +68,8 @@ export COMPOSER_MEMORY_LIMIT=-1
 #==========================================
 # PARENT ENTRYPOINT
 #==========================================
+ls -ali /opt/bitnami/magento
+
 sed -i '/exec "$@"/d' /opt/bitnami/scripts/magento/entrypoint.sh
 /bin/bash /opt/bitnami/scripts/magento/entrypoint.sh "$@"
 
