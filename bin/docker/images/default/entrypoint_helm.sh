@@ -109,6 +109,15 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     read -r -a CUSTOM_MODULES <<<"$CUSTOM_MODULES"
     IFS=$OLDIFS
 
+    #==========================================
+    # VCS AUTHENTICATION
+    #==========================================
+    printf "Set composer http-basic $GITLAB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
+
+    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
+
     # Add custom repositories to composer config
     if [ ! ${#CUSTOM_REPOSITORIES[*]} = 0 ]; then
         cnt_repo=$((${#CUSTOM_REPOSITORIES[*]} - 1))
@@ -129,15 +138,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
             gosu $MAGENTO_DIR_USER composer require $package
         done
     fi
-
-    #==========================================
-    # VCS AUTHENTICATION
-    #==========================================
-    printf "Set composer http-basic $GITLAB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
-
-    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
