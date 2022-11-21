@@ -8,7 +8,7 @@
   ],
   "require": {
     "hipay/hipay-fullservice-sdk-php": "^2.11.0",
-    "giggsey/libphonenumber-for-php": "^8.12.*"
+    "giggsey/libphonenumber-for-php": "^8.12.0"
   },
   "scripts": {
     "post-install-cmd": [
