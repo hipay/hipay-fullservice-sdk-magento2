@@ -116,7 +116,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
 
     printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
+    gosu $MAGENTO_DIR_USER composer config github-oauth.github.com $GITHUB_API_TOKEN
 
     # Add custom repositories to composer config
     if [ ! ${#CUSTOM_REPOSITORIES[*]} = 0 ]; then
