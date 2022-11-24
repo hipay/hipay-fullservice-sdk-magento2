@@ -96,6 +96,16 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         echo "xdebug.remote_autostart=off" >>$xdebugFile
     fi
 
+
+    #==========================================
+    # VCS AUTHENTICATION
+    #==========================================
+    printf "Set composer http-basic $GITLAB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
+
+    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
+    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
+
     # Transform string vars to array
     OLDIFS=$IFS
     IFS=','
@@ -124,15 +134,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
             gosu $MAGENTO_DIR_USER composer require $package
         done
     fi
-
-    #==========================================
-    # VCS AUTHENTICATION
-    #==========================================
-    printf "Set composer http-basic $GITLAB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
-
-    printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
