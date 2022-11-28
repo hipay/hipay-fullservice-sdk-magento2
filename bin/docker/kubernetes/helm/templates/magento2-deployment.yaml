@@ -10,7 +10,7 @@ spec:
     - port: 80
       protocol: TCP
       name: web
-      targetPort: 80
+      targetPort: 8080
   selector:
     app: magento2-{{ .Release.Name }}
     tier: frontend-{{ .Release.Name }}
