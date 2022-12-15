@@ -71,6 +71,11 @@ export COMPOSER_MEMORY_LIMIT=-1
 sed -i '/exec "$@"/d' /opt/bitnami/scripts/magento/entrypoint.sh
 /bin/bash /opt/bitnami/scripts/magento/entrypoint.sh "$@"
 
+#mkdir -p $MAGENTO_ROOT/app/code/
+#cp -R /tmp/app/code/HiPay $MAGENTO_ROOT/app/code/HiPay
+
+echo "AFTER MAGE INSTALL"
+
 #==========================================
 #  INIT HIPAY CONFIGURATION AND DEV
 #==========================================
@@ -96,6 +101,13 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         echo "xdebug.remote_autostart=off" >>$xdebugFile
     fi
 
+    # Transform string vars to array
+    OLDIFS=$IFS
+    IFS=','
+    read -r -a CUSTOM_REPOSITORIES <<<"$CUSTOM_REPOSITORIES"
+    read -r -a CUSTOM_PACKAGES <<<"$CUSTOM_PACKAGES"
+    read -r -a CUSTOM_MODULES <<<"$CUSTOM_MODULES"
+    IFS=$OLDIFS
 
     #==========================================
     # VCS AUTHENTICATION
@@ -104,15 +116,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     gosu $MAGENTO_DIR_USER composer config http-basic.gitlab.hipay.org "x-access-token" "$GITLAB_API_TOKEN"
 
     printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
-    gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
-
-    # Transform string vars to array
-    OLDIFS=$IFS
-    IFS=','
-    read -r -a CUSTOM_REPOSITORIES <<<"$CUSTOM_REPOSITORIES"
-    read -r -a CUSTOM_PACKAGES <<<"$CUSTOM_PACKAGES"
-    read -r -a CUSTOM_MODULES <<<"$CUSTOM_MODULES"
-    IFS=$OLDIFS
+    gosu $MAGENTO_DIR_USER composer config github-oauth.github.com $GITHUB_API_TOKEN
 
     # Add custom repositories to composer config
     if [ ! ${#CUSTOM_REPOSITORIES[*]} = 0 ]; then
@@ -139,7 +143,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
+    su -c 'composer require magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
       php bin/magento module:enable HiPay_FullserviceMagento && \
       php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
       php bin/magento setup:upgrade && \
