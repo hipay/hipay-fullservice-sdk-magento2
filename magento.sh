@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #==========================================
 #  Use this script for one first starting
 #
@@ -35,14 +37,14 @@ if [ "$1" = 'init' ]; then
         sudo rm -Rf log/ web/
         docker compose -f docker-compose.yml build
         COMPOSE_HTTP_TIMEOUT=200 docker compose -f docker-compose.yml up -d
-#        docker cp $containerMG2:/var/www/html/magento2 web/
+        # docker cp $containerMG2:/var/www/html/magento2 web/
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose-bitnami to link this files"
     fi
 elif [ "$1" = 'kill' ]; then
     docker compose -f docker-compose.yml stop
     docker compose -f docker-compose.yml rm -fv
-    rm -Rf log/ web/
+    sudo rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then

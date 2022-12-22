@@ -16,8 +16,8 @@
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
+use HiPay\FullserviceMagento\Model\Method\HostedSplitMethod;
 use Magento\Checkout\Model\ConfigProviderInterface;
-use HiPay\FullserviceMagento\Model\Method\CcSplitMethod;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider;
@@ -36,7 +36,7 @@ class SplitConfigProvider extends CcConfigProvider
     /**
      * @var string $methodCode
      */
-    protected $methodCode = CcSplitMethod::HIPAY_METHOD_CODE;
+    protected $methodCode = HostedSplitMethod::HIPAY_METHOD_CODE;
 
     /**
      * @var MethodInterface[]
