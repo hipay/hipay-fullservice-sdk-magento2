@@ -39,7 +39,7 @@ printf "\n${COLOR_SUCCESS}        ELASTICSEARCH CONNECTION         ${NC}\n"
 printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 countES=0
 statusES=0
-# Wait max 1min
+# Wait max 5min ( Mac os )
 until [ "$countES" -gt 5 ]; do
     if curl $ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT_NUMBER; then
         statusES=1
@@ -48,7 +48,7 @@ until [ "$countES" -gt 5 ]; do
     else
         countES=$((countES + 1))
         if [ "$countES" -le 5 ]; then
-            sleep 10
+            sleep 60
         fi
     fi
 done

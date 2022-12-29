@@ -5,6 +5,8 @@ RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && cp ./n98-magerun2.phar /usr/local/bin/ \
     && rm ./n98-magerun2.phar
 
+RUN echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
+
 #====================================================
 # OVERRIDE PARENT ENTRYPOINT
 #=====================================================
