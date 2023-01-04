@@ -53,7 +53,6 @@ services:
       - ./tests:/bitnami/magento/tests
       - ./log:/bitnami/magento/var/log
       - ./conf/sdk:/bitnami/magento/sdk
-      - ./bin/docker/images/default/php-override.ini:/opt/bitnami/php/etc/conf.d/php-override.ini
     depends_on:
       - mariadb
       - elasticsearch
@@ -64,13 +63,9 @@ services:
     environment:
       - cluster.name=docker-cluster
       - discovery.type=single-node
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
       - http.port=9200
 
 volumes:
   mariadb_data:
-    driver: local
-  magento_data:
-    driver: local
-  elasticsearch_data:
     driver: local

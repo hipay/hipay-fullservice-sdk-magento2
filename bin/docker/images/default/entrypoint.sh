@@ -40,7 +40,7 @@ printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 countES=0
 statusES=0
 # Wait max 5min ( Mac os )
-until [ "$countES" -gt 5 ]; do
+until [ "$countES" -gt 30 ]; do
     if curl $ELASTICSEARCH_HOST:$ELASTICSEARCH_PORT_NUMBER; then
         statusES=1
         printf "ElasticSearch is ready !\n"
@@ -48,7 +48,7 @@ until [ "$countES" -gt 5 ]; do
     else
         countES=$((countES + 1))
         if [ "$countES" -le 5 ]; then
-            sleep 60
+            sleep 10
         fi
     fi
 done

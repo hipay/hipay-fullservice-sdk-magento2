@@ -6,6 +6,7 @@ RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && rm ./n98-magerun2.phar
 
 RUN echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
+COPY ./bin/docker/images/default/php-override.ini /opt/bitnami/php/etc/conf.d/php-override.ini
 
 #====================================================
 # OVERRIDE PARENT ENTRYPOINT
