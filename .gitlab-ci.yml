@@ -182,10 +182,9 @@ deploy2recette:
     GPC_ACCOUNT: ''
   script:
     - echo $RELEASE_NAME
-    - >
+    - |-
       BRANCH=$CI_COMMIT_REF_NAME
-      if [ "$CI_COMMIT_TAG" = "" ]
-      then
+      if [ "$CI_COMMIT_TAG" = "" ]; then
         BRANCH=dev-$CI_COMMIT_REF_NAME
       fi
     - >
