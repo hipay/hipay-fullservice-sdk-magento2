@@ -248,6 +248,16 @@ class Notify
                     )
                 ) {
                     $canProcess = true;
+                } else {
+                    throw new WebApiException(
+                        __(sprintf(
+                            'Order "%s" has invalid status : "%s".',
+                            $this->_transaction->getOrder()->getId(),
+                            $this->_order->getStatus()
+                        )),
+                        0,
+                        WebApiException::HTTP_BAD_REQUEST
+                    );
                 }
                 break;
             case TransactionStatus::AUTHORIZED:
@@ -259,6 +269,27 @@ class Notify
                     || in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
                 ) {
                     $canProcess = true;
+                } else {
+                    if (!in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))) {
+                        throw new WebApiException(
+                            __(sprintf(
+                                'Order "%s" has invalid status : "%s".',
+                                $this->_transaction->getOrder()->getId(),
+                                $this->_order->getStatus()
+                            )),
+                            0,
+                            WebApiException::HTTP_BAD_REQUEST
+                        );
+                    }
+                    throw new WebApiException(
+                        __(sprintf(
+                            'Order "%s" has invalid state : "%s".',
+                            $this->_transaction->getOrder()->getId(),
+                            $this->_order->getState()
+                        )),
+                        0,
+                        WebApiException::HTTP_BAD_REQUEST
+                    );
                 }
                 break;
             case TransactionStatus::CAPTURE_REQUESTED:
@@ -301,7 +332,13 @@ class Notify
         }
 
         if (!$this->canProcessTransaction()) {
-            return $this;
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(sprintf(
+                    'Cannot process notification "%s" for transaction "%s".',
+                    $this->_transaction->getStatus(),
+                    $this->_transaction->getOrder()->getId()
+                ))
+            );
         }
 
         /**
@@ -944,8 +981,8 @@ class Notify
     protected function _doTransactionAuthorization()
     {
         /**
- * @var $payment \Magento\Sales\Model\Order\Payment
-*/
+         * @var $payment \Magento\Sales\Model\Order\Payment
+        */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $payment->setTransactionAdditionalInfo('authorization_code', $this->_transaction->getAuthorizationCode());
@@ -994,8 +1031,8 @@ class Notify
     protected function _doTransactionCapture($skipFraudDetection = false)
     {
         /**
- * @var $payment \Magento\Sales\Model\Order\Payment
-*/
+         * @var $payment \Magento\Sales\Model\Order\Payment
+        */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
         $parentTransactionId = $payment->getLastTransId();
@@ -1064,8 +1101,8 @@ class Notify
     protected function _doTransactionVoid()
     {
         /**
- * @var $payment \Magento\Sales\Model\Order\Payment
-*/
+         * @var $payment \Magento\Sales\Model\Order\Payment
+        */
         $payment = $this->_order->getPayment();
         $parentTransactionId = $payment->getLastTransId();
 
