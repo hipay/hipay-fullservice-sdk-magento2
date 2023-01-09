@@ -85,9 +85,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['legend' => __('Split Payment'), 'class' => 'fieldset-wide']
         );
 
-        $dateFormat = $this->_localeDate->getDateFormat(
-            \IntlDateFormatter::SHORT
-        );
+        $dateFormat = 'dd/MM/yyyy';
 
         $fieldset->addField(
             'date_to_pay',
