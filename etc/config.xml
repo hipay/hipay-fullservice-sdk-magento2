@@ -656,8 +656,9 @@
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
-                <allowspecific>0</allowspecific>
+                <allowspecific>1</allowspecific>
                 <allowed_currencies>PLN</allowed_currencies>
+                <specificcountry>PL</specificcountry>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
