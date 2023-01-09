@@ -105,8 +105,8 @@ class SplitPaymentActions extends Column
                         ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete %1', '${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?', '${ $.$data.name }')
+                            'title' => __('Delete %1', $item[$item['id_field_name']]),
+                            'message' => __('Are you sure you wan\'t to delete the %1 record?', 'n°' . $item[$item['id_field_name']])
                         ]
                     ];
                     $item[$name]['pay'] = [
@@ -116,8 +116,8 @@ class SplitPaymentActions extends Column
                         ),
                         'label' => __('Pay'),
                         'confirm' => [
-                            'title' => __('Pay %1', '${ $.$data.amount_to_pay }'),
-                            'message' => __('Are you sure you wan\'t to pay %1 ?', '${ $.$data.amount_to_pay }')
+                            'title' => __('Pay %1', $item['amount_to_pay']),
+                            'message' => __('Are you sure you wan\'t to pay %1 ?', $item['amount_to_pay'])
                         ]
                     ];
                 }
