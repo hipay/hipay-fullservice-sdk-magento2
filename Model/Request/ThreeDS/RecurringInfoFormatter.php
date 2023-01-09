@@ -90,7 +90,7 @@ class RecurringInfoFormatter extends AbstractRequest
             return (int)date('Ymd', strtotime($expirationDate ?: ''));
         }
 
-        $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
+        $orderCreatedAt = new \DateTime($this->_order->getCreatedAt() ?: '');
 
         $paymentProfile = $this->_threeDSHelper->getPaymentProfile($this->_splitProfileId);
 

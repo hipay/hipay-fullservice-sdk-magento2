@@ -582,7 +582,7 @@ class Notify
                     $amount = $this->_order->getGrandTotal();
                 }
 
-                $orderCreatedAt = new \DateTime($this->_order->getCreatedAt());
+                $orderCreatedAt = new \DateTime($this->_order->getCreatedAt() ?: '');
 
                 $splitAmounts = $profile->splitAmount($amount, $orderCreatedAt);
                 $splitAmountsCount = count($splitAmounts);

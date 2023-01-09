@@ -94,7 +94,7 @@ class HostedSplitMethod extends HostedMethod
             $amounts = $payment->getOrder()->getGrandTotal();
         }
 
-        $orderCreatedAt = new \DateTime($order->getCreatedAt());
+        $orderCreatedAt = new \DateTime($order->getCreatedAt() ?: '');
 
         $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
 
@@ -128,7 +128,7 @@ class HostedSplitMethod extends HostedMethod
                 $amounts = $payment->getOrder()->getGrandTotal();
             }
 
-            $orderCreatedAt = new \DateTime($payment->getOrder()->getCreatedAt());
+            $orderCreatedAt = new \DateTime($payment->getOrder()->getCreatedAt() ?: '');
 
             $splitAmounts = $profile->splitAmount($amounts, $orderCreatedAt);
             if (!is_array($splitAmounts) || empty($splitAmounts)) {
