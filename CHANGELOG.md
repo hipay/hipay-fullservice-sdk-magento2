@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- **Add** : Added HiPay CSP withelist
+- **Fix** : Added documentation about PHP server configuration issue causing database saving problems
+- **Fix** : Added more details on notification exceptions
+- **Fix** : Fixed configuration rules for IDeal & Giropay payment methods
+- **Fix** : Fixed missing configuration field for MbWay payment method
+- **Fix** : Fixed date syntax on split payment screens
+- **Fix** : Fixed enabling option for status field on split payment screens
+
 ## 1.16.0
 
 - **Add** : Added **Bancontact Credit Card / QR code** payment method
