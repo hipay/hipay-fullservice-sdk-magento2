@@ -164,6 +164,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Debit date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
