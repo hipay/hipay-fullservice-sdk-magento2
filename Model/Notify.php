@@ -251,9 +251,10 @@ class Notify
                 } else {
                     throw new WebApiException(
                         __(sprintf(
-                            'Order "%s" has invalid status : "%s".',
+                            'Cannot process transaction for order "%s". Status: "%s". State: "%s".',
                             $this->_transaction->getOrder()->getId(),
-                            $this->_order->getStatus()
+                            $this->_order->getStatus(),
+                            $this->_order->getState(),
                         )),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
@@ -270,22 +271,12 @@ class Notify
                 ) {
                     $canProcess = true;
                 } else {
-                    if (!in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))) {
-                        throw new WebApiException(
-                            __(sprintf(
-                                'Order "%s" has invalid status : "%s".',
-                                $this->_transaction->getOrder()->getId(),
-                                $this->_order->getStatus()
-                            )),
-                            0,
-                            WebApiException::HTTP_BAD_REQUEST
-                        );
-                    }
                     throw new WebApiException(
                         __(sprintf(
-                            'Order "%s" has invalid state : "%s".',
+                            'Cannot process transaction for order "%s". Status: "%s". State: "%s".',
                             $this->_transaction->getOrder()->getId(),
-                            $this->_order->getState()
+                            $this->_order->getStatus(),
+                            $this->_order->getState(),
                         )),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
