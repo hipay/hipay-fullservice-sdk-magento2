@@ -70,8 +70,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         /**
- * @var \Magento\Framework\Data\Form $form
-*/
+         * @var \Magento\Framework\Data\Form $form
+        */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -85,7 +85,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['legend' => __('Split Payment'), 'class' => 'fieldset-wide']
         );
 
-        $dateFormat = 'dd/MM/yyyy';
+        $dateFormat = 'MM/dd/yyyy';
 
         $fieldset->addField(
             'date_to_pay',
@@ -124,7 +124,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Status'),
                 'values' => $options,
                 'required' => true,
-                'disabled' => true
+                'disabled' => $isElementDisabled
             ]
         );
 
