@@ -106,7 +106,10 @@ class SplitPaymentActions extends Column
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete %1', $item[$item['id_field_name']]),
-                            'message' => __('Are you sure you wan\'t to delete the %1 record?', 'n°' . $item[$item['id_field_name']])
+                            'message' => __(
+                                'Are you sure you wan\'t to delete the %1 record?',
+                                'n°' . $item[$item['id_field_name']]
+                            )
                         ]
                     ];
                     $item[$name]['pay'] = [

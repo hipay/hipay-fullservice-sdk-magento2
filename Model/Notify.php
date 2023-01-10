@@ -250,12 +250,12 @@ class Notify
                     $canProcess = true;
                 } else {
                     throw new WebApiException(
-                        __(sprintf(
-                            'Cannot process transaction for order "%s". Status: "%s". State: "%s".',
+                        __(
+                            'Cannot process transaction for order "%1". Status: "%2". State: "%3".',
                             $this->_transaction->getOrder()->getId(),
                             $this->_order->getStatus(),
-                            $this->_order->getState(),
-                        )),
+                            $this->_order->getState()
+                        ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
                     );
@@ -272,12 +272,12 @@ class Notify
                     $canProcess = true;
                 } else {
                     throw new WebApiException(
-                        __(sprintf(
-                            'Cannot process transaction for order "%s". Status: "%s". State: "%s".',
+                        __(
+                            'Cannot process transaction for order "%1". Status: "%2". State: "%3".',
                             $this->_transaction->getOrder()->getId(),
                             $this->_order->getStatus(),
-                            $this->_order->getState(),
-                        )),
+                            $this->_order->getState()
+                        ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
                     );
