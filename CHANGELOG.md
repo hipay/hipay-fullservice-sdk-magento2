@@ -9,6 +9,7 @@
 - **Fix** : Fixed missing configuration field for MbWay payment method
 - **Fix** : Fixed date syntax on split payment screens
 - **Fix** : Fixed enabling option for status field on split payment screens
+- **Fix** : Fixed browser issue about `<iframe>` HTML tag
 
 ## 1.16.0
 
