@@ -16,6 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
+use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Model\Transaction;
 use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
@@ -285,6 +286,21 @@ class Notify
                 break;
             case TransactionStatus::CAPTURE_REQUESTED:
             case TransactionStatus::CAPTURED:
+                // if operation ID exists matching magento2, check invoice related to this order
+                // then, if invoice does not exist ~> refuse notif
+                $operationId = $this->_transaction->getOperation() ? $this->_transaction->getOperation()->getId() : null;
+                if (
+                    $operationId
+                    && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
+                    && !$this->getInvoiceForTransactionId($this->_order, $operationId)
+                ) {
+                    throw new WebApiException(
+                        __(sprintf('Invoice "%s" does not exist in database.', $operationId)),
+                        0,
+                        WebApiException::HTTP_BAD_REQUEST
+                    );
+                }
+
                 // status : 118 - We check the 116 has been received before handling
                 $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
                 if (is_array($savedStatues) && isset($savedStatues[TransactionStatus::AUTHORIZED])) {
@@ -1022,7 +1038,7 @@ class Notify
     protected function _doTransactionCapture($skipFraudDetection = false)
     {
         /**
-         * @var $payment \Magento\Sales\Model\Order\Payment
+         * @var \Magento\Sales\Model\Order\Payment $payment
         */
         $payment = $this->_order->getPayment();
         $payment->setTransactionAdditionalInfo('transac_currency', $this->_transaction->getCurrency());
