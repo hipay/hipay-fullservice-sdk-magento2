@@ -288,11 +288,13 @@ class Notify
             case TransactionStatus::CAPTURED:
                 // if operation ID exists matching magento2, check invoice related to this order
                 // then, if invoice does not exist ~> refuse notif
-                $operationId = $this->_transaction->getOperation() ? $this->_transaction->getOperation()->getId() : null;
+                $operationId = $this->_transaction->getOperation()
+                    ? $this->_transaction->getOperation()->getId()
+                    : null;
                 if (
-                    $operationId
-                    && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
-                    && !$this->getInvoiceForTransactionId($this->_order, $operationId)
+                        $operationId
+                        && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
+                        && !$this->getInvoiceForTransactionId($this->_order, $operationId)
                 ) {
                     throw new WebApiException(
                         __(sprintf('Invoice "%s" does not exist in database.', $operationId)),
