@@ -174,7 +174,7 @@ class SplitConfigProvider extends CcConfigProvider
         if (!isset($this->paymentProfiles[$methodCode])) {
             $ppIds = $this->_hipayConfig->getValue('split_payments');
             if (!is_array($ppIds)) {
-                $ppIds = explode(',', $ppIds);
+                $ppIds = explode(',', $ppIds ?: '');
             }
             $this->paymentProfiles[$methodCode] = $this->ppCollectionFactory->create();
             $this->paymentProfiles[$methodCode]->addFieldToFilter('profile_id', array('IN' => $ppIds));

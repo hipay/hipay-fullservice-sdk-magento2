@@ -86,7 +86,7 @@
                 <sdk_js_url>https://libs.hipay.com/js/sdkjs.js</sdk_js_url>
                 <basket_enabled>0</basket_enabled>
                 <currency_transaction>0</currency_transaction>
-                <send_notification_url>0</send_notification_url>
+                <send_notification_url>1</send_notification_url>
             </configurations>
             <hipay_proxy_settings>
                 <hipay_proxy_host/>
@@ -595,6 +595,7 @@
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\Mbway</payment_method>
                 <active>0</active>
                 <title>Hipay Enterprise MB Way Hosted Fields</title>
+                <payment_action>Sale</payment_action>
                 <payment_action>Authorization</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
