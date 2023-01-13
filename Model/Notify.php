@@ -250,12 +250,14 @@ class Notify
                 ) {
                     $canProcess = true;
                 } else {
+                    $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
                     throw new WebApiException(
                         __(
-                            'Cannot process transaction for order "%1". Status: "%2". State: "%3".',
+                            'Cannot process transaction for order "%1". State: "%2". Status: "%3". Status history : %4',
                             $this->_transaction->getOrder()->getId(),
+                            $this->_order->getState(),
                             $this->_order->getStatus(),
-                            $this->_order->getState()
+                            is_array($savedStatues) ? implode(' - ', $savedStatues) : ''
                         ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
@@ -272,12 +274,14 @@ class Notify
                 ) {
                     $canProcess = true;
                 } else {
+                    $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
                     throw new WebApiException(
                         __(
-                            'Cannot process transaction for order "%1". Status: "%2". State: "%3".',
+                            'Cannot process transaction for order "%1". State: "%2". Status: "%3". Status history : %4',
                             $this->_transaction->getOrder()->getId(),
+                            $this->_order->getState(),
                             $this->_order->getStatus(),
-                            $this->_order->getState()
+                            is_array($savedStatues) ? implode(' - ', $savedStatues) : ''
                         ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
