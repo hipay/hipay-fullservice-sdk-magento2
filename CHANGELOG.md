@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.17.0
 
 - **Add** : Added HiPay CSP withelist
 - **Fix** : Added documentation about PHP server configuration issue causing database saving problems
