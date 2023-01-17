@@ -101,8 +101,8 @@ class PaymentProfileActions extends Column
                         ),
                         'label' => __('Delete'),
                         'confirm' => [
-                            'title' => __('Delete %1', '${ $.$data.name }'),
-                            'message' => __('Are you sure you wan\'t to delete a %1 record?', '${ $.$data.name }')
+                            'title' => __('Delete %1', $item['name']),
+                            'message' => __('Are you sure you wan\'t to delete the %1 record?', $item['name'])
                         ]
                     ];
                 }

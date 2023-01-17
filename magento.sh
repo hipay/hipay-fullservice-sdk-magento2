@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 #==========================================
 #  Use this script for one first starting
 #
@@ -30,23 +32,20 @@ fi
 
 if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
-        docker compose -f docker-compose.yml stop
-        docker compose -f docker-compose.yml rm -fv
+        docker compose -f docker-compose.yml rm -sfv
         sudo rm -Rf log/ web/
         docker compose -f docker-compose.yml build
-        COMPOSE_HTTP_TIMEOUT=200 docker compose -f docker-compose.yml up -d
-#        docker cp $containerMG2:/var/www/html/magento2 web/
+        COMPOSE_HTTP_TIMEOUT=500 docker compose -f docker-compose.yml up -d
+        # docker cp $containerMG2:/var/www/html/magento2 web/
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose-bitnami to link this files"
     fi
 elif [ "$1" = 'kill' ]; then
-    docker compose -f docker-compose.yml stop
-    docker compose -f docker-compose.yml rm -fv
-    rm -Rf log/ web/
+    docker compose -f docker-compose.yml rm -sfv
+    sudo rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then
-    docker compose -f docker-compose.yml stop
     docker compose -f docker-compose.yml up -d
 elif [ "$1" = 'static' ]; then
     docker exec $containerMG2 rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/

@@ -254,9 +254,9 @@
           data-bind="attr: {id: getCode() + '-iframe', src: getIFrameUrl(),width: getIframeWidth(),height: getIframeHeight(),style: getIframeStyle()}, event: {load: iframeLoaded}"
           data-container="hipay-hosted-iframe"
           class="hipay_hosted iframe"
-          scrolling="yes"
-          frameborder="0"
           border="0"
+          title="HiPay Hosted Page"
+          sandbox="allow-top-navigation allow-same-origin allow-scripts allow-forms"
         ></iframe>
       </div>
       <!-- /ko -->

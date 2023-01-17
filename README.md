@@ -30,6 +30,27 @@ Read the **[project documentation][doc-home]** for comprehensive information abo
 - Payment in x installments without fees
 - Subscription management (development in progress)
 
+## Support
+
+HiPay frequently releases new versions of the modules. It is imperative to regularly update your platforms to be compatible with the versions of HiPay’s APIs, which are also evolving.
+HiPay offers support services provided that your platforms run on maintained PHP versions and updated CMS versions with the latest security patches (see the list below).
+We are obligated to follow each publisher’s minimum recommendations.
+If you encounter an issue while using the modules, before contacting our Support team, we invite you to:
+
+- analyze your platform’s PHP logs as well as the logs specific to the HiPay module,
+- update the module to the most recent version,
+- perform similar tests on your stage environments,
+- analyze possible overloading in the code and interferences with third-party modules,
+- perform tests on a blank environment without your developments or any third-party modules.
+
+## Requirements
+
+If you encounter problems when saving the configuration, you must increase the value of the php property "**max_input_vars**"
+
+Minimum value:  
+
+`max_input_vars = 10000`
+
 ## License
 
 The **HiPay Fullservice module for Magento 2** is available under the **Apache 2.0 License**. Check out the [license file][project-license] for more information.

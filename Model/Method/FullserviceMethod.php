@@ -240,14 +240,16 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Check method for processing with base currency
      *
-     * @param                                         string $currencyCode
-     * @return                                        bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param  string $currencyCode
+     * @return bool
      */
     public function canUseForCurrency($currencyCode)
     {
+        $allowedCurrencies = explode(",", $this->getConfigData('allowed_currencies') ?: '');
+        $currencyCode = $this->priceCurrency->getCurrency()->getData('currency_code') ?? $currencyCode;
+
         if ($this->getConfigData('allowed_currencies') != "") {
-            return in_array($currencyCode, explode(",", $this->getConfigData('allowed_currencies') ?: ''));
+            return in_array($currencyCode, $allowedCurrencies);
         }
         return true;
     }

@@ -167,7 +167,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_applepay/secret_passphrase_test $HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials_applepay_tokenjs/api_username_test $HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set --encrypt hipay/hipay_credentials_applepay_tokenjs/api_password_test $HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST
-    n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set payment/hipay_cc/cctypes "VI,MC,AE,CB,MI"
     n98-magerun2.phar -q --skip-root-check --root-dir="$MAGENTO_ROOT" config:store:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"

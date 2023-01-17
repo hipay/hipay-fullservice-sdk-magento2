@@ -1,6 +1,13 @@
 version: '2'
+
+networks:
+  magento2:
+    driver: bridge
+
 services:
   mariadb:
+    networks:
+      - magento2
     image: docker.io/bitnami/mariadb:10.4
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
@@ -12,6 +19,8 @@ services:
     volumes:
       - 'mariadb_data:/bitnami/mariadb'
   magento:
+    networks:
+      - magento2
     build:
       context: .
       dockerfile: ./bin/docker/images/default/Dockerfile
@@ -24,7 +33,6 @@ services:
       - ./bin/docker/conf/development/mage.env
       - ./bin/docker/conf/development/module.env
     volumes:
-      - './web:/bitnami/magento'
       - ./Block:/bitnami/magento/app/code/HiPay/FullserviceMagento/Block
       - ./Controller:/bitnami/magento/app/code/HiPay/FullserviceMagento/Controller
       - ./etc:/bitnami/magento/app/code/HiPay/FullserviceMagento/etc
@@ -49,9 +57,9 @@ services:
       - mariadb
       - elasticsearch
   elasticsearch:
-    image: docker.io/bitnami/elasticsearch:7
-    volumes:
-      - 'elasticsearch_data:/bitnami/elasticsearch/data'
+    networks:
+      - magento2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     environment:
       - cluster.name=docker-cluster
       - discovery.type=single-node
@@ -60,8 +68,4 @@ services:
 
 volumes:
   mariadb_data:
-    driver: local
-  magento_data:
-    driver: local
-  elasticsearch_data:
     driver: local

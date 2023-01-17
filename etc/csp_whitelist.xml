@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="script-src">
+            <values>
+                <value id="hipay-tpp" type="host">secure-gateway.hipay-tpp.com</value>
+                <value id="hipay" type="host">*.hipay.com</value>
+                <value id="iesnare" type="host">mpsnare.iesnare.com</value>
+            </values>
+        </policy>
+        <policy id="style-src">
+            <values>
+                <value id="hipay" type="host">*.hipay.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="hipay-tpp" type="host">secure-gateway.hipay-tpp.com</value>
+                <value id="hipay" type="host">*.hipay.com</value>
+            </values>
+        </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="hipay" type="host">*.hipay.com</value>
+                <value id="iesnare" type="host">wss://mpsnare.iesnare.com</value>
+            </values>
+        </policy>
+        <policy id="media-src">
+            <values>
+                <value id="data" type="host">data:</value>
+                <value id="iesnare" type="host">mpsnare.iesnare.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>
