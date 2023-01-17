@@ -27,6 +27,8 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
  */
 class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 {
+    private const DATE_FORMAT = 'd/m/Y H:i:s';
+
     protected const HIPAY_GITHUB_MAGENTO2_LATEST =
         "https://api.github.com/repos/hipay/hipay-fullservice-sdk-magento2/releases/latest";
 
@@ -113,14 +115,14 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
              *
              * Solution : max 1 call per hour
              */
-            $this->lastGithubPoll = \DateTime::createFromFormat('d/m/Y H:i:s', $lastResult->lastCall);
+            $this->lastGithubPoll = \DateTime::createFromFormat(self::DATE_FORMAT, $lastResult->lastCall);
 
             // If not, setting default data with values not showing the block
         } else {
             $this->newVersion = $this->version;
-            $this->newVersionDate = \DateTime::createFromFormat('d/m/Y H:i:s', "01/01/1990 00:00:00");
+            $this->newVersionDate = \DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
             $this->readMeUrl = "#";
-            $this->lastGithubPoll = \DateTime::createFromFormat('d/m/Y H:i:s', "01/01/1990 00:00:00");
+            $this->lastGithubPoll = \DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
         }
     }
 
@@ -154,10 +156,10 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             // Request GitHub with curl
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, self::HIPAY_GITHUB_MAGENTO2_LATEST);
-            if ($github_token = getenv('GITHUB_API_TOKEN')) {
+            if ($githubToken = getenv('GITHUB_API_TOKEN')) {
                 curl_setopt($ch, CURLOPT_HEADER, 1);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                    'Authorization' => 'token ' . $github_token
+                    'Authorization' => 'token ' . $githubToken
                 ]);
             }
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -169,16 +171,16 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 
             // If call is successful, reading from call
             if ($gitHubInfo) {
-                $this->newVersion = $gitHubInfo->tag_name;
-                $this->newVersionDate = $gitHubInfo->published_at;
-                $this->readMeUrl = $gitHubInfo->html_url;
+                $this->newVersion = isset($gitHubInfo->tag_name) ? $gitHubInfo->tag_name : null;
+                $this->newVersionDate = isset($gitHubInfo->published_at) ? $gitHubInfo->published_at : null;
+                $this->readMeUrl = isset($gitHubInfo->html_url) ? $gitHubInfo->html_url : null;
                 $this->lastGithubPoll = $curdate;
 
                 $infoFormatted = new \stdClass();
                 $infoFormatted->newVersion = $this->newVersion;
                 $infoFormatted->newVersionDate = $this->newVersionDate;
                 $infoFormatted->readMeUrl = $this->readMeUrl;
-                $infoFormatted->lastCall = $curdate->format('d/m/Y H:i:s');
+                $infoFormatted->lastCall = $curdate->format(self::DATE_FORMAT);
 
                 $this->_config->setModuleVersionInfo(json_encode($infoFormatted));
             }

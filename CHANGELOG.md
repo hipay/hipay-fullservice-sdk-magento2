@@ -11,6 +11,7 @@
 - **Fix** : Fixed enabling option for status field on split payment screens
 - **Fix** : Fixed browser issue about `<iframe>` HTML tag
 - **Fix** : Fixed invoice update when HiPay notification is processed before invoice creation
+- **Fix** : Fixed notificiation process on BO
 
 ## 1.16.0
 
