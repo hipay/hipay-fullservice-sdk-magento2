@@ -86,7 +86,7 @@
                 <sdk_js_url>https://libs.hipay.com/js/sdkjs.js</sdk_js_url>
                 <basket_enabled>0</basket_enabled>
                 <currency_transaction>0</currency_transaction>
-                <send_notification_url>0</send_notification_url>
+                <send_notification_url>1</send_notification_url>
             </configurations>
             <hipay_proxy_settings>
                 <hipay_proxy_host/>
@@ -389,7 +389,9 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
-                <allowspecific>0</allowspecific>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -435,7 +437,9 @@
                 <payment_products>ideal</payment_products>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
-                <allowspecific>0</allowspecific>
+                <allowspecific>1</allowspecific>
+                <specificcountry>NL</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -470,7 +474,9 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <template>basic-js</template>
                 <css></css>
-                <allowspecific>0</allowspecific>
+                <allowspecific>1</allowspecific>
+                <specificcountry>NL</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -589,6 +595,7 @@
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\Mbway</payment_method>
                 <active>0</active>
                 <title>Hipay Enterprise MB Way Hosted Fields</title>
+                <payment_action>Sale</payment_action>
                 <payment_action>Authorization</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
@@ -650,8 +657,9 @@
                 <payment_products_categories>ewallet</payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
-                <allowspecific>0</allowspecific>
+                <allowspecific>1</allowspecific>
                 <allowed_currencies>PLN</allowed_currencies>
+                <specificcountry>PL</specificcountry>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>

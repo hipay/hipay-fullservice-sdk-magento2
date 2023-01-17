@@ -182,6 +182,11 @@ deploy2recette:
     GPC_ACCOUNT: ''
   script:
     - echo $RELEASE_NAME
+    - |-
+      BRANCH=$CI_COMMIT_REF_NAME
+      if [ "$CI_COMMIT_TAG" = "" ]; then
+        BRANCH=dev-$CI_COMMIT_REF_NAME
+      fi
     - >
       helm install $RELEASE_NAME ./bin/docker/kubernetes/helm/
       --namespace default
@@ -201,7 +206,7 @@ deploy2recette:
       --set hipay_applepay_tokenjs_username_test="$HIPAY_APPLEPAY_TOKENJS_USERNAME_RE7"
       --set hipay_applepay_tokenjs_publickey_test="$HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_RE7"
       --set pi_data_url="$PI_CI_DATA_URL"
-      --set branch="$CI_COMMIT_REF_NAME"
+      --set branch="$BRANCH"
   allow_failure: true
   environment:
     name: review/${CI_COMMIT_REF_SLUG}

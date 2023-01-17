@@ -160,17 +160,18 @@
         <column name="date_to_pay" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                     <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Debit date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
         <column name="amount_to_pay" class="HiPay\FullserviceMagento\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>               
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="label" xsi:type="string" translate="true">Debit Amount</item>
                 </item>
             </argument>
@@ -201,8 +202,8 @@
         </column>
         <column name="status">
             <argument name="data" xsi:type="array">
-           		 <item name="options" xsi:type="object">HiPay\FullserviceMagento\Model\System\Config\Source\SplitPayment\Status</item>
-                 <item name="config" xsi:type="array">
+                <item name="options" xsi:type="object">HiPay\FullserviceMagento\Model\System\Config\Source\SplitPayment\Status</item>
+                <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="dataType" xsi:type="string">select</item>

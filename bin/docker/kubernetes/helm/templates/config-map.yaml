@@ -13,12 +13,15 @@ data:
   MAGENTO_DATABASE_PORT_NUMBER: "3306"
   MAGENTO_DATABASE_USER: bn_magento
   MAGENTO_DATABASE_NAME: bitnami_magento
+  MAGENTO_DATABASE_PASSWORD: ""
   MAGENTO_USERNAME: demo
   MAGENTO_PASSWORD: hipay123
-  MAGENTO_EMAIL: demo@hipaycom
+  MAGENTO_EMAIL: demo@hipay.com
   MAGENTO_MODE: developer
   ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
   ELASTICSEARCH_PORT_NUMBER: "9200"
+  MAGENTO_ELASTICSEARCH_USER: ""
+  MAGENTO_ELASTICSEARCH_PASSWORD: ""
   PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
   MARIADB_DATABASE: bitnami_magento
@@ -42,8 +45,8 @@ data:
   HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
-  CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-{{ .Values.branch }},giggsey/libphonenumber-for-php
+  CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},giggsey/libphonenumber-for-php
   CUSTOM_MODULES: HiPay_FullserviceMagento
   # Elastic Search env var
   keys: |
