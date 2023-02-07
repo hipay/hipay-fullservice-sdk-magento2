@@ -31,6 +31,8 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Magento\Sales\Model\OrderRepository;
 
 /**
  * Notify Class Model
@@ -145,6 +147,16 @@ class Notify
      */
     protected $creditmemoSender;
 
+    /**
+     * @var UpdateCouponUsages
+     */
+    protected $updateCouponUsages;
+
+    /**
+     * @var OrderRepository
+     */
+    protected $orderRepository;
+
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -159,6 +171,8 @@ class Notify
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
+        UpdateCouponUsages $updateCouponUsages,
+        OrderRepository $orderRepository,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -176,6 +190,9 @@ class Notify
         $this->transactionRepository = $transactionRepository;
 
         $this->creditmemoSender = $creditmemoSender;
+
+        $this->updateCouponUsages = $updateCouponUsages;
+        $this->orderRepository = $orderRepository;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -825,6 +842,13 @@ class Notify
             $this->_order->setStatus($orderStatus);
 
             $this->_order->save();
+
+            try {
+                $order = $this->orderRepository->get($this->_order->getId());
+                $this->updateCouponUsages->execute($order, false);
+            } catch (\Exception $e) {
+
+            }
 
             $creditmemo = $payment->getCreatedCreditmemo();
             if ($creditmemo) {
