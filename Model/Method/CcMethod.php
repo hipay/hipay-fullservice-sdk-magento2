@@ -101,7 +101,7 @@ class CcMethod extends FullserviceMethod
         $info = $this->getInfoInstance();
         $info->setCcType($additionalData->getCcType())
             ->setCcOwner($additionalData->getCcOwner())
-            ->setCcLast4(substr($additionalData->getCcNumber(), -4))
+            ->setCcLast4(substr($additionalData->getCcNumber() ?? '', -4))
             ->setCcNumber($additionalData->getCcNumber())
             ->setCcCid($additionalData->getCcCid())
             ->setCcExpMonth($additionalData->getCcExpMonth())
