@@ -1,5 +1,10 @@
 # Changelog
 
+# Unreleased
+
+- **Add** : Added Multibanco reference to customer order view
+- **Fix** : Fixed PHP 8 compatibility issues
+
 ## 1.17.0
 
 - **Add** : Added HiPay CSP withelist

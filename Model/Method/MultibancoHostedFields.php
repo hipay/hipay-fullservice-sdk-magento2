@@ -35,6 +35,11 @@ class MultibancoHostedFields extends LocalHostedFields
     /**
      * @var string
      */
+    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Multibanco\Info';
+
+    /**
+     * @var string
+     */
     protected static $_technicalCode = 'multibanco';
 
     /**

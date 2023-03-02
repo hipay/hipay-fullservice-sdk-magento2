@@ -1385,6 +1385,7 @@
                 <cancel_pending_order>0</cancel_pending_order>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
+                <time_limit_to_pay>0.5</time_limit_to_pay>
                 <payment_products>multibanco</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <template>basic-js</template>
