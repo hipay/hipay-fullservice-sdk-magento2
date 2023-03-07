@@ -4,19 +4,19 @@ namespace HiPay\FullserviceMagento\Api\Data;
 
 interface NotificationInterface
 {
-    const NOTIFICATION_ID = 'notification_id';
+    public const NOTIFICATION_ID = 'notification_id';
 
-    const STATUS = 'status';
+    public const STATUS = 'status';
 
-    const CONTENT = 'content';
+    public const CONTENT = 'content';
 
-    const HIPAY_CREATED_AT = 'hipay_created_at';
+    public const HIPAY_CREATED_AT = 'hipay_created_at';
 
-    const CREATED_AT = 'created_at';
+    public const CREATED_AT = 'created_at';
 
-    const ATTEMPTS = 'attempts';
+    public const ATTEMPTS = 'attempts';
 
-    const STATE = 'state';
+    public const STATE = 'state';
 
     /**
      * Gets Notification ID

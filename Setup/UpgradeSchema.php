@@ -561,7 +561,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'state',
                     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     255,
-                    ['nullable' => false, 'default' => \HiPay\FullserviceMagento\Model\Notification::NOTIFICATION_STATE_CREATED],
+                    [
+                        'nullable' => false,
+                        'default' => \HiPay\FullserviceMagento\Model\Notification::NOTIFICATION_STATE_CREATED
+                    ],
                     'State of notification'
                 );
 
