@@ -328,12 +328,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $this->installShippingMappingTable($setup, $context);
 
+        $this->installNotificationTable($setup, $context);
+
         $setup->endSetup();
     }
 
     private function installShippingMappingTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $tableName = $setup->getTable($setup->getTable('hipay_cart_mapping_shipping'));
+        $tableName = $setup->getTable('hipay_cart_mapping_shipping');
 
         if ($setup->getConnection()->isTableExists($tableName)) {
             if (version_compare($context->getVersion(), '1.10.2', '<')) {
@@ -404,10 +406,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * Create table 'hipay_customer_card'
      */
-    private function installTokenTable($setup, $context)
+    private function installTokenTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         if (version_compare($context->getVersion(), '1.7.0', '<')) {
-            $tableName = $setup->getTable($setup->getTable('hipay_customer_card'));
+            $tableName = $setup->getTable('hipay_customer_card');
 
             if ($setup->getConnection()->isTableExists($tableName)) {
                 $columns = [
@@ -505,7 +507,69 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
     }
 
-    private function addColumns($columns, $tableName, $setup)
+    /**
+     * Create table 'hipay_notification'
+     */
+    private function installNotificationTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        if (version_compare($context->getVersion(), '1.18.0', '<')) {
+            $tableName = $setup->getTable('hipay_notification');
+            
+            $table = $setup->getConnection()
+                ->newTable($tableName)
+                ->addColumn(
+                    'notification_id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                    'Notification Id'
+                )
+                ->addColumn(
+                    'status',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    4,
+                    ['nullable' => false],
+                    'HiPay status code of notification'
+                )
+                ->addColumn(
+                    'content',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    null,
+                    ['nullable' => false],
+                    'JSON content of notification'
+                )
+                ->addColumn(
+                    'hipay_created_at',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                    null,
+                    ['nullable' => false],
+                    'Creation date of notification from HiPay'
+                )
+                ->addColumn(
+                    'created_at',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_DATETIME,
+                    null,
+                    ['nullable' => false],
+                    'Creation date of notification'
+                )->addColumn(
+                    'attempts',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['nullable' => false, 'default' => 0],
+                    'Attempts count'
+                )->addColumn(
+                    'state',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable' => false, 'default' => \HiPay\FullserviceMagento\Model\Notification::NOTIFICATION_STATE_CREATED],
+                    'State of notification'
+                );
+
+            $setup->getConnection()->createTable($table);
+        }
+    }
+
+    private function addColumns(array $columns, string $tableName, SchemaSetupInterface $setup)
     {
         $connection = $setup->getConnection();
         foreach ($columns as $name => $definition) {

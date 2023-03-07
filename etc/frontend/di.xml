@@ -18,6 +18,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="HiPay\FullserviceMagento\Api\Data\NotificationInterface" type="HiPay\FullserviceMagento\Model\Notification"/>
     <type name="Magento\Payment\Model\Method\Providers\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -153,9 +154,24 @@
             <argument name="storage" xsi:type="object">HiPay\FullserviceMagento\Model\Session\Storage</argument>
         </arguments>
     </virtualType>
+    <virtualType name="HipayLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="hipay" xsi:type="object">HiPay\FullserviceMagento\Logger\HipayHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="HiPay\FullserviceMagento\Controller\Fullservice">
         <arguments>
             <argument name="hipaySession" xsi:type="object">HiPay\FullserviceMagento\Model\Session</argument>
+        </arguments>
+    </type>
+    <type name="HiPay\FullserviceMagento\Controller\Notify\Index">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session</argument>
+            <argument name="hipayConfig" xsi:type="object">HiPay\FullserviceMagento\Model\Config</argument>
+            <argument name="notificationFactory" xsi:type="object">HiPay\FullserviceMagento\Model\Notification\Factory</argument>
+            <argument name="logger" xsi:type="object">HipayLogger</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">

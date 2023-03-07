@@ -5,10 +5,10 @@ namespace HiPay\FullserviceMagento\Logger;
 use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
-use Monolog\Logger as MonologLogger;
+use Monolog\Logger;
 
 /**
- * Handler Request for gateway
+ * Handler for HiPay
  *
  * @see HiPay\FullserviceMagento\Model\Config.php
  *
@@ -17,16 +17,20 @@ use Monolog\Logger as MonologLogger;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class RequestHandler extends \Magento\Framework\Logger\Handler\Base
+class HipayHandler extends \Magento\Framework\Logger\Handler\Base
 {
     /**
      * @var int
      */
-    protected $loggerType = MonologLogger::DEBUG;
+    protected $loggerType = Logger::DEBUG;
 
     /**
-     *
      * @var string
      */
     protected $fileName = '/var/log/hipay.log';
+
+    public static function getInstance()
+    {
+        return new self(new \Magento\Framework\Filesystem\Driver\File());
+    }
 }

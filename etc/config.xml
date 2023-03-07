@@ -94,6 +94,9 @@
                 <hipay_proxy_user/>
                 <hipay_proxy_password/>
             </hipay_proxy_settings>
+            <hipay_notifications>
+                <notifications_cron>0</notifications_cron>
+            </hipay_notifications>
         </hipay>
         <payment>
             <hipay_hosted>

@@ -34,6 +34,7 @@
                 <item name="hipay_splitpayment_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Grid\Collection</item>
                 <item name="hipay_cartcategories_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\CartCategories\Grid\Collection</item>
                 <item name="hipay_mappingshipping_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\Grid\Collection</item>
+                <item name="hipay_notification_grid_data_source" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\Notification\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -59,6 +60,12 @@
         <arguments>
             <argument name="mainTable" xsi:type="string">hipay_cart_mapping_shipping</argument>
             <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="HiPay\FullserviceMagento\Model\ResourceModel\Notification\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">hipay_notification</argument>
+            <argument name="resourceModel" xsi:type="string">HiPay\FullserviceMagento\Model\ResourceModel\Notification</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\Console\CommandList">
