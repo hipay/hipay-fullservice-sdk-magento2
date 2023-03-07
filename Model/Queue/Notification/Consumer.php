@@ -60,11 +60,13 @@ class Consumer
     public function execute(string $id)
     {
         if ($id) {
-            $this->logger->info('Consuming notification ID "' . $id . '"');
-
             /** @var Notification */
             $notification = $this->notificationFactory->create();
             $notification->load($id);
+
+            $this->logger->info(
+                'Consuming notification ID "' . $id . '" related to status ' . $notification->getStatus()
+            );
 
             try {
                 /** @var \HiPay\FullserviceMagento\Model\Notify */
