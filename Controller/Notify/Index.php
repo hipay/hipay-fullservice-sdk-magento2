@@ -101,6 +101,7 @@ class Index extends AppAction
                 $notificationData = [
                     'content' => json_encode($params),
                     'status' => $params['status'],
+                    'order_id' => $params['order']['id'],
                     'hipay_created_at' => new \DateTime($notificationDate->format('Y-m-d H:i:s')),
                     'created_at' => new \DateTime()
                 ];

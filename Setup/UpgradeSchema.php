@@ -514,7 +514,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         if (version_compare($context->getVersion(), '1.18.0', '<')) {
             $tableName = $setup->getTable('hipay_notification');
-            
+
             $table = $setup->getConnection()
                 ->newTable($tableName)
                 ->addColumn(
@@ -530,6 +530,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     4,
                     ['nullable' => false],
                     'HiPay status code of notification'
+                )
+                ->addColumn(
+                    'order_id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    255,
+                    ['nullable' => false,],
+                    'Order ID of notification'
                 )
                 ->addColumn(
                     'content',
@@ -566,6 +573,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'default' => \HiPay\FullserviceMagento\Model\Notification::NOTIFICATION_STATE_CREATED
                     ],
                     'State of notification'
+                )
+                ->addIndex(
+                    $tableName,
+                    ['state', 'attempts', 'status', 'created_at', 'order_id'],
+                    ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
                 );
 
             $setup->getConnection()->createTable($table);
