@@ -1,7 +1,8 @@
 # Changelog
 
-# Unreleased
+## Unreleased
 
+- **Add** : Added setting option to process HiPay notifications using CRON job
 - **Add** : Added Multibanco reference to customer order view
 - **Fix** : Fixed PHP 8 compatibility issues
 

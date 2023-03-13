@@ -1,4 +1,6 @@
-FROM bitnami/magento:2.4.4
+FROM bitnami/magento:2.4.5
+
+RUN apt update && apt upgrade -y && apt install curl -y
 
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \

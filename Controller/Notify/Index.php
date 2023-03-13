@@ -16,10 +16,14 @@
 
 namespace HiPay\FullserviceMagento\Controller\Notify;
 
+use HiPay\FullserviceMagento\Model\Config;
+use HiPay\FullserviceMagento\Model\Notification\Factory;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Webapi\Exception as WebApiException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Notification controller
@@ -35,24 +39,41 @@ use Magento\Framework\Webapi\Exception as WebApiException;
 class Index extends AppAction
 {
     /**
-     *
-     * @var \Psr\Log\LoggerInterface $_logger
+     * @var Session
+     */
+    protected $_checkoutSession;
+
+    /**
+     * @var Config
+     */
+    protected $_hipayConfig;
+
+    /**
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * Index constructor.
-     *
-     * @param Context                  $context
-     * @param \Psr\Log\LoggerInterface $_logger
+     * @var Factory
      */
+    private $_notificationFactory;
+
     public function __construct(
         Context $context,
-        \Psr\Log\LoggerInterface $_logger
+        Session $checkoutSession,
+        Config $hipayConfig,
+        Factory $notificationFactory,
+        LoggerInterface $logger
     ) {
         parent::__construct($context);
 
-        $this->_logger = $_logger;
+        $this->_checkoutSession = $checkoutSession;
+        $storeId = $this->_checkoutSession->getQuote()->getStore()->getStoreId();
+        $this->_hipayConfig = $hipayConfig;
+        $this->_hipayConfig->setStoreId($storeId);
+
+        $this->_notificationFactory = $notificationFactory;
+        $this->_logger = $logger;
 
         if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
             $request = $this->getRequest();
@@ -66,20 +87,39 @@ class Index extends AppAction
     /**
      * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * */
+     **/
     public function execute()
     {
         $params = $this->getRequest()->getPost()->toArray();
+        $reponseBody = 'OK';
 
         try {
-            /**
- * @var $notify \HiPay\FullserviceMagento\Model\Notify
-**/
-            $notify = $this->_objectManager->create(
-                '\HiPay\FullserviceMagento\Model\Notify',
-                ['params' => ['response' => $params]]
-            );
-            $notify->processTransaction();
+            $cronModeActivated = $this->_hipayConfig->isNotificationCronActive();
+
+            if ($cronModeActivated) {
+                $notificationDate = \DateTimeImmutable::createFromFormat(\DateTime::ATOM, $params['date_updated']);
+                $notificationData = [
+                    'content' => json_encode($params),
+                    'status' => $params['status'],
+                    'order_id' => $params['order']['id'],
+                    'hipay_created_at' => new \DateTime($notificationDate->format('Y-m-d H:i:s')),
+                    'created_at' => new \DateTime()
+                ];
+                $notification = $this->_notificationFactory->create();
+                $notification->setData($notificationData);
+                $notification->save();
+
+                $reponseBody = 'Notification will be processed later';
+            } else {
+                /**
+                 * @var \HiPay\FullserviceMagento\Model\Notify $notify
+                 **/
+                $notify = $this->_objectManager->create(
+                    '\HiPay\FullserviceMagento\Model\Notify',
+                    ['params' => ['response' => $params]]
+                );
+                $notify->processTransaction();
+            }
         } catch (WebApiException $e) {
             $this->_logger->warning($e);
 
@@ -92,7 +132,7 @@ class Index extends AppAction
             $this->getResponse()->setBody($e->getTraceAsString())->sendResponse();
         }
 
-        $this->getResponse()->setBody('OK')->sendResponse();
+        $this->getResponse()->setBody($reponseBody)->sendResponse();
     }
 
     /**

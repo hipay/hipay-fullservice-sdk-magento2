@@ -524,5 +524,8 @@ Automatic,Automatique
 "Hosted Page Version","Version des pages hébergées"
 "Hosted Page v1","Page hébergée v1"
 "Hosted Page v2","Page hébergée v2"
+"HiPay Notifications","Notifications HiPay"
+"Enable notification CRON","Activation du CRON de notifications"
+"If yes then handle HiPay notifications by a CRON job","Si oui, alors gère les notifications HiPay par une tâche CRON"
 "Restore cart on return","Restaurer le panier au retour"
 "Restore cart when back button is pressed during payment process","Restaurer le panier lorsque le bouton retour est utilisé pendant le processus de paiement"

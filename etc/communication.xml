@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Communication/etc/communication.xsd">
+    <topic name="hipay.notification" is_synchronous="false" request="string">
+        <handler name="HiPayNotificationHandler" type="HiPay\FullserviceMagento\Model\Queue\Notification\Consumer" method="execute"/>
+    </topic>
+</config>

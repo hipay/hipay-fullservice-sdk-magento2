@@ -33,10 +33,11 @@ fi
 if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
         docker compose -f docker-compose.yml rm -sfv
+        docker compose -f docker-compose.yml rm -sfv mariadb
         sudo rm -Rf log/ web/
         docker compose -f docker-compose.yml build
         COMPOSE_HTTP_TIMEOUT=500 docker compose -f docker-compose.yml up -d
-        # docker cp $containerMG2:/var/www/html/magento2 web/
+        # docker cp $containerMG2:/bitnami/magento web/
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose-bitnami to link this files"
     fi
@@ -47,22 +48,27 @@ elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then
     docker compose -f docker-compose.yml up -d
+elif [ "$1" = "cache" ]; then
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:f
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'static' ]; then
-    docker exec $containerMG2 rm -Rf /var/www/html/magento2/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
-    docker exec $containerMG2 gosu magento2 php bin/magento setup:static-content:deploy -t Magento/luma
-    docker exec $containerMG2 gosu magento2 php bin/magento c:c
+    docker exec $containerMG2 rm -Rf /bitnami/magento/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy -t Magento/luma
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'di' ]; then
-    docker exec $containerMG2 rm -Rf /var/www/html/magento2/var/cache /var/www/html/magento2/var/di /var/www/html/magento2/var/generation /var/www/html/magento2/var/page_cache
-    docker exec $containerMG2 gosu magento2 php bin/magento setup:di:compile
-    docker exec $containerMG2 gosu magento2 php bin/magento c:c
+    docker exec $containerMG2 rm -Rf /bitnami/magento/var/cache /bitnami/magento/var/di /bitnami/magento/var/generation /bitnami/magento/var/page_cache
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:di:compile
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
+elif [ "$1" = "db" ]; then
+    docker exec -ti $containerMG2 mariadb -u bn_magento -D bitnami_magento -h mariadb
 elif [ "$1" = 'command' ]; then
-    docker exec $containerMG2 gosu magento2 php bin/magento $2
+    docker exec $containerMG2 gosu daemon php bin/magento $2
 elif [ "$1" = 'l' ]; then
     docker compose -f docker-compose.yml logs -f
 elif [ "$1" = 'install' ]; then
-    docker exec $containerMG2 gosu magento2 bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
-    docker exec $containerMG2 gosu magento2 bin/magento setup:upgrade
-    docker exec $containerMG2 gosu magento2 bin/magento c:c
+    docker exec $containerMG2 gosu daemon /bitnami/magento/bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
+    docker exec $containerMG2 gosu daemon /bitnami/magento/bin/magento setup:upgrade
+    docker exec $containerMG2 gosu daemon /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'test' ]; then
 
     rm -rf bin/tests/errors/*
