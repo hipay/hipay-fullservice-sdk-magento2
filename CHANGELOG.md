@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.18.0
 
 - **Add** : Added setting option to process HiPay notifications using CRON job
 - **Add** : Added Multibanco reference to customer order view
