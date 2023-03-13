@@ -946,4 +946,10 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $key = 'hostedpage_version';
         return $this->getGeneraleValue($key, 'hipay_hostedpage');
     }
+
+    public function isNotificationCronActive()
+    {
+        $key = 'notifications_cron';
+        return $this->getGeneraleValue($key, 'hipay_notifications');
+    }
 }

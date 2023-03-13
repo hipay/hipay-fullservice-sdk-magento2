@@ -25,5 +25,8 @@
         <job name="hipay_clean_pending_orders" instance="HiPay\FullserviceMagento\Cron\CleanPendingOrders" method="execute">
             <schedule>*/15 * * * *</schedule>
         </job>
+        <job name="hipay_process_notifications" instance="HiPay\FullserviceMagento\Cron\ProcessNotifications" method="execute">
+            <schedule>*/5 * * * *</schedule>
+        </job>
     </group>
 </config>

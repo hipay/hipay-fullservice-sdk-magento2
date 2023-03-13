@@ -18,15 +18,18 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-<group id="hipay_multibanco" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
-	<label>HiPay Enterprise Multibanco</label>
-	<comment></comment>
-	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-	<field id="multibanco_order_expiration_time" translate="label" type="select" sortOrder="50" showInDefault="1"
-		   showInWebsite="1" showInStore="0">
-		<label>Order expiration date</label>
-		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes</source_model>
-	</field>
-	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-</group>
+	<group id="hipay_multibanco" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>HiPay Enterprise Multibanco</label>
+		<comment></comment>
+		<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+		<field id="time_limit_to_pay" translate="label" type="text" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="1">
+			<label>Period of validity of the payment page</label>
+			<comment>In hours</comment>
+		</field>
+		<field id="multibanco_order_expiration_time" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+			<label>Order expiration date</label>
+			<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes</source_model>
+		</field>
+		<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+	</group>
 </include>

@@ -1,0 +1,15 @@
+.payment-method dd.content table.data.table tbody tr:first-child {
+  display: grid;
+}
+
+.payment-method dd.content table.data.table tbody tr:first-child th {
+  font-size: 1.6rem;
+  font-weight: 600;
+  padding-left: 0;
+  border: none;
+}
+
+.payment-method dd.content table.data.table tbody tr:first-child td {
+  padding: 0;
+  border: none;
+}

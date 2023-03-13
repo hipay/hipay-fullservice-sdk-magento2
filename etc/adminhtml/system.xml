@@ -32,6 +32,7 @@
             <include path="HiPay_FullserviceMagento::system/hashing_algorithm.xml"/>
             <include path="HiPay_FullserviceMagento::system/emails.xml"/>
             <include path="HiPay_FullserviceMagento::system/proxy.xml"/>
+            <include path="HiPay_FullserviceMagento::system/notifications.xml"/>
             <include path="HiPay_FullserviceMagento::system/general.xml"/>
         </section>
         <section id="payment">

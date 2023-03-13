@@ -526,7 +526,7 @@ abstract class FullserviceMethod extends AbstractMethod
             //Set Card data to payment info
             $info->setCcType($card->getCcType())
                 ->setCcOwner($card->getCcOwner())
-                ->setCcLast4(substr($card->getCcNumberEnc(), -4))
+                ->setCcLast4(substr($card->getCcNumberEnc() ?? '', -4))
                 ->setCcExpMonth($card->getCcExpMonth())
                 ->setCcExpYear($card->getCcExpYear())
                 ->setCcNumEnc($card->getCcNumberEnc());
