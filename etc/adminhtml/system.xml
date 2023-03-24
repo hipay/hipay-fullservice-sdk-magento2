@@ -41,6 +41,7 @@
             <include path="HiPay_FullserviceMagento::system/method/hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/hosted-split.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/applepay.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/sisal_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/qiwi-wallet.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/dexia.xml"/>

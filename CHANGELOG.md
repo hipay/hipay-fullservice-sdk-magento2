@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Add** : Added **Mooney** payment method using Hosted Fields
+
 ## 1.18.0
 
 - **Add** : Added setting option to process HiPay notifications using CRON job

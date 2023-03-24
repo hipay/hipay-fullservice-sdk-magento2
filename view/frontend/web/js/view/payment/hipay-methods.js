@@ -41,6 +41,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-applepay'
     },
     {
+      type: 'hipay_sisal_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal-hosted-fields'
+    },
+    {
       type: 'hipay_sisal',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
