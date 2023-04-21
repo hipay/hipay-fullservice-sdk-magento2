@@ -44,13 +44,7 @@
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <!-- Local method -->
-        <method name="hipay_qiwiwallet">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
         <method name="hipay_sdd">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_dexia">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_giropay">

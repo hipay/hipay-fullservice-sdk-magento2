@@ -66,13 +66,7 @@
                                                                         <item name="hipay_sisal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="hipay_qiwiwallet" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
-                                                                        </item>
                                                                         <item name="hipay_sdd" xsi:type="array">
-                                                                            <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
-                                                                        </item>
-                                                                        <item name="hipay_dexia" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <item name="hipay_giropay" xsi:type="array">

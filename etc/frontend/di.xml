@@ -90,7 +90,6 @@
                 <item name="hipay_applepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\ApplePay::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_qiwiwallet" xsi:type="const">HiPay\FullserviceMagento\Model\Method\QiwiWallet::HIPAY_METHOD_CODE</item>
-                <item name="hipay_dexia" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Dexia::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
                 <item name="hipay_yandexapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\YandexApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_webmoneyapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\WebmoneyApi::HIPAY_METHOD_CODE</item>

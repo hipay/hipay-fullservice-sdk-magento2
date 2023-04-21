@@ -46,11 +46,6 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
     },
     {
-      type: 'hipay_dexia',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-dexia'
-    },
-    {
       type: 'hipay_sdd',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sdd'
