@@ -33,6 +33,7 @@ services:
       - ./bin/docker/conf/development/mage.env
       - ./bin/docker/conf/development/module.env
     volumes:
+      - './web:/bitnami/magento'
       - ./Api:/bitnami/magento/app/code/HiPay/FullserviceMagento/Api
       - ./Block:/bitnami/magento/app/code/HiPay/FullserviceMagento/Block
       - ./Controller:/bitnami/magento/app/code/HiPay/FullserviceMagento/Controller
