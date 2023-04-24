@@ -50,18 +50,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="HiPay\FullserviceMagento\Model\Method\Providers\AstropayConfigProvider">
-        <arguments>
-            <argument name="methodCodes" xsi:type="array">
-                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_CODE</item>
-                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_CODE</item>
-            </argument>
-            <argument name="methodTypeIdentification" xsi:type="array">
-                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_IDENTIFICATION</item>
-                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_IDENTIFICATION</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -72,8 +60,6 @@
                 <item name="hipay_applepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\ApplePay::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
-                <item name="hipay_yandexapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\YandexApi::HIPAY_METHOD_CODE</item>
-                <item name="hipay_webmoneyapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\WebmoneyApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sofortapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SofortApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_bancontact_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\BancontactHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
@@ -85,8 +71,6 @@
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
-                <item name="hipay_bbva" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Bbva::HIPAY_METHOD_CODE</item>
-                <item name="hipay_boleto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Astropay\Boleto::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay3X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong::HIPAY_METHOD_CODE</item>
@@ -108,7 +92,6 @@
                 <item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider</item>
                 <item name="hipay_split_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\SplitConfigProvider</item>
-                <item name="hipay_astropay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\AstropayConfigProvider</item>
                 <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
                 <item name="hipay_local_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider</item>
             </argument>

@@ -54,9 +54,6 @@
             <include path="HiPay_FullserviceMagento::system/method/przelewy24.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sdd.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sofort.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/bbva.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/boleto.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/santandercash.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong.xml"/>

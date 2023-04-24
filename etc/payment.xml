@@ -50,9 +50,6 @@
         <method name="hipay_giropay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="hipay_ing">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
         <method name="hipay_bancontact_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -81,30 +78,6 @@
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_sofortapi">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_webmoneyapi">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_yandexapi">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_aura">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_banamex">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_banco">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_bbva">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_boleto">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_bradesco">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_facilypay3X">

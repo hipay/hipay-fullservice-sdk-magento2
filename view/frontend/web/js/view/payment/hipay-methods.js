@@ -51,16 +51,6 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sdd'
     },
     {
-      type: 'hipay_yandexapi',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-yandexapi'
-    },
-    {
-      type: 'hipay_webmoneyapi',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-webmoneyapi'
-    },
-    {
       type: 'hipay_postfinancecardapi',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-postfinancecardapi'
@@ -114,16 +104,6 @@ define([
       type: 'hipay_mbway',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
-    },
-    {
-      type: 'hipay_bbva',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bbva'
-    },
-    {
-      type: 'hipay_boleto',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-boleto'
     },
     {
       type: 'hipay_facilypay3X',
