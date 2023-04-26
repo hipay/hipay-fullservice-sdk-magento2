@@ -51,24 +51,9 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal'
     },
     {
-      type: 'hipay_dexia',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-dexia'
-    },
-    {
       type: 'hipay_sdd',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sdd'
-    },
-    {
-      type: 'hipay_yandexapi',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-yandexapi'
-    },
-    {
-      type: 'hipay_webmoneyapi',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-webmoneyapi'
     },
     {
       type: 'hipay_postfinancecardapi',
@@ -79,11 +64,6 @@ define([
       type: 'hipay_sofortapi',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sofortapi'
-    },
-    {
-      type: 'hipay_ing',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ing'
     },
     {
       type: 'hipay_bancontact_hosted_fields',
@@ -129,61 +109,6 @@ define([
       type: 'hipay_mbway',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
-    },
-    {
-      type: 'hipay_aura',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-aura'
-    },
-    {
-      type: 'hipay_banamex',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-banamex'
-    },
-    {
-      type: 'hipay_banco',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-banco'
-    },
-    {
-      type: 'hipay_caixa',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-caixa'
-    },
-    {
-      type: 'hipay_bbva',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bbva'
-    },
-    {
-      type: 'hipay_boleto',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-boleto'
-    },
-    {
-      type: 'hipay_bradesco',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bradesco'
-    },
-    {
-      type: 'hipay_itau',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-itau'
-    },
-    {
-      type: 'hipay_oxxo',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-oxxo'
-    },
-    {
-      type: 'hipay_santander',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-santander'
-    },
-    {
-      type: 'hipay_santandercash',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-santandercash'
     },
     {
       type: 'hipay_facilypay3X',
