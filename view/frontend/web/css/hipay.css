@@ -19,20 +19,3 @@
 #hipay-container-hosted-fields-sisal {
   display: none;
 }
-
-.magento-table-hipay-multibanco,
-.magento-table-hipay-mooney {
-  margin: 0 0 1.41575em;
-  max-width: 50%;
-}
-
-.magento-table-hipay-multibanco .magento-table-hipay-title,
-.magento-table-hipay-mooney .magento-table-hipay-title,
-.magento-table-hipay-multibanco .magento-table-hipay-logo,
-.magento-table-hipay-mooney .magento-table-hipay-logo {
-  text-align: center;
-}
-
-.magento-table-hipay-mooney .magento-table-hipay-subtitle {
-  font-weight: 400;
-}

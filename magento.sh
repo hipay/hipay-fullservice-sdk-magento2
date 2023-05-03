@@ -32,22 +32,23 @@ fi
 
 if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
-        docker compose -f docker-compose.yml rm -sfv
-        docker compose -f docker-compose.yml rm -sfv mariadb
+        docker compose rm -sfv
+        docker compose rm -sfv mariadb
         sudo rm -Rf log/ web/
-        docker compose -f docker-compose.yml build
-        COMPOSE_HTTP_TIMEOUT=500 docker compose -f docker-compose.yml up -d
+        COMPOSE_HTTP_TIMEOUT=500 docker compose up -d --build
         # docker cp $containerMG2:/bitnami/magento web/
     else
         echo "Put your credentials in auth.env and hipay.env before start update the docker-compose-bitnami to link this files"
     fi
 elif [ "$1" = 'kill' ]; then
-    docker compose -f docker-compose.yml rm -sfv
+    docker compose rm -sfv
+    docker compose rm -sfv mariadb
     sudo rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
 elif [ "$1" = 'restart' ]; then
-    docker compose -f docker-compose.yml up -d
+    docker compose stop
+    docker compose up -d --build
 elif [ "$1" = "cache" ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:f
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
@@ -64,7 +65,7 @@ elif [ "$1" = "db" ]; then
 elif [ "$1" = 'command' ]; then
     docker exec $containerMG2 gosu daemon php bin/magento $2
 elif [ "$1" = 'l' ]; then
-    docker compose -f docker-compose.yml logs -f
+    docker compose logs -f
 elif [ "$1" = 'install' ]; then
     docker exec $containerMG2 gosu daemon /bitnami/magento/bin/magento module:enable --clear-static-content HiPay_FullServiceMagento
     docker exec $containerMG2 gosu daemon /bitnami/magento/bin/magento setup:upgrade

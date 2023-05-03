@@ -29,22 +29,30 @@ class Pending extends \Magento\Framework\View\Element\Template
     protected $_checkoutSession;
 
     /**
+     * @var \Magento\Framework\Locale\Resolver
+     */
+    protected $_store;
+
+    /**
      * Pending constructor.
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session                  $checkoutSession
+     * @param \Magento\Framework\Locale\Resolver               $store
      * @param \Magento\Sales\Model\OrderFactory                $orderFactory
      * @param array                                            $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\Locale\Resolver $store,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_checkoutSession = $checkoutSession;
         $this->_orderFactory = $orderFactory;
+        $this->_store = $store;
     }
 
     /**
@@ -67,6 +75,14 @@ class Pending extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Returns locale code language of store
+     */
+    public function getLang()
+    {
+        return strtolower($this->_store->getLocale());
+    }
+
+    /**
      * Continue shopping URL
      *
      * @return string
@@ -80,7 +96,7 @@ class Pending extends \Magento\Framework\View\Element\Template
     {
         $lastOrderId = $this->_checkoutSession->getLastOrderId();
         if ($lastOrderId) {
-            /** @var $order  \Magento\Sales\Model\Order **/
+            /** @var \Magento\Sales\Model\Order **/
             $order = $this->_orderFactory->create();
             $order->load($lastOrderId);
             $referenceToPay = $order->getPayment()->getAdditionalInformation('reference_to_pay');
