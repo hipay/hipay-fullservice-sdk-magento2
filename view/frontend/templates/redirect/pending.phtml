@@ -37,7 +37,7 @@
 <?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
     <div class="referenceContainer">
         <div id="referenceToPay"></div>
-        <button class="action primary checkout" onclick="window.print()"><?php echo __("PRINT") ?></button>
+        <button class="action primary checkout print" onclick="window.print()"><?php echo __("PRINT") ?></button>
     </div>
     <script type="text/javascript">
         var lang = '<?php echo $block->getLang() ?>';

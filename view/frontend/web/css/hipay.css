@@ -24,6 +24,10 @@
   text-align: center;
 }
 
+.referenceContainer .print {
+  margin-top: 12px;
+}
+
 @media print {
   body * {
     visibility: hidden;
