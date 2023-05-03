@@ -35,6 +35,17 @@
     <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
 <?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #referenceToPay,
+            #referenceToPay * {
+                visibility: visible;
+            }
+        }
+    </style>
     <div class="referenceContainer">
         <div id="referenceToPay"></div>
         <button class="action primary checkout print" onclick="window.print()"><?php echo __("PRINT") ?></button>
