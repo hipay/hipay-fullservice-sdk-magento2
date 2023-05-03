@@ -35,14 +35,17 @@
     <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
 <?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
-    <div id="referenceToPay"></div>
+    <div class="referenceContainer">
+        <div id="referenceToPay"></div>
+        <button class="action primary checkout" onclick="window.print()"><?php echo __("PRINT") ?></button>
+    </div>
     <script type="text/javascript">
         var lang = '<?php echo $block->getLang() ?>';
         var hipaySdk = new HiPay({
-          username: 'hosted',
-          password: 'hosted',
-          environment: 'production',
-          lang: lang.length > 2 ? lang.substr(0, 2) : 'en'
+            username: 'hosted',
+            password: 'hosted',
+            environment: 'production',
+            lang: lang.length > 2 ? lang.substr(0, 2) : 'en'
         });
         <?php if($referenceToPay['method'] === 'multibanco') : ?>
             hipaySdk.createReference('multibanco', {

@@ -19,3 +19,17 @@
 #hipay-container-hosted-fields-sisal {
   display: none;
 }
+
+.referenceContainer {
+  text-align: center;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #referenceToPay,
+  #referenceToPay * {
+    visibility: visible;
+  }
+}

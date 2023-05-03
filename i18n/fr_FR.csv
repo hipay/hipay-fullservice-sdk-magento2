@@ -508,3 +508,4 @@ Automatic,Automatique
 "If yes then handle HiPay notifications by a CRON job","Si oui, alors gère les notifications HiPay par une tâche CRON"
 "Restore cart on return","Restaurer le panier au retour"
 "Restore cart when back button is pressed during payment process","Restaurer le panier lorsque le bouton retour est utilisé pendant le processus de paiement"
+"PRINT","IMPRIMER"

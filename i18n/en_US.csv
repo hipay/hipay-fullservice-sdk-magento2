@@ -313,3 +313,4 @@
 "If yes then handle HiPay notifications by a CRON job","If yes then handle HiPay notifications by a CRON job"
 "Restore cart on return","Restore cart on return"
 "Restore cart when back button is pressed during payment process","Restore cart when back button is pressed during payment process"
+"PRINT","PRINT"
