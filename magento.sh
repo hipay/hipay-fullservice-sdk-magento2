@@ -34,6 +34,7 @@ if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
         docker compose -f docker-compose.yml rm -sfv
         docker compose -f docker-compose.yml rm -sfv mariadb
+        docker volume rm hipay-fullservice-sdk-magento2_mariadb_data
         sudo rm -Rf log/ web/
         docker compose -f docker-compose.yml build
         COMPOSE_HTTP_TIMEOUT=500 docker compose -f docker-compose.yml up -d
@@ -43,6 +44,7 @@ if [ "$1" = 'init' ]; then
     fi
 elif [ "$1" = 'kill' ]; then
     docker compose -f docker-compose.yml rm -sfv
+    docker volume rm hipay-fullservice-sdk-magento2_mariadb_data
     sudo rm -Rf log/ web/
 elif [ "$1" = 'start_https' ]; then
     docker compose -f docker-compose-bitnami-https.yml up -d --build
