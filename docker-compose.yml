@@ -60,7 +60,7 @@ services:
   elasticsearch:
     networks:
       - magento2
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+    image: docker.io/bitnami/elasticsearch:7
     environment:
       - cluster.name=docker-cluster
       - discovery.type=single-node
