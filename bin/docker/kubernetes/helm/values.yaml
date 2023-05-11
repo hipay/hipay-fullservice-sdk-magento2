@@ -1,5 +1,5 @@
 mysql_image: 'docker.io/bitnami/mariadb'
-mysql_tag: '10.4'
+mysql_tag: '10.6'
 
 elastic_image: 'docker.io/bitnami/elasticsearch'
 elastic_tag: '7'

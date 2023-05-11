@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.19.0
+
+- **Add** : Added **Mooney** payment method using Hosted Fields
+- **Add** : Removed some unused payment means
+- **Fix** : Fixed coupon usage for customers after refunded or failed order, thanks to [Synoffs](https://github.com/Synoffs) for issue [#156](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/156)
+- **Fix** : Fixed issues about PHP 8.2 deprecated functions
+
 ## 1.18.0
 
 - **Add** : Added setting option to process HiPay notifications using CRON job

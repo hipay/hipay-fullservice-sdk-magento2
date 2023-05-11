@@ -65,7 +65,7 @@ stages:
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: web
-    - name: docker.io/bitnami/mariadb:10.4
+    - name: docker.io/bitnami/mariadb:10.6
       alias: mariadb
     - name: docker.io/bitnami/elasticsearch:7
       alias: elasticsearch

@@ -1,11 +1,13 @@
-FROM bitnami/magento:2.4.5
+FROM bitnami/magento:2.4.6
 
-RUN apt update && apt upgrade -y && apt install curl -y
+RUN apt update && apt upgrade -y && apt install curl php-dev gosu -y
 
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \
     && cp ./n98-magerun2.phar /usr/local/bin/ \
     && rm ./n98-magerun2.phar
+
+RUN pecl install xdebug
 
 RUN echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
 COPY ./bin/docker/images/default/php-override.ini /opt/bitnami/php/etc/conf.d/php-override.ini
