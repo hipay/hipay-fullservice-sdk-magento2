@@ -49,7 +49,7 @@ class Info extends \Magento\Payment\Block\Info
 
     protected function _prepareSpecificInformation($transport = null)
     {
-        $reference = $this->getInfo()->getAdditionalInformation('reference_to_pay')['reference'];
+        $reference = $this->getInfo()->getAdditionalInformation('reference_to_pay')['barCode'];
         return new \Magento\Framework\DataObject(["Payment Reference" => $reference]);
     }
 }
