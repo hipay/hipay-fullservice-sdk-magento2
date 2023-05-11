@@ -8,7 +8,7 @@ services:
   mariadb:
     networks:
       - magento2
-    image: docker.io/bitnami/mariadb:10.4
+    image: docker.io/bitnami/mariadb:10.6
     environment:
       # ALLOW_EMPTY_PASSWORD is recommended only for development.
       - ALLOW_EMPTY_PASSWORD=yes
@@ -33,6 +33,7 @@ services:
       - ./bin/docker/conf/development/mage.env
       - ./bin/docker/conf/development/module.env
     volumes:
+      - './web:/bitnami/magento'
       - ./Api:/bitnami/magento/app/code/HiPay/FullserviceMagento/Api
       - ./Block:/bitnami/magento/app/code/HiPay/FullserviceMagento/Block
       - ./Controller:/bitnami/magento/app/code/HiPay/FullserviceMagento/Controller
@@ -60,7 +61,7 @@ services:
   elasticsearch:
     networks:
       - magento2
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    image: docker.io/bitnami/elasticsearch:7
     environment:
       - cluster.name=docker-cluster
       - discovery.type=single-node

@@ -81,10 +81,9 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     #==========================================
     if [[ "$XDEBUG_ENABLED" = "1" ]]; then
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
-        printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
+        printf "\n${COLOR_SUCCESS}     CONFIGURE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        pecl install xdebug
         xdebugFile=/opt/bitnami/php/etc/conf.d/xdebug.ini
 
         echo 'zend_extension=xdebug' >>$xdebugFile
@@ -104,6 +103,8 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
 
     printf "Set composer GITHUB http-basic $GITHUB_API_TOKEN\n"
     gosu $MAGENTO_DIR_USER composer config -g github-oauth.github.com $GITHUB_API_TOKEN
+
+    gosu $MAGENTO_DIR_USER composer config repositories.magento composer https://repo.magento.com
 
     # Transform string vars to array
     OLDIFS=$IFS
@@ -138,13 +139,13 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
-      php bin/magento module:enable HiPay_FullserviceMagento && \
-      php bin/magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
-      php bin/magento setup:upgrade && \
-      php bin/magento setup:di:compile && \
-      php bin/magento setup:static-content:deploy -f && \
-      php bin/magento cache:flush' $MAGENTO_DIR_USER -s /bin/bash
+    su -c 'composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data -n && \
+      magento module:enable HiPay_FullserviceMagento && \
+      magento module:enable Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
+      magento setup:upgrade && \
+      magento setup:di:compile && \
+      magento setup:static-content:deploy -f && \
+      magento cache:flush' $MAGENTO_DIR_USER -s /bin/bash
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
