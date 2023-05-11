@@ -15,16 +15,15 @@
  *
  */
 
-#hipay-container-hosted-fields-multibanco {
+#hipay-container-hosted-fields-multibanco,
+#hipay-container-hosted-fields-sisal {
   display: none;
 }
 
-.magento-table-hipay-multibanco {
-  margin: 0 0 1.41575em;
-  max-width: 50%;
+.referenceContainer {
+  text-align: center;
 }
 
-.magento-table-hipay-multibanco .magento-table-hipay-title,
-.magento-table-hipay-multibanco .magento-table-hipay-logo {
-  text-align: center;
+.referenceContainer .print {
+  margin-top: 12px;
 }

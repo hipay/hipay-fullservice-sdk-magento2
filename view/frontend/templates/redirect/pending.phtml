@@ -20,6 +20,13 @@
  * @var \HiPay\FullserviceMagento\Block\Redirect\Pending $block
  */
 ?>
+<?php
+    echo $this
+        ->getLayout()
+        ->createBlock('HiPay\FullserviceMagento\Block\ExternalJS')
+        ->setTemplate('HiPay_FullserviceMagento::additional/external_js.phtml')
+        ->toHtml()
+?>
 <div class="page-title">
     <h1><?php /* @escapeNotVerified */ echo __('Your payment is in pending.') ?></h1>
 </div>
@@ -28,40 +35,45 @@
     <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
 <?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
 <?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
-<table aria-label="magento-mutlibanco" class="magento-table magento-table-hipay-multibanco">
-    <thead>
-        <tr>
-            <th colspan="2" scope="col" class="magento-table-hipay-title">
-                <?php echo __('Pay the reference at an ATM or with your Homebanking account.')?>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th colspan="2" scope="col" class="magento-table-hipay-logo"><img id="multibanco-hipay" alt="multibanco"
-                    width="200px" src="<?php echo $referenceToPay['logo'] ?>" /></th>
-        </tr>
-        <tr>
-            <th class="magento-table-hipay-field" scope="col"><?php echo __("ENTITY") ?>:</th>
-            <th class="third-column" scope="col"><?php /* @escapeNotVerified */ echo $referenceToPay['entity'] ?></th>
-        </tr>
-        <tr>
-            <th class="magento-table-hipay-field" scope="col"><?php echo __("REFERENCE") ?>:</th>
-            <th class="magento-table-hipay-field-value" scope="col">
-                <?php /* @escapeNotVerified */ echo $referenceToPay['reference'] ?></th>
-        </tr>
-        <tr>
-            <th class="magento-table-hipay-field" scope="col"><?php echo __("AMOUNT") ?>:</th>
-            <th class="magento-table-hipay-field-value" scope="col">
-                <?php /* @escapeNotVerified */ echo $referenceToPay['amount'] ?> &euro;</th>
-        </tr>
-        <tr>
-            <th class="magento-table-hipay-field" scope="col"><?php echo __("EXPIRATION DATE") ?>:</th>
-            <th class="magento-table-hipay-field-value" scope="col">
-                <?php /* @escapeNotVerified */ echo $referenceToPay['expirationDate'] ?></th>
-        </tr>
-    </tbody>
-</table>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #referenceToPay,
+            #referenceToPay * {
+                visibility: visible;
+            }
+        }
+    </style>
+    <div class="referenceContainer">
+        <div id="referenceToPay"></div>
+        <button class="action primary checkout print" onclick="window.print()"><?php echo __("PRINT") ?></button>
+    </div>
+    <script type="text/javascript">
+        var lang = '<?php echo $block->getLang() ?>';
+        var hipaySdk = new HiPay({
+            username: 'hosted',
+            password: 'hosted',
+            environment: 'production',
+            lang: lang.length > 2 ? lang.substr(0, 2) : 'en'
+        });
+        <?php if($referenceToPay['method'] === 'multibanco') : ?>
+            hipaySdk.createReference('multibanco', {
+                selector: 'referenceToPay',
+                reference: '<?php echo $referenceToPay['reference'] ?>',
+                entity: '<?php echo $referenceToPay['entity'] ?>',
+                amount: '<?php echo $referenceToPay['amount'] ?>',
+                expirationDate: '<?php echo $referenceToPay['expirationDate'] ?>',
+            });
+        <?php else : ?>
+            hipaySdk.createReference('sisal', {
+                selector: 'referenceToPay',
+                reference: '<?php echo $referenceToPay['reference'] ?>',
+                barCode: '<?php echo $referenceToPay['barCode'] ?>'
+            });
+        <?php endif ?>
+    </script>
 <?php endif ?>
 <p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?>
 </p>
