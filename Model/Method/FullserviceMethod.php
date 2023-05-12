@@ -146,6 +146,36 @@ abstract class FullserviceMethod extends AbstractMethod
     protected static $_technicalCode;
 
     /**
+     * @var HiPay\FullserviceMagento\Model\Gateway\Factory
+     */
+    protected $_gatewayManagerFactory;
+
+    /**
+     * @var \Magento\Framework\Url
+     */
+    protected $urlBuilder;
+
+    /**
+     * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender
+     */
+    protected $fraudAcceptSender;
+
+    /**
+     * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender
+     */
+    protected $fraudDenySender;
+
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $_checkoutSession;
+
+    /**
+     * @var \HiPay\FullserviceMagento\Model\CardFactory
+     */
+    protected $_cardFactory;
+
+    /**
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository                                        $transactionRepository

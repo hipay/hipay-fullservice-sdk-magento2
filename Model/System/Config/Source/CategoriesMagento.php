@@ -27,6 +27,16 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
 {
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     */
+    protected $categoryCollectionFactory;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * CategoriesMagento constructor.
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory

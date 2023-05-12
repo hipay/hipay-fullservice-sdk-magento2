@@ -29,12 +29,13 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsMagento
      */
-    protected $shippingMethodsMagento;
+    protected $_shippingMethodsMagento;
 
     /**
      * @var \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay
      */
-    protected $shippingMethodsHipay;
+    protected $_shippingMethodsHipay;
+
 
     /**
      * Form constructor.

@@ -40,6 +40,11 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * ShippingMethodsMagento constructor.
      *
      * @param \Magento\Shipping\Model\Config                     $configShipping
