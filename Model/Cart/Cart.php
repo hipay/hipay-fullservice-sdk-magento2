@@ -45,6 +45,31 @@ class Cart extends \Magento\Payment\Model\Cart
     protected $_areAmountsValid = false;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    protected  $_eventManager;
+
+    /**
+     * @var \Magento\Payment\Model\Cart\SalesModel
+     */
+    protected $_salesModel;
+
+    /**
+     * @var bool
+     */
+    protected $_itemsCollectingRequired;
+
+    /**
+     * @var array
+     */
+    protected $_salesModelItems;
+
+    /**
+     * @vararray
+     */
+    protected $_customItems;
+
+    /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
      * @param \Magento\Framework\Event\ManagerInterface      $eventManager
      * @param \Magento\Quote\Api\Data\CartInterface          $salesModel

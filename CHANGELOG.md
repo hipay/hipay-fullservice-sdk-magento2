@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.19.1
+
+- **Fix** : Fixed issues with deprecations in PHP 8.2
+
 ## 1.19.0
 
 - **Add** : Added **Mooney** payment method using Hosted Fields

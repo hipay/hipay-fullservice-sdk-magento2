@@ -31,7 +31,7 @@ class AbstractFactory
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager = null;
+    private $objectManager;
 
     /**
      * @var string
