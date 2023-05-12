@@ -49,6 +49,11 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $methodCode = null;
 
     /**
+     * @var string
+     */
+    protected $elementName;
+
+    /**
      * Customer constructor.
      *
      * @param \Magento\Rule\Model\Condition\Context                   $context
@@ -170,7 +175,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
             ->addAttributeToFilter('customer_id', $customer_id)
             ->count();
         $toValidate->setOrdersCount($orders_count);
-        $toValidate->setCustomerIsGuest($quote->getCustomerIsGuest() === nulll ? 0 : $quote->getCustomerIsGuest());
+        $toValidate->setCustomerIsGuest($quote->getCustomerIsGuest() === null ? 0 : $quote->getCustomerIsGuest());
         $toValidate->setDiffAddresses($this->_addressesesAreDifferent($quote));
         $toValidate->setCustomerGroup($quote->getCustomerGroupId());
 

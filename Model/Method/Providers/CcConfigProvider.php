@@ -73,7 +73,15 @@ class CcConfigProvider implements ConfigProviderInterface
      */
     protected $assetSource;
 
+    /**
+     * @var Context
+     */
     protected $context;
+
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
 
     /**
      * CcConfigProvider constructor.
