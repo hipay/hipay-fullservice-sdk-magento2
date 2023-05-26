@@ -34,21 +34,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @var string
-     */
-    protected $_objectId;
-
-    /**
-     * @var string
-     */
-    protected $_blockGroup;
-
-    /**
-     * @var string
-     */
-    protected $_controller;
-
-    /**
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry           $registry
      * @param array                                 $data

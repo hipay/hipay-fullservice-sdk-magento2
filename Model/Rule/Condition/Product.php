@@ -29,11 +29,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     protected $methodCode = null;
 
     /**
-     * @var string
-     */
-    protected $elementName;
-
-    /**
      * Add special attributes
      *
      * @param  array $attributes
