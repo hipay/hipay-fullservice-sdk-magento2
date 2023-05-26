@@ -36,7 +36,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected $_shippingMethodsHipay;
 
-
     /**
      * Form constructor.
      *

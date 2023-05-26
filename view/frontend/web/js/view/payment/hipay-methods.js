@@ -111,6 +111,16 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
     },
     {
+      type: 'hipay_alma3X',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-alma3X'
+    },
+    {
+      type: 'hipay_alma4X',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-alma4X'
+    },
+    {
       type: 'hipay_facilypay3X',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay3X'

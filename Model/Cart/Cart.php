@@ -47,7 +47,7 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected  $_eventManager;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Payment\Model\Cart\SalesModel
@@ -62,12 +62,12 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * @var array
      */
-    protected $_salesModelItems;
+    protected $_salesModelItems = [];
 
     /**
-     * @vararray
+     * @var array
      */
-    protected $_customItems;
+    protected $_customItems = [];
 
     /**
      * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
