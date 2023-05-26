@@ -60,11 +60,6 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $methodCode = null;
 
     /**
-     * @var string
-     */
-    protected $elementName;
-
-    /**
      * Address constructor.
      *
      * @param \Magento\Rule\Model\Condition\Context               $context

@@ -36,11 +36,6 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     protected $methodCode = null;
 
     /**
-     * @var string
-     */
-    protected $elementName;
-
-    /**
      * Combine constructor.
      *
      * @param \Magento\Rule\Model\Condition\Context                  $context

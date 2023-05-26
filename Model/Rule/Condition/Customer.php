@@ -49,11 +49,6 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     protected $methodCode = null;
 
     /**
-     * @var string
-     */
-    protected $elementName;
-
-    /**
      * Customer constructor.
      *
      * @param \Magento\Rule\Model\Condition\Context                   $context
