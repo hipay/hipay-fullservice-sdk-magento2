@@ -73,6 +73,8 @@
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
+                <item name="hipay_alma3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Alma3X::HIPAY_METHOD_CODE</item>
+                <item name="hipay_alma4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Alma4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay3X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong::HIPAY_METHOD_CODE</item>
