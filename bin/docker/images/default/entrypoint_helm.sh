@@ -89,7 +89,6 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         printf "\n${COLOR_SUCCESS}     ENABLE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-        pecl install xdebug
         xdebugFile=/opt/bitnami/php/etc/conf.d/xdebug.ini
 
         echo 'zend_extension=xdebug' >>$xdebugFile
