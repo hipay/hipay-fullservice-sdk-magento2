@@ -31,11 +31,6 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-fields'
     },
     {
-      type: 'hipay_hostedsplit',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
-    },
-    {
       type: 'hipay_applepay',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-applepay'
