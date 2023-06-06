@@ -224,10 +224,12 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
 
         $this->save();
 
-        if($this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED){
+        if ($this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED) {
             try {
                 $this->sendErrorEmail();
-            } catch(\Exception $e){}
+            } catch (\Exception $e) {
+                unset($e);
+            }
         }
 
         if ($exception) {
