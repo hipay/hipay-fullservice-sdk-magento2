@@ -5,6 +5,7 @@
 - **Add** : Added support for new payment means :
   - Alma 3x
   - Alma 4x
+- **Add** : Removed Split Payment method. Existing split payments are still processed normally.
 
 ## 1.19.1
 

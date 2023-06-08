@@ -65,7 +65,7 @@ elif [ "$1" = 'di' ]; then
 elif [ "$1" = "db" ]; then
     docker exec -ti $containerMG2 mariadb -u bn_magento -D bitnami_magento -h mariadb
 elif [ "$1" = 'command' ]; then
-    docker exec $containerMG2 gosu daemon php bin/magento $2
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento $2
 elif [ "$1" = 'l' ]; then
     docker compose logs -f
 elif [ "$1" = 'install' ]; then
