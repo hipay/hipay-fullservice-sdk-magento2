@@ -73,7 +73,7 @@ spec:
           persistentVolumeClaim:
             claimName: mysql-pv-claim-{{ .Release.Name }}
       nodeSelector:
-        node_type: default
+        node_pool: default
       tolerations:
         - key: cd_service
           operator: Equal
