@@ -107,9 +107,6 @@
         <method name="hipay_creditlong_opc4">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
-        <method name="hipay_klarna">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
         <method name="hipay_bnpp3X">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

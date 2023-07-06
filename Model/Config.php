@@ -19,10 +19,8 @@ namespace HiPay\FullserviceMagento\Model;
 use HiPay\FullserviceMagento\Model\Config\AbstractConfig;
 use HiPay\FullserviceMagento\Model\Method\ApplePay;
 use HiPay\FullserviceMagento\Model\System\Config\Source\Environments;
-use HiPay\FullserviceMagento\Model\System\Config\Source\HostedpageVersion;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions;
 use HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct;
-use HiPay\FullserviceMagento\Model\System\Config\Source\Templates;
 use HiPay\Fullservice\HTTP\Configuration\Configuration as ConfigSDK;
 use HiPay\Fullservice\HTTP\Configuration\ConfigurationInterface;
 
@@ -148,8 +146,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
 
-        $hostedpagev2 = $this->getHostedpageVersion() === HostedpageVersion::V2 ? true : false;
-
         try {
             $env = $this->getApiEnv();
             if ($env == null) {
@@ -162,7 +158,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
                     'apiEnv' => $env,
                     'apiHTTPHeaderAccept' => 'application/json',
                     'proxy' => $this->getProxy(),
-                    'hostedPageV2' => $hostedpagev2
+                    'hostedPageV2' => true
                 ]
             );
         } catch (\Exception $e) {
@@ -210,16 +206,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
     public function isMoto()
     {
         return (bool) $this->getOrder()->getPayment()->getAdditionalInformation('is_moto') ?: false;
-    }
-
-    /**
-     * Templates type source getter
-     *
-     * @return array
-     */
-    public function getTemplates()
-    {
-        return (new Templates())->getTemplates();
     }
 
     /**
@@ -939,12 +925,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         if ($this->_configSDK !== null) {
             $this->_configSDK->setHostedPageV2($hostedPageV2);
         }
-    }
-
-    public function getHostedpageVersion()
-    {
-        $key = 'hostedpage_version';
-        return $this->getGeneraleValue($key, 'hipay_hostedpage');
     }
 
     public function isNotificationCronActive()

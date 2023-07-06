@@ -34,14 +34,6 @@
             <label>Period of validity of the payment page</label>
             <comment>In hours</comment>
         </field>
-        <field id="css_url" translate="label comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
-            <label>Custom CSS url</label>
-            <comment>Important, HTTPS protocol is required</comment>
-        </field>
-        <field id="template" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
-            <label>Template type</label>
-            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Templates</source_model>
-        </field>
         <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
             <label>Display hosted page in Iframe</label>
             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

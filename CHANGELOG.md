@@ -6,6 +6,8 @@
   - Alma 3x
   - Alma 4x
 - **Add** : Removed Split Payment method. Existing split payments are still processed normally.
+- **Add** : Removed Hosted Page v1 option
+- **Add** : Removed unsupported Klarna Invoice payment method
 
 ## 1.19.1
 
