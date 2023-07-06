@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.20.0
 
 - **Add** : Added support for new payment means :
   - Alma 3x
@@ -8,6 +8,7 @@
 - **Add** : Removed Split Payment method. Existing split payments are still processed normally.
 - **Add** : Removed Hosted Page v1 option
 - **Add** : Removed unsupported Klarna Invoice payment method
+- **Fix** : Fixed issues with deprecations in PHP 8.2
 
 ## 1.19.1
 
