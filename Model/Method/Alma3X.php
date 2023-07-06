@@ -14,35 +14,34 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\System\Config\Source;
+namespace HiPay\FullserviceMagento\Model\Method;
 
 /**
- * Source model for available templates type
+ * Alma 3X payment method
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Templates implements \Magento\Framework\Option\ArrayInterface
+class Alma3X extends AbstractMethodAPI
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function toOptionArray()
-    {
-        return $this->getTemplates();
-    }
+    public const HIPAY_METHOD_CODE = 'hipay_alma3X';
 
     /**
-     * Templates type source getter
-     *
-     * @return array
+     * @var string
      */
-    public function getTemplates()
-    {
-        return [
-            \HiPay\Fullservice\Enum\Transaction\Template::BASIC_JS => __('Basic JS'),
-        ];
-    }
+    protected static $_technicalCode = 'alma-3x';
+
+    /**
+     * @var string
+     */
+    protected $_code = self::HIPAY_METHOD_CODE;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canUseInternal = false;
 }

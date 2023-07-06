@@ -214,17 +214,23 @@ class SplitPayment extends \Magento\Framework\Model\AbstractModel
                 case TransactionState::ERROR:
                 default:
                     $this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
-                    $this->sendErrorEmail();
                     break;
             }
         } catch (\Exception $e) {
             $this->setStatus(self::SPLIT_PAYMENT_STATUS_FAILED);
-            $this->sendErrorEmail();
-
             $exception = $e;
         }
         $this->setAttempts($this->getAttempts() + 1);
+
         $this->save();
+
+        if ($this->getStatus() == self::SPLIT_PAYMENT_STATUS_FAILED) {
+            try {
+                $this->sendErrorEmail();
+            } catch (\Exception $e) {
+                unset($e);
+            }
+        }
 
         if ($exception) {
             throw $exception;

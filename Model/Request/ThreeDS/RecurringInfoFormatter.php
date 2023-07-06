@@ -77,7 +77,7 @@ class RecurringInfoFormatter extends AbstractRequest
 
         $recurringInfo->frequency = $this->getFrequencyDays();
 
-        $recurringInfo->expiration_date = $this->getExpirationDate();
+//        $recurringInfo->expiration_date = $this->getExpirationDate();
 
         return $recurringInfo;
     }

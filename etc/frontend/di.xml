@@ -73,13 +73,14 @@
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
+                <item name="hipay_alma3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Alma3X::HIPAY_METHOD_CODE</item>
+                <item name="hipay_alma4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Alma4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay3X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_facilypay4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLong::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong_opc2" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc2::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong_opc3" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc3::HIPAY_METHOD_CODE</item>
                 <item name="hipay_creditlong_opc4" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\CreditLongOpc4::HIPAY_METHOD_CODE</item>
-                <item name="hipay_klarna" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Klarna::HIPAY_METHOD_CODE</item>
                 <item name="hipay_bnpp4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Bnpp\Bnpp4X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_bnpp3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Bnpp\Bnpp3X::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mybank" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mybank::HIPAY_METHOD_CODE</item>

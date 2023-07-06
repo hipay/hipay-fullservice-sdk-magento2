@@ -31,11 +31,6 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-fields'
     },
     {
-      type: 'hipay_hostedsplit',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted-split'
-    },
-    {
       type: 'hipay_applepay',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-applepay'
@@ -111,6 +106,16 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-mbway'
     },
     {
+      type: 'hipay_alma3X',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-alma3X'
+    },
+    {
+      type: 'hipay_alma4X',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-alma4X'
+    },
+    {
       type: 'hipay_facilypay3X',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-facilypay3X'
@@ -139,11 +144,6 @@ define([
       type: 'hipay_creditlong_opc4',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-creditlong_opc4'
-    },
-    {
-      type: 'hipay_klarna',
-      component:
-        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'
     },
     {
       type: 'hipay_bnpp4X',

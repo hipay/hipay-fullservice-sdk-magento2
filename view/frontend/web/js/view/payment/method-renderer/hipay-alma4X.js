@@ -25,7 +25,7 @@ define([
     },
 
     getCode: function () {
-      return 'hipay_klarna';
+      return 'hipay_alma4X';
     },
     isActive: function () {
       return true;

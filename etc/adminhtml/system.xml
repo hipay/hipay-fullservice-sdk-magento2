@@ -23,7 +23,6 @@
             <label>HiPay Enterprise</label>
             <tab>sales</tab>
             <resource>HiPay_FullserviceMagento::hipay</resource>
-            <include path="HiPay_FullserviceMagento::system/hostedpage.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_tokenjs.xml"/>
@@ -39,7 +38,6 @@
             <include path="HiPay_FullserviceMagento::system/method/hosted.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/hosted-moto.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/hosted_fields.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/hosted-split.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/applepay.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sisal_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sisal.xml"/>
@@ -55,13 +53,14 @@
             <include path="HiPay_FullserviceMagento::system/method/przelewy24.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sdd.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sofort.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/alma3X.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/alma4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong_opc2.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong_opc3.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/creditlong_opc4.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/klarna.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/bnpp4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/mybank.xml"/>

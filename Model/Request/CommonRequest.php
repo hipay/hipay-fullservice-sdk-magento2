@@ -195,8 +195,8 @@ abstract class CommonRequest extends BaseRequest
             $discount = $item->getDataUsingMethod('discount');
 
             /**
- * @var \HiPay\Fullservice\Gateway\Model\Cart\Item
-*/
+             * @var \HiPay\Fullservice\Gateway\Model\Cart\Item
+            */
             switch ($item->getType()) {
                 case TypeItems::GOOD:
                     $product = $this->_productRepositoryInterface->getById($productId);

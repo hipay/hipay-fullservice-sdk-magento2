@@ -83,6 +83,12 @@
         <method name="hipay_sofortapi">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_alma3X">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="hipay_alma4X">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="hipay_facilypay3X">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
@@ -99,9 +105,6 @@
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_creditlong_opc4">
-            <allow_multiple_address>0</allow_multiple_address>
-        </method>
-        <method name="hipay_klarna">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="hipay_bnpp3X">

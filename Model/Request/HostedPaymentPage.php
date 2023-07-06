@@ -45,18 +45,14 @@ class HostedPaymentPage extends Order
         //Inherit from parent class Order but no used in this pbject request
         unset($hppRequest->payment_product);
 
-        $hppRequest->css = $this->_config->getValue('css_url');
         $hppRequest->template = ((bool)$this->_config->getValue('iframe_mode') && !$this->_config->isAdminArea()) ?
-            'iframe-js' : $this->_config->getValue('template');
+            'iframe' : 'material';
 
         $hppRequest->payment_product_list = implode(",", $this->_config->getPaymentProductsList());
 
         $hppRequest->payment_product_category_list = implode(",", $this->_config->getPaymentProductCategoryList());
 
         $hppRequest->time_limit_to_pay = (int)($this->_config->getValue('time_limit_to_pay') * 3600);
-
-        //Add display selector value. #TPPMAG2-68
-        $hppRequest->display_selector = $this->_config->getValue('display_selector');
 
         if ($this->_order->getPayment()->getAdditionalInformation('create_oneclick')) {
             $hppRequest->multi_use = 1;
