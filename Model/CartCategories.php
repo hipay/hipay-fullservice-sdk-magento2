@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model;
 
 /**
- * Hipay Payment profile data model
+ * Hipay Cart categories data model
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay

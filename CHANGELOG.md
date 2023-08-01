@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.21.0
+
+- **Add** : Fully removed split payment processing.
+
 ## 1.20.0
 
 - **Add** : Added support for new payment means :

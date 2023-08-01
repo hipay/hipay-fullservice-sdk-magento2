@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories;
 
 /**
- * Payment profile resource Collection
+ * Collection
  *
  * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay

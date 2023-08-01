@@ -18,7 +18,6 @@ namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
 use HiPay\FullserviceMagento\Model\Method\CcMethod;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
-use HiPay\FullserviceMagento\Model\Method\HostedSplitMethod;
 use HiPay\FullserviceMagento\Model\Method\Context as Context;
 use HiPay\FullserviceMagento\Model\System\Config\Source\CcType;
 use Magento\Payment\Model\CcConfig;
@@ -41,8 +40,7 @@ class CcConfigProvider implements ConfigProviderInterface
      */
     protected $methods =  [
         CcMethod::HIPAY_METHOD_CODE,
-        HostedFieldsMethod::HIPAY_METHOD_CODE,
-        HostedSplitMethod::HIPAY_METHOD_CODE
+        HostedFieldsMethod::HIPAY_METHOD_CODE
     ];
     /**
      * @var CcConfig

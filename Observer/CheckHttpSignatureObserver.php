@@ -191,10 +191,6 @@ class CheckHttpSignatureObserver implements ObserverInterface
             $orderId = $request->getParam('orderid', 0);
         } elseif (($o = $request->getParam('order', [])) && isset($o['id'])) {
             $orderId = $o['id'];
-
-            if (strpos($o['id'], '-split-') !== false) {
-                return explode("-", $o['id'] ?: '')[0];
-            }
         }
         return $orderId;
     }

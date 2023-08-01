@@ -40,28 +40,14 @@ class ThreeDSTwo extends AbstractHelper
 
     protected $_session;
 
-    /**
-     * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $_spFactory
-     */
-    protected $_ppFactory;
-
-    /**
-     * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $_spFactory
-     */
-    protected $_spFactory;
-
     public function __construct(
         Context $context,
         \Magento\Customer\Model\Session $session,
-        CollectionFactory $orderCollectionFactory,
-        \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
-        \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
+        CollectionFactory $orderCollectionFactory
     ) {
         parent::__construct($context);
         $this->_session = $session;
         $this->_orderCollectionFactory = $orderCollectionFactory;
-        $this->_ppFactory = $ppFactory;
-        $this->_spFactory = $spFactory;
     }
 
     public function isCustomerLoggedIn()
@@ -197,52 +183,6 @@ class ThreeDSTwo extends AbstractHelper
         }
 
         return true;
-    }
-
-    /**
-     * @param  $profileId
-     * @return mixed
-     * @throws LocalizedException
-     */
-    public function getPaymentProfile($profileId)
-    {
-        $profile = $this->_ppFactory->create();
-        $profile->load($profileId);
-
-        if (!$profile->getId()) {
-            throw new LocalizedException(__('Payment Profile not found.'));
-        }
-
-        return $profile;
-    }
-
-    /**
-     * @param  $orderId
-     * @return \Magento\Framework\DataObject
-     * @throws LocalizedException
-     */
-    public function getLastOrderSplitPayment($orderId)
-    {
-        $splitPayments = $this->getOrderSplitPaymentCollection($orderId);
-
-        return $splitPayments->getLastItem();
-    }
-
-    /**
-     * @param  $orderId
-     * @return bool|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     */
-    public function getOrderSplitPaymentCollection($orderId)
-    {
-        $splitPayments = $this->_spFactory->create()->getCollection()
-            ->addFieldToFilter('order_id', $orderId)
-            ->setOrder('date_to_pay', 'asc');
-
-        if (count($splitPayments->getItems()) === 0) {
-            return false;
-        }
-
-        return $splitPayments;
     }
 
     private function isDifferentAddresses($shipping, $billing)

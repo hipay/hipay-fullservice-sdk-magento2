@@ -61,7 +61,6 @@ class Order extends CommonRequest
     );
 
     protected $_cardPaymentMethod = array(
-        'hipay_hostedsplit',
         'hipay_hosted_fields',
         'hipay_hosted',
         'hipay_hostedmoto'
@@ -383,20 +382,6 @@ class Order extends CommonRequest
         )->getRequestObject();
 
         $orderRequest->device_channel = $this->getDeviceChannel();
-
-        if ($this->isSplitPayment()) {
-            $orderRequest->recurring_info = $this->_requestFactory->create(
-                '\HiPay\FullserviceMagento\Model\Request\ThreeDS\RecurringInfoFormatter',
-                [
-                    'params' =>
-                        [
-                            'order' => $this->_order,
-                            'config' => $this->_config,
-                            'profile_id' => $this->_order->getPayment()->getAdditionalInformation('profile_id')
-                        ]
-                ]
-            )->getRequestObject();
-        }
     }
 
     /**
@@ -404,19 +389,7 @@ class Order extends CommonRequest
      */
     public function getDeviceChannel()
     {
-        if ($this->isSplitPayment() && $this->_order->getForcedSplitId() !== null) {
-            return DeviceChannel::THREE_DS_REQUESTOR_INITIATED;
-        }
-
         return DeviceChannel::BROWSER;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isSplitPayment()
-    {
-        return $this->_order->getPayment()->getAdditionalInformation('profile_id') !== null;
     }
 
     /**

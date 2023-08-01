@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model;
 
 /**
- * Hipay Payment profile data model
+ * Hipay Shipping map data model
  *
  * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay

@@ -19,9 +19,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="hipay_pay_split_payment" instance="HiPay\FullserviceMagento\Cron\PaySplitPayment" method="execute">
-            <schedule>0 1 * * *</schedule>
-        </job>
         <job name="hipay_clean_pending_orders" instance="HiPay\FullserviceMagento\Cron\CleanPendingOrders" method="execute">
             <schedule>*/15 * * * *</schedule>
         </job>
