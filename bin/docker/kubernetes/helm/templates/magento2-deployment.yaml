@@ -81,9 +81,6 @@ spec:
         name: magento2-{{ .Release.Name }}
         resources:
           requests:
-            memory: "4G"
-            cpu: "1000m"
-          limits:
             memory: "5G"
             cpu: "1200m"
         envFrom:
@@ -92,10 +89,3 @@ spec:
         ports:
           - containerPort: 80
             name: magento2
-      nodeSelector:
-        node_pool: default
-      tolerations:
-        - key: cd_service
-          operator: Equal
-          value: only
-          effect: NoExecute
