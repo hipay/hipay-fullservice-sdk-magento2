@@ -1,6 +1,6 @@
 FROM bitnami/magento:2.4.6
 
-RUN apt update && apt upgrade -y && apt install curl php-dev gosu -y
+RUN apt update && apt upgrade -y && apt install curl php-dev gosu git unzip -y
 
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \

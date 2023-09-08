@@ -598,7 +598,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     public function isBasketForcedDisabled()
     {
-        return in_array($this->_methodCode, ['hipay_hostedsplit']);
+        return false;
     }
 
     /**

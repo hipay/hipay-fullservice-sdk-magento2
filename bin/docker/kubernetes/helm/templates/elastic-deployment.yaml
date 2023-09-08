@@ -53,9 +53,6 @@ spec:
         name: elastic-{{ .Release.Name }}
         resources:
           requests:
-            memory: "2G"
-            cpu: "500m"
-          limits:
             memory: "2.5G"
             cpu: "1000m"
         envFrom:
@@ -68,10 +65,3 @@ spec:
         - name: elastic-persistent-storage-{{ .Release.Name }}
           persistentVolumeClaim:
             claimName: elastic-pv-claim-{{ .Release.Name }}
-      nodeSelector:
-        node_pool: default
-      tolerations:
-        - key: cd_service
-          operator: Equal
-          value: only
-          effect: NoExecute

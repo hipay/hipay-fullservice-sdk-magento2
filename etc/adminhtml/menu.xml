@@ -24,9 +24,6 @@
              module="HiPay_FullserviceMagento" sortOrder="51" resource="HiPay_FullserviceMagento::hipay_payment"/>
         <add id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Entreprise" module="HiPay_FullserviceMagento"
              sortOrder="20" parent="Magento_Sales::sales" resource="HiPay_FullserviceMagento::hipay_payment"/>
-        <add id="HiPay_FullserviceMagento::hipay_split_payment" title="Split Payment" module="HiPay_FullserviceMagento"
-             sortOrder="20" parent="HiPay_FullserviceMagento::hipay_payment_menu" action="hipay/splitpayment"
-             resource="HiPay_FullserviceMagento::hipay_split_payment"/>
         <add id="HiPay_FullserviceMagento::hipay_mapping_categories" title="Mapping Categories"
              module="HiPay_FullserviceMagento" sortOrder="30" parent="HiPay_FullserviceMagento::hipay_payment_menu"
              action="hipay/cartcategories" resource="HiPay_FullserviceMagento::hipay_cart_categories"/>

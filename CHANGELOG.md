@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.21.0
+
+- **Add** : Fully removed split payment processing.
+- **Add** : Add cancel button option for hosted page.
+
 ## 1.20.0
 
 - **Add** : Added support for new payment means :

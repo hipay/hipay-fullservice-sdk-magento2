@@ -92,36 +92,6 @@ class Notify
     protected $_cardFactory;
 
     /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory
-     */
-    protected $ppFactory;
-
-    /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory
-     */
-    protected $spFactory;
-
-    /**
-     *
-     * @var bool $isSplitPayment
-     */
-    protected $isSplitPayment = false;
-
-    /**
-     *
-     * @var bool $isFirstSplitPayment
-     */
-    protected $isFirstSplitPayment = false;
-
-    /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\SplitPayment $splitPayment
-     */
-    protected $splitPayment;
-
-    /**
      * @var ResourceOrder $orderResource
      */
     protected $orderResource;
@@ -159,8 +129,6 @@ class Notify
         FraudReviewSender $fraudReviewSender,
         FraudDenySender $fraudDenySender,
         \Magento\Payment\Helper\Data $paymentHelper,
-        \HiPay\FullserviceMagento\Model\PaymentProfileFactory $ppFactory,
-        \HiPay\FullserviceMagento\Model\SplitPaymentFactory $spFactory,
         ResourceOrder $orderResource,
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
@@ -174,9 +142,6 @@ class Notify
         $this->fraudReviewSender = $fraudReviewSender;
         $this->fraudDenySender = $fraudDenySender;
 
-        $this->ppFactory = $ppFactory;
-        $this->spFactory = $spFactory;
-
         $this->orderResource = $orderResource;
         $this->_transactionDB = $_transactionDB;
         $this->priceCurrency = $priceCurrency;
@@ -188,19 +153,6 @@ class Notify
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
-            if (strpos($incrementId, '-split-') !== false) {
-                list($realIncrementId, , $splitPaymentId) = explode("-", $incrementId ?: '');
-                $params['response']['order']['id'] = $realIncrementId;
-                $this->isSplitPayment = true;
-                $this->splitPayment = $this->spFactory->create();
-                $this->splitPayment->load((int)$splitPaymentId);
-
-                if (!$this->splitPayment->getId()) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __(sprintf('Wrong Split Payment ID: "%s".', $splitPaymentId))
-                    );
-                }
-            }
 
             $this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
 
@@ -214,10 +166,6 @@ class Notify
                 );
             }
 
-            if ($this->_order->getPayment()->getAdditionalInformation('profile_id') && !$this->isSplitPayment) {
-                $this->isFirstSplitPayment = true;
-            }
-
             //Retieve method model
             $this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
 
@@ -228,20 +176,6 @@ class Notify
                 __('Posted data response as array is required.')
             );
         }
-    }
-
-    public function processSplitPayment()
-    {
-        $amount = $this->_order->getOrderCurrency()->formatPrecision(
-            $this->splitPayment->getAmountToPay(),
-            2,
-            [],
-            false
-        );
-        $this->_doTransactionMessage(
-            __('Split Payment #%1. %2 %3.', $this->splitPayment->getId(), $amount, $this->_transaction->getMessage())
-        );
-        return $this;
     }
 
     protected function canProcessTransaction()
@@ -348,11 +282,6 @@ class Notify
 
     public function processTransaction()
     {
-        if ($this->isSplitPayment) {
-            $this->processSplitPayment();
-            return $this;
-        }
-
         if (!$this->canProcessTransaction()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(sprintf(
@@ -461,13 +390,6 @@ class Notify
                 // Skip magento fraud checking
                 $this->_doTransactionCapture(true);
 
-                /**
-                 * save split payments
-                 */
-                if (!$this->orderAlreadySplit()) {
-                    $this->insertSplitPayment();
-                }
-
                 break;
             case TransactionStatus::REFUND_REQUESTED:
                 // status : 124
@@ -575,87 +497,6 @@ class Notify
         //Save the last status
         $this->_order->getPayment()->setAdditionalInformation('last_status', $lastStatus);
         $this->_order->save();
-    }
-
-    protected function orderAlreadySplit()
-    {
-        /**
-         * @var $splitPayments \HiPay\FullserviceMagento\Model\ResourceModel\SplitPayment\Collection
-         */
-        $splitPayments = $this->spFactory->create()->getCollection()->addFieldToFilter(
-            'order_id',
-            $this->_order->getId()
-        );
-        if ($splitPayments->count()) {
-            return true;
-        }
-        return false;
-    }
-
-    protected function insertSplitPayment()
-    {
-        //Check if it is split payment and insert it
-        if (($profileId = (int)$this->_order->getPayment()->getAdditionalInformation('profile_id'))) {
-            $profile = $this->ppFactory->create();
-            $profile->load($profileId);
-            if ($profile->getId()) {
-                $amount = $this->_order->getBaseGrandTotal();
-                if ($this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()) {
-                    $amount = $this->_order->getGrandTotal();
-                }
-
-                $orderCreatedAt = new \DateTime($this->_order->getCreatedAt() ?: '');
-
-                $splitAmounts = $profile->splitAmount($amount, $orderCreatedAt);
-                $splitAmountsCount = count($splitAmounts);
-
-                /**
-                 * @var $splitPayment \HiPay\FullserviceMagento\Model\SplitPayment
-                */
-                for ($i = 0; $i < $splitAmountsCount; $i++) {
-                    $splitPayment = $this->spFactory->create();
-
-                    $splitPayment->setAmountToPay($splitAmounts[$i]['amountToPay']);
-                    $splitPayment->setAttempts($i == 0 ? 1 : 0);
-                    $splitPayment->setCardToken($this->_transaction->getPaymentMethod()->getToken());
-                    $splitPayment->setCustomerId($this->_order->getCustomerId());
-                    $splitPayment->setDateToPay($splitAmounts[$i]['dateToPay']);
-                    $splitPayment->setMethodCode($this->_order->getPayment()->getMethod());
-                    $splitPayment->setRealOrderId($this->_order->getIncrementId());
-                    $splitPayment->setOrderId($this->_order->getId());
-                    $splitPayment->setStatus(
-                        $i == 0 ? SplitPayment::SPLIT_PAYMENT_STATUS_COMPLETE :
-                            SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
-                    );
-                    $splitPayment->setProfileId($profileId);
-                    if (
-                        $this->_transaction->getCurrency() != $this->_order->getBaseCurrencyCode()
-                    ) {
-                        $splitPayment->setBaseGrandTotal($this->_order->getGrandTotal());
-                        $splitPayment->setBaseCurrencyCode($this->_transaction->getCurrency());
-                    } else {
-                        $splitPayment->setBaseGrandTotal($this->_order->getBaseGrandTotal());
-                        $splitPayment->setBaseCurrencyCode($this->_order->getBaseCurrencyCode());
-                    }
-
-                    try {
-                        $splitPayment->save();
-                    } catch (\Exception $e) {
-                        if ($this->_order->canHold()) {
-                            $this->_order->hold();
-                        }
-                        $this->_doTransactionMessage(
-                            __('Order held because an error occurred while saving one of the split payments')
-                        );
-                    }
-                }
-            } else {
-                if ($this->_order->canHold()) {
-                    $this->_order->hold();
-                }
-                $this->_doTransactionMessage(__('Order held because split payments was not saved!'));
-            }
-        }
     }
 
     protected function _canSaveCc()
@@ -1018,10 +859,6 @@ class Notify
             ->setCurrencyCode($this->_transaction->getCurrency())
             ->setIsTransactionClosed(0)
             ->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
-
-        if (($this->isFirstSplitPayment || $this->isSplitPayment) && $payment->getIsFraudDetected()) {
-            $payment->setIsFraudDetected(false);
-        }
 
         if (!$this->_order->getEmailSent()) {
             $this->orderSender->send($this->_order);

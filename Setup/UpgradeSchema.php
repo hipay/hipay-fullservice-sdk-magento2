@@ -155,7 +155,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     60,
                     [
                         'nullable' => false,
-                        'default' => \HiPay\FullserviceMagento\Model\SplitPayment::SPLIT_PAYMENT_STATUS_PENDING
+                        'default' => 'pending'
                     ],
                     'Type of payment'
                 );
@@ -324,6 +324,18 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
 
             $setup->getConnection()->createTable($table);
+        }
+
+        if (version_compare($context->getVersion(), '1.21.0', '<')) {
+
+            /**
+             * Drop split related tables
+             */
+            $paymentProfileTable = $setup->getTable('hipay_payment_profile');
+            $splitPaymentTable = $setup->getTable('hipay_split_payment');
+
+            $setup->getConnection()->dropTable($splitPaymentTable);
+            $setup->getConnection()->dropTable($paymentProfileTable);
         }
 
         $this->installShippingMappingTable($setup, $context);

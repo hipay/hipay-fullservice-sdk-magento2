@@ -24,11 +24,6 @@
                 <resource id="HiPay_FullserviceMagento::hipay_payment" title="HiPay Payment" sortOrder="10">
                     <resource id="HiPay_FullserviceMagento::hipay_mapping_shipping"  title="Manage shipping categories" sortOrder="40" />
                     <resource id="HiPay_FullserviceMagento::hipay_cart_categories"  title="Manage cart categories" sortOrder="30" />
-                    <resource id="HiPay_FullserviceMagento::hipay_split_payment"  title="Split Payment" sortOrder="20" >
-                        <resource id="HiPay_FullserviceMagento::split_save" title="Save split payment" sortOrder="10" />
-                        <resource id="HiPay_FullserviceMagento::split_delete" title="Delete split payment" sortOrder="20" />
-                        <resource id="HiPay_FullserviceMagento::split_pay" title="Pay split payment" sortOrder="30" />
-                    </resource>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

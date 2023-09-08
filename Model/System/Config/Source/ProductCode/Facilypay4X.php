@@ -17,7 +17,6 @@
 namespace HiPay\FullserviceMagento\Model\System\Config\Source\ProductCode;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use HiPay\FullserviceMagento\Model\SplitPayment;
 
 /**
  * FacilY Pay 4X product code

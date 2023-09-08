@@ -58,6 +58,9 @@ class HostedPaymentPage extends Order
             $hppRequest->multi_use = 1;
         }
 
+        $hppRequest->display_cancel_button =
+            $this->_config->getGeneraleValue('cancel_button', 'hipay_hosted_page_management');
+
         return $hppRequest;
     }
 }
