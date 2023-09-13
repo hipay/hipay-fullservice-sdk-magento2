@@ -128,7 +128,9 @@ class CleanPendingOrders
 
         foreach ($websites as $website) {
             $websiteId = $website->getId();
+            $this->logger->info('Cleaning pending order for website ' . $websiteId);
             $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
+
 
             $methodCodes = $this->getHipayMethods($websiteId);
             $hostedMethodCodes = $this->getHostedHipayMethods($websiteId);
@@ -206,7 +208,8 @@ class CleanPendingOrders
                                 ->addStatusToHistory(
                                     $order->getStatus(),
                                     __(
-                                        'Order canceled automatically by cron because order is pending since %1 minutes',
+                                        'Order canceled automatically by cron because order ' .
+                                        'is pending since %1 minutes',
                                         $messageInterval
                                     )
                                 );
@@ -247,7 +250,6 @@ class CleanPendingOrders
                     $methods[] = $code;
             }
         }
-        
 
         return $methods;
     }
