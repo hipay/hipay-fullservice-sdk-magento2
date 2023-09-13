@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.21.1 - UNRELEASED
+
+- **Fix** : Fixed CRON for cleaning pending orders to support multi websites
+- **Fix** : Fixed reference to pay rendering
+
 ## 1.21.0
 
 - **Add** : Fully removed split payment processing.
