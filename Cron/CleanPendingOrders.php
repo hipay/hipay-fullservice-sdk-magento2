@@ -131,7 +131,6 @@ class CleanPendingOrders
             $this->logger->info('Cleaning pending order for website ' . $websiteId);
             $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
 
-
             $methodCodes = $this->getHipayMethods($websiteId);
             $hostedMethodCodes = $this->getHostedHipayMethods($websiteId);
 
