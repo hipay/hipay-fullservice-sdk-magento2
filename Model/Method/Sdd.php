@@ -31,7 +31,7 @@ use Magento\Directory\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Sdd extends FullserviceMethod
+class Sdd extends LocalHostedFields
 {
     public const HIPAY_METHOD_CODE = 'hipay_sdd';
 
