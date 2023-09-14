@@ -101,6 +101,9 @@ class Pending extends \Magento\Framework\View\Element\Template
             $order->load($lastOrderId);
             $referenceToPay = $order->getPayment()->getAdditionalInformation('reference_to_pay');
             if ($referenceToPay) {
+                if (is_string($referenceToPay)) {
+                    $referenceToPay = json_decode($referenceToPay, true);
+                }
                 $referenceToPay['method'] = $order->getPayment()->getCcType();
                 if ($referenceToPay['method'] === 'multibanco') {
                     $referenceToPay['logo'] =
