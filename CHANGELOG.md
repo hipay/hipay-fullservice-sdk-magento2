@@ -4,6 +4,7 @@
 
 - **Fix** : Fixed CRON for cleaning pending orders to support multi websites
 - **Fix** : Fixed reference to pay rendering
+- **Fix** : Fix translations
 - **Add** : Added IT translation
 
 ## 1.21.0
