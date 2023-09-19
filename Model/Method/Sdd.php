@@ -60,7 +60,6 @@ class Sdd extends LocalHostedFields
     protected $_additionalInformationKeys = [
         'sdd_gender',
         'sdd_bank_name',
-        'sdd_code_bic',
         'sdd_iban',
         'sdd_firstname',
         'sdd_lastname',
@@ -90,58 +89,6 @@ class Sdd extends LocalHostedFields
         $info = $this->getInfoInstance();
         $info->setCcType($additionalData->getCcType());
 
-        return $this;
-    }
-
-    /**
-     * Validate payment method information object
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function validate()
-    {
-        /**
-         * Calling parent validate function
-         */
-        parent::validate();
-        $info = $this->getInfoInstance();
-
-        if (!$info->getCcType()) {
-            return $this;
-        }
-
-        $errorMsg = '';
-
-        // Get iso code from order or quote ( Validate is called twice per magento core )
-        $order = $info->getQuote();
-        if ($info->getOrder()) {
-            $order = $info->getOrder();
-        }
-
-        // Instantiate validators for the model
-        $validatorIban = new \Zend\Validator\Iban(
-            array('country_code' => $order->getBillingAddress()->getCountryId())
-        );
-        $validatorEmpty = new \Zend\Validator\NotEmpty();
-
-        if (!$validatorIban->isValid($info->getAdditionalInformation('sdd_iban'))) {
-            $errorMsg = __('Iban is not correct, please enter a valid Iban.');
-        } else {
-            if (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_firstname'))) {
-                $errorMsg = __('Firstname is mandatory.');
-            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_lastname'))) {
-                $errorMsg = __('Lastname is mandatory.');
-            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_code_bic'))) {
-                $errorMsg = __('Code BIC is not correct, please enter a valid Code BIC.');
-            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_bank_name'))) {
-                $errorMsg = __('Bank name is not correct, please enter a valid Bank name.');
-            }
-        }
-
-        if ($errorMsg) {
-            throw new \Magento\Framework\Exception\LocalizedException($errorMsg);
-        }
         return $this;
     }
 }
