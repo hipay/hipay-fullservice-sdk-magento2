@@ -1,9 +1,11 @@
 # Changelog
 
-## 1.21.1 - UNRELEASED
+## 1.22.0 - UNRELEASED
 
 - **Fix** : Fixed CRON for cleaning pending orders to support multi websites
 - **Fix** : Fixed reference to pay rendering
+- **Fix** : Fix translations
+- **Add** : Added IT translation
 
 ## 1.21.0
 
