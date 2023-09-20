@@ -93,11 +93,11 @@ class Sdd extends LocalHostedFields
     }
 
         /**
-     * Validate payment method information object
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
+         * Validate payment method information object
+         *
+         * @return $this
+         * @throws \Magento\Framework\Exception\LocalizedException
+         */
     public function validate()
     {
         /**
