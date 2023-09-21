@@ -39,8 +39,8 @@ class SEPADirectDebitPayment extends AbstractPaymentMethod
         $sddPaymentMethod->recurring_payment = 0;
 
         /**
- * @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
-*/
+        * @var HiPay\Fullservice\Gateway\Request\PaymentMethod\SEPADirectDebitPaymentMethod
+        */
         $sddPaymentMethod->bank_name = $this->_order->getPayment()->getAdditionalInformation('sdd_bank_name');
         $sddPaymentMethod->issuer_bank_id = $this->_order->getPayment()->getAdditionalInformation('sdd_bic');
         $sddPaymentMethod->iban = $this->_order->getPayment()->getAdditionalInformation('sdd_iban');

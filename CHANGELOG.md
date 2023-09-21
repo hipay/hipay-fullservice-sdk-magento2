@@ -6,6 +6,7 @@
 - **Fix** : Fixed reference to pay rendering
 - **Fix** : Fix translations
 - **Add** : Added IT translation
+- **Fix** : Fixed SDD order processing
 
 ## 1.21.0
 

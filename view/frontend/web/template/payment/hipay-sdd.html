@@ -17,229 +17,156 @@
  */
 -->
 <div
-  class="payment-method"
-  data-bind="css: {'_active': (getCode() == isChecked())}"
+    class="payment-method"
+    data-bind="css: {'_active': (getCode() == isChecked())}"
 >
-  <div class="payment-method-title field choice">
-    <input
-      type="radio"
-      name="payment[method]"
-      class="radio"
-      data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
-    />
-    <label data-bind="attr: {'for': getCode()}" class="label">
-      <span data-bind="text: getTitle()"></span>
-    </label>
-  </div>
-  <div class="payment-method-content">
-    <!-- ko foreach: getRegion('messages') -->
-    <!-- ko template: getTemplate() -->
-    <!-- /ko -->
-    <!--/ko-->
-    <div class="payment-method-billing-address">
-      <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-      <!-- ko template: getTemplate() -->
-      <!-- /ko -->
-      <!--/ko-->
+    <div class="payment-method-title field choice">
+        <input
+            type="radio"
+            name="payment[method]"
+            class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
+        />
+        <label data-bind="attr: {'for': getCode()}" class="label">
+            <span data-bind="text: getTitle()"></span>
+        </label>
     </div>
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() -->
+        <!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+            <!--/ko-->
+        </div>
 
-    <form
-      class="form"
-      id="co-transparent-form"
-      data-bind="mageInit: {'validation':[]}"
-      action="#"
-      method="post"
-      autocomplete="off"
-    >
-      <input
-        type="hidden"
-        id="ioBBFingerPrint"
-        name="payment[device_fingerprint]"
-        data-bind="attr: {value: getFingerprint()}"
-      />
-
-      <fieldset
-        data-bind="attr: {class: 'fieldset payment items ' + getCode(), id: 'payment_form_' + getCode()}"
-      >
-        <div
-          class="field required"
-          data-bind="attr: {id: getCode() + '_gender'}"
+        <form
+            class="form"
+            id="co-transparent-form"
+            data-bind="mageInit: {'validation':[]}"
+            action="#"
+            method="post"
+            autocomplete="off"
         >
-          <label data-bind="attr: {'for': getCode() + '_gender'}" class="label">
-            <span>
-              <!-- ko i18n: 'Gender'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <select
-              data-bind="attr: {'for': getCode() + '_gender'},value: sdd_gender"
-              name="payment[sdd_gender]"
+            <input
+                type="hidden"
+                id="ioBBFingerPrint"
+                name="payment[device_fingerprint]"
+                data-bind="attr: {value: getFingerprint()}"
+            />
+
+            <!--[if IE 9]>
+            <div class="ie9 hipay-container" id="hipay-container-hosted-fields" data-bind="visible: initHostedFields()">
+            <![endif]-->
+            <!--[if gt IE 9]><!-->
+            <div
+                class="hipay-container"
+                id="hipay-container-sdd"
+                data-bind="visible: initHostedFields() "
             >
-              <option value="U" selected></option>
-              <option value="M">
-                <!-- ko i18n: 'Male'-->
-                <!-- /ko -->
-              </option>
-              <option value="F">
-                <!-- ko i18n: 'Female'-->
-                <!-- /ko -->
-              </option>
-            </select>
-          </div>
-        </div>
-        <div
-          class="field required"
-          data-bind="attr: {id: getCode() + '_firstname'}"
-        >
-          <label
-            data-bind="attr: {'for': getCode() + '_firstname'}"
-            class="label"
-          >
-            <span>
-              <!-- ko i18n: 'Firstname'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <input
-              type="text"
-              data-bind="attr: {
-                                            id: getCode() + '_firstname',
-										    class: 'input-text',
-										    autocomplete: off,
-										    title: $t('Firstname'),
-										   'data-validate': JSON.stringify({required:true}),
-										   },
-											value: sdd_firstname"
-              name="payment[sdd_firstname]"
-            />
-          </div>
-        </div>
-        <div
-          class="field required"
-          data-bind="attr: {id: getCode() + '_lastname'}"
-        >
-          <label data-bind="attr: {for: getCode() + '_lastname'}" class="label">
-            <span>
-              <!-- ko i18n: 'Lastname'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <input
-              type="text"
-              data-bind="attr: {
-                                            id: getCode() + '_lastname',
-                                            autocomplete: off,
-										    class: 'input-text',
-										    title: $t('Lastname'),
-										   'data-validate': JSON.stringify({required:true}),
-										    },
-											value: sdd_lastname "
-              name="payment[sdd_lastname]"
-            />
-          </div>
-        </div>
-        <div class="field required" data-bind="attr: {id: getCode() + '_iban'}">
-          <label data-bind="attr: {'for': getCode() + '_iban'}" class="label">
-            <span>
-              <!-- ko i18n: 'Iban'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <input
-              type="text"
-              data-bind="attr: {
-                                            id: getCode() + '_iban',
-										    autocomplete: off,
-										    class: 'input-text',
-										    title: $t('Iban'),
-										   'data-validate': JSON.stringify({required:true}),
-										    },
-											value: sdd_iban"
-              name="payment[sdd_iban]"
-            />
-          </div>
-        </div>
-        <div
-          class="field required"
-          data-bind="attr: {id: getCode() + '_code_bic'}"
-        >
-          <label data-bind="attr: {for: getCode() + '_code_bic'}" class="label">
-            <span>
-              <!-- ko i18n: 'Code BIC'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <input
-              type="text"
-              data-bind="attr: {
-										   id: getCode() + '_code_bic',
-										   autocomplete: off,
-										   class: 'input-text',
-										   title: $t('Code BIC'),
-										   'data-validate': JSON.stringify({required:true}),
-										    },
-											value: sdd_code_bic "
-              name="payment[sdd_code_bic]"
-            />
-          </div>
-        </div>
-        <div
-          class="field required"
-          data-bind="attr: {id: getCode() + '_bank_name'}"
-        >
-          <label
-            data-bind="attr: {for: getCode() + '_bank_name'}"
-            class="label"
-          >
-            <span>
-              <!-- ko i18n: 'Bank name'-->
-              <!-- /ko -->
-            </span>
-          </label>
-          <div class="control">
-            <input
-              type="text"
-              data-bind="attr: {
-										   id: getCode() + '_bank_name',
-										   autocomplete: off,
-										   class: 'input-text',
-										   title: $t('Bank name'),
-										   'data-validate': JSON.stringify({required:true}),
-										     },
-										    value: sdd_bank_name"
-              name="payment[sdd_bank_name]"
-            />
-          </div>
-        </div>
-      </fieldset>
-    </form>
+                <!--<![endif]-->
 
-    <div class="checkout-agreements-block">
-      <!-- ko foreach: $parent.getRegion('before-place-order') -->
-      <!-- ko template: getTemplate() -->
-      <!-- /ko -->
-      <!--/ko-->
-    </div>
-    <div class="actions-toolbar">
-      <div class="primary">
-        <button
-          class="action primary checkout"
-          type="submit"
-          data-bind="
-                        click: placeOrder,
+                <div class="hipay-row">
+                    <div class="hipay-field-container">
+                        <div class="hipay-field" id="hipay-gender"></div>
+                        <label class="hipay-label" for="hipay-gender">
+                            <!-- ko i18n: 'Gender'-->
+                            <!-- /ko -->
+                        </label>
+                        <div
+                            class="hipay-field-error"
+                            data-hipay-id="hipay-sdd-field-error-gender"
+                        ></div>
+                    </div>
+                </div>
+                <div class="hipay-row">
+                    <div class="hipay-field-container">
+                        <div class="hipay-field" id="hipay-firstname"></div>
+                        <label class="hipay-label" for="hipay-firstname">
+                            <!-- ko i18n: 'Firstname'-->
+                            <!-- /ko -->
+                        </label>
+                        <div class="hipay-baseline"></div>
+                        <div
+                            class="hipay-field-error"
+                            data-hipay-id="hipay-sdd-field-error-firstname"
+                        ></div>
+                    </div>
+                    <div class="hipay-field-container">
+                        <div class="hipay-field" id="hipay-lastname"></div>
+                        <label class="hipay-label" for="hipay-lastname">
+                            <!-- ko i18n: 'Lastname'-->
+                            <!-- /ko -->
+                        </label>
+                        <div class="hipay-baseline"></div>
+                        <div
+                            class="hipay-field-error"
+                            data-hipay-id="hipay-sdd-field-error-lastname"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="hipay-row">
+                    <div class="hipay-field-container">
+                        <div class="hipay-field" id="hipay-bank-name"></div>
+                        <label class="hipay-label" for="hipay-bank-name">
+                            <!-- ko i18n: 'Bank Name'-->
+                            <!-- /ko -->
+                        </label>
+                        <div class="hipay-baseline"></div>
+                        <div
+                            class="hipay-field-error"
+                            data-hipay-id="hipay-sdd-field-error-bank_name"
+                        ></div>
+                    </div>
+                </div>
+
+                <div class="hipay-row">
+                    <div class="hipay-field-container">
+                        <div class="hipay-field" id="hipay-iban"></div>
+                        <label class="hipay-label" for="hipay-iban">
+                            <!-- ko i18n: 'Iban'-->
+                            <!-- /ko -->
+                        </label>
+                        <div class="hipay-baseline"></div>
+                        <div
+                            class="hipay-field-error"
+                            data-hipay-id="hipay-sdd-field-error-iban"
+                        ></div>
+                    </div>
+                </div>
+
+                <!-- ko foreach: getRegion('messages') -->
+                <!-- ko template: getTemplate() -->
+                <!-- /ko -->
+                <!--/ko-->
+            </div>
+        </form>
+
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button
+                    class="action primary checkout"
+                    type="submit"
+                    data-bind="
+                        click: place_order,
                         attr: {title: $t('Place Order')},
-                        enable: isPlaceOrderActionAllowed()
+                        enable: isPlaceOrderAllowed()
                         "
-          disabled
-        >
-          <span data-bind="i18n: 'Place Order'"></span>
-        </button>
-      </div>
+                    disabled
+                >
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

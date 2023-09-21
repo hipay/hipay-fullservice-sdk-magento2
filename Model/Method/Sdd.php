@@ -31,7 +31,7 @@ use Magento\Directory\Model;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Sdd extends FullserviceMethod
+class Sdd extends LocalHostedFields
 {
     public const HIPAY_METHOD_CODE = 'hipay_sdd';
 
@@ -60,7 +60,6 @@ class Sdd extends FullserviceMethod
     protected $_additionalInformationKeys = [
         'sdd_gender',
         'sdd_bank_name',
-        'sdd_code_bic',
         'sdd_iban',
         'sdd_firstname',
         'sdd_lastname',
@@ -93,12 +92,12 @@ class Sdd extends FullserviceMethod
         return $this;
     }
 
-    /**
-     * Validate payment method information object
-     *
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
+        /**
+         * Validate payment method information object
+         *
+         * @return $this
+         * @throws \Magento\Framework\Exception\LocalizedException
+         */
     public function validate()
     {
         /**
@@ -132,8 +131,6 @@ class Sdd extends FullserviceMethod
                 $errorMsg = __('Firstname is mandatory.');
             } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_lastname'))) {
                 $errorMsg = __('Lastname is mandatory.');
-            } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_code_bic'))) {
-                $errorMsg = __('Code BIC is not correct, please enter a valid Code BIC.');
             } elseif (!$validatorEmpty->isValid($info->getAdditionalInformation('sdd_bank_name'))) {
                 $errorMsg = __('Bank name is not correct, please enter a valid Bank name.');
             }
