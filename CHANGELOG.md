@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.22.0 - UNRELEASED
+## 1.22.0
 
 - **Fix** : Fixed CRON for cleaning pending orders to support multi websites
 - **Fix** : Fixed reference to pay rendering
