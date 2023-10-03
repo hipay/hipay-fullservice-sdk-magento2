@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.22.0
+
+- **Fix** : Fixed CRON for cleaning pending orders to support multi websites
+- **Fix** : Fixed reference to pay rendering
+- **Fix** : Fix translations
+- **Add** : Added IT translation
+- **Fix** : Fixed SDD order processing
+
 ## 1.21.0
 
 - **Add** : Fully removed split payment processing.
