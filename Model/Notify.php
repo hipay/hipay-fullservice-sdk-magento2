@@ -200,7 +200,7 @@ class Notify
                             $this->_transaction->getOrder()->getId(),
                             $this->_order->getState(),
                             $this->_order->getStatus(),
-                            is_array($savedStatues) ? implode(' - ', $savedStatues) : ''
+                            is_array($savedStatues) ? implode(' - ', array_keys($savedStatues)) : ''
                         ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
@@ -224,7 +224,7 @@ class Notify
                             $this->_transaction->getOrder()->getId(),
                             $this->_order->getState(),
                             $this->_order->getStatus(),
-                            is_array($savedStatues) ? implode(' - ', $savedStatues) : ''
+                            is_array($savedStatues) ? implode(' - ', array_keys($savedStatues)) : ''
                         ),
                         0,
                         WebApiException::HTTP_BAD_REQUEST
