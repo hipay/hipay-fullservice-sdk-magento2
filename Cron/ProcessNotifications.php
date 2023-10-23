@@ -21,6 +21,7 @@ use HiPay\FullserviceMagento\Model\ResourceModel\Notification\Collection;
 use HiPay\FullserviceMagento\Model\Queue\Notification\Publisher;
 use HiPay\FullserviceMagento\Model\Config;
 use Magento\Checkout\Model\Session;
+use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use Magento\Framework\Logger\Monolog;
 
 /**
@@ -56,6 +57,11 @@ class ProcessNotifications
     protected $_hipayConfig;
 
     /**
+     * @var ResourceOrder $orderResource
+     */
+    protected $orderResource;
+
+    /**
      * @var Session
      */
     protected $_checkoutSession;
@@ -65,6 +71,7 @@ class ProcessNotifications
         Publisher $publisher,
         Config $hipayConfig,
         Session $checkoutSession,
+        ResourceOrder $orderResource,
         Monolog $logger
     ) {
         $this->notificationCollection = $notificationCollection;
@@ -73,6 +80,7 @@ class ProcessNotifications
         $this->logger->pushHandler(\HiPay\FullserviceMagento\Logger\HipayHandler::getInstance());
         $this->_checkoutSession = $checkoutSession;
         $storeId = $this->_checkoutSession->getQuote()->getStore()->getStoreId();
+        $this->orderResource = $orderResource;
         $this->_hipayConfig = $hipayConfig;
         $this->_hipayConfig->setStoreId($storeId);
     }
@@ -118,5 +126,7 @@ class ProcessNotifications
         }else{
             $this->logger->info('Cron notifications disabled');
         }
+        
+        $this->orderResource->getConnection()->query("commit");
     }
 }
