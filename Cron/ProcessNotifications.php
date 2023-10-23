@@ -19,6 +19,8 @@ namespace HiPay\FullserviceMagento\Cron;
 use HiPay\FullserviceMagento\Model\Notification;
 use HiPay\FullserviceMagento\Model\ResourceModel\Notification\Collection;
 use HiPay\FullserviceMagento\Model\Queue\Notification\Publisher;
+use HiPay\FullserviceMagento\Model\Config;
+use Magento\Checkout\Model\Session;
 use Magento\Framework\Logger\Monolog;
 
 /**
@@ -48,51 +50,73 @@ class ProcessNotifications
      */
     protected $logger;
 
+    /**
+     * @var Config
+     */
+    protected $_hipayConfig;
+
+    /**
+     * @var Session
+     */
+    protected $_checkoutSession;
+
     public function __construct(
         Collection $notificationCollection,
         Publisher $publisher,
+        Config $hipayConfig,
+        Session $checkoutSession,
         Monolog $logger
     ) {
         $this->notificationCollection = $notificationCollection;
         $this->publisher = $publisher;
         $this->logger = $logger;
         $this->logger->pushHandler(\HiPay\FullserviceMagento\Logger\HipayHandler::getInstance());
+        $this->_checkoutSession = $checkoutSession;
+        $storeId = $this->_checkoutSession->getQuote()->getStore()->getStoreId();
+        $this->_hipayConfig = $hipayConfig;
+        $this->_hipayConfig->setStoreId($storeId);
     }
 
     public function execute()
     {
-        $notifications = $this->notificationCollection
-            ->addFieldToFilter('state', ['in' => [
-                Notification::NOTIFICATION_STATE_CREATED,
-                Notification::NOTIFICATION_STATE_FAILED,
-                Notification::NOTIFICATION_STATE_IN_PROGRESS
-            ]])
-            ->addFieldToFilter('attempts', ['lt' => 50])
-            ->addOrder('status', 'asc')
-            ->load()
-            ->getItems();
+        $cronModeActivated = $this->_hipayConfig->isNotificationCronActive();
 
-        // Inject notifications in progress in array if exists since 1 day
-        $yesterday = new \DateTime('- 1 day');
-        $notifications = array_filter($notifications, function (Notification $notification) use ($yesterday) {
-            if (
-                $notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
-                || $notification->getCreatedAt() < $yesterday
-            ) {
-                return true;
+        if($cronModeActivated){
+            $notifications = $this->notificationCollection
+                ->addFieldToFilter('state', ['in' => [
+                    Notification::NOTIFICATION_STATE_CREATED,
+                    Notification::NOTIFICATION_STATE_FAILED,
+                    Notification::NOTIFICATION_STATE_IN_PROGRESS
+                ]])
+                ->addFieldToFilter('attempts', ['lt' => 50])
+                ->addOrder('status', 'asc')
+                ->load()
+                ->getItems();
+
+            // Inject notifications in progress in array if exists since 1 day
+            $yesterday = new \DateTime('- 1 day');
+            $notifications = array_filter($notifications, function (Notification $notification) use ($yesterday) {
+                if (
+                    $notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
+                    || $notification->getCreatedAt() < $yesterday
+                ) {
+                    return true;
+                }
+            });
+            
+            if (count($notifications)) {
+                $this->notificationCollection
+                    ->setDataToAll('state', Notification::NOTIFICATION_STATE_IN_PROGRESS)
+                    ->save();
             }
-        });
-        
-        if (count($notifications)) {
-            $this->notificationCollection
-                ->setDataToAll('state', Notification::NOTIFICATION_STATE_IN_PROGRESS)
-                ->save();
-        }
-        
-        foreach ($notifications as $notification) {
-            $this->publisher->execute($notification->getId());
-        }
+            
+            foreach ($notifications as $notification) {
+                $this->publisher->execute($notification->getId());
+            }
 
-        $this->logger->info('Processing ' . count($notifications) . ' HiPay notifications');
+            $this->logger->info('Processing ' . count($notifications) . ' HiPay notifications');
+        }else{
+            $this->logger->info('Cron notifications disabled');
+        }
     }
 }
