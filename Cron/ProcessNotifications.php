@@ -89,7 +89,7 @@ class ProcessNotifications
     {
         $cronModeActivated = $this->_hipayConfig->isNotificationCronActive();
 
-        if($cronModeActivated){
+        if ($cronModeActivated) {
             $notifications = $this->notificationCollection
                 ->addFieldToFilter('state', ['in' => [
                     Notification::NOTIFICATION_STATE_CREATED,
@@ -123,7 +123,7 @@ class ProcessNotifications
             }
 
             $this->logger->info('Processing ' . count($notifications) . ' HiPay notifications');
-        }else{
+        } else {
             $this->logger->info('Cron notifications disabled');
         }
         
