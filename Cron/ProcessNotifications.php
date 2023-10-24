@@ -89,6 +89,7 @@ class ProcessNotifications
     {
         $cronModeActivated = $this->_hipayConfig->isNotificationCronActive();
 
+        // We need to check whether cron notifications are enabled to avoid opening transactions
         if ($cronModeActivated) {
             $notifications = $this->notificationCollection
                 ->addFieldToFilter('state', ['in' => [
@@ -127,6 +128,7 @@ class ProcessNotifications
             $this->logger->info('Cron notifications disabled');
         }
         
+        // We commit in the case of an open transaction
         try {
             $this->orderResource->getConnection()->query('commit');
         } catch (Exception $e) {
