@@ -127,6 +127,10 @@ class ProcessNotifications
             $this->logger->info('Cron notifications disabled');
         }
         
-        $this->orderResource->getConnection()->query("commit");
+        try {
+            $this->orderResource->getConnection()->query('commit');
+        } catch (Exception $e) {
+            $this->logger->info('Error: ' . $e);
+        }
     }
 }
