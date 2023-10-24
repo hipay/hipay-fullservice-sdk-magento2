@@ -31,6 +31,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Notify Class Model
@@ -115,6 +116,11 @@ class Notify
      */
     protected $creditmemoSender;
 
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface
+     */
+    protected $orderManagement;
+
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -127,6 +133,7 @@ class Notify
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
+        OrderManagementInterface $orderManagement,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -141,6 +148,8 @@ class Notify
         $this->transactionRepository = $transactionRepository;
 
         $this->creditmemoSender = $creditmemoSender;
+
+        $this->orderManagement = $orderManagement;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -799,6 +808,7 @@ class Notify
             ->deny(false);
 
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
+        $this->orderManagement->cancel($this->_order->getId());
         $this->_order->setStatus($orderStatus);
 
         $this->_order->save();
@@ -823,6 +833,7 @@ class Notify
                 'order_status_payment_canceled'
             );
         }
+        $this->orderManagement->cancel($this->_order->getId());
         $this->_order->setStatus($orderStatus);
         $this->_order->save();
     }
