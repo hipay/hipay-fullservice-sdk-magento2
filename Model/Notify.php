@@ -31,7 +31,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
 
 /**
  * Notify Class Model
@@ -116,11 +115,6 @@ class Notify
      */
     protected $creditmemoSender;
 
-    /**
-     * @var UpdateCouponUsages
-     */
-    protected $updateCouponUsages;
-
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -133,7 +127,6 @@ class Notify
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
-        UpdateCouponUsages $updateCouponUsages,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -148,8 +141,6 @@ class Notify
         $this->transactionRepository = $transactionRepository;
 
         $this->creditmemoSender = $creditmemoSender;
-
-        $this->updateCouponUsages = $updateCouponUsages;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -676,8 +667,6 @@ class Notify
 
             $this->_order->save();
 
-            $this->updateCouponUsages->execute($this->_order, false);
-
             $creditmemo = $payment->getCreatedCreditmemo();
             if ($creditmemo) {
                 $this->creditmemoSender->send($creditmemo);
@@ -813,7 +802,6 @@ class Notify
         $this->_order->setStatus($orderStatus);
 
         $this->_order->save();
-        $this->updateCouponUsages->execute($this->_order, false);
     }
 
     /**
@@ -837,7 +825,6 @@ class Notify
         }
         $this->_order->setStatus($orderStatus);
         $this->_order->save();
-        $this->updateCouponUsages->execute($this->_order, false);
     }
 
     /**
