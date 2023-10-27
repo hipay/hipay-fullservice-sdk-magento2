@@ -125,14 +125,14 @@ class ProcessNotifications
 
             $this->logger->info('Processing ' . count($notifications) . ' HiPay notifications');
         } else {
-            $this->logger->info('Cron notifications disabled');
+            $this->logger->debug('Cron notifications disabled');
         }
         
         // We commit in the case of an open transaction
         try {
             $this->orderResource->getConnection()->query('commit');
         } catch (Exception $e) {
-            $this->logger->info('Error: ' . $e);
+            $this->logger->info('Error during commit : ' . $e);
         }
     }
 }
