@@ -31,7 +31,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Magento\Sales\Api\OrderManagementInterface;
 
 /**
  * Notify Class Model
@@ -117,9 +117,9 @@ class Notify
     protected $creditmemoSender;
 
     /**
-     * @var UpdateCouponUsages
+     * @var \Magento\Sales\Api\OrderManagementInterface
      */
-    protected $updateCouponUsages;
+    protected $orderManagement;
 
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -133,7 +133,7 @@ class Notify
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
-        UpdateCouponUsages $updateCouponUsages,
+        OrderManagementInterface $orderManagement,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -149,7 +149,7 @@ class Notify
 
         $this->creditmemoSender = $creditmemoSender;
 
-        $this->updateCouponUsages = $updateCouponUsages;
+        $this->orderManagement = $orderManagement;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -676,8 +676,6 @@ class Notify
 
             $this->_order->save();
 
-            $this->updateCouponUsages->execute($this->_order, false);
-
             $creditmemo = $payment->getCreatedCreditmemo();
             if ($creditmemo) {
                 $this->creditmemoSender->send($creditmemo);
@@ -810,10 +808,10 @@ class Notify
             ->deny(false);
 
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
+        $this->orderManagement->cancel($this->_order->getId());
         $this->_order->setStatus($orderStatus);
 
         $this->_order->save();
-        $this->updateCouponUsages->execute($this->_order, false);
     }
 
     /**
@@ -835,9 +833,9 @@ class Notify
                 'order_status_payment_canceled'
             );
         }
+        $this->orderManagement->cancel($this->_order->getId());
         $this->_order->setStatus($orderStatus);
         $this->_order->save();
-        $this->updateCouponUsages->execute($this->_order, false);
     }
 
     /**
