@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.22.1
+
+- **Fixed** : Fixed PHP method usage when checking card holder
+- **Fixed** : Fixed coupon credit on order cancel - removed functionality, merchants are supposed to make this themselves
+- **Fixed** : Fixed notification process causing unclosed transactions
+- **Fixed** : Fixed notification error handling
+
 ## 1.22.0
 
 - **Fix** : Fixed CRON for cleaning pending orders to support multi websites
