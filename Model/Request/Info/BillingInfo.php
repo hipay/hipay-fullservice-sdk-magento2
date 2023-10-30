@@ -101,9 +101,10 @@ class BillingInfo extends AbstractInfoRequest
         $lastName = $billingAddress->getLastname();
         $theoricCardHolder = $firstName . ' ' . $lastName;
         if (
-            ( $ccType == 'AE' || $ccType == 'american-express')
-            && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
+            $cardOwner
             && count($partsCardOwner) > 1
+            && ( $ccType == 'AE' || $ccType == 'american-express')
+            && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
         ) {
             $firstName = $this->extractPartOfCardHolder($cardOwner, self::KEY_FIRSTNAME);
             $lastName = $this->extractPartOfCardHolder($cardOwner, self::KEY_LASTNAME);

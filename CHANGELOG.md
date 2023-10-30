@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed** : Fixed PHP method usage when checking card holder
+
 ## 1.22.0
 
 - **Fix** : Fixed CRON for cleaning pending orders to support multi websites
