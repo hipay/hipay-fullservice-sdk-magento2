@@ -16,6 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
+use HiPay\Fullservice\Enum\Transaction\Template;
 use HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest;
 
 /**
@@ -45,8 +46,9 @@ class HostedPaymentPage extends Order
         //Inherit from parent class Order but no used in this pbject request
         unset($hppRequest->payment_product);
 
+        $hppRequest->css = $this->_config->getValue('css_url');
         $hppRequest->template = ((bool)$this->_config->getValue('iframe_mode') && !$this->_config->isAdminArea()) ?
-            'iframe' : 'material';
+            'iframe-js' : Template::BASIC_JS ;
 
         $hppRequest->payment_product_list = implode(",", $this->_config->getPaymentProductsList());
 
