@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.22.2
+
+- **Fixed** : Fixed HostedPayment method adding `custom_css` field for HostedPage v1 with Mix Payment
+
 ## 1.22.1
 
 - **Fixed** : Fixed PHP method usage when checking card holder
