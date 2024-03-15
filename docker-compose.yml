@@ -58,6 +58,7 @@ services:
     depends_on:
       - mariadb
       - elasticsearch
+      - smtp
   elasticsearch:
     networks:
       - magento2
@@ -67,6 +68,13 @@ services:
       - discovery.type=single-node
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
       - http.port=9200
+  smtp:
+    image: schickling/mailcatcher
+    networks:
+      - magento2
+    ports:
+      - "1016:1080"
+    mem_limit: 256M
 
 volumes:
   mariadb_data:
