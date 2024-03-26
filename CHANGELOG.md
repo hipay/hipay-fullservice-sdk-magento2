@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- **Fixed** : Fixed stock discount when order refused or during clean pending orders
 - **Fixed** : Fixed email template for MO/TO payments
 
 ## 1.22.2

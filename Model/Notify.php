@@ -239,7 +239,7 @@ class Notify
                     ? $this->_transaction->getOperation()->getId()
                     : null;
                 if (
-                        $operationId
+                    $operationId
                         && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
                         && !$this->getInvoiceForTransactionId($this->_order, $operationId)
                 ) {
@@ -821,7 +821,7 @@ class Notify
      */
     protected function _doTransactionFailure()
     {
-        $this->_order->registerCancellation($this->_generateComment(''));
+        $this->orderManagement->cancel($this->_order->getId());
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
         if (
             in_array(
@@ -833,7 +833,6 @@ class Notify
                 'order_status_payment_canceled'
             );
         }
-        $this->orderManagement->cancel($this->_order->getId());
         $this->_order->setStatus($orderStatus);
         $this->_order->save();
     }
