@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.22.3
 
 - **Fixed** : Fixed stock discount when order refused or during clean pending orders, thanks to [madleen](https://github.com/madleen) for issue [#163](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/163) and [syno-bgt](https://github.com/syno-bgt) for issue [#161](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/161)
 - **Fixed** : Fixed cart restoration when cron mode is active, thanks to [brmor-mistermenuiserie](https://github.com/brmor-mistermenuiserie) for issue [#162](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/162)
