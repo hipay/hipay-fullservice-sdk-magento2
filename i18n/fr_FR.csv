@@ -263,7 +263,7 @@
 "Refund requested","Remboursement demandé"
 "Refunded","Remboursé"
 "Restore cart on return","Restaurer le panier au retour"
-"Restore cart when back button is pressed during payment process","Restaurer le panier lorsque le bouton retour est utilisé pendant le processus de paiement"
+"Restore cart when back button is pressed during payment process. Not available when CRON notifications are enabled","Restaurer le panier lorsque le bouton retour est utilisé pendant le processus de paiement. Non disponible lorsque les notifications CRON sont activées"
 "Row total in cart","Lignes totales de carte"
 "Rules 3D Secure","Règles 3D de Securité"
 "Rules Oneclick","Règle Oneclick"

@@ -263,7 +263,7 @@
 "Refund requested","Rimborso richiesto"
 "Refunded","Rimborsato"
 "Restore cart on return","Ripristino del carrello al ritorno"
-"Restore cart when back button is pressed during payment process","Ripristino del carrello quando si preme il pulsante indietro durante il processo di pagamento"
+"Restore cart when back button is pressed during payment process. Not available when CRON notifications are enabled","Ripristino del carrello quando si preme il pulsante indietro durante il processo di pagamento. Non disponibile quando sono abilitate le notifiche CRON"
 "Row total in cart","Rigo totale nel carrello"
 "Rules 3D Secure","Regole 3D Secure"
 "Rules Oneclick","Regole OneClick"

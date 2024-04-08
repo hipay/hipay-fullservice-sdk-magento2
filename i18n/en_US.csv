@@ -263,7 +263,7 @@
 "Refund requested","Refund requested"
 "Refunded","Refunded"
 "Restore cart on return","Restore cart on return"
-"Restore cart when back button is pressed during payment process","Restore cart when back button is pressed during payment process"
+"Restore cart when back button is pressed during payment process. Not available when CRON notifications are enabled","Restore cart when back button is pressed during payment process. Not available when CRON notifications are enabled"
 "Row total in cart","Row total in cart"
 "Rules 3D Secure","Rules 3D Secure"
 "Rules Oneclick","Rules Oneclick"

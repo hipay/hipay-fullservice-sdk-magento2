@@ -123,12 +123,20 @@ class HostedPaymentLinkSender extends Sender
     {
         $transport = [
             'order' => $order,
+            'order_id' => $order->getId(),
             'billing' => $order->getBillingAddress(),
             'payment_html' => $this->getPaymentHtml($order),
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
-            'hostedRedirectUrl' => $order->getPayment()->getAdditionalInformation('redirectUrl'),
+            'created_at_formatted' => $order->getCreatedAtFormatted(2),
+            'order_data' => [
+                'customer_name' => $order->getCustomerName(),
+                'is_not_virtual' => $order->getIsNotVirtual(),
+                'email_customer_note' => $order->getEmailCustomerNote(),
+                'frontend_status_label' => $order->getFrontendStatusLabel()
+            ],
+            'hosted_redirect_url' => $order->getPayment()->getAdditionalInformation('redirectUrl'),
         ];
 
         $this->templateContainer->setTemplateVars($transport);

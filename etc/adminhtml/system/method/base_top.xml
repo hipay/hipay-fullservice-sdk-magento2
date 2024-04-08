@@ -67,7 +67,7 @@
     <field id="restore_cart_on_back" translate="label comment" type="select" sortOrder="49" showInDefault="1"
            showInWebsite="1" showInStore="0">
         <label>Restore cart on return</label>
-        <comment>Restore cart when back button is pressed during payment process</comment>
+        <comment>Restore cart when back button is pressed during payment process. Not available when CRON notifications are enabled</comment>
         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
     </field>
 </include>

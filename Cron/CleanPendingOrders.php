@@ -201,21 +201,26 @@ class CleanPendingOrders
 
                     if ($orderCreationTimeIsCancellable && $order->canCancel()) {
                         try {
-                            $order->cancel();
+                            $this->_orderManagement->cancel($order->getId());
+
+                            $orderStatus = $order->getPayment()->getMethodInstance()->getConfigData(
+                                'order_status_payment_canceled'
+                            );
+
                             // keep order status/state
                             $order
                                 ->addStatusToHistory(
-                                    $order->getStatus(),
+                                    $orderStatus,
                                     __(
                                         'Order canceled automatically by cron because order ' .
                                         'is pending since %1 minutes',
                                         $messageInterval
                                     )
                                 );
+                            
+                            $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
 
                             $order->save();
-
-                            $this->_orderManagement->cancel($order->getId());
                         } catch (Exception $e) {
                             $this->logger->critical($e->getMessage());
                         }
