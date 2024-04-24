@@ -19,11 +19,17 @@ define([
   'Magento_Checkout/js/view/payment/default',
   'Magento_Checkout/js/model/full-screen-loader',
   'Magento_Checkout/js/model/quote',
-], function (ko, $, Component, fullScreenLoader, quote) {
+  'Magento_Checkout/js/action/place-order',
+  'mage/storage'
+], function (ko, $, Component, fullScreenLoader, quote, placeOrderAction, storage) {
   'use strict';
   return Component.extend({
     defaults: {
       template: 'HiPay_FullserviceMagento/payment/hipay-paypal',
+      idResponse: null,
+      additional_data: null,
+      creditCardToken: null,
+      hipayResponse:null,
       configHipay: null,
       hipayHostedFields: null,
       redirectAfterPlaceOrder: false,
@@ -73,7 +79,6 @@ define([
     initialize: function () {
       var self = this;
       self._super();
-      console.log(this.convertToUpperCaseAfterUnderscore(self.locale));
       self.configHipay = {
         template: 'auto',
         selector: 'paypal-field',
@@ -108,10 +113,23 @@ define([
           self.configHipay
       );
 
+      self.hipayHostedFields.on('paymentAuthorized', function (token) {
+        self.paymentAuthorized(self, token);
+      });
+
       self.isPlaceOrderAllowed(true);
 
       return true;
     },
+
+    paymentAuthorized: function (self, tokenHipay) {
+      var body = $('body');
+      self.creditCardType(tokenHipay.payment_product);
+      self.browser_info(JSON.stringify(tokenHipay.browser_info));
+      self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+
+    },
+
 
     isPaypalV2Allowed: function () {
       var self = this;
@@ -139,29 +157,9 @@ define([
 
     initObservable: function () {
       var self = this;
-      self._super().observe(['browser_info']);
+      self._super().observe(['additional_data','creditCardToken', 'creditCardType', 'browser_info']);
 
       return self;
-    },
-
-    place_order: function (data, event) {
-      var self = this;
-      if (event) {
-        event.preventDefault();
-      }
-
-      fullScreenLoader.startLoader();
-      self.hipayHostedFields.getPaymentData().then(
-          function (response) {
-            self.creditCardType(response.payment_product);
-            self.browser_info(JSON.stringify(response.browser_info));
-            self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-            fullScreenLoader.stopLoader();
-          },
-          function (errors) {
-            fullScreenLoader.stopLoader();
-          }
-      );
     },
 
     afterPlaceOrder: function () {
@@ -183,6 +181,7 @@ define([
       var data = {
         method: self.item.method,
         additional_data: {
+          cc_type: self.creditCardType(),
           browser_info: self.browser_info()
         }
       };

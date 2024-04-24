@@ -24,7 +24,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class PaypalV2 extends AbstractMethodAPI
+class PaypalV2 extends LocalHostedFields
 {
     public const HIPAY_METHOD_CODE = 'hipay_paypalapiv2';
 
@@ -39,9 +39,7 @@ class PaypalV2 extends AbstractMethodAPI
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
-     * @var int
+     * @var string[] keys to import in payment additionnal informations
      */
-    public $overridePendingTimeout = 500;
-
-    protected $_additionalInformationKeys = ['browser_info'];
+    protected $_additionalInformationKeys = ['browser_info', 'cc_type'];
 }
