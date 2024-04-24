@@ -44,6 +44,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Providers\PaypalConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_paypalapiv2" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PaypalV2::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -62,6 +69,7 @@
                 <item name="hipay_postfinanceefinanceapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceEFinance::HIPAY_METHOD_CODE</item>
                 <item name="hipay_postfinancecardapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PostFinanceCard::HIPAY_METHOD_CODE</item>
                 <item name="hipay_paypalapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Paypal::HIPAY_METHOD_CODE</item>
+                <item name="hipay_paypalapiv2" xsi:type="const">HiPay\FullserviceMagento\Model\Method\PaypalV2::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mbway::HIPAY_METHOD_CODE</item>
                 <item name="hipay_przelewy24api" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Przelewy24Api::HIPAY_METHOD_CODE</item>
@@ -87,6 +95,7 @@
                 <item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider</item>
                 <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
+                <item name="hipay_paypal_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\PaypalConfigProvider</item>
                 <item name="hipay_local_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider</item>
             </argument>
         </arguments>
