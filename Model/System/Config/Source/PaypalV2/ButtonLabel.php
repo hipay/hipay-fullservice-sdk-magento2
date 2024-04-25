@@ -49,7 +49,7 @@ class ButtonLabel implements \Magento\Framework\Option\ArrayInterface
             self::BUTTON_PAY => __('Pay'),
             self::BUTTON_SUBSCRIBE => __('Subscribe'),
             self::BUTTON_CHECKOUT => __('Checkout'),
-            self::BUTTON_BUYNOW => __('BuyNow')
+            self::BUTTON_BUYNOW => __('Buy Now')
         ];
 
         return $button;

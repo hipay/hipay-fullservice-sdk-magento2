@@ -40,8 +40,8 @@ class ButtonShape implements \Magento\Framework\Option\ArrayInterface
     {
         // TODO: Implement toOptionArray() method.
         $button = [
-            self::BUTTON_PILL => __('Pill'),
-            self::BUTTON_RECT => __('Rect')
+            self::BUTTON_PILL => __('Rounded'),
+            self::BUTTON_RECT => __('Rectangle')
         ];
 
         return $button;

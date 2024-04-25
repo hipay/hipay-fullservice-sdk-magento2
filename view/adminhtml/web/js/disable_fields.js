@@ -1,4 +1,4 @@
-define([], function () {
+define(['domReady'], function (domReady) {
     'use strict';
 
     // Function to disable or enable fields based on the value of merchant_id
@@ -24,10 +24,16 @@ define([], function () {
             }
         });
     }
+    domReady(function() {
+        var merchantIdSelector = 'payment_us_hipay_paypalapiv2_merchant_id';
+        if (document.getElementById(merchantIdSelector) !== null) {
+            toggleFields();
 
-    toggleFields();
-
-    document.getElementById('payment_us_hipay_paypalapiv2_merchant_id').addEventListener('change', function () {
-        toggleFields();
+            document.getElementById(merchantIdSelector).addEventListener('change', function () {
+                toggleFields();
+            });
+        }
     });
+
+
 });

@@ -24,9 +24,6 @@ define([
   return Component.extend({
     defaults: {
       template: 'HiPay_FullserviceMagento/payment/hipay-paypal',
-      idResponse: null,
-      additional_data: null,
-      creditCardToken: null,
       configHipay: null,
       hipayHostedFields: null,
       redirectAfterPlaceOrder: false,
