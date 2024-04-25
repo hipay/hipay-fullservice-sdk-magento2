@@ -18,10 +18,8 @@ define([
   'jquery',
   'Magento_Checkout/js/view/payment/default',
   'Magento_Checkout/js/model/full-screen-loader',
-  'Magento_Checkout/js/model/quote',
-  'Magento_Checkout/js/action/place-order',
-  'mage/storage'
-], function (ko, $, Component, fullScreenLoader, quote, placeOrderAction, storage) {
+  'Magento_Checkout/js/model/quote'
+], function (ko, $, Component, fullScreenLoader, quote) {
   'use strict';
   return Component.extend({
     defaults: {
@@ -29,11 +27,13 @@ define([
       idResponse: null,
       additional_data: null,
       creditCardToken: null,
-      hipayResponse:null,
       configHipay: null,
       hipayHostedFields: null,
       redirectAfterPlaceOrder: false,
       totals: quote.totals,
+      placeOrderStatusUrl:
+      window.checkoutConfig.payment.hiPayFullservice.placeOrderStatusUrl
+          .hipay_paypalapiv2,
       afterPlaceOrderUrl:
       window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
           .hipay_paypalapiv2,
@@ -123,13 +123,10 @@ define([
     },
 
     paymentAuthorized: function (self, tokenHipay) {
-      var body = $('body');
-      self.creditCardType(tokenHipay.payment_product);
       self.browser_info(JSON.stringify(tokenHipay.browser_info));
+      self.paypal_order_id(tokenHipay.orderID);
       self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-
     },
-
 
     isPaypalV2Allowed: function () {
       var self = this;
@@ -157,7 +154,7 @@ define([
 
     initObservable: function () {
       var self = this;
-      self._super().observe(['additional_data','creditCardToken', 'creditCardType', 'browser_info']);
+      self._super().observe(['paypal_order_id', 'browser_info']);
 
       return self;
     },
@@ -181,8 +178,8 @@ define([
       var data = {
         method: self.item.method,
         additional_data: {
-          cc_type: self.creditCardType(),
-          browser_info: self.browser_info()
+          paypal_order_id:self.paypal_order_id(),
+          browser_info: self.browser_info(),
         }
       };
       return $.extend(true, parent, data);

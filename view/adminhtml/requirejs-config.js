@@ -19,5 +19,6 @@ var config = {
     '*': {
       fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form'
     }
-  }
+  },
+  deps: ["HiPay_FullserviceMagento/js/disable_fields"],
 };

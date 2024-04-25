@@ -31,15 +31,10 @@ class PaypalV2 extends LocalHostedFields
     /**
      * @var string
      */
-    protected static $_technicalCode = 'paypal';
-
-    /**
-     * @var string
-     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
      * @var string[] keys to import in payment additionnal informations
      */
-    protected $_additionalInformationKeys = ['browser_info', 'cc_type'];
+    protected $_additionalInformationKeys = ['paypal_order_id', 'browser_info'];
 }
