@@ -76,6 +76,7 @@ define([
     initialize: function () {
       var self = this;
       self._super();
+
       self.configHipay = {
         template: 'auto',
         selector: 'paypal-field',

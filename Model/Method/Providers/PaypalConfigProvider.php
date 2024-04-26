@@ -140,7 +140,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
                                 'button_colour' => $this->hipayConfig->getValue('button_colour'),
                                 'button_height' => $this->hipayConfig->getValue('button_height'),
                                 'button_shape' => $this->hipayConfig->getValue('button_shape'),
-                                'show_pay_later' => $this->hipayConfig->getValue('show_pay_later')
+                                'show_pay_later' => (bool) $this->hipayConfig->getValue('show_pay_later')
                             ],
                         ],
                     ]
