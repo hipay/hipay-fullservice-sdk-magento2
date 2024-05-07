@@ -137,7 +137,7 @@ class ApplepayConfigProvider implements ConfigProviderInterface
                                 'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
                                 'display_name' => $this->hipayConfig->getValue('display_name'),
                                 'button_type' => $this->hipayConfig->getValue('button_type'),
-                                'button_colour' => $this->hipayConfig->getValue('button_colour'),
+                                'button_color' => $this->hipayConfig->getValue('button_color'),
                             ],
                         ],
                     ]

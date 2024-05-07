@@ -14,27 +14,36 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source\Paypal;
 
 /**
- * Paypal V2 payment method
+ * Source model for Button Shape
  *
- * @author    Hipay
+ * @author    HiPay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class PaypalV2 extends LocalHostedFields
+
+class ButtonShape implements \Magento\Framework\Option\ArrayInterface
 {
-    public const HIPAY_METHOD_CODE = 'hipay_paypalapiv2';
+    /**
+     * Button Colors
+     */
+    public const BUTTON_PILL = 'pill';
+    public const BUTTON_RECT = 'rect';
 
     /**
-     * @var string
+     * @return array
      */
-    protected $_code = self::HIPAY_METHOD_CODE;
+    public function toOptionArray(): array
+    {
+        // TODO: Implement toOptionArray() method.
+        $button = [
+            self::BUTTON_PILL => __('Rounded'),
+            self::BUTTON_RECT => __('Rectangle')
+        ];
 
-    /**
-     * @var string[] keys to import in payment additionnal informations
-     */
-    protected $_additionalInformationKeys = ['paypal_order_id', 'browser_info'];
+        return $button;
+    }
 }

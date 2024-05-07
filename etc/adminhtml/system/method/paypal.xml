@@ -33,6 +33,31 @@
 		<tooltip><![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. </br><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
 	</field>
     <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
+	<field id="merchant_id" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Merchant PayPal ID</label>
+		<comment><![CDATA[<b>Important! :</b> Please provide your Merchant PayPal ID to enable PayPal V2 integration.]]></comment>
+	</field>
+	<field id="button_color" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Color</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonColor</source_model>
+	</field>
+	<field id="button_shape" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Shape</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonShape</source_model>
+	</field>
+	<field id="button_label" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Label</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonLabel</source_model>
+	</field>
+	<field id="button_height" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Height</label>
+		<validate>validate-number validate-number-range number-range-25-55</validate>
+		<comment>Enter a value between 25 and 55. Default is 40.</comment>
+	</field>
+	<field id="bnpl" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Show 'Buy Now / Pay Later' Button</label>
+		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+	</field>
 
 	<!--
 		Include tag import configuration from another file.

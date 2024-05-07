@@ -14,7 +14,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\System\Config\Source\PaypalV2;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source\Paypal;
 
 use function Symfony\Component\String\s;
 

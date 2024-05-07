@@ -448,6 +448,11 @@
                 <active>0</active>
                 <title>Hipay Enterprise Paypal</title>
                 <payment_action>Sale</payment_action>
+                <button_color>gold</button_color>
+                <button_shape>pill</button_shape>
+                <button_label>pay</button_label>
+                <button_height>40</button_height>
+                <bnpl>1</bnpl>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
                 <order_status_payment_refused>holded</order_status_payment_refused>
@@ -466,36 +471,6 @@
                 <env>stage</env>
                 <group>hipay</group>
             </hipay_paypalapi>
-            <hipay_paypalapiv2>
-                <model>HiPay\FullserviceMagento\Model\Method\PaypalV2</model>
-                <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
-                <active>0</active>
-                <title>Hipay Enterprise Paypal V2</title>
-                <button_layout>vertical</button_layout>
-                <button_colour>gold</button_colour>
-                <button_shape>pill</button_shape>
-                <button_label>pay</button_label>
-                <button_height>40</button_height>
-                <show_pay_later>1</show_pay_later>
-                <payment_action>Sale</payment_action>
-                <order_status>pending</order_status>
-                <order_status_payment_accepted>processing</order_status_payment_accepted>
-                <order_status_payment_refused>holded</order_status_payment_refused>
-                <order_status_payment_canceled>canceled</order_status_payment_canceled>
-                <hipay_status_validate_order>118</hipay_status_validate_order>
-                <display_card_owner>0</display_card_owner>
-                <cancel_pending_order>0</cancel_pending_order>
-                <re_add_to_cart>0</re_add_to_cart>
-                <restore_cart_on_back>0</restore_cart_on_back>
-                <payment_products>paypal</payment_products>
-                <payment_products_categories>ewallet</payment_products_categories>
-                <authentication_indicator>0</authentication_indicator>
-                <allow_use_oneclick>0</allow_use_oneclick>
-                <allowspecific>0</allowspecific>
-                <debug>0</debug>
-                <env>stage</env>
-                <group>hipay</group>
-            </hipay_paypalapiv2>
             <hipay_mbway_hosted_fields>
                 <model>HiPay\FullserviceMagento\Model\Method\MbwayHostedFields</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\Mbway</payment_method>

@@ -42,4 +42,6 @@ class Paypal extends AbstractMethodAPI
      * @var int
      */
     public $overridePendingTimeout = 500;
+
+    protected $_additionalInformationKeys = ['paypal_order_id', 'browser_info'];
 }
