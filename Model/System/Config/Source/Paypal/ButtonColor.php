@@ -41,15 +41,12 @@ class ButtonColor implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray(): array
     {
-        // TODO: Implement toOptionArray() method.
-        $button = [
+        return [
             self::BUTTON_GOLD => __('Gold'),
             self::BUTTON_BLUE => __('Blue'),
             self::BUTTON_BLACK => __('Black'),
             self::BUTTON_SILVER => __('Silver'),
             self::BUTTON_WHITE => __('White')
         ];
-
-        return $button;
     }
 }

@@ -57,6 +57,7 @@
 	<field id="bnpl" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
 		<label>Show 'Buy Now / Pay Later' Button</label>
 		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+		<comment>The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000.</comment>
 	</field>
 
 	<!--

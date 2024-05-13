@@ -43,15 +43,12 @@ class ButtonLabel implements \Magento\Framework\Option\ArrayInterface
      */
     public function toOptionArray(): array
     {
-        // TODO: Implement toOptionArray() method.
-        $button = [
+        return [
             self::BUTTON_PAYPAL => __('Paypal'),
             self::BUTTON_PAY => __('Pay'),
             self::BUTTON_SUBSCRIBE => __('Subscribe'),
             self::BUTTON_CHECKOUT => __('Checkout'),
             self::BUTTON_BUYNOW => __('Buy Now')
         ];
-
-        return $button;
     }
 }

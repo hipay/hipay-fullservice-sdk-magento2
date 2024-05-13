@@ -388,4 +388,5 @@
 "Button Height","Altezza del pulsante"
 "Show 'Buy Now / Pay Later' Button","Mostra il pulsante 'Compra ora / Paga dopo'"
 "Enter a value between 25 and 55. Default is 40.","Inserisci un valore compreso tra 25 e 55. Il valore predefinito è 40."
+"The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000.","La funzionalità 'Compra ora, Paga dopo' è disponibile solo se la valuta dello store è l'euro e se l'importo del carrello è compreso tra 30 e 2000 euro."
 "<b>Important! :</b> Please provide your Merchant PayPal ID to enable PayPal V2 integration.","<b>Importante! :</b> Si prega di fornire il proprio ID commerciante PayPal per abilitare l'integrazione PayPal V2."

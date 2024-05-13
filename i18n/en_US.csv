@@ -388,4 +388,6 @@
 "Button Height","Button Height"
 "Show 'Buy Now / Pay Later' Button","Show 'Buy Now / Pay Later' Button"
 "Enter a value between 25 and 55. Default is 40.","Enter a value between 25 and 55. Default is 40."
+"The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000.","The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000."
 "<span style="color: #ff0000; font-weight: bold;">Important! :</span> Please provide your Merchant PayPal ID to enable PayPal V2 integration.","<span style="color: #ff0000; font-weight: bold;">Important! :</span> Please provide your Merchant PayPal ID to enable PayPal V2 integration."
+
