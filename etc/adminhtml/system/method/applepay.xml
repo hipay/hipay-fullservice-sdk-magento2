@@ -37,9 +37,9 @@
             <label>Button type</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonType</source_model>
         </field>
-        <field id="button_colour" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1">
-            <label>Button Colour</label>
-            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonColour</source_model>
+        <field id="button_color" translate="label" type="select" sortOrder="34" showInDefault="1" showInWebsite="1">
+            <label>Button Color</label>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonColor</source_model>
         </field>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>

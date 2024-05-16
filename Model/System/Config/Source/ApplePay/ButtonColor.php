@@ -24,7 +24,7 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class ButtonColour implements \Magento\Framework\Option\ArrayInterface
+class ButtonColor implements \Magento\Framework\Option\ArrayInterface
 {
     protected const BLACK = 'black';
     protected const WHITE = 'white';
