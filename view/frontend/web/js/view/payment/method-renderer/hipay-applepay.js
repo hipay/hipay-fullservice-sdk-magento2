@@ -53,8 +53,8 @@ define([
       buttonType: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.button_type
         : 'plain',
-      buttonColour: window.checkoutConfig.payment.hipay_applepay
-        ? window.checkoutConfig.payment.hipay_applepay.button_colour
+      buttonColor: window.checkoutConfig.payment.hipay_applepay
+        ? window.checkoutConfig.payment.hipay_applepay.button_color
         : 'black',
       locale: window.checkoutConfig.payment.hiPayFullservice.locale
         ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
@@ -131,7 +131,7 @@ define([
         selector: 'hipay-apple-pay-button',
         applePayStyle: {
           type: self.buttonType,
-          color: self.buttonColour
+          color: self.buttonColor
         }
       };
 

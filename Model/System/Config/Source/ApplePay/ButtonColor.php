@@ -14,34 +14,33 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
 
 /**
- * Paypal payment method
+ * Source model for available 3ds values
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Paypal extends AbstractMethodAPI
+class ButtonColor implements \Magento\Framework\Option\ArrayInterface
 {
-    public const HIPAY_METHOD_CODE = 'hipay_paypalapi';
+    protected const BLACK = 'black';
+    protected const WHITE = 'white';
+    protected const WHITE_WITH_LINE = 'white-with-line';
 
     /**
-     * @var string
+     * Options getter
+     *
+     * @return array
      */
-    protected static $_technicalCode = 'paypal';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * @var int
-     */
-    public $overridePendingTimeout = 500;
-
-    protected $_additionalInformationKeys = ['paypal_order_id', 'browser_info'];
+    public function toOptionArray()
+    {
+        return [
+            ['value' => self::BLACK, 'label' => __('Black')],
+            ['value' => self::WHITE, 'label' => __('White')],
+            ['value' => self::WHITE_WITH_LINE, 'label' => __('White with line')],
+        ];
+    }
 }
