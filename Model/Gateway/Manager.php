@@ -254,6 +254,15 @@ class Manager
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
+    public function requestOperationCancel($amount = null)
+    {
+        return $this->_requestOperation(Operation::CANCEL);
+    }
+
+    /**
+     *
+     * @return \HiPay\Fullservice\Gateway\Model\Operation
+     */
     public function requestOperationAcceptChallenge()
     {
         return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);
