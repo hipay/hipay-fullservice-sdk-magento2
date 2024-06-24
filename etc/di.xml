@@ -61,4 +61,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="hipay_clean_pending_orders" xsi:type="object">HiPay\FullserviceMagento\Console\Command\CleanPendingOrdersCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
