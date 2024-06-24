@@ -26,6 +26,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Model\Order;
+use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use DateTime;
 use DateInterval;
 use Exception;
@@ -86,16 +87,23 @@ class CleanPendingOrders
     protected $storeWebsiteRelation;
 
     /**
+     *
+     * @var ManagerFactory $_gatewayManagerFactory
+     */
+    protected $_gatewayManagerFactory;
+
+    /**
      * CleanPendingOrders constructor
      *
-     * @param OrderFactory                  $orderFactory
-     * @param Data                          $paymentHelper
-     * @param ScopeConfigInterface          $scopeConfig
-     * @param LoggerInterface               $logger
-     * @param OrderManagementInterface      $orderManagement
-     * @param DateTimeFactory               $dateTimeFactory
-     * @param StoreManagerInterface         $storeManager
+     * @param OrderFactory $orderFactory
+     * @param Data $paymentHelper
+     * @param ScopeConfigInterface $scopeConfig
+     * @param LoggerInterface $logger
+     * @param OrderManagementInterface $orderManagement
+     * @param DateTimeFactory $dateTimeFactory
+     * @param StoreManagerInterface $storeManager
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
+     * @param ManagerFactory $gatewayManagerFactory
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -105,7 +113,8 @@ class CleanPendingOrders
         OrderManagementInterface $orderManagement,
         DateTimeFactory $dateTimeFactory,
         StoreManagerInterface $storeManager,
-        StoreWebsiteRelationInterface $storeWebsiteRelation
+        StoreWebsiteRelationInterface $storeWebsiteRelation,
+        ManagerFactory $gatewayManagerFactory
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -115,6 +124,7 @@ class CleanPendingOrders
         $this->_dateTimeFactory = $dateTimeFactory;
         $this->storeManager = $storeManager;
         $this->storeWebsiteRelation = $storeWebsiteRelation;
+        $this->_gatewayManagerFactory = $gatewayManagerFactory;
     }
 
     /**
@@ -153,15 +163,6 @@ class CleanPendingOrders
                 }
             }
 
-            //Limited time in minutes
-            $limitedTime = 30;
-
-            $dateFormat = 'Y-m-d H:i:s';
-            $dateObject = $this->_dateTimeFactory->create();
-            $gmtDate = $dateObject->gmtDate($dateFormat);
-            $date = new DateTime($gmtDate);
-            $interval = new DateInterval("PT{$limitedTime}M");
-
             /**
              * @var Order $orderModel
              */
@@ -186,7 +187,7 @@ class CleanPendingOrders
                         'method' => $code
                     ];
 
-                    if ($code === 'hipay_hosted_fields') {
+                    if ($code == 'hipay_hosted_fields') {
                         // one day interval
                         $intervalConditions[] = [
                             'value' => 1440,
@@ -214,12 +215,17 @@ class CleanPendingOrders
             foreach ($stateConditions as $condition) {
                 $state = $condition['value'];
                 $method = $condition['method'];
-                $caseStateConditions[] = "(main_table.state = '$state' AND op.method = '$method')";
+                $caseStateConditions[] = "(main_table.status = '$state' AND op.method = '$method')";
             }
 
             // Construct the CASE conditions for interval
             $caseIntervalConditions = [];
+            $dateFormat = 'Y-m-d H:i:s';
             foreach ($intervalConditions as $condition) {
+
+                $dateObject = $this->_dateTimeFactory->create();
+                $gmtDate = $dateObject->gmtDate($dateFormat);
+                $date = new DateTime($gmtDate);
                 $interval = new DateInterval("PT{$condition['value']}M");;
                 $method = $condition['method'];
                 $formattedDate = $date->sub($interval)->format($dateFormat);
@@ -243,16 +249,16 @@ class CleanPendingOrders
                 ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
                 ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
 
-            //var_dump((string) $collection->getSelect());
-            //die("here");
             if ($collection->getSize() >= 1) {
+                // Build the method to interval map
+                $methodIntervals = [];
+                foreach ($intervalConditions as $condition) {
+                    $methodIntervals[$condition['method']] = $condition['value'];
+                }
                 foreach ($collection as $order) {
                     $method = $order->getMethod();
-                    if (isset($intervalConditions[$method])) {
-                        $interval = new DateInterval("PT{$intervalConditions[$method]}M");
-                    } else {
-                        $interval = new DateInterval("PT30M"); // default interval if method not found
-                    }
+                    $intervalValue = $methodIntervals[$method] ?? 30; // default interval if method not found
+                    $interval = new DateInterval("PT{$intervalValue}M");
                     $this->cancelOrder($order, $interval, $dateFormat);
                 }
             }
@@ -294,6 +300,8 @@ class CleanPendingOrders
 
         if ($orderCreationTimeIsCancellable && $order->canCancel()) {
             try {
+
+
                 $this->_orderManagement->cancel($order->getId());
 
                 $orderStatus = $order->getPayment()->getMethodInstance()->getConfigData(
@@ -314,6 +322,12 @@ class CleanPendingOrders
                 $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
 
                 $order->save();
+
+                //Cancel through API
+                if (!empty($order->getPayment()->getCcTransId())) {
+                    $this->getGatewayManager($order)->requestOperationCancel();
+                }
+
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage());
             }
@@ -321,4 +335,15 @@ class CleanPendingOrders
 
         return $this;
     }
+
+    /**
+     *
+     * @param  \Magento\Sales\Model\Order $order
+     * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
+     */
+    protected function getGatewayManager($order)
+    {
+        return $this->_gatewayManagerFactory->create($order);
+    }
+
 }
