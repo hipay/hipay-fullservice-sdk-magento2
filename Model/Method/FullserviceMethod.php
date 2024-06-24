@@ -514,6 +514,22 @@ abstract class FullserviceMethod extends AbstractMethod
     }
 
     /**
+     * Attempt to Cancel a payment that is under peding
+     *
+     * @param                                         InfoInterface $payment
+     * @return                                        false
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
+     * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function cancelPayment(InfoInterface $payment)
+    {
+        parent::cancel($payment);
+        $this->getGatewayManager($payment->getOrder())->requestOperationCancel();
+        return true;
+    }
+
+    /**
      * Attempt to deny a payment that us under review
      *
      * @param                                         InfoInterface $payment
