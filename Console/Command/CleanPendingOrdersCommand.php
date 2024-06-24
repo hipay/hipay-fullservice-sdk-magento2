@@ -16,10 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Console\Command;
 
-use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
+use Magento\Framework\App\State;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
 
 /**
  * Class ConvertSerializedData
@@ -27,6 +28,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class CleanPendingOrdersCommand extends Command
 {
+    /**
+     * @var State
+     */
+    protected $state;
+
     /**
      * @var CleanPendingOrders
      */
@@ -37,10 +43,12 @@ class CleanPendingOrdersCommand extends Command
      *
      * @param CleanPendingOrders $cleanPendingOrders
      */
-    public function __construct(CleanPendingOrders $cleanPendingOrders)
+    public function __construct(State $state, CleanPendingOrders $cleanPendingOrders)
     {
+        $this->state = $state;
         $this->cleanPendingOrders = $cleanPendingOrders;
         parent::__construct();
+
     }
 
     /**
@@ -61,6 +69,7 @@ class CleanPendingOrdersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->state->setAreaCode('global');
         $this->cleanPendingOrders->execute();
         $output->writeln('<info>Pending orders cleaned successfully.</info>');
         return Command::SUCCESS;
