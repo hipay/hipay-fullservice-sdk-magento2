@@ -54,7 +54,7 @@
 }
 
 #hipay-container {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: white;
 }
 
@@ -73,7 +73,7 @@
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   width: 100%;
-  height: 50px;
+  height: fit-content;
   margin: 0 10px;
 }
 
@@ -208,7 +208,7 @@
 }
 
 .hipay-container-hosted-fields-local
-  [data-hipay-id='ideal-wrapper']
+  [data-hipay-id="ideal-wrapper"]
   .hipay-field-container {
   height: inherit;
 }
@@ -232,5 +232,16 @@
   width: 50%;
   margin: auto;
   flex-grow: 0;
-  height: 100%;
+  height: 50px;
+}
+
+.errorTOC {
+  display: flex;
+  padding: 12px;
+  background-color: #f8d6da;
+  border-radius: 5px;
+  border: 1px solid #753b41;
+  color: #753b41;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }

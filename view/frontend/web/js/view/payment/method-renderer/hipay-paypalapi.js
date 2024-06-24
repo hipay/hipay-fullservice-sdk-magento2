@@ -14,72 +14,114 @@
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 define([
-  'jquery',
-  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted',
-  'ko',
-  'Magento_Checkout/js/view/payment/default',
-  'Magento_Checkout/js/model/full-screen-loader',
-  'Magento_Checkout/js/model/quote'
-], function ($, ComponentHosted,ko, ComponentDefault, fullScreenLoader, quote) {
-  'use strict';
+  "jquery",
+  "HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted",
+  "ko",
+  "Magento_Checkout/js/view/payment/default",
+  "Magento_Checkout/js/model/full-screen-loader",
+  "Magento_Checkout/js/model/quote",
+  "domReady!"
+], function (
+  $,
+  ComponentHosted,
+  ko,
+  ComponentDefault,
+  fullScreenLoader,
+  quote,
+) {
+  "use strict";
+
   var merchantId = window.checkoutConfig.payment.hipay_paypalapi.merchant_id ?? '';
-  if(merchantId.length > 0) {
+
+  if (merchantId.length > 0) {
     return ComponentDefault.extend({
       defaults: {
-        template: 'HiPay_FullserviceMagento/payment/hipay-paypal',
+        template: "HiPay_FullserviceMagento/payment/hipay-paypal",
         configHipay: null,
         hipayHostedFields: null,
         redirectAfterPlaceOrder: false,
         totals: quote.totals,
         placeOrderStatusUrl:
-        window.checkoutConfig.payment.hiPayFullservice.placeOrderStatusUrl
+          window.checkoutConfig.payment.hiPayFullservice.placeOrderStatusUrl
             .hipay_paypalapi,
         afterPlaceOrderUrl:
-        window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
+          window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
             .hipay_paypalapi,
         env: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.env
-            : 'stage',
-        apiUsernameTokenJs: window.checkoutConfig.payment
-            .hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi
-                .apiUsernameTokenJs
-            : '',
-        apiPasswordTokenJs: window.checkoutConfig.payment
-            .hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi
-                .apiPasswordTokenJs
-            : '',
+          ? window.checkoutConfig.payment.hipay_paypalapi.env
+          : "stage",
+        apiUsernameTokenJs: window.checkoutConfig.payment.hipay_paypalapi
+          ? window.checkoutConfig.payment.hipay_paypalapi.apiUsernameTokenJs
+          : "",
+        apiPasswordTokenJs: window.checkoutConfig.payment.hipay_paypalapi
+          ? window.checkoutConfig.payment.hipay_paypalapi.apiPasswordTokenJs
+          : "",
         merchantId: merchantId,
         buttonLabel: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.button_label
-            : 'pay',
+          ? window.checkoutConfig.payment.hipay_paypalapi.button_label
+          : "pay",
         buttonShape: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.button_shape
-            : 'pill',
+          ? window.checkoutConfig.payment.hipay_paypalapi.button_shape
+          : "pill",
         buttonColor: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.button_color
-            : 'gold',
+          ? window.checkoutConfig.payment.hipay_paypalapi.button_color
+          : "gold",
         buttonHeight: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.button_height
-            : '40',
+          ? window.checkoutConfig.payment.hipay_paypalapi.button_height
+          : "40",
         bnpl: window.checkoutConfig.payment.hipay_paypalapi
-            ? window.checkoutConfig.payment.hipay_paypalapi.bnpl
-            : true,
+          ? window.checkoutConfig.payment.hipay_paypalapi.bnpl
+          : true,
         locale: window.checkoutConfig.payment.hiPayFullservice.locale
-            ? window.checkoutConfig.payment.hiPayFullservice.locale
-                .hipay_paypalapi
-            : 'en_us'
+          ? window.checkoutConfig.payment.hiPayFullservice.locale
+              .hipay_paypalapi
+          : "en_us",
       },
       isPlaceOrderAllowed: ko.observable(false),
+      isAllTOCChecked: ko.observable(!window.checkoutConfig.checkoutAgreements.isEnabled),
+      allTOC: new Map(),
+
+      initTOCEvents: function() {
+        var self = this;
+
+        $(document).ready(function() {
+          if (window.checkoutConfig.checkoutAgreements.isEnabled) {
+            $('body').on('DOMNodeInserted', function(e) {
+                var results = document.querySelectorAll("input[id*='agreement_hipay_paypal']")
+                var agreements = window.checkoutConfig.checkoutAgreements.agreements;
+                agreements = agreements.filter((input) => input.mode == '1');
+                if(results.length && results.length == agreements.length){
+                  results.forEach(function(input, index) {
+                    self.allTOC.set(index, false);
+                    input.addEventListener('change', function(event){
+                      console.log("CHANGE");
+                      self.allTOC.set(index, event.target.checked);
+                      updateTOCState();
+                    });
+                  })
+                  $('body').off('DOMNodeInserted');
+                }
+            });
+          }
+
+          function updateTOCState(){
+            var noChecked = [...self.allTOC.values()].filter((value) => value == false);
+            if(noChecked.length > 0){
+              self.isAllTOCChecked(false);
+            }else{
+              self.isAllTOCChecked(true);
+            }
+          }
+        });
+      },
 
       initialize: function () {
         var self = this;
         self._super();
 
         self.configHipay = {
-          template: 'auto',
-          selector: 'paypal-field',
+          template: "auto",
+          selector: "paypal-field",
           merchantPaypalId: self.merchantId,
           canPayLater: Boolean(self.bnpl),
           paypalButtonStyle: {
@@ -92,8 +134,10 @@ define([
             amount: Number(quote.totals().base_grand_total.toFixed(2)),
             currency: quote.totals().quote_currency_code,
             locale: this.convertToUpperCaseAfterUnderscore(self.locale),
-          }
+          },
         };
+
+        self.initTOCEvents();
       },
 
       initHostedFields: function () {
@@ -103,15 +147,15 @@ define([
           username: self.apiUsernameTokenJs,
           password: self.apiPasswordTokenJs,
           environment: self.env,
-          lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
+          lang: self.locale.length > 2 ? self.locale.substr(0, 2) : "en",
         });
 
         self.hipayHostedFields = self.hipaySdk.create(
-            'paypal',
-            self.configHipay
+          "paypal",
+          self.configHipay
         );
 
-        self.hipayHostedFields.on('paymentAuthorized', function (token) {
+        self.hipayHostedFields.on("paymentAuthorized", function (token) {
           self.paymentAuthorized(self, token);
         });
 
@@ -152,7 +196,7 @@ define([
 
       initObservable: function () {
         var self = this;
-        self._super().observe(['paypal_order_id', 'browser_info']);
+        self._super().observe(["paypal_order_id", "browser_info"]);
 
         return self;
       },
@@ -164,21 +208,24 @@ define([
       context: function () {
         return this;
       },
+
       getProductCode: function () {
-        return 'paypal';
+        return "paypal";
       },
+
       getCode: function () {
-        return 'hipay_paypalapi';
+        return "hipay_paypalapi";
       },
+
       getData: function () {
         var self = this;
         var parent = self._super();
         var data = {
           method: self.item.method,
           additional_data: {
-            paypal_order_id:self.paypal_order_id(),
+            paypal_order_id: self.paypal_order_id(),
             browser_info: self.browser_info(),
-          }
+          },
         };
         return $.extend(true, parent, data);
       },
@@ -186,32 +233,30 @@ define([
         return true;
       },
 
-      convertToUpperCaseAfterUnderscore: function(str){
+      convertToUpperCaseAfterUnderscore: function (str) {
         // Split the string at the underscore
-        let parts = str.split('_');
+        let parts = str.split("_");
 
         // Capitalize the second part
         parts[1] = parts[1].toUpperCase();
 
         // Join the parts back together
-        return parts.join('_');
-      }
+        return parts.join("_");
+      },
     });
-
   } else {
     return ComponentHosted.extend({
       defaults: {
-        template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-        redirectAfterPlaceOrder: false
+        template: "HiPay_FullserviceMagento/payment/hipay-hosted",
+        redirectAfterPlaceOrder: false,
       },
 
       getCode: function () {
-        return 'hipay_paypalapi';
+        return "hipay_paypalapi";
       },
       isActive: function () {
         return true;
-      }
+      },
     });
   }
-
 });

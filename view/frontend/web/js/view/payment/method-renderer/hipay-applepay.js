@@ -15,21 +15,21 @@
  */
 
 define([
-  'ko',
-  'jquery',
-  'Magento_Checkout/js/view/payment/default',
-  'Magento_Checkout/js/action/place-order',
-  'Magento_Checkout/js/model/quote',
-  'mage/storage'
+  "ko",
+  "jquery",
+  "Magento_Checkout/js/view/payment/default",
+  "Magento_Checkout/js/action/place-order",
+  "Magento_Checkout/js/model/quote",
+  "mage/storage",
 ], function (ko, $, Component, placeOrderAction, quote, storage) {
-  'use strict';
+  "use strict";
 
   var canMakeApplePay = ko.observable(false);
   return Component.extend({
     defaults: {
-      template: 'HiPay_FullserviceMagento/payment/hipay-applepay',
+      template: "HiPay_FullserviceMagento/payment/hipay-applepay",
       creditCardToken: null,
-      creditCardType: 'cb',
+      creditCardType: "cb",
       instanceApplePay: null,
       totals: quote.totals,
       eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
@@ -41,35 +41,37 @@ define([
           .hipay_applepay,
       env: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.env
-        : 'stage',
+        : "stage",
       apiUsernameTokenJs: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.apiUsernameTokenJs
-        : '',
+        : "",
       apiPasswordTokenJs: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.apiPasswordTokenJs
-        : '',
+        : "",
       merchantId: window.checkoutConfig.payment.hipay_applepay.merchant_id,
       displayName: window.checkoutConfig.payment.hipay_applepay.display_name,
       buttonType: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.button_type
-        : 'plain',
+        : "plain",
       buttonColor: window.checkoutConfig.payment.hipay_applepay
         ? window.checkoutConfig.payment.hipay_applepay.button_color
-        : 'black',
+        : "black",
       locale: window.checkoutConfig.payment.hiPayFullservice.locale
         ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
-        : 'en_us'
+        : "en_us",
     },
 
     placeOrderHandler: null,
     validateHandler: null,
+    isAllTOCChecked: ko.observable(!window.checkoutConfig.checkoutAgreements.isEnabled),
+    allTOC: new Map(),
 
     initHostedFields: function (self) {
       return new HiPay({
         username: self.apiUsernameTokenJs,
         password: self.apiPasswordTokenJs,
         environment: self.env,
-        lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
+        lang: self.locale.length > 2 ? self.locale.substr(0, 2) : "en",
       });
     },
 
@@ -113,6 +115,40 @@ define([
       }
     },
 
+    initTOCEvents: function() {
+      var self = this;
+      
+      $(document).ready(function() {
+        if (window.checkoutConfig.checkoutAgreements.isEnabled) {
+          $('body').on('DOMNodeInserted', function(e) {
+            var results = document.querySelectorAll("input[id*='agreement_hipay_applepay']")
+            var agreements = window.checkoutConfig.checkoutAgreements.agreements;
+            agreements = agreements.filter((input) => input.mode == '1');
+              if(results.length && results.length == agreements.length){
+                results.forEach(function(input, index) {
+                  self.allTOC.set(index, false);
+                  input.addEventListener('change', function(event){
+                    self.allTOC.set(index, event.target.checked);
+                    updateTOCState();
+                  });
+                })
+                $('body').off('DOMNodeInserted');
+              }
+          });
+        }
+
+        function updateTOCState(){
+          console.log('updateTOCState');
+          var noChecked = [...self.allTOC.values()].filter((value) => value == false);
+          if(noChecked.length > 0){
+            self.isAllTOCChecked(false);
+          }else{
+            self.isAllTOCChecked(true);
+          }
+        }
+      });
+    },
+
     initApplePayField: function (self, hipaySdk) {
       if (!hipaySdk) {
         hipaySdk = self.initHostedFields(self);
@@ -125,20 +161,22 @@ define([
           currencyCode: quote.totals().quote_currency_code,
           total: {
             label: self.displayName,
-            amount: Number(quote.totals().base_grand_total).toFixed(2)
-          }
+            amount: Number(quote.totals().base_grand_total).toFixed(2),
+          },
         },
-        selector: 'hipay-apple-pay-button',
+        selector: "hipay-apple-pay-button",
         applePayStyle: {
           type: self.buttonType,
-          color: self.buttonColor
-        }
+          color: self.buttonColor,
+        },
       };
 
       self.instanceApplePay = hipaySdk.create(
-        'paymentRequestButton',
+        "paymentRequestButton",
         applePayConfig
       );
+
+      self.initTOCEvents();
 
       if (self.instanceApplePay) {
         canMakeApplePay(true);
@@ -154,7 +192,7 @@ define([
           }
         });
 
-        self.instanceApplePay.on('paymentAuthorized', function (token) {
+        self.instanceApplePay.on("paymentAuthorized", function (token) {
           self.paymentAuthorized(self, token);
         });
 
@@ -163,10 +201,10 @@ define([
     },
 
     paymentAuthorized: function (self, tokenHipay) {
-      var body = $('body');
+      var body = $("body");
       self.creditCardToken(tokenHipay.token);
       self.creditCardType(
-        tokenHipay.brand.toLowerCase().replace(/ /g, '-') || self.creditCardType
+        tokenHipay.brand.toLowerCase().replace(/ /g, "-") || self.creditCardType
       );
 
       var deferred = $.Deferred();
@@ -196,7 +234,7 @@ define([
               $.mage.redirect(self.afterPlaceOrderUrl);
             });
         });
-      body.loader('hide');
+      body.loader("hide");
     },
 
     /**
@@ -214,7 +252,7 @@ define([
     },
 
     initObservable: function () {
-      this._super().observe(['creditCardToken', 'creditCardType', 'eci']);
+      this._super().observe(["creditCardToken", "creditCardType", "eci"]);
 
       return this;
     },
@@ -225,24 +263,27 @@ define([
     isShowLegend: function () {
       return true;
     },
+
     context: function () {
       return this;
     },
+
     /**
      * @override
      */
     getCode: function () {
-      return 'hipay_applepay';
+      return "hipay_applepay";
     },
+
     getData: function () {
       return {
         method: this.item.method,
         additional_data: {
           card_token: this.creditCardToken(),
           eci: this.eci(),
-          cc_type: this.creditCardType()
-        }
+          cc_type: this.creditCardType(),
+        },
       };
-    }
+    },
   });
 });
