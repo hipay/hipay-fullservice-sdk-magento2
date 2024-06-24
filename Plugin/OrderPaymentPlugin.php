@@ -96,6 +96,33 @@ class OrderPaymentPlugin
     }
 
     /**
+     * Run HiPay cancel payment
+     * Used to set custom status and state when order is canceled
+     *
+     * @param  Order\Payment $subject
+     * @param  callable      $proceed
+     * @param  bool          $isOnline
+     * @return Order\Payment
+     */
+    public function aroundCancel(\Magento\Sales\Model\Order\Payment $subject, callable $proceed)
+    {
+
+        if ($this->isHipayMethod($subject->getMethod())) {
+            /**
+             * @var \Magento\Payment\Model\Method\AbstractMethod $method
+             */
+
+            $method = $subject->getMethodInstance();
+            $method->setStore($subject->getOrder()->getStoreId());
+            $method->cancelPayment($subject);
+        } else {
+            $proceed();
+        }
+
+        return $subject;
+    }
+
+    /**
      *
      * @param  string $method
      * @return bool
