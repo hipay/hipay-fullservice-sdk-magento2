@@ -240,10 +240,6 @@ class CleanPendingOrders
                 $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
             }
 
-            // Combine CASE conditions into a single condition
-            $caseConditionString = implode(' OR ', $caseStateConditions);
-            $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
-
             $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at'])
                 ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
                 ->join(
@@ -253,9 +249,15 @@ class CleanPendingOrders
                 )
                 ->setPageSize(50);
 
-            $collection->getSelect()
-                ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
-                ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
+            // Combine CASE conditions into a single condition
+            if (count($caseStateConditions) > 0 && count($caseIntervalConditions) > 0) {
+                $caseConditionString = implode(' OR ', $caseStateConditions);
+                $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
+
+                $collection->getSelect()
+                    ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
+                    ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
+            }
 
             if ($collection->getSize() >= 1) {
                 // Build the method to interval map
