@@ -3,4 +3,7 @@
     <publisher topic="hipay.notification">
         <connection name="db" exchange="magento"/>
     </publisher>
+    <publisher topic="order.cancel.hipay.api">
+        <connection name="db" exchange="magento" />
+    </publisher>
 </config>

@@ -2,5 +2,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
     <exchange name="magento" type="topic" connection="db">
         <binding id="NotificationBinding" topic="hipay.notification" destinationType="queue" destination="hipay.notification"/>
+        <binding id="cancelOrderHipayApiBinding" topic="order.cancel.hipay.api" destinationType="queue" destination="cancel_order_hipay_api_queue"/>
     </exchange>
 </config>
