@@ -27,6 +27,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Model\Order;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
+use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrderApiPublisher;
 use DateTime;
 use DateInterval;
 use Exception;
@@ -93,6 +94,12 @@ class CleanPendingOrders
     protected $_gatewayManagerFactory;
 
     /**
+     * @var CancelOrderApiPublisher $_cancelOrderApiPublisher
+     */
+    protected $_cancelOrderApiPublisher;
+
+
+    /**
      * CleanPendingOrders constructor
      *
      * @param OrderFactory $orderFactory
@@ -104,6 +111,7 @@ class CleanPendingOrders
      * @param StoreManagerInterface $storeManager
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      * @param ManagerFactory $gatewayManagerFactory
+     * @param CancelOrderApiPublisher $cancelOrderApiPublisher
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -114,7 +122,8 @@ class CleanPendingOrders
         DateTimeFactory $dateTimeFactory,
         StoreManagerInterface $storeManager,
         StoreWebsiteRelationInterface $storeWebsiteRelation,
-        ManagerFactory $gatewayManagerFactory
+        ManagerFactory $gatewayManagerFactory,
+        CancelOrderApiPublisher $cancelOrderApiPublisher
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -125,6 +134,7 @@ class CleanPendingOrders
         $this->storeManager = $storeManager;
         $this->storeWebsiteRelation = $storeWebsiteRelation;
         $this->_gatewayManagerFactory = $gatewayManagerFactory;
+        $this->_cancelOrderApiPublisher = $cancelOrderApiPublisher;
     }
 
     /**
@@ -178,7 +188,6 @@ class CleanPendingOrders
             // Build conditions for interval time of cancelation
             $intervalConditions = [];
 
-
             foreach ($paymentMethods as $code => $data) {
                 if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
                     $stateConditions[] = [
@@ -222,7 +231,6 @@ class CleanPendingOrders
             $caseIntervalConditions = [];
             $dateFormat = 'Y-m-d H:i:s';
             foreach ($intervalConditions as $condition) {
-
                 $dateObject = $this->_dateTimeFactory->create();
                 $gmtDate = $dateObject->gmtDate($dateFormat);
                 $date = new DateTime($gmtDate);
@@ -257,7 +265,7 @@ class CleanPendingOrders
                 }
                 foreach ($collection as $order) {
                     $method = $order->getMethod();
-                    $intervalValue = $methodIntervals[$method] ?? 30; // default interval if method not found
+                    $intervalValue = $methodIntervals[$method] ?? 30;
                     $interval = new DateInterval("PT{$intervalValue}M");
                     $this->cancelOrder($order, $interval, $dateFormat);
                 }
@@ -301,7 +309,6 @@ class CleanPendingOrders
         if ($orderCreationTimeIsCancellable && $order->canCancel()) {
             try {
 
-
                 $this->_orderManagement->cancel($order->getId());
 
                 $orderStatus = $order->getPayment()->getMethodInstance()->getConfigData(
@@ -325,7 +332,12 @@ class CleanPendingOrders
 
                 //Cancel through API
                 if (!empty($order->getPayment()->getCcTransId())) {
-                    $this->getGatewayManager($order)->requestOperationCancel();
+                    try {
+                        $this->getGatewayManager($order)->requestOperationCancel();
+                    } catch (Exception $e) {
+                        $this->_cancelOrderApiPublisher->execute((string) $order->getId());
+                        $this->logger->critical($e->getMessage());
+                    }
                 }
 
             } catch (Exception $e) {
