@@ -3,4 +3,7 @@
     <topic name="hipay.notification" is_synchronous="false" request="string">
         <handler name="HiPayNotificationHandler" type="HiPay\FullserviceMagento\Model\Queue\Notification\Consumer" method="execute"/>
     </topic>
+    <topic name="order.cancel.hipay.api" request="string">
+        <handler name="cancelOrderHipayApiHandler" type="HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Consumer" method="execute"/>
+    </topic>
 </config>
