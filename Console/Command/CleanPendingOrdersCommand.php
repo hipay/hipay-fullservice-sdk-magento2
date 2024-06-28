@@ -16,16 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Console\Command;
 
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
-use Magento\Framework\Translate\Inline\StateInterface;
-use Magento\Framework\TranslateInterface;
-use Magento\Store\Model\App\Emulation;
 
 /**
  * Class ConvertSerializedData
@@ -34,40 +29,17 @@ use Magento\Store\Model\App\Emulation;
 class CleanPendingOrdersCommand extends Command
 {
     /**
-     * @var State
-     */
-    protected $state;
-
-    /**
      * @var CleanPendingOrders
      */
     protected $cleanPendingOrders;
 
-    protected $_emulation;
-
-    protected $_translator;
-
-    protected $_inlineTranslation;
-
     /**
      * Constructor
      *
-     * @param State $state
-     * @param Emulation $emulation
-     * @param TranslateInterface $translator
-     * @param StateInterface $inlineTranslation
      * @param CleanPendingOrders $cleanPendingOrders
      */
-    public function __construct(State $state,
-                                Emulation $emulation,
-                                TranslateInterface $translator,
-                                StateInterface $inlineTranslation,
-                                CleanPendingOrders $cleanPendingOrders)
+    public function __construct(CleanPendingOrders $cleanPendingOrders)
     {
-        $this->state = $state;
-        $this->_emulation  = $emulation;
-        $this->_translator = $translator;
-        $this->_inlineTranslation = $inlineTranslation;
         $this->cleanPendingOrders = $cleanPendingOrders;
         parent::__construct();
 
