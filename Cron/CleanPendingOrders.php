@@ -109,7 +109,6 @@ class CleanPendingOrders
      */
     protected $_state;
 
-
     /**
      * @var Emulation
      */
@@ -243,19 +242,19 @@ class CleanPendingOrders
                         if ($code == 'hipay_hosted_fields') {
                             // one day interval
                             $intervalConditions[] = [
-                                'value' => 1,
+                                'value' => 1440,
                                 'method' => $code
                             ];
-                        } else if (strpos($code, 'alma') !== false) {
+                        } elseif (strpos($code, 'alma') !== false) {
                             // two days interval
                             $intervalConditions[] = [
-                                'value' => 1,
+                                'value' => 2880,
                                 'method' => $code
                             ];
                         } else {
                             // default interval
                             $intervalConditions[] = [
-                                'value' => 1,
+                                'value' => 30,
                                 'method' => $code
                             ];
                         }
