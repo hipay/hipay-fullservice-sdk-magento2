@@ -17,7 +17,6 @@
 namespace HiPay\FullserviceMagento\Cron;
 
 use Magento\Framework\App\AreaInterface;
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\OrderFactory;
@@ -32,10 +31,6 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Model\Order;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
-use Magento\Framework\Translate\Inline\StateInterface;
-use Magento\Framework\TranslateInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Framework\App\Language\Dictionary;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrderApiPublisher;
 use DateTime;
@@ -299,7 +294,7 @@ class CleanPendingOrders
                     ->setPageSize(50);
 
                 // Combine CASE conditions into a single condition
-                if (count($caseStateConditions) > 33 && count($caseIntervalConditions) > 33) {
+                if (count($caseStateConditions) > 0 && count($caseIntervalConditions) > 0 ) {
                     $caseConditionString = implode(' OR ', $caseStateConditions);
                     $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
 
@@ -318,17 +313,12 @@ class CleanPendingOrders
                         $method = $order->getMethod();
                         $intervalValue = $methodIntervals[$method] ?? 30;
                         $interval = new DateInterval("PT{$intervalValue}M");
-                      //  $this->cancelOrder($order, $interval, $dateFormat);
+                        $this->cancelOrder($order, $interval, $dateFormat);
                     }
                 }
-
-
                 $this->_emulation->stopEnvironmentEmulation();
 
             }
-            //die("here");
-
-
 
         }
 
@@ -349,6 +339,7 @@ class CleanPendingOrders
     {
         $orderCreationTimeIsCancellable = true;
 
+
         $orderMethodInstance = $order->getPayment()->getMethodInstance();
         $messageInterval = $interval->i;
 
@@ -366,7 +357,7 @@ class CleanPendingOrders
             }
         }
 
-        if ($order) {
+        if ($orderCreationTimeIsCancellable && $order->canCancel()) {
             try {
                 $message = __('Order canceled automatically by cron because order is pending since %1 minutes'
                     , $messageInterval);
