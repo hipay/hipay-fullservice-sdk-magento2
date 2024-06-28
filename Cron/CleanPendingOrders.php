@@ -16,22 +16,33 @@
  
 namespace HiPay\FullserviceMagento\Cron;
 
+use Magento\Framework\App\AreaInterface;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\Sales\Model\Order;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Framework\TranslateInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\App\Language\Dictionary;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrderApiPublisher;
 use DateTime;
 use DateInterval;
 use Exception;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\AreaList;
 
 /**
  * HiPay module crontab
@@ -98,6 +109,21 @@ class CleanPendingOrders
      */
     protected $_cancelOrderApiPublisher;
 
+    /**
+     * @var State
+     */
+    protected $_state;
+
+
+    /**
+     * @var Emulation
+     */
+    protected $_emulation;
+
+    /**
+     * @var AreaList
+     */
+    protected $_areaList;
 
     /**
      * CleanPendingOrders constructor
@@ -112,6 +138,9 @@ class CleanPendingOrders
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
      * @param ManagerFactory $gatewayManagerFactory
      * @param CancelOrderApiPublisher $cancelOrderApiPublisher
+     * @param State $state
+     * @param Emulation $emulation
+     * @param AreaList $areaList
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -123,7 +152,10 @@ class CleanPendingOrders
         StoreManagerInterface $storeManager,
         StoreWebsiteRelationInterface $storeWebsiteRelation,
         ManagerFactory $gatewayManagerFactory,
-        CancelOrderApiPublisher $cancelOrderApiPublisher
+        CancelOrderApiPublisher $cancelOrderApiPublisher,
+        State $state,
+        Emulation $emulation,
+        AreaList $areaList
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -135,143 +167,169 @@ class CleanPendingOrders
         $this->storeWebsiteRelation = $storeWebsiteRelation;
         $this->_gatewayManagerFactory = $gatewayManagerFactory;
         $this->_cancelOrderApiPublisher = $cancelOrderApiPublisher;
+        $this->_state = $state;
+        $this->_emulation  = $emulation;
+        $this->_areaList = $areaList;
     }
 
     /**
      * Clean orders in pending status since 30 minutes
      *
      * @return $this
+     * @throws LocalizedException
      */
     public function execute()
     {
+        $this->_state->setAreaCode(Area::AREA_FRONTEND);
+        $areaModel = $this->_areaList->getArea($this->_state->getAreaCode());
+
+        // Load design and translation parts
+        $areaModel->load(AreaInterface::PART_DESIGN);
+        $areaModel->load(AreaInterface::PART_TRANSLATE);
+
         $websites = $this->storeManager->getWebsites();
 
         foreach ($websites as $website) {
-            $websiteId = $website->getId();
-            $this->logger->info('Cleaning pending order for website ' . $websiteId);
-            $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
+            $stores = $website->getStores();
 
-            $paymentMethods = $this->paymentHelper->getPaymentMethods();
-            $cancelPendingOrdersConfig = [];
-            $pendingOrderStatusConfig = [];
+            foreach ($stores as $store) {
+                $storeId = $store->getId();
+                $this->_emulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
+                $websiteId = $website->getId();
 
-            // Pre-fetch configuration values for all payment methods
-            foreach ($paymentMethods as $code => $data) {
-                if ((strpos($code, 'hipay') !== false || strpos($code, 'hipay_cc') === false)) {
-                    $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
-                        'payment/' . $code . '/cancel_pending_order',
-                        ScopeInterface::SCOPE_WEBSITE,
-                        $websiteId
-                    );
-                    if ($cancelPendingOrdersConfig[$code]) {
-                        $pendingOrderStatusConfig[$code] = $this->_scopeConfig->getValue(
-                            'payment/' . $code . '/order_status',
+                $this->logger->info('Cleaning pending order for website ' . $storeId);
+                $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
+
+                $paymentMethods = $this->paymentHelper->getPaymentMethods();
+                $cancelPendingOrdersConfig = [];
+                $pendingOrderStatusConfig = [];
+
+                // Pre-fetch configuration values for all payment methods
+                foreach ($paymentMethods as $code => $data) {
+                    if ((strpos($code, 'hipay') !== false || strpos($code, 'hipay_cc') === false)) {
+                        $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
+                            'payment/' . $code . '/cancel_pending_order',
                             ScopeInterface::SCOPE_WEBSITE,
                             $websiteId
                         );
+                        if ($cancelPendingOrdersConfig[$code]) {
+                            $pendingOrderStatusConfig[$code] = $this->_scopeConfig->getValue(
+                                'payment/' . $code . '/order_status',
+                                ScopeInterface::SCOPE_WEBSITE,
+                                $websiteId
+                            );
+                        }
                     }
                 }
-            }
 
-            /**
-             * @var Order $orderModel
-             */
-            $orderModel = $this->_orderFactory->create();
+                /**
+                 * @var Order $orderModel
+                 */
+                $orderModel = $this->_orderFactory->create();
 
-            /**
-             * @var $collection OrderCollection
-             */
-            $collection = $orderModel->getCollection();
+                /**
+                 * @var $collection OrderCollection
+                 */
+                $collection = $orderModel->getCollection();
 
-            // Build conditions for state and method filtering
-            $stateConditions = [];
-            // Build conditions for interval time of cancelation
-            $intervalConditions = [];
+                // Build conditions for state and method filtering
+                $stateConditions = [];
+                // Build conditions for interval time of cancelation
+                $intervalConditions = [];
 
-            foreach ($paymentMethods as $code => $data) {
-                if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
-                    $stateConditions[] = [
-                        'field' => 'main_table.state',
-                        'value' => $pendingOrderStatusConfig[$code],
-                        'method' => $code
-                    ];
-
-                    if ($code == 'hipay_hosted_fields') {
-                        // one day interval
-                        $intervalConditions[] = [
-                            'value' => 1440,
+                foreach ($paymentMethods as $code => $data) {
+                    if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
+                        $stateConditions[] = [
+                            'field' => 'main_table.state',
+                            'value' => $pendingOrderStatusConfig[$code],
                             'method' => $code
                         ];
-                    } else if (strpos($code, 'alma') !== false) {
-                        // two days interval
-                        $intervalConditions[] = [
-                            'value' => 2880,
-                            'method' => $code
-                        ];
-                    } else {
-                        // default interval
-                        $intervalConditions[] = [
-                            'value' => 30,
-                            'method' => $code
-                        ];
+
+                        if ($code == 'hipay_hosted_fields') {
+                            // one day interval
+                            $intervalConditions[] = [
+                                'value' => 1,
+                                'method' => $code
+                            ];
+                        } else if (strpos($code, 'alma') !== false) {
+                            // two days interval
+                            $intervalConditions[] = [
+                                'value' => 1,
+                                'method' => $code
+                            ];
+                        } else {
+                            // default interval
+                            $intervalConditions[] = [
+                                'value' => 1,
+                                'method' => $code
+                            ];
+                        }
                     }
                 }
-            }
 
-            // Construct the CASE conditions for state and method
-            $caseStateConditions = [];
+                // Construct the CASE conditions for state and method
+                $caseStateConditions = [];
 
-            foreach ($stateConditions as $condition) {
-                $state = $condition['value'];
-                $method = $condition['method'];
-                $caseStateConditions[] = "(main_table.status = '$state' AND op.method = '$method')";
-            }
+                foreach ($stateConditions as $condition) {
+                    $state = $condition['value'];
+                    $method = $condition['method'];
+                    $caseStateConditions[] = "(main_table.status = '$state' AND op.method = '$method')";
+                }
 
-            // Construct the CASE conditions for interval
-            $caseIntervalConditions = [];
-            $dateFormat = 'Y-m-d H:i:s';
-            foreach ($intervalConditions as $condition) {
-                $dateObject = $this->_dateTimeFactory->create();
-                $gmtDate = $dateObject->gmtDate($dateFormat);
-                $date = new DateTime($gmtDate);
-                $interval = new DateInterval("PT{$condition['value']}M");;
-                $method = $condition['method'];
-                $formattedDate = $date->sub($interval)->format($dateFormat);
-                $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
-            }
-
-            $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at'])
-                ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
-                ->join(
-                    ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
-                    'main_table.entity_id = op.parent_id',
-                    ['method']
-                )
-                ->setPageSize(50);
-
-            // Combine CASE conditions into a single condition
-            if (count($caseStateConditions) > 0 && count($caseIntervalConditions) > 0) {
-                $caseConditionString = implode(' OR ', $caseStateConditions);
-                $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
-
-                $collection->getSelect()
-                    ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
-                    ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
-            }
-
-            if ($collection->getSize() >= 1) {
-                // Build the method to interval map
-                $methodIntervals = [];
+                // Construct the CASE conditions for interval
+                $caseIntervalConditions = [];
+                $dateFormat = 'Y-m-d H:i:s';
                 foreach ($intervalConditions as $condition) {
-                    $methodIntervals[$condition['method']] = $condition['value'];
+                    $dateObject = $this->_dateTimeFactory->create();
+                    $gmtDate = $dateObject->gmtDate($dateFormat);
+                    $date = new DateTime($gmtDate);
+                    $interval = new DateInterval("PT{$condition['value']}M");;
+                    $method = $condition['method'];
+                    $formattedDate = $date->sub($interval)->format($dateFormat);
+                    $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
                 }
-                foreach ($collection as $order) {
-                    $method = $order->getMethod();
-                    $intervalValue = $methodIntervals[$method] ?? 30;
-                    $interval = new DateInterval("PT{$intervalValue}M");
-                    $this->cancelOrder($order, $interval, $dateFormat);
+
+                $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at'])
+                    ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
+                    ->join(
+                        ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
+                        'main_table.entity_id = op.parent_id',
+                        ['method']
+                    )
+                    ->setPageSize(50);
+
+                // Combine CASE conditions into a single condition
+                if (count($caseStateConditions) > 33 && count($caseIntervalConditions) > 33) {
+                    $caseConditionString = implode(' OR ', $caseStateConditions);
+                    $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
+
+                    $collection->getSelect()
+                        ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
+                        ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
                 }
+
+                if ($collection->getSize() >= 1) {
+                    // Build the method to interval map
+                    $methodIntervals = [];
+                    foreach ($intervalConditions as $condition) {
+                        $methodIntervals[$condition['method']] = $condition['value'];
+                    }
+                    foreach ($collection as $order) {
+                        $method = $order->getMethod();
+                        $intervalValue = $methodIntervals[$method] ?? 30;
+                        $interval = new DateInterval("PT{$intervalValue}M");
+                      //  $this->cancelOrder($order, $interval, $dateFormat);
+                    }
+                }
+
+
+                $this->_emulation->stopEnvironmentEmulation();
+
             }
+            //die("here");
+
+
+
         }
 
         return $this;
@@ -308,8 +366,10 @@ class CleanPendingOrders
             }
         }
 
-        if ($orderCreationTimeIsCancellable && $order->canCancel()) {
+        if ($order) {
             try {
+                $message = __('Order canceled automatically by cron because order is pending since %1 minutes'
+                    , $messageInterval);
 
                 $this->_orderManagement->cancel($order->getId());
 
@@ -317,20 +377,19 @@ class CleanPendingOrders
                     'order_status_payment_canceled'
                 );
 
-                // keep order status/state
-                $order
-                    ->addStatusToHistory(
-                        $orderStatus,
-                        __(
-                            'Order canceled automatically by cron because order ' .
-                            'is pending since %1 minutes',
-                            $messageInterval
-                        )
-                    );
-
                 $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
 
+                // keep order status/state
+                $history = $order->addCommentToStatusHistory($message,
+                    $order->getStatus(),
+                    true
+                );
+                $history->setIsCustomerNotified(false);
+
+                $history->save();
                 $order->save();
+
+                $this->_orderManagement->addComment($order->getId(),$history);
 
                 //Cancel through API
                 if (!empty($order->getPayment()->getCcTransId())) {
