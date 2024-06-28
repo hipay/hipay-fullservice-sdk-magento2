@@ -389,4 +389,10 @@
 "Enter a value between 25 and 55. Default is 40.","Entrez une valeur entre 25 et 55. La valeur par défaut est 40."
 "The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000.","La fonctionnalité 'Acheter maintenant, Payer plus tard' est uniquement disponible si la devise du magasin est l'euro et si le montant du panier se situe entre 30 et 2000 euros."
 "<b>Important! :</b> Please provide your Merchant PayPal ID to enable PayPal V2 integration.","<b>Important! :</b> Veuillez fournir votre identifiant marchand PayPal pour activer l'intégration PayPal V2."
+"Canceled","Annulée",module,Magento_Sales
+"Canceled","Annulée",module,Magento_Bundle
+"Canceled","Annulée",module,Magento_Downloadable
+"Canceled","Annulée",module,Magento_Paypal
+"Canceled","Annulée",module,Magento_Reports
+"Canceled","Annulée",module,Magento_Signifyd
 
