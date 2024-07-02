@@ -254,7 +254,7 @@ class Manager
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
-    public function requestOperationCancel($amount = null)
+    public function requestOperationCancel()
     {
         return $this->_requestOperation(Operation::CANCEL);
     }
@@ -370,14 +370,13 @@ class Manager
         $maintenanceRequest->operation_id = $operationId;
         $this->_debug($this->_requestToArray($maintenanceRequest));
 
-        $opModel = $this->_gateway->requestMaintenanceOperation(
+        return $this->_gateway->requestMaintenanceOperation(
             $operationType,
             $transactionReference,
             $amount,
             $operationId,
             $maintenanceRequest
         );
-        return $opModel;
     }
 
     /**
@@ -393,8 +392,6 @@ class Manager
             ->addFilter(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID, $paymentId)
             ->create();
 
-        $nbTrx = $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
-
-        return $nbTrx;
+        return $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
     }
 }

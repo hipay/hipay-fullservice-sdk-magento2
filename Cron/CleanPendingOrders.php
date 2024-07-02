@@ -122,19 +122,19 @@ class CleanPendingOrders
     /**
      * CleanPendingOrders constructor
      *
-     * @param OrderFactory $orderFactory
-     * @param Data $paymentHelper
-     * @param ScopeConfigInterface $scopeConfig
-     * @param LoggerInterface $logger
-     * @param OrderManagementInterface $orderManagement
-     * @param DateTimeFactory $dateTimeFactory
-     * @param StoreManagerInterface $storeManager
+     * @param OrderFactory                  $orderFactory
+     * @param Data                          $paymentHelper
+     * @param ScopeConfigInterface          $scopeConfig
+     * @param LoggerInterface               $logger
+     * @param OrderManagementInterface      $orderManagement
+     * @param DateTimeFactory               $dateTimeFactory
+     * @param StoreManagerInterface         $storeManager
      * @param StoreWebsiteRelationInterface $storeWebsiteRelation
-     * @param ManagerFactory $gatewayManagerFactory
-     * @param CancelOrderApiPublisher $cancelOrderApiPublisher
-     * @param State $state
-     * @param Emulation $emulation
-     * @param AreaList $areaList
+     * @param ManagerFactory                $gatewayManagerFactory
+     * @param CancelOrderApiPublisher       $cancelOrderApiPublisher
+     * @param State                         $state
+     * @param Emulation                     $emulation
+     * @param AreaList                      $areaList
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -200,7 +200,7 @@ class CleanPendingOrders
 
                 // Pre-fetch configuration values for all payment methods
                 foreach ($paymentMethods as $code => $data) {
-                    if ((strpos($code, 'hipay') !== false || strpos($code, 'hipay_cc') === false)) {
+                    if (strpos($code, 'hipay') !== false || strpos($code, 'hipay_cc') === false) {
                         $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
                             'payment/' . $code . '/cancel_pending_order',
                             ScopeInterface::SCOPE_WEBSITE,
@@ -277,7 +277,7 @@ class CleanPendingOrders
                     $dateObject = $this->_dateTimeFactory->create();
                     $gmtDate = $dateObject->gmtDate($dateFormat);
                     $date = new DateTime($gmtDate);
-                    $interval = new DateInterval("PT{$condition['value']}M");;
+                    $interval = new DateInterval("PT{$condition['value']}M");
                     $method = $condition['method'];
                     $formattedDate = $date->sub($interval)->format($dateFormat);
                     $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
@@ -293,7 +293,7 @@ class CleanPendingOrders
                     ->setPageSize(50);
 
                 // Combine CASE conditions into a single condition
-                if (count($caseStateConditions) > 0 && count($caseIntervalConditions) > 0 ) {
+                if (!empty($caseStateConditions) && !empty($caseIntervalConditions)) {
                     $caseConditionString = implode(' OR ', $caseStateConditions);
                     $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
 
@@ -316,28 +316,24 @@ class CleanPendingOrders
                     }
                 }
                 $this->_emulation->stopEnvironmentEmulation();
-
             }
-
         }
 
         return $this;
     }
 
-
     /**
      * Function Cancel order
      *
-     * @param Order $order
+     * @param Order             $order
      * @param DateInterval|null $interval
-     * @param string|null $dateFormat
+     * @param string|null       $dateFormat
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function cancelOrder(Order $order, ?DateInterval $interval, ?string $dateFormat = 'Y-m-d H:i:s')
     {
         $orderCreationTimeIsCancellable = true;
-
 
         $orderMethodInstance = $order->getPayment()->getMethodInstance();
         $messageInterval = $interval->i;
@@ -358,8 +354,10 @@ class CleanPendingOrders
 
         if ($orderCreationTimeIsCancellable && $order->canCancel()) {
             try {
-                $message = __('Order canceled automatically by cron because order is pending since %1 minutes'
-                    , $messageInterval);
+                $message = __(
+                    'Order canceled automatically by cron because order is pending since %1 minutes',
+                    $messageInterval
+                );
 
                 $this->_orderManagement->cancel($order->getId());
 
@@ -370,7 +368,8 @@ class CleanPendingOrders
                 $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
 
                 // keep order status/state
-                $history = $order->addCommentToStatusHistory($message,
+                $history = $order->addCommentToStatusHistory(
+                    $message,
                     $order->getStatus(),
                     true
                 );
@@ -379,7 +378,7 @@ class CleanPendingOrders
                 $history->save();
                 $order->save();
 
-                $this->_orderManagement->addComment($order->getId(),$history);
+                $this->_orderManagement->addComment($order->getId(), $history);
 
                 //Cancel through API
                 if (!empty($order->getPayment()->getCcTransId())) {
@@ -390,7 +389,6 @@ class CleanPendingOrders
                         $this->logger->critical($e->getMessage());
                     }
                 }
-
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage());
             }
@@ -408,5 +406,4 @@ class CleanPendingOrders
     {
         return $this->_gatewayManagerFactory->create($order);
     }
-
 }

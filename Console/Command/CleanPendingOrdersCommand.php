@@ -16,11 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Console\Command;
 
+use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
 
 /**
  * Class ConvertSerializedData
@@ -42,7 +42,6 @@ class CleanPendingOrdersCommand extends Command
     {
         $this->cleanPendingOrders = $cleanPendingOrders;
         parent::__construct();
-
     }
 
     /**
@@ -57,7 +56,7 @@ class CleanPendingOrdersCommand extends Command
     /**
      * Execute command
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      * @return int
      * @throws LocalizedException
