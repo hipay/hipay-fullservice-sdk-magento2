@@ -59,11 +59,11 @@ class Consumer
     protected $cancelOrderApiPublisher;
 
     /**
-     * @param ObjectManagerInterface $objectManager
-     * @param Monolog $logger
+     * @param ObjectManagerInterface   $objectManager
+     * @param Monolog                  $logger
      * @param OrderRepositoryInterface $orderRepository
-     * @param ManagerFactory $gatewayManagerFactory
-     * @param Publisher $cancelOrderApiPublisher
+     * @param ManagerFactory           $gatewayManagerFactory
+     * @param Publisher                $cancelOrderApiPublisher
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -88,8 +88,6 @@ class Consumer
     public function execute(string $id)
     {
         if ($id) {
-
-
             $this->logger->info(
                 'Consuming cancel order ID "' . $id
             );
@@ -99,8 +97,8 @@ class Consumer
                 $order = $this->orderRepository->get((int) $id);
 
                 if (!empty($order)) {
-                  $gateway = $this->gatewayManagerFactory->create($order);
-                  $gateway->requestOperationCancel();
+                    $gateway = $this->gatewayManagerFactory->create($order);
+                    $gateway->requestOperationCancel();
                 }
             } catch (\Exception $e) {
                 $this->cancelOrderApiPublisher->execute((string) $id);
