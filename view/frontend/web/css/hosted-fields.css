@@ -73,7 +73,7 @@
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
   width: 100%;
-  height: fit-content;
+  height: 50px;
   margin: 0 10px;
 }
 
@@ -84,6 +84,10 @@
 .ie9 .hipay-field-container-half {
   width: 100%;
   margin-bottom: 16px;
+}
+
+.apple-container{
+  height: fit-content;
 }
 
 .hipay-field {

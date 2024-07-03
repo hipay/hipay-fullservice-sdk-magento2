@@ -15,14 +15,14 @@
  */
 
 define([
-  "ko",
-  "jquery",
-  "HiPay_FullserviceMagento/js/view/payment/cc-form",
-  "Magento_Checkout/js/model/full-screen-loader",
-  "Magento_Checkout/js/model/quote",
-  "domReady!",
+  'ko',
+  'jquery',
+  'HiPay_FullserviceMagento/js/view/payment/cc-form',
+  'Magento_Checkout/js/model/full-screen-loader',
+  'Magento_Checkout/js/model/quote',
+  'domReady!'
 ], function (ko, $, Component, fullScreenLoader, quote) {
-  "use strict";
+  'use strict';
 
   return Component.extend({
     createHostedFields: function (context) {
@@ -30,9 +30,9 @@ define([
       if (context) {
         self = context;
       }
-      self.hipayHostedFields = self.hipaySdk.create("card", self.configHipay);
+      self.hipayHostedFields = self.hipaySdk.create('card', self.configHipay);
 
-      self.hipayHostedFields.on("change", function (data) {
+      self.hipayHostedFields.on('change', function (data) {
         if (self.showCcForm()) {
           if (!data.valid || data.error) {
             self.hipayHFstatus = false;
@@ -45,7 +45,7 @@ define([
 
       self.hipaySdk.injectBaseStylesheet();
 
-      self.hipayHostedFields.on("blur", function (data) {
+      self.hipayHostedFields.on('blur', function (data) {
         // Get error container
         var domElement = document.querySelector(
           "[data-hipay-id='hipay-card-field-error-" + data.element + "']"
@@ -60,11 +60,11 @@ define([
         if (!data.validity.valid && !data.validity.empty) {
           domElement.innerText = data.validity.error;
         } else {
-          domElement.innerText = "";
+          domElement.innerText = '';
         }
       });
 
-      self.hipayHostedFields.on("inputChange", function (data) {
+      self.hipayHostedFields.on('inputChange', function (data) {
         // Get error container
         var domElement = document.querySelector(
           "[data-hipay-id='hipay-card-field-error-" + data.element + "']"
@@ -79,7 +79,7 @@ define([
         if (!data.validity.valid && !data.validity.potentiallyValid) {
           domElement.innerText = data.validity.error;
         } else {
-          domElement.innerText = "";
+          domElement.innerText = '';
         }
       });
 
@@ -97,65 +97,67 @@ define([
     },
 
     defaults: {
-      template: "HiPay_FullserviceMagento/payment/hipay-hosted-fields",
+      template: 'HiPay_FullserviceMagento/payment/hipay-hosted-fields',
       showCcForm: true,
       env:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.env
-          : "",
+          : '',
       apiUsernameTokenJs:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.apiUsernameTokenJs
-          : "",
+          : '',
       apiPasswordTokenJs:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.apiPasswordTokenJs
-          : "",
+          : '',
       color:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.color
-          : "",
+          : '',
       fontFamily:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.fontFamily
-          : "",
+          : '',
       fontSize:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.fontSize
-          : "",
+          : '',
       fontWeight:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.fontWeight
-          : "",
+          : '',
       placeholderColor:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.placeholderColor
-          : "",
+          : '',
       caretColor:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.caretColor
-          : "",
+          : '',
       iconColor:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.iconColor
-          : "",
+          : '',
       locale:
         window.checkoutConfig.payment.hiPayFullservice !== undefined
           ? window.checkoutConfig.payment.hiPayFullservice.locale
               .hipay_hosted_fields
-          : "",
+          : '',
       sdkJsUrl:
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.sdkJsUrl
-          : "",
-      hipaySdk: "",
+          : '',
+      hipaySdk: ''
     },
 
     hipayHostedFields: null,
     configHipay: null,
     hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
-    isAllTOCChecked: ko.observable(!window.checkoutConfig.checkoutAgreements.isEnabled),
+    isAllTOCChecked: ko.observable(
+      !window.checkoutConfig.checkoutAgreements.isEnabled
+    ),
     allTOC: new Map(),
 
     /**
@@ -184,33 +186,39 @@ define([
       }
     },
 
-    initTOCEvents: function() {
+    initTOCEvents: function () {
       var self = this;
 
-      $(document).ready(function() {
+      $(document).ready(function () {
         if (window.checkoutConfig.checkoutAgreements.isEnabled) {
-          $('body').on('DOMNodeInserted', function(e) {
-              var results = document.querySelectorAll("input[id*='agreement_hipay_hosted_fields']")
-              var agreements = window.checkoutConfig.checkoutAgreements.agreements;
-              agreements = agreements.filter((input) => input.mode == '1');
-              if(results.length && results.length == agreements.length){
-                results.forEach(function(input, index) {
-                  self.allTOC.set(index, false);
-                  input.addEventListener('change', function(event){
-                    self.allTOC.set(index, event.target.checked);
-                    updateTOCState();
-                  });
-                })
-                $('body').off('DOMNodeInserted');
-              }
-          });
+          $('body').on('DOMNodeInserted', initHostedFieldsEvents);
         }
 
-        function updateTOCState(){
-          var noChecked = [...self.allTOC.values()].filter((value) => value == false);
-          if(noChecked.length > 0){
+        function initHostedFieldsEvents() {
+          var results = document.querySelectorAll(
+            "input[id*='agreement_hipay_hosted_fields']"
+          );
+          var agreements = window.checkoutConfig.checkoutAgreements.agreements;
+          agreements = agreements.filter((input) => input.mode == '1');
+          if (results.length && results.length == agreements.length) {
+            results.forEach(function (input, index) {
+              self.allTOC.set(index, false);
+              input.addEventListener('change', function (event) {
+                self.allTOC.set(index, event.target.checked);
+                updateTOCState();
+              });
+            });
+            $('body').off('DOMNodeInserted', initHostedFieldsEvents);
+          }
+        }
+
+        function updateTOCState() {
+          var noChecked = [...self.allTOC.values()].filter(
+            (value) => value == false
+          );
+          if (noChecked.length > 0) {
             self.isAllTOCChecked(false);
-          }else{
+          } else {
             self.isAllTOCChecked(true);
           }
         }
@@ -219,8 +227,8 @@ define([
 
     initialize: function () {
       var self = this;
-      var customerFirstName = "";
-      var customerLastName = "";
+      var customerFirstName = '';
+      var customerLastName = '';
 
       self._super();
 
@@ -231,25 +239,25 @@ define([
       }
 
       self.configHipay = {
-        selector: "hipay-container-hosted-fields",
+        selector: 'hipay-container-hosted-fields',
         multi_use: self.allowMultiUse(),
         fields: {
           cardHolder: {
-            selector: "hipay-card-holder",
+            selector: 'hipay-card-holder',
             defaultFirstname: customerFirstName,
-            defaultLastname: customerLastName,
+            defaultLastname: customerLastName
           },
           cardNumber: {
-            selector: "hipay-card-number",
+            selector: 'hipay-card-number'
           },
           expiryDate: {
-            selector: "hipay-date-expiry",
+            selector: 'hipay-date-expiry'
           },
           cvc: {
-            selector: "hipay-cvc",
+            selector: 'hipay-cvc',
             helpButton: true,
-            helpSelector: "hipay-help-cvc",
-          },
+            helpSelector: 'hipay-help-cvc'
+          }
         },
         styles: {
           base: {
@@ -259,9 +267,9 @@ define([
             fontWeight: self.fontWeight,
             placeholderColor: self.placeholderColor,
             caretColor: self.caretColor,
-            iconColor: self.iconColor,
-          },
-        },
+            iconColor: self.iconColor
+          }
+        }
       };
 
       self.initTOCEvents();
@@ -278,13 +286,13 @@ define([
      */
     initObservable: function () {
       var self = this;
-      self._super().observe(["createOneclick"]);
+      self._super().observe(['createOneclick']);
 
       self.showCcForm = ko.computed(function () {
         var showCC =
           !(self.useOneclick() && self.customerHasCard()) ||
           self.selectedCard() === undefined ||
-          self.selectedCard() === "";
+          self.selectedCard() === '';
         return showCC;
       }, self);
 
@@ -299,7 +307,7 @@ define([
      * @override
      */
     getCode: function () {
-      return "hipay_hosted_fields";
+      return 'hipay_hosted_fields';
     },
 
     getData: function () {
@@ -331,7 +339,7 @@ define([
           self.creditCardToken(response.token);
           self.creditCardType(response.payment_product);
           self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-          self.creditCardToken("");
+          self.creditCardToken('');
           fullScreenLoader.stopLoader();
         },
         function (errors) {
@@ -350,6 +358,6 @@ define([
           fullScreenLoader.stopLoader();
         }
       );
-    },
+    }
   });
 });
