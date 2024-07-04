@@ -174,12 +174,12 @@
 
 .HiPayField--focused + .hipay-label,
 .HiPayField--focused + .hipay-label svg {
-  color: #00ade9 !important;
-  fill: #00ade9 !important;
+  color: #A50979 !important;
+  fill: #A50979 !important;
 }
 
 .HiPayField--focused + .hipay-baseline {
-  color: #00ade9 !important;
+  color: #A50979 !important;
 }
 
 .HiPayField--invalid + .hipay-label {
@@ -200,7 +200,7 @@
 }
 
 .HiPayField--focused + .hipay-label + .hipay-baseline {
-  border-bottom: solid 1px #00ade9;
+  border-bottom: solid 1px #A50979;
 }
 
 .HiPayField--invalid + .hipay-label + .hipay-baseline {
