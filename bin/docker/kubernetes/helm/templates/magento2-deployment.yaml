@@ -83,6 +83,7 @@ spec:
           requests:
             memory: "5G"
             cpu: "1200m"
+            ephemeral-storage: "2Gi"
         envFrom:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
