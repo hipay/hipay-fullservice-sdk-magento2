@@ -20,6 +20,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <csp>
+            <policies>
+                <storefront_checkout_index_index>
+                    <scripts>
+                        <inline>1</inline>
+                    </scripts>
+                </storefront_checkout_index_index>
+            </policies>
+        </csp>
         <hipay>
             <hipay_credentials>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
