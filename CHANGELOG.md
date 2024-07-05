@@ -3,6 +3,7 @@
 ## Unreleased
 
 - **Fixed** : Fixed CSP issues allowing *inline scripts* and new entries in `csp_whitelist.xml`
+- **Fixed** : Handle terms of conditions checkboxes
 
 ## 1.22.3
 
