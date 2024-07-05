@@ -191,7 +191,7 @@
               data-bind="
                         click: generateToken,
                         attr: {title: $t('Place Order')},
-                        enable: isPlaceOrderActionAllowed() && isPlaceOrderAllowed()
+                        enable: isPlaceOrderActionAllowed() && isPlaceOrderAllowed() && isAllTOCChecked()
                         "
               disabled
             >
@@ -202,6 +202,12 @@
       </div>
     </form>
     <div class="checkout-agreements-block">
+      <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">
+        <span>
+          <!-- ko i18n: 'Please agree with the terms of conditions below'-->
+          <!-- /ko -->
+        </span>
+      </div>
       <!-- ko foreach: $parent.getRegion('before-place-order') -->
       <!-- ko template: getTemplate() -->
       <!-- /ko -->

@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- **Fixed** : Fixed CSP issues allowing *inline scripts* and new entries in `csp_whitelist.xml`
+- **Fixed** : Handle terms of conditions checkboxes
+
 ## 1.22.3
 
 - **Fixed** : Fixed stock discount when order refused or during clean pending orders, thanks to [madleen](https://github.com/madleen) for issue [#163](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/163) and [syno-bgt](https://github.com/syno-bgt) for issue [#161](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/161)

@@ -20,7 +20,7 @@
 <div
   id="payment-method-applepay"
   class="payment-method"
-  data-bind="css: {'_active': (getCode() == isChecked())}, visible: isApplePayVisible()"
+  data-bind="css: {'_active': (getCode() == isChecked())}"
 >
   <div class="payment-method-title field choice">
     <input
@@ -44,13 +44,20 @@
       <!-- /ko -->
       <!--/ko-->
     </div>
-    <div class="hipay-field-container">
+    <div class="hipay-field-container apple-container">
       <div
         class="hipay-payment-request-button"
         id="hipay-apple-pay-button"
+        data-bind="visible: isAllTOCChecked()"
       ></div>
     </div>
     <div class="checkout-agreements-block">
+      <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">
+        <span>
+          <!-- ko i18n: 'Please agree with the terms of conditions below'-->
+          <!-- /ko -->
+        </span>
+      </div>
       <!-- ko foreach: $parent.getRegion('before-place-order') -->
       <!-- ko template: getTemplate() -->
       <!-- /ko -->

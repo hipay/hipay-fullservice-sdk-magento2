@@ -155,6 +155,10 @@ define([
     configHipay: null,
     hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
+    isAllTOCChecked: ko.observable(
+      !window.checkoutConfig.checkoutAgreements.isEnabled
+    ),
+    allTOC: new Map(),
 
     /**
      * @param {Function} handler
@@ -180,6 +184,45 @@ define([
       } else {
         self.isPlaceOrderAllowed(self.hipayHFstatus);
       }
+    },
+
+    initTOCEvents: function () {
+      var self = this;
+
+      $(document).ready(function () {
+        if (window.checkoutConfig.checkoutAgreements.isEnabled) {
+          $('body').on('DOMNodeInserted', initHostedFieldsEvents);
+        }
+
+        function initHostedFieldsEvents() {
+          var results = document.querySelectorAll(
+            "input[id*='agreement_hipay_hosted_fields']"
+          );
+          var agreements = window.checkoutConfig.checkoutAgreements.agreements;
+          agreements = agreements.filter((input) => input.mode == '1');
+          if (results.length && results.length == agreements.length) {
+            results.forEach(function (input, index) {
+              self.allTOC.set(index, false);
+              input.addEventListener('change', function (event) {
+                self.allTOC.set(index, event.target.checked);
+                updateTOCState();
+              });
+            });
+            $('body').off('DOMNodeInserted', initHostedFieldsEvents);
+          }
+        }
+
+        function updateTOCState() {
+          var noChecked = [...self.allTOC.values()].filter(
+            (value) => value == false
+          );
+          if (noChecked.length > 0) {
+            self.isAllTOCChecked(false);
+          } else {
+            self.isAllTOCChecked(true);
+          }
+        }
+      });
     },
 
     initialize: function () {
@@ -228,6 +271,8 @@ define([
           }
         }
       };
+
+      self.initTOCEvents();
     },
     /**
      * @param {Function} handler
