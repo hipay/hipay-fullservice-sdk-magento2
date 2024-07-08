@@ -15,7 +15,8 @@
 }
 
 #payment-method-paypal .hipay-field-container {
-  padding-bottom: 50px;
+  height: fit-content;
+  padding-bottom: 10px;
 }
 
 #paypal-field {

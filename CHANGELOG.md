@@ -3,6 +3,8 @@
 ## Unreleased
 
 - **Fix** : Fixed reference to pay rendering from customer's orders view
+- **Fix** : Fixed CSP issues allowing *inline scripts* and new entries in `csp_whitelist.xml`
+- **Fix** : Handle terms of conditions checkboxes
 
 ## 1.22.3
 

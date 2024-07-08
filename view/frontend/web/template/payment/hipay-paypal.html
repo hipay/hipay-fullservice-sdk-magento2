@@ -45,9 +45,15 @@
       <!--/ko-->
     </div>
     <div class="hipay-field-container">
-      <div id="paypal-field"></div>
+      <div id="paypal-field" data-bind="visible: isAllTOCChecked()"></div>
     </div>
     <div class="checkout-agreements-block">
+      <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">
+        <span>
+          <!-- ko i18n: 'Please agree with the terms of conditions below'-->
+          <!-- /ko -->
+        </span>
+      </div>
       <!-- ko foreach: $parent.getRegion('before-place-order') -->
       <!-- ko template: getTemplate() -->
       <!-- /ko -->

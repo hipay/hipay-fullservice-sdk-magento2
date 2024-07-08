@@ -1,6 +1,6 @@
-FROM bitnami/magento:2.4.6
+FROM bitnami/magento:2.4.7
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl git unzip php-dev gosu
+RUN apt update && apt upgrade -y && apt install curl git unzip php-dev gosu -y && apt clean
 
 RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \

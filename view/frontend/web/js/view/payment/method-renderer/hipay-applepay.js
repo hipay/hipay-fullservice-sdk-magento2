@@ -63,6 +63,10 @@ define([
 
     placeOrderHandler: null,
     validateHandler: null,
+    isAllTOCChecked: ko.observable(
+      !window.checkoutConfig.checkoutAgreements.isEnabled
+    ),
+    allTOC: new Map(),
 
     initHostedFields: function (self) {
       return new HiPay({
@@ -113,6 +117,45 @@ define([
       }
     },
 
+    initTOCEvents: function () {
+      var self = this;
+
+      $(document).ready(function () {
+        if (window.checkoutConfig.checkoutAgreements.isEnabled) {
+          $('body').on('DOMNodeInserted', initApplePayEvents);
+        }
+
+        function initApplePayEvents() {
+          var results = document.querySelectorAll(
+            "input[id*='agreement_hipay_applepay']"
+          );
+          var agreements = window.checkoutConfig.checkoutAgreements.agreements;
+          agreements = agreements.filter((input) => input.mode == '1');
+          if (results.length && results.length == agreements.length) {
+            results.forEach(function (input, index) {
+              self.allTOC.set(index, false);
+              input.addEventListener('change', function (event) {
+                self.allTOC.set(index, event.target.checked);
+                updateTOCState();
+              });
+            });
+            $('body').off('DOMNodeInserted', initApplePayEvents);
+          }
+        }
+
+        function updateTOCState() {
+          var noChecked = [...self.allTOC.values()].filter(
+            (value) => value == false
+          );
+          if (noChecked.length > 0) {
+            self.isAllTOCChecked(false);
+          } else {
+            self.isAllTOCChecked(true);
+          }
+        }
+      });
+    },
+
     initApplePayField: function (self, hipaySdk) {
       if (!hipaySdk) {
         hipaySdk = self.initHostedFields(self);
@@ -139,6 +182,8 @@ define([
         'paymentRequestButton',
         applePayConfig
       );
+
+      self.initTOCEvents();
 
       if (self.instanceApplePay) {
         canMakeApplePay(true);
@@ -225,15 +270,18 @@ define([
     isShowLegend: function () {
       return true;
     },
+
     context: function () {
       return this;
     },
+
     /**
      * @override
      */
     getCode: function () {
       return 'hipay_applepay';
     },
+
     getData: function () {
       return {
         method: this.item.method,
