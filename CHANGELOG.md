@@ -1,21 +1,25 @@
 # Changelog
 
+## Unreleased
+
+- **Fix** : Fixed reference to pay rendering from customer's orders view
+
 ## 1.22.3
 
-- **Fixed** : Fixed stock discount when order refused or during clean pending orders, thanks to [madleen](https://github.com/madleen) for issue [#163](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/163) and [syno-bgt](https://github.com/syno-bgt) for issue [#161](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/161)
-- **Fixed** : Fixed cart restoration when cron mode is active, thanks to [brmor-mistermenuiserie](https://github.com/brmor-mistermenuiserie) for issue [#162](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/162)
-- **Fixed** : Fixed email template for MO/TO payments
+- **Fix** : Fixed stock discount when order refused or during clean pending orders, thanks to [madleen](https://github.com/madleen) for issue [#163](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/163) and [syno-bgt](https://github.com/syno-bgt) for issue [#161](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/161)
+- **Fix** : Fixed cart restoration when cron mode is active, thanks to [brmor-mistermenuiserie](https://github.com/brmor-mistermenuiserie) for issue [#162](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/162)
+- **Fix** : Fixed email template for MO/TO payments
 
 ## 1.22.2
 
-- **Fixed** : Fixed HostedPayment method adding `custom_css` field for HostedPage v1 with Mix Payment
+- **Fix** : Fixed HostedPayment method adding `custom_css` field for HostedPage v1 with Mix Payment
 
 ## 1.22.1
 
-- **Fixed** : Fixed PHP method usage when checking card holder
-- **Fixed** : Fixed coupon credit on order cancel - removed functionality, merchants are supposed to make this themselves
-- **Fixed** : Fixed notification process causing unclosed transactions
-- **Fixed** : Fixed notification error handling
+- **Fix** : Fixed PHP method usage when checking card holder
+- **Fix** : Fixed coupon credit on order cancel - removed functionality, merchants are supposed to make this themselves
+- **Fix** : Fixed notification process causing unclosed transactions
+- **Fix** : Fixed notification error handling
 
 ## 1.22.0
 
