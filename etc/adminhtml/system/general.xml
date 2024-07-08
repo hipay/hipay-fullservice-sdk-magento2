@@ -28,8 +28,7 @@
 			</field>
 			<field id="fingerprint_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
             	<label>Url of Hipay's libs for FingerPrint</label>
-                <comment>Not to be modified. Please read our documentation : https://developer.hipay.com/getting-started/platform-hipay-enterprise/overview/#device-fingerprint-integration
-                </comment>
+                <comment>Not to be modified. Please read our documentation : https://developer.hipay.com/getting-started/platform-hipay-enterprise/overview/#device-fingerprint-integration</comment>
             </field>
 			<field id="sdk_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
 				<label>Url of Hipay's libs for Hosted Fields </label>

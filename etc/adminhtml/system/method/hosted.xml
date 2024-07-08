@@ -30,7 +30,7 @@
                 automatically captured
             </comment>
             <tooltip>
-                <![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. </br><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
+                <![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. <br/><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
         </field>
         <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
         <field id="payment_products" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
