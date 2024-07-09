@@ -252,7 +252,7 @@ class CleanPendingOrders
                                 'method' => $code
                             ];
                         } else {
-                            // default interval
+                            // default interval 30 minutes
                             $intervalConditions[] = [
                                 'value' => 30,
                                 'method' => $code
@@ -283,7 +283,7 @@ class CleanPendingOrders
                     $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
                 }
 
-                $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at'])
+                $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at', 'increment_id'])
                     ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
                     ->join(
                         ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
@@ -297,7 +297,7 @@ class CleanPendingOrders
                     $caseConditionString = implode(' OR ', $caseStateConditions);
                     $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
 
-                    $collection->getSelect()
+                   $collection->getSelect()
                         ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
                         ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
                 }
@@ -380,15 +380,28 @@ class CleanPendingOrders
 
                 $this->_orderManagement->addComment($order->getId(), $history);
 
-                //Cancel through API
-                if (!empty($order->getPayment()->getCcTransId())) {
+                $gatewayClient = $this->getGatewayManager($order);
+                $payment = $order->getPayment();
+
+                if (empty($payment->getCcTransId())) {
                     try {
-                        $this->getGatewayManager($order)->requestOperationCancel();
+                        $transId = $gatewayClient->requestOrderTransactionInformation($order->getIncrementId());
+                        $payment->setCcTransId($transId);
+                        $order->save();
                     } catch (Exception $e) {
-                        $this->_cancelOrderApiPublisher->execute((string) $order->getId());
-                        $this->logger->critical($e->getMessage());
+                        $this->logger->error('Failed to retrieve transaction ID: ' . $e->getMessage());
                     }
                 }
+
+                if ($payment->getCcTransId()) {
+                    try {
+                        $gatewayClient->requestOperationCancel();
+                    } catch (Exception $e) {
+                        $this->logger->critical('Failed to cancel order: ' . $e->getMessage());
+                        $this->_cancelOrderApiPublisher->execute((string) $order->getId());
+                    }
+                }
+
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage());
             }
