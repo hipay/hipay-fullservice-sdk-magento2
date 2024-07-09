@@ -277,6 +277,11 @@ class Manager
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
     }
 
+    public function requestOrderTransactionInformation($orderId)
+    {
+        return $this->_gateway->requestOrderTransactionInformation($orderId)[0]->getTransactionReference();
+    }
+
     /**
      * @return mixed
      */
