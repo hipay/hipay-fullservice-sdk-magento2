@@ -334,6 +334,14 @@ class Order extends CommonRequest
             }
         }
 
+        if ($payment_product == 'paypal') {
+            $paypalOrderID = $this->_order->getPayment()->getAdditionalInformation('paypal_order_id');
+            if ($paypalOrderID !== null) {
+                $providerData = ['paypal_id' => $paypalOrderID];
+                $orderRequest->provider_data = (string) json_encode($providerData);
+            }
+        }
+
         if (preg_match("/[34]xcb-no-fees|[34]xcb|credit-long/", $payment_product ?: '')) {
             $merchantPromotion = $this->_config->getValue('merchant_promotion');
             $orderRequest->payment_product_parameters = json_encode(

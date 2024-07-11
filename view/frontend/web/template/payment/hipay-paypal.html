@@ -16,11 +16,11 @@
  *
  */
 -->
-<!-- ko if: isApplePayAllowed() -->
+<!-- ko if: isPaypalV2Allowed() -->
 <div
-  id="payment-method-applepay"
+  id="payment-method-paypal"
   class="payment-method"
-  data-bind="css: {'_active': (getCode() == isChecked())}"
+  data-bind="css: {'_active': (getCode() == isChecked())}, visible: initHostedFields()"
 >
   <div class="payment-method-title field choice">
     <input
@@ -44,12 +44,8 @@
       <!-- /ko -->
       <!--/ko-->
     </div>
-    <div class="hipay-field-container apple-container">
-      <div
-        class="hipay-payment-request-button"
-        id="hipay-apple-pay-button"
-        data-bind="visible: isAllTOCChecked()"
-      ></div>
+    <div class="hipay-field-container">
+      <div id="paypal-field" data-bind="visible: isAllTOCChecked()"></div>
     </div>
     <div class="checkout-agreements-block">
       <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">

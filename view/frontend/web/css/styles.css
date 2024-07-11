@@ -13,3 +13,12 @@
   padding: 0;
   border: none;
 }
+
+#payment-method-paypal .hipay-field-container {
+  height: fit-content;
+  padding-bottom: 10px;
+}
+
+#paypal-field {
+  width: 40%;
+}

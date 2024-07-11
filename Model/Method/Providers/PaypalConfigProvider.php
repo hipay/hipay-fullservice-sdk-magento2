@@ -19,14 +19,14 @@ namespace HiPay\FullserviceMagento\Model\Method\Providers;
 use Magento\Checkout\Model\ConfigProviderInterface;
 
 /**
- * Applepay config provider
+ * Paypal config provider
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class ApplepayConfigProvider implements ConfigProviderInterface
+class PaypalConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CcConfig
@@ -82,7 +82,7 @@ class ApplepayConfigProvider implements ConfigProviderInterface
     private $resolver;
 
     /**
-     * ApplePayConfigProvider constructor.
+     * PaypalConfigProvider constructor.
      *
      * @param \Magento\Payment\Model\CcConfig                                      $ccConfig
      * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
@@ -130,14 +130,17 @@ class ApplepayConfigProvider implements ConfigProviderInterface
                     [
                         'payment' => [
                             $methodCode => [
-                                'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameApplePayTokenJs(),
-                                'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordApplePayTokenJs(),
+                                'apiUsernameTokenJs' => $this->hipayConfig->getApiUsernameTokenJs(),
+                                'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordTokenJs(),
                                 'env' => $this->hipayConfig->getApiEnv(),
                                 'sdkJsUrl' => $this->hipayConfig->getSdkJsUrl(),
                                 'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
-                                'display_name' => $this->hipayConfig->getValue('display_name'),
-                                'button_type' => $this->hipayConfig->getValue('button_type'),
+                                'button_label' => $this->hipayConfig->getValue('button_label'),
+                                'button_layout' => $this->hipayConfig->getValue('button_layout'),
                                 'button_color' => $this->hipayConfig->getValue('button_color'),
+                                'button_height' => $this->hipayConfig->getValue('button_height'),
+                                'button_shape' => $this->hipayConfig->getValue('button_shape'),
+                                'bnpl' => (bool) $this->hipayConfig->getValue('bnpl')
                             ],
                         ],
                     ]

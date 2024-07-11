@@ -4,8 +4,10 @@
         <policy id="script-src">
             <values>
                 <value id="hipay-tpp" type="host">secure-gateway.hipay-tpp.com</value>
+                <value id="hipay-tpp-stage" type="host">stage-secure-gateway.hipay-tpp.com</value>
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="iesnare" type="host">mpsnare.iesnare.com</value>
+                <value id="paypal" type="host">*.paypal.com</value>
             </values>
         </policy>
         <policy id="style-src">
@@ -16,11 +18,15 @@
         <policy id="frame-src">
             <values>
                 <value id="hipay-tpp" type="host">secure-gateway.hipay-tpp.com</value>
+                <value id="hipay-tpp-stage" type="host">stage-secure-gateway.hipay-tpp.com</value>
                 <value id="hipay" type="host">*.hipay.com</value>
+                <value id="paypal" type="host">*.paypal.com</value>
             </values>
         </policy>
         <policy id="connect-src">
             <values>
+                <value id="hipay-tpp" type="host">secure-gateway.hipay-tpp.com</value>
+                <value id="hipay-tpp-stage" type="host">stage-secure-gateway.hipay-tpp.com</value>
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="iesnare" type="host">wss://mpsnare.iesnare.com</value>
             </values>

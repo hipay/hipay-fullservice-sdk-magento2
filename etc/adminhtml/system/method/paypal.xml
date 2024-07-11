@@ -19,7 +19,7 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_paypalapi" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
-	<label>HiPay Enterprise Paypal</label>
+	<label>HiPay Enterprise PayPal</label>
 	<comment></comment>
 	<!--
 		Include tag import configuration from another file.
@@ -30,9 +30,35 @@
 	<field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
 		<label>Capture</label>
 		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
-		<tooltip><![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. </br><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
+		<tooltip><![CDATA[<b>Manual</b>: All transactions will be captured manually either from the Hipay Back office or from your Magento administration dashboard. <br/><b>Automatic</b>: All transactions will be captured automatically.]]></tooltip>
 	</field>
     <include path="HiPay_FullserviceMagento::system/method/base_country.xml"/>
+	<field id="merchant_id" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Merchant PayPal ID</label>
+		<comment><![CDATA[<b>NEW</b>: The new PayPal integration allows you to pay with PayPal without redirection and to offer payment with installments.<br/>Available by <b>invitation only</b> at this time, please contact our support or your account manager for more information.]]></comment>
+	</field>
+	<field id="button_color" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Color</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonColor</source_model>
+	</field>
+	<field id="button_shape" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Shape</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonShape</source_model>
+	</field>
+	<field id="button_label" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Label</label>
+		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Paypal\ButtonLabel</source_model>
+	</field>
+	<field id="button_height" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Button Height</label>
+		<validate>validate-number validate-number-range number-range-25-55</validate>
+		<comment>Enter a value between 25 and 55. Default is 40.</comment>
+	</field>
+	<field id="bnpl" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+		<label>Show 'Buy Now / Pay Later' Button</label>
+		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+		<comment>The 'Buy now, Pay later' feature is only available if the store currency is euros and if the basket amount is between 30 and 2000.</comment>
+	</field>
 
 	<!--
 		Include tag import configuration from another file.

@@ -20,6 +20,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <csp>
+            <policies>
+                <storefront_checkout_index_index>
+                    <scripts>
+                        <inline>1</inline>
+                    </scripts>
+                </storefront_checkout_index_index>
+            </policies>
+        </csp>
         <hipay>
             <hipay_credentials>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
@@ -186,8 +195,8 @@
                 <font_size>15px</font_size>
                 <font_weight>400</font_weight>
                 <placeholder_color></placeholder_color>
-                <caret_color>#00ADE9</caret_color>
-                <icon_color>#00ADE9</icon_color>
+                <caret_color>#A50979</caret_color>
+                <icon_color>#A50979</icon_color>
                 <debug>0</debug>
                 <env>STAGE</env>
                 <group>hipay</group>
@@ -210,7 +219,7 @@
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <display_name>Your display name</display_name>
                 <button_type>plain</button_type>
-                <button_colour>black</button_colour>
+                <button_color>black</button_color>
                 <payment_products>cb</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <authentication_indicator>0</authentication_indicator>
@@ -448,6 +457,11 @@
                 <active>0</active>
                 <title>Hipay Enterprise Paypal</title>
                 <payment_action>Sale</payment_action>
+                <button_color>gold</button_color>
+                <button_shape>pill</button_shape>
+                <button_label>pay</button_label>
+                <button_height>40</button_height>
+                <bnpl>1</bnpl>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
                 <order_status_payment_refused>holded</order_status_payment_refused>

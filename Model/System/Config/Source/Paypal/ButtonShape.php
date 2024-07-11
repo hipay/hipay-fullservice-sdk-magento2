@@ -14,33 +14,33 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay;
+namespace HiPay\FullserviceMagento\Model\System\Config\Source\Paypal;
 
 /**
- * Source model for available 3ds values
+ * Source model for Button Shape
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
+ * @author    HiPay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class ButtonColour implements \Magento\Framework\Option\ArrayInterface
+
+class ButtonShape implements \Magento\Framework\Option\ArrayInterface
 {
-    protected const BLACK = 'black';
-    protected const WHITE = 'white';
-    protected const WHITE_WITH_LINE = 'white-with-line';
+    /**
+     * Button Colors
+     */
+    public const BUTTON_PILL = 'pill';
+    public const BUTTON_RECT = 'rect';
 
     /**
-     * Options getter
-     *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
-            ['value' => self::BLACK, 'label' => __('Black')],
-            ['value' => self::WHITE, 'label' => __('White')],
-            ['value' => self::WHITE_WITH_LINE, 'label' => __('White with line')],
+            self::BUTTON_PILL => __('Rounded'),
+            self::BUTTON_RECT => __('Rectangle')
         ];
     }
 }
