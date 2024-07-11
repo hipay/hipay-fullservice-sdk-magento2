@@ -1,10 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.23.0
 
 - **Fix** : Fixed reference to pay rendering from customer's orders view
 - **Fix** : Fixed CSP issues allowing *inline scripts* and new entries in `csp_whitelist.xml`
 - **Fix** : Handle terms of conditions checkboxes
+- **Add**: Add PayPal v2
+- **Add**: Add rebranding colors and new logo to HiPay module
 
 ## 1.22.3
 
