@@ -254,6 +254,15 @@ class Manager
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
+    public function requestOperationCancel()
+    {
+        return $this->_requestOperation(Operation::CANCEL);
+    }
+
+    /**
+     *
+     * @return \HiPay\Fullservice\Gateway\Model\Operation
+     */
     public function requestOperationAcceptChallenge()
     {
         return $this->_requestOperation(Operation::ACCEPT_CHALLENGE);
@@ -266,6 +275,11 @@ class Manager
     public function requestOperationDenyChallenge()
     {
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
+    }
+
+    public function requestOrderTransactionInformation($orderId)
+    {
+        return $this->_gateway->requestOrderTransactionInformation($orderId)[0]->getTransactionReference();
     }
 
     /**
@@ -361,14 +375,13 @@ class Manager
         $maintenanceRequest->operation_id = $operationId;
         $this->_debug($this->_requestToArray($maintenanceRequest));
 
-        $opModel = $this->_gateway->requestMaintenanceOperation(
+        return $this->_gateway->requestMaintenanceOperation(
             $operationType,
             $transactionReference,
             $amount,
             $operationId,
             $maintenanceRequest
         );
-        return $opModel;
     }
 
     /**
@@ -384,8 +397,6 @@ class Manager
             ->addFilter(\Magento\Sales\Api\Data\TransactionInterface::PAYMENT_ID, $paymentId)
             ->create();
 
-        $nbTrx = $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
-
-        return $nbTrx;
+        return $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
     }
 }
