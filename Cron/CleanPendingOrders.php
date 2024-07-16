@@ -283,7 +283,14 @@ class CleanPendingOrders
                     $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
                 }
 
-                $collection->addFieldToSelect(['entity_id', 'state', 'status', 'store_id', 'created_at', 'increment_id'])
+                $collection->addFieldToSelect([
+                    'entity_id',
+                    'state',
+                    'status',
+                    'store_id',
+                    'created_at',
+                    'increment_id'
+                ])
                     ->addFieldToFilter('main_table.store_id', ['in' => $storesId])
                     ->join(
                         ['op' => $orderModel->getResource()->getTable('sales_order_payment')],
@@ -297,7 +304,7 @@ class CleanPendingOrders
                     $caseConditionString = implode(' OR ', $caseStateConditions);
                     $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
 
-                   $collection->getSelect()
+                    $collection->getSelect()
                         ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
                         ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
                 }
@@ -401,7 +408,6 @@ class CleanPendingOrders
                         $this->_cancelOrderApiPublisher->execute((string) $order->getId());
                     }
                 }
-
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage());
             }
