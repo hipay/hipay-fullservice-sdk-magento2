@@ -246,9 +246,9 @@ class CleanPendingOrders
                                 'method' => $code
                             ];
                         } elseif (strpos($code, 'alma') !== false) {
-                            // two days interval
+                            // three days interval
                             $intervalConditions[] = [
-                                'value' => 2880,
+                                'value' => 4320,
                                 'method' => $code
                             ];
                         } else {
