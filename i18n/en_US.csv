@@ -45,6 +45,12 @@
 "Buy Now","Buy Now"
 "Cancel orders stayed in pending because customer not validated payment","Cancel orders stayed in pending because customer not validated payment"
 "Cancel pending order","Cancel pending order"
+"Canceled","Canceled",module,Magento_Bundle
+"Canceled","Canceled",module,Magento_Downloadable
+"Canceled","Canceled",module,Magento_Paypal
+"Canceled","Canceled",module,Magento_Reports
+"Canceled","Canceled",module,Magento_Sales
+"Canceled","Canceled",module,Magento_Signifyd
 "Capture requested","Capture requested"
 "Capture Requested","Capture Requested"
 "Capture","Capture"
