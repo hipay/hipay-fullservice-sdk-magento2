@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.24.0
+
+- **Add** : Added new system to clean pending orders
+
 ## 1.23.0
 
 - **Fix** : Fixed reference to pay rendering from customer's orders view
