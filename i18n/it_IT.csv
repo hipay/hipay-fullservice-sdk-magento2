@@ -45,6 +45,12 @@
 "Buy Now","Compra ora"
 "Cancel orders stayed in pending because customer not validated payment","Annulla gli ordini rimasti in sospeso perché il cliente non ha convalidato il pagamento."
 "Cancel pending order","Annulla ordine in sospeso"
+"Canceled","Cancellato",module,Magento_Bundle
+"Canceled","Cancellato",module,Magento_Downloadable
+"Canceled","Cancellato",module,Magento_Paypal
+"Canceled","Cancellato",module,Magento_Reports
+"Canceled","Cancellato",module,Magento_Sales
+"Canceled","Cancellato",module,Magento_Signifyd
 "Capture requested","Cattura richiesta"
 "Capture Requested","Cattura Richiesta"
 "Capture","Cattura"

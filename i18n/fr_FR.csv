@@ -45,6 +45,12 @@
 "Buy Now","Acheter"
 "Cancel orders stayed in pending because customer not validated payment","Annule les commandes en attentes depuis 30 minutes."
 "Cancel pending order","Annuler les commandes en attentes"
+"Canceled","Annulée",module,Magento_Bundle
+"Canceled","Annulée",module,Magento_Downloadable
+"Canceled","Annulée",module,Magento_Paypal
+"Canceled","Annulée",module,Magento_Reports
+"Canceled","Annulée",module,Magento_Sales
+"Canceled","Annulée",module,Magento_Signifyd
 "Capture requested","Capture demandée"
 "Capture Requested","Capture demandée"
 "Capture","Capturer"
