@@ -47,6 +47,12 @@
 		<field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
 			<label>Wrapper iFrame Style</label>
 		</field>
+		<field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
+			   showInStore="0">
+			<label>Cancel pending order</label>
+			<comment>Cancel pending orders since 30 minutes.</comment>
+			<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+		</field>
 		<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
 	</group>
 </include>

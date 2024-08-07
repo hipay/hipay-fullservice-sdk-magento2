@@ -22,6 +22,12 @@
 	<label>HiPay Enterprise Bnp Personal Finance 3X</label>
 	<comment></comment>
 	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+	<field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
+		   showInStore="0">
+		<label>Cancel pending order</label>
+		<comment>Cancel pending orders since 30 minutes.</comment>
+		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+	</field>
 	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
 </group>
 </include>
