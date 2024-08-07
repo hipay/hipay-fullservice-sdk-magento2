@@ -221,7 +221,7 @@ class CleanPendingOrders
                             'method' => $code
                         ];
 
-                        if ($code == 'hipay_hosted_fields'|| $code == 'hipay_applepay') {
+                        if ($code == 'hipay_hosted_fields' || $code == 'hipay_applepay') {
                             // one day interval
                             $intervalConditions[] = [
                                 'value' => 1440,
