@@ -16,7 +16,6 @@
 
 namespace HiPay\FullserviceMagento\Cron;
 
-use Magento\Framework\App\AreaInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\OrderFactory;
@@ -37,7 +36,6 @@ use DateTime;
 use DateInterval;
 use Exception;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\App\AreaList;
 
 /**
  * HiPay module crontab
@@ -115,11 +113,6 @@ class CleanPendingOrders
     protected $_emulation;
 
     /**
-     * @var AreaList
-     */
-    protected $_areaList;
-
-    /**
      * CleanPendingOrders constructor
      *
      * @param OrderFactory                  $orderFactory
@@ -134,7 +127,6 @@ class CleanPendingOrders
      * @param CancelOrderApiPublisher       $cancelOrderApiPublisher
      * @param State                         $state
      * @param Emulation                     $emulation
-     * @param AreaList                      $areaList
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -148,8 +140,7 @@ class CleanPendingOrders
         ManagerFactory $gatewayManagerFactory,
         CancelOrderApiPublisher $cancelOrderApiPublisher,
         State $state,
-        Emulation $emulation,
-        AreaList $areaList
+        Emulation $emulation
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -163,7 +154,6 @@ class CleanPendingOrders
         $this->_cancelOrderApiPublisher = $cancelOrderApiPublisher;
         $this->_state = $state;
         $this->_emulation  = $emulation;
-        $this->_areaList = $areaList;
     }
 
     /**
@@ -174,23 +164,16 @@ class CleanPendingOrders
      */
     public function execute()
     {
-        $this->_state->setAreaCode(Area::AREA_FRONTEND);
-        $areaModel = $this->_areaList->getArea($this->_state->getAreaCode());
-
-        // Load design and translation parts
-        $areaModel->load(AreaInterface::PART_DESIGN);
-        $areaModel->load(AreaInterface::PART_TRANSLATE);
-
         $websites = $this->storeManager->getWebsites();
 
         foreach ($websites as $website) {
+
             $stores = $website->getStores();
 
             foreach ($stores as $store) {
                 $storeId = $store->getId();
                 $this->_emulation->startEnvironmentEmulation($storeId, Area::AREA_FRONTEND, true);
                 $websiteId = $website->getId();
-
                 $this->logger->info('Cleaning pending order for website ' . $storeId);
                 $storesId = $this->storeWebsiteRelation->getStoreByWebsiteId($websiteId);
 

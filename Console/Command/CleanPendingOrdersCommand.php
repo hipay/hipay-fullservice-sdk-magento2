@@ -17,6 +17,10 @@
 namespace HiPay\FullserviceMagento\Console\Command;
 
 use HiPay\FullserviceMagento\Cron\CleanPendingOrders;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\AreaInterface;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\State;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,14 +38,31 @@ class CleanPendingOrdersCommand extends Command
     protected $cleanPendingOrders;
 
     /**
+     * @var State
+     */
+    protected $_state;
+
+    /**
+     * @var AreaList
+     */
+    protected $_areaList;
+
+    /**
      * Constructor
      *
+     * @param State $state
+     * @param AreaList $areaList
      * @param CleanPendingOrders $cleanPendingOrders
      */
-    public function __construct(CleanPendingOrders $cleanPendingOrders)
-    {
-        $this->cleanPendingOrders = $cleanPendingOrders;
+    public function __construct(
+        State $state,
+        AreaList $areaList,
+        CleanPendingOrders $cleanPendingOrders
+    ) {
         parent::__construct();
+        $this->cleanPendingOrders = $cleanPendingOrders;
+        $this->_state = $state;
+        $this->_areaList = $areaList;
     }
 
     /**
@@ -63,8 +84,14 @@ class CleanPendingOrdersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->_state->setAreaCode(Area::AREA_FRONTEND);
+        $areaModel = $this->_areaList->getArea($this->_state->getAreaCode());
+        // Load design and translation parts
+        $areaModel->load(AreaInterface::PART_DESIGN);
+        $areaModel->load(AreaInterface::PART_TRANSLATE);
+
         $this->cleanPendingOrders->execute();
         $output->writeln('<info>Pending orders cleaned successfully.</info>');
-        return Command::SUCCESS;
+        return 1;
     }
 }
