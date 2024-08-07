@@ -50,8 +50,8 @@ class CleanPendingOrdersCommand extends Command
     /**
      * Constructor
      *
-     * @param State $state
-     * @param AreaList $areaList
+     * @param State              $state
+     * @param AreaList           $areaList
      * @param CleanPendingOrders $cleanPendingOrders
      */
     public function __construct(

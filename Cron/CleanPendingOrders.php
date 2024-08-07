@@ -167,7 +167,6 @@ class CleanPendingOrders
         $websites = $this->storeManager->getWebsites();
 
         foreach ($websites as $website) {
-
             $stores = $website->getStores();
 
             foreach ($stores as $store) {
