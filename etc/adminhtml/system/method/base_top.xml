@@ -30,7 +30,7 @@
     <field id="order_status" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1"
            showInStore="0">
         <label>New Order Status</label>
-        <source_model>Magento\Sales\Model\Config\Source\Order\Status\Newprocessing</source_model>
+        <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Status\NewProcessing</source_model>
     </field>
     <field id="order_status_payment_accepted" translate="label" type="select" sortOrder="42" showInDefault="1"
            showInWebsite="1" showInStore="0">
