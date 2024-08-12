@@ -398,3 +398,6 @@
 "Your payment is accepted.","Il vostro pagamento è stato accettato"
 "Your payment is in pending.","Il vostro pagamento è in pending."
 "Your transaction is declined.","La vostra transazione è rifiutata."
+"Cancel pending orders since 30 minutes.","Annulla gli ordini in sospeso da 30 minuti."
+"Cancel pending orders since 1 day.","Annulla gli ordini in sospeso da 1 giorno."
+"Cancel pending orders since 3 days.","Annulla gli ordini in sospeso da 3 giorni."

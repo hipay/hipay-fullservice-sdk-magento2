@@ -80,6 +80,12 @@
             <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
             <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
         </field>
+        <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
+               showInStore="0">
+            <label>Cancel pending order</label>
+            <comment>Cancel orders stayed in pending because customer not validated payment</comment>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>
 </include>
