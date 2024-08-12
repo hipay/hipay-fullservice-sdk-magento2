@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.24.1
+
+- **Fix** : Fixed issue about deprecated JavaScript / jQuery method
+- **Fix** : Fixed error when CleanPendingOrders CRON job was running
+
 ## 1.24.0
 
 - **Add** : Added new system to clean pending orders

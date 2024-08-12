@@ -43,7 +43,7 @@
 "Button Shape","Forme du bouton"
 "Button Type","Type de bouton"
 "Buy Now","Acheter"
-"Cancel orders stayed in pending because customer not validated payment","Annule les commandes en attentes depuis 30 minutes."
+"Cancel orders stayed in pending because customer not validated payment","Annule les commandes restées en attente dû au fait que le client n'ait pas validé le paiement"
 "Cancel pending order","Annuler les commandes en attentes"
 "Canceled","Annulée",module,Magento_Bundle
 "Canceled","Annulée",module,Magento_Downloadable
@@ -398,3 +398,6 @@
 "Your payment is accepted.","Votre paiement est accepté"
 "Your payment is in pending.","Votre paiement est en attente de validation."
 "Your transaction is declined.","Votre transaction est refusée."
+"Cancel pending orders since 30 minutes.","Annule les commandes en attentes depuis 30 minutes."
+"Cancel pending orders since 1 day.","Annule les commandes en attentes depuis un jour."
+"Cancel pending orders since 3 days.","Annule les commandes en attentes depuis 3 jours."

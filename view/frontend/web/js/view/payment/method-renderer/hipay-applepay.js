@@ -64,7 +64,12 @@ define([
     placeOrderHandler: null,
     validateHandler: null,
     isAllTOCChecked: ko.observable(
-      !window.checkoutConfig.checkoutAgreements.isEnabled
+      !(
+        window.checkoutConfig.checkoutAgreements.isEnabled &&
+        window.checkoutConfig.checkoutAgreements.agreements.some(
+          (input) => input.mode == '1'
+        )
+      )
     ),
     allTOC: new Map(),
 
@@ -122,7 +127,14 @@ define([
 
       $(document).ready(function () {
         if (window.checkoutConfig.checkoutAgreements.isEnabled) {
-          $('body').on('DOMNodeInserted', initApplePayEvents);
+          var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+              if (mutation.type === 'childList' && mutation.addedNodes.length) {
+                initApplePayEvents();
+              }
+            });
+          });
+          observer.observe(document.body, { childList: true, subtree: true });
         }
 
         function initApplePayEvents() {
@@ -139,7 +151,7 @@ define([
                 updateTOCState();
               });
             });
-            $('body').off('DOMNodeInserted', initApplePayEvents);
+            observer.takeRecords();
           }
         }
 
