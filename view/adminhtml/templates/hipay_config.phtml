@@ -1,0 +1,11 @@
+<script type="text/javascript">
+    require([], function () {
+        window.hipayConfig = {
+            getApiUsernameTokenJs:
+                '<?= $block->escapeHtml($block->getApiUsernameTokenJs()) ?>',
+            getApiPasswordTokenJs:
+                '<?= $block->escapeHtml($block->getApiPasswordTokenJs()) ?>',
+            getEnv: '<?= $block->escapeHtml($block->getEnv()) ?>'
+        }
+    })
+</script>
