@@ -8,3 +8,5 @@
     height: 3rem!important;;
     margin-bottom: .3rem;
 }
+#row_payment_us_hipay_paypalapi_paypal_v2_status {display: none}
+#row_payment_us_hipay_paypalapi_paypal_v2_status .label{visibility: hidden}
