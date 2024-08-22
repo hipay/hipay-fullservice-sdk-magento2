@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Api;
 
 use HiPay\FullserviceMagento\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * HipayAvailablePaymentProducts class for payment products
@@ -28,6 +29,11 @@ use HiPay\FullserviceMagento\Model\Config;
  */
 class HipayAvailablePaymentProducts
 {
+    /**
+     * @var LoggerInterface $_logger
+     */
+    protected $_logger;
+
     /**
      * @var Config $_hipayConfig
      */
@@ -56,10 +62,12 @@ class HipayAvailablePaymentProducts
     /**
      * HipayAvailablePaymentProducts Construct
      *
-     * @param Config $hipayConfig
+     * @param LoggerInterface $logger
+     * @param Config          $hipayConfig
      */
-    public function __construct(Config $hipayConfig)
+    public function __construct(LoggerInterface $logger, Config $hipayConfig)
     {
+        $this->_logger = $logger;
         $this->_hipayConfig = $hipayConfig;
     }
 
@@ -124,7 +132,22 @@ class HipayAvailablePaymentProducts
         $response = curl_exec($ch);
 
         if (curl_errno($ch)) {
-            throw new Exception('Curl error: ' . curl_error($ch));
+            $errorCode = curl_errno($ch);
+            $errorMessage = 'Curl error: ' . curl_error($ch);
+            $this->_logger->critical($errorMessage, ['error_code' => $errorCode]);
+
+            $response = [
+                'success' => false,
+                'error' => [
+                    'code' => $errorCode,
+                    'message' => $errorMessage
+                ]
+            ];
+
+            header('Content-Type: application/json');
+            echo json_encode($response);
+
+            return false;
         }
 
         curl_close($ch);

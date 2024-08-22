@@ -58,11 +58,11 @@ class HipayConfig extends Template
     /**
      * HipayConfig constructor.
      *
-     * @param Context $context
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Config $hipayConfig
+     * @param Context               $context
+     * @param ScopeConfigInterface  $scopeConfig
+     * @param Config                $hipayConfig
      * @param StoreManagerInterface $storeManager
-     * @param array $data
+     * @param array                 $data
      */
     public function __construct(
         Context $context,
@@ -85,7 +85,8 @@ class HipayConfig extends Template
     public function getApiUsernameTokenJs()
     {
         $env = $this->getEnv();
-        $configPath = self::XML_PATH_HIPAY_CREDENTIALS . ($env === self::ENV_PRODUCTION ? 'api_username' : 'api_username_test');
+        $configPath = self::XML_PATH_HIPAY_CREDENTIALS .
+            ($env === self::ENV_PRODUCTION ? 'api_username' : 'api_username_test');
         return (string) $this->scopeConfig->getValue($configPath, 'store', $this->getCurrentStoreId());
     }
 
@@ -97,7 +98,8 @@ class HipayConfig extends Template
     public function getApiPasswordTokenJs()
     {
         $env = $this->getEnv();
-        $configPath = self::XML_PATH_HIPAY_CREDENTIALS . ($env === self::ENV_PRODUCTION ? 'api_password' : 'api_password_test');
+        $configPath = self::XML_PATH_HIPAY_CREDENTIALS .
+            ($env === self::ENV_PRODUCTION ? 'api_password' : 'api_password_test');
         return $this->scopeConfig->getValue($configPath, 'store', $this->getCurrentStoreId());
     }
 
