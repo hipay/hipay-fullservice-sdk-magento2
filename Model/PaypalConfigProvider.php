@@ -13,6 +13,7 @@
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
@@ -44,13 +45,13 @@ class PaypalConfigProvider implements ConfigProviderInterface
     /**
      * PaypalConfigProvider Construct
      *
-     * @param LoggerInterface $logger
+     * @param LoggerInterface               $logger
      * @param HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
      */
     public function __construct(
         LoggerInterface $logger,
         HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
-    )  {
+    ) {
         $this->_logger = $logger;
         $this->_hipayAvailablePaymentProducts = $hipayAvailablePaymentProducts;
     }
