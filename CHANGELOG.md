@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fix** : Fixed display issue about ApplePay payment method which was displayed on unsupported devices
+
 ## 1.24.1
 
 - **Fix** : Fixed issue about deprecated JavaScript / jQuery method

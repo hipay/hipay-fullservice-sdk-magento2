@@ -63,6 +63,7 @@ define([
 
     placeOrderHandler: null,
     validateHandler: null,
+    isApplePayAllowed: ko.observable(true),
     isAllTOCChecked: ko.observable(
       !(
         window.checkoutConfig.checkoutAgreements.isEnabled &&
@@ -72,6 +73,14 @@ define([
       )
     ),
     allTOC: new Map(),
+
+    initialize: function () {
+      var self = this;
+      self._super();
+      self.checkApplePayAllowed().then((result) => {
+        self.isApplePayAllowed(result);
+      });
+    },
 
     initHostedFields: function (self) {
       return new HiPay({
@@ -86,7 +95,7 @@ define([
       return canMakeApplePay();
     },
 
-    isApplePayAllowed: function () {
+    checkApplePayAllowed: function () {
       var self = this;
 
       if (self.instanceApplePay) {
@@ -100,15 +109,17 @@ define([
       if (self.merchantId) {
         var hipaySdk = self.initHostedFields(self);
 
-        hipaySdk
-          .canMakePaymentsWithActiveCard(self.merchantId)
-          .then(function (canMakePayments) {
-            if (canMakePayments) {
-              self.initApplePayField(self, hipaySdk);
-            }
-          });
-        // Mandatory
-        return true;
+        return new Promise((resolve) => {
+          hipaySdk
+            .canMakePaymentsWithActiveCard(self.merchantId)
+            .then(function (canMakePayments) {
+              if (canMakePayments) {
+                resolve(self.initApplePayField(self, hipaySdk));
+              } else {
+                resolve(false);
+              }
+            });
+        });
       } else {
         var canMakePayments = false;
         try {
