@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.24.2
 
 - **Fix** : Fixed display issue about ApplePay payment method which was displayed on unsupported devices
+- **Fix** : Fixed issue about CSP policy
 
 ## 1.24.1
 
