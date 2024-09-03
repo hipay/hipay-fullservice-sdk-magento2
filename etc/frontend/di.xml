@@ -85,6 +85,7 @@
                 <item name="hipay_mybank" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mybank::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Multibanco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_klarna" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Klarna::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
