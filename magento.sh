@@ -56,7 +56,7 @@ elif [ "$1" = "cache" ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'static' ]; then
     docker exec $containerMG2 rm -Rf /bitnami/magento/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
-    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy -t Magento/luma
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy -t Magento/luma -f
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'static-fr' ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
