@@ -54,7 +54,7 @@
             <include path="HiPay_FullserviceMagento::system/method/przelewy24.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sdd.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/sofort.xml"/>
-            <include path="HiPay_FullserviceMagento::system/method/klarna.xml"/>
+            <include path="HiPay_FullserviceMagento::system/method/klarna_hosted_fields.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/alma3X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/alma4X.xml"/>
             <include path="HiPay_FullserviceMagento::system/method/facilypay3X.xml"/>
