@@ -171,9 +171,9 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-multibanco'
     },
     {
-      type: 'hipay_klarna',
+      type: 'hipay_klarna_hosted_fields',
       component:
-      'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna'
+      'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-klarna-hosted-fields'
     }
   );
   /**

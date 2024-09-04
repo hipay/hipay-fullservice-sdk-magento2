@@ -24,9 +24,9 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Klarna extends HostedMethod
+class KlarnaHostedFields extends LocalHostedFields
 {
-    public const HIPAY_METHOD_CODE = 'hipay_klarna';
+    public const HIPAY_METHOD_CODE = 'hipay_klarna_hosted_fields';
 
     /**
      * @var string
@@ -39,9 +39,7 @@ class Klarna extends HostedMethod
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
-     * Payment Method feature
-     *
-     * @var bool
+     * @var string[] keys to import in payment additionnal informations
      */
-    protected $_canUseInternal = false;
+    protected $_additionalInformationKeys = ['browser_info', 'cc_type'];
 }

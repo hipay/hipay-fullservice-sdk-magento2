@@ -601,8 +601,8 @@
                 <env>stage</env>
                 <group>hipay</group>
             </hipay_sofortapi>
-            <hipay_klarna>
-                <model>HiPay\FullserviceMagento\Model\Method\Klarna</model>
+            <hipay_klarna_hosted_fields>
+                <model>HiPay\FullserviceMagento\Model\Method\KlarnaHostedFields</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>HiPay Enterprise Klarna</title>
@@ -626,7 +626,7 @@
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
-            </hipay_klarna>
+            </hipay_klarna_hosted_fields>
             <hipay_alma3X>
                 <model>HiPay\FullserviceMagento\Model\Method\Alma3X</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
