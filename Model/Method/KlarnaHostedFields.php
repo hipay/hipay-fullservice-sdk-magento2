@@ -41,5 +41,5 @@ class KlarnaHostedFields extends LocalHostedFields
     /**
      * @var string[] keys to import in payment additionnal informations
      */
-    protected $_additionalInformationKeys = ['browser_info', 'cc_type'];
+    protected $_additionalInformationKeys = ['browser_info', 'payment_product'];
 }
