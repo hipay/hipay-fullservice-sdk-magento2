@@ -95,7 +95,7 @@ define([
 
         initObservable: function () {
             var self = this;
-            self._super().observe(['creditCardType', 'browser_info']);
+            self._super().observe(['creditCardType', 'browser_info', 'payment_product']);
 
             return self;
         },
@@ -109,7 +109,9 @@ define([
             fullScreenLoader.startLoader();
             self.hipayHostedFields.getPaymentData().then(
                 function (response) {
+                    console.log(response);
                     self.creditCardType(response.payment_product);
+                    self.payment_product(response.payment_product);
                     self.browser_info(JSON.stringify(response.browser_info));
                     self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
                     fullScreenLoader.stopLoader();
@@ -139,7 +141,7 @@ define([
             var data = {
                 method: self.item.method,
                 additional_data: {
-                    cc_type: self.creditCardType(),
+                    payment_product: self.payment_product(),
                     browser_info: self.browser_info()
                 }
             };
