@@ -1,5 +1,8 @@
 # Changelog
 
+## UNRELEASE
+- **Add** : Added Klarna payment method
+
 ## 1.24.2
 
 - **Fix** : Fixed display issue about ApplePay payment method which was displayed on unsupported devices
