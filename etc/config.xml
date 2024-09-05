@@ -606,7 +606,7 @@
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>HiPay Enterprise Klarna</title>
-                <payment_action>Sale</payment_action>
+                <payment_action>Authorization</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>
                 <order_status_payment_refused>holded</order_status_payment_refused>
