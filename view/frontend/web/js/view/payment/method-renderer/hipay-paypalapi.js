@@ -32,9 +32,11 @@ define([
   'use strict';
 
   var isPayPalV2 =
-      window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
+      window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '',
+      isHostedField =
+      window.checkoutConfig.payment.hipay_paypalapi.isHostedField ?? '';
 
-  if (isPayPalV2 === 1) {
+  if (isPayPalV2 === 1 && isHostedField === 1) {
     return ComponentDefault.extend({
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-paypal',
