@@ -16,13 +16,10 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
+use Magento\Checkout\Model\ConfigProviderInterface;
+use HiPay\FullserviceMagento\Model\Api\HipayAvailablePaymentProducts;
 use Psr\Log\LoggerInterface;
 use Exception;
-use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
-use HiPay\FullserviceMagento\Model\Api\HipayAvailablePaymentProducts;
-use HiPay\FullserviceMagento\Model\Method\HostedMethod;
 
 /**
  * PaypalConfigProvider class for PayPal payment product
@@ -46,26 +43,16 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $_hipayAvailablePaymentProducts;
 
     /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * PaypalConfigProvider Construct
      *
      * @param LoggerInterface               $logger
-     * @param ScopeConfigInterface          $scopeConfig
      * @param HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
      */
     public function __construct(
         LoggerInterface $logger,
-        ScopeConfigInterface $scopeConfig,
         HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
     ) {
         $this->_logger = $logger;
-        $this->_scopeConfig = $scopeConfig;
         $this->_hipayAvailablePaymentProducts = $hipayAvailablePaymentProducts;
     }
 
@@ -79,8 +66,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'hipay_paypalapi' => [
-                    'isPayPalV2' => $this->isPayPalV2() ? 1 : 0,
-                    'isHostedField' => $this->isHostedPage() ? 0 : 1
+                    'isPayPalV2' => $this->isPayPalV2() ? 1 : 0
                 ]
             ]
         ];
@@ -91,7 +77,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    protected function isPayPalV2()
+    protected function isPayPalV2(): bool
     {
         try {
             $paymentProducts = $this->_hipayAvailablePaymentProducts->getAvailablePaymentProducts('paypal');
@@ -105,18 +91,5 @@ class PaypalConfigProvider implements ConfigProviderInterface
         }
 
         return false;
-    }
-
-    /**
-     * Check if Hosted Page is Enabled
-     *
-     * @return bool
-     */
-    protected function isHostedPage()
-    {
-       return $this->_scopeConfig->getValue(
-            'payment/' . HostedMethod::HIPAY_METHOD_CODE . '/active',
-            ScopeInterface::SCOPE_WEBSITE
-        );
     }
 }
