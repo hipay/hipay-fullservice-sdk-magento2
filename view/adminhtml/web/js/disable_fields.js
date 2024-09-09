@@ -18,33 +18,62 @@ define([
     'domReady!'
 ], function (hipayPaypalConfig) {
     'use strict'
-
     var lastState = null,
-        debounceTimer = null
+        debounceTimer = null,
+        isPayPalSelected = false
 
     function toggleFields(shouldEnable) {
         ['button_color', 'button_shape', 'button_label', 'button_height', 'bnpl'].forEach(
             function (fieldId) {
                 var field = document.getElementById(
-                    'payment_us_hipay_paypalapi_' + fieldId
-                )
-                if (field) field.disabled = !shouldEnable
+                        'payment_us_hipay_paypalapi_' + fieldId
+                    ),
+                    HostedPageField = document.getElementById(
+                        'payment_us_hipay_hosted_paypal_' + fieldId
+                    )
+                if (field) field.disabled = !shouldEnable || !isPayPalSelected
+                if (HostedPageField) HostedPageField.disabled = !shouldEnable || !isPayPalSelected
             }
         )
 
         var v2StatusRow = document.querySelector(
-            '#row_payment_us_hipay_paypalapi_paypal_v2_status'
-        )
+                '#row_payment_us_hipay_paypalapi_paypal_v2_status'
+            ),
+            v2StatusRowHostedPage = document.querySelector(
+                '#row_payment_us_hipay_hosted_paypal_v2_status'
+            )
         if (v2StatusRow) {
-            v2StatusRow.style.display = shouldEnable ? 'none' : 'table-row'
+            v2StatusRow.style.display = (shouldEnable && isPayPalSelected) ? 'none' : 'table-row'
+        }
+        if (v2StatusRowHostedPage) {
+            v2StatusRowHostedPage.style.display = (shouldEnable && isPayPalSelected) ? 'none' : 'table-row'
+        }
+
+        // Hide/show the PayPal hosted row
+        var paypalHostedRow = document.getElementById('row_payment_us_hipay_hosted_paypal');
+        if (paypalHostedRow) {
+            paypalHostedRow.style.display = isPayPalSelected ? '' : 'none';
         }
     }
 
     function isHiPayPayPalSectionActive() {
         var sectionDiv = document.querySelector(
-            '#row_payment_us_hipay_paypalapi .section-config'
-        )
-        return sectionDiv?.classList.contains('active')
+                '#row_payment_us_hipay_paypalapi .section-config'
+            ),
+            hostedSectionDiv = document.querySelector(
+                '#row_payment_us_hipay_hosted_paypal .section-config'
+            )
+        return sectionDiv?.classList.contains('active') || hostedSectionDiv?.classList.contains('active')
+    }
+
+    function checkPayPalSelected() {
+        var select = document.getElementById('payment_us_hipay_hosted_payment_products')
+        if (select) {
+            isPayPalSelected = Array.from(select.selectedOptions).some(option => option.value === 'paypal')
+        } else {
+            isPayPalSelected = false
+        }
+        toggleFields(lastState)
     }
 
     function handleHiPayPayPalSection() {
@@ -83,6 +112,7 @@ define([
                 toggleFields(false)
             }
         }
+        checkPayPalSelected()
     }
 
     var debouncedHandler = function () {
@@ -103,5 +133,17 @@ define([
         if (event?.target.id === 'payment_us_hipay_paypalapi-head') {
             setTimeout(debouncedHandler, 0)
         }
+        if (event?.target.id === 'payment_us_hipay_hosted_paypal-head') {
+            setTimeout(debouncedHandler, 0)
+        }
     })
+
+    // Add event listener for select field changes
+    var select = document.getElementById('payment_us_hipay_hosted_payment_products')
+    if (select) {
+        select.addEventListener('change', checkPayPalSelected)
+    }
+
+    // Initial check on page load
+    checkPayPalSelected()
 })
