@@ -63,6 +63,17 @@ class HostedPaymentPage extends Order
         $hppRequest->display_cancel_button =
             $this->_config->getGeneraleValue('cancel_button', 'hipay_hosted_page_management');
 
+        $hppRequest->paypal_v2_label =
+            $this->_config->getValue('paypal/button_label') ?? 'pay';
+        $hppRequest->paypal_v2_shape =
+            $this->_config->getValue('paypal/button_shape') ?? 'pill';
+        $hppRequest->paypal_v2_color =
+            $this->_config->getValue('paypal/button_color') ?? 'gold';
+        $hppRequest->paypal_v2_height =
+            (int) $this->_config->getValue('paypal/button_height') ?? 40;
+        $hppRequest->paypal_v2_bnpl =
+            (int) $this->_config->getValue('paypal/bnpl') ?? 1;
+
         return $hppRequest;
     }
 }
