@@ -74,10 +74,10 @@ class HipayAvailablePaymentProducts
     /**
      * HipayAvailablePaymentProducts constructor.
      *
-     * @param LoggerInterface $logger
-     * @param Config $hipayConfig
+     * @param LoggerInterface   $logger
+     * @param Config            $hipayConfig
      * @param ResponseInterface $response
-     * @param Json $json
+     * @param Json              $json
      */
     public function __construct(
         LoggerInterface $logger,
