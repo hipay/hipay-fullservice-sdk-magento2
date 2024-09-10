@@ -19,7 +19,7 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="paypal" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-        <label>Paypal V2 Hosted Page Button Configuration</label>
+        <label>Hosted Page Paypal V2 Button Configuration</label>
         <field id="v2_status" translate="label comment" type="hidden" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
             <comment><![CDATA[<b>NEW</b>: The new PayPal integration allows you to pay with PayPal without redirection and to offer payment with installments.<br/>Available by <b>invitation only</b> at this time, please contact our support or your account manager for more information.]]></comment>
         </field>

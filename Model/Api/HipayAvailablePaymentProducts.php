@@ -18,6 +18,8 @@ namespace HiPay\FullserviceMagento\Model\Api;
 
 use HiPay\FullserviceMagento\Model\Config;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * HipayAvailablePaymentProducts class for payment products
@@ -30,14 +32,24 @@ use Psr\Log\LoggerInterface;
 class HipayAvailablePaymentProducts
 {
     /**
-     * @var LoggerInterface $_logger
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var Config $_hipayConfig
+     * @var Config
      */
     protected $_hipayConfig;
+
+    /**
+     * @var ResponseInterface
+     */
+    protected $_response;
+
+    /**
+     * @var Json
+     */
+    protected $_json;
 
     /**
      * @var string
@@ -60,15 +72,23 @@ class HipayAvailablePaymentProducts
     protected $baseUrl;
 
     /**
-     * HipayAvailablePaymentProducts Construct
+     * HipayAvailablePaymentProducts constructor.
      *
      * @param LoggerInterface $logger
-     * @param Config          $hipayConfig
+     * @param Config $hipayConfig
+     * @param ResponseInterface $response
+     * @param Json $json
      */
-    public function __construct(LoggerInterface $logger, Config $hipayConfig)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        Config $hipayConfig,
+        ResponseInterface $response,
+        Json $json
+    ) {
         $this->_logger = $logger;
         $this->_hipayConfig = $hipayConfig;
+        $this->_response = $response;
+        $this->_json = $json;
     }
 
     /**
@@ -98,13 +118,13 @@ class HipayAvailablePaymentProducts
     }
 
     /**
-     * Build the URL for the API request then Send the HTTP request to the API.
+     * Get available payment products.
      *
-     * @param $paymentProduct
-     * @param $eci
-     * @param $operation
-     * @param $withOptions
-     * @return mixed
+     * @param string $paymentProduct
+     * @param string $eci
+     * @param string $operation
+     * @param string $withOptions
+     * @return array|bool
      */
     public function getAvailablePaymentProducts(
         $paymentProduct = 'paypal',
@@ -136,7 +156,7 @@ class HipayAvailablePaymentProducts
             $errorMessage = 'Curl error: ' . curl_error($ch);
             $this->_logger->critical($errorMessage, ['error_code' => $errorCode]);
 
-            $response = [
+            $errorResponse = [
                 'success' => false,
                 'error' => [
                     'code' => $errorCode,
@@ -144,14 +164,15 @@ class HipayAvailablePaymentProducts
                 ]
             ];
 
-            header('Content-Type: application/json');
-            echo json_encode($response);
+            $this->_response->setHeader('Content-Type', 'application/json');
+            $this->_response->setBody($this->_json->serialize($errorResponse));
+            $this->_response->sendResponse();
 
             return false;
         }
 
         curl_close($ch);
 
-        return json_decode($response, true);
+        return $this->_json->unserialize($response);
     }
 }

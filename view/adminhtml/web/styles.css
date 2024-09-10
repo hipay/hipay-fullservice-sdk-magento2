@@ -10,3 +10,36 @@
 }
 #row_payment_us_hipay_paypalapi_paypal_v2_status {display: none}
 #row_payment_us_hipay_paypalapi_paypal_v2_status .label{visibility: hidden}
+#row_payment_us_hipay_hosted {
+    margin-bottom: 20px;
+    padding: 15px;
+}
+#payment_us_hipay_hosted_paypal-head {
+    font-weight: bold;
+    color: #eb5202;
+    margin-bottom: 10px;
+    font-size: small;
+    display: inline-block;
+}
+#payment_us_hipay_hosted_paypal .form-list {
+    margin-left: 15px;
+}
+#payment_us_hipay_hosted_paypal-head {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #eb5202;
+    font-weight: 600;
+}
+#payment_us_hipay_hosted_paypal-head:before {
+    font-size: 20px;
+    margin-right: 5px;
+    top: 20px;
+}
+#row_payment_us_hipay_hosted_paypal {
+    border-left: 3px solid #eb5202;
+    padding-left: 15px;
+    margin-top: 15px;
+    margin-left: 20px;
+    background-color: #f8f8f8;
+}
