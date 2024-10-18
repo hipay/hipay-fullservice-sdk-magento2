@@ -800,7 +800,7 @@ class Notify
      */
     protected function _doTransactionDenied()
     {
-        if($this->_order->canCancel()) {
+        if ($this->_order->canCancel()) {
             $this->_order->getPayment()
                 ->setTransactionId($this->_transaction->getTransactionReference() . "-denied")
                 ->setCcTransId($this->_transaction->getTransactionReference())
