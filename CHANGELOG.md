@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- **Fix** : Fixed stock discount when *Blocked* (110) or *Denied* (111) notification is received
+
 ## 1.24.2
 
 - **Fix** : Fixed display issue about ApplePay payment method which was displayed on unsupported devices

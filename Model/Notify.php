@@ -800,15 +800,17 @@ class Notify
      */
     protected function _doTransactionDenied()
     {
-        $this->_order->getPayment()
-            ->setTransactionId($this->_transaction->getTransactionReference() . "-denied")
-            ->setCcTransId($this->_transaction->getTransactionReference())
-            ->setNotificationResult(true)
-            ->setIsTransactionClosed(true)
-            ->deny(false);
+        if($this->_order->canCancel()) {
+            $this->_order->getPayment()
+                ->setTransactionId($this->_transaction->getTransactionReference() . "-denied")
+                ->setCcTransId($this->_transaction->getTransactionReference())
+                ->setNotificationResult(true)
+                ->setIsTransactionClosed(true)
+                ->deny(false);
+        }
 
         $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData('order_status_payment_refused');
-        $this->orderManagement->cancel($this->_order->getId());
+
         $this->_order->setStatus($orderStatus);
 
         $this->_order->save();
