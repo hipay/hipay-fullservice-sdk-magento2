@@ -469,7 +469,6 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
-
         } catch (\Exception $e) {
             $this->_logger->critical($e);
             throw new LocalizedException(__('There was an error requesting new transaction: %1.', $e->getMessage()));
