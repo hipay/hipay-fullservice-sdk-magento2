@@ -441,7 +441,26 @@ abstract class FullserviceMethod extends AbstractMethod
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {
         try {
-            $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
+            try {
+                $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
+            } catch (\Exception $e) {
+                $this->_logger->warning(sprintf(
+                    'Exception occurred while requesting new transaction for order %s: %s',
+                    $payment->getOrder()->getIncrementId(),
+                    $e->getMessage()
+                ));
+
+                // Set order as pending
+                $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
+                $payment->getOrder()->setStatus($this->getConfigData('order_status'));
+
+                // Set pending URL, same as TransactionState::PENDING case
+                $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
+                $payment->setAdditionalInformation('redirectUrl', $pendingUrl);
+
+                return $this;
+            }
+
             $redirectUrl = $this->processResponse($response);
 
             //always in pending, because only notification can change order/transaction statues
@@ -450,9 +469,10 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
+
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            throw new LocalizedException(__('There was an error request new transaction: %1.', $e->getMessage()));
+            throw new LocalizedException(__('There was an error requesting new transaction: %1.', $e->getMessage()));
         }
         return $this;
     }
