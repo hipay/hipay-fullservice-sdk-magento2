@@ -14,124 +14,166 @@
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 define([
-    'HiPay_FullserviceMagento/js/hipay-paypal-config',
-    'domReady!'
+  'HiPay_FullserviceMagento/js/hipay-paypal-config',
+  'domReady!'
 ], function (hipayPaypalConfig) {
-    'use strict';
+  'use strict';
 
-    let isV2 = false;
-    let isPayPalSelected = false;
+  let isV2 = false;
+  let isPayPalSelected = false;
 
-    function checkPayPalV2() {
-        return new Promise((resolve, reject) => {
-            if (typeof hipayPaypalConfig.createHipayAvailablePaymentProducts === 'function' &&
-                typeof hipayConfig !== 'undefined' &&
-                hipayConfig.getApiUsernameTokenJs &&
-                hipayConfig.getApiPasswordTokenJs &&
-                typeof hipayConfig.getEnv !== 'undefined') {
+  function checkPayPalV2() {
+    return new Promise((resolve, reject) => {
+      if (
+        typeof hipayPaypalConfig.createHipayAvailablePaymentProducts ===
+          'function' &&
+        typeof hipayConfig !== 'undefined' &&
+        hipayConfig.getApiUsernameTokenJs &&
+        hipayConfig.getApiPasswordTokenJs &&
+        typeof hipayConfig.getEnv !== 'undefined'
+      ) {
+        const config = hipayPaypalConfig.createHipayAvailablePaymentProducts(
+          hipayConfig.getApiUsernameTokenJs,
+          hipayConfig.getApiPasswordTokenJs,
+          hipayConfig.getEnv === 'stage'
+        );
 
-                const config = hipayPaypalConfig.createHipayAvailablePaymentProducts(
-                    hipayConfig.getApiUsernameTokenJs,
-                    hipayConfig.getApiPasswordTokenJs,
-                    hipayConfig.getEnv === 'stage'
-                );
-
-                if (typeof config?.getAvailablePaymentProducts === 'function') {
-                    config.getAvailablePaymentProducts('paypal', '7', '4', 'true')
-                        .then(result => {
-                            isV2 = result?.length > 0 &&
-                                result[0].options.payer_id.length > 0 &&
-                                result[0].options.provider_architecture_version === 'v1';
-                            resolve(isV2);
-                        })
-                        .catch(reject);
-                } else {
-                    resolve(false);
-                }
-            } else {
-                resolve(false);
-            }
-        });
-    }
-
-    function toggleFields(shouldEnable) {
-        ['button_color', 'button_shape', 'button_label', 'button_height', 'bnpl'].forEach(fieldId => {
-            const field = document.getElementById(`payment_us_hipay_paypalapi_${fieldId}`);
-            const hostedPageField = document.getElementById(`payment_us_hipay_hosted_paypal_${fieldId}`);
-            if (field) field.disabled = !shouldEnable || !isPayPalSelected;
-            if (hostedPageField) hostedPageField.disabled = !shouldEnable || !isPayPalSelected;
-        });
-
-        const v2StatusRow = document.querySelector('#row_payment_us_hipay_paypalapi_paypal_v2_status');
-        const v2StatusRowHostedPage = document.querySelector('#row_payment_us_hipay_hosted_paypal_v2_status');
-        if (v2StatusRow) {
-            v2StatusRow.style.display = (shouldEnable && isPayPalSelected) ? 'none' : 'table-row';
-        }
-        if (v2StatusRowHostedPage) {
-            v2StatusRowHostedPage.style.display = (shouldEnable && isPayPalSelected) ? 'none' : 'table-row';
-        }
-
-        const paypalHostedRow = document.getElementById('row_payment_us_hipay_hosted_paypal');
-        if (paypalHostedRow) {
-            paypalHostedRow.style.display = isPayPalSelected ? '' : 'none';
-        }
-    }
-
-    function checkPayPalSelected() {
-        const select = document.getElementById('payment_us_hipay_hosted_payment_products');
-        isPayPalSelected = select ? Array.from(select.selectedOptions).some(option => option.value === 'paypal') : false;
-        toggleFields(isV2);
-    }
-
-    function handleHiPayPayPalSection() {
-        const isActive = document.querySelector('#row_payment_us_hipay_paypalapi .section-config')?.classList.contains('active') || false;
-        const isActiveHostedPage = document.querySelector('#row_payment_us_hipay_hosted_paypal .section-config')?.classList.contains('active') || false;
-        if (isActive || isActiveHostedPage) {
-            checkPayPalV2().then(() => {
-                toggleFields(isV2);
-            }).catch(() => {
-                toggleFields(false);
-            });
+        if (typeof config?.getAvailablePaymentProducts === 'function') {
+          config
+            .getAvailablePaymentProducts('paypal', '7', '4', 'true')
+            .then((result) => {
+              isV2 =
+                result?.length > 0 &&
+                result[0].options.payer_id.length > 0 &&
+                result[0].options.provider_architecture_version === 'v1';
+              resolve(isV2);
+            })
+            .catch(reject);
         } else {
-            toggleFields(false);
+          resolve(false);
         }
+      } else {
+        resolve(false);
+      }
+    });
+  }
 
-        checkPayPalSelected();
-    }
-
-    const debouncedHandler = debounce(handleHiPayPayPalSection, 250);
-
-    // Initial setup
-    handleHiPayPayPalSection();
-
-    // Setup observers and event listeners
-    new MutationObserver(debouncedHandler).observe(document.body, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ['class']
+  function toggleFields(shouldEnable) {
+    [
+      'button_color',
+      'button_shape',
+      'button_label',
+      'button_height',
+      'bnpl'
+    ].forEach((fieldId) => {
+      const field = document.getElementById(
+        `payment_us_hipay_paypalapi_${fieldId}`
+      );
+      const hostedPageField = document.getElementById(
+        `payment_us_hipay_hosted_paypal_${fieldId}`
+      );
+      if (field) field.disabled = !shouldEnable;
+      if (hostedPageField)
+        hostedPageField.disabled = !shouldEnable || !isPayPalSelected;
     });
 
-    document.addEventListener('click', event => {
-        if (event?.target.id === 'payment_us_hipay_paypalapi-head' || event?.target.id === 'payment_us_hipay_hosted_paypal-head') {
-            setTimeout(debouncedHandler, 0);
-        }
-    });
-
-    const select = document.getElementById('payment_us_hipay_hosted_payment_products');
-    if (select) {
-        select.addEventListener('change', checkPayPalSelected);
+    const v2StatusRow = document.querySelector(
+      '#row_payment_us_hipay_paypalapi_paypal_v2_status'
+    );
+    const v2StatusRowHostedPage = document.querySelector(
+      '#row_payment_us_hipay_hosted_paypal_v2_status'
+    );
+    if (v2StatusRow) {
+      v2StatusRow.style.display =
+        shouldEnable && isPayPalSelected ? 'none' : 'table-row';
+    }
+    if (v2StatusRowHostedPage) {
+      v2StatusRowHostedPage.style.display =
+        shouldEnable && isPayPalSelected ? 'none' : 'table-row';
     }
 
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
+    const paypalHostedRow = document.getElementById(
+      'row_payment_us_hipay_hosted_paypal'
+    );
+    if (paypalHostedRow) {
+      paypalHostedRow.style.display = isPayPalSelected ? '' : 'none';
     }
+  }
+
+  function checkPayPalSelected() {
+    const select = document.getElementById(
+      'payment_us_hipay_hosted_payment_products'
+    );
+    isPayPalSelected = select
+      ? Array.from(select.selectedOptions).some(
+          (option) => option.value === 'paypal'
+        )
+      : false;
+    toggleFields(isV2);
+  }
+
+  function handleHiPayPayPalSection() {
+    const isActive =
+      document
+        .querySelector('#row_payment_us_hipay_paypalapi .section-config')
+        ?.classList.contains('active') || false;
+    const isActiveHostedPage =
+      document
+        .querySelector('#row_payment_us_hipay_hosted_paypal .section-config')
+        ?.classList.contains('active') || false;
+    if (isActive || isActiveHostedPage) {
+      checkPayPalV2()
+        .then(() => {
+          toggleFields(isV2);
+        })
+        .catch(() => {
+          toggleFields(false);
+        });
+    } else {
+      toggleFields(false);
+    }
+
+    checkPayPalSelected();
+  }
+
+  const debouncedHandler = debounce(handleHiPayPayPalSection, 250);
+
+  // Initial setup
+  handleHiPayPayPalSection();
+
+  // Setup observers and event listeners
+  new MutationObserver(debouncedHandler).observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  document.addEventListener('click', (event) => {
+    if (
+      event?.target.id === 'payment_us_hipay_paypalapi-head' ||
+      event?.target.id === 'payment_us_hipay_hosted_paypal-head'
+    ) {
+      setTimeout(debouncedHandler, 0);
+    }
+  });
+
+  const select = document.getElementById(
+    'payment_us_hipay_hosted_payment_products'
+  );
+  if (select) {
+    select.addEventListener('change', checkPayPalSelected);
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 });
