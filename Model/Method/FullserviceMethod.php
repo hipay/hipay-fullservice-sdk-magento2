@@ -441,9 +441,20 @@ abstract class FullserviceMethod extends AbstractMethod
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {
         try {
-            try {
-                $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
-            } catch (\Exception $e) {
+            $response = $this->getGatewayManager($payment->getOrder())->requestNewOrder();
+
+            // Set order state and status
+            $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
+            $payment->getOrder()->setStatus($this->getConfigData('order_status'));
+
+            // Process response and store data
+            $redirectUrl = $this->processResponse($response);
+            $payment->setAdditionalInformation('response', $response->toArray());
+            $payment->setAdditionalInformation('status', $response->getState());
+            $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
+
+        } catch (\Exception $e) {
+            if ($e->getCode() === 28) {
                 $this->_logger->warning(sprintf(
                     'Exception occurred while requesting new transaction for order %s: %s',
                     $payment->getOrder()->getIncrementId(),
@@ -454,25 +465,19 @@ abstract class FullserviceMethod extends AbstractMethod
                 $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
                 $payment->getOrder()->setStatus($this->getConfigData('order_status'));
 
-                // Set pending URL, same as TransactionState::PENDING case
+                // Set pending URL
                 $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
                 $payment->setAdditionalInformation('redirectUrl', $pendingUrl);
 
                 return $this;
             }
 
-            $redirectUrl = $this->processResponse($response);
-
-            //always in pending, because only notification can change order/transaction statues
-            $payment->getOrder()->setState(\Magento\Sales\Model\Order::STATE_NEW);
-            $payment->getOrder()->setStatus($this->getConfigData('order_status'));
-            $payment->setAdditionalInformation('response', $response->toArray());
-            $payment->setAdditionalInformation('status', $response->getState());
-            $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
-        } catch (\Exception $e) {
             $this->_logger->critical($e);
-            throw new LocalizedException(__('There was an error requesting new transaction: %1.', $e->getMessage()));
+            throw new LocalizedException(
+                __('There was an error requesting new transaction: %1.', $e->getMessage())
+            );
         }
+
         return $this;
     }
 
