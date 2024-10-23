@@ -452,7 +452,6 @@ abstract class FullserviceMethod extends AbstractMethod
             $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);
-
         } catch (\Exception $e) {
             if ($e->getCode() === 28) {
                 $this->_logger->warning(sprintf(
