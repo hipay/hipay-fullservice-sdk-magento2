@@ -179,7 +179,7 @@ abstract class AbstractConfig implements ConfigInterface
         return $this->_scopeConfig->getValue(
             $this->_mapGeneralFieldset($key, $group),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            1
+            $this->_storeId
         );
     }
 
