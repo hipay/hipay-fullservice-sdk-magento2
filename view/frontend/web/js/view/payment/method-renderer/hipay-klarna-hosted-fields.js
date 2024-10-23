@@ -109,7 +109,6 @@ define([
             fullScreenLoader.startLoader();
             self.hipayHostedFields.getPaymentData().then(
                 function (response) {
-                    console.log(response);
                     self.creditCardType(response.payment_product);
                     self.payment_product(response.payment_product);
                     self.browser_info(JSON.stringify(response.browser_info));
