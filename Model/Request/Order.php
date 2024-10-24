@@ -245,6 +245,7 @@ class Order extends CommonRequest
     private function getSpecifiedPaymentProduct()
     {
         return ($this->getPaymentProductFees()) ? $this->getPaymentProductFees() :
+            $this->_order->getPayment()->getAdditionalInformation('payment_product') ??
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
     }
 

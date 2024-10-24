@@ -1,7 +1,9 @@
 # Changelog
 
-## UNRELEASE
+## Unreleased
+
 - **Add** : Added Klarna payment method
+- **Fix** : Fixed stock discount when *Blocked* (110) or *Denied* (111) notification is received
 
 ## 1.24.2
 
