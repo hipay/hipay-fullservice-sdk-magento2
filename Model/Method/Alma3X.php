@@ -44,4 +44,33 @@ class Alma3X extends AbstractMethodAPI
      * @var bool
      */
     protected $_canUseInternal = false;
+
+    const MINIMUM_AMOUNT = 30;
+    const MAXIMUM_AMOUNT = 2000;
+
+    /**
+     * Check whether payment method can be used
+     *
+     * @param CartInterface|null $quote
+     * @return bool
+     */
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    {
+        // First check parent rules (from HiPay)
+        $isAvailable = parent::isAvailable($quote);
+
+        if (!$isAvailable || !$quote) {
+            return false;
+        }
+
+        $total = $quote->getGrandTotal();
+
+        // Hide payment method if total is outside allowed range
+        if ($total < self::MINIMUM_AMOUNT || $total > self::MAXIMUM_AMOUNT) {
+            return false;
+        }
+
+        return true;
+
+    }
 }
