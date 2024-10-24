@@ -73,13 +73,13 @@ define([
       'button_height',
       'bnpl'
     ].forEach((fieldId) => {
-      const field = document.getElementById(
+      const hostedField = document.getElementById(
         `payment_us_hipay_paypalapi_${fieldId}`
       );
       const hostedPageField = document.getElementById(
         `payment_us_hipay_hosted_paypal_${fieldId}`
       );
-      if (field) field.disabled = !shouldEnable;
+      if (hostedField) hostedField.disabled = !shouldEnable;
       if (hostedPageField)
         hostedPageField.disabled = !shouldEnable || !isPayPalSelected;
     });
