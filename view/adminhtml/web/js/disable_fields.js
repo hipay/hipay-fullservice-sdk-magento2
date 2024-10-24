@@ -21,9 +21,14 @@ define([
 
   let isV2 = false;
   let isPayPalSelected = false;
+  let initPayPalPromise = null;
 
   function checkPayPalV2() {
-    return new Promise((resolve, reject) => {
+    if (initPayPalPromise !== null && isV2 !== false) {
+      return initPayPalPromise;
+    }
+
+    initPayPalPromise = new Promise((resolve, reject) => {
       if (
         typeof hipayPaypalConfig.createHipayAvailablePaymentProducts ===
           'function' &&
@@ -56,6 +61,8 @@ define([
         resolve(false);
       }
     });
+
+    return initPayPalPromise;
   }
 
   function toggleFields(shouldEnable) {
