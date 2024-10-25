@@ -17,8 +17,7 @@
  *
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <csp>
             <policies>
@@ -622,7 +621,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>1</allowspecific>
                 <allowed_currencies>EUR,CHF,DKK,GBP,NOK,PLN,SEK</allowed_currencies>
-                <specificcountry>DE,AT,BE,DK,ES,FI,FR,IT,NO,NL,PL,PT,UK,SE,CH</specificcountry>
+                <specificcountry>DE,AT,BE,DK,ES,FI,FR,IT,NO,NL,PL,PT,GB,SE,CH</specificcountry>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
