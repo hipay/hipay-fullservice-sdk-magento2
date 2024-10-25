@@ -70,7 +70,7 @@ class HostedPaymentPage extends Order
         $color = $this->_config->getValue('paypal/button_color');
         $hppRequest->paypal_v2_color = $color === null ? null : $color;
         $height = $this->_config->getValue('paypal/button_height');
-        $hppRequest->paypal_v2_height = ($height === null || (int)$height === 0) ? null : (int)$height;
+        $hppRequest->paypal_v2_height = ($height === null || (int)$height < 40) ? null : (int)$height;
         $bnpl = $this->_config->getValue('paypal/bnpl');
         $hppRequest->paypal_v2_bnpl = $bnpl === null ? null : (int)$bnpl;
 
