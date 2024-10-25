@@ -63,16 +63,16 @@ class HostedPaymentPage extends Order
         $hppRequest->display_cancel_button =
             $this->_config->getGeneraleValue('cancel_button', 'hipay_hosted_page_management');
 
-        $hppRequest->paypal_v2_label =
-            $this->_config->getValue('paypal/button_label') ?? null;
-        $hppRequest->paypal_v2_shape =
-            $this->_config->getValue('paypal/button_shape') ?? null;
-        $hppRequest->paypal_v2_color =
-            $this->_config->getValue('paypal/button_color') ?? null;
-        $hppRequest->paypal_v2_height =
-            (int) $this->_config->getValue('paypal/button_height') ?? null;
-        $hppRequest->paypal_v2_bnpl =
-            (int) $this->_config->getValue('paypal/bnpl') ?? null;
+        $label = $this->_config->getValue('paypal/button_label');
+        $hppRequest->paypal_v2_label = $label === null ? null : $label;
+        $shape = $this->_config->getValue('paypal/button_shape');
+        $hppRequest->paypal_v2_shape = $shape === null ? null : $shape;
+        $color = $this->_config->getValue('paypal/button_color');
+        $hppRequest->paypal_v2_color = $color === null ? null : $color;
+        $height = $this->_config->getValue('paypal/button_height');
+        $hppRequest->paypal_v2_height = ($height === null || (int)$height === 0) ? null : (int)$height;
+        $bnpl = $this->_config->getValue('paypal/bnpl');
+        $hppRequest->paypal_v2_bnpl = $bnpl === null ? null : (int)$bnpl;
 
         return $hppRequest;
     }
