@@ -37,6 +37,7 @@
             <label>Payment products</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentProduct</source_model>
         </field>
+        <include path="HiPay_FullserviceMagento::system/method/paypal_v2.xml"/>
         <field id="authentication_indicator" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
             <label>Use 3D Secure</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ThreeDs</source_model>

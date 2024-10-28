@@ -31,10 +31,10 @@ define([
 ) {
   'use strict';
 
-  var merchantId =
-    window.checkoutConfig.payment.hipay_paypalapi.merchant_id ?? '';
+  var isPayPalV2 =
+      window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
 
-  if (merchantId.length > 0) {
+  if (isPayPalV2 === 1) {
     return ComponentDefault.extend({
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-paypal',
@@ -57,7 +57,6 @@ define([
         apiPasswordTokenJs: window.checkoutConfig.payment.hipay_paypalapi
           ? window.checkoutConfig.payment.hipay_paypalapi.apiPasswordTokenJs
           : '',
-        merchantId: merchantId,
         buttonLabel: window.checkoutConfig.payment.hipay_paypalapi
           ? window.checkoutConfig.payment.hipay_paypalapi.button_label
           : 'pay',
@@ -114,7 +113,7 @@ define([
             var agreements =
               window.checkoutConfig.checkoutAgreements.agreements;
             agreements = agreements.filter((input) => input.mode == '1');
-            if (results.length && results.length == agreements.length) {
+            if (results?.length == agreements.length) {
               results.forEach(function (input, index) {
                 self.allTOC.set(index, false);
                 input.addEventListener('change', function (event) {
@@ -146,7 +145,6 @@ define([
         self.configHipay = {
           template: 'auto',
           selector: 'paypal-field',
-          merchantPaypalId: self.merchantId,
           canPayLater: Boolean(self.bnpl),
           paypalButtonStyle: {
             shape: self.buttonShape,
@@ -197,7 +195,7 @@ define([
       isPaypalV2Allowed: function () {
         var self = this;
 
-        if (self.merchantId) {
+        if (isPayPalV2 === 1) {
           return true;
         }
 
