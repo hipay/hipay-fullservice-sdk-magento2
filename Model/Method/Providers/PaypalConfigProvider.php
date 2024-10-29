@@ -134,7 +134,6 @@ class PaypalConfigProvider implements ConfigProviderInterface
                                 'apiPasswordTokenJs' => $this->hipayConfig->getApiPasswordTokenJs(),
                                 'env' => $this->hipayConfig->getApiEnv(),
                                 'sdkJsUrl' => $this->hipayConfig->getSdkJsUrl(),
-                                'merchant_id' => $this->hipayConfig->getValue('merchant_id'),
                                 'button_label' => $this->hipayConfig->getValue('button_label'),
                                 'button_layout' => $this->hipayConfig->getValue('button_layout'),
                                 'button_color' => $this->hipayConfig->getValue('button_color'),

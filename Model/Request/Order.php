@@ -47,7 +47,7 @@ class Order extends CommonRequest
      */
     protected $_paymentMethod;
 
-    protected $_ccTypes = array(
+    protected $_ccTypes = [
         'VI' => 'visa',
         'AE' => 'american-express',
         'MC' => 'mastercard',
@@ -58,13 +58,13 @@ class Order extends CommonRequest
         'cb' => 'cb',
         'maestro' => 'maestro',
         'bcmc' => 'bcmc'
-    );
+    ];
 
-    protected $_cardPaymentMethod = array(
+    protected $_cardPaymentMethod = [
         'hipay_hosted_fields',
         'hipay_hosted',
         'hipay_hostedmoto'
-    );
+    ];
 
     /**
      * @var \HiPay\FullserviceMagento\Helper\Data
@@ -245,6 +245,7 @@ class Order extends CommonRequest
     private function getSpecifiedPaymentProduct()
     {
         return ($this->getPaymentProductFees()) ? $this->getPaymentProductFees() :
+            $this->_order->getPayment()->getAdditionalInformation('payment_product') ??
             $this->_order->getPayment()->getMethodInstance()->getConfigData('payment_products');
     }
 
@@ -345,14 +346,14 @@ class Order extends CommonRequest
         if (preg_match("/[34]xcb-no-fees|[34]xcb|credit-long/", $payment_product ?: '')) {
             $merchantPromotion = $this->_config->getValue('merchant_promotion');
             $orderRequest->payment_product_parameters = json_encode(
-                array(
+                [
                     "merchant_promotion" => $merchantPromotion && !empty($merchantPromotion) ?
                     $merchantPromotion :
                     \HiPay\Fullservice\Helper\MerchantPromotionCalculator::calculate(
                         $payment_product,
                         $orderRequest->amount
                     )
-                )
+                ]
             );
         }
 
@@ -469,7 +470,7 @@ class Order extends CommonRequest
      */
     public function getCustomData()
     {
-        $customData = array();
+        $customData = [];
         return $customData;
     }
 
