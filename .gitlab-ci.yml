@@ -10,6 +10,7 @@ stages:
   - quality
   - build-test
   - test
+  - release
   - build
   - deploy
 
@@ -144,6 +145,34 @@ build-test-2-1-10:
       - $ONLY_DEPLOY
   tags:
     - medium
+
+release_job:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  variables:
+    TEMP_CHANGELOG_FILE: 'release_changelog.txt'
+  rules:
+    - if: $CI_COMMIT_TAG # Run this job when a tag is created manually
+  script:
+    - |
+      # Extract changelog part according to tag version
+      CHANGELOG=$(awk -v version="## $CI_COMMIT_TAG" '
+        $0 ~ version {printit=1; next}
+        printit && /^## / {exit}
+        printit {print}
+      ' CHANGELOG.md)
+
+      {
+        echo "# CHANGE LOG"
+        echo "$CHANGELOG"
+      } > "$TEMP_CHANGELOG_FILE"
+    - cat "$TEMP_CHANGELOG_FILE"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    name: Version $CI_COMMIT_TAG
+    description: '$TEMP_CHANGELOG_FILE'
+    milestones:
+      - $CI_COMMIT_TAG
 
 build:
   <<: *login-to-registry

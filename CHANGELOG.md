@@ -1,8 +1,9 @@
 # Changelog
 
-## Unreleased
+## 1.25.0
 
 - **Add** : Added Klarna payment method
+- **Fix** : Fixed issues on order timeout by redirecting customer to pending URL
 - **Fix** : Fixed stock discount when *Blocked* (110) or *Denied* (111) notification is received
 
 ## 1.24.2
