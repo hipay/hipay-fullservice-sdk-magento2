@@ -203,8 +203,6 @@ get-jira-tickets:
             const err = await githubResponse.json();
             throw new Error("Failed to send GitHub event: " + JSON.stringify(err));
           }
-
-          console.log("GitHub response", await githubResponse.json());
         } catch (error) {
           throw new Error("Request error: " + error.message);
         }
