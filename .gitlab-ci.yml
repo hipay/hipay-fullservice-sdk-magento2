@@ -173,7 +173,7 @@ get-jira-tickets:
 
           mergeRequests.forEach((mr) => {
             const matches = mr.source_branch.match(/EC-\d+/);
-            if(matches.length) {
+            if(matches?.length) {
               tickets.push(matches[0].toUpperCase());
             }
           });
