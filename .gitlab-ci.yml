@@ -165,7 +165,7 @@ get-jira-tickets:
 
           if (!gitlabResponse.ok) {
             const err = await gitlabResponse.json();
-            throw new Error("Failed to send message: " + JSON.stringify(err));
+            throw new Error("Failed to send GitLab request: " + JSON.stringify(err));
           }
 
           const mergeRequests = await gitlabResponse.json();
@@ -185,7 +185,7 @@ get-jira-tickets:
             client_payload: tickets
           };
 
-          await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
+          const githubResponse = await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -194,6 +194,13 @@ get-jira-tickets:
             },
             body: JSON.stringify(payload)
           });
+
+          if (!githubResponse.ok) {
+            const err = await githubResponse.json();
+            throw new Error("Failed to send GitHub event: " + JSON.stringify(err));
+          }
+
+          console.log("GitHub response", await githubResponse.json());
         } catch (error) {
           throw new Error("Request error: " + error.message);
         }
