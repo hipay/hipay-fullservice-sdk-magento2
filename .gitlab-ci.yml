@@ -182,7 +182,7 @@ get-jira-tickets:
 
           const payload = {
             event_type: "trigger-artifact-workflow",
-            client_payload: tickets
+            client_payload: { tickets }
           };
 
           const githubResponse = await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
