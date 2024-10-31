@@ -159,7 +159,7 @@ get-jira-tickets:
           const gitlabResponse = await fetch("${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?state=merged&target_branch=develop&milestone=${CI_COMMIT_TAG}", {
             method: "GET",
             headers: {
-              "Private-Token": "$CI_JOB_TOKEN"
+              "Private-Token": "$GITLAB_API_TOKEN"
             }
           });
 
