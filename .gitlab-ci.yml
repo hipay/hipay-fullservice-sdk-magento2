@@ -146,13 +146,69 @@ build-test-2-1-10:
   tags:
     - medium
 
-release_job:
+get-jira-tickets:
+  stage: release
+  image: node:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - |
+      node <<EOF
+      (async () => {
+        try {
+          const gitlabResponse = await fetch("${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?state=merged&target_branch=develop&milestone=${CI_COMMIT_TAG}", {
+            method: "GET",
+            headers: {
+              "Private-Token": "$CI_JOB_TOKEN"
+            }
+          });
+
+          if (!gitlabResponse.ok) {
+            const err = await gitlabResponse.json();
+            throw new Error("Failed to send message: " + JSON.stringify(err));
+          }
+
+          const mergeRequests = await gitlabResponse.json();
+          const tickets = [];
+
+          mergeRequests.forEach((mr) => {
+            const matches = mr.source_branch.match(/EC-\d+/);
+            if(matches.length) {
+              tickets.push(matches[0].toUpperCase());
+            }
+          });
+
+          console.log("tickets", tickets);
+
+          const payload = {
+            event_type: "trigger-artifact-workflow",
+            client_payload: tickets
+          };
+
+          await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer ${GITHUB_TOKEN}",
+              "User-Agent": "Node.js"
+            },
+            body: JSON.stringify(payload)
+          });
+        } catch (error) {
+          throw new Error("Request error: " + error.message);
+        }
+      })();
+      EOF
+
+release-job:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - get-jira-tickets
   variables:
     TEMP_CHANGELOG_FILE: 'release_changelog.txt'
   rules:
-    - if: $CI_COMMIT_TAG # Run this job when a tag is created manually
+    - if: $CI_COMMIT_TAG
   script:
     - |
       # Extract changelog part according to tag version

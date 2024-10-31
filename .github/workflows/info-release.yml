@@ -1,0 +1,19 @@
+name: Infos release artifacts
+
+on:
+  repository_dispatch:
+    types: [trigger-artifact-workflow]
+
+jobs:
+  store_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Access data from GitLab payload
+        run: |
+          echo '${{ toJSON(github.event.client_payload) }}' > artifact.json
+          cat artifact.json
+      - name: Upload JSON as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitlab-data-artifact
+          path: artifact.json
