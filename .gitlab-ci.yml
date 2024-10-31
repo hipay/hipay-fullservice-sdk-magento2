@@ -181,9 +181,13 @@ get-jira-tickets:
           console.log("tickets", tickets);
 
           const payload = {
-            event_type: "trigger-artifact-workflow",
-            client_payload: { tickets }
+            "event_type": "trigger-artifact-workflow",
+            "client_payload": {
+              "tickets": JSON.stringify(tickets)
+            }
           };
+
+          console.log("payload", payload);
 
           const githubResponse = await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
             method: "POST",
