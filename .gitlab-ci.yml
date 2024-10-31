@@ -183,7 +183,7 @@ get-jira-tickets:
           const payload = {
             "event_type": "trigger-artifact-workflow",
             "client_payload": {
-              "tickets": JSON.stringify(tickets)
+              "tickets": tickets
             }
           };
 
