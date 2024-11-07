@@ -44,4 +44,24 @@ class Alma4X extends AbstractMethodAPI
      * @var bool
      */
     protected $_canUseInternal = false;
+
+    /**
+     * Check whether payment method can be used
+     *
+     * @param CartInterface|null $quote
+     * @return bool
+     */
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    {
+        // First check parent rules (from HiPay)
+        $isAvailable = parent::isAvailable($quote);
+
+        if (!$isAvailable || !$quote) {
+            return false;
+        }
+
+        $total = $quote->getGrandTotal();
+
+        return $this->getMinMaxByPaymentProduct($total, self::$_technicalCode);
+    }
 }

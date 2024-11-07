@@ -45,9 +45,6 @@ class Alma3X extends AbstractMethodAPI
      */
     protected $_canUseInternal = false;
 
-    const MINIMUM_AMOUNT = 30;
-    const MAXIMUM_AMOUNT = 2000;
-
     /**
      * Check whether payment method can be used
      *
@@ -65,12 +62,6 @@ class Alma3X extends AbstractMethodAPI
 
         $total = $quote->getGrandTotal();
 
-        // Hide payment method if total is outside allowed range
-        if ($total < self::MINIMUM_AMOUNT || $total > self::MAXIMUM_AMOUNT) {
-            return false;
-        }
-
-        return true;
-
+        return $this->getMinMaxByPaymentProduct($total, self::$_technicalCode);
     }
 }

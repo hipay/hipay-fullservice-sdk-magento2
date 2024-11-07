@@ -107,6 +107,9 @@
             <hipay_hosted_page_management>
                 <cancel_button>1</cancel_button>
             </hipay_hosted_page_management>
+            <hipay_api_environment>
+                <api_environment>STAGE</api_environment>
+            </hipay_api_environment>
         </hipay>
         <payment>
             <hipay_hosted>

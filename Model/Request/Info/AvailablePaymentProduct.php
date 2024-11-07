@@ -16,8 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
-use HiPay\Fullservice\Gateway\Request\Info\AvailablePaymentProductRequest;
+use HiPay\Fullservice\Gateway\Request\Info\AvailablePaymentProductRequest as AvailablePaymentProductRequest;
+use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
+use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest;
+use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
 /**
  * Available Payment Product
@@ -27,7 +30,7 @@ use HiPay\FullserviceMagento\Model\Request\CommonRequest;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class AvailablePaymentProduct extends CommonRequest
+class AvailablePaymentProduct extends AbstractRequest
 {
     /**
      *  Payment Product
@@ -57,11 +60,6 @@ class AvailablePaymentProduct extends CommonRequest
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
-        \HiPay\FullserviceMagento\Model\Cart\CartFactory $cartFactory,
-        \Magento\Weee\Helper\Data $weeeHelper,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
-        CollectionFactory $mappingCategoriesCollectionFactory,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         $params = []
     ) {
         parent::__construct(
@@ -73,11 +71,6 @@ class AvailablePaymentProduct extends CommonRequest
             $requestFactory,
             $urlBuilder,
             $helper,
-            $cartFactory,
-            $weeeHelper,
-            $productRepositoryInterface,
-            $mappingCategoriesCollectionFactory,
-            $categoryFactory,
             $params
         );
 
@@ -86,7 +79,9 @@ class AvailablePaymentProduct extends CommonRequest
     }
 
     /**
-     * @inheritDoc
+     *  Map Request Object for transaction
+     *
+     * @return \HiPay\Fullservice\Gateway\Request\Info\AvailablePaymentProductRequest
      */
     protected function mapRequest()
     {
@@ -94,5 +89,7 @@ class AvailablePaymentProduct extends CommonRequest
 
         $available_payment_product->payment_product = $this->payment_product;
         $available_payment_product->with_options = $this->with_options;
+
+        return $available_payment_product;
     }
 }

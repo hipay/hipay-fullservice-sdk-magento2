@@ -387,11 +387,12 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      *
      * @param  \Magento\Sales\Model\Order $order
+     * @param  array $order
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function getGatewayManager($order)
+    public function getGatewayManager($order, $params = [])
     {
-        return $this->_gatewayManagerFactory->create($order);
+        return $this->_gatewayManagerFactory->create($order, $params);
     }
 
     /**

@@ -74,4 +74,32 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     {
         $this->_isInitializeNeeded = (bool)$isInitializeNeeded;
     }
+
+    /**
+     * Get min and max amount by payment product
+     *
+     * @param $total
+     * @param $technicalCode
+     * @return bool
+     */
+    protected function getMinMaxByPaymentProduct($total, $technicalCode)
+    {
+        $availablePaymentProductResponse = $this->_gatewayManagerFactory->create(null, ['apiEnv' => 1]);
+        $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct( [$technicalCode],true);
+
+        foreach ($paymentProducts as $product) {
+            if ($product->getCode() === $technicalCode) {
+                $options = $product->getOptions();
+                $installments = substr($product->getCode(), -2, 1);
+                $minKey = "basketAmountMin{$installments}x";
+                $maxKey = "basketAmountMax{$installments}x";
+
+                if (isset($options[$minKey], $options[$maxKey])) {
+                    return $total >= (float)$options[$minKey] && $total <= (float)$options[$maxKey];
+                }
+            }
+        }
+
+        return false;
+    }
 }
