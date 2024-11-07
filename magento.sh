@@ -56,7 +56,7 @@ elif [ "$1" = "cache" ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'static' ]; then
     docker exec $containerMG2 rm -Rf /bitnami/magento/pub/static/frontend/Magento/luma/en_US/HiPay_FullserviceMagento/
-    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy -t Magento/luma
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy -t Magento/luma -f
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
 elif [ "$1" = 'static-fr' ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
@@ -65,8 +65,13 @@ elif [ "$1" = 'static-fr' ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:static-content:deploy fr_FR -f
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:f
-elif [ "$1" = 'production' ]; then
+elif [ "$1" = 'developer' ]; then
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento deploy:mode:set developer
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:upgrade
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:c
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento c:f
+elif [ "$1" = 'production' ]; then
+    docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento deploy:mode:set production
 elif [ "$1" = 'di' ]; then
     docker exec $containerMG2 rm -Rf /bitnami/magento/var/cache /bitnami/magento/var/di /bitnami/magento/var/generation /bitnami/magento/var/page_cache
     docker exec $containerMG2 gosu daemon php /bitnami/magento/bin/magento setup:di:compile

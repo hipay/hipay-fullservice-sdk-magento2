@@ -34,6 +34,7 @@
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SisalHostedFields::HIPAY_METHOD_CODE</item>
+                <item name="hipay_klarna_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\KlarnaHostedFields::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -85,6 +86,7 @@
                 <item name="hipay_mybank" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Mybank::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Multibanco::HIPAY_METHOD_CODE</item>
+                <item name="hipay_klarna_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\KlarnaHostedFields::HIPAY_METHOD_CODE</item>
             </argument>
         </arguments>
     </type>
@@ -133,6 +135,14 @@
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="hipay" xsi:type="string">/hipay/</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="hipay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\PaypalConfigProvider</item>
             </argument>
         </arguments>
     </type>
