@@ -407,7 +407,10 @@ class Manager
         $params = $this->_getRequestParameters();
         $params['params']['payment_product'] = $paymentProduct;
         $params['params']['with_options'] = $withOptions;
-        $paymentProductRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Info\AvailablePaymentProduct', $params);
+        $paymentProductRequest = $this->_getRequestObject(
+            '\HiPay\FullserviceMagento\Model\Request\Info\AvailablePaymentProduct',
+            $params
+        );
 
         return $this->_gateway->requestAvailablePaymentProduct(
             $paymentProductRequest

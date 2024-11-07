@@ -85,7 +85,7 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     protected function getMinMaxByPaymentProduct($total, $technicalCode)
     {
         $availablePaymentProductResponse = $this->_gatewayManagerFactory->create(null, ['apiEnv' => 1]);
-        $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct( [$technicalCode],true);
+        $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct([$technicalCode], true);
 
         foreach ($paymentProducts as $product) {
             if ($product->getCode() === $technicalCode) {
