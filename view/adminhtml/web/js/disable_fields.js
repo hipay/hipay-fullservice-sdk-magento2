@@ -13,15 +13,26 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define([
-  'HiPay_FullserviceMagento/js/hipay-paypal-config',
-  'domReady!'
-], function (hipayPaypalConfig) {
+define(['hipayAvailablePaymentProducts', 'domReady!'], function (
+  availablePaymentProducts
+) {
   'use strict';
-
   let isV2 = false;
   let isPayPalSelected = false;
   let initPayPalPromise = null;
+  let paymentProductsInstance = null;
+
+  function initializePaymentProducts() {
+    if (!paymentProductsInstance && typeof hipayConfig !== 'undefined') {
+      paymentProductsInstance = availablePaymentProducts();
+      paymentProductsInstance.setCredentials(
+        hipayConfig.getApiUsernameTokenJs,
+        hipayConfig.getApiPasswordTokenJs,
+        hipayConfig.getEnv === 'stage'
+      );
+    }
+    return paymentProductsInstance;
+  }
 
   function checkPayPalV2() {
     if (initPayPalPromise !== null && isV2 !== false) {
@@ -30,33 +41,29 @@ define([
 
     initPayPalPromise = new Promise((resolve, reject) => {
       if (
-        typeof hipayPaypalConfig.createHipayAvailablePaymentProducts ===
-          'function' &&
         typeof hipayConfig !== 'undefined' &&
         hipayConfig.getApiUsernameTokenJs &&
         hipayConfig.getApiPasswordTokenJs &&
         typeof hipayConfig.getEnv !== 'undefined'
       ) {
-        const config = hipayPaypalConfig.createHipayAvailablePaymentProducts(
-          hipayConfig.getApiUsernameTokenJs,
-          hipayConfig.getApiPasswordTokenJs,
-          hipayConfig.getEnv === 'stage'
-        );
+        const instance = initializePaymentProducts();
 
-        if (typeof config?.getAvailablePaymentProducts === 'function') {
-          config
-            .getAvailablePaymentProducts('paypal', '7', '4', 'true')
-            .then((result) => {
-              isV2 =
-                result?.length > 0 &&
-                result[0].options.payer_id.length > 0 &&
-                result[0].options.provider_architecture_version === 'v1';
-              resolve(isV2);
-            })
-            .catch(reject);
-        } else {
-          resolve(false);
-        }
+        // Configure the payment products request for PayPal
+        instance.updateConfig('operation', ['4']);
+        instance.updateConfig('payment_product', ['paypal']);
+        instance.updateConfig('eci', ['7']);
+        instance.updateConfig('with_options', true);
+
+        instance
+          .getAvailableProducts()
+          .then((result) => {
+            isV2 =
+              result?.length > 0 &&
+              result[0].options.payer_id.length > 0 &&
+              result[0].options.provider_architecture_version === 'v1';
+            resolve(isV2);
+          })
+          .catch(reject);
       } else {
         resolve(false);
       }
