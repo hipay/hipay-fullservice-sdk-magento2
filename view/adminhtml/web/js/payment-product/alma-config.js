@@ -1,7 +1,8 @@
-define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
-  availablePaymentProducts,
-  $
-) {
+define([
+  'hipayAvailablePaymentProducts',
+  'jquery',
+  'domReady!view/adminhtml/web/js'
+], function (availablePaymentProducts, $) {
   'use strict';
   let isAlmaInitialized = false;
   let paymentProductsInstance = null;
