@@ -1,8 +1,7 @@
-define([
-  'hipayAvailablePaymentProducts',
-  'jquery',
-  'domReady!view/adminhtml/web/js'
-], function (availablePaymentProducts, $) {
+define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
+  availablePaymentProducts,
+  $
+) {
   'use strict';
   let isAlmaInitialized = false;
   let paymentProductsInstance = null;
@@ -68,8 +67,6 @@ define([
   }
 
   function updateAlmaAmountFields(productData) {
-    console.log('Updating Alma amount fields with data:', productData);
-
     productData.forEach((product) => {
       if (product.code === 'alma-3x') {
         const minAmount = product.options?.basketAmountMin3x;
@@ -123,7 +120,6 @@ define([
     return instance
       .getAvailableProducts()
       .then((result) => {
-        console.log('Received Alma products:', result);
         isAlmaInitialized = true;
         updateAlmaAmountFields(result);
       })
@@ -138,8 +134,6 @@ define([
   function handleHiPayAlmaSection() {
     const alma3XActive = $('#payment_us_hipay_alma3X').is(':visible');
     const alma4XActive = $('#payment_us_hipay_alma4X').is(':visible');
-
-    console.log('Section status:', { alma3XActive, alma4XActive });
 
     if (alma3XActive || alma4XActive) {
       checkAlmaConfiguration();
@@ -163,7 +157,6 @@ define([
     'click',
     '#payment_us_hipay_alma3X-head, #payment_us_hipay_alma4X-head',
     function (e) {
-      console.log('Alma section header clicked:', e.target.id);
       isAlmaInitialized = false; // Reset initialization to show loader again
       debouncedHandler();
     }

@@ -13,10 +13,9 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-define([
-  'hipayAvailablePaymentProducts',
-  'domReady!view/adminhtml/web/js'
-], function (availablePaymentProducts) {
+define(['hipayAvailablePaymentProducts', 'domReady!'], function (
+  availablePaymentProducts
+) {
   'use strict';
   let isV2 = false;
   let isPayPalSelected = false;
