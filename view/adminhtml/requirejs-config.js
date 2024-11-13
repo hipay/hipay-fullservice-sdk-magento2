@@ -19,8 +19,12 @@ var config = {
     '*': {
       fullserviceCcForm: 'HiPay_FullserviceMagento/js/cc-form',
       hipayAvailablePaymentProducts:
-        'HiPay_FullserviceMagento/js/available-payment-products'
+        'HiPay_FullserviceMagento/js/available-payment-products',
+      hipayAlmaConfig: 'HiPay_FullserviceMagento/js/alma-config'
     }
   },
-  deps: ['HiPay_FullserviceMagento/js/disable_fields']
+  deps: [
+    'HiPay_FullserviceMagento/js/disable_fields',
+    'HiPay_FullserviceMagento/js/alma-config'
+  ]
 };
