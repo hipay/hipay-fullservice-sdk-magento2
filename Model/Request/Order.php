@@ -284,9 +284,7 @@ class Order extends CommonRequest
 
         $orderRequest->cid = $this->_customerId;
         $xForwardedFor = $this->_order->getXForwardedFor();
-        $orderRequest->ipaddr = $xForwardedFor ?
-            explode(',', $xForwardedFor)[0] :
-            $this->_order->getRemoteIp();
+        $orderRequest->ipaddr = $xForwardedFor ? explode(',', $xForwardedFor)[0] : $this->_order->getRemoteIp();
         $orderRequest->language = $this->_localeResolver->getLocale();
 
         $redirectParams = ['_secure' => true];

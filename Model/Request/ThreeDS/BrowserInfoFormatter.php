@@ -94,9 +94,7 @@ class BrowserInfoFormatter extends AbstractRequest
         $browserData = json_decode($this->_order->getPayment()->getAdditionalInformation('browser_info') ?: '');
 
         $xForwardedFor = $this->_order->getXForwardedFor();
-        $browserInfo->ipaddr = $xForwardedFor ?
-            explode(',', $xForwardedFor)[0] :
-            $this->_order->getRemoteIp();
+        $browserInfo->ipaddr = $xForwardedFor ? explode(',', $xForwardedFor)[0] : $this->_order->getRemoteIp();
         $browserInfo->http_accept = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : null;
         $browserInfo->javascript_enabled = true;
 
