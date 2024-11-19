@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+- **Fix** : Fixed stock discount when order refused or during clean pending orders, thanks to madleen for issue #163 and syno-bgt for issue #161
+
 ## 1.25.0
 
 - **Add** : Added Klarna payment method
