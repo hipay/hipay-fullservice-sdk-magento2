@@ -3,7 +3,7 @@
 ## UNRELEASED
 
 - **Fix** : Allow retrieving customer X-Forwarded-For IP addresse
-- **Fix** : Replace deprecated Zend validator with Laminas validator
+- **Fix** : Replace deprecated Zend validator with Laminas validator, thanks to [YoanSamuel](https://github.com/YoanSamuel) for issue [#164](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/164)
 
 ## 1.25.0
 
