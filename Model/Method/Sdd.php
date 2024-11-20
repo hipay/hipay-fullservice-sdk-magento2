@@ -119,10 +119,10 @@ class Sdd extends LocalHostedFields
         }
 
         // Instantiate validators for the model
-        $validatorIban = new \Zend\Validator\Iban(
+        $validatorIban = new \Laminas\Validator\Iban(
             array('country_code' => $order->getBillingAddress()->getCountryId())
         );
-        $validatorEmpty = new \Zend\Validator\NotEmpty();
+        $validatorEmpty = new \Laminas\Validator\NotEmpty();
 
         if (!$validatorIban->isValid($info->getAdditionalInformation('sdd_iban'))) {
             $errorMsg = __('Iban is not correct, please enter a valid Iban.');
