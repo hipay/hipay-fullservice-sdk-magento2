@@ -34,5 +34,10 @@
                 <value id="iesnare" type="host">mpsnare.iesnare.com</value>
             </values>
         </policy>
+        <policy id="img-src">
+            <values>
+                <value id="hipay" type="host">*.hipay.com</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>
