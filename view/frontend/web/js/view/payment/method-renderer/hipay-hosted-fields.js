@@ -20,8 +20,9 @@ define([
   'HiPay_FullserviceMagento/js/view/payment/cc-form',
   'Magento_Checkout/js/model/full-screen-loader',
   'Magento_Checkout/js/model/quote',
+  'mage/url',
   'domReady!'
-], function (ko, $, Component, fullScreenLoader, quote) {
+], function (ko, $, Component, fullScreenLoader, quote, urlBuilder) {
   'use strict';
 
   return Component.extend({
@@ -33,7 +34,7 @@ define([
       self.hipayHostedFields = self.hipaySdk.create('card', self.configHipay);
 
       self.hipayHostedFields.on('change', function (data) {
-        if (self.showCcForm()) {
+        if (self.showCcForm() || self.useOneclick()) {
           if (!data.valid || data.error) {
             self.hipayHFstatus = false;
           } else if (data.valid) {
@@ -179,7 +180,7 @@ define([
 
     changeOneClick: function () {
       var self = this;
-      self.hipayHostedFields.setMultiUse(self.allowMultiUse());
+      return self.useOneclick();
     },
 
     changeCard: function () {
@@ -239,6 +240,21 @@ define([
 
     initialize: function () {
       var self = this;
+
+      $(document).on('click', '#pay-other-card', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (self.showCcForm()) {
+          self.selectedCard('dummy');
+          $('.lbl-saved-cards').show();
+          $('.hipay-form-row').show();
+        } else {
+          // Switch to new card form
+          self.selectedCard('');
+          $('.lbl-saved-cards:not(#pay-other-card)').hide();
+          $('.hipay-form-row').hide();
+        }
+      });
       var customerFirstName = '';
       var customerLastName = '';
 
@@ -253,7 +269,15 @@ define([
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
         multi_use: self.allowMultiUse(),
+        one_click: {
+          enabled: true,
+          cards_display_count: 3,
+          cards: self.getCustomerCards()
+        },
         fields: {
+          savedCards: {
+            selector: 'hipay-saved-cards'
+          },
           cardHolder: {
             selector: 'hipay-card-holder',
             defaultFirstname: customerFirstName,
@@ -269,6 +293,9 @@ define([
             selector: 'hipay-cvc',
             helpButton: true,
             helpSelector: 'hipay-help-cvc'
+          },
+          savedCardButton: {
+            selector: 'hipay-saved-card-button'
           }
         },
         styles: {
@@ -298,7 +325,7 @@ define([
      */
     initObservable: function () {
       var self = this;
-      self._super().observe(['createOneclick']);
+      self._super().observe(['createOneclick', 'selectedCard']);
 
       self.showCcForm = ko.computed(function () {
         var showCC =
@@ -307,6 +334,25 @@ define([
           self.selectedCard() === '';
         return showCC;
       }, self);
+
+      // Add handler for saved card selection
+      $(document).on(
+        'change',
+        '.saved-card input[type="checkbox"]',
+        function () {
+          var $checkbox = $(this);
+          // Uncheck other checkboxes
+          $('.saved-card input[type="checkbox"]')
+            .not($checkbox)
+            .prop('checked', false);
+
+          if ($checkbox.is(':checked')) {
+            self.selectedCard($checkbox.attr('id'));
+          } else {
+            self.selectedCard('');
+          }
+        }
+      );
 
       return self;
     },
@@ -340,19 +386,38 @@ define([
         event.preventDefault();
       }
 
-      if (self.creditCardToken()) {
-        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-        return;
-      }
+      // if (self.creditCardToken()) {
+      //   self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+      //   return;
+      // }
 
       fullScreenLoader.startLoader();
       self.hipayHostedFields.getPaymentData().then(
         function (response) {
-          self.creditCardToken(response.token);
-          self.creditCardType(response.payment_product);
-          self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-          self.creditCardToken('');
-          fullScreenLoader.stopLoader();
+          console.log(response);
+          // If save card is checked
+          if (response.multi_use) {
+            // Save card data
+            return $.ajax({
+              url: urlBuilder.build('hipay/card/save'),
+              type: 'POST',
+              data: JSON.stringify(response),
+              contentType: 'application/json; charset=utf-8',
+              dataType: 'json'
+            }).then(function (saveResponse) {
+              self.creditCardToken(response.token);
+              self.creditCardType(response.payment_product);
+              self.createOneclick(response.one_click);
+              self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+              self.creditCardToken('');
+            });
+          } else {
+            self.creditCardToken(response.token);
+            self.creditCardType(response.payment_product);
+            self.createOneclick(response.one_click);
+            self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+            self.creditCardToken('');
+          }
         },
         function (errors) {
           for (var error in errors) {

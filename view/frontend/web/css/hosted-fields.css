@@ -249,3 +249,13 @@
   margin-top: 12px;
   margin-bottom: 12px;
 }
+
+.one-click .hipay-field-container, .one-click .hipay-field {
+  position: relative;
+  height: auto;
+}
+
+#pay-other-card > .arrow {
+  pointer-events: none; /* Re-enable clicks specifically on the arrow */
+  cursor: pointer;
+}

@@ -66,7 +66,7 @@
         data-bind="visible: initHostedFields() "
       >
         <!--<![endif]-->
-        <!-- ko if: (useOneclick() && customerHasCard()) -->
+        <!-- ko if: (!useOneclick() && customerHasCard()) -->
 
         <div class="hipay-row">
           <div class="hipay-field-container">
@@ -98,6 +98,13 @@
         </div>
         <!-- /ko -->
 
+        <!-- ko if: (useOneclick() && customerHasCard()) -->
+        <div class="hipay-row one-click">
+          <div class="hipay-field-container">
+            <div class="hipay-field" id="hipay-saved-cards"></div>
+          </div>
+        </div>
+        <!-- /ko -->
         <div class="hipay-row" data-bind="visible: showCcForm()">
           <div class="hipay-field-container">
             <div class="hipay-field" id="hipay-card-holder"></div>
@@ -156,29 +163,11 @@
         <div class="hipay-elements-container" data-bind="visible: showCcForm()">
           <div id="hipay-help-cvc"></div>
         </div>
-        <!-- ko if: (useOneclick())-->
-        <div class="field" data-bind="visible: showForm()">
-          <label class="label">
-            <span></span>
-          </label>
-          <div class="control">
-            <input
-              type="checkbox"
-              name="payment[create_oneclick]"
-              value="1"
-              checked="checked"
-              class="checkbox"
-              data-bind="checked: createOneclick, event: {change: changeOneClick}, attr: {id:  getCode() + '_create_oneclick'}"
-            />
-            <label class="label" for="create_oneclick">
-              <span>
-                <!-- ko i18n: 'Save this card for future use'-->
-                <!-- /ko -->
-              </span>
-            </label>
+        <div class="hipay-row" data-bind="visible: showCcForm()">
+          <div class="hipay-field-container">
+            <div class="hipay-field" id="hipay-saved-card-button"></div>
           </div>
         </div>
-        <!-- /ko -->
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() -->
         <!-- /ko -->

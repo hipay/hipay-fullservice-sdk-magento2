@@ -168,10 +168,12 @@ class GenericConfigProvider implements ConfigProviderInterface
         $cards = [];
         foreach ($this->getCustomerCards() as $card) {
             $cards[] = [
-                'name' => $card->getName(),
-                'ccToken' => $card->getCcToken(),
-                'ccType' => $card->getCcType(),
-                'ccOwner' => $card->getCcOwner()
+                'token' => $card->getCcToken(),
+                'brand' => $card->getCcType(),
+                'card_holder' => $card->getCcOwner(),
+                'card_expiry_month' => $card->getCcExpMonth(),
+                'card_expiry_year' => $card->getCcExpYear(),
+                'pan' => $card->getCcNumberEnc()
             ];
         }
 
@@ -179,7 +181,7 @@ class GenericConfigProvider implements ConfigProviderInterface
             'payment' => [
                 'hiPayFullservice' => [
                     'customerCards' => $cards,
-                    'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
+                    'selectedCard' => count($cards) ? current($cards)['token'] : null,
                     'defaultEci' => ECI::SECURE_ECOMMERCE,
                     'recurringEci' => ECI::RECURRING_ECOMMERCE,
                     'useOrderCurrency' => (bool)$this->_hipayConfig->useOrderCurrency()

@@ -85,26 +85,10 @@
       <div>&nbsp;</div>
       <!-- /ko -->
       <!-- ko if: (useOneclick())-->
-      <div class="field" data-bind="visible: showForm()">
-        <label class="label">
-          <span></span>
+      <div class="hipay-field-container">
+        <div class="hipay-field" id="hipay-saved-cards-button"></div>
+        <label class="hipay-label" for="hipay-saved-cards-button">
         </label>
-        <div class="control">
-          <input
-            type="checkbox"
-            name="payment[create_oneclick]"
-            value="1"
-            checked="checked"
-            class="checkbox"
-            data-bind="checked: createOneclick,attr: {id:  getCode() + '_create_oneclick'}"
-          />
-          <label class="label" for="create_oneclick">
-            <span>
-              <!-- ko i18n: 'Save this card for future use'-->
-              <!-- /ko -->
-            </span>
-          </label>
-        </div>
       </div>
       <!-- /ko -->
     </form>
