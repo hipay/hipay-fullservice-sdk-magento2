@@ -521,14 +521,12 @@ class UpgradeSchema implements UpgradeSchemaInterface
             if ($setup->getConnection()->isTableExists($tableName)) {
                 $setup->getConnection()->addIndex(
                     $tableName,
-                    $setup->getIdxName($tableName, ['customer_id'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
-                    ['customer_id'],
-                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                );
-                $setup->getConnection()->addIndex(
-                    $tableName,
-                    $setup->getIdxName($tableName, ['cc_number_enc'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
-                    ['cc_number_enc'],
+                    $setup->getIdxName(
+                        $tableName,
+                        ['customer_id', 'cc_number_enc'],
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
+                    ['customer_id', 'cc_number_enc'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 );
             }
