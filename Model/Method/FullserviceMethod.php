@@ -118,6 +118,10 @@ abstract class FullserviceMethod extends AbstractMethod
         'cc_type',
         'fingerprint',
         'cc_owner',
+        'card_pan',
+        'card_expiry_month',
+        'card_expiry_year',
+        'card_multi_use',
         'browser_info'
     ];
     /**
@@ -176,10 +180,15 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $_cardFactory;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
+     */
+    protected $_cardCollectionFactory;
+
+    /**
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository                                        $transactionRepository
-     * @param Method\Context                                               $context
+     * @param \HiPay\FullserviceMagento\Model\Method\Context               $context
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
      * @param array                                                        $data
@@ -211,6 +220,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['methodCode' => $this->getCode()]]);
         $this->_checkoutSession = $context->getCheckoutSession();
         $this->_cardFactory = $context->getCardFactory();
+        $this->_cardCollectionFactory = $context->getCardCollectionFactory();
         $this->priceCurrency = $context->getPriceCurrency();
 
         $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
@@ -449,6 +459,7 @@ abstract class FullserviceMethod extends AbstractMethod
 
             // Process response and store data
             $redirectUrl = $this->processResponse($response);
+
             $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);

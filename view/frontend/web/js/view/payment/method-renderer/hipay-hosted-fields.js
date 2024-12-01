@@ -386,38 +386,24 @@ define([
         event.preventDefault();
       }
 
-      // if (self.creditCardToken()) {
-      //   self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-      //   return;
-      // }
+      if (self.creditCardToken()) {
+        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+        return;
+      }
 
       fullScreenLoader.startLoader();
       self.hipayHostedFields.getPaymentData().then(
         function (response) {
-          console.log(response);
-          // If save card is checked
-          if (response.multi_use) {
-            // Save card data
-            return $.ajax({
-              url: urlBuilder.build('hipay/card/save'),
-              type: 'POST',
-              data: JSON.stringify(response),
-              contentType: 'application/json; charset=utf-8',
-              dataType: 'json'
-            }).then(function (saveResponse) {
-              self.creditCardToken(response.token);
-              self.creditCardType(response.payment_product);
-              self.createOneclick(response.one_click);
-              self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-              self.creditCardToken('');
-            });
-          } else {
-            self.creditCardToken(response.token);
-            self.creditCardType(response.payment_product);
-            self.createOneclick(response.one_click);
-            self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-            self.creditCardToken('');
-          }
+          self.creditCardToken(response.token);
+          self.creditCardType(response.payment_product);
+          self.creditCardOwner(response.card_holder);
+          self.creditCardNumber(response.pan);
+          self.creditCardExpMonth(response.card_expiry_month);
+          self.creditCardExpYear(response.card_expiry_year);
+          self.createOneclick(response.one_click);
+          self.multiUse(response.multi_use);
+          self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+          self.creditCardToken('');
         },
         function (errors) {
           for (var error in errors) {

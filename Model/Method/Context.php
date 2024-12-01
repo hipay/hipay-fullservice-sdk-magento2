@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
+use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
 
 /**
  * Class Context for payments methods
@@ -64,6 +65,11 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @var \HiPay\FullserviceMagento\Model\CardFactory
      */
     protected $_cardFactory;
+
+    /**
+     * @var CollectionFactory
+     */
+    private $_cardCollectionFactory;
 
     /**
      * Config factory
@@ -136,6 +142,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \HiPay\FullserviceMagento\Model\Config\Factory                 $configFactory
      * @param \Magento\Checkout\Model\Session                                $checkoutSession
      * @param \HiPay\FullserviceMagento\Model\CardFactory                    $cardFactory
+     * @param CollectionFactory                                              $cardCollectionFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface              $priceCurrency
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -154,6 +161,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+        CollectionFactory $cardCollectionFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
 
@@ -174,6 +182,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_configFactory = $configFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_cardFactory = $cardFactory;
+        $this->_cardCollectionFactory = $cardCollectionFactory;
         $this->priceCurrency = $priceCurrency;
     }
 
@@ -205,6 +214,11 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getCardFactory()
     {
         return $this->_cardFactory;
+    }
+
+    public function getCardCollectionFactory()
+    {
+        return $this->_cardCollectionFactory;
     }
 
     public function getConfigFactory()

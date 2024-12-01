@@ -358,6 +358,12 @@ class Order extends CommonRequest
             );
         }
 
+        $oneClick = $this->_order->getPayment()->getAdditionalInformation('create_oneclick') == '1';
+
+        if ($oneClick) {
+            $orderRequest->one_click = true;
+        }
+
         $orderRequest->http_user_agent = $this->_httpHeader->getHttpUserAgent();
 
         return $orderRequest;

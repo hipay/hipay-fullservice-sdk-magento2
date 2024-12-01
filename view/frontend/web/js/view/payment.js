@@ -31,6 +31,11 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
         window.checkoutConfig.payment.hiPayFullservice.customerCards,
       createOneclick: false,
       creditCardType: '',
+      creditCardOwner: '',
+      creditCardNumber: '',
+      creditCardExpMonth: '',
+      creditCardExpYear: '',
+      multiUse: '',
       fingerprint: '',
       defaultEci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
       recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
@@ -46,7 +51,12 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
         'selectedCard',
         'createOneclick',
         'creditCardType',
+        'creditCardOwner',
+        'creditCardNumber',
+        'creditCardExpMonth',
+        'creditCardExpYear',
         'creditCardToken',
+        'multiUse',
         'eci',
         'fingerprint'
       ]);
@@ -129,6 +139,11 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
         additional_data: {
           create_oneclick: this.createOneclick(),
           card_token: this.creditCardToken(),
+          card_owner: this.creditCardOwner(),
+          card_pan: this.creditCardNumber(),
+          card_expiry_month: this.creditCardExpMonth(),
+          card_expiry_year: this.creditCardExpYear(),
+          card_multi_use: this.multiUse(),
           eci: this.eci(),
           cc_type: this.creditCardType(),
           fingerprint: fingerprint

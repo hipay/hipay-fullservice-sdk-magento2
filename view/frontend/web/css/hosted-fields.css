@@ -259,3 +259,6 @@
   pointer-events: none; /* Re-enable clicks specifically on the arrow */
   cursor: pointer;
 }
+.HiSwitch-icon-check {
+  margin-right: 40px !important;
+}
