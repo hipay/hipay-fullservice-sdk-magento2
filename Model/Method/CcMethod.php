@@ -442,7 +442,7 @@ class CcMethod extends FullserviceMethod
      * Save or update card
      *
      * @param array $cardData
-     * @param int $customerId
+     * @param int   $customerId
      * @return Card
      * @throws LocalizedException
      */
@@ -481,7 +481,6 @@ class CcMethod extends FullserviceMethod
             $card->save();
 
             return $card;
-
         } catch (\Exception $e) {
             throw new LocalizedException(__('Failed to save card: %1', $e->getMessage()));
         }
@@ -490,7 +489,7 @@ class CcMethod extends FullserviceMethod
     /**
      * Find existing card by customer ID and encrypted card number
      *
-     * @param int $customerId
+     * @param int    $customerId
      * @param string $ccNumberEnc
      * @return Card|null
      */

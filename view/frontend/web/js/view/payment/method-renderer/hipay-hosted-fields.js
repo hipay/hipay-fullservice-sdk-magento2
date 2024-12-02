@@ -20,9 +20,8 @@ define([
   'HiPay_FullserviceMagento/js/view/payment/cc-form',
   'Magento_Checkout/js/model/full-screen-loader',
   'Magento_Checkout/js/model/quote',
-  'mage/url',
   'domReady!'
-], function (ko, $, Component, fullScreenLoader, quote, urlBuilder) {
+], function (ko, $, Component, fullScreenLoader, quote) {
   'use strict';
 
   return Component.extend({
@@ -178,20 +177,6 @@ define([
       return self.allowOneclick.hipay_hosted_fields && self.createOneclick();
     },
 
-    changeOneClick: function () {
-      var self = this;
-      return self.useOneclick();
-    },
-
-    changeCard: function () {
-      var self = this;
-      if (!self.showCcForm()) {
-        self.isPlaceOrderAllowed(true);
-      } else {
-        self.isPlaceOrderAllowed(self.hipayHFstatus);
-      }
-    },
-
     initTOCEvents: function () {
       var self = this;
 
@@ -265,13 +250,13 @@ define([
         customerFirstName = billingAddress.firstname;
         customerLastName = billingAddress.lastname;
       }
-
+      console.log(self.getCustomerSavedCardsCount());
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
         multi_use: self.allowMultiUse(),
         one_click: {
-          enabled: true,
-          cards_display_count: self.getCustomerSavedCardsCount(),
+          enabled: self.useOneclick(),
+          cards_display_count: Number(self.getCustomerSavedCardsCount()),
           cards: self.getCustomerCards()
         },
         fields: {
