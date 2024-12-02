@@ -259,6 +259,13 @@
   pointer-events: none; /* Re-enable clicks specifically on the arrow */
   cursor: pointer;
 }
-.HiSwitch-icon-check {
-  margin-right: 40px !important;
+
+#hipay-saved-card-button {
+  text-align: left;
+}
+
+#hipay-saved-card-button input[type="checkbox"], .one-click input[type="checkbox"]{
+  margin: 0;
+  position: absolute;
+  top: 0;
 }

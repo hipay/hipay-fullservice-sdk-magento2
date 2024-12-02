@@ -250,7 +250,7 @@ define([
         customerFirstName = billingAddress.firstname;
         customerLastName = billingAddress.lastname;
       }
-      console.log(self.getCustomerSavedCardsCount());
+
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
         multi_use: self.allowMultiUse(),
@@ -284,6 +284,14 @@ define([
           }
         },
         styles: {
+          components: {
+            switch: {
+              mainColor: '#FF8C50'
+            },
+            checkbox: {
+              mainColor: '#6864E7'
+            }
+          },
           base: {
             fontFamily: self.fontFamily,
             color: self.color,
