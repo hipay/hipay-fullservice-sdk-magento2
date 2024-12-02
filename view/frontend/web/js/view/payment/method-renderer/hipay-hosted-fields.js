@@ -139,6 +139,16 @@ define([
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.iconColor
           : '',
+      oneClickHighlightColor:
+        window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+          ? window.checkoutConfig.payment.hipay_hosted_fields
+              .oneClickHighlightColor
+          : '',
+      oneClickToggleColor:
+        window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+          ? window.checkoutConfig.payment.hipay_hosted_fields
+              .oneClickToggleColor
+          : '',
       locale:
         window.checkoutConfig.payment.hiPayFullservice !== undefined
           ? window.checkoutConfig.payment.hiPayFullservice.locale
@@ -286,10 +296,10 @@ define([
         styles: {
           components: {
             switch: {
-              mainColor: '#FF8C50'
+              mainColor: self.oneClickToggleColor
             },
             checkbox: {
-              mainColor: '#6864E7'
+              mainColor: self.oneClickHighlightColor
             }
           },
           base: {

@@ -405,3 +405,5 @@
 "Allow customers to save their card details for future purchases.","Permettre aux clients d'enregistrer leurs coordonnées bancaires pour leurs futurs achats."
 "Maximum Saved Cards Per Customer","Nombre maximum de cartes par client"
 "Maximum number of cards a customer can save to their account.","Nombre maximum de cartes qu'un client peut enregistrer sur son compte."
+"Selected Card Highlight Color","Couleur de surbrillance de la carte sélectionnée"
+"Save Card Toggle Color","Couleur du bouton de sauvegarde de carte"
