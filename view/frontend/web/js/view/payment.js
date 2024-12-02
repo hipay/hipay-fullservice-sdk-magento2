@@ -30,6 +30,7 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
       customerCards:
         window.checkoutConfig.payment.hiPayFullservice.customerCards,
       createOneclick: false,
+      maxSavedCard: window.checkoutConfig.payment.hiPayFullservice.maxSavedCard,
       creditCardType: '',
       creditCardOwner: '',
       creditCardNumber: '',
@@ -112,6 +113,11 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
     getCustomerCards: function () {
       return this.customerCards;
     },
+
+    getCustomerSavedCardsCount: function () {
+      return this.maxSavedCard[this.getCode()];
+    },
+
     getCustomerCardByToken: function (token) {
       for (var i = 0; i < this.customerCards.length; i++) {
         if (this.customerCards[i].ccToken == token) {

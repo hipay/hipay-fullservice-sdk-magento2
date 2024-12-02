@@ -153,6 +153,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                             ],
                             'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
                             'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
+                            'maxSavedCard' => [$methodCode => $this->maxSavedCardCount($methodCode)],
                             'displayCardOwner' => [$methodCode => $this->displayCardOwner($methodCode)],
                             'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
                             'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
@@ -224,6 +225,11 @@ class GenericConfigProvider implements ConfigProviderInterface
         $quote = $this->checkoutSession->getQuote();
 
         return (bool)$this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
+    }
+
+    protected function maxSavedCardCount($methodCode)
+    {
+        return $this->_hipayConfig->getValue('max_saved_cards');
     }
 
     protected function isIframeMode($methodCode)

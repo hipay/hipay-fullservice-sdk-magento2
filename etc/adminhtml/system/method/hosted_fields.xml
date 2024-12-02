@@ -48,6 +48,15 @@
                 <field id="allow_use_oneclick" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Use Oneclick</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Allow customers to save their card details for future purchases.</comment>
+                </field>
+                <field id="max_saved_cards" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Maximum Saved Cards Per Customer</label>
+                    <validate>validate-number validate-greater-than-zero</validate>
+                    <comment>Maximum number of cards a customer can save to their account.</comment>
+                    <depends>
+                        <field id="allow_use_oneclick">1</field>
+                    </depends>
                 </field>
  				<field id="filter_oneclick" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Rules Oneclick</label>

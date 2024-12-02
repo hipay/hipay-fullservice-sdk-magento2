@@ -271,7 +271,7 @@ define([
         multi_use: self.allowMultiUse(),
         one_click: {
           enabled: true,
-          cards_display_count: 3,
+          cards_display_count: self.getCustomerSavedCardsCount(),
           cards: self.getCustomerCards()
         },
         fields: {
