@@ -256,7 +256,7 @@
 }
 
 #pay-other-card > .arrow {
-  pointer-events: none; /* Re-enable clicks specifically on the arrow */
+  pointer-events: none;
   cursor: pointer;
 }
 
