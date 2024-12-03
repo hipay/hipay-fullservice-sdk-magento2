@@ -58,7 +58,7 @@
                         <field id="allow_use_oneclick">1</field>
                     </depends>
                 </field>
-                <field id="registered_card_highlight_color" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="saved_card_highlight_color" translate="label comment" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Selected Card Highlight Color</label>
                     <depends>
                         <field id="allow_use_oneclick">1</field>
