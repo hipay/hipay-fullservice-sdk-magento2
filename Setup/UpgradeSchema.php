@@ -341,6 +341,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->installShippingMappingTable($setup, $context);
 
         $this->installNotificationTable($setup, $context);
+        $this->installHipaySalesOrderTable($setup, $context);
 
         $setup->endSetup();
     }
@@ -590,6 +591,71 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $tableName,
                     ['state', 'attempts', 'status', 'created_at', 'order_id'],
                     ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX]
+                );
+
+            $setup->getConnection()->createTable($table);
+        }
+    }
+
+    private function installHipaySalesOrderTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        if (version_compare($context->getVersion(), '1.27.0', '<')) {
+            $tableName = $setup->getTable('hipay_sales_order');
+
+            $table = $setup->getConnection()
+                ->newTable($tableName)
+                ->addColumn(
+                    'entity_id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                    'Entity ID'
+                )
+                ->addColumn(
+                    'order_id',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => false],
+                    'Order ID'
+                )
+                ->addColumn(
+                    'is_locked',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
+                    null,
+                    ['nullable' => false, 'default' => '0'],
+                    'Is Order Locked'
+                )
+                ->addColumn(
+                    'locked_at',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    null,
+                    ['nullable' => true],
+                    'Lock Timestamp'
+                )
+                ->addColumn(
+                    'created_at',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    null,
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT],
+                    'Creation Time'
+                )
+                ->addColumn(
+                    'updated_at',
+                    \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    null,
+                    ['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
+                    'Update Time'
+                )
+                ->addIndex(
+                    $setup->getIdxName('hipay_sales_order', ['order_id']),
+                    ['order_id']
+                )
+                ->addForeignKey(
+                    $setup->getFkName('hipay_sales_order', 'order_id', 'sales_order', 'entity_id'),
+                    'order_id',
+                    $setup->getTable('sales_order'),
+                    'entity_id',
+                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 );
 
             $setup->getConnection()->createTable($table);
