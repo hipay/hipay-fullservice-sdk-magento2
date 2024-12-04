@@ -301,7 +301,7 @@ class Notify
 
         try {
             //Begin transaction to lock this order record during update
-            $this->orderLockManager->lockOrder($this->_order);;
+            $this->orderLockManager->lockOrder($this->_order);
 
             $selectForupdate = $this->orderResource->getConnection()->select()
                 ->from($this->orderResource->getMainTable())->where(
@@ -382,10 +382,12 @@ class Notify
                     // status : 118
                 case TransactionStatus::PARTIALLY_CAPTURED:
                     // status : 119
-                    //If status Capture Requested is configured to validate the order and is a direct capture notification
+                    //If status Capture Requested is configured to validate the order
+                    // and is a direct capture notification
                     // (118), we break because order is already validate.
                     if (
-                        (int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order')
+                        (int)$this->_order->getPayment()->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order')
                         == 117
                         && (int)$this->_transaction->getStatus() == 118
                         && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
