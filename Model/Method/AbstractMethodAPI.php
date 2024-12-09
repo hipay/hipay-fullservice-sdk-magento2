@@ -84,20 +84,25 @@ abstract class AbstractMethodAPI extends FullserviceMethod
      */
     protected function getMinMaxByPaymentProduct($total, $technicalCode)
     {
-        $availablePaymentProductResponse = $this->_gatewayManagerFactory->create(null, ['apiEnv' => 1]);
-        $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct([$technicalCode], true);
+        try {
+            $availablePaymentProductResponse = $this->_gatewayManagerFactory->create(null, ['apiEnv' => 1]);
+            $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct([$technicalCode], true);
 
-        foreach ($paymentProducts as $product) {
-            if ($product->getCode() === $technicalCode) {
-                $options = $product->getOptions();
-                $installments = substr($product->getCode(), -2, 1);
-                $minKey = "basketAmountMin{$installments}x";
-                $maxKey = "basketAmountMax{$installments}x";
+            foreach ($paymentProducts as $product) {
+                if ($product->getCode() === $technicalCode) {
+                    $options = $product->getOptions();
+                    $installments = substr($product->getCode(), -2, 1);
+                    $minKey = "basketAmountMin{$installments}x";
+                    $maxKey = "basketAmountMax{$installments}x";
 
-                if (isset($options[$minKey], $options[$maxKey])) {
-                    return $total >= (float)$options[$minKey] && $total <= (float)$options[$maxKey];
+                    if (isset($options[$minKey], $options[$maxKey])) {
+                        return $total >= (float)$options[$minKey] && $total <= (float)$options[$maxKey];
+                    }
                 }
             }
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            return false;
         }
 
         return false;
