@@ -472,6 +472,7 @@ class Notify
             //Save status infos
             $this->saveHiPayStatus();
         } catch (\Exception $exception) {
+            // throw the exception now that the order is unlocked
             throw $exception;
         } finally {
             // unlock the order
