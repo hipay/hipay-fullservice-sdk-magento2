@@ -176,6 +176,11 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $_cardFactory;
 
     /**
+     * @var int
+     */
+    public $overridePendingTimeout = 30;
+
+    /**
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository                                        $transactionRepository

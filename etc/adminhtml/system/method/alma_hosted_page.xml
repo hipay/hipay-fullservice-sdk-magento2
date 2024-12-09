@@ -30,6 +30,9 @@
             <label>Maximum Order Total</label>
             <comment><![CDATA[]]></comment>
         </field>
+        <field id="max_min_status" translate="label comment" type="hidden" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+            <comment><![CDATA[For any questions regarding minimum and maximum amounts, please contact support or your account manager.]]></comment>
+        </field>
     </group>
     <group id="alma_4x" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>Hipay Hosted Page Alma 4X</label>
@@ -42,6 +45,9 @@
                showInStore="0">
             <label>Maximum Order Total</label>
             <comment><![CDATA[]]></comment>
+        </field>
+        <field id="max_min_status" translate="label comment" type="hidden" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="1">
+            <comment><![CDATA[For any questions regarding minimum and maximum amounts, please contact support or your account manager.]]></comment>
         </field>
     </group>
 </include>
