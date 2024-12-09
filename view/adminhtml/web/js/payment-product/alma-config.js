@@ -1,25 +1,35 @@
-/**
- * HiPay Fullservice Magento
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the Apache 2.0 Licence
- * that is bundled with this package in the file LICENSE.md.
- * It is also available through the world-wide-web at this URL:
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
   availablePaymentProducts,
   $
 ) {
   'use strict';
   let isAlmaInitialized = false;
+  let initAlmaPromise = null;
   let paymentProductsInstance = null;
+  let isAlma3xSelected = false;
+  let isAlma4xSelected = false;
+
+  // Set default values for Alma 3X and 4X
+  createOrUpdateValueDisplay('payment_us_hipay_alma3X_min_order_total', 50);
+  createOrUpdateValueDisplay('payment_us_hipay_alma3X_max_order_total', 2000);
+  createOrUpdateValueDisplay('payment_us_hipay_alma4X_min_order_total', 50);
+  createOrUpdateValueDisplay('payment_us_hipay_alma4X_max_order_total', 2000);
+  createOrUpdateValueDisplay(
+    'payment_us_hipay_hosted_alma_3x_min_order_total',
+    50
+  );
+  createOrUpdateValueDisplay(
+    'payment_us_hipay_hosted_alma_3x_max_order_total',
+    2000
+  );
+  createOrUpdateValueDisplay(
+    'payment_us_hipay_hosted_alma_4x_min_order_total',
+    50
+  );
+  createOrUpdateValueDisplay(
+    'payment_us_hipay_hosted_alma_4x_max_order_total',
+    2000
+  );
 
   function initializePaymentProducts() {
     if (!paymentProductsInstance && typeof hipayConfig !== 'undefined') {
@@ -59,7 +69,11 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
       'payment_us_hipay_alma3X_min_order_total',
       'payment_us_hipay_alma3X_max_order_total',
       'payment_us_hipay_alma4X_min_order_total',
-      'payment_us_hipay_alma4X_max_order_total'
+      'payment_us_hipay_alma4X_max_order_total',
+      'payment_us_hipay_hosted_alma_3x_min_order_total',
+      'payment_us_hipay_hosted_alma_3x_max_order_total',
+      'payment_us_hipay_hosted_alma_4x_min_order_total',
+      'payment_us_hipay_hosted_alma_4x_max_order_total'
     ];
 
     fields.forEach((fieldId) => {
@@ -92,10 +106,18 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
             'payment_us_hipay_alma3X_min_order_total',
             minAmount
           );
+          createOrUpdateValueDisplay(
+            'payment_us_hipay_hosted_alma_3x_min_order_total',
+            minAmount
+          );
         }
         if (maxAmount) {
           createOrUpdateValueDisplay(
             'payment_us_hipay_alma3X_max_order_total',
+            maxAmount
+          );
+          createOrUpdateValueDisplay(
+            'payment_us_hipay_hosted_alma_3x_max_order_total',
             maxAmount
           );
         }
@@ -108,10 +130,18 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
             'payment_us_hipay_alma4X_min_order_total',
             minAmount
           );
+          createOrUpdateValueDisplay(
+            'payment_us_hipay_hosted_alma_4x_min_order_total',
+            minAmount
+          );
         }
         if (maxAmount) {
           createOrUpdateValueDisplay(
             'payment_us_hipay_alma4X_max_order_total',
+            maxAmount
+          );
+          createOrUpdateValueDisplay(
+            'payment_us_hipay_hosted_alma_4x_max_order_total',
             maxAmount
           );
         }
@@ -119,40 +149,84 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     });
   }
 
+  function checkAlmaSelected() {
+    const select = document.getElementById(
+      'payment_us_hipay_hosted_payment_products'
+    );
+    if (select) {
+      const selectedOptions = Array.from(select.selectedOptions);
+      isAlma3xSelected = selectedOptions.some(
+        (option) => option.value === 'alma-3x'
+      );
+      isAlma4xSelected = selectedOptions.some(
+        (option) => option.value === 'alma-4x'
+      );
+
+      // Toggle visibility of hosted Alma rows
+      const alma3xRow = document.getElementById(
+        'row_payment_us_hipay_hosted_alma_3x'
+      );
+      const alma4xRow = document.getElementById(
+        'row_payment_us_hipay_hosted_alma_4x'
+      );
+
+      if (alma3xRow) {
+        alma3xRow.style.display = isAlma3xSelected ? '' : 'none';
+      }
+      if (alma4xRow) {
+        alma4xRow.style.display = isAlma4xSelected ? '' : 'none';
+      }
+    }
+  }
+
   function checkAlmaConfiguration() {
-    if (isAlmaInitialized) {
-      return Promise.resolve();
+    if (initAlmaPromise !== null) {
+      return initAlmaPromise;
     }
 
     addLoaders();
     const instance = initializePaymentProducts();
 
-    // Configure the payment products request for Alma
     instance.updateConfig('payment_product', ['alma-3x', 'alma-4x']);
     instance.updateConfig('with_options', true);
     instance.updateConfig('currency', ['EUR']);
 
-    return instance
+    initAlmaPromise = instance
       .getAvailableProducts()
       .then((result) => {
-        isAlmaInitialized = true;
         updateAlmaAmountFields(result);
+        return result;
       })
       .catch((error) => {
         console.error('Error fetching Alma configuration:', error);
-        // Remove loaders and show error state
         $('.alma-loader').remove();
         $('.alma-amount-display').text('Error loading values');
+        throw error;
       });
+
+    return initAlmaPromise;
   }
 
   function handleHiPayAlmaSection() {
     const alma3XActive = $('#payment_us_hipay_alma3X').is(':visible');
     const alma4XActive = $('#payment_us_hipay_alma4X').is(':visible');
+    const hostedAlma3XActive = $('#row_payment_us_hipay_hosted_alma_3x').is(
+      ':visible'
+    );
+    const hostedAlma4XActive = $('#row_payment_us_hipay_hosted_alma_4x').is(
+      ':visible'
+    );
 
-    if (alma3XActive || alma4XActive) {
+    if (
+      alma3XActive ||
+      alma4XActive ||
+      hostedAlma3XActive ||
+      hostedAlma4XActive
+    ) {
       checkAlmaConfiguration();
     }
+
+    checkAlmaSelected();
   }
 
   // Create a debounced version of the handler
@@ -172,10 +246,18 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     'click',
     '#payment_us_hipay_alma3X-head, #payment_us_hipay_alma4X-head',
     function (e) {
-      isAlmaInitialized = false; // Reset initialization to show loader again
+      isAlmaInitialized = false;
       debouncedHandler();
     }
   );
+
+  // Add event listener for payment products select
+  const select = document.getElementById(
+    'payment_us_hipay_hosted_payment_products'
+  );
+  if (select) {
+    select.addEventListener('change', checkAlmaSelected);
+  }
 
   // Observe section expansions/collapses
   new MutationObserver(debouncedHandler).observe(document.body, {
