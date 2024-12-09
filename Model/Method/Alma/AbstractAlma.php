@@ -40,7 +40,6 @@ class AbstractAlma extends AbstractMethodAPI
      */
     public $overridePendingTimeout = 4320;
 
-
     /**
      * Check whether payment method can be used
      *
