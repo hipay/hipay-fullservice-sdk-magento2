@@ -3,33 +3,58 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
   $
 ) {
   'use strict';
+
+  const DEFAULT_MIN_ORDER = 50;
+  const DEFAULT_MAX_ORDER = 2000;
+  const CURRENCY = 'EUR';
+  const ALMA_3X = 'alma-3x';
+  const ALMA_4X = 'alma-4x';
+  const PAYMENT_FIELD_IDS = {
+    ALMA_3X: {
+      MIN: 'payment_us_hipay_alma3X_min_order_total',
+      MAX: 'payment_us_hipay_alma3X_max_order_total',
+      HOSTED_MIN: 'payment_us_hipay_hosted_alma_3x_min_order_total',
+      HOSTED_MAX: 'payment_us_hipay_hosted_alma_3x_max_order_total',
+      HEAD: 'payment_us_hipay_alma3X-head',
+      SECTION: 'payment_us_hipay_alma3X',
+      ROW: 'row_payment_us_hipay_hosted_alma_3x'
+    },
+    ALMA_4X: {
+      MIN: 'payment_us_hipay_alma4X_min_order_total',
+      MAX: 'payment_us_hipay_alma4X_max_order_total',
+      HOSTED_MIN: 'payment_us_hipay_hosted_alma_4x_min_order_total',
+      HOSTED_MAX: 'payment_us_hipay_hosted_alma_4x_max_order_total',
+      HEAD: 'payment_us_hipay_alma4X-head',
+      SECTION: 'payment_us_hipay_alma4X',
+      ROW: 'row_payment_us_hipay_hosted_alma_4x'
+    },
+    HOSTED_PRODUCTS: 'payment_us_hipay_hosted_payment_products'
+  };
+
   let isAlmaInitialized = false;
   let initAlmaPromise = null;
   let paymentProductsInstance = null;
   let isAlma3xSelected = false;
   let isAlma4xSelected = false;
 
-  // Set default values for Alma 3X and 4X
-  createOrUpdateValueDisplay('payment_us_hipay_alma3X_min_order_total', 50);
-  createOrUpdateValueDisplay('payment_us_hipay_alma3X_max_order_total', 2000);
-  createOrUpdateValueDisplay('payment_us_hipay_alma4X_min_order_total', 50);
-  createOrUpdateValueDisplay('payment_us_hipay_alma4X_max_order_total', 2000);
-  createOrUpdateValueDisplay(
-    'payment_us_hipay_hosted_alma_3x_min_order_total',
-    50
-  );
-  createOrUpdateValueDisplay(
-    'payment_us_hipay_hosted_alma_3x_max_order_total',
-    2000
-  );
-  createOrUpdateValueDisplay(
-    'payment_us_hipay_hosted_alma_4x_min_order_total',
-    50
-  );
-  createOrUpdateValueDisplay(
-    'payment_us_hipay_hosted_alma_4x_max_order_total',
-    2000
-  );
+  // Set default values
+  Object.values(PAYMENT_FIELD_IDS.ALMA_3X)
+    .filter((id) => id.includes('min') || id.includes('max'))
+    .forEach((id) =>
+      createOrUpdateValueDisplay(
+        id,
+        id.includes('min') ? DEFAULT_MIN_ORDER : DEFAULT_MAX_ORDER
+      )
+    );
+
+  Object.values(PAYMENT_FIELD_IDS.ALMA_4X)
+    .filter((id) => id.includes('min') || id.includes('max'))
+    .forEach((id) =>
+      createOrUpdateValueDisplay(
+        id,
+        id.includes('min') ? DEFAULT_MIN_ORDER : DEFAULT_MAX_ORDER
+      )
+    );
 
   function initializePaymentProducts() {
     if (!paymentProductsInstance && typeof hipayConfig !== 'undefined') {
@@ -48,9 +73,7 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     const parentCell = field.closest('.value');
     let wrapper = parentCell.find('.alma-amount-wrapper');
 
-    // Remove existing loader if any
     wrapper.find('.alma-loader').remove();
-
     let displaySpan = wrapper.find('.alma-amount-display');
 
     if (wrapper.length === 0) {
@@ -60,20 +83,18 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
       parentCell.prepend(wrapper);
     }
 
-    displaySpan.text(`${value} €`);
+    displaySpan.text(`${value} ${CURRENCY}`);
     field.val(value);
   }
 
   function addLoaders() {
     const fields = [
-      'payment_us_hipay_alma3X_min_order_total',
-      'payment_us_hipay_alma3X_max_order_total',
-      'payment_us_hipay_alma4X_min_order_total',
-      'payment_us_hipay_alma4X_max_order_total',
-      'payment_us_hipay_hosted_alma_3x_min_order_total',
-      'payment_us_hipay_hosted_alma_3x_max_order_total',
-      'payment_us_hipay_hosted_alma_4x_min_order_total',
-      'payment_us_hipay_hosted_alma_4x_max_order_total'
+      ...Object.values(PAYMENT_FIELD_IDS.ALMA_3X).filter((id) =>
+        id.includes('total')
+      ),
+      ...Object.values(PAYMENT_FIELD_IDS.ALMA_4X).filter((id) =>
+        id.includes('total')
+      )
     ];
 
     fields.forEach((fieldId) => {
@@ -97,51 +118,39 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
 
   function updateAlmaAmountFields(productData) {
     productData.forEach((product) => {
-      if (product.code === 'alma-3x') {
+      if (product.code === ALMA_3X) {
         const minAmount = product.options?.basketAmountMin3x;
         const maxAmount = product.options?.basketAmountMax3x;
 
         if (minAmount) {
+          createOrUpdateValueDisplay(PAYMENT_FIELD_IDS.ALMA_3X.MIN, minAmount);
           createOrUpdateValueDisplay(
-            'payment_us_hipay_alma3X_min_order_total',
-            minAmount
-          );
-          createOrUpdateValueDisplay(
-            'payment_us_hipay_hosted_alma_3x_min_order_total',
+            PAYMENT_FIELD_IDS.ALMA_3X.HOSTED_MIN,
             minAmount
           );
         }
         if (maxAmount) {
+          createOrUpdateValueDisplay(PAYMENT_FIELD_IDS.ALMA_3X.MAX, maxAmount);
           createOrUpdateValueDisplay(
-            'payment_us_hipay_alma3X_max_order_total',
-            maxAmount
-          );
-          createOrUpdateValueDisplay(
-            'payment_us_hipay_hosted_alma_3x_max_order_total',
+            PAYMENT_FIELD_IDS.ALMA_3X.HOSTED_MAX,
             maxAmount
           );
         }
-      } else if (product.code === 'alma-4x') {
+      } else if (product.code === ALMA_4X) {
         const minAmount = product.options?.basketAmountMin4x;
         const maxAmount = product.options?.basketAmountMax4x;
 
         if (minAmount) {
+          createOrUpdateValueDisplay(PAYMENT_FIELD_IDS.ALMA_4X.MIN, minAmount);
           createOrUpdateValueDisplay(
-            'payment_us_hipay_alma4X_min_order_total',
-            minAmount
-          );
-          createOrUpdateValueDisplay(
-            'payment_us_hipay_hosted_alma_4x_min_order_total',
+            PAYMENT_FIELD_IDS.ALMA_4X.HOSTED_MIN,
             minAmount
           );
         }
         if (maxAmount) {
+          createOrUpdateValueDisplay(PAYMENT_FIELD_IDS.ALMA_4X.MAX, maxAmount);
           createOrUpdateValueDisplay(
-            'payment_us_hipay_alma4X_max_order_total',
-            maxAmount
-          );
-          createOrUpdateValueDisplay(
-            'payment_us_hipay_hosted_alma_4x_max_order_total',
+            PAYMENT_FIELD_IDS.ALMA_4X.HOSTED_MAX,
             maxAmount
           );
         }
@@ -150,25 +159,18 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
   }
 
   function checkAlmaSelected() {
-    const select = document.getElementById(
-      'payment_us_hipay_hosted_payment_products'
-    );
+    const select = document.getElementById(PAYMENT_FIELD_IDS.HOSTED_PRODUCTS);
     if (select) {
       const selectedOptions = Array.from(select.selectedOptions);
       isAlma3xSelected = selectedOptions.some(
-        (option) => option.value === 'alma-3x'
+        (option) => option.value === ALMA_3X
       );
       isAlma4xSelected = selectedOptions.some(
-        (option) => option.value === 'alma-4x'
+        (option) => option.value === ALMA_4X
       );
 
-      // Toggle visibility of hosted Alma rows
-      const alma3xRow = document.getElementById(
-        'row_payment_us_hipay_hosted_alma_3x'
-      );
-      const alma4xRow = document.getElementById(
-        'row_payment_us_hipay_hosted_alma_4x'
-      );
+      const alma3xRow = document.getElementById(PAYMENT_FIELD_IDS.ALMA_3X.ROW);
+      const alma4xRow = document.getElementById(PAYMENT_FIELD_IDS.ALMA_4X.ROW);
 
       if (alma3xRow) {
         alma3xRow.style.display = isAlma3xSelected ? '' : 'none';
@@ -187,9 +189,9 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     addLoaders();
     const instance = initializePaymentProducts();
 
-    instance.updateConfig('payment_product', ['alma-3x', 'alma-4x']);
+    instance.updateConfig('payment_product', [ALMA_3X, ALMA_4X]);
     instance.updateConfig('with_options', true);
-    instance.updateConfig('currency', ['EUR']);
+    instance.updateConfig('currency', [CURRENCY]);
 
     initAlmaPromise = instance
       .getAvailableProducts()
@@ -208,12 +210,16 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
   }
 
   function handleHiPayAlmaSection() {
-    const alma3XActive = $('#payment_us_hipay_alma3X').is(':visible');
-    const alma4XActive = $('#payment_us_hipay_alma4X').is(':visible');
-    const hostedAlma3XActive = $('#row_payment_us_hipay_hosted_alma_3x').is(
+    const alma3XActive = $(`#${PAYMENT_FIELD_IDS.ALMA_3X.SECTION}`).is(
       ':visible'
     );
-    const hostedAlma4XActive = $('#row_payment_us_hipay_hosted_alma_4x').is(
+    const alma4XActive = $(`#${PAYMENT_FIELD_IDS.ALMA_4X.SECTION}`).is(
+      ':visible'
+    );
+    const hostedAlma3XActive = $(`#${PAYMENT_FIELD_IDS.ALMA_3X.ROW}`).is(
+      ':visible'
+    );
+    const hostedAlma4XActive = $(`#${PAYMENT_FIELD_IDS.ALMA_4X.ROW}`).is(
       ':visible'
     );
 
@@ -229,7 +235,6 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     checkAlmaSelected();
   }
 
-  // Create a debounced version of the handler
   const debouncedHandler = (function () {
     let timeout;
     return function () {
@@ -238,28 +243,22 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     };
   })();
 
-  // Initial setup
   handleHiPayAlmaSection();
 
-  // Setup observers and event listeners
   $(document).on(
     'click',
-    '#payment_us_hipay_alma3X-head, #payment_us_hipay_alma4X-head',
-    function (e) {
+    `#${PAYMENT_FIELD_IDS.ALMA_3X.HEAD}, #${PAYMENT_FIELD_IDS.ALMA_4X.HEAD}`,
+    function () {
       isAlmaInitialized = false;
       debouncedHandler();
     }
   );
 
-  // Add event listener for payment products select
-  const select = document.getElementById(
-    'payment_us_hipay_hosted_payment_products'
-  );
+  const select = document.getElementById(PAYMENT_FIELD_IDS.HOSTED_PRODUCTS);
   if (select) {
     select.addEventListener('change', checkAlmaSelected);
   }
 
-  // Observe section expansions/collapses
   new MutationObserver(debouncedHandler).observe(document.body, {
     childList: true,
     subtree: true,

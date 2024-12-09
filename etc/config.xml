@@ -637,7 +637,7 @@
                 <group>hipay</group>
             </hipay_klarna_hosted_fields>
             <hipay_alma3X>
-                <model>HiPay\FullserviceMagento\Model\Method\Alma3X</model>
+                <model>HiPay\FullserviceMagento\Model\Method\Alma\Alma3X</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>Hipay Entreprise Alma 3x</title>
@@ -665,7 +665,7 @@
                 <group>hipay</group>
             </hipay_alma3X>
             <hipay_alma4X>
-                <model>HiPay\FullserviceMagento\Model\Method\Alma4X</model>
+                <model>HiPay\FullserviceMagento\Model\Method\Alma\Alma4X</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
                 <title>Hipay Entreprise Alma 4x</title>
