@@ -101,7 +101,6 @@ class Consumer
                     $gateway->requestOperationCancel();
                 }
             } catch (\Exception $e) {
-                $this->cancelOrderApiPublisher->execute((string) $id);
                 $this->logger->error($e->getMessage() . "\n" . $e->getTraceAsString());
 
                 throw $e;
