@@ -471,14 +471,11 @@ class Notify
 
             //Save status infos
             $this->saveHiPayStatus();
-
-            //Unlock order table
-            $this->orderLockManager->unlockOrder($this->_order);
         } catch (\Exception $exception) {
+            throw $exception;
+        } finally {
             // unlock the order
             $this->orderLockManager->unlockOrder($this->_order);
-            // throw the exception now that the order is unlocked
-            throw $exception;
         }
         return $this;
     }
