@@ -267,19 +267,18 @@ class CleanPendingOrders
     /**
      * Function Cancel order
      *
-     * @param Order             $order
-     * @param string|null       $dateFormat
+     * @param Order  $order
+     * @param string $dateFormat
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function cancelOrder(Order $order, ?string $dateFormat = 'Y-m-d H:i:s')
+    protected function cancelOrder(Order $order, string $dateFormat = 'Y-m-d H:i:s')
     {
         $orderCreationTimeIsCancellable = true;
 
         $orderMethodInstance = $order->getPayment()->getMethodInstance();
 
         if (isset($orderMethodInstance->overridePendingTimeout)) {
-
             $messageInterval = $orderMethodInstance->overridePendingTimeout;
             $dateObject = $this->_dateTimeFactory->create();
             $gmtDate = $dateObject->gmtDate($dateFormat);
