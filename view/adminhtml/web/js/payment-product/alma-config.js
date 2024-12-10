@@ -107,10 +107,12 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
         wrapper.append($('<div>').addClass('alma-loader'));
         wrapper.append($('<span>').addClass('alma-amount-display'));
         parentCell.prepend(wrapper);
+        $('.alma-amount-display').hide();
       } else {
         wrapper.find('.alma-amount-display');
         if (!wrapper.find('.alma-loader').length) {
           wrapper.prepend($('<div>').addClass('alma-loader'));
+          $('.alma-amount-display').hide();
         }
       }
     });
@@ -196,6 +198,8 @@ define(['hipayAvailablePaymentProducts', 'jquery', 'domReady!'], function (
     initAlmaPromise = instance
       .getAvailableProducts()
       .then((result) => {
+        $('.alma-loader').remove();
+        $('.alma-amount-display').show();
         updateAlmaAmountFields(result);
         return result;
       })
