@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +e
+set -e
 COLOR_SUCCESS='\033[0;32m'
 NC='\033[0m'
 PREFIX_STORE1=$RANDOM$RANDOM
