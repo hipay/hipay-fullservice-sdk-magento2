@@ -43,3 +43,102 @@
     margin-left: 20px;
     background-color: #f8f8f8;
 }
+
+/* Alma 3x Hosted Styles */
+#payment_us_hipay_hosted_alma_3x-head {
+    font-weight: bold;
+    color: #eb5202;
+    margin-bottom: 10px;
+    font-size: small;
+    display: inline-block;
+}
+
+#payment_us_hipay_hosted_alma_3x .form-list {
+    margin-left: 15px;
+}
+
+#payment_us_hipay_hosted_alma_3x-head {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #eb5202;
+    font-weight: 600;
+}
+
+#payment_us_hipay_hosted_alma_3x-head:before {
+    font-size: 20px;
+    margin-right: 5px;
+    top: 20px;
+}
+
+#row_payment_us_hipay_hosted_alma_3x {
+    border-left: 3px solid #eb5202;
+    padding-left: 15px;
+    margin-top: 15px;
+    margin-left: 20px;
+    background-color: #f8f8f8;
+}
+
+/* Alma 4x Hosted Styles */
+#payment_us_hipay_hosted_alma_4x-head {
+    font-weight: bold;
+    color: #eb5202;
+    margin-bottom: 10px;
+    font-size: small;
+    display: inline-block;
+}
+
+#payment_us_hipay_hosted_alma_4x .form-list {
+    margin-left: 15px;
+}
+
+#payment_us_hipay_hosted_alma_4x-head {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #eb5202;
+    font-weight: 600;
+}
+
+#payment_us_hipay_hosted_alma_4x-head:before {
+    font-size: 20px;
+    margin-right: 5px;
+    top: 20px;
+}
+
+#row_payment_us_hipay_hosted_alma_4x {
+    border-left: 3px solid #eb5202;
+    padding-left: 15px;
+    margin-top: 15px;
+    margin-left: 20px;
+    background-color: #f8f8f8;
+}
+
+.alma-loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #1979c3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.alma-amount-display {
+    display: block;
+    font-weight: bold;
+    color: #514943;
+}
+
+.alma-amount-wrapper {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
