@@ -121,6 +121,11 @@ class Notify
      */
     protected $orderManagement;
 
+    /**
+     * @var \HiPay\FullserviceMagento\Model\OrderLockManager
+     */
+    protected $orderLockManager;
+
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -134,6 +139,7 @@ class Notify
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
         OrderManagementInterface $orderManagement,
+        \HiPay\FullserviceMagento\Model\OrderLockManager $orderLockManager,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -150,6 +156,7 @@ class Notify
         $this->creditmemoSender = $creditmemoSender;
 
         $this->orderManagement = $orderManagement;
+        $this->orderLockManager = $orderLockManager;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -292,181 +299,184 @@ class Notify
             );
         }
 
-        /**
-         * Begin transaction to lock this order record during update
-         */
-        $this->orderResource->getConnection()->beginTransaction();
+        try {
+            //Begin transaction to lock this order record during update
+            $this->orderLockManager->lockOrder($this->_order);
 
-        $selectForupdate = $this->orderResource->getConnection()->select()
-            ->from($this->orderResource->getMainTable())->where(
-                $this->orderResource->getIdFieldName() . '=?',
-                $this->_order->getId()
-            )
-            ->forUpdate(true);
+            $selectForupdate = $this->orderResource->getConnection()->select()
+                ->from($this->orderResource->getMainTable())->where(
+                    $this->orderResource->getIdFieldName() . '=?',
+                    $this->_order->getId()
+                )
+                ->forUpdate(true);
 
-        //Execute for update query
-        $this->orderResource->getConnection()->fetchOne($selectForupdate);
+            //Execute for update query
+            $this->orderResource->getConnection()->fetchOne($selectForupdate);
 
-        //Write about notification in order history
-        $this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
+            //Write about notification in order history
+            $this->_doTransactionMessage("Status code: " . $this->_transaction->getStatus());
 
-        // Write CC TYPE if Payment is Hosted Payment
-        if (empty($this->_order->getPayment()->getCcType())) {
-            $this->_order->getPayment()->setCcType($this->_transaction->getPaymentProduct());
-        }
+            // Write CC TYPE if Payment is Hosted Payment
+            if (empty($this->_order->getPayment()->getCcType())) {
+                $this->_order->getPayment()->setCcType($this->_transaction->getPaymentProduct());
+            }
 
-        switch ($this->_transaction->getStatus()) {
-            case TransactionStatus::BLOCKED:
-                // status : 110
-                $this->_setFraudDetected();
-                // no break
-            case TransactionStatus::DENIED:
-                // status : 111
-                $this->_doTransactionDenied();
-                break;
-            case TransactionStatus::AUTHORIZED_AND_PENDING:
-                // status : 112
-            case TransactionStatus::PENDING_PAYMENT:
-                // status : 200
-                $this->_setFraudDetected();
-                $this->_doTransactionAuthorizedAndPending();
-                break;
-            case TransactionStatus::AUTHORIZATION_REQUESTED:
-                // status : 142
-                $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
-                break;
-            case TransactionStatus::REFUSED:
-                // status 113 : Fail transaction if not via hosted page
-                if ($this->_order->getPayment()->getMethodInstance() instanceof HostedMethod) {
-                    $this->_doTransactionMessage();
-                } else {
+            switch ($this->_transaction->getStatus()) {
+                case TransactionStatus::BLOCKED:
+                    // status : 110
+                    $this->_setFraudDetected();
+                    // no break
+                case TransactionStatus::DENIED:
+                    // status : 111
+                    $this->_doTransactionDenied();
+                    break;
+                case TransactionStatus::AUTHORIZED_AND_PENDING:
+                    // status : 112
+                case TransactionStatus::PENDING_PAYMENT:
+                    // status : 200
+                    $this->_setFraudDetected();
+                    $this->_doTransactionAuthorizedAndPending();
+                    break;
+                case TransactionStatus::AUTHORIZATION_REQUESTED:
+                    // status : 142
+                    $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
+                    break;
+                case TransactionStatus::REFUSED:
+                    // status 113 : Fail transaction if not via hosted page
+                    if ($this->_order->getPayment()->getMethodInstance() instanceof HostedMethod) {
+                        $this->_doTransactionMessage();
+                    } else {
+                        $this->_doTransactionFailure();
+                    }
+                    break;
+                case TransactionStatus::CANCELLED:
+                    //115 Cancel order and transaction
+                case TransactionStatus::AUTHORIZATION_REFUSED:
+                    // status : 163
                     $this->_doTransactionFailure();
-                }
-                break;
-            case TransactionStatus::CANCELLED:
-                //115 Cancel order and transaction
-            case TransactionStatus::AUTHORIZATION_REFUSED:
-                // status : 163
-                $this->_doTransactionFailure();
-                break;
-            case TransactionStatus::CAPTURE_REFUSED:
-                // status : 173
-                $this->_doTransactionCaptureRefused();
-                break;
-            case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
-                $this->_doTransactionFailure();
-                break;
-            case TransactionStatus::AUTHORIZED:
-                // status : 116
-                $this->_doTransactionAuthorization();
-                break;
-            case TransactionStatus::CAPTURE_REQUESTED:
-                // status : 117
-                $this->_doTransactionCaptureRequested();
-                //If status Capture Requested is not configured to validate the order, we break.
-                if (
-                    (int)$this->_order->getPayment()
-                        ->getMethodInstance()
-                        ->getConfigData('hipay_status_validate_order') != 117
-                ) {
                     break;
-                }
-                // no break
-            case TransactionStatus::CAPTURED:
-                // status : 118
-            case TransactionStatus::PARTIALLY_CAPTURED:
-                // status : 119
-                //If status Capture Requested is configured to validate the order and is a direct capture notification
-                // (118), we break because order is already validate.
-                if (
-                    (int)$this->_order->getPayment()->getMethodInstance()->getConfigData('hipay_status_validate_order')
-                    == 117
-                    && (int)$this->_transaction->getStatus() == 118
-                    && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
-                ) {
+                case TransactionStatus::CAPTURE_REFUSED:
+                    // status : 173
+                    $this->_doTransactionCaptureRefused();
                     break;
-                }
+                case TransactionStatus::EXPIRED: //114 Hold order, the merchant can unhold and try a new capture
+                    $this->_doTransactionFailure();
+                    break;
+                case TransactionStatus::AUTHORIZED:
+                    // status : 116
+                    $this->_doTransactionAuthorization();
+                    break;
+                case TransactionStatus::CAPTURE_REQUESTED:
+                    // status : 117
+                    $this->_doTransactionCaptureRequested();
+                    //If status Capture Requested is not configured to validate the order, we break.
+                    if (
+                        (int)$this->_order->getPayment()
+                            ->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order') != 117
+                    ) {
+                        break;
+                    }
+                    // no break
+                case TransactionStatus::CAPTURED:
+                    // status : 118
+                case TransactionStatus::PARTIALLY_CAPTURED:
+                    // status : 119
+                    //If status Capture Requested is configured to validate the order
+                    // and is a direct capture notification
+                    // (118), we break because order is already validate.
+                    if (
+                        (int)$this->_order->getPayment()->getMethodInstance()
+                            ->getConfigData('hipay_status_validate_order')
+                        == 117
+                        && (int)$this->_transaction->getStatus() == 118
+                        && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
+                    ) {
+                        break;
+                    }
 
-                // Skip magento fraud checking
-                $this->_doTransactionCapture(true);
+                    // Skip magento fraud checking
+                    $this->_doTransactionCapture(true);
 
-                break;
-            case TransactionStatus::REFUND_REQUESTED:
-                // status : 124
-                $this->_doTransactionRefundRequested();
-                break;
-            case TransactionStatus::REFUNDED:
-                // status : 125
-            case TransactionStatus::PARTIALLY_REFUNDED:
-                // status : 126
-                $this->_doTransactionRefund();
-                break;
-            case TransactionStatus::REFUND_REFUSED:
-                // status : 165
-                $this->_doTransactionRefundRefused();
-                // no break
-            case TransactionStatus::CREATED:
-                // status : 101
-            case TransactionStatus::CARD_HOLDER_ENROLLED:
-                // status : 103
-            case TransactionStatus::CARD_HOLDER_NOT_ENROLLED:
-                // status : 104
-            case TransactionStatus::UNABLE_TO_AUTHENTICATE:
-                // status : 105
-            case TransactionStatus::CARD_HOLDER_AUTHENTICATED:
-                // status : 106
-            case TransactionStatus::AUTHENTICATION_ATTEMPTED:
-                // status : 107
-            case TransactionStatus::COULD_NOT_AUTHENTICATE:
-                // status : 108
-            case TransactionStatus::AUTHENTICATION_FAILED:
-                // status : 109
-            case TransactionStatus::COLLECTED:
-                // status : 120
-            case TransactionStatus::PARTIALLY_COLLECTED:
-                // status : 121
-            case TransactionStatus::SETTLED:
-                // status : 122
-            case TransactionStatus::PARTIALLY_SETTLED:
-                // status : 123
-            case TransactionStatus::CHARGED_BACK:
-                // status : 129
-            case TransactionStatus::DEBITED:
-                // status : 131
-            case TransactionStatus::PARTIALLY_DEBITED:
-                // status : 132
-            case TransactionStatus::AUTHENTICATION_REQUESTED:
-                // status : 140
-            case TransactionStatus::AUTHENTICATED:
-                // status : 141
-            case TransactionStatus::ACQUIRER_FOUND:
-                // status : 150
-            case TransactionStatus::ACQUIRER_NOT_FOUND:
-                // status : 151
-            case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN:
-                // status : 160
-            case TransactionStatus::RISK_ACCEPTED:
-                // status : 161
-                $this->_doTransactionMessage();
-                break;
+                    break;
+                case TransactionStatus::REFUND_REQUESTED:
+                    // status : 124
+                    $this->_doTransactionRefundRequested();
+                    break;
+                case TransactionStatus::REFUNDED:
+                    // status : 125
+                case TransactionStatus::PARTIALLY_REFUNDED:
+                    // status : 126
+                    $this->_doTransactionRefund();
+                    break;
+                case TransactionStatus::REFUND_REFUSED:
+                    // status : 165
+                    $this->_doTransactionRefundRefused();
+                    // no break
+                case TransactionStatus::CREATED:
+                    // status : 101
+                case TransactionStatus::CARD_HOLDER_ENROLLED:
+                    // status : 103
+                case TransactionStatus::CARD_HOLDER_NOT_ENROLLED:
+                    // status : 104
+                case TransactionStatus::UNABLE_TO_AUTHENTICATE:
+                    // status : 105
+                case TransactionStatus::CARD_HOLDER_AUTHENTICATED:
+                    // status : 106
+                case TransactionStatus::AUTHENTICATION_ATTEMPTED:
+                    // status : 107
+                case TransactionStatus::COULD_NOT_AUTHENTICATE:
+                    // status : 108
+                case TransactionStatus::AUTHENTICATION_FAILED:
+                    // status : 109
+                case TransactionStatus::COLLECTED:
+                    // status : 120
+                case TransactionStatus::PARTIALLY_COLLECTED:
+                    // status : 121
+                case TransactionStatus::SETTLED:
+                    // status : 122
+                case TransactionStatus::PARTIALLY_SETTLED:
+                    // status : 123
+                case TransactionStatus::CHARGED_BACK:
+                    // status : 129
+                case TransactionStatus::DEBITED:
+                    // status : 131
+                case TransactionStatus::PARTIALLY_DEBITED:
+                    // status : 132
+                case TransactionStatus::AUTHENTICATION_REQUESTED:
+                    // status : 140
+                case TransactionStatus::AUTHENTICATED:
+                    // status : 141
+                case TransactionStatus::ACQUIRER_FOUND:
+                    // status : 150
+                case TransactionStatus::ACQUIRER_NOT_FOUND:
+                    // status : 151
+                case TransactionStatus::CARD_HOLDER_ENROLLMENT_UNKNOWN:
+                    // status : 160
+                case TransactionStatus::RISK_ACCEPTED:
+                    // status : 161
+                    $this->_doTransactionMessage();
+                    break;
+            }
+
+            if (
+                $this->_transaction->getStatus() == TransactionStatus::CAPTURED
+                || $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
+            ) {
+                /**
+                 * save token and credit card informations encryted
+                 */
+                $this->_saveCc();
+            }
+
+            //Save status infos
+            $this->saveHiPayStatus();
+        } catch (\Exception $exception) {
+            throw $exception;
+        } finally {
+            // unlock the order
+            $this->orderLockManager->unlockOrder($this->_order);
         }
-
-        if (
-            $this->_transaction->getStatus() == TransactionStatus::CAPTURED
-            || $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
-        ) {
-            /**
-             * save token and credit card informations encryted
-             */
-            $this->_saveCc();
-        }
-
-        //Save status infos
-        $this->saveHiPayStatus();
-
-        //Send commit to unlock order table
-        $this->orderResource->getConnection()->commit();
-
         return $this;
     }
 
