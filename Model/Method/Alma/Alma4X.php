@@ -14,7 +14,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\Method\Alma;
 
 /**
  * Alma 4X payment method
@@ -24,7 +24,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Alma4X extends AbstractMethodAPI
+class Alma4X extends AbstractAlma
 {
     public const HIPAY_METHOD_CODE = 'hipay_alma4X';
 
@@ -37,11 +37,4 @@ class Alma4X extends AbstractMethodAPI
      * @var string
      */
     protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
-     *
-     * @var bool
-     */
-    protected $_canUseInternal = false;
 }
