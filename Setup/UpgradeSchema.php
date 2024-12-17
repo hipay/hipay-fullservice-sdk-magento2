@@ -599,7 +599,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     private function installHipaySalesOrderTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.27.0', '<')) {
+        if (version_compare($context->getVersion(), '1.26.0', '<')) {
             $tableName = $setup->getTable('hipay_sales_order');
 
             $table = $setup->getConnection()
