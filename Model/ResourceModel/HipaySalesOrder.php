@@ -14,34 +14,26 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\ResourceModel;
 
 /**
- * Alma 3X payment method
+ * Hipay sales order resource model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
+ * @author    Aymeric Berthelot <aberthelot@hipay.com>
+ * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Alma3X extends AbstractMethodAPI
+class HipaySalesOrder extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    public const HIPAY_METHOD_CODE = 'hipay_alma3X';
-
     /**
-     * @var string
-     */
-    protected static $_technicalCode = 'alma-3x';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
+     * Initialize main table and table id field
      *
-     * @var bool
+     * @return             void
+     * @codeCoverageIgnore
      */
-    protected $_canUseInternal = false;
+    protected function _construct()
+    {
+        $this->_init('hipay_sales_order', 'entity_id');
+    }
 }

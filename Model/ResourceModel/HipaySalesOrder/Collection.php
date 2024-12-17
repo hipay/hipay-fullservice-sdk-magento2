@@ -14,34 +14,28 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\ResourceModel\HipaySalesOrder;
 
 /**
- * Alma 4X payment method
+ * Hipay Sales Order Collection
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Alma4X extends AbstractMethodAPI
+class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
-    public const HIPAY_METHOD_CODE = 'hipay_alma4X';
-
     /**
-     * @var string
-     */
-    protected static $_technicalCode = 'alma-4x';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Payment Method feature
+     * Initialize resource
      *
-     * @var bool
+     * @return void
      */
-    protected $_canUseInternal = false;
+    protected function _construct()
+    {
+        $this->_init(
+            \HiPay\FullserviceMagento\Model\HipaySalesOrder::class,
+            \HiPay\FullserviceMagento\Model\ResourceModel\HipaySalesOrder::class
+        );
+    }
 }

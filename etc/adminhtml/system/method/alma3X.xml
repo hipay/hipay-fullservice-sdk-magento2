@@ -33,6 +33,6 @@
 		<comment>Cancel pending orders since 3 days.</comment>
 		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 	</field>
-	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+	<include path="HiPay_FullserviceMagento::system/method/base_bottom_api.xml"/>
 </group>
 </include>

@@ -210,8 +210,6 @@ class CleanPendingOrders
 
                 // Build conditions for state and method filtering
                 $stateConditions = [];
-                // Build conditions for interval time of cancelation
-                $intervalConditions = [];
 
                 foreach ($paymentMethods as $code => $data) {
                     if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
@@ -220,26 +218,6 @@ class CleanPendingOrders
                             'value' => $pendingOrderStatusConfig[$code],
                             'method' => $code
                         ];
-
-                        if ($code == 'hipay_hosted_fields' || $code == 'hipay_applepay') {
-                            // one day interval
-                            $intervalConditions[] = [
-                                'value' => 1440,
-                                'method' => $code
-                            ];
-                        } elseif (strpos($code, 'alma') !== false) {
-                            // three days interval
-                            $intervalConditions[] = [
-                                'value' => 4320,
-                                'method' => $code
-                            ];
-                        } else {
-                            // default interval 30 minutes
-                            $intervalConditions[] = [
-                                'value' => 30,
-                                'method' => $code
-                            ];
-                        }
                     }
                 }
 
@@ -252,17 +230,10 @@ class CleanPendingOrders
                     $caseStateConditions[] = "(main_table.status = '$state' AND op.method = '$method')";
                 }
 
-                // Construct the CASE conditions for interval
-                $caseIntervalConditions = [];
-                $dateFormat = 'Y-m-d H:i:s';
-                foreach ($intervalConditions as $condition) {
-                    $dateObject = $this->_dateTimeFactory->create();
-                    $gmtDate = $dateObject->gmtDate($dateFormat);
-                    $date = new DateTime($gmtDate);
-                    $interval = new DateInterval("PT{$condition['value']}M");
-                    $method = $condition['method'];
-                    $formattedDate = $date->sub($interval)->format($dateFormat);
-                    $caseIntervalConditions[] = "(main_table.created_at <= '$formattedDate' AND op.method = '$method')";
+                if (!empty($caseStateConditions)) {
+                    $caseConditionString = implode(' OR ', $caseStateConditions);
+                    $collection->getSelect()
+                        ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'));
                 }
 
                 $collection->addFieldToSelect([
@@ -281,27 +252,9 @@ class CleanPendingOrders
                     )
                     ->setPageSize(50);
 
-                // Combine CASE conditions into a single condition
-                if (!empty($caseStateConditions) && !empty($caseIntervalConditions)) {
-                    $caseConditionString = implode(' OR ', $caseStateConditions);
-                    $caseIntervalConditionsString = implode(' OR ', $caseIntervalConditions);
-
-                    $collection->getSelect()
-                        ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'))
-                        ->where(new \Zend_Db_Expr('(' . $caseIntervalConditionsString . ')'));
-                }
-
                 if ($collection->getSize() >= 1) {
-                    // Build the method to interval map
-                    $methodIntervals = [];
-                    foreach ($intervalConditions as $condition) {
-                        $methodIntervals[$condition['method']] = $condition['value'];
-                    }
                     foreach ($collection as $order) {
-                        $method = $order->getMethod();
-                        $intervalValue = $methodIntervals[$method] ?? 30;
-                        $interval = new DateInterval("PT{$intervalValue}M");
-                        $this->cancelOrder($order, $interval, $dateFormat);
+                        $this->cancelOrder($order);
                     }
                 }
                 $this->_emulation->stopEnvironmentEmulation();
@@ -314,18 +267,16 @@ class CleanPendingOrders
     /**
      * Function Cancel order
      *
-     * @param Order             $order
-     * @param DateInterval|null $interval
-     * @param string|null       $dateFormat
+     * @param Order  $order
+     * @param string $dateFormat
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function cancelOrder(Order $order, ?DateInterval $interval, ?string $dateFormat = 'Y-m-d H:i:s')
+    protected function cancelOrder(Order $order, string $dateFormat = 'Y-m-d H:i:s')
     {
         $orderCreationTimeIsCancellable = true;
 
         $orderMethodInstance = $order->getPayment()->getMethodInstance();
-        $messageInterval = $interval->i;
 
         if (isset($orderMethodInstance->overridePendingTimeout)) {
             $messageInterval = $orderMethodInstance->overridePendingTimeout;

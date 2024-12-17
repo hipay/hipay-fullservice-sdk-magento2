@@ -169,14 +169,20 @@ get-jira-tickets:
           }
 
           const mergeRequests = await gitlabResponse.json();
-          const tickets = [];
+          let tickets = [];
 
           mergeRequests.forEach((mr) => {
             const matches = mr.source_branch.match(/EC-\d+/);
-            if(matches.length) {
+            const matchesTitle = mr.title.match(/(EC-\d+)/g);
+            if(matches?.length) {
               tickets.push(matches[0].toUpperCase());
             }
+            matchesTitle?.forEach((match) => {
+                tickets.push(match.toUpperCase());
+            });
           });
+
+          tickets = [...new Set(tickets)];
 
           console.log("tickets", tickets);
 

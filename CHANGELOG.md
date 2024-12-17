@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.26.0
+
+- **Add** : Dynamically get Alma MAX/MIN from merchant account
+- **Fix** : Lock order table row while executing notification
+- **Fix** : Allow retrieving customer X-Forwarded-For IP addresse
+- **Fix** : Replace deprecated Zend validator with Laminas validator, thanks to [YoanSamuel](https://github.com/YoanSamuel) for issue [#164](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/164)
+- **Fix** : Removed redundant cancel during CleanPendingOrders
+
 ## 1.25.0
 
 - **Add** : Added Klarna payment method
