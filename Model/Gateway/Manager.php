@@ -136,10 +136,12 @@ class Manager
         } else {
             $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
             $platform = (isset($params['platform'])) ? $params['platform'] : false;
+            $apiEnv = (isset($params['apiEnv'])) ? $params['apiEnv'] : false;
             $params = array(
                 'params' => array(
                     'storeId' => $storeId,
-                    'platform' => $platform
+                    'platform' => $platform,
+                    'apiEnv' => $apiEnv
                 )
             );
         }
@@ -398,5 +400,20 @@ class Manager
             ->create();
 
         return $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
+    }
+
+    public function requestPaymentProduct($paymentProduct = [], $withOptions = false)
+    {
+        $params = $this->_getRequestParameters();
+        $params['params']['payment_product'] = $paymentProduct;
+        $params['params']['with_options'] = $withOptions;
+        $paymentProductRequest = $this->_getRequestObject(
+            '\HiPay\FullserviceMagento\Model\Request\Info\AvailablePaymentProduct',
+            $params
+        );
+
+        return $this->_gateway->requestAvailablePaymentProduct(
+            $paymentProductRequest
+        );
     }
 }

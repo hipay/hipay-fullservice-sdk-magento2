@@ -95,6 +95,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
      */
     protected $_isApplePay;
 
+    protected $_apiEnvStage;
+
     /**
      * Config constructor.
      *
@@ -122,7 +124,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
-
         if ($params) {
             if (isset($params['methodCode'])) {
                 $method = $params['methodCode'];
@@ -136,6 +137,11 @@ class Config extends AbstractConfig implements ConfigurationInterface
             if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
                 $this->setOrder($params['order']);
             }
+
+            if (isset($params['apiEnv'])) {
+                $this->_apiEnvStage = $this->getGeneraleValue('api_environment', 'hipay_api_environment')
+                    == ConfigSDK::API_ENV_STAGE;
+            }
         }
 
         $this->_forceMoto = isset($params['forceMoto']) ? $params['forceMoto'] : false;
@@ -145,9 +151,8 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
-
         try {
-            $env = $this->getApiEnv();
+            $env = $this->_apiEnvStage === true ? ConfigSDK::API_ENV_STAGE : $this->getApiEnv();
             if ($env == null) {
                 $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
             }
@@ -269,7 +274,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
 
     public function isStageMode()
     {
-        return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE || $this->_forceStage;
+        return $this->getApiEnv() == ConfigSDK::API_ENV_STAGE || $this->_forceStage || $this->_apiEnvStage;
     }
 
     public function hasCredentials($withTokenJs = false, $withApplePay = false)

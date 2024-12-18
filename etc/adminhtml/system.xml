@@ -23,6 +23,7 @@
             <label>HiPay Enterprise</label>
             <tab>sales</tab>
             <resource>HiPay_FullserviceMagento::hipay</resource>
+            <include path="HiPay_FullserviceMagento::system/api_env.xml"/>
             <include path="HiPay_FullserviceMagento::system/cancel_button.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials.xml"/>
             <include path="HiPay_FullserviceMagento::system/credentials_moto.xml"/>

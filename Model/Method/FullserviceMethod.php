@@ -180,6 +180,11 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $_cardFactory;
 
     /**
+     * @var int
+     */
+    public $overridePendingTimeout = 30;
+
+    /**
      * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
      */
     protected $_cardCollectionFactory;
@@ -188,7 +193,7 @@ abstract class FullserviceMethod extends AbstractMethod
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository                                        $transactionRepository
-     * @param \HiPay\FullserviceMagento\Model\Method\Context               $context
+     * @param Method\Context                                               $context
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
      * @param array                                                        $data
@@ -397,11 +402,12 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      *
      * @param  \Magento\Sales\Model\Order $order
+     * @param  array                      $params
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function getGatewayManager($order)
+    public function getGatewayManager($order, $params = [])
     {
-        return $this->_gatewayManagerFactory->create($order);
+        return $this->_gatewayManagerFactory->create($order, $params);
     }
 
     /**
@@ -459,7 +465,6 @@ abstract class FullserviceMethod extends AbstractMethod
 
             // Process response and store data
             $redirectUrl = $this->processResponse($response);
-
             $payment->setAdditionalInformation('response', $response->toArray());
             $payment->setAdditionalInformation('status', $response->getState());
             $payment->setAdditionalInformation('redirectUrl', $redirectUrl);

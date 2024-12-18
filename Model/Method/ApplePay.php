@@ -34,6 +34,11 @@ class ApplePay extends LocalHostedFields
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
+     * @var int
+     */
+    public $overridePendingTimeout = 1440;
+
+    /**
      * Is active
      *
      * @param  int|null $storeId
