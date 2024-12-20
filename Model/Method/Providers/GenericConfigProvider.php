@@ -221,10 +221,8 @@ class GenericConfigProvider implements ConfigProviderInterface
     protected function useOneclick($methodCode)
     {
         $allowUseOneclick = $this->_hipayConfig->getValue('allow_use_oneclick');
-        $filterOneclick = $this->_hipayConfig->getValue('filter_oneclick');
-        $quote = $this->checkoutSession->getQuote();
 
-        return (bool)$this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
+        return (bool)$this->hipayHelper->useOneclick($allowUseOneclick);
     }
 
     protected function maxSavedCardCount($methodCode)

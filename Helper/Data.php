@@ -112,11 +112,9 @@ class Data extends AbstractHelper
     /**
      *
      * @param  bool                       $allowUseOneclick Method config Data
-     * @param  int                        $filterOneclick   Rule's id in configuration
-     * @param  \Magento\Quote\Model\Quote $quote
      * @return boolean
      */
-    public function useOneclick($allowUseOneclick, $filterOneclick, $quote)
+    public function useOneclick($allowUseOneclick)
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $customerSession = $objectManager->get('Magento\Customer\Model\Session');
@@ -126,11 +124,6 @@ class Data extends AbstractHelper
                 case 0:
                     return false;
                 case 1:
-                    $rule = $this->ruleFactory->create();
-                    $rule->load($filterOneclick);
-                    if ($rule->getId()) {
-                        return (int)$rule->validate($quote);
-                    }
                     return true;
             }
             return false;

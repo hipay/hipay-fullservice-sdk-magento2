@@ -43,6 +43,8 @@ define([
         }
       });
 
+      self.setupSavedCardsObserver();
+
       self.hipaySdk.injectBaseStylesheet();
 
       self.hipayHostedFields.on('blur', function (data) {
@@ -182,11 +184,6 @@ define([
       this.validateHandler = handler;
     },
 
-    allowMultiUse: function () {
-      var self = this;
-      return self.allowOneclick.hipay_hosted_fields && self.createOneclick();
-    },
-
     initTOCEvents: function () {
       var self = this;
 
@@ -246,10 +243,11 @@ define([
         } else {
           // Switch to new card form
           self.selectedCard('');
-          $('.lbl-saved-cards:not(#pay-other-card)').hide();
-          $('.hipay-form-row').hide();
+          //$('.lbl-saved-cards:not(#pay-other-card)').hide();
+          //$('.hipay-form-row').hide();
         }
       });
+
       var customerFirstName = '';
       var customerLastName = '';
 
@@ -263,7 +261,7 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
-        multi_use: self.allowMultiUse(),
+        multi_use: self.useOneclick(),
         one_click: {
           enabled: self.useOneclick(),
           cards_display_count: Number(self.getCustomerSavedCardsCount()),
@@ -313,14 +311,74 @@ define([
           }
         }
       };
-
       self.initTOCEvents();
     },
+
+    setupSavedCardsObserver: function () {
+      var self = this;
+      var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.addedNodes.length) {
+            var savedCardsContainer =
+              document.getElementById('hipay-saved-cards');
+            if (
+              savedCardsContainer &&
+              savedCardsContainer.querySelector('.saved-card')
+            ) {
+              self.bindSavedCardsEvents();
+            }
+          }
+        });
+      });
+
+      // Start observing the document with the configured parameters
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    },
+
+    bindSavedCardsEvents: function () {
+      var self = this;
+
+      $('#hipay-saved-cards .saved-card').each(function () {
+        $(this)
+          .off('click')
+          .on('click', function () {
+            var $checkbox = $(this).find('input[type="checkbox"]');
+
+            // Uncheck other checkboxes
+            $('.saved-card input[type="checkbox"]')
+              .not($checkbox)
+              .prop('checked', false);
+
+            if ($checkbox.is(':checked')) {
+              // When a saved card is selected:
+              self.selectedCard($checkbox.attr('id'));
+            } else {
+              self.selectedCard($checkbox.attr('id'));
+            }
+          });
+      });
+    },
+
     /**
      * @param {Function} handler
      */
     setPlaceOrderHandler: function (handler) {
       this.placeOrderHandler = handler;
+    },
+
+    waitForHiPay: function () {
+      return new Promise((resolve) => {
+        (function checkHiPay() {
+          if (window.HiPay && typeof HiPay.init === 'function') {
+            resolve();
+          } else {
+            setTimeout(checkHiPay, 50);
+          }
+        })();
+      });
     },
 
     /**
@@ -337,25 +395,6 @@ define([
           self.selectedCard() === '';
         return showCC;
       }, self);
-
-      // Add handler for saved card selection
-      $(document).on(
-        'change',
-        '.saved-card input[type="checkbox"]',
-        function () {
-          var $checkbox = $(this);
-          // Uncheck other checkboxes
-          $('.saved-card input[type="checkbox"]')
-            .not($checkbox)
-            .prop('checked', false);
-
-          if ($checkbox.is(':checked')) {
-            self.selectedCard($checkbox.attr('id'));
-          } else {
-            self.selectedCard('');
-          }
-        }
-      );
 
       return self;
     },
@@ -387,11 +426,6 @@ define([
 
       if (event) {
         event.preventDefault();
-      }
-
-      if (self.creditCardToken()) {
-        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-        return;
       }
 
       fullScreenLoader.startLoader();

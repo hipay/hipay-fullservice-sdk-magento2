@@ -70,13 +70,6 @@
                         <field id="allow_use_oneclick">1</field>
                     </depends>
                 </field>
- 				<field id="filter_oneclick" translate="label comment" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Rules Oneclick</label>
-                    <comment>Configure Rules to activate oneclick</comment>
-                    <frontend_model>HiPay\FullserviceMagento\Block\Adminhtml\Form\Field\Rule</frontend_model>
-                    <backend_model>HiPay\FullserviceMagento\Model\System\Config\Backend\Rule</backend_model>
-                </field>
-
                 <field id="color" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Color</label>
                 </field>
