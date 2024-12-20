@@ -111,7 +111,7 @@ class Data extends AbstractHelper
 
     /**
      *
-     * @param  bool                       $allowUseOneclick Method config Data
+     * @param  bool $allowUseOneclick Method config Data
      * @return boolean
      */
     public function useOneclick($allowUseOneclick)

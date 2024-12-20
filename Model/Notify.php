@@ -456,9 +456,8 @@ class Notify
                     $this->_doTransactionMessage();
                     break;
             }
-
-        //Save status infos
-        $this->saveHiPayStatus();
+            //Save status infos
+            $this->saveHiPayStatus();
         } catch (\Exception $exception) {
             throw $exception;
         } finally {
