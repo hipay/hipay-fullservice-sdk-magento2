@@ -241,10 +241,7 @@ define([
           $('.lbl-saved-cards').show();
           $('.hipay-form-row').show();
         } else {
-          // Switch to new card form
           self.selectedCard('');
-          //$('.lbl-saved-cards:not(#pay-other-card)').hide();
-          //$('.hipay-form-row').hide();
         }
       });
 
