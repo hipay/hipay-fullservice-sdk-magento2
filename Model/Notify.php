@@ -299,6 +299,12 @@ class Notify
             );
         }
 
+        if ($this->orderLockManager->isLocked($this->_order)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Order %1 is currently being processed. Please try again later.', $this->_order->getIncrementId())
+            );
+        }
+
         try {
             //Begin transaction to lock this order record during update
             $this->orderLockManager->lockOrder($this->_order);
