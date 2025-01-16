@@ -394,6 +394,7 @@
 "Your order is in payment review.","Votre commande est en attente de paiement."
 "Your order payment is now reviewed and accepted.","Votre paiement a été vérifié et accepté."
 "Your order was canceled.","Votre commande a été annulée."
+"Your order #%1 was canceled.","Votre commande #%1 a été annulée."
 "Your order was declined.","Votre commande a été refusée."
 "Your payment is accepted.","Votre paiement est accepté"
 "Your payment is in pending.","Votre paiement est en attente de validation."

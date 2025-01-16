@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASE
+
+- **Fix** : Cancel order when payment abandonment instead of updated to pending state
+
 ## 1.26.0
 
 - **Fix** : Lock order table row while executing notification
