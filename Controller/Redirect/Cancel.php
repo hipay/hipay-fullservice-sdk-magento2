@@ -75,7 +75,6 @@ class Cancel extends Fullservice
      * */
     public function execute()
     {
-
         $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
         if ($lastOrderId) {
             /**
