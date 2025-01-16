@@ -111,7 +111,6 @@ class Cancel extends Fullservice
             $this->messageManager->addNoticeMessage(
                 __('Your order #%1 was canceled.', $order->getIncrementId())
             );
-
         }
 
         $this->_redirect('checkout/cart');
