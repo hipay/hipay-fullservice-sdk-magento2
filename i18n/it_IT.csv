@@ -393,7 +393,6 @@
 "Your Order <span class=""no-link"">#%increment_id</span>","Il tuo ordine <span class=""no-link"">#%increment_id</span>"
 "Your order is in payment review.","L'ordine è in attesa di pagamento."
 "Your order payment is now reviewed and accepted.","Il pagamento dell'ordine è stato esaminato e accettato."
-"Your order was canceled.","L\'ordine è stato cancellato."
 "Your order #%1 was canceled.","L\'ordine #%1 è stato cancellato."
 "Your order was declined.","L\'ordine è stato rifiutato."
 "Your payment is accepted.","Il vostro pagamento è stato accettato"
