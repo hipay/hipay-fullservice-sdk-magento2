@@ -393,7 +393,7 @@
 "Your Order <span class=""no-link"">#%increment_id</span>","Your Order <span class=""no-link"">#%increment_id</span>"
 "Your order is in payment review.","Your order is in payment review."
 "Your order payment is now reviewed and accepted.","Your order payment is now reviewed and accepted."
-"Your order was canceled.","Your order was canceled."
+"Your order #%1 was canceled.","Your order #%1 was canceled."
 "Your order was declined.","Your order was declined."
 "Your payment is accepted.","Your payment is accepted."
 "Your payment is in pending.","Your payment is in pending."

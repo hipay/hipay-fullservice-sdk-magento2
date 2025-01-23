@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Add** : Update OneClick payment
+- **Fix** : Cancel order when payment abandonment instead of updated to pending state
 
 ## 1.26.0
 
