@@ -66,38 +66,14 @@
         data-bind="visible: initHostedFields() "
       >
         <!--<![endif]-->
-        <!-- ko if: (useOneclick() && customerHasCard()) -->
 
-        <div class="hipay-row">
+        <!-- ko if: (useOneclick() && customerHasCard()) -->
+        <div class="hipay-row one-click">
           <div class="hipay-field-container">
-            <label
-              data-bind="attr: {for: getCode() + '_cc_token'}"
-              class="label"
-            >
-              <span>
-                <!-- ko i18n: 'Your credit cards'-->
-                <!-- /ko -->
-              </span>
-            </label>
-            <div class="hipay-field">
-              <select
-                name="payment[cc_token]"
-                class="select"
-                data-bind="attr: {id: getCode() + '_cc_token', 'data-container': getCode() + '-cc-token'},
-                                     mageInit: {creditCardType:{creditCardTypeContainer:'#' + getCode() + '_cc_type_ss_div'}},
-                                     enable: true,
-                                     options: getCustomerCards(),
-                                     optionsValue: 'ccToken',
-                                     optionsText: 'name',
-                                     optionsCaption: $t('Pay with a new card'),
-                                     value: selectedCard,
-                                     event: {change: changeCard}"
-              ></select>
-            </div>
+            <div class="hipay-field" id="hipay-saved-cards"></div>
           </div>
         </div>
         <!-- /ko -->
-
         <div class="hipay-row" data-bind="visible: showCcForm()">
           <div class="hipay-field-container">
             <div class="hipay-field" id="hipay-card-holder"></div>
@@ -156,28 +132,9 @@
         <div class="hipay-elements-container" data-bind="visible: showCcForm()">
           <div id="hipay-help-cvc"></div>
         </div>
-        <!-- ko if: (useOneclick())-->
-        <div class="field" data-bind="visible: showForm()">
-          <label class="label">
-            <span></span>
-          </label>
-          <div class="control">
-            <input
-              type="checkbox"
-              name="payment[create_oneclick]"
-              value="1"
-              checked="checked"
-              class="checkbox"
-              data-bind="checked: createOneclick, event: {change: changeOneClick}, attr: {id:  getCode() + '_create_oneclick'}"
-            />
-            <label class="label" for="create_oneclick">
-              <span>
-                <!-- ko i18n: 'Save this card for future use'-->
-                <!-- /ko -->
-              </span>
-            </label>
-          </div>
-        </div>
+        <!-- ko if: (useOneclick()) -->
+
+        <div id="hipay-saved-card-button" data-bind="visible: showCcForm()"></div>
         <!-- /ko -->
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() -->

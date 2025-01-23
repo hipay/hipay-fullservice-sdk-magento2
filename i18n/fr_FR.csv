@@ -403,3 +403,8 @@
 "Cancel pending orders since 3 days.","Annule les commandes en attentes depuis 3 jours."
 "Hosted Page Paypal V2 Button Configuration","Configuration bouton Paypal V2 page hébergée"
 "For any questions regarding minimum and maximum amounts, please contact support or your account manager.","Pour toutes questions relatives aux montants minimums et maximums, merci de contacter le support ou votre gestionnaire de compte."
+"Allow customers to save their card details for future purchases.","Permettre aux clients d'enregistrer leurs coordonnées bancaires pour leurs futurs achats."
+"Maximum saved cards displayed per customer","Nombre maximum de cartes affichées par client"
+"If you leave the field empty, all the customer's saved cards will be displayed.","Si vous laissez le champ vide, toutes les cartes enregistrées du client s'afficheront."
+"Selected Card Highlight Color","Couleur de surbrillance de la carte sélectionnée"
+"Save Card Toggle Color","Couleur du bouton de sauvegarde de carte"

@@ -7,11 +7,13 @@
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="iesnare" type="host">mpsnare.iesnare.com</value>
                 <value id="paypal" type="host">*.paypal.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
             </values>
         </policy>
         <policy id="style-src">
             <values>
                 <value id="hipay" type="host">*.hipay.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
             </values>
         </policy>
         <policy id="frame-src">
@@ -19,6 +21,7 @@
                 <value id="hipay-tpp" type="host">*.hipay-tpp.com</value>
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="paypal" type="host">*.paypal.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
             </values>
         </policy>
         <policy id="connect-src">
@@ -26,12 +29,21 @@
                 <value id="hipay-tpp" type="host">*.hipay-tpp.com</value>
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="iesnare" type="host">wss://mpsnare.iesnare.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
             </values>
         </policy>
         <policy id="media-src">
             <values>
                 <value id="data" type="host">data:</value>
                 <value id="iesnare" type="host">mpsnare.iesnare.com</value>
+                <value id="google" type="host">*.storage.googleapis.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="hipay" type="host">*.hipay.com</value>
+                <value id="google" type="host">*.googleapis.com</value>
             </values>
         </policy>
     </policies>
