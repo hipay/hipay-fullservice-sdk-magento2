@@ -153,6 +153,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                             ],
                             'isIframeMode' => [$methodCode => $this->isIframeMode($methodCode)],
                             'useOneclick' => [$methodCode => $this->useOneclick($methodCode)],
+                            'maxSavedCard' => [$methodCode => $this->getMaxSavedCardCount($methodCode)],
                             'displayCardOwner' => [$methodCode => $this->displayCardOwner($methodCode)],
                             'iFrameWidth' => [$methodCode => $this->getIframeProp($methodCode, 'width')],
                             'iFrameHeight' => [$methodCode => $this->getIframeProp($methodCode, 'height')],
@@ -168,10 +169,12 @@ class GenericConfigProvider implements ConfigProviderInterface
         $cards = [];
         foreach ($this->getCustomerCards() as $card) {
             $cards[] = [
-                'name' => $card->getName(),
-                'ccToken' => $card->getCcToken(),
-                'ccType' => $card->getCcType(),
-                'ccOwner' => $card->getCcOwner()
+                'token' => $card->getCcToken(),
+                'brand' => $card->getCcType(),
+                'card_holder' => $card->getCcOwner(),
+                'card_expiry_month' => $card->getCcExpMonth(),
+                'card_expiry_year' => $card->getCcExpYear(),
+                'pan' => $card->getCcNumberEnc()
             ];
         }
 
@@ -179,7 +182,7 @@ class GenericConfigProvider implements ConfigProviderInterface
             'payment' => [
                 'hiPayFullservice' => [
                     'customerCards' => $cards,
-                    'selectedCard' => count($cards) ? current($cards)['ccToken'] : null,
+                    'selectedCard' => count($cards) ? current($cards)['token'] : null,
                     'defaultEci' => ECI::SECURE_ECOMMERCE,
                     'recurringEci' => ECI::RECURRING_ECOMMERCE,
                     'useOrderCurrency' => (bool)$this->_hipayConfig->useOrderCurrency()
@@ -218,10 +221,14 @@ class GenericConfigProvider implements ConfigProviderInterface
     protected function useOneclick($methodCode)
     {
         $allowUseOneclick = $this->_hipayConfig->getValue('allow_use_oneclick');
-        $filterOneclick = $this->_hipayConfig->getValue('filter_oneclick');
-        $quote = $this->checkoutSession->getQuote();
 
-        return (bool)$this->hipayHelper->useOneclick($allowUseOneclick, $filterOneclick, $quote);
+        return (bool)$this->hipayHelper->useOneclick($allowUseOneclick);
+    }
+
+    protected function getMaxSavedCardCount($methodCode)
+    {
+        $maxSavedCards = $this->_hipayConfig->getValue('one_click/max_saved_cards');
+        return $maxSavedCards >= 1 ? $maxSavedCards : time();
     }
 
     protected function isIframeMode($methodCode)

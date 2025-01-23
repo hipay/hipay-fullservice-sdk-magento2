@@ -30,7 +30,13 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
       customerCards:
         window.checkoutConfig.payment.hiPayFullservice.customerCards,
       createOneclick: false,
+      maxSavedCard: window.checkoutConfig.payment.hiPayFullservice.maxSavedCard,
       creditCardType: '',
+      creditCardOwner: '',
+      creditCardNumber: '',
+      creditCardExpMonth: '',
+      creditCardExpYear: '',
+      multiUse: '',
       fingerprint: '',
       defaultEci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
       recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
@@ -46,7 +52,12 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
         'selectedCard',
         'createOneclick',
         'creditCardType',
+        'creditCardOwner',
+        'creditCardNumber',
+        'creditCardExpMonth',
+        'creditCardExpYear',
         'creditCardToken',
+        'multiUse',
         'eci',
         'fingerprint'
       ]);
@@ -102,6 +113,11 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
     getCustomerCards: function () {
       return this.customerCards;
     },
+
+    getCustomerSavedCardsCount: function () {
+      return this.maxSavedCard[this.getCode()];
+    },
+
     getCustomerCardByToken: function (token) {
       for (var i = 0; i < this.customerCards.length; i++) {
         if (this.customerCards[i].ccToken == token) {
@@ -129,6 +145,11 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
         additional_data: {
           create_oneclick: this.createOneclick(),
           card_token: this.creditCardToken(),
+          card_owner: this.creditCardOwner(),
+          card_pan: this.creditCardNumber(),
+          card_expiry_month: this.creditCardExpMonth(),
+          card_expiry_year: this.creditCardExpYear(),
+          card_multi_use: this.multiUse(),
           eci: this.eci(),
           cc_type: this.creditCardType(),
           fingerprint: fingerprint

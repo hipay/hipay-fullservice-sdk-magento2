@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASE
+
+- **Add** : Update OneClick payment
+
 ## 1.26.0
 
 - **Fix** : Lock order table row while executing notification

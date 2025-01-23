@@ -118,6 +118,10 @@ abstract class FullserviceMethod extends AbstractMethod
         'cc_type',
         'fingerprint',
         'cc_owner',
+        'card_pan',
+        'card_expiry_month',
+        'card_expiry_year',
+        'card_multi_use',
         'browser_info'
     ];
     /**
@@ -181,6 +185,11 @@ abstract class FullserviceMethod extends AbstractMethod
     public $overridePendingTimeout = 30;
 
     /**
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
+     */
+    protected $_cardCollectionFactory;
+
+    /**
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository                                        $transactionRepository
@@ -216,6 +225,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['methodCode' => $this->getCode()]]);
         $this->_checkoutSession = $context->getCheckoutSession();
         $this->_cardFactory = $context->getCardFactory();
+        $this->_cardCollectionFactory = $context->getCardCollectionFactory();
         $this->priceCurrency = $context->getPriceCurrency();
 
         $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');

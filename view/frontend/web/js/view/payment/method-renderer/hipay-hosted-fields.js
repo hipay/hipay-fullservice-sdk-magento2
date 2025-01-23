@@ -33,7 +33,7 @@ define([
       self.hipayHostedFields = self.hipaySdk.create('card', self.configHipay);
 
       self.hipayHostedFields.on('change', function (data) {
-        if (self.showCcForm()) {
+        if (self.showCcForm() || self.useOneclick()) {
           if (!data.valid || data.error) {
             self.hipayHFstatus = false;
           } else if (data.valid) {
@@ -42,6 +42,8 @@ define([
           self.isPlaceOrderAllowed(self.hipayHFstatus);
         }
       });
+
+      self.setupSavedCardsObserver();
 
       self.hipaySdk.injectBaseStylesheet();
 
@@ -139,6 +141,16 @@ define([
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.iconColor
           : '',
+      oneClickHighlightColor:
+        window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+          ? window.checkoutConfig.payment.hipay_hosted_fields
+              .oneClickHighlightColor
+          : '',
+      oneClickToggleColor:
+        window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+          ? window.checkoutConfig.payment.hipay_hosted_fields
+              .oneClickToggleColor
+          : '',
       locale:
         window.checkoutConfig.payment.hiPayFullservice !== undefined
           ? window.checkoutConfig.payment.hiPayFullservice.locale
@@ -170,25 +182,6 @@ define([
      */
     setValidateHandler: function (handler) {
       this.validateHandler = handler;
-    },
-
-    allowMultiUse: function () {
-      var self = this;
-      return self.allowOneclick.hipay_hosted_fields && self.createOneclick();
-    },
-
-    changeOneClick: function () {
-      var self = this;
-      self.hipayHostedFields.setMultiUse(self.allowMultiUse());
-    },
-
-    changeCard: function () {
-      var self = this;
-      if (!self.showCcForm()) {
-        self.isPlaceOrderAllowed(true);
-      } else {
-        self.isPlaceOrderAllowed(self.hipayHFstatus);
-      }
     },
 
     initTOCEvents: function () {
@@ -239,6 +232,19 @@ define([
 
     initialize: function () {
       var self = this;
+
+      $(document).on('click', '#pay-other-card', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (self.showCcForm()) {
+          self.selectedCard('dummy');
+          $('.lbl-saved-cards').show();
+          $('.hipay-form-row').show();
+        } else {
+          self.selectedCard('');
+        }
+      });
+
       var customerFirstName = '';
       var customerLastName = '';
 
@@ -252,8 +258,15 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
-        multi_use: self.allowMultiUse(),
+        one_click: {
+          enabled: self.useOneclick(),
+          cards_display_count: Number(self.getCustomerSavedCardsCount()),
+          cards: self.getCustomerCards()
+        },
         fields: {
+          savedCards: {
+            selector: 'hipay-saved-cards'
+          },
           cardHolder: {
             selector: 'hipay-card-holder',
             defaultFirstname: customerFirstName,
@@ -269,9 +282,20 @@ define([
             selector: 'hipay-cvc',
             helpButton: true,
             helpSelector: 'hipay-help-cvc'
+          },
+          savedCardButton: {
+            selector: 'hipay-saved-card-button'
           }
         },
         styles: {
+          components: {
+            switch: {
+              mainColor: self.oneClickToggleColor
+            },
+            checkbox: {
+              mainColor: self.oneClickHighlightColor
+            }
+          },
           base: {
             fontFamily: self.fontFamily,
             color: self.color,
@@ -283,9 +307,57 @@ define([
           }
         }
       };
-
       self.initTOCEvents();
     },
+
+    setupSavedCardsObserver: function () {
+      var self = this;
+      var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.addedNodes.length) {
+            var savedCardsContainer =
+              document.getElementById('hipay-saved-cards');
+            if (
+              savedCardsContainer &&
+              savedCardsContainer.querySelector('.saved-card')
+            ) {
+              self.bindSavedCardsEvents();
+            }
+          }
+        });
+      });
+
+      // Start observing the document with the configured parameters
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    },
+
+    bindSavedCardsEvents: function () {
+      var self = this;
+
+      $('#hipay-saved-cards .saved-card').each(function () {
+        $(this)
+          .off('click')
+          .on('click', function () {
+            var $checkbox = $(this).find('input[type="checkbox"]');
+
+            // Uncheck other checkboxes
+            $('.saved-card input[type="checkbox"]')
+              .not($checkbox)
+              .prop('checked', false);
+
+            if ($checkbox.is(':checked')) {
+              // When a saved card is selected:
+              self.selectedCard($checkbox.attr('id'));
+            } else {
+              self.selectedCard($checkbox.attr('id'));
+            }
+          });
+      });
+    },
+
     /**
      * @param {Function} handler
      */
@@ -293,12 +365,24 @@ define([
       this.placeOrderHandler = handler;
     },
 
+    waitForHiPay: function () {
+      return new Promise((resolve) => {
+        (function checkHiPay() {
+          if (window.HiPay && typeof HiPay.init === 'function') {
+            resolve();
+          } else {
+            setTimeout(checkHiPay, 50);
+          }
+        })();
+      });
+    },
+
     /**
      * @override
      */
     initObservable: function () {
       var self = this;
-      self._super().observe(['createOneclick']);
+      self._super().observe(['createOneclick', 'selectedCard']);
 
       self.showCcForm = ko.computed(function () {
         var showCC =
@@ -340,19 +424,22 @@ define([
         event.preventDefault();
       }
 
-      if (self.creditCardToken()) {
-        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
-        return;
-      }
-
       fullScreenLoader.startLoader();
       self.hipayHostedFields.getPaymentData().then(
         function (response) {
+          if (response.one_click === true || response.multi_use === true) {
+            self.eci(self.defaultEci);
+          }
           self.creditCardToken(response.token);
           self.creditCardType(response.payment_product);
+          self.creditCardOwner(response.card_holder);
+          self.creditCardNumber(response.pan);
+          self.creditCardExpMonth(response.card_expiry_month);
+          self.creditCardExpYear(response.card_expiry_year);
+          self.createOneclick(response.one_click);
+          self.multiUse(response.multi_use);
           self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
           self.creditCardToken('');
-          fullScreenLoader.stopLoader();
         },
         function (errors) {
           for (var error in errors) {
