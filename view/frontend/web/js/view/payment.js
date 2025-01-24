@@ -133,6 +133,31 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
     customerHasCard: function () {
       return this.getCustomerCards().length > 0;
     },
+
+    getAvailableBrands: function (brand)  {
+      let result = new Set();
+
+      Object.entries(brand).forEach(([key, value]) => {
+        switch(key) {
+          case 'VI':
+            result.add('visa');
+            result.add('cb');
+            break;
+          case 'MC':
+            result.add('mastercard');
+            break;
+          case 'AE':
+            result.add('american-express');
+            break;
+          case 'MI':
+            result.add('maestro');
+            break;
+        }
+      });
+
+      return Array.from(result);
+    },
+
     getData: function () {
       var fingerprint = $('#ioBB').val();
 

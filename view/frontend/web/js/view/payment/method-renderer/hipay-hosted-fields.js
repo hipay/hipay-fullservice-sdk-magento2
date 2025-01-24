@@ -160,7 +160,11 @@ define([
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.sdkJsUrl
           : '',
-      hipaySdk: ''
+      hipaySdk: '',
+      availableBrands:
+          window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+              ? window.checkoutConfig.payment.hipay_hosted_fields.availableTypes
+              : ''
     },
 
     hipayHostedFields: null,
@@ -258,6 +262,7 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
+        brand: self.getAvailableBrands(self.availableBrands),
         one_click: {
           enabled: self.useOneclick(),
           cards_display_count: Number(self.getCustomerSavedCardsCount()),
