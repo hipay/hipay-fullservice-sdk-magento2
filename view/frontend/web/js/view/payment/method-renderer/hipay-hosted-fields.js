@@ -160,11 +160,7 @@ define([
         window.checkoutConfig.payment.hipay_hosted_fields !== undefined
           ? window.checkoutConfig.payment.hipay_hosted_fields.sdkJsUrl
           : '',
-      hipaySdk: '',
-      availableBrands:
-          window.checkoutConfig.payment.hipay_hosted_fields !== undefined
-              ? window.checkoutConfig.payment.hipay_hosted_fields.availableTypes
-              : ''
+      hipaySdk: ''
     },
 
     hipayHostedFields: null,
