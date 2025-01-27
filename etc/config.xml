@@ -197,8 +197,8 @@
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <one_click>
-                    <saved_card_highlight_color>#6864E7</saved_card_highlight_color>
-                    <save_card_toggle_color>#FF8C50</save_card_toggle_color>
+                    <saved_card_highlight_color>#02A17B</saved_card_highlight_color>
+                    <save_card_toggle_color>#02A17B</save_card_toggle_color>
                 </one_click>
                 <allowspecific>0</allowspecific>
                 <cctypes>AE,VI,MC</cctypes>

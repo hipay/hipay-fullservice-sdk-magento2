@@ -258,6 +258,7 @@ define([
 
       self.configHipay = {
         selector: 'hipay-container-hosted-fields',
+        brand: self.getAvailableBrands(self.availableBrands),
         one_click: {
           enabled: self.useOneclick(),
           cards_display_count: Number(self.getCustomerSavedCardsCount()),

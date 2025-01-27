@@ -269,3 +269,7 @@
   position: absolute;
   top: 0;
 }
+
+.one-click .saved-card svg {
+  font-size: 2rem;
+}
