@@ -139,6 +139,7 @@ class Notify
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
         OrderManagementInterface $orderManagement,
+        \HiPay\FullserviceMagento\Model\OrderLockManager $orderLockManager,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -155,6 +156,7 @@ class Notify
         $this->creditmemoSender = $creditmemoSender;
 
         $this->orderManagement = $orderManagement;
+        $this->orderLockManager = $orderLockManager;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
