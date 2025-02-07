@@ -210,13 +210,18 @@ class CleanPendingOrders
 
                 $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
                 $caseStateConditions = [];
+
                 foreach ($paymentMethods as $code => $data) {
-                    if (strpos($code, 'hipay') !== false) {
-                        if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
-                            foreach ($targetStates as $state) {
-                                $caseStateConditions[] = "(main_table.state = '$state' AND op.method = '$code')";
-                            }
-                        }
+                    if (strpos($code, 'hipay') === false) {
+                        continue;
+                    }
+
+                    if (empty($cancelPendingOrdersConfig[$code])) {
+                        continue;
+                    }
+
+                    foreach ($targetStates as $state) {
+                        $caseStateConditions[] = "(main_table.state = '$state' AND op.method = '$code')";
                     }
                 }
 
