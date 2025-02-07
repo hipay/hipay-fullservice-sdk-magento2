@@ -208,26 +208,16 @@ class CleanPendingOrders
                  */
                 $collection = $orderModel->getCollection();
 
-                // Build conditions for state and method filtering
-                $stateConditions = [];
-
-                foreach ($paymentMethods as $code => $data) {
-                    if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
-                        $stateConditions[] = [
-                            'field' => 'main_table.state',
-                            'value' => $pendingOrderStatusConfig[$code],
-                            'method' => $code
-                        ];
-                    }
-                }
-
-                // Construct the CASE conditions for state and method
+                $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
                 $caseStateConditions = [];
-
-                foreach ($stateConditions as $condition) {
-                    $state = $condition['value'];
-                    $method = $condition['method'];
-                    $caseStateConditions[] = "(main_table.status = '$state' AND op.method = '$method')";
+                foreach ($paymentMethods as $code => $data) {
+                    if (strpos($code, 'hipay') !== false) {
+                        if (isset($cancelPendingOrdersConfig[$code]) && $cancelPendingOrdersConfig[$code]) {
+                            foreach ($targetStates as $state) {
+                                $caseStateConditions[] = "(main_table.state = '$state' AND op.method = '$code')";
+                            }
+                        }
+                    }
                 }
 
                 if (!empty($caseStateConditions)) {
