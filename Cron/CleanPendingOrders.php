@@ -180,21 +180,30 @@ class CleanPendingOrders
                 $cancelPendingOrdersConfig = [];
                 $pendingOrderStatusConfig = [];
 
-                // Pre-fetch configuration values for all payment methods
-                foreach ($paymentMethods as $code => $data) {
-                    if (strpos($code, 'hipay') !== false || strpos($code, 'hipay_cc') === false) {
-                        $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
-                            'payment/' . $code . '/cancel_pending_order',
+                // Filter HiPay payment methods
+                $hipayPaymentMethods = array_filter(array_keys($paymentMethods), function ($code) {
+                    return strpos($code, 'hipay') !== false;
+                });
+
+                if (empty($hipayPaymentMethods)) {
+                    $this->logger->info('No HiPay payment methods found for store ' . $storeId);
+                    $this->_emulation->stopEnvironmentEmulation();
+                    continue;
+                }
+
+                // Pre-fetch configuration values for HiPay payment methods
+                foreach ($hipayPaymentMethods as $code) {
+                    $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
+                        'payment/' . $code . '/cancel_pending_order',
+                        ScopeInterface::SCOPE_WEBSITE,
+                        $websiteId
+                    );
+                    if ($cancelPendingOrdersConfig[$code]) {
+                        $pendingOrderStatusConfig[$code] = $this->_scopeConfig->getValue(
+                            'payment/' . $code . '/order_status',
                             ScopeInterface::SCOPE_WEBSITE,
                             $websiteId
                         );
-                        if ($cancelPendingOrdersConfig[$code]) {
-                            $pendingOrderStatusConfig[$code] = $this->_scopeConfig->getValue(
-                                'payment/' . $code . '/order_status',
-                                ScopeInterface::SCOPE_WEBSITE,
-                                $websiteId
-                            );
-                        }
                     }
                 }
 
@@ -208,29 +217,40 @@ class CleanPendingOrders
                  */
                 $collection = $orderModel->getCollection();
 
-                $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
                 $caseStateConditions = [];
 
-                foreach ($paymentMethods as $code => $data) {
-                    if (strpos($code, 'hipay') === false) {
-                        continue;
-                    }
-
+                // Build conditions for HiPay payment methods with cancel_pending_order enabled
+                foreach ($hipayPaymentMethods as $code) {
                     if (empty($cancelPendingOrdersConfig[$code])) {
                         continue;
                     }
 
-                    foreach ($targetStates as $state) {
-                        $caseStateConditions[] = "(main_table.state = '$state' AND op.method = '$code')";
-                    }
+                    $status = $pendingOrderStatusConfig[$code];
+                    $caseStateConditions[] = "(main_table.status = '$status' AND op.method = '$code')";
                 }
 
+                // Apply filters to the collection
+                $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
+
+                $filteredHipayPaymentMethods = array_filter($hipayPaymentMethods, function ($code) use ($cancelPendingOrdersConfig) {
+                    return !empty($cancelPendingOrdersConfig[$code]);
+                });
+
+                $collection->getSelect()
+                    ->where('op.method IN (?)', $filteredHipayPaymentMethods);
+                //In case we have status not assigned to states pending/pending_payment
                 if (!empty($caseStateConditions)) {
-                    $caseConditionString = implode(' OR ', $caseStateConditions);
-                    $collection->getSelect()
-                        ->where(new \Zend_Db_Expr('(' . $caseConditionString . ')'));
+                    $collection->getSelect()->where(
+                        new \Zend_Db_Expr(
+                            "(main_table.state IN ('" . implode("','", $targetStates) . "')) " .
+                            "OR (" . implode(' OR ', $caseStateConditions) . ")"
+                        )
+                    );
+                } else {
+                    $collection->getSelect()->where('main_table.state IN (?)', $targetStates);
                 }
 
+                // Add fields to select and join with payment table
                 $collection->addFieldToSelect([
                     'entity_id',
                     'state',
@@ -246,12 +266,16 @@ class CleanPendingOrders
                         ['method']
                     )
                     ->setPageSize(50);
-
+                // Process orders
                 if ($collection->getSize() >= 1) {
+                    $this->logger->info('Found ' . $collection->getSize() . ' orders to process for store ' . $storeId);
                     foreach ($collection as $order) {
                         $this->cancelOrder($order);
                     }
+                } else {
+                    $this->logger->info('No orders to process for store ' . $storeId);
                 }
+
                 $this->_emulation->stopEnvironmentEmulation();
             }
         }
