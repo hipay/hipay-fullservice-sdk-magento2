@@ -232,7 +232,8 @@ class CleanPendingOrders
                 // Apply filters to the collection
                 $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
 
-                $filteredHipayPaymentMethods = array_filter($hipayPaymentMethods, function ($code) use ($cancelPendingOrdersConfig) {
+                $filteredHipayPaymentMethods = array_filter($hipayPaymentMethods,
+                    function ($code) use ($cancelPendingOrdersConfig) {
                     return !empty($cancelPendingOrdersConfig[$code]);
                 });
 
