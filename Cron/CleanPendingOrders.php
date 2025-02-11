@@ -232,10 +232,10 @@ class CleanPendingOrders
                 // Apply filters to the collection
                 $targetStates = [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT];
 
-                $filteredHipayPaymentMethods =
-                    array_filter($hipayPaymentMethods, function ($code) use ($cancelPendingOrdersConfig) {
-                    return !empty($cancelPendingOrdersConfig[$code]);
-                });
+                $filteredHipayPaymentMethods = array_filter($hipayPaymentMethods,
+                        function ($code) use ($cancelPendingOrdersConfig) {
+                        return !empty($cancelPendingOrdersConfig[$code]);
+                    });
 
                 $collection->getSelect()
                     ->where('op.method IN (?)', $filteredHipayPaymentMethods);
