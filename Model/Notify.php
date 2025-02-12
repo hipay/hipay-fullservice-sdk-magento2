@@ -17,7 +17,6 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use HiPay\Fullservice\Enum\Transaction\Operation;
-use HiPay\Fullservice\Gateway\Model\Order;
 use HiPay\Fullservice\Gateway\Model\Transaction;
 use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
@@ -34,6 +33,7 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use HiPay\FullserviceMagento\Model\OrderState as OrderState;
+
 /**
  * Notify Class Model
  *
