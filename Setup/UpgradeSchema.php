@@ -518,19 +518,20 @@ class UpgradeSchema implements UpgradeSchemaInterface
             }
         }
 
-        if (version_compare($context->getVersion(), '1.26.0', '<')) {
-            if ($setup->getConnection()->isTableExists($tableName)) {
-                $setup->getConnection()->addIndex(
+        if (
+            version_compare($context->getVersion(), '1.27.0', '<')
+            && $setup->getConnection()->isTableExists($tableName)
+        ) {
+            $setup->getConnection()->addIndex(
+                $tableName,
+                $setup->getIdxName(
                     $tableName,
-                    $setup->getIdxName(
-                        $tableName,
-                        ['customer_id', 'cc_number_enc'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                    ),
                     ['customer_id', 'cc_number_enc'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                );
-            }
+                ),
+                ['customer_id', 'cc_number_enc'],
+                \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+            );
         }
     }
 
@@ -613,7 +614,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     private function installHipaySalesOrderTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '1.26.0', '<')) {
+        if (version_compare($context->getVersion(), '1.27.0', '<')) {
             $tableName = $setup->getTable('hipay_sales_order');
 
             $table = $setup->getConnection()
