@@ -142,3 +142,22 @@
     align-items: center;
     margin-top: 5px;
 }
+
+#row_payment_us_hipay_hosted_fields_one_click .section-config {
+    width: 60%;
+    margin: auto;
+    background-color: #f6f6f6;
+}
+
+#row_payment_us_hipay_hosted_fields_one_click .admin__collapsible-block.entry-edit-head{
+    margin: auto;
+    width: 50%;
+}
+
+.color-picker {
+    display: none;
+}
+
+.color-picker + .sp-replacer {
+    display: inline-block;
+}

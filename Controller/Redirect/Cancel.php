@@ -36,6 +36,11 @@ class Cancel extends Fullservice
     private $orderFactory;
 
     /**
+     * @var \Magento\Sales\Api\OrderManagementInterface
+     */
+    private $orderManagement;
+
+    /**
      * Cancel constructor.
      *
      * @param \Magento\Framework\App\Action\Context            $context
@@ -46,6 +51,7 @@ class Cancel extends Fullservice
      * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Sales\Model\OrderFactory                $orderFactory
+     * @param \Magento\Sales\Api\OrderManagementInterface      $orderManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -55,9 +61,11 @@ class Cancel extends Fullservice
         \Psr\Log\LoggerInterface $logger,
         \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Sales\Api\OrderManagementInterface $orderManagement
     ) {
         $this->orderFactory = $orderFactory;
+        $this->orderManagement = $orderManagement;
         parent::__construct(
             $context,
             $customerSession,
@@ -75,7 +83,6 @@ class Cancel extends Fullservice
      * */
     public function execute()
     {
-
         $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
         if ($lastOrderId) {
             /**
@@ -108,9 +115,11 @@ class Cancel extends Fullservice
                     );
                 }
             }
+            $this->orderManagement->cancel($lastOrderId);
+            $this->messageManager->addNoticeMessage(
+                __('Your order #%1 was canceled.', $order->getIncrementId())
+            );
         }
-
-        $this->messageManager->addNoticeMessage(__('Your order was canceled.'));
 
         $this->_redirect('checkout/cart');
     }

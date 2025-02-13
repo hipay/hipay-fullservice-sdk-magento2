@@ -299,6 +299,12 @@ class Notify
             );
         }
 
+        if ($this->orderLockManager->isLocked($this->_order)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Order %1 is currently being processed. Please try again later.', $this->_order->getIncrementId())
+            );
+        }
+
         try {
             //Begin transaction to lock this order record during update
             $this->orderLockManager->lockOrder($this->_order);
@@ -458,17 +464,6 @@ class Notify
                     $this->_doTransactionMessage();
                     break;
             }
-
-            if (
-                $this->_transaction->getStatus() == TransactionStatus::CAPTURED
-                || $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
-            ) {
-                /**
-                 * save token and credit card informations encryted
-                 */
-                $this->_saveCc();
-            }
-
             //Save status infos
             $this->saveHiPayStatus();
         } catch (\Exception $exception) {
@@ -516,45 +511,6 @@ class Notify
             ['visa', 'american-express', 'mastercard', 'cb']
         )
             && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
-    }
-
-    /**
-     * @return bool|\HiPay\FullserviceMagento\Model\Card
-     */
-    protected function _saveCc()
-    {
-        if ($this->_canSaveCc()) {
-            $token = $this->_transaction->getPaymentMethod()->getToken();
-            if (!$this->_cardTokenExist($token)) {
-                /**
-                 * @var $card \HiPay\FullserviceMagento\Model\Card
-                 */
-                $card = $this->_cardFactory->create();
-                /**
-                 * @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod
-                 */
-                $paymentMethod = $this->_transaction->getPaymentMethod();
-                $paymentProduct = $this->_transaction->getPaymentProduct();
-                $card->setCcToken($token);
-                $card->setCustomerId($this->_order->getCustomerId());
-                $card->setCcExpMonth($paymentMethod->getCardExpiryMonth());
-                $card->setCcExpYear($paymentMethod->getCardExpiryYear());
-                $card->setCcNumberEnc($paymentMethod->getPan());
-                $card->setCcType($paymentProduct);
-                $card->setCcOwner($paymentMethod->getCardHolder());
-                $card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
-                $card->setName(sprintf(__('Card %s - %s'), $paymentMethod->getBrand(), $paymentMethod->getPan()));
-                $card->setCreatedAt(new \DateTime());
-
-                try {
-                    return $card->save();
-                } catch (\Exception $e) {
-                    $this->_generateComment(__("Card not registered! Due to: %s", $e->getMessage()), true);
-                }
-            }
-        }
-
-        return false;
     }
 
     protected function _cardTokenExist($token)

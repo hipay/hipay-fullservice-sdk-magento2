@@ -421,9 +421,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     private function installTokenTable(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
+        $tableName = $setup->getTable('hipay_customer_card');
         if (version_compare($context->getVersion(), '1.7.0', '<')) {
-            $tableName = $setup->getTable('hipay_customer_card');
-
             if ($setup->getConnection()->isTableExists($tableName)) {
                 $columns = [
                     'created_at' => [
@@ -516,6 +515,21 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     );
 
                 $setup->getConnection()->createTable($table);
+            }
+        }
+
+        if (version_compare($context->getVersion(), '1.26.0', '<')) {
+            if ($setup->getConnection()->isTableExists($tableName)) {
+                $setup->getConnection()->addIndex(
+                    $tableName,
+                    $setup->getIdxName(
+                        $tableName,
+                        ['customer_id', 'cc_number_enc'],
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    ),
+                    ['customer_id', 'cc_number_enc'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                );
             }
         }
     }

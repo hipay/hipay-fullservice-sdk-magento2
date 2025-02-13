@@ -249,3 +249,27 @@
   margin-top: 12px;
   margin-bottom: 12px;
 }
+
+.one-click .hipay-field-container, .one-click .hipay-field {
+  position: relative;
+  height: auto;
+}
+
+#pay-other-card > .arrow {
+  pointer-events: none;
+  cursor: pointer;
+}
+
+#hipay-saved-card-button {
+  text-align: left;
+}
+
+#hipay-saved-card-button input[type="checkbox"], .one-click input[type="checkbox"]{
+  margin: 0;
+  position: absolute;
+  top: 0;
+}
+
+.one-click .saved-card svg {
+  font-size: 2rem;
+}

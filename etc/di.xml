@@ -69,4 +69,11 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\App\Response\HeaderProvider\XFrameOptions">
+        <arguments>
+            <argument name="httpHeader" xsi:type="string">X-Frame-Options</argument>
+            <argument name="value" xsi:type="string">SAMEORIGIN</argument>
+        </arguments>
+    </type>
 </config>

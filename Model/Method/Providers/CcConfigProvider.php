@@ -132,6 +132,8 @@ class CcConfigProvider implements ConfigProviderInterface
                 ];
 
                 if ($methodCode == HostedFieldsMethod::HIPAY_METHOD_CODE) {
+                    $oneClickToggleColor = $this->_hipayConfig->getValue('one_click/save_card_toggle_color');
+                    $oneClickHighlightColor = $this->_hipayConfig->getValue('one_click/saved_card_highlight_color');
                     $conf = array_merge_recursive(
                         $conf,
                         [
@@ -143,6 +145,8 @@ class CcConfigProvider implements ConfigProviderInterface
                                 'placeholderColor' => $this->_hipayConfig->getValue('placeholder_color'),
                                 'caretColor' => $this->_hipayConfig->getValue('caret_color'),
                                 'iconColor' => $this->_hipayConfig->getValue('icon_color'),
+                                'oneClickToggleColor' => $oneClickToggleColor,
+                                'oneClickHighlightColor' => $oneClickHighlightColor
                             ]
                         ]
                     );
