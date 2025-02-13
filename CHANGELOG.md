@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASE
+## 1.27.0
 
 - **Add** : Update OneClick payment
 - **Fix** : Cancel order when payment abandonment instead of updated to pending state

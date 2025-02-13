@@ -76,10 +76,12 @@ stages:
     when: always
   tags:
     - small
-  except:
-    variables:
-      - $ONLY_DEPLOY
-      - $CI_COMMIT_MESSAGE =~ /skip-tests/
+  rules:
+    - if: $ONLY_DEPLOY
+      when: never
+    - if: $CI_COMMIT_MESSAGE =~ /skip-tests/
+      when: never
+    - when: on_success
 
 .login_to_registry: &login-to-registry
   before_script:
@@ -109,9 +111,10 @@ code-quality:
     - cd ci-tools/phpcs
     - composer install
     - ./vendor/bin/phpcs --standard=ruleset.xml
-  except:
-    variables:
-      - $ONLY_DEPLOY
+  rules:
+    - if: $ONLY_DEPLOY
+      when: never
+    - when: on_success
   tags:
     - small
 
@@ -128,9 +131,10 @@ build-test-2-1-10:
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile"
       --destination "$REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}"
-  except:
-    variables:
-      - $ONLY_DEPLOY
+  rules:
+    - if: $ONLY_DEPLOY
+      when: never
+    - when: on_success
   tags:
     - small
 
@@ -140,9 +144,10 @@ build-test-2-1-10:
   script:
     - curl --retry 20 --retry-delay 10 --retry-connrefused --output /dev/null http://web
     - sh bin/tests/casper_run_circle.sh http://web:8096
-  except:
-    variables:
-      - $ONLY_DEPLOY
+  rules:
+    - if: $ONLY_DEPLOY
+      when: never
+    - when: on_success
   tags:
     - medium
 
@@ -150,6 +155,8 @@ get-jira-tickets:
   stage: release
   image: node:latest
   rules:
+    - if: $ONLY_DEPLOY
+      when: never
     - if: $CI_COMMIT_TAG
   script:
     - |
@@ -223,6 +230,8 @@ release-job:
   variables:
     TEMP_CHANGELOG_FILE: 'release_changelog.txt'
   rules:
+    - if: $ONLY_DEPLOY
+      when: never
     - if: $CI_COMMIT_TAG
   script:
     - |
