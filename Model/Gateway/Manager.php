@@ -281,7 +281,15 @@ class Manager
 
     public function requestOrderTransactionInformation($orderId)
     {
-        return $this->_gateway->requestOrderTransactionInformation($orderId)[0]->getTransactionReference();
+        $transactions = $this->_gateway->requestOrderTransactionInformation($orderId);
+
+        if (!empty($transactions)) {
+            return $transactions[0]->getTransactionReference();
+        }
+
+        $this->_logger->warning("No transactions found for order ID: " . $orderId);
+
+        return null;
     }
 
     /**
