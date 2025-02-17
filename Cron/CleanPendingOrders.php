@@ -348,8 +348,12 @@ class CleanPendingOrders
                 if (empty($payment->getCcTransId())) {
                     try {
                         $transId = $gatewayClient->requestOrderTransactionInformation($order->getIncrementId());
-                        $payment->setCcTransId($transId);
-                        $order->save();
+                        if ($transId !== null) {
+                            $payment->setCcTransId($transId);
+                            $order->save();
+                        } else {
+                            $this->logger->warning('No transaction ID found for order: ' . $order->getIncrementId());
+                        }
                     } catch (Exception $e) {
                         $this->logger->error('Failed to retrieve transaction ID: ' . $e->getMessage());
                     }
