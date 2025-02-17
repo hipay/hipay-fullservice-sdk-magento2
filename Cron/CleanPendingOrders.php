@@ -389,11 +389,8 @@ class CleanPendingOrders
             if (!empty($transactions)) {
                 return $transactions[0]->getTransactionReference();
             }
-
-            // Log a warning if no transactions were found
             $this->logger->warning('No transactions found for order: ' . $order->getIncrementId());
         } catch (\Exception $e) {
-            // Log the error if an exception occurs
             $this->logger->error('Error fetching transaction information for order ' . $order->getIncrementId() . ': ' . $e->getMessage());
         }
 
