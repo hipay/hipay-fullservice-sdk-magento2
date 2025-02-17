@@ -4,10 +4,10 @@
 
 - **Add** : Update OneClick payment
 - **Fix** : Cancel order when payment abandonment instead of updated to pending state
+- **Fix** : Fixed lock order table row while executing notification
 
 ## 1.26.0
 
-- **Fix** : Lock order table row while executing notification
 - **Add** : Dynamically get Alma MAX/MIN from merchant account
 - **Fix** : Lock order table row while executing notification
 - **Fix** : Allow retrieving customer X-Forwarded-For IP addresse
