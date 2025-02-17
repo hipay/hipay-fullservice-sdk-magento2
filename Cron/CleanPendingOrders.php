@@ -347,8 +347,8 @@ class CleanPendingOrders
 
                 if (empty($payment->getCcTransId())) {
                     try {
-                        $transId = $this->getTransactionReference($gatewayClient, $order);
-                        if (!is_null($transId)) {
+                        $transId = $gatewayClient->getTransactionReference($order);
+                        if ($transId !== null) {
                             $payment->setCcTransId($transId);
                             $order->save();
                         } else {
@@ -373,28 +373,6 @@ class CleanPendingOrders
         }
 
         return $this;
-    }
-
-    /**
-     * Retrieves the transaction reference for a given order.
-     *
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient
-     * @param \Magento\Sales\Model\Order $order
-     * @return string|null
-     */
-    protected function getTransactionReference($gatewayClient, $order)
-    {
-        try {
-            $transactions = $gatewayClient->requestOrderTransactionInformation($order->getIncrementId());
-            if (!empty($transactions)) {
-                return $transactions[0]->getTransactionReference();
-            }
-            $this->logger->warning('No transactions found for order: ' . $order->getIncrementId());
-        } catch (\Exception $e) {
-            $this->logger->error('Error fetching transaction information for order ' . $order->getIncrementId() . ': ' . $e->getMessage());
-        }
-
-        return null;
     }
 
     /**
