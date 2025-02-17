@@ -348,7 +348,7 @@ class CleanPendingOrders
                 if (empty($payment->getCcTransId())) {
                     try {
                         $transId = $this->getTransactionReference($gatewayClient, $order);
-                        if ($transId !== null) {
+                        if (!is_null($transId)) {
                             $payment->setCcTransId($transId);
                             $order->save();
                         } else {
