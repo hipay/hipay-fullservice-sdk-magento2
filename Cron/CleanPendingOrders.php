@@ -328,7 +328,7 @@ class CleanPendingOrders
                 );
 
                 $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
-
+                $order->save();
                 // keep order status/state
                 $history = $order->addCommentToStatusHistory(
                     $message,
@@ -338,7 +338,6 @@ class CleanPendingOrders
                 $history->setIsCustomerNotified(false);
 
                 $history->save();
-                $order->save();
 
                 $this->_orderManagement->addComment($order->getId(), $history);
 
