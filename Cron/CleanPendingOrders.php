@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Cron;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Helper\Data;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -113,6 +114,11 @@ class CleanPendingOrders
     protected $_emulation;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private  $_orderRepository;
+
+    /**
      * CleanPendingOrders constructor
      *
      * @param OrderFactory                  $orderFactory
@@ -127,6 +133,7 @@ class CleanPendingOrders
      * @param CancelOrderApiPublisher       $cancelOrderApiPublisher
      * @param State                         $state
      * @param Emulation                     $emulation
+     * @param OrderRepositoryInterface      $orderRepository
      */
     public function __construct(
         OrderFactory $orderFactory,
@@ -140,7 +147,8 @@ class CleanPendingOrders
         ManagerFactory $gatewayManagerFactory,
         CancelOrderApiPublisher $cancelOrderApiPublisher,
         State $state,
-        Emulation $emulation
+        Emulation $emulation,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->_orderFactory = $orderFactory;
         $this->paymentHelper = $paymentHelper;
@@ -154,6 +162,7 @@ class CleanPendingOrders
         $this->_cancelOrderApiPublisher = $cancelOrderApiPublisher;
         $this->_state = $state;
         $this->_emulation  = $emulation;
+        $this->_orderRepository = $orderRepository;
     }
 
     /**
@@ -328,18 +337,15 @@ class CleanPendingOrders
                 );
 
                 $order->setState(Order::STATE_CANCELED)->setStatus($orderStatus);
-                $order->save();
+
                 // keep order status/state
-                $history = $order->addCommentToStatusHistory(
+                $order->addCommentToStatusHistory(
                     $message,
                     $order->getStatus(),
                     true
-                );
-                $history->setIsCustomerNotified(false);
+                )->setIsCustomerNotified(false);
 
-                $history->save();
-
-                $this->_orderManagement->addComment($order->getId(), $history);
+                $this->_orderRepository->save($order);
 
                 $gatewayClient = $this->getGatewayManager($order);
                 $payment = $order->getPayment();
