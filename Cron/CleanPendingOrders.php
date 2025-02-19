@@ -116,7 +116,7 @@ class CleanPendingOrders
     /**
      * @var OrderRepositoryInterface
      */
-    private  $_orderRepository;
+    protected  $_orderRepository;
 
     /**
      * CleanPendingOrders constructor
