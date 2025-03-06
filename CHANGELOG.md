@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASE
+## 1.27.1
 
 - **Fix** : Updated order status and state upon transaction failure with notification code 113
 - **Fix** : Modified the cleanPendingOrder cron job to exclude non-HiPay payment methods and restore cancel pending/pending_payment order state
