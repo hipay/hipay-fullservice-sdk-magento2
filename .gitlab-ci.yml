@@ -14,6 +14,11 @@ stages:
   - build
   - deploy
 
+include:
+  - project: 'pi-ecommerce/cms/cms-template-ci'
+    ref: '1.0.0'
+    file: 'release.yaml'
+
 #########################
 ####  TEMPLATE      ####
 ########################
@@ -151,114 +156,12 @@ build-test-2-1-10:
   tags:
     - medium
 
-get-jira-tickets:
-  stage: release
-  image: node:latest
-  rules:
-    - if: $ONLY_DEPLOY
-      when: never
-    - if: $CI_COMMIT_TAG
-  script:
-    - |
-      node <<EOF
-      (async () => {
-        try {
-          const gitlabResponse = await fetch("${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/merge_requests?state=merged&target_branch=develop&milestone=${CI_COMMIT_TAG}", {
-            method: "GET",
-            headers: {
-              "Private-Token": "$GITLAB_API_TOKEN"
-            }
-          });
-
-          if (!gitlabResponse.ok) {
-            const err = await gitlabResponse.json();
-            throw new Error("Failed to send GitLab request: " + JSON.stringify(err));
-          }
-
-          const mergeRequests = await gitlabResponse.json();
-          let tickets = [];
-
-          mergeRequests.forEach((mr) => {
-            const matches = mr.source_branch.match(/EC-\d+/);
-            const matchesTitle = mr.title.match(/(EC-\d+)/g);
-            if(matches?.length) {
-              tickets.push(matches[0].toUpperCase());
-            }
-            matchesTitle?.forEach((match) => {
-                tickets.push(match.toUpperCase());
-            });
-          });
-
-          tickets = [...new Set(tickets)];
-
-          console.log("tickets", tickets);
-
-          const payload = {
-            "event_type": "trigger-artifact-workflow",
-            "client_payload": {
-              "tickets": tickets
-            }
-          };
-
-          console.log("payload", JSON.stringify(payload));
-
-          const githubResponse = await fetch("https://api.github.com/repos/${GITHUB_ORGANIZATION}/${GITHUB_PROJECT}/dispatches", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer ${GITHUB_TOKEN}",
-              "User-Agent": "Node.js"
-            },
-            body: JSON.stringify(payload)
-          });
-
-          if (!githubResponse.ok) {
-            const err = await githubResponse.json();
-            throw new Error("Failed to send GitHub event: " + JSON.stringify(err));
-          }
-        } catch (error) {
-          throw new Error("Request error: " + error.message);
-        }
-      })();
-      EOF
-
-release-job:
-  stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  needs:
-    - get-jira-tickets
-  variables:
-    TEMP_CHANGELOG_FILE: 'release_changelog.txt'
-  rules:
-    - if: $ONLY_DEPLOY
-      when: never
-    - if: $CI_COMMIT_TAG
-  script:
-    - |
-      # Extract changelog part according to tag version
-      CHANGELOG=$(awk -v version="## $CI_COMMIT_TAG" '
-        $0 ~ version {printit=1; next}
-        printit && /^## / {exit}
-        printit {print}
-      ' CHANGELOG.md)
-
-      {
-        echo "# CHANGE LOG"
-        echo "$CHANGELOG"
-      } > "$TEMP_CHANGELOG_FILE"
-    - cat "$TEMP_CHANGELOG_FILE"
-  release:
-    tag_name: $CI_COMMIT_TAG
-    name: Version $CI_COMMIT_TAG
-    description: '$TEMP_CHANGELOG_FILE'
-    milestones:
-      - $CI_COMMIT_TAG
-
 build:
   <<: *login-to-registry
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:v1.6.0-debug
+  needs: []
   rules:
     - if: $ONLY_DEPLOY
       when: on_success

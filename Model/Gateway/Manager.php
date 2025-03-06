@@ -281,7 +281,14 @@ class Manager
 
     public function requestOrderTransactionInformation($orderId)
     {
-        return $this->_gateway->requestOrderTransactionInformation($orderId)[0]->getTransactionReference();
+        return $this->_gateway->requestOrderTransactionInformation($orderId) ?? null;
+    }
+
+    public function getTransactionReference($order)
+    {
+        return ($transactions = $this->requestOrderTransactionInformation($order->getIncrementId()))
+            ? $transactions[0]->getTransactionReference()
+            : null;
     }
 
     /**
