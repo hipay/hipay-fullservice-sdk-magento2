@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASE
+
+- **Fix** : Updated order status and state upon authentication failure with notification code 109
+
 ## 1.27.1
 
 - **Fix** : Updated order status and state upon transaction failure with notification code 113
