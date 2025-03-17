@@ -367,6 +367,8 @@ class Notify
                     //115 Cancel order and transaction
                 case TransactionStatus::AUTHORIZATION_REFUSED:
                     // status : 163
+                case TransactionStatus::AUTHENTICATION_FAILED:
+                    // status : 109
                     $this->_doTransactionFailure();
                     break;
                 case TransactionStatus::CAPTURE_REFUSED:
@@ -441,8 +443,6 @@ class Notify
                     // status : 107
                 case TransactionStatus::COULD_NOT_AUTHENTICATE:
                     // status : 108
-                case TransactionStatus::AUTHENTICATION_FAILED:
-                    // status : 109
                 case TransactionStatus::COLLECTED:
                     // status : 120
                 case TransactionStatus::PARTIALLY_COLLECTED:
