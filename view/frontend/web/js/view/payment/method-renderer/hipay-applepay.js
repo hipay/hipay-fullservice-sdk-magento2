@@ -180,8 +180,13 @@ define([
     },
 
     initApplePayField: function (self, hipaySdk) {
-      if (!hipaySdk) {
-        hipaySdk = self.initHostedFields(self);
+      if (!self.initializedHipaySdk) {
+        if (!hipaySdk) {
+          hipaySdk = self.initHostedFields(self);
+        }
+        self.initializedHipaySdk = hipaySdk;
+      } else {
+        return;
       }
 
       var applePayConfig = {

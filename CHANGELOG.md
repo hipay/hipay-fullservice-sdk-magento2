@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Updated order status and state upon authentication failure with notification code 109, thanks to [madleen](https://github.com/madleen) for issue [#167](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/167)
+- **Fix** : Avoid redundant ApplePay initialized session
 
 ## 1.27.1
 
