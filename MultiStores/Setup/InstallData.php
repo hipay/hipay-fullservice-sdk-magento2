@@ -28,8 +28,6 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductColl
  * Class InstallData
  *
  * Setup class for creating secondary website, store group and store view during module installation
- *
- * @package HiPay\MultiStores\Setup
  */
 class InstallData implements InstallDataInterface
 {
@@ -86,12 +84,12 @@ class InstallData implements InstallDataInterface
     /**
      * Secondary website code constant
      */
-    const SECONDARY_WEBSITE_CODE = 'website2';
+    protected const SECONDARY_WEBSITE_CODE = 'website2';
 
     /**
      * Secondary store code constant
      */
-    const SECONDARY_STORE_CODE = 'secondary_store';
+    protected const SECONDARY_STORE_CODE = 'secondary_store';
 
     /**
      * InstallData constructor.
