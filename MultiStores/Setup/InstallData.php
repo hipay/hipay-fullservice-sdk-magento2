@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @category HiPay
  * @package HiPay_MultiStores
@@ -95,16 +96,16 @@ class InstallData implements InstallDataInterface
     /**
      * InstallData constructor.
      *
-     * @param WebsiteFactory $websiteFactory
-     * @param StoreFactory $storeFactory
-     * @param GroupFactory $groupFactory
-     * @param StoreManagerInterface $storeManager
-     * @param Config $configResource
-     * @param ScopeConfigInterface $scopeConfig
-     * @param ProductFactory $productFactory
+     * @param WebsiteFactory           $websiteFactory
+     * @param StoreFactory             $storeFactory
+     * @param GroupFactory             $groupFactory
+     * @param StoreManagerInterface    $storeManager
+     * @param Config                   $configResource
+     * @param ScopeConfigInterface     $scopeConfig
+     * @param ProductFactory           $productFactory
      * @param ProductCollectionFactory $productCollectionFactory
-     * @param State $state
-     * @param AreaList $areaList
+     * @param State                    $state
+     * @param AreaList                 $areaList
      */
     public function __construct(
         WebsiteFactory $websiteFactory,
@@ -134,7 +135,7 @@ class InstallData implements InstallDataInterface
      * Install method to create secondary website, store group and store view
      *
      * @param ModuleDataSetupInterface $setup
-     * @param ModuleContextInterface $context
+     * @param ModuleContextInterface   $context
      * @throws \Exception
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
