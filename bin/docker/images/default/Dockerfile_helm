@@ -1,18 +1,16 @@
 FROM bitnami/magento:2.4.7
 
-RUN apt update && apt upgrade -y && apt install curl git unzip php-dev gosu -y && apt clean
-
-RUN curl -O  https://files.magerun.net/n98-magerun2.phar  \
+RUN apt update && apt upgrade -y && apt install curl git unzip php-dev gosu -y && apt clean \
+    && curl -O  https://files.magerun.net/n98-magerun2.phar  \
     && chmod +x ./n98-magerun2.phar \
     && cp ./n98-magerun2.phar /usr/local/bin/ \
-    && rm ./n98-magerun2.phar
+    && rm ./n98-magerun2.phar \
+    && pecl install xdebug \
+    && echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
 
-RUN pecl install xdebug
-
-RUN echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
 COPY ./bin/docker/images/default/php-override.ini /opt/bitnami/php/etc/conf.d/php-override.ini
-RUN echo "sendmail_path = /usr/bin/msmtp -t" > /opt/bitnami/php/etc/conf.d/sendmail.ini
-RUN printf "host smtp\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc
+RUN echo "sendmail_path = /usr/bin/msmtp -t" > /opt/bitnami/php/etc/conf.d/sendmail.ini \
+    && printf "host smtp\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc
 
 #====================================================
 # OVERRIDE PARENT ENTRYPOINT
@@ -26,8 +24,6 @@ COPY ./bin/docker/conf/development/auth.json /usr/sbin/.composer/auth.json
 
 COPY ./bin/docker/images/default/entrypoint_helm.sh /usr/local/bin/
 RUN  chmod u+x /usr/local/bin/entrypoint_helm.sh
-
-RUN echo "ok"
 
 ENTRYPOINT ["/usr/local/bin/entrypoint_helm.sh"]
 CMD [ "/opt/bitnami/scripts/magento/run.sh" ]
