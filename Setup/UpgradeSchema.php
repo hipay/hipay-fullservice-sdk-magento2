@@ -533,6 +533,35 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             );
         }
+
+        if (version_compare($context->getVersion(), '1.27.3', '<')) {
+            if ($setup->getConnection()->isTableExists($tableName)
+                && !$setup->getConnection()->tableColumnExists($tableName, 'authorized')) {
+                $setup->getConnection()->addColumn(
+                    $tableName,
+                    'authorized',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
+                        'nullable' => false,
+                        'default' => 0,
+                        'comment' => 'Is Card Authorized'
+                    ]
+                );
+            }
+            if ($setup->getConnection()->isTableExists($tableName)) {
+                $indexes = $setup->getConnection()->getIndexList($tableName);
+                $tokenIndexName = $setup->getIdxName($tableName, ['cc_token'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE);
+
+                if (!isset($indexes[$tokenIndexName])) {
+                    $setup->getConnection()->addIndex(
+                        $tableName,
+                        $tokenIndexName,
+                        ['cc_token'],
+                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                    );
+                }
+            }
+        }
     }
 
     /**
