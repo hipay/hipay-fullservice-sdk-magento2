@@ -53,6 +53,7 @@ services:
       - ./tests:/bitnami/magento/tests
       - ./log:/bitnami/magento/var/log
       - ./conf/sdk:/bitnami/magento/sdk
+      - ./MultiStores:/bitnami/magento/app/code/HiPay/MultiStores
     depends_on:
       - mariadb
       - elasticsearch

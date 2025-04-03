@@ -83,7 +83,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     #==========================================
     # XDebug
     #==========================================
-    if [[ "$XDEBUG_ENABLED" = "1" ]]; then
+    if [[ "$XDEBUG_ENABLED" = "0" ]]; then
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
         printf "\n${COLOR_SUCCESS}     CONFIGURE XDEBUG $ENVIRONMENT          ${NC}\n"
         printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
@@ -150,6 +150,16 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
       magento setup:di:compile && \
       magento setup:static-content:deploy -f && \
       magento cache:flush' $MAGENTO_DIR_USER -s /bin/bash
+
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+    printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MULTISTORE MODULE             ${NC}\n"
+    printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
+
+    su -c 'magento module:enable HiPay_MultiStores && \
+       magento setup:upgrade && \
+       magento setup:di:compile && \
+       magento setup:static-content:deploy -f && \
+       magento cache:flush' $MAGENTO_DIR_USER -s /bin/bash
 
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     CONFIGURING HIPAY CREDENTIAL        ${NC}\n"
