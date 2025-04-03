@@ -5,7 +5,8 @@ ADD https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2.phar
 RUN apt update && apt upgrade -y && apt install curl git unzip php-dev gosu -y && apt clean \
     && chmod +x /usr/local/bin/n98-magerun2.phar \
     && pecl install xdebug \
-    && echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf
+    && echo 'Mutex posixsem' >>/opt/bitnami/apache2/conf/httpd.conf \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./bin/docker/images/default/php-override.ini /opt/bitnami/php/etc/conf.d/php-override.ini
 RUN echo "sendmail_path = /usr/bin/msmtp -t" > /opt/bitnami/php/etc/conf.d/sendmail.ini \
