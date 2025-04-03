@@ -470,7 +470,8 @@ class CcMethod extends FullserviceMethod
                 ->setCcNumberEnc($cardData['card_pan'])
                 ->setCclast4(substr($cardData['card_pan'], -4))
                 ->setCcStatus(Card::STATUS_ENABLED)
-                ->setIsDefault(0);
+                ->setIsDefault(0)
+                ->setAuthorized(0);
 
             // Set created_at only for new cards
             if (!$card->getId()) {
