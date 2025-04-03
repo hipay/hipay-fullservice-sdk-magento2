@@ -543,7 +543,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     [
                         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
                         'nullable' => false,
-                        'default' => 0,
+                        'default' => 1,
                         'comment' => 'Is Card Authorized'
                     ]
                 );
