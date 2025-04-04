@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
+use HiPay\FullserviceMagento\Model\Card;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
@@ -426,6 +427,28 @@ abstract class FullserviceMethod extends AbstractMethod
         $redirectUrl = $successUrl;
         switch ($response->getState()) {
             case TransactionState::COMPLETED:
+                if (
+                    $response->getPaymentMethod() &&
+                    $response->getPaymentMethod()->getToken() &&
+                    $this->_checkoutSession->getQuote()->getCustomerId()
+                ) {
+                    try {
+                        $customerId = $this->_checkoutSession->getQuote()->getCustomerId();
+                        $cardData = [
+                            'card_token' => $response->getPaymentMethod()->getToken(),
+                            'cc_type' => $response->getPaymentProduct(),
+                            'card_expiry_month' => $response->getPaymentMethod()->getCardExpiryMonth(),
+                            'card_expiry_year' => $response->getPaymentMethod()->getCardExpiryYear(),
+                            'cc_owner' => $response->getPaymentMethod()->getCardHolder(),
+                            'card_pan' => $response->getPaymentMethod()->getPan()
+                        ];
+
+                        $this->saveCard($cardData, $customerId, true);
+                    } catch (\Exception $e) {
+                        $this->_logger->error('Error saving card: ' . $e->getMessage());
+                        // We don't want to interrupt the payment process if card saving fails
+                    }
+                }
                 //redirectUrl is success by default
                 break;
             case TransactionState::PENDING:
@@ -636,5 +659,89 @@ abstract class FullserviceMethod extends AbstractMethod
         $isDifferentCurrency = $transacCurrency && $transacCurrency !== $payment->getOrder()->getBaseCurrencyCode();
         $isDifferentCurrency &= $transacCurrency === $payment->getOrder()->getOrderCurrencyCode();
         return $isDifferentCurrency;
+    }
+
+    /**
+     * Save or update card
+     *
+     * @param array $cardData
+     * @param int   $customerId
+     * @param int   $authorized
+     *
+     * @return Card
+     * @throws LocalizedException
+     */
+    protected function saveCard(array $cardData, int $customerId, bool $authorized = false)
+    {
+        try {
+            // Format card name
+            $cardName = $this->formatCardName($cardData);
+
+            // Try to find existing card
+            $card = $this->findExistingCard($customerId, $cardData['card_pan']);
+
+            if (!$card) {
+                $card = $this->_cardFactory->create();
+            }
+
+            // Set or update card data
+            $card->setCustomerId($customerId)
+                ->setName($cardName)
+                ->setCcToken($cardData['card_token'])
+                ->setCcType(strtolower($cardData['cc_type']))
+                ->setCcExpMonth($cardData['card_expiry_month'])
+                ->setCcExpYear($cardData['card_expiry_year'])
+                ->setCcOwner($cardData['cc_owner'])
+                ->setCcNumberEnc($cardData['card_pan'])
+                ->setCclast4(substr($cardData['card_pan'], -4))
+                ->setCcStatus(Card::STATUS_ENABLED)
+                ->setIsDefault(0)
+                ->setAuthorized($authorized);
+
+            // Set created_at only for new cards
+            if (!$card->getId()) {
+                $card->setCreatedAt(new \DateTime());
+            }
+
+            // Save card
+            $card->save();
+
+            return $card;
+        } catch (\Exception $e) {
+            throw new LocalizedException(__('Failed to save card: %1', $e->getMessage()));
+        }
+    }
+
+    /**
+     * Find existing card by customer ID and encrypted card number
+     *
+     * @param int    $customerId
+     * @param string $ccNumberEnc
+     * @return Card|null
+     */
+    protected function findExistingCard(int $customerId, string $ccNumberEnc)
+    {
+        $cardCollection = $this->_cardCollectionFactory->create();
+        $cardCollection->addFieldToFilter('customer_id', $customerId)
+            ->addFieldToFilter('cc_number_enc', $ccNumberEnc);
+
+        return $cardCollection->getFirstItem()->getId() ? $cardCollection->getFirstItem() : null;
+    }
+
+    /**
+     * Format card display name
+     *
+     * @param array $cardData
+     * @return string
+     */
+    protected function formatCardName(array $cardData)
+    {
+        return sprintf(
+            '%s •••• %s - Expires %s/%s',
+            ucfirst(strtolower($cardData['cc_type'])),
+            substr($cardData['card_pan'], -4),
+            $cardData['card_expiry_month'],
+            $cardData['card_expiry_year']
+        );
     }
 }
