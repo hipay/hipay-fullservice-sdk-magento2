@@ -144,14 +144,12 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
     multistore=""
-    multistore_composer=""
     if [ "$MULTISTORE" == "true" ]; then
         multistore="HiPay_MultiStores"
-        multistore_composer="hipay/module-multistores"
-        printf "${COLOR_SUCCESS} Multistore enabled !${NC}\n"
+        printf "${COLOR_SUCCESS} Multistore will be enabled !${NC}\n"
     fi
 
-    su -c "composer require hipay/hipay-fullservice-sdk-php $multistore_composer magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data -n && \
+    su -c "composer require hipay/hipay-fullservice-sdk-php magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data -n && \
       magento module:enable HiPay_FullserviceMagento $multistore Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
       magento setup:upgrade && \
       magento setup:di:compile && \

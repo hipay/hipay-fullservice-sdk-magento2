@@ -48,8 +48,8 @@ data:
   HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
-  CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},giggsey/libphonenumber-for-php
+  CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git,vcs git@github.com:hipay/hipay-fullservice-sdk-magento2-multistore.git
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},hipay/module-multistores,giggsey/libphonenumber-for-php
   CUSTOM_MODULES: HiPay_FullserviceMagento
   # Elastic Search env var
   keys: |

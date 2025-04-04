@@ -145,7 +145,7 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
     multistore=""
     if [ "$MULTISTORE" == "true" ]; then
         multistore="HiPay_MultiStores"
-        printf "${COLOR_SUCCESS} Multistore enabled !${NC}\n"
+        printf "${COLOR_SUCCESS} Multistore will be enabled !${NC}\n"
     fi
 
     su -c "composer require magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
