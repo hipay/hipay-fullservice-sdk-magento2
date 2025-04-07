@@ -534,9 +534,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
-        if (version_compare($context->getVersion(), '1.27.3', '<')) {
-            if ($setup->getConnection()->isTableExists($tableName)
-                && !$setup->getConnection()->tableColumnExists($tableName, 'authorized')) {
+        if (
+            version_compare($context->getVersion(), '1.27.3', '<')
+            && $setup->getConnection()->isTableExists($tableName)
+            && !$setup->getConnection()->tableColumnExists($tableName, 'authorized')
+        ) {
                 $setup->getConnection()->addColumn(
                     $tableName,
                     'authorized',
@@ -547,7 +549,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'comment' => 'Is Card Authorized'
                     ]
                 );
-            }
         }
     }
 

@@ -712,9 +712,8 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Find existing card by customer ID and encrypted card number
      *
-     * @param int $customerId
+     * @param int    $customerId
      * @param string $ccNumberEnc
-     * @param string $cc_token
      * @return Card|null
      */
     protected function findExistingCard(int $customerId, string $ccNumberEnc)
