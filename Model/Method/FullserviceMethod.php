@@ -435,15 +435,13 @@ abstract class FullserviceMethod extends AbstractMethod
                     try {
                         $customerId = $this->_checkoutSession->getQuote()->getCustomerId();
                         $cardData = [
-                            'card_token' => $response->getPaymentMethod()->getToken(),
-                            'cc_type' => $response->getPaymentProduct(),
-                            'card_expiry_month' => $response->getPaymentMethod()->getCardExpiryMonth(),
-                            'card_expiry_year' => $response->getPaymentMethod()->getCardExpiryYear(),
-                            'cc_owner' => $response->getPaymentMethod()->getCardHolder(),
                             'card_pan' => $response->getPaymentMethod()->getPan()
                         ];
-
-                        $this->saveCard($cardData, $customerId, true);
+                        $card = $this->findExistingCard($customerId, $cardData['card_pan']);
+                        if ($card) {
+                            $card->setAuthorized(true);
+                            $card->save();
+                        }
                     } catch (\Exception $e) {
                         $this->_logger->error('Error saving card: ' . $e->getMessage());
                         // We don't want to interrupt the payment process if card saving fails
@@ -683,7 +681,6 @@ abstract class FullserviceMethod extends AbstractMethod
             if (!$card) {
                 $card = $this->_cardFactory->create();
             }
-
             // Set or update card data
             $card->setCustomerId($customerId)
                 ->setName($cardName)
@@ -715,12 +712,14 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Find existing card by customer ID and encrypted card number
      *
-     * @param int    $customerId
+     * @param int $customerId
      * @param string $ccNumberEnc
+     * @param string $cc_token
      * @return Card|null
      */
     protected function findExistingCard(int $customerId, string $ccNumberEnc)
     {
+        $ccNumberEnc = str_replace('*', 'x', $ccNumberEnc);
         $cardCollection = $this->_cardCollectionFactory->create();
         $cardCollection->addFieldToFilter('customer_id', $customerId)
             ->addFieldToFilter('cc_number_enc', $ccNumberEnc);

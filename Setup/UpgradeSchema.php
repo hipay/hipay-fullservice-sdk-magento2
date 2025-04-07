@@ -548,19 +548,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     ]
                 );
             }
-            if ($setup->getConnection()->isTableExists($tableName)) {
-                $indexes = $setup->getConnection()->getIndexList($tableName);
-                $tokenIndexName = $setup->getIdxName($tableName, ['cc_token'], \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE);
-
-                if (!isset($indexes[$tokenIndexName])) {
-                    $setup->getConnection()->addIndex(
-                        $tableName,
-                        $tokenIndexName,
-                        ['cc_token'],
-                        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-                    );
-                }
-            }
         }
     }
 

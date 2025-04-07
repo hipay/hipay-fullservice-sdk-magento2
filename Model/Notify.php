@@ -86,10 +86,9 @@ class Notify
     protected $_methodInstance;
 
     /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\CardFactory $_cardFactory
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
      */
-    protected $_cardFactory;
+    protected $_cardCollectionFactory;
 
     /**
      * @var ResourceOrder $orderResource
@@ -134,7 +133,7 @@ class Notify
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+        \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $cardCollectionFactory,
         OrderSender $orderSender,
         FraudReviewSender $fraudReviewSender,
         FraudDenySender $fraudDenySender,
@@ -149,7 +148,7 @@ class Notify
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
-        $this->_cardFactory = $cardFactory;
+        $this->_cardCollectionFactory = $cardCollectionFactory;
         $this->orderSender = $orderSender;
         $this->fraudReviewSender = $fraudReviewSender;
         $this->fraudDenySender = $fraudDenySender;
@@ -523,11 +522,7 @@ class Notify
 
     protected function _canSaveCc()
     {
-        return (bool)in_array(
-            $this->_transaction->getPaymentProduct(),
-            ['visa', 'american-express', 'mastercard', 'cb']
-        )
-            && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
     }
 
     /**
@@ -544,43 +539,26 @@ class Notify
              * @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod
              */
             $paymentMethod = $this->_transaction->getPaymentMethod();
-            $paymentProduct = $this->_transaction->getPaymentProduct();
-
-            // Check if card with this token already exists
-            $card = $this->_cardFactory->create();
-            $card->load($token, 'cc_token');
-
-            // If card doesn't exist, create a new one
-            if (!$card->getId()) {
-                $card->setCcToken($token);
-                $card->setCustomerId($this->_order->getCustomerId());
-                $card->setCcExpMonth($paymentMethod->getCardExpiryMonth());
-                $card->setCcExpYear($paymentMethod->getCardExpiryYear());
-                $card->setCcNumberEnc($paymentMethod->getPan());
-                $card->setCcType($paymentProduct);
-                $card->setCcOwner($paymentMethod->getCardHolder());
-                $card->setCcStatus(\HiPay\FullserviceMagento\Model\Card::STATUS_ENABLED);
-                $card->setName(sprintf(__('Card %s - %s'), $paymentMethod->getBrand(), $paymentMethod->getPan()));
-                $card->setCreatedAt(new \DateTime());
-            }
-
-            $card->setAuthorized(1);
 
             try {
-                return $card->save();
+                $ccNumberEnc = str_replace('*', 'x', $paymentMethod->getPan());
+                $cardCollection = $this->_cardCollectionFactory->create();
+                $cardCollection->addFieldToFilter('customer_id', $this->_order->getCustomerId())
+                    ->addFieldToFilter('cc_number_enc', $ccNumberEnc);
+
+                if ($cardCollection->getFirstItem()->getId()) {
+                    /** @var \HiPay\FullserviceMagento\Model\Card $card */
+                    $card = $cardCollection->getFirstItem();
+                    $card->setAuthorized(true);
+
+                    return $card->save();
+                }
             } catch (\Exception $e) {
                 $this->_generateComment(__("Card not registered! Due to: %s", $e->getMessage()), true);
             }
         }
 
         return false;
-    }
-
-    protected function _cardTokenExist($token)
-    {
-        $card = $this->_cardFactory->create();
-        $card->load($token, 'cc_token');
-        return (bool)$card->getId();
     }
 
     /**
