@@ -541,10 +541,9 @@ class Notify
             $paymentMethod = $this->_transaction->getPaymentMethod();
 
             try {
-                $ccNumberEnc = str_replace('*', 'x', $paymentMethod->getPan());
                 $cardCollection = $this->_cardCollectionFactory->create();
                 $cardCollection->addFieldToFilter('customer_id', $this->_order->getCustomerId())
-                    ->addFieldToFilter('cc_number_enc', $ccNumberEnc);
+                    ->addFieldToFilter('cc_number_enc', $paymentMethod->getPan());
 
                 if ($cardCollection->getFirstItem()->getId()) {
                     /** @var \HiPay\FullserviceMagento\Model\Card $card */

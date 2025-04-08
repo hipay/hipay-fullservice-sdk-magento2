@@ -681,6 +681,8 @@ abstract class FullserviceMethod extends AbstractMethod
             if (!$card) {
                 $card = $this->_cardFactory->create();
             }
+
+            $ccNumberEnc = str_replace('x', '*', $cardData['card_pan']);
             // Set or update card data
             $card->setCustomerId($customerId)
                 ->setName($cardName)
@@ -689,7 +691,7 @@ abstract class FullserviceMethod extends AbstractMethod
                 ->setCcExpMonth($cardData['card_expiry_month'])
                 ->setCcExpYear($cardData['card_expiry_year'])
                 ->setCcOwner($cardData['cc_owner'])
-                ->setCcNumberEnc($cardData['card_pan'])
+                ->setCcNumberEnc($ccNumberEnc)
                 ->setCclast4(substr($cardData['card_pan'], -4))
                 ->setCcStatus(Card::STATUS_ENABLED)
                 ->setIsDefault(0)
@@ -718,7 +720,6 @@ abstract class FullserviceMethod extends AbstractMethod
      */
     protected function findExistingCard(int $customerId, string $ccNumberEnc)
     {
-        $ccNumberEnc = str_replace('*', 'x', $ccNumberEnc);
         $cardCollection = $this->_cardCollectionFactory->create();
         $cardCollection->addFieldToFilter('customer_id', $customerId)
             ->addFieldToFilter('cc_number_enc', $ccNumberEnc);
