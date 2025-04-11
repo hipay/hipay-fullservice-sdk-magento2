@@ -664,25 +664,36 @@ abstract class FullserviceMethod extends AbstractMethod
      *
      * @param array $cardData
      * @param int   $customerId
-     * @param int   $authorized
      *
      * @return Card
      * @throws LocalizedException
      */
-    protected function saveCard(array $cardData, int $customerId, bool $authorized = false)
+    protected function saveCard(array $cardData, int $customerId)
     {
         try {
-            // Format card name
             $cardName = $this->formatCardName($cardData);
 
-            // Try to find existing card
+            if (isset($cardData['card_pan']) && strpos($cardData['card_pan'], 'x') !== false) {
+                $cardData['card_pan'] = str_replace('x', '*', $cardData['card_pan']);
+            }
+
             $card = $this->findExistingCard($customerId, $cardData['card_pan']);
+
+            if (!$card && strpos($cardData['card_pan'], '*') !== false) {
+                $xMaskedPan = str_replace('*', 'x', $cardData['card_pan']);
+                $cardWithXMasking = $this->findExistingCard($customerId, $xMaskedPan);
+
+                if ($cardWithXMasking) {
+                    $cardWithXMasking->delete();
+                }
+            }
 
             if (!$card) {
                 $card = $this->_cardFactory->create();
             }
 
             $ccNumberEnc = str_replace('x', '*', $cardData['card_pan']);
+
             // Set or update card data
             $card->setCustomerId($customerId)
                 ->setName($cardName)
@@ -695,7 +706,7 @@ abstract class FullserviceMethod extends AbstractMethod
                 ->setCclast4(substr($cardData['card_pan'], -4))
                 ->setCcStatus(Card::STATUS_ENABLED)
                 ->setIsDefault(0)
-                ->setAuthorized($authorized);
+                ->setAuthorized(0);
 
             // Set created_at only for new cards
             if (!$card->getId()) {
