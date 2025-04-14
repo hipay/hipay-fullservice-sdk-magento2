@@ -533,6 +533,23 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             );
         }
+
+        if (
+            version_compare($context->getVersion(), '1.27.3', '<')
+            && $setup->getConnection()->isTableExists($tableName)
+            && !$setup->getConnection()->tableColumnExists($tableName, 'authorized')
+        ) {
+                $setup->getConnection()->addColumn(
+                    $tableName,
+                    'authorized',
+                    [
+                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BOOLEAN,
+                        'nullable' => false,
+                        'default' => 1,
+                        'comment' => 'Is Card Authorized'
+                    ]
+                );
+        }
     }
 
     /**

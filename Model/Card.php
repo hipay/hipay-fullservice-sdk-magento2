@@ -50,6 +50,8 @@ namespace HiPay\FullserviceMagento\Model;
  * @method \HiPay\FullserviceMagento\Model\Card setCcToken(int $ccToken)
  * @method int getIsDefault()
  * @method \HiPay\FullserviceMagento\Model\Card setIsDefault(int $isDefault)
+ * @method bool getAuthorized()
+ * @method \HiPay\FullserviceMagento\Model\Card setAuthorized(bool $authorized)
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
