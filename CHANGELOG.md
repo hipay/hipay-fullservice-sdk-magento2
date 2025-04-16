@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASE
+## 1.27.3
 
 - **Fix** : (OneClick) Prevent saving payment card details without proper authorization.
 
