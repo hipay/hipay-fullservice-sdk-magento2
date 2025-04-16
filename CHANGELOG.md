@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.27.3
+
+- **Fix** : (OneClick) Prevent saving payment card details without proper authorization.
+
 ## 1.27.2
 
 - **Fix** : Updated order status and state upon authentication failure with notification code 109, thanks to [madleen](https://github.com/madleen) for issue [#167](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/167)

@@ -30,7 +30,6 @@ use HiPay\FullserviceMagento\Model\Method\HostedMethod;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use HiPay\FullserviceMagento\Model\OrderState as OrderState;
 
@@ -87,10 +86,9 @@ class Notify
     protected $_methodInstance;
 
     /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\CardFactory $_cardFactory
+     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
      */
-    protected $_cardFactory;
+    protected $_cardCollectionFactory;
 
     /**
      * @var ResourceOrder $orderResource
@@ -135,7 +133,7 @@ class Notify
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+        \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $cardCollectionFactory,
         OrderSender $orderSender,
         FraudReviewSender $fraudReviewSender,
         FraudDenySender $fraudDenySender,
@@ -150,7 +148,7 @@ class Notify
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
-        $this->_cardFactory = $cardFactory;
+        $this->_cardCollectionFactory = $cardCollectionFactory;
         $this->orderSender = $orderSender;
         $this->fraudReviewSender = $fraudReviewSender;
         $this->fraudDenySender = $fraudDenySender;
@@ -472,6 +470,16 @@ class Notify
                     $this->_doTransactionMessage();
                     break;
             }
+
+            if (
+                $this->_transaction->getStatus() == TransactionStatus::CAPTURED
+                || $this->_transaction->getStatus() == TransactionStatus::AUTHORIZED
+            ) {
+                /**
+                 * save token and credit card informations encryted
+                 */
+                $this->_saveCc();
+            }
             //Save status infos
             $this->saveHiPayStatus();
         } catch (\Exception $exception) {
@@ -514,18 +522,42 @@ class Notify
 
     protected function _canSaveCc()
     {
-        return (bool)in_array(
-            $this->_transaction->getPaymentProduct(),
-            ['visa', 'american-express', 'mastercard', 'cb']
-        )
-            && $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
     }
 
-    protected function _cardTokenExist($token)
+    /**
+     * Save or update credit card information
+     *
+     * @return bool|\HiPay\FullserviceMagento\Model\Card
+     */
+    protected function _saveCc()
     {
-        $card = $this->_cardFactory->create();
-        $card->load($token, 'cc_token');
-        return (bool)$card->getId();
+        if ($this->_canSaveCc()) {
+            $token = $this->_transaction->getPaymentMethod()->getToken();
+
+            /**
+             * @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod
+             */
+            $paymentMethod = $this->_transaction->getPaymentMethod();
+
+            try {
+                $cardCollection = $this->_cardCollectionFactory->create();
+                $cardCollection->addFieldToFilter('customer_id', $this->_order->getCustomerId())
+                    ->addFieldToFilter('cc_number_enc', $paymentMethod->getPan());
+
+                if ($cardCollection->getFirstItem()->getId()) {
+                    /** @var \HiPay\FullserviceMagento\Model\Card $card */
+                    $card = $cardCollection->getFirstItem();
+                    $card->setAuthorized(true);
+
+                    return $card->save();
+                }
+            } catch (\Exception $e) {
+                $this->_generateComment(__("Card not registered! Due to: %s", $e->getMessage()), true);
+            }
+        }
+
+        return false;
     }
 
     /**

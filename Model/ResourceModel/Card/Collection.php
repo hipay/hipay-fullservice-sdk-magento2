@@ -49,20 +49,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Return only valid cards
+     * Return only valid cards (not expired and authorized)
      *
      * @return \HiPay\FullserviceMagento\Model\ResourceModel\Card\Collection $this
      */
     public function onlyValid()
     {
+        // Filter to get only authorized cards
+        $this->addFieldToFilter('authorized', true);
+
+        // Check for expiration dates
         $today = new \DateTime();
         $currentYear = (int)$today->format('Y');
         $currentMonth = (int)$today->format('m');
         $this->addFieldToFilter('cc_exp_year', array("gteq" => $currentYear));
 
         /**
- * @var $card \HiPay\FullserviceMagento\Model\Card
-*/
+         * @var $card \HiPay\FullserviceMagento\Model\Card
+         */
         foreach ($this->getItems() as $card) {
             if ($card->getCcExpYear() == $currentYear && $card->getCcExpMonth() < $currentMonth) {
                 $this->removeItemByKey($card->getId());

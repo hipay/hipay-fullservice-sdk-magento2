@@ -174,7 +174,7 @@ class GenericConfigProvider implements ConfigProviderInterface
                 'card_holder' => $card->getCcOwner(),
                 'card_expiry_month' => $card->getCcExpMonth(),
                 'card_expiry_year' => $card->getCcExpYear(),
-                'pan' => $card->getCcNumberEnc()
+                'pan' => str_replace('*', 'x', $card->getCcNumberEnc())
             ];
         }
 
