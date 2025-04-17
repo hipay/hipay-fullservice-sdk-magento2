@@ -65,7 +65,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'hipay_paypalapi' => [
-                    'isPayPalV2' => $this->isPayPalV2() ? 1 : 0
+                    'isPayPalV2' => (int) $this->isPayPalV2()
                 ]
             ]
         ];
