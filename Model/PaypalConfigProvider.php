@@ -44,8 +44,8 @@ class PaypalConfigProvider implements ConfigProviderInterface
     /**
      * PaypalConfigProvider Construct
      *
-     * @param LoggerInterface               $logger
-     * @param GatewayClient                 $gatewayClient
+     * @param LoggerInterface $logger
+     * @param GatewayClient   $gatewayClient
      */
     public function __construct(
         LoggerInterface $logger,
