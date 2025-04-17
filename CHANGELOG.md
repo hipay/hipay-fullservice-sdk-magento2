@@ -1,5 +1,10 @@
 # Changelog
 
+## UNRELEASE
+
+- **Fix** : Simplified PayPal API version detection by using direct requestPaymentProduct method
+- **Fix** : Updated selectors to make PayPal and Alma settings work across all Magento store views.
+
 ## 1.27.2
 
 - **Fix** : Updated order status and state upon authentication failure with notification code 109, thanks to [madleen](https://github.com/madleen) for issue [#167](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/167)
