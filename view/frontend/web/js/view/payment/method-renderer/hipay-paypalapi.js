@@ -32,7 +32,7 @@ define([
   'use strict';
 
   var isPayPalV2 =
-      window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
+    window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
 
   if (isPayPalV2 === 1) {
     return ComponentDefault.extend({
@@ -153,7 +153,10 @@ define([
             label: self.buttonLabel
           },
           request: {
-            amount: Number(quote.totals().base_grand_total.toFixed(2)),
+            amount:
+              Math.round(
+                (Number(quote.totals().base_grand_total) + Number.EPSILON) * 100
+              ) / 100,
             currency: quote.totals().quote_currency_code,
             locale: this.convertToUpperCaseAfterUnderscore(self.locale)
           }

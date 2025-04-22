@@ -1,5 +1,9 @@
 # Changelog
 
+## Unrelease
+
+- **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
+
 ## 1.27.3
 
 - **Fix** : (OneClick) Prevent saving payment card details without proper authorization.
