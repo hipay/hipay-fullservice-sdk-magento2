@@ -207,13 +207,6 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
           message: error
         });
       }
-    },
-
-    safeToFixed: function (value, decimals = 2) {
-      const factor = 10 ** decimals;
-      const rounded =
-        Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
-      return rounded.toFixed(decimals);
     }
   });
 });

@@ -319,6 +319,13 @@ define([
           cc_type: this.creditCardType()
         }
       };
+    },
+
+    safeToFixed: function (value, decimals = 2) {
+      const factor = 10 ** decimals;
+      const rounded =
+        Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
+      return rounded.toFixed(decimals);
     }
   });
 });
