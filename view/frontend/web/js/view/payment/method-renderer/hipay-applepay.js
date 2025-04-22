@@ -196,10 +196,7 @@ define([
           currencyCode: quote.totals().quote_currency_code,
           total: {
             label: self.displayName,
-            amount:
-              Math.round(
-                (Number(quote.totals().base_grand_total) + Number.EPSILON) * 100
-              ) / 100
+            amount: self.safeToFixed(quote.totals().base_grand_total)
           }
         },
         selector: 'hipay-apple-pay-button',
@@ -223,10 +220,9 @@ define([
           if (
             applePayConfig.request.total.amount != newValue.base_grand_total
           ) {
-            applePayConfig.request.total.amount =
-              Math.round(
-                (Number(newValue.base_grand_total) + Number.EPSILON) * 100
-              ) / 100;
+            applePayConfig.request.total.amount = self.safeToFixed(
+              newValue.base_grand_total
+            );
             self.instanceApplePay.update(applePayConfig);
           }
         });

@@ -153,10 +153,7 @@ define([
             label: self.buttonLabel
           },
           request: {
-            amount:
-              Math.round(
-                (Number(quote.totals().base_grand_total) + Number.EPSILON) * 100
-              ) / 100,
+            amount: self.safeToFixed(quote.totals().base_grand_total),
             currency: quote.totals().quote_currency_code,
             locale: this.convertToUpperCaseAfterUnderscore(self.locale)
           }
