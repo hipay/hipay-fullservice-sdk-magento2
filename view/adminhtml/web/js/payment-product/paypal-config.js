@@ -166,8 +166,7 @@ define(['hipayAvailablePaymentProducts', 'domReady!'], function (
   document.addEventListener('click', (event) => {
     if (
         event?.target.id &&
-        (event.target.id.match(/payment_.*_hipay_paypalapi-head/) ||
-            event.target.id.match(/payment_.*_hipay_hosted_paypal-head/))
+        event.target.id.match(/payment_.*_hipay_paypalapi-head|payment_.*_hipay_hosted_paypal-head/)
     ) {
       setTimeout(debouncedHandler, 0);
     }
