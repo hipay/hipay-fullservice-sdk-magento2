@@ -196,7 +196,7 @@ define([
           currencyCode: quote.totals().quote_currency_code,
           total: {
             label: self.displayName,
-            amount: Number(quote.totals().base_grand_total).toFixed(2)
+            amount: self.safeToFixed(quote.totals().base_grand_total)
           }
         },
         selector: 'hipay-apple-pay-button',
@@ -220,9 +220,9 @@ define([
           if (
             applePayConfig.request.total.amount != newValue.base_grand_total
           ) {
-            applePayConfig.request.total.amount = Number(
+            applePayConfig.request.total.amount = self.safeToFixed(
               newValue.base_grand_total
-            ).toFixed(2);
+            );
             self.instanceApplePay.update(applePayConfig);
           }
         });
@@ -319,6 +319,13 @@ define([
           cc_type: this.creditCardType()
         }
       };
+    },
+
+    safeToFixed: function (value, decimals = 2) {
+      const factor = 10 ** decimals;
+      const rounded =
+        Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
+      return rounded.toFixed(decimals);
     }
   });
 });
