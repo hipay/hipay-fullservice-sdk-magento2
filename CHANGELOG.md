@@ -8,6 +8,8 @@
 ## 1.27.3
 
 - **Fix** : (OneClick) Prevent saving payment card details without proper authorization.
+- **Fix** : Simplified PayPal API version detection by using direct requestPaymentProduct method
+- **Fix** : Updated selectors to make PayPal and Alma settings work across all Magento store views.
 
 ## 1.27.2
 

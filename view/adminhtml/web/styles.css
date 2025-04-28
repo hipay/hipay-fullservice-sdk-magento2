@@ -1,42 +1,42 @@
 .hipay-section .heading {background: url("images/hipay/hipay-full-color.png") no-repeat 4% 50% / 10rem auto; padding-left: 20rem;}
 .hipay-section .button-container {float: right;}
-.admin__menu .item-hipay-payment-menu  > a:before {
+.admin__menu .item-hipay-payment-menu > a:before {
     content: ''!important;
-    background: url(images/hipay/hipay.svg) no-repeat center center / 5.1rem auto   ;
+    background: url(images/hipay/hipay.svg) no-repeat center center / 5.1rem auto;
     display: block;
     font-size: 2.2rem;
-    height: 3rem!important;;
+    height: 3rem!important;
     margin-bottom: .3rem;
 }
-#row_payment_us_hipay_paypalapi_paypal_v2_status {display: none}
-#row_payment_us_hipay_paypalapi_paypal_v2_status .label{visibility: hidden}
-#row_payment_us_hipay_hosted {
+[id*="row_payment"][id*="hipay_paypalapi_paypal_v2_status"] {display: none}
+[id*="row_payment"][id*="hipay_paypalapi_paypal_v2_status"] .label{visibility: hidden}
+[id*="row_payment"][id*="hipay_hosted"] {
     margin-bottom: 20px;
     padding: 15px;
 }
-#payment_us_hipay_hosted_paypal-head {
+[id*="payment"][id*="hipay_hosted_paypal-head"] {
     font-weight: bold;
     color: #eb5202;
     margin-bottom: 10px;
     font-size: small;
     display: inline-block;
 }
-#payment_us_hipay_hosted_paypal .form-list {
+[id*="payment"][id*="hipay_hosted_paypal"] .form-list {
     margin-left: 15px;
 }
-#payment_us_hipay_hosted_paypal-head {
+[id*="payment"][id*="hipay_hosted_paypal-head"] {
     display: flex;
     align-items: center;
     font-size: 14px;
     color: #eb5202;
     font-weight: 600;
 }
-#payment_us_hipay_hosted_paypal-head:before {
+[id*="payment"][id*="hipay_hosted_paypal-head"]:before {
     font-size: 20px;
     margin-right: 5px;
     top: 20px;
 }
-#row_payment_us_hipay_hosted_paypal {
+[id*="row_payment"][id*="hipay_hosted_paypal"] {
     border-left: 3px solid #eb5202;
     padding-left: 15px;
     margin-top: 15px;
@@ -45,7 +45,7 @@
 }
 
 /* Alma 3x Hosted Styles */
-#payment_us_hipay_hosted_alma_3x-head {
+[id*="payment"][id*="hipay_hosted_alma_3x-head"] {
     font-weight: bold;
     color: #eb5202;
     margin-bottom: 10px;
@@ -53,11 +53,11 @@
     display: inline-block;
 }
 
-#payment_us_hipay_hosted_alma_3x .form-list {
+[id*="payment"][id*="hipay_hosted_alma_3x"] .form-list {
     margin-left: 15px;
 }
 
-#payment_us_hipay_hosted_alma_3x-head {
+[id*="payment"][id*="hipay_hosted_alma_3x-head"] {
     display: flex;
     align-items: center;
     font-size: 14px;
@@ -65,13 +65,13 @@
     font-weight: 600;
 }
 
-#payment_us_hipay_hosted_alma_3x-head:before {
+[id*="payment"][id*="hipay_hosted_alma_3x-head"]:before {
     font-size: 20px;
     margin-right: 5px;
     top: 20px;
 }
 
-#row_payment_us_hipay_hosted_alma_3x {
+[id*="row_payment"][id*="hipay_hosted_alma_3x"] {
     border-left: 3px solid #eb5202;
     padding-left: 15px;
     margin-top: 15px;
@@ -80,7 +80,7 @@
 }
 
 /* Alma 4x Hosted Styles */
-#payment_us_hipay_hosted_alma_4x-head {
+[id*="payment"][id*="hipay_hosted_alma_4x-head"] {
     font-weight: bold;
     color: #eb5202;
     margin-bottom: 10px;
@@ -88,11 +88,11 @@
     display: inline-block;
 }
 
-#payment_us_hipay_hosted_alma_4x .form-list {
+[id*="payment"][id*="hipay_hosted_alma_4x"] .form-list {
     margin-left: 15px;
 }
 
-#payment_us_hipay_hosted_alma_4x-head {
+[id*="payment"][id*="hipay_hosted_alma_4x-head"] {
     display: flex;
     align-items: center;
     font-size: 14px;
@@ -100,13 +100,13 @@
     font-weight: 600;
 }
 
-#payment_us_hipay_hosted_alma_4x-head:before {
+[id*="payment"][id*="hipay_hosted_alma_4x-head"]:before {
     font-size: 20px;
     margin-right: 5px;
     top: 20px;
 }
 
-#row_payment_us_hipay_hosted_alma_4x {
+[id*="row_payment"][id*="hipay_hosted_alma_4x"] {
     border-left: 3px solid #eb5202;
     padding-left: 15px;
     margin-top: 15px;
@@ -143,13 +143,13 @@
     margin-top: 5px;
 }
 
-#row_payment_us_hipay_hosted_fields_one_click .section-config {
+[id*="row_payment"][id*="hipay_hosted_fields_one_click"] .section-config {
     width: 60%;
     margin: auto;
     background-color: #f6f6f6;
 }
 
-#row_payment_us_hipay_hosted_fields_one_click .admin__collapsible-block.entry-edit-head{
+[id*="row_payment"][id*="hipay_hosted_fields_one_click"] .admin__collapsible-block.entry-edit-head{
     margin: auto;
     width: 50%;
 }
