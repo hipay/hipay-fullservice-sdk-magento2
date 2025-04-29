@@ -3,6 +3,7 @@
 ## Unrelease
 
 - **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
+- **Fix** : Fixed mini-cart display not showing items restored after payment cancellation.
 
 ## 1.27.3
 
