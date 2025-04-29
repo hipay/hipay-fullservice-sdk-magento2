@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use HiPay\FullserviceMagento\Model\Api\HipayAvailablePaymentProducts;
+use HiPay\FullserviceMagento\Model\Gateway\Manager as GatewayClient;
 use Psr\Log\LoggerInterface;
 use Exception;
 
@@ -37,23 +37,22 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $_logger;
 
     /**
-     *
-     * @var HipayAvailablePaymentProducts $_hipayAvailablePaymentProducts
+     * @var GatewayClient
      */
-    protected $_hipayAvailablePaymentProducts;
+    protected $_gatewayClient;
 
     /**
      * PaypalConfigProvider Construct
      *
-     * @param LoggerInterface               $logger
-     * @param HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
+     * @param LoggerInterface $logger
+     * @param GatewayClient   $gatewayClient
      */
     public function __construct(
         LoggerInterface $logger,
-        HipayAvailablePaymentProducts $hipayAvailablePaymentProducts
+        GatewayClient $gatewayClient
     ) {
         $this->_logger = $logger;
-        $this->_hipayAvailablePaymentProducts = $hipayAvailablePaymentProducts;
+        $this->_gatewayClient = $gatewayClient;
     }
 
     /**
@@ -66,7 +65,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
         return [
             'payment' => [
                 'hipay_paypalapi' => [
-                    'isPayPalV2' => $this->isPayPalV2() ? 1 : 0
+                    'isPayPalV2' => (int) $this->isPayPalV2()
                 ]
             ]
         ];
@@ -80,11 +79,11 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected function isPayPalV2(): bool
     {
         try {
-            $paymentProducts = $this->_hipayAvailablePaymentProducts->getAvailablePaymentProducts('paypal');
+            $paymentProduct = $this->_gatewayClient->requestPaymentProduct('paypal', true);
 
-            if (!empty($paymentProducts[0]['options'])) {
-                $options = $paymentProducts[0]['options'];
-                return $options['provider_architecture_version'] === 'v1' && !empty($options['payer_id']);
+            if (!empty($paymentProduct[0]->getOptions())) {
+                $options = $paymentProduct[0]->getOptions();
+                return $options['providerArchitectureVersion'] === 'v1' && !empty($options['payerId']);
             }
         } catch (Exception $e) {
             $this->_logger->critical($e->getMessage());

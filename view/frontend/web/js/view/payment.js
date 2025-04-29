@@ -42,9 +42,9 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
       recurringEci: window.checkoutConfig.payment.hiPayFullservice.recurringEci,
       eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
       availableBrands:
-          window.checkoutConfig.payment.hipay_hosted_fields !== undefined
-              ? window.checkoutConfig.payment.hipay_hosted_fields.availableTypes
-              : '',
+        window.checkoutConfig.payment.hipay_hosted_fields !== undefined
+          ? window.checkoutConfig.payment.hipay_hosted_fields.availableTypes
+          : '',
       showForm: true
     },
     getAfterPlaceOrderUrl: function () {
@@ -134,19 +134,21 @@ define(['jquery', 'ko', 'Magento_Checkout/js/view/payment/default'], function (
       return this.allowOneclick[this.getCode()];
     },
 
-    customerHasCard: function() {
+    customerHasCard: function () {
       let customerCards = this.getCustomerCards();
       let availableBrands = this.getAvailableBrands(this.availableBrands);
 
-      return customerCards.length > 0 &&
-          customerCards.some(card => availableBrands.includes(card.brand));
+      return (
+        customerCards.length > 0 &&
+        customerCards.some((card) => availableBrands.includes(card.brand))
+      );
     },
 
-    getAvailableBrands: function (brand)  {
+    getAvailableBrands: function (brand) {
       let result = new Set();
 
       Object.entries(brand).forEach(([key, value]) => {
-        switch(key) {
+        switch (key) {
           case 'VI':
             result.add('visa');
             result.add('cb');

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.27.4
+
+- **Fix** : Simplified PayPal API version detection by using direct requestPaymentProduct method
+- **Fix** : Updated selectors to make PayPal and Alma settings work across all Magento store views.
+- **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
+- **Fix** : Fixed mini-cart display not showing items restored after payment cancellation.
+
 ## 1.27.3
 
 - **Fix** : (OneClick) Prevent saving payment card details without proper authorization.

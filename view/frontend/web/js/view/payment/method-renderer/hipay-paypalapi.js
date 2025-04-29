@@ -32,7 +32,7 @@ define([
   'use strict';
 
   var isPayPalV2 =
-      window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
+    window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
 
   if (isPayPalV2 === 1) {
     return ComponentDefault.extend({
@@ -153,7 +153,7 @@ define([
             label: self.buttonLabel
           },
           request: {
-            amount: Number(quote.totals().base_grand_total.toFixed(2)),
+            amount: self.safeToFixed(quote.totals().base_grand_total),
             currency: quote.totals().quote_currency_code,
             locale: this.convertToUpperCaseAfterUnderscore(self.locale)
           }
@@ -264,6 +264,13 @@ define([
 
         // Join the parts back together
         return parts.join('_');
+      },
+
+      safeToFixed: function (value, decimals = 2) {
+        const factor = 10 ** decimals;
+        const rounded =
+          Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
+        return rounded.toFixed(decimals);
       }
     });
   } else {
