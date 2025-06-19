@@ -110,7 +110,9 @@ class HipayConfig extends Template
      */
     public function getEnv()
     {
-        $env = $this->scopeConfig->getValue(self::XML_PATH_HIPAY_PAYMENT_PRODUCT_ENV, 'store', $this->getCurrentStoreId());
+        $env = $this->scopeConfig->getValue(
+            self::XML_PATH_HIPAY_PAYMENT_PRODUCT_ENV, 'store', $this->getCurrentStoreId()
+        );
         return $env === self::ENV_STAGE ? self::ENV_STAGE : $env;
     }
 
