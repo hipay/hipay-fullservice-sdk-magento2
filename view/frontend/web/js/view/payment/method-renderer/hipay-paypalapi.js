@@ -159,6 +159,12 @@ define([
           }
         };
 
+        quote.totals.subscribe(function(totals) {
+          if (self.hipayHostedFields) {
+            self.configHipay.request.amount = self.safeToFixed(Number(totals.base_grand_total));
+          }
+        });
+
         self.initTOCEvents();
       },
 

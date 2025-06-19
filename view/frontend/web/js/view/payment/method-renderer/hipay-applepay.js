@@ -221,7 +221,7 @@ define([
             applePayConfig.request.total.amount != newValue.base_grand_total
           ) {
             applePayConfig.request.total.amount = self.safeToFixed(
-              newValue.base_grand_total
+              Number(newValue.base_grand_total)
             );
             self.instanceApplePay.update(applePayConfig);
           }
