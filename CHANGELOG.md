@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASE
+
+- **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
+- **Fix** : Fixed payment product environment account merchant info
+- **Fix** : Fixed PayPal checkout price in PopIn
+
 ## 1.27.4
 
 - **Fix** : Simplified PayPal API version detection by using direct requestPaymentProduct method

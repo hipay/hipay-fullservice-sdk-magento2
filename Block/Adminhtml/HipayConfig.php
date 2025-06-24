@@ -35,7 +35,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class HipayConfig extends Template
 {
     protected const XML_PATH_HIPAY_CREDENTIALS = 'hipay/hipay_credentials_tokenjs/';
-    protected const XML_PATH_HIPAY_PAYPAL_ENV = 'payment/hipay_paypalapi/env';
+    protected const XML_PATH_HIPAY_PAYMENT_PRODUCT_ENV = 'hipay/hipay_api_environment/api_environment';
     protected const ENV_PRODUCTION = 'production';
     protected const ENV_TEST = 'test';
     protected const ENV_STAGE = 'stage';
@@ -110,7 +110,8 @@ class HipayConfig extends Template
      */
     public function getEnv()
     {
-        $env = $this->scopeConfig->getValue(self::XML_PATH_HIPAY_PAYPAL_ENV, 'store', $this->getCurrentStoreId());
+        $env = $this->scopeConfig
+            ->getValue(self::XML_PATH_HIPAY_PAYMENT_PRODUCT_ENV, 'store', $this->getCurrentStoreId());
         return $env === self::ENV_STAGE ? self::ENV_STAGE : $env;
     }
 

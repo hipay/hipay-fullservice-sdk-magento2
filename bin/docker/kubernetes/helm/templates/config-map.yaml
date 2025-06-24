@@ -35,7 +35,7 @@ data:
   GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
   # HiPay env var
   ENVIRONMENT: production
-  ACTIVE_METHODS: hipay_hosted_fields,hipay_hosted
+  ACTIVE_METHODS: hipay_hosted,hipay_hostedmoto,hipay_hosted_fields,hipay_applepay,hipay_sisal_hosted_fields,hipay_sisal,hipay_giropay,hipay_bancontact_hosted_fields,hipay_ideal_hosted_fields,hipay_ideal,hipay_mbway_hosted_fields,hipay_mbway,hipay_multibanco_hosted_fields,hipay_multibanco,hipay_postfinancecardapi,hipay_postfinanceefinanceapi,hipay_paypalapi,hipay_przelewy24api,hipay_sofortapi,hipay_sdd,hipay_mybank,hipay_klarna_hosted_fields,hipay_alma3X,hipay_alma4X,hipay_facilypay3X,hipay_facilypay4X,hipay_creditlong,hipay_creditlong_opc2,hipay_creditlong_opc3,hipay_creditlong_opc4,hipay_bnpp4X,hipay_bnpp3X
   HIPAY_API_USER_TEST: {{ .Values.hipay_api_user_test }}
   HIPAY_API_PASSWORD_TEST: {{ .Values.hipay_api_password_test }}
   HIPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_secret_passphrase_test }}
