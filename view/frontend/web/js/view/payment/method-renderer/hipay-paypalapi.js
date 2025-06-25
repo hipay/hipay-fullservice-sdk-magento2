@@ -153,11 +153,17 @@ define([
             label: self.buttonLabel
           },
           request: {
-            amount: self.safeToFixed(quote.totals().base_grand_total),
+            amount: self.safeToFixed(Number(quote.totals().base_grand_total)),
             currency: quote.totals().quote_currency_code,
             locale: this.convertToUpperCaseAfterUnderscore(self.locale)
           }
         };
+
+        quote.totals.subscribe(function(totals) {
+          if (self.hipayHostedFields) {
+            self.configHipay.request.amount = self.safeToFixed(Number(totals.base_grand_total));
+          }
+        });
 
         self.initTOCEvents();
       },
@@ -268,8 +274,9 @@ define([
 
       safeToFixed: function (value, decimals = 2) {
         const factor = 10 ** decimals;
+        const correction = 1 / 10 ** (decimals + 2);
         const rounded =
-          Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
+          Math.round((value + correction) * factor) / factor;
         return rounded.toFixed(decimals);
       }
     });

@@ -196,7 +196,7 @@ define([
           currencyCode: quote.totals().quote_currency_code,
           total: {
             label: self.displayName,
-            amount: self.safeToFixed(quote.totals().base_grand_total)
+            amount: self.safeToFixed(Number(quote.totals().base_grand_total))
           }
         },
         selector: 'hipay-apple-pay-button',
@@ -221,7 +221,7 @@ define([
             applePayConfig.request.total.amount != newValue.base_grand_total
           ) {
             applePayConfig.request.total.amount = self.safeToFixed(
-              newValue.base_grand_total
+              Number(newValue.base_grand_total)
             );
             self.instanceApplePay.update(applePayConfig);
           }
@@ -323,8 +323,9 @@ define([
 
     safeToFixed: function (value, decimals = 2) {
       const factor = 10 ** decimals;
+      const correction = 1 / 10 ** (decimals + 2);
       const rounded =
-        Math.round((parseFloat(value) + Number.EPSILON) * factor) / factor;
+        Math.round((value + correction) * factor) / factor;
       return rounded.toFixed(decimals);
     }
   });
