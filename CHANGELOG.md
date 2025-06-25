@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+## 1.27.5
+
 - **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
 - **Fix** : Fixed payment product environment account merchant info
 - **Fix** : Fixed PayPal checkout price in PopIn
