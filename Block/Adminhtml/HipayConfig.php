@@ -122,11 +122,24 @@ class HipayConfig extends Template
      */
     public function getCurrentStoreId()
     {
-        try {
-            return (int) $this->storeManager->getStore()->getId();
-        } catch (\Exception $e) {
-            // Log the exception or handle it as appropriate for your application
-            return 0;
+        // Check for admin store parameter first
+        $storeParam = $this->getRequest()->getParam('store');
+        $websiteParam = $this->getRequest()->getParam('website');
+
+        if ($storeParam) {
+            return (int) $storeParam;
         }
+
+        if ($websiteParam) {
+            try {
+                $website = $this->storeManager->getWebsite($websiteParam);
+
+                return (int) $website->getDefaultStore()->getId();
+            } catch (\Exception $e) {
+                return 0;
+            }
+        }
+
+        return (int) $this->storeManager->getStore()->getId();
     }
 }

@@ -126,6 +126,11 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * Context constructor.
      *
      * @param \Magento\Framework\Model\Context                               $modelContext
@@ -144,6 +149,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * @param \HiPay\FullserviceMagento\Model\CardFactory                    $cardFactory
      * @param CollectionFactory                                              $cardCollectionFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface              $priceCurrency
+     * @param \Magento\Store\Model\StoreManagerInterface                     $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -162,7 +168,8 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         \Magento\Checkout\Model\Session $checkoutSession,
         \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
         CollectionFactory $cardCollectionFactory,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
 
         //Abstract Method objects
@@ -184,6 +191,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_cardFactory = $cardFactory;
         $this->_cardCollectionFactory = $cardCollectionFactory;
         $this->priceCurrency = $priceCurrency;
+        $this->_storeManager = $storeManager;
     }
 
     public function getGatewayManagerFactory()
@@ -264,5 +272,10 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function getPriceCurrency()
     {
         return $this->priceCurrency;
+    }
+
+    public function getStoreManager()
+    {
+        return $this->_storeManager;
     }
 }
