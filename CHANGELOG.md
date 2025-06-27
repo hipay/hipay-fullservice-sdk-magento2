@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed payment product api store id
+
 ## 1.27.5
 
 - **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
