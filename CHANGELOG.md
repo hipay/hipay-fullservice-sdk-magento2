@@ -4,7 +4,7 @@
 
 - **Fix** : Fixed payment product api store id
 - **Fix** : Fixed default env stage value in config.xml for payment methods
-- 
+
 ## 1.27.5
 
 - **Fix** : Fixed rounded amounts using higher value on **PayPal** and **ApplePay** payment methods
