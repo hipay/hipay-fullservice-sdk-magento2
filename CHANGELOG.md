@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Fixed payment product api store id
+- **Fix** : Fixed default env stage value in config.xml for payment methods
 
 ## 1.27.5
 
