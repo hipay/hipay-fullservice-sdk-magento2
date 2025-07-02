@@ -139,7 +139,7 @@
                 <authentication_indicator>0</authentication_indicator>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
                 <paypal>
                     <button_color>gold</button_color>
@@ -179,7 +179,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_hostedmoto>
             <hipay_hosted_fields>
@@ -210,7 +210,7 @@
                 <caret_color>#A50979</caret_color>
                 <icon_color>#A50979</icon_color>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
                 <cctypes_mapper>
                     <![CDATA[{"american-express":"AE","discover":"DI","jcb":"JCB","mastercard":"MC","master-card":"MC","visa":"VI","maestro":"MI","diners-club":"DN","unionpay":"CUP", "bcmc" : "MI", "cb": "VI"}]]></cctypes_mapper>
@@ -237,7 +237,7 @@
                 <authentication_indicator>0</authentication_indicator>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_applepay>
             <hipay_sisal_hosted_fields>
@@ -297,7 +297,7 @@
                 <!-- Custom local configuration -->
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_sisal>
             <hipay_giropay>
@@ -330,7 +330,7 @@
                 <specificcountry>DE</specificcountry>
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_giropay>
             <hipay_bancontact_hosted_fields>
@@ -354,7 +354,7 @@
                 <specificcountry>BE</specificcountry>
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_bancontact_hosted_fields>
             <hipay_ideal_hosted_fields>
@@ -378,7 +378,7 @@
                 <specificcountry>NL</specificcountry>
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_ideal_hosted_fields>
             <hipay_ideal>
@@ -412,7 +412,7 @@
                 <specificcountry>NL</specificcountry>
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_ideal>
             <hipay_postfinancecardapi>
@@ -586,7 +586,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>0</allowspecific>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_sdd>
             <hipay_sofortapi>
@@ -664,7 +664,7 @@
                 <allowed_currencies>EUR</allowed_currencies>
                 <specificcountry>FR,DE,IT,BE,LUX,NL,IE,AT,PT,ES</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_alma3X>
             <hipay_alma4X>
@@ -692,7 +692,7 @@
                 <allowed_currencies>EUR</allowed_currencies>
                 <specificcountry>FR,DE,IT,BE,LUX,NL,IE,AT,PT,ES</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_alma4X>
             <hipay_facilypay3X>
@@ -719,7 +719,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,BE,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_facilypay3X>
             <hipay_facilypay4X>
@@ -746,7 +746,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,BE,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_facilypay4X>
             <hipay_creditlong>
@@ -772,7 +772,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_creditlong>
             <hipay_creditlong_opc2>
@@ -798,7 +798,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_creditlong_opc2>
             <hipay_creditlong_opc3>
@@ -824,7 +824,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_creditlong_opc3>
             <hipay_creditlong_opc4>
@@ -850,7 +850,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR,IT,PT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_creditlong_opc4>
             <hipay_bnpp4X>
@@ -873,7 +873,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_bnpp4X>
             <hipay_bnpp3X>
@@ -896,7 +896,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>FR</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_bnpp3X>
             <hipay_mybank>
@@ -919,7 +919,7 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>IT</specificcountry>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_mybank>
             <hipay_multibanco_hosted_fields>
@@ -975,7 +975,7 @@
                 <!-- Custom local configuration -->
                 <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
-                <env>STAGE</env>
+                <env>stage</env>
                 <group>hipay</group>
             </hipay_multibanco>
         </payment>
