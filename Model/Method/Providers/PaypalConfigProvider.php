@@ -16,7 +16,15 @@
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
+use HiPay\FullserviceMagento\Helper\Data;
+use HiPay\FullserviceMagento\Model\Config;
+use HiPay\FullserviceMagento\Model\Method\Context;
+use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Payment\Model\CcConfig;
+use Psr\Log\LoggerInterface;
 
 /**
  * Paypal config provider
@@ -79,17 +87,25 @@ class PaypalConfigProvider implements ConfigProviderInterface
     /**
      * @var ResolverInterface
      */
-    private $resolver;
+    protected $resolver;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * PaypalConfigProvider constructor.
      *
-     * @param \Magento\Payment\Model\CcConfig                                      $ccConfig
-     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
-     * @param \Magento\Customer\Model\Session                                      $customerSession
-     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param Context                                                              $context
-     * @param array                                                                $methodCodes
+     * @param CcConfig          $ccConfig
+     * @param Data              $hipayHelper
+     * @param Session           $customerSession
+     * @param CollectionFactory $collectionFactory
+     * @param Context           $context
+     * @param LoggerInterface   $logger
+     * @param ResolverInterface $resolver
+     * @param Config            $hipayConfig
+     * @param array             $methodCodes
      */
     public function __construct(
         \Magento\Payment\Model\CcConfig $ccConfig,
@@ -109,11 +125,48 @@ class PaypalConfigProvider implements ConfigProviderInterface
         $this->checkoutSession = $context->getCheckoutSession();
         $this->collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
+        $this->storeManager = $context->getStoreManager();
 
-        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+        $storeId = $this->resolveValidStoreId();
+
         $this->hipayConfig = $hipayConfig;
         $this->hipayConfig->setStoreId($storeId);
         $this->hipayConfig->setMethodCode('');
+    }
+
+    /**
+     * Resolve a valid store ID for HiPay configuration
+     *
+     * @return int
+     */
+    protected function resolveValidStoreId()
+    {
+        try {
+            // First, try to get store ID from quote
+            $quote = $this->checkoutSession->getQuote();
+            if ($quote && $quote->getStore()) {
+                $storeId = (int) $quote->getStore()->getStoreId();
+                if ($storeId > 0) {
+                    return $storeId;
+                }
+            }
+        } catch (\Exception $e) {
+            // Quote might not be available in some contexts
+        }
+
+        try {
+            // Fallback to current store from store manager
+            $currentStore = $this->storeManager->getStore();
+            if ($currentStore) {
+                $storeId = (int) $currentStore->getId();
+                if ($storeId > 0) {
+                    return $storeId;
+                }
+            }
+        } catch (\Exception $e) {
+            // Store manager might fail in CLI contexts
+        }
+        return 1;
     }
 
     /**

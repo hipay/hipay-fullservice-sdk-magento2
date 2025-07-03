@@ -4,6 +4,7 @@
 
 - **Fix** : Fixed payment product api store id
 - **Fix** : Fixed default env stage value in config.xml for payment methods
+- **Fix** : Improved efficiency of PayPal config provider service
 
 ## 1.27.5
 
