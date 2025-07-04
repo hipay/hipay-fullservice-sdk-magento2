@@ -95,6 +95,11 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $storeManager;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * PaypalConfigProvider constructor.
      *
      * @param CcConfig          $ccConfig
@@ -126,6 +131,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
         $this->collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
         $this->storeManager = $context->getStoreManager();
+        $this->logger = $logger;
 
         $storeId = $this->resolveValidStoreId();
 
@@ -139,10 +145,9 @@ class PaypalConfigProvider implements ConfigProviderInterface
      *
      * @return int
      */
-    protected function resolveValidStoreId()
+    private function resolveValidStoreId()
     {
         try {
-            // First, try to get store ID from quote
             $quote = $this->checkoutSession->getQuote();
             if ($quote && $quote->getStore()) {
                 $storeId = (int) $quote->getStore()->getStoreId();
@@ -151,11 +156,12 @@ class PaypalConfigProvider implements ConfigProviderInterface
                 }
             }
         } catch (\Exception $e) {
-            // Quote might not be available in some contexts
+            $this->logger->warning('HiPay PayPal: Unable to resolve store ID from quote', [
+                'exception' => $e->getMessage()
+            ]);
         }
 
         try {
-            // Fallback to current store from store manager
             $currentStore = $this->storeManager->getStore();
             if ($currentStore) {
                 $storeId = (int) $currentStore->getId();
@@ -164,7 +170,9 @@ class PaypalConfigProvider implements ConfigProviderInterface
                 }
             }
         } catch (\Exception $e) {
-            // Store manager might fail in CLI contexts
+            $this->logger->warning('HiPay PayPal: Unable to resolve store ID from store manager', [
+                'exception' => $e->getMessage()
+            ]);
         }
         return 1;
     }
