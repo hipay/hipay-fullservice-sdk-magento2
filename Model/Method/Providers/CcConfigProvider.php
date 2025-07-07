@@ -16,13 +16,16 @@
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
+use HiPay\FullserviceMagento\Model\Config;
 use HiPay\FullserviceMagento\Model\Method\CcMethod;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
-use HiPay\FullserviceMagento\Model\Method\Context as Context;
+use HiPay\FullserviceMagento\Model\Method\Context;
 use HiPay\FullserviceMagento\Model\System\Config\Source\CcType;
 use Magento\Payment\Model\CcConfig;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\View\Asset\Source;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class CC config provider
@@ -33,15 +36,16 @@ use Magento\Framework\View\Asset\Source;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class CcConfigProvider implements ConfigProviderInterface
+class CcConfigProvider extends AbstractConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @var MethodInterface[]
+     * @var array
      */
     protected $methods =  [
         CcMethod::HIPAY_METHOD_CODE,
         HostedFieldsMethod::HIPAY_METHOD_CODE
     ];
+
     /**
      * @var CcConfig
      */
@@ -56,18 +60,18 @@ class CcConfigProvider implements ConfigProviderInterface
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\System\Config\Source\CcType $_cctypes
+     * @var CcType
      */
     protected $_cctypeSource;
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Config $_hipayConfig
+     * @var Config
      */
     protected $_hipayConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source
+     * @var Source
      */
     protected $assetSource;
 
@@ -77,35 +81,43 @@ class CcConfigProvider implements ConfigProviderInterface
     protected $context;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $checkoutSession;
 
     /**
      * CcConfigProvider constructor.
      *
-     * @param CcConfig                    $ccConfig
-     * @param System\Config\Source\CcType $cctypeSource
-     * @param Config\Factory              $configFactory
-     * @param Source                      $assetSource
+     * @param CcConfig        $ccConfig
+     * @param CcType          $cctypeSource
+     * @param Source          $assetSource
+     * @param Context         $context
+     * @param LoggerInterface $logger
+     * @param Config          $hipayConfig
+     * @param array           $methodCodes
      */
     public function __construct(
         CcConfig $ccConfig,
         CcType $cctypeSource,
         Source $assetSource,
         Context $context,
-        \Psr\Log\LoggerInterface $logger,
-        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
+        LoggerInterface $logger,
+        Config $hipayConfig,
         array $methodCodes = []
     ) {
+        parent::__construct(
+            $context,
+            $logger
+        );
+
         $this->urlBuilder = $context->urlBuilder;
         $this->_cctypeSource = $cctypeSource;
         $this->ccConfig = $ccConfig;
         $this->assetSource = $assetSource;
         $this->context = $context;
 
-        $this->checkoutSession = $context->getCheckoutSession();
-        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+        $storeId = $this->resolveValidStoreId();
+
         $this->_hipayConfig = $hipayConfig;
         $this->_hipayConfig->setStoreId($storeId);
         $this->_hipayConfig->setMethodCode("");

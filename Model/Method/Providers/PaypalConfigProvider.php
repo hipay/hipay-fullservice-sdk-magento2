@@ -34,7 +34,7 @@ use Psr\Log\LoggerInterface;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class PaypalConfigProvider implements ConfigProviderInterface
+class PaypalConfigProvider extends AbstractConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CcConfig
@@ -42,7 +42,7 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $ccConfig;
 
     /**
-     * @var MethodInterface[]
+     * @var array
      */
     protected $methods = [];
 
@@ -55,32 +55,26 @@ class PaypalConfigProvider implements ConfigProviderInterface
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @var Data
      */
     protected $hipayHelper;
 
     /**
      *
-     * @var \Magento\Checkout\Model\Session $checkoutSession
-     */
-    protected $checkoutSession;
-
-    /**
-     *
-     * @var \Magento\Customer\Model\Session $customerSession
+     * @var Session
      */
     protected $customerSession;
 
     /**
      * Card resource model
      *
-     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory
+     * @var CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Config $hipayConfig
+     * @var Config
      */
     protected $hipayConfig;
 
@@ -88,16 +82,6 @@ class PaypalConfigProvider implements ConfigProviderInterface
      * @var ResolverInterface
      */
     protected $resolver;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
 
     /**
      * PaypalConfigProvider constructor.
@@ -113,68 +97,33 @@ class PaypalConfigProvider implements ConfigProviderInterface
      * @param array             $methodCodes
      */
     public function __construct(
-        \Magento\Payment\Model\CcConfig $ccConfig,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \Magento\Customer\Model\Session $customerSession,
-        \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
-        \HiPay\FullserviceMagento\Model\Method\Context $context,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Locale\ResolverInterface $resolver,
-        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
+        CcConfig $ccConfig,
+        Data $hipayHelper,
+        Session $customerSession,
+        CollectionFactory $collectionFactory,
+        Context $context,
+        LoggerInterface $logger,
+        ResolverInterface $resolver,
+        Config $hipayConfig,
         array $methodCodes = []
     ) {
+        parent::__construct(
+            $context,
+            $logger
+        );
+
         $this->methods = $methodCodes;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->resolver = $resolver;
-        $this->checkoutSession = $context->getCheckoutSession();
         $this->collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
-        $this->storeManager = $context->getStoreManager();
-        $this->logger = $logger;
 
         $storeId = $this->resolveValidStoreId();
 
         $this->hipayConfig = $hipayConfig;
         $this->hipayConfig->setStoreId($storeId);
         $this->hipayConfig->setMethodCode('');
-    }
-
-    /**
-     * Resolve a valid store ID for HiPay configuration
-     *
-     * @return int
-     */
-    private function resolveValidStoreId()
-    {
-        try {
-            $quote = $this->checkoutSession->getQuote();
-            if ($quote && $quote->getStore()) {
-                $storeId = (int) $quote->getStore()->getStoreId();
-                if ($storeId > 0) {
-                    return $storeId;
-                }
-            }
-        } catch (\Exception $e) {
-            $this->logger->warning('HiPay PayPal: Unable to resolve store ID from quote', [
-                'exception' => $e->getMessage()
-            ]);
-        }
-
-        try {
-            $currentStore = $this->storeManager->getStore();
-            if ($currentStore) {
-                $storeId = (int) $currentStore->getId();
-                if ($storeId > 0) {
-                    return $storeId;
-                }
-            }
-        } catch (\Exception $e) {
-            $this->logger->warning('HiPay PayPal: Unable to resolve store ID from store manager', [
-                'exception' => $e->getMessage()
-            ]);
-        }
-        return 1;
     }
 
     /**
