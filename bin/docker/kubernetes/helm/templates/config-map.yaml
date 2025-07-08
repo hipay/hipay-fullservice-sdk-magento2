@@ -49,8 +49,8 @@ data:
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git,vcs git@github.com:hipay/hipay-fullservice-sdk-magento2-multistore.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},hipay/module-multistores,giggsey/libphonenumber-for-php
-  CUSTOM_MODULES: HiPay_FullserviceMagento
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},hipay/module-multistores,giggsey/libphonenumber-for-php,juashyam/logviewer
+  CUSTOM_MODULES: HiPay_MultiStores,Juashyam_LogViewer
   # Elastic Search env var
   keys: |
     cluster.name=docker-cluster
