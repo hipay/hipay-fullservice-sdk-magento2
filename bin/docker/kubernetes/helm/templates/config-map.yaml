@@ -25,7 +25,6 @@ data:
   MAGENTO_ELASTICSEARCH_USER: ""
   MAGENTO_ELASTICSEARCH_PASSWORD: ""
   PHP_ENABLE_OPCACHE: "false"
-  MULTISTORE: "true"
   # MariaDB env var
   MARIADB_DATABASE: bitnami_magento
   MARIADB_USER: bn_magento
