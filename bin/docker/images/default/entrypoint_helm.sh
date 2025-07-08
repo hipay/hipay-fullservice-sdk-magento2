@@ -138,18 +138,23 @@ if [ "$NEED_SETUP_CONFIG" = "1" ]; then
         done
     fi
 
+    # Add required modules
+    CUSTOM_MODULES_TO_ENABLE=""
+    if [ ! ${#CUSTOM_MODULES[*]} = 0 ]; then
+        cnt_module=$((${#CUSTOM_MODULES[*]} - 1))
+        for i in $(seq 0 $cnt_module); do
+            module=$(echo ${CUSTOM_MODULES[$i]} | sed 's/^[ \t]*//;s/[ \t]*$//')
+            printf "\nEnable module $module"
+            CUSTOM_MODULES_TO_ENABLE="$CUSTOM_MODULES_TO_ENABLE $module"
+        done
+    fi
+
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     printf "\n${COLOR_SUCCESS}     INSTALLING HIPAY MODULE             ${NC}\n"
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
 
-    multistore=""
-    if [ "$MULTISTORE" == "true" ]; then
-        multistore="HiPay_MultiStores"
-        printf "${COLOR_SUCCESS} Multistore will be enabled !${NC}\n"
-    fi
-
     su -c "composer require magento/module-bundle-sample-data magento/module-theme-sample-data magento/module-widget-sample-data magento/module-catalog-sample-data magento/module-cms-sample-data magento/module-tax-sample-data && \
-      php bin/magento module:enable HiPay_FullserviceMagento $multistore Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData && \
+      php bin/magento module:enable HiPay_FullserviceMagento Magento_BundleSampleData Magento_ThemeSampleData Magento_CatalogSampleData Magento_CmsSampleData Magento_TaxSampleData $CUSTOM_MODULES_TO_ENABLE && \
       php bin/magento setup:upgrade && \
       php bin/magento setup:di:compile && \
       php bin/magento setup:static-content:deploy -f && \

@@ -16,7 +16,15 @@
 
 namespace HiPay\FullserviceMagento\Model\Method\Providers;
 
+use HiPay\FullserviceMagento\Helper\Data;
+use HiPay\FullserviceMagento\Model\Config;
+use HiPay\FullserviceMagento\Model\Method\Context;
+use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
 use Magento\Checkout\Model\ConfigProviderInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Payment\Model\CcConfig;
+use Psr\Log\LoggerInterface;
 
 /**
  * Local config provider
@@ -26,7 +34,7 @@ use Magento\Checkout\Model\ConfigProviderInterface;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class LocalConfigProvider implements ConfigProviderInterface
+class LocalConfigProvider extends AbstractConfigProvider implements ConfigProviderInterface
 {
     /**
      * @var CcConfig
@@ -34,7 +42,7 @@ class LocalConfigProvider implements ConfigProviderInterface
     protected $ccConfig;
 
     /**
-     * @var MethodInterface[]
+     * @var array
      */
     protected $methods = [];
 
@@ -47,32 +55,26 @@ class LocalConfigProvider implements ConfigProviderInterface
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @var Data
      */
     protected $hipayHelper;
 
     /**
      *
-     * @var \Magento\Checkout\Model\Session $checkoutSession
-     */
-    protected $checkoutSession;
-
-    /**
-     *
-     * @var \Magento\Customer\Model\Session $customerSession
+     * @var Session
      */
     protected $customerSession;
 
     /**
      * Card resource model
      *
-     * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory
+     * @var CollectionFactory
      */
     protected $collectionFactory;
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Config $hipayConfig
+     * @var Config
      */
     protected $hipayConfig;
 
@@ -84,33 +86,41 @@ class LocalConfigProvider implements ConfigProviderInterface
     /**
      * LocalConfigProvider constructor.
      *
-     * @param \Magento\Payment\Model\CcConfig                                      $ccConfig
-     * @param \HiPay\FullserviceMagento\Helper\Data                                $hipayHelper
-     * @param \Magento\Customer\Model\Session                                      $customerSession
-     * @param \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory
-     * @param Context                                                              $context
-     * @param array                                                                $methodCodes
+     * @param CcConfig          $ccConfig
+     * @param Data              $hipayHelper
+     * @param Session           $customerSession
+     * @param CollectionFactory $collectionFactory
+     * @param Context           $context
+     * @param LoggerInterface   $logger
+     * @param ResolverInterface $resolver
+     * @param Config            $hipayConfig
+     * @param array             $methodCodes
      */
     public function __construct(
-        \Magento\Payment\Model\CcConfig $ccConfig,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \Magento\Customer\Model\Session $customerSession,
-        \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory $collectionFactory,
-        \HiPay\FullserviceMagento\Model\Method\Context $context,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Locale\ResolverInterface $resolver,
-        \HiPay\FullserviceMagento\Model\Config $hipayConfig,
+        CcConfig $ccConfig,
+        Data $hipayHelper,
+        Session $customerSession,
+        CollectionFactory $collectionFactory,
+        Context $context,
+        LoggerInterface $logger,
+        ResolverInterface $resolver,
+        Config $hipayConfig,
         array $methodCodes = []
     ) {
+        parent::__construct(
+            $context,
+            $logger
+        );
+
         $this->methods = $methodCodes;
         $this->urlBuilder = $context->getUrlBuilder();
         $this->hipayHelper = $hipayHelper;
         $this->resolver = $resolver;
-        $this->checkoutSession = $context->getCheckoutSession();
         $this->collectionFactory = $collectionFactory;
         $this->customerSession = $customerSession;
 
-        $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
+        $storeId = $this->resolveValidStoreId();
+
         $this->hipayConfig = $hipayConfig;
         $this->hipayConfig->setStoreId($storeId);
         $this->hipayConfig->setMethodCode('');
