@@ -136,6 +136,11 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @var \Magento\Sales\Model\Order\Payment\Transaction\Repository TransactionRepository
      */
     protected $transactionRepository;
@@ -228,6 +233,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->_cardFactory = $context->getCardFactory();
         $this->_cardCollectionFactory = $context->getCardCollectionFactory();
         $this->priceCurrency = $context->getPriceCurrency();
+        $this->_storeManager = $context->getStoreManager();
 
         $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
 
