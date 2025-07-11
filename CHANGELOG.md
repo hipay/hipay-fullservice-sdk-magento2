@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+## 1.27.6
+
 - **Fix** : Fixed payment product api store id
 - **Fix** : Fixed default env stage value in config.xml for payment methods
 - **Fix** : Improved efficiency of PayPal config provider service
