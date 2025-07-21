@@ -400,7 +400,7 @@ define([
     return ComponentHosted.extend({
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-        redirectAfterPlaceOrder: false,
+        redirectAfterPlaceOrder: false
       },
 
       getCode: function() {
