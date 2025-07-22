@@ -22,6 +22,7 @@ use HiPay\Fullservice\Enum\Customer\Gender;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
+use HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes;
 
 /**
  * Order Request Object
@@ -123,6 +124,11 @@ class Order extends CommonRequest
     protected $_httpHeader;
 
     /**
+     * @var OrderExpirationTimes
+     */
+    protected $expirationSource;
+
+    /**
      * {@inheritDoc}
      *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
@@ -146,6 +152,7 @@ class Order extends CommonRequest
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\HTTP\Header $httpHeader,
+        OrderExpirationTimes $expirationSource,
         $params = []
     ) {
         parent::__construct(
@@ -173,6 +180,7 @@ class Order extends CommonRequest
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
         $this->_httpHeader = $httpHeader;
+        $this->expirationSource = $expirationSource;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -330,8 +338,9 @@ class Order extends CommonRequest
         $this->processExtraInformations($orderRequest, $useOrderCurrency);
 
         if ($payment_product == 'multibanco') {
-            $timeLimit = $this->_config->getValue('multibanco_order_expiration_time');
-            if ($timeLimit && in_array($timeLimit, [3, 30, 90])) {
+            $validExpirationKeys = array_keys($this->expirationSource->getValues());
+            $timeLimit = (string) $this->_config->getValue('multibanco_order_expiration_time');
+            if ($timeLimit && in_array($timeLimit, $validExpirationKeys)) {
                 $orderRequest->expiration_limit = $timeLimit;
             }
         }

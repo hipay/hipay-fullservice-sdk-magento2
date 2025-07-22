@@ -44,9 +44,15 @@ class OrderExpirationTimes implements \Magento\Framework\Option\ArrayInterface
     public function getValues()
     {
         $vals = [
-            3 => __('3 days'),
-            30 => __('30 days'),
-            90 => __('90 days'),
+            'H1'  => __('1 hour'),
+            'H3'  => __('3 hours'),
+            'H6'  => __('6 hours'),
+            'H12' => __('12 hours'),
+            '0'   => __('Current day'),
+            '1'   => __('1 day'),
+            '3'   => __('3 days'),
+            '30'  => __('30 days'),
+            '90'  => __('90 days'),
         ];
 
         return $vals;
