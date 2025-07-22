@@ -86,7 +86,8 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     {
         try {
             $availablePaymentProductResponse = $this->_gatewayManagerFactory->create(null, [
-                    'apiEnv' => 1, 'storeId' => $this->_storeManager->getStore()->getId()
+                    'apiEnv' => $this->_hipayConfig->getApiEnv(),
+                    'storeId' => $this->_storeManager->getStore()->getId()
                 ]);
             $paymentProducts = $availablePaymentProductResponse->requestPaymentProduct([$technicalCode], true);
 

@@ -36,7 +36,7 @@ define([
   'use strict';
 
   var isPayPalV2 =
-    window.checkoutConfig.payment.hipay_paypalapi.isPayPalV2 ?? '';
+    window.checkoutConfig?.payment?.hipay_paypalapi?.isPayPalV2 ?? '';
 
   if (isPayPalV2 === 1) {
     return ComponentDefault.extend({
@@ -53,32 +53,32 @@ define([
           window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl
             .hipay_paypalapi,
         env: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.env
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.env
           : 'stage',
         apiUsernameTokenJs: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.apiUsernameTokenJs
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.apiUsernameTokenJs
           : '',
         apiPasswordTokenJs: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.apiPasswordTokenJs
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.apiPasswordTokenJs
           : '',
         buttonLabel: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.button_label
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.button_label
           : 'pay',
         buttonShape: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.button_shape
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.button_shape
           : 'pill',
         buttonColor: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.button_color
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.button_color
           : 'gold',
         buttonHeight: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.button_height
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.button_height
           : '40',
         bnpl: window.checkoutConfig.payment.hipay_paypalapi
-          ? window.checkoutConfig.payment.hipay_paypalapi.bnpl
+          ? window.checkoutConfig?.payment?.hipay_paypalapi?.bnpl
           : true,
         locale: window.checkoutConfig.payment.hiPayFullservice.locale
-          ? window.checkoutConfig.payment.hiPayFullservice.locale
-              .hipay_paypalapi
+          ? window.checkoutConfig?.payment?.hiPayFullservice?.locale
+              ?.hipay_paypalapi
           : 'en_us'
       },
 
@@ -136,10 +136,10 @@ define([
         var cartData = customerData.get('cart');
 
         cartData.subscribe(function (updatedCart) {
-          if (updatedCart && updatedCart.items) {
+          if (updatedCart?.items) {
             // Only handle cart changes if PayPal is the active payment method
-            if (self.isPayPalActive()) {
-              self.handleCartChange();
+            if (self.isPayPalActive?.()) {
+              self.handleCartChange?.();
             }
           }
         });
@@ -213,17 +213,17 @@ define([
         if (self.hipayHostedFields && totals) {
           try {
             // Update the amount if PayPal SDK supports it
-            if (self.hipayHostedFields.updateAmount) {
+            if (self.hipayHostedFields?.updateAmount) {
               self.hipayHostedFields.updateAmount(
                 self.safeToFixed(Number(totals.base_grand_total))
               );
             } else {
               // Fallback: reinitialize PayPal
-              self.reinitializePayPal();
+              self.reinitializePayPal?.();
             }
           } catch (error) {
             console.warn('PayPal amount update failed:', error);
-            self.reinitializePayPal();
+            self.reinitializePayPal?.();
           }
         }
       },
@@ -237,7 +237,7 @@ define([
         // Destroy existing instance
         if (self.hipayHostedFields) {
           try {
-            self.hipayHostedFields.destroy();
+            self.hipayHostedFields?.destroy?.();
           } catch (error) {
             console.warn('PayPal destroy failed:', error);
           }
@@ -300,37 +300,37 @@ define([
               "input[id*='agreement_hipay_paypal']"
             );
             var agreements =
-              window.checkoutConfig.checkoutAgreements.agreements;
-            agreements = agreements.filter((input) => input.mode == '1');
-            if (results?.length == agreements.length) {
-              results.forEach(function (input, index) {
+              window.checkoutConfig?.checkoutAgreements?.agreements;
+            agreements = agreements?.filter?.((input) => input.mode == '1');
+            if (results?.length == agreements?.length) {
+              results?.forEach?.(function (input, index) {
                 self.allTOC.set(index, false);
                 input.addEventListener('change', function (event) {
-                  self.allTOC.set(index, event.target.checked);
-                  updateTOCState();
+                  self.allTOC.set(index, event?.target?.checked);
+                  updateTOCState?.();
                 });
               });
-              observer.takeRecords();
+              observer?.takeRecords?.();
             }
           }
 
           function updateTOCState() {
-            var noChecked = [...self.allTOC.values()].filter(
+            var noChecked = [...self.allTOC.values()]?.filter?.(
               (value) => value == false
             );
-            if (noChecked.length > 0) {
-              self.isAllTOCChecked(false);
+            if (noChecked?.length > 0) {
+              self.isAllTOCChecked?.(false);
             } else {
-              self.isAllTOCChecked(true);
+              self.isAllTOCChecked?.(true);
             }
           }
         });
       },
 
       paymentAuthorized: function (self, tokenHipay) {
-        self.browser_info(JSON.stringify(tokenHipay.browser_info));
-        self.paypal_order_id(tokenHipay.orderID);
-        self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
+        self.browser_info?.(JSON.stringify(tokenHipay?.browser_info));
+        self.paypal_order_id?.(tokenHipay?.orderID);
+        self.placeOrder?.(self.getData?.(), self.redirectAfterPlaceOrder);
       },
 
       isPaypalV2Allowed: function () {
@@ -345,10 +345,7 @@ define([
         var selectedPaymentMethod = quote.paymentMethod();
 
         // Check if PayPal is selected as payment method
-        return (
-          selectedPaymentMethod &&
-          selectedPaymentMethod.method === self.getCode()
-        );
+        return selectedPaymentMethod?.method === self.getCode();
       },
 
       /**
@@ -397,7 +394,7 @@ define([
             browser_info: self.browser_info()
           }
         };
-        return $.extend(true, parent, data);
+        return $.extend?.(true, parent, data);
       },
 
       isActive: function () {
@@ -407,14 +404,14 @@ define([
       convertToUpperCaseAfterUnderscore: function (str) {
         let parts = str.split('_');
         parts[1] = parts[1].toUpperCase();
-        return parts.join('_');
+        return parts?.join?.('_');
       },
 
       safeToFixed: function (value, decimals = 2) {
         const factor = 10 ** decimals;
         const correction = 1 / 10 ** (decimals + 2);
         const rounded = Math.round((value + correction) * factor) / factor;
-        return rounded.toFixed(decimals);
+        return rounded?.toFixed?.(decimals);
       },
 
       /**
@@ -424,7 +421,7 @@ define([
         if (this.cartChangeTimeout) {
           clearTimeout(this.cartChangeTimeout);
         }
-        this._super();
+        this._super?.();
       }
     });
   } else {
