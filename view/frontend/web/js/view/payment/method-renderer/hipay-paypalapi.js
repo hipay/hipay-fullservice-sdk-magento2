@@ -209,12 +209,12 @@ define([
         // Listen for AJAX completion (covers most discount/coupon operations)
         $(document).on('ajaxComplete', function(event, xhr, settings) {
           // Check if the AJAX request was related to discount/coupon
-          if (settings.url && (
-            settings.url.includes('coupon') || 
-            settings.url.includes('discount') || 
-            settings.url.includes('cart') ||
-            settings.url.includes('checkout')
-          )) {
+          if (
+            settings.url?.includes('coupon') || 
+            settings.url?.includes('discount') || 
+            settings.url?.includes('cart') ||
+            settings.url?.includes('checkout')
+          ) {
             if (self.isPayPalActive()) {
               setTimeout(function() {
                 self.handleCartChange();
