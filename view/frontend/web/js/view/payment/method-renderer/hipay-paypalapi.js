@@ -125,6 +125,9 @@ define([
         // Subscribe to cart section changes
         self.initCartChangeListener();
 
+        // Listen for DOM changes to handle PayPal field recreation
+        self.initPayPalFieldObserver();
+
         self.initTOCEvents();
       },
 
@@ -141,6 +144,107 @@ define([
             if (self.isPayPalActive()) {
               self.handleCartChange();
             }
+          }
+        });
+
+        // Listen for discount/coupon changes
+        self.initDiscountListener();
+      },
+
+      /**
+       * Initialize PayPal field observer to handle DOM recreation
+       */
+      initPayPalFieldObserver: function () {
+        var self = this;
+        
+        // Create a mutation observer to watch for PayPal field changes
+        if (typeof MutationObserver !== 'undefined') {
+          var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.type === 'childList') {
+                var paypalField = document.getElementById('paypal-field');
+                if (paypalField?.children.length > 0 && !self.hipayHostedFields) {
+                  // PayPal field was recreated but we don't have an instance
+                  setTimeout(function() {
+                    self.initHostedFields();
+                  }, 100);
+                }
+              }
+            });
+          });
+          
+          // Start observing the PayPal field container
+          var paypalField = document.getElementById('paypal-field');
+          if (paypalField) {
+            observer.observe(paypalField, {
+              childList: true,
+              subtree: true
+            });
+          }
+        }
+      },
+
+      /**
+       * Initialize discount and coupon change listeners
+       */
+      initDiscountListener: function () {
+        var self = this;
+
+        // Listen for coupon code application/removal
+        $(document).on('click', '[data-action="apply-coupon"], [data-action="cancel-coupon"]', function() {
+          if (self.isPayPalActive()) {
+            setTimeout(function() {
+              self.handleCartChange();
+            }, 500); // Wait for coupon action to complete
+          }
+        });
+
+        // Listen for discount code input changes
+        $(document).on('input', 'input[name="coupon_code"], input[name="discount_code"]', function() {
+          if (self.isPayPalActive()) {
+            self.handleCartChange();
+          }
+        });
+
+        // Listen for AJAX completion (covers most discount/coupon operations)
+        $(document).on('ajaxComplete', function(event, xhr, settings) {
+          // Check if the AJAX request was related to discount/coupon
+          if (settings.url && (
+            settings.url.includes('coupon') || 
+            settings.url.includes('discount') || 
+            settings.url.includes('cart') ||
+            settings.url.includes('checkout')
+          )) {
+            if (self.isPayPalActive()) {
+              setTimeout(function() {
+                self.handleCartChange();
+              }, 300);
+            }
+          }
+        });
+
+        // Listen for quote totals changes (covers all price changes)
+        quote.totals.subscribe(function(totals) {
+          if (self.isPayPalActive() && totals) {
+            self.updatePayPalAmount(totals);
+          }
+        }, null, 'change');
+
+        // Listen for billing address changes (can affect totals)
+        quote.billingAddress.subscribe(function(address) {
+          if (self.isPayPalActive() && address) {
+            setTimeout(function() {
+              self.handleCartChange();
+            }, 500);
+          }
+        });
+
+        // Listen for shipping method changes
+        quote.shippingMethod.subscribe(function(method) {
+          if (self.isPayPalActive() && method) {
+            setTimeout(function() {
+              self.handleCartChange();
+            }, 500);
           }
         });
       },
@@ -187,6 +291,9 @@ define([
               }
             }
           })
+          .catch(function(error) {
+            console.error('Error refreshing payment data:', error);
+          })
           .always(function () {
             fullScreenLoader.stopLoader();
           });
@@ -212,11 +319,14 @@ define([
 
         if (self.hipayHostedFields && totals) {
           try {
+            var newAmount = self.safeToFixed(Number(totals.base_grand_total));
+            
             // Update the amount if PayPal SDK supports it
             if (self.hipayHostedFields.updateAmount) {
-              self.hipayHostedFields.updateAmount(
-                self.safeToFixed(Number(totals.base_grand_total))
-              );
+              self.hipayHostedFields.updateAmount(newAmount);
+              // Also update the configuration for consistency
+              self.configHipay.request.amount = newAmount;
+              self.configHipay.request.currency = totals.quote_currency_code;
             } else {
               // Fallback: reinitialize PayPal
               self.reinitializePayPal();
@@ -244,18 +354,36 @@ define([
           self.hipayHostedFields = null;
         }
 
+        // Clear the DOM element completely
+        var paypalField = document.getElementById('paypal-field');
+        if (paypalField) {
+          paypalField.innerHTML = '';
+          // Remove any existing PayPal iframes or elements
+          var paypalElements = paypalField.querySelectorAll('*');
+          paypalElements.forEach(function(element) {
+            element.remove();
+          });
+        }
+
         // Reset state
         self.isPlaceOrderAllowed(false);
 
-        // Reinitialize after a short delay
+        // Reinitialize after a short delay to ensure DOM is cleared
         setTimeout(function () {
           self.initHostedFields();
-        }, 100);
+        }, 200);
       },
 
       initHostedFields: function () {
         var self = this;
 
+        // Ensure the DOM element is clean before creating new instance
+        var paypalField = document.getElementById('paypal-field');
+        if (paypalField?.children.length > 0) {
+          paypalField.innerHTML = '';
+        }
+
+        // Create new HiPay SDK instance
         self.hipaySdk = new HiPay({
           username: self.apiUsernameTokenJs,
           password: self.apiPasswordTokenJs,
@@ -263,6 +391,7 @@ define([
           lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
         });
 
+        // Create PayPal hosted fields
         self.hipayHostedFields = self.hipaySdk.create(
           'paypal',
           self.configHipay
@@ -417,13 +546,33 @@ define([
       },
 
       /**
-       * Cleanup method to clear timeouts
+       * Cleanup method to clear timeouts and PayPal instances
        */
       dispose: function () {
-        if (this.cartChangeTimeout) {
-          clearTimeout(this.cartChangeTimeout);
+        var self = this;
+        
+        // Clear timeout
+        if (self.cartChangeTimeout) {
+          clearTimeout(self.cartChangeTimeout);
         }
-        this._super();
+        
+        // Destroy PayPal instance
+        if (self.hipayHostedFields) {
+          try {
+            self.hipayHostedFields.destroy();
+            self.hipayHostedFields = null;
+          } catch (error) {
+            console.warn('PayPal destroy failed during dispose:', error);
+          }
+        }
+        
+        // Clear DOM element
+        var paypalField = document.getElementById('paypal-field');
+        if (paypalField) {
+          paypalField.innerHTML = '';
+        }
+        
+        self._super();
       }
     });
   } else {
