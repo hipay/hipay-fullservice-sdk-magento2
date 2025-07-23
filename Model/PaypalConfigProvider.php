@@ -20,8 +20,6 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Gateway\Manager as GatewayClient;
 use Psr\Log\LoggerInterface;
 use Exception;
-use Magento\Store\Model\StoreManagerInterface;
-use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
 
 /**
  * PaypalConfigProvider class for PayPal payment product
@@ -44,33 +42,17 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $_gatewayClient;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
-     * @var GatewayManagerFactory
-     */
-    protected $_gatewayManagerFactory;
-
-    /**
      * PaypalConfigProvider Construct
      *
      * @param LoggerInterface $logger
      * @param GatewayClient   $gatewayClient
-     * @param StoreManagerInterface $storeManager
-     * @param GatewayManagerFactory $gatewayManagerFactory
      */
     public function __construct(
         LoggerInterface $logger,
-        GatewayClient $gatewayClient,
-        StoreManagerInterface $storeManager,
-        GatewayManagerFactory $gatewayManagerFactory
+        GatewayClient $gatewayClient
     ) {
         $this->_logger = $logger;
         $this->_gatewayClient = $gatewayClient;
-        $this->_storeManager = $storeManager;
-        $this->_gatewayManagerFactory = $gatewayManagerFactory;
     }
 
     /**
@@ -94,22 +76,16 @@ class PaypalConfigProvider implements ConfigProviderInterface
      *
      * @return bool
      */
-    protected function isPayPalV2($storeId = null): bool
+    protected function isPayPalV2(): bool
     {
         try {
-            // Use the provided storeId or fallback to the current store
-            $storeId = $storeId ?? $this->_storeManager->getStore()->getId();
-            $gatewayClient = $this->_gatewayManagerFactory->create(null, [
-                'apiEnv' => 1,
-                'storeId' => $storeId
-            ]);
-            $paymentProduct = $gatewayClient->requestPaymentProduct('paypal', true);
+            $paymentProduct = $this->_gatewayClient->requestPaymentProduct('paypal', true);
 
             if (!empty($paymentProduct[0]->getOptions())) {
                 $options = $paymentProduct[0]->getOptions();
                 return $options['providerArchitectureVersion'] === 'v1' && !empty($options['payerId']);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_logger->critical($e->getMessage());
         }
 
