@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
 use Exception;
 use Magento\Store\Model\StoreManagerInterface;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
-use HiPay\FullserviceMagento\Model\Config as HipayConfig;
 
 /**
  * PaypalConfigProvider class for PayPal payment product
@@ -55,31 +54,23 @@ class PaypalConfigProvider implements ConfigProviderInterface
     protected $_gatewayManagerFactory;
 
     /**
-     * @var HipayConfig
-     */
-    protected $_hipayConfig;
-
-    /**
      * PaypalConfigProvider Construct
      *
-     * @param LoggerInterface       $logger
-     * @param GatewayClient         $gatewayClient
+     * @param LoggerInterface $logger
+     * @param GatewayClient   $gatewayClient
      * @param StoreManagerInterface $storeManager
      * @param GatewayManagerFactory $gatewayManagerFactory
-     * @param HipayConfig           $hipayConfig
      */
     public function __construct(
         LoggerInterface $logger,
         GatewayClient $gatewayClient,
         StoreManagerInterface $storeManager,
-        GatewayManagerFactory $gatewayManagerFactory,
-        HipayConfig $hipayConfig
+        GatewayManagerFactory $gatewayManagerFactory
     ) {
         $this->_logger = $logger;
         $this->_gatewayClient = $gatewayClient;
         $this->_storeManager = $storeManager;
         $this->_gatewayManagerFactory = $gatewayManagerFactory;
-        $this->_hipayConfig = $hipayConfig;
     }
 
     /**
@@ -108,13 +99,10 @@ class PaypalConfigProvider implements ConfigProviderInterface
         try {
             // Use the provided storeId or fallback to the current store
             $storeId = $storeId ?? $this->_storeManager->getStore()->getId();
-            $gatewayClient = $this->_gatewayManagerFactory->create(
-                null,
-                [
-                    'apiEnv' => $this->_hipayConfig->getApiEnv(),
-                    'storeId' => $storeId
-                ]
-            );
+            $gatewayClient = $this->_gatewayManagerFactory->create(null, [
+                'apiEnv' => 1,
+                'storeId' => $storeId
+            ]);
             $paymentProduct = $gatewayClient->requestPaymentProduct('paypal', true);
 
             if (!empty($paymentProduct[0]->getOptions())) {
