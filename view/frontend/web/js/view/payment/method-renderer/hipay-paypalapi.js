@@ -136,7 +136,7 @@ define([
         var cartData = customerData.get('cart');
 
         cartData.subscribe(function (updatedCart) {
-          if (updatedCart && updatedCart.items) {
+          if (updatedCart?.items) {
             // Only handle cart changes if PayPal is the active payment method
             if (self.isPayPalActive()) {
               self.handleCartChange();
@@ -346,8 +346,7 @@ define([
 
         // Check if PayPal is selected as payment method
         return (
-          selectedPaymentMethod &&
-          selectedPaymentMethod.method === self.getCode()
+          selectedPaymentMethod?.method === self.getCode()
         );
       },
 
