@@ -20,8 +20,6 @@ define([
   'Magento_Checkout/js/view/payment/default',
   'Magento_Checkout/js/model/full-screen-loader',
   'Magento_Checkout/js/model/quote',
-  'Magento_Customer/js/customer-data',
-  'Magento_Checkout/js/action/get-payment-information',
   'domReady!'
 ], function (
   $,
@@ -29,9 +27,7 @@ define([
   ko,
   ComponentDefault,
   fullScreenLoader,
-  quote,
-  customerData,
-  getPaymentInformation
+  quote
 ) {
   'use strict';
 
@@ -81,7 +77,6 @@ define([
               .hipay_paypalapi
           : 'en_us'
       },
-
       isPlaceOrderAllowed: ko.observable(false),
       isAllTOCChecked: ko.observable(
         !(
@@ -92,319 +87,6 @@ define([
         )
       ),
       allTOC: new Map(),
-      cartChangeTimeout: null,
-
-      initialize: function () {
-        var self = this;
-        self._super();
-
-        self.configHipay = {
-          template: 'auto',
-          selector: 'paypal-field',
-          canPayLater: Boolean(self.bnpl),
-          paypalButtonStyle: {
-            shape: self.buttonShape,
-            height: Number(self.buttonHeight),
-            color: self.buttonColor,
-            label: self.buttonLabel
-          },
-          request: {
-            amount: self.safeToFixed(Number(quote.totals().base_grand_total)),
-            currency: quote.totals().quote_currency_code,
-            locale: this.convertToUpperCaseAfterUnderscore(self.locale)
-          }
-        };
-
-        // Subscribe to quote totals changes
-        quote.totals.subscribe(function (totals) {
-          if (self.hipayHostedFields && totals) {
-            self.updatePayPalAmount(totals);
-          }
-        });
-
-        // Subscribe to cart section changes
-        self.initCartChangeListener();
-
-        // Listen for DOM changes to handle PayPal field recreation
-        self.initPayPalFieldObserver();
-
-        self.initTOCEvents();
-      },
-
-      /**
-       * Initialize cart change listener
-       */
-      initCartChangeListener: function () {
-        var self = this;
-        var cartData = customerData.get('cart');
-
-        cartData.subscribe(function (updatedCart) {
-          if (updatedCart?.items) {
-            // Only handle cart changes if PayPal is the active payment method
-            if (self.isPayPalActive()) {
-              self.handleCartChange();
-            }
-          }
-        });
-
-        // Listen for discount/coupon changes
-        self.initDiscountListener();
-      },
-
-      /**
-       * Initialize PayPal field observer to handle DOM recreation
-       */
-      initPayPalFieldObserver: function () {
-        var self = this;
-        
-        // Create a mutation observer to watch for PayPal field changes
-        if (typeof MutationObserver !== 'undefined') {
-          var observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-              if (mutation.type === 'childList') {
-                var paypalField = document.getElementById('paypal-field');
-                if (paypalField?.children.length > 0 && !self.hipayHostedFields) {
-                  // PayPal field was recreated but we don't have an instance
-                  setTimeout(function() {
-                    self.initHostedFields();
-                  }, 100);
-                }
-              }
-            });
-          });
-          
-          // Start observing the PayPal field container
-          var paypalField = document.getElementById('paypal-field');
-          if (paypalField) {
-            observer.observe(paypalField, {
-              childList: true,
-              subtree: true
-            });
-          }
-        }
-      },
-
-      /**
-       * Initialize discount and coupon change listeners
-       */
-      initDiscountListener: function () {
-        var self = this;
-
-        // Listen for coupon code application/removal
-        $(document).on('click', '[data-action="apply-coupon"], [data-action="cancel-coupon"]', function() {
-          if (self.isPayPalActive()) {
-            setTimeout(function() {
-              self.handleCartChange();
-            }, 500); // Wait for coupon action to complete
-          }
-        });
-
-        // Listen for discount code input changes
-        $(document).on('input', 'input[name="coupon_code"], input[name="discount_code"]', function() {
-          if (self.isPayPalActive()) {
-            self.handleCartChange();
-          }
-        });
-
-        // Listen for AJAX completion (covers most discount/coupon operations)
-        $(document).on('ajaxComplete', function(event, xhr, settings) {
-          // Check if the AJAX request was related to discount/coupon
-          if (
-            settings.url?.includes('coupon') || 
-            settings.url?.includes('discount') || 
-            settings.url?.includes('cart') ||
-            settings.url?.includes('checkout')
-          ) {
-            if (self.isPayPalActive()) {
-              setTimeout(function() {
-                self.handleCartChange();
-              }, 300);
-            }
-          }
-        });
-
-        // Listen for quote totals changes (covers all price changes)
-        quote.totals.subscribe(function(totals) {
-          if (self.isPayPalActive() && totals) {
-            self.updatePayPalAmount(totals);
-          }
-        }, null, 'change');
-
-        // Listen for billing address changes (can affect totals)
-        quote.billingAddress.subscribe(function(address) {
-          if (self.isPayPalActive() && address) {
-            setTimeout(function() {
-              self.handleCartChange();
-            }, 500);
-          }
-        });
-
-        // Listen for shipping method changes
-        quote.shippingMethod.subscribe(function(method) {
-          if (self.isPayPalActive() && method) {
-            setTimeout(function() {
-              self.handleCartChange();
-            }, 500);
-          }
-        });
-      },
-
-      /**
-       * Handle cart changes with debouncing
-       */
-      handleCartChange: function () {
-        var self = this;
-
-        // Clear existing timeout
-        if (self.cartChangeTimeout) {
-          clearTimeout(self.cartChangeTimeout);
-        }
-
-        // Debounce the cart change handling
-        self.cartChangeTimeout = setTimeout(function () {
-          self.refreshPaymentData();
-        }, 500);
-      },
-
-      /**
-       * Refresh payment data when cart changes
-       */
-      refreshPaymentData: function () {
-        var self = this;
-
-        // Show loading
-        fullScreenLoader.startLoader();
-
-        // Get fresh payment information
-        getPaymentInformation()
-          .then(function (data) {
-            if (data.totals) {
-              // Update quote totals
-              quote.setTotals(data.totals);
-
-              // Update PayPal configuration
-              self.updatePayPalConfiguration(data.totals);
-
-              // Reinitialize PayPal if needed
-              if (self.hipayHostedFields) {
-                self.reinitializePayPal();
-              }
-            }
-          })
-          .catch(function(error) {
-            console.error('Error refreshing payment data:', error);
-          })
-          .always(function () {
-            fullScreenLoader.stopLoader();
-          });
-      },
-
-      /**
-       * Update PayPal configuration with new totals
-       */
-      updatePayPalConfiguration: function (totals) {
-        var self = this;
-
-        self.configHipay.request.amount = self.safeToFixed(
-          Number(totals.base_grand_total)
-        );
-        self.configHipay.request.currency = totals.quote_currency_code;
-      },
-
-      /**
-       * Update PayPal amount (for existing instances)
-       */
-      updatePayPalAmount: function (totals) {
-        var self = this;
-
-        if (self.hipayHostedFields && totals) {
-          try {
-            var newAmount = self.safeToFixed(Number(totals.base_grand_total));
-            
-            // Update the amount if PayPal SDK supports it
-            if (self.hipayHostedFields.updateAmount) {
-              self.hipayHostedFields.updateAmount(newAmount);
-              // Also update the configuration for consistency
-              self.configHipay.request.amount = newAmount;
-              self.configHipay.request.currency = totals.quote_currency_code;
-            } else {
-              // Fallback: reinitialize PayPal
-              self.reinitializePayPal();
-            }
-          } catch (error) {
-            console.warn('PayPal amount update failed:', error);
-            self.reinitializePayPal();
-          }
-        }
-      },
-
-      /**
-       * Reinitialize PayPal hosted fields
-       */
-      reinitializePayPal: function () {
-        var self = this;
-
-        // Destroy existing instance
-        if (self.hipayHostedFields) {
-          try {
-            self.hipayHostedFields.destroy();
-          } catch (error) {
-            console.warn('PayPal destroy failed:', error);
-          }
-          self.hipayHostedFields = null;
-        }
-
-        // Clear the DOM element completely
-        var paypalField = document.getElementById('paypal-field');
-        if (paypalField) {
-          paypalField.innerHTML = '';
-          // Remove any existing PayPal iframes or elements
-          var paypalElements = paypalField.querySelectorAll('*');
-          paypalElements.forEach(function(element) {
-            element.remove();
-          });
-        }
-
-        // Reset state
-        self.isPlaceOrderAllowed(false);
-
-        // Reinitialize after a short delay to ensure DOM is cleared
-        setTimeout(function () {
-          self.initHostedFields();
-        }, 200);
-      },
-
-      initHostedFields: function () {
-        var self = this;
-
-        // Ensure the DOM element is clean before creating new instance
-        var paypalField = document.getElementById('paypal-field');
-        if (paypalField?.children.length > 0) {
-          paypalField.innerHTML = '';
-        }
-
-        // Create new HiPay SDK instance
-        self.hipaySdk = new HiPay({
-          username: self.apiUsernameTokenJs,
-          password: self.apiPasswordTokenJs,
-          environment: self.env,
-          lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
-        });
-
-        // Create PayPal hosted fields
-        self.hipayHostedFields = self.hipaySdk.create(
-          'paypal',
-          self.configHipay
-        );
-
-        self.hipayHostedFields.on('paymentAuthorized', function (token) {
-          self.paymentAuthorized(self, token);
-        });
-
-        self.isPlaceOrderAllowed(true);
-
-        return true;
-      },
 
       initTOCEvents: function () {
         var self = this;
@@ -456,6 +138,172 @@ define([
         });
       },
 
+      /**
+       * Initialize discount and coupon change listeners
+       */
+      initDiscountListener: function () {
+        var self = this;
+
+        // Listen for coupon code application/removal
+        $(document).on('click', '[data-action="apply-coupon"], [data-action="cancel-coupon"]', function() {
+          if (self.isPayPalActive()) {
+            setTimeout(function() {
+              self.handleDiscountChange();
+            }, 500); // Wait for coupon action to complete
+          }
+        });
+
+        // Listen for discount code input changes with debouncing
+        var discountInputTimeout = null;
+        $(document).on('input', 'input[name="coupon_code"], input[name="discount_code"]', function() {
+          if (self.isPayPalActive()) {
+            // Clear existing timeout
+            if (discountInputTimeout) {
+              clearTimeout(discountInputTimeout);
+            }
+            // Debounce the input - only trigger after user stops typing for 1 second
+            discountInputTimeout = setTimeout(function() {
+              self.handleDiscountChange();
+            }, 1000);
+          }
+        });
+      },
+
+      /**
+       * Initialize address change listeners
+       */
+      initAddressListener: function () {
+        var self = this;
+
+        // Listen for billing address changes (can affect totals)
+        var lastBillingAddress = null;
+        quote.billingAddress.subscribe(function(address) {
+          if (self.isPayPalActive() && address) {
+            // Only trigger if billing address actually changed (not just initialized)
+            var addressKey = address.region_id + '_' + address.country_id;
+            if (lastBillingAddress !== addressKey) {
+              lastBillingAddress = addressKey;
+              setTimeout(function() {
+                self.handleAddressChange();
+              }, 500);
+            }
+          }
+        });
+
+        // Listen for shipping method changes
+        var lastShippingMethod = null;
+        quote.shippingMethod.subscribe(function(method) {
+          if (self.isPayPalActive() && method) {
+            // Only trigger if shipping method actually changed
+            var methodKey = method.carrier_code + '_' + method.method_code;
+            if (lastShippingMethod !== methodKey) {
+              lastShippingMethod = methodKey;
+              setTimeout(function() {
+                self.handleAddressChange();
+              }, 500);
+            }
+          }
+        });
+      },
+
+      /**
+       * Handle discount changes
+       */
+      handleDiscountChange: function () {
+        var self = this;
+        
+        // Only proceed if PayPal is still the active payment method
+        if (!self.isPayPalActive()) {
+          return;
+        }
+
+        // Update PayPal amount with current totals
+        var currentTotals = quote.totals();
+        if (currentTotals && self.hipayHostedFields) {
+          self.configHipay.request.amount = self.safeToFixed(Number(currentTotals.base_grand_total));
+          self.configHipay.request.currency = currentTotals.quote_currency_code;
+        }
+      },
+
+      /**
+       * Handle address changes
+       */
+      handleAddressChange: function () {
+        var self = this;
+        
+        // Only proceed if PayPal is still the active payment method
+        if (!self.isPayPalActive()) {
+          return;
+        }
+
+        // Update PayPal amount with current totals
+        var currentTotals = quote.totals();
+        if (currentTotals && self.hipayHostedFields) {
+          self.configHipay.request.amount = self.safeToFixed(Number(currentTotals.base_grand_total));
+          self.configHipay.request.currency = currentTotals.quote_currency_code;
+        }
+      },
+
+      initialize: function () {
+        var self = this;
+        self._super();
+
+        self.configHipay = {
+          template: 'auto',
+          selector: 'paypal-field',
+          canPayLater: Boolean(self.bnpl),
+          paypalButtonStyle: {
+            shape: self.buttonShape,
+            height: Number(self.buttonHeight),
+            color: self.buttonColor,
+            label: self.buttonLabel
+          },
+          request: {
+            amount: self.safeToFixed(Number(quote.totals().base_grand_total)),
+            currency: quote.totals().quote_currency_code,
+            locale: this.convertToUpperCaseAfterUnderscore(self.locale)
+          }
+        };
+
+        quote.totals.subscribe(function(totals) {
+          if (self.hipayHostedFields) {
+            self.configHipay.request.amount = self.safeToFixed(Number(totals.base_grand_total));
+          }
+        });
+
+        // Listen for discount/coupon changes
+        self.initDiscountListener();
+
+        // Listen for address changes
+        self.initAddressListener();
+
+        self.initTOCEvents();
+      },
+
+      initHostedFields: function () {
+        var self = this;
+
+        self.hipaySdk = new HiPay({
+          username: self.apiUsernameTokenJs,
+          password: self.apiPasswordTokenJs,
+          environment: self.env,
+          lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
+        });
+
+        self.hipayHostedFields = self.hipaySdk.create(
+          'paypal',
+          self.configHipay
+        );
+
+        self.hipayHostedFields.on('paymentAuthorized', function (token) {
+          self.paymentAuthorized(self, token);
+        });
+
+        self.isPlaceOrderAllowed(true);
+
+        return true;
+      },
+
       paymentAuthorized: function (self, tokenHipay) {
         self.browser_info(JSON.stringify(tokenHipay.browser_info));
         self.paypal_order_id(tokenHipay.orderID);
@@ -463,7 +311,13 @@ define([
       },
 
       isPaypalV2Allowed: function () {
-        return isPayPalV2 === 1;
+        var self = this;
+
+        if (isPayPalV2 === 1) {
+          return true;
+        }
+
+        return false;
       },
 
       /**
@@ -496,6 +350,7 @@ define([
       initObservable: function () {
         var self = this;
         self._super().observe(['paypal_order_id', 'browser_info']);
+
         return self;
       },
 
@@ -527,52 +382,27 @@ define([
         };
         return $.extend(true, parent, data);
       },
-
       isActive: function () {
         return true;
       },
 
       convertToUpperCaseAfterUnderscore: function (str) {
+        // Split the string at the underscore
         let parts = str.split('_');
+
+        // Capitalize the second part
         parts[1] = parts[1].toUpperCase();
+
+        // Join the parts back together
         return parts.join('_');
       },
 
       safeToFixed: function (value, decimals = 2) {
         const factor = 10 ** decimals;
         const correction = 1 / 10 ** (decimals + 2);
-        const rounded = Math.round((value + correction) * factor) / factor;
+        const rounded =
+          Math.round((value + correction) * factor) / factor;
         return rounded.toFixed(decimals);
-      },
-
-      /**
-       * Cleanup method to clear timeouts and PayPal instances
-       */
-      dispose: function () {
-        var self = this;
-        
-        // Clear timeout
-        if (self.cartChangeTimeout) {
-          clearTimeout(self.cartChangeTimeout);
-        }
-        
-        // Destroy PayPal instance
-        if (self.hipayHostedFields) {
-          try {
-            self.hipayHostedFields.destroy();
-            self.hipayHostedFields = null;
-          } catch (error) {
-            console.warn('PayPal destroy failed during dispose:', error);
-          }
-        }
-        
-        // Clear DOM element
-        var paypalField = document.getElementById('paypal-field');
-        if (paypalField) {
-          paypalField.innerHTML = '';
-        }
-        
-        self._super();
       }
     });
   } else {
@@ -585,7 +415,6 @@ define([
       getCode: function () {
         return 'hipay_paypalapi';
       },
-
       isActive: function () {
         return true;
       }
