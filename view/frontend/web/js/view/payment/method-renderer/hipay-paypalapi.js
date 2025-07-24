@@ -244,6 +244,51 @@ define([
         }
       },
 
+      /**
+       * Initialize mini cart change listeners for PayPal V2
+       */
+      initMiniCartListener: function () {
+        var self = this;
+
+        // Listen for mini cart updates (quantity changes, product removal, etc.)
+        $(document).ready(function () {
+
+          // Listen for mini cart updates via AJAX (more comprehensive)
+          $(document).ajaxComplete(function(event, xhr, settings) {
+            // Check if the AJAX call is related to mini cart updates
+            if (
+              settings.url?.includes('/updateItemQty') ||
+              settings.url?.includes('/removeItem')
+            ) {
+              if (self.isPayPalActive()) {
+                setTimeout(function() {
+                  self.handleMiniCartChange();
+                }, 1000); // Longer delay for AJAX operations
+              }
+            }
+          });
+
+        });
+      },
+
+      /**
+       * Handle mini cart changes by reloading the page
+       */
+      handleMiniCartChange: function () {
+        var self = this;
+        
+        // Only proceed if PayPal V2 is still the active payment method
+        if (!self.isPayPalActive()) {
+          return;
+        }
+        
+        // Show loading indicator before reload
+        fullScreenLoader.startLoader();
+        
+        // Reload the page
+        window.location.reload();
+      },
+
       initialize: function () {
         var self = this;
         self._super();
@@ -278,6 +323,9 @@ define([
         self.initAddressListener();
 
         self.initTOCEvents();
+
+        // NEW: Add mini cart listeners for PayPal V2
+        self.initMiniCartListener();
       },
 
       initHostedFields: function () {
