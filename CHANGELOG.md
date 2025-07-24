@@ -2,7 +2,6 @@
 
 ## UNRELEASE
 
-- **Fix** : Improved synchronization between mini cart and checkout cart for PayPal.
 - **Fix** : Fixed PayPal environment switching (sandbox/production) per store view.
 
 ## 1.27.6
