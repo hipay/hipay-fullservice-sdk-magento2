@@ -87,9 +87,15 @@ define([
       initialize: function () {
         var self = this;
         self._super();
-        self.checkApplePayAllowed().then((result) => {
-          self.isApplePayAllowed(result);
-        });
+        self
+          .checkApplePayAllowed()
+          .then((result) => {
+            self.isApplePayAllowed(result);
+          })
+          .catch((error) => {
+            console.warn('Error checking Apple Pay availability:', error);
+            self.isApplePayAllowed(false);
+          });
 
         // Initialize mini cart listeners (from mixin)
         self.initMiniCartListener();
@@ -112,11 +118,11 @@ define([
         var self = this;
 
         if (self.instanceApplePay) {
-          return true;
+          return Promise.resolve(true);
         }
 
         if (!self.displayName) {
-          return false;
+          return Promise.resolve(false);
         }
 
         if (self.merchantId) {
@@ -138,11 +144,12 @@ define([
           try {
             canMakePayments = window.ApplePaySession.canMakePayments();
           } catch (e) {
-            return false;
+            return Promise.resolve(false);
           }
           if (canMakePayments) {
-            return self.initApplePayField(self);
+            return Promise.resolve(self.initApplePayField(self));
           }
+          return Promise.resolve(false);
         }
       },
 
@@ -280,6 +287,14 @@ define([
                   if (response.redirectUrl) {
                     $.mage.redirect(response.redirectUrl);
                   }
+                } else {
+                  try {
+                    self.instanceApplePay.completePaymentWithSuccess();
+                  } catch (error) {
+                    console.warn('Error completing Apple Pay payment:', error);
+                  }
+
+                  $.mage.redirect(self.afterPlaceOrderUrl);
                 }
               })
               .fail(function () {
