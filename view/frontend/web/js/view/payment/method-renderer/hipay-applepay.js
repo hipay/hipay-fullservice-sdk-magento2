@@ -359,7 +359,11 @@ define([
        * @returns {String}
        */
       getPendingUrl: function () {
-        return window.BASE_URL + 'hipay/redirect/pending?payment_method=' + this.getCode();
+        return (
+          window.BASE_URL +
+          'hipay/redirect/pending?payment_method=' +
+          this.getCode()
+        );
       }
     })
   );
