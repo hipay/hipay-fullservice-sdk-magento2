@@ -224,11 +224,12 @@ class Notify
             case TransactionStatus::AUTHORIZED:
                 // status : 116
                 if (
-                    $this->_order->getState() == Order::STATE_NEW
-                    || $this->_order->getState() == Order::STATE_PENDING_PAYMENT
-                    || $this->_order->getState() == Order::STATE_PAYMENT_REVIEW
-                    || $this->_order->getState() == Order::STATE_HOLDED
-                    || in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
+                    in_array($this->_order->getState(), [
+                        Order::STATE_NEW,
+                        Order::STATE_PENDING_PAYMENT,
+                        Order::STATE_PAYMENT_REVIEW,
+                        Order::STATE_HOLDED
+                    ]) || $this->_order->getStatus() === Config::STATUS_AUTHORIZATION_REQUESTED
                 ) {
                     $canProcess = true;
                 } else {
