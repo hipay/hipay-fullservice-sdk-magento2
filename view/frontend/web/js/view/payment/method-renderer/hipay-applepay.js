@@ -294,7 +294,7 @@ define([
                     console.warn('Error completing Apple Pay payment:', error);
                   }
 
-                  $.mage.redirect(self.afterPlaceOrderUrl);
+                  $.mage.redirect(self.getPendingUrl());
                 }
               })
               .fail(function () {
@@ -352,6 +352,14 @@ define([
             cc_type: this.creditCardType()
           }
         };
+      },
+
+      /**
+       * Get the pending URL for redirect
+       * @returns {String}
+       */
+      getPendingUrl: function () {
+        return window.BASE_URL + 'hipay/redirect/pending?payment_method=' + this.getCode();
       }
     })
   );
