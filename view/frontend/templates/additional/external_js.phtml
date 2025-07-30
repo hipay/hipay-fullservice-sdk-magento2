@@ -1,2 +1,13 @@
-<!-- Add external js for Hosted fields -->
-<script src="<?php echo $block->getJsSrcHostedFields();?>" type="text/javascript" charset="utf-8"></script>
+<?php
+$integrityHash = $block->getIntegrityHash();
+$sdkUrl = $block->getJsSrcHostedFields();
+?>
+<?php if ($integrityHash): ?>
+<script src="<?php echo $sdkUrl; ?>" 
+        type="text/javascript" 
+        charset="utf-8" 
+        integrity="<?php echo $integrityHash; ?>" 
+        crossorigin="anonymous"></script>
+<?php else: ?>
+<script src="<?php echo $sdkUrl; ?>" type="text/javascript" charset="utf-8"></script>
+<?php endif; ?>

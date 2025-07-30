@@ -362,6 +362,8 @@
 "Try to enable for configured 3ds rules","Try to enable for configured 3ds rules"
 "Two Weeks","Two Weeks"
 "Url of Hipay's javascript","Url of Hipay's javascript"
+"Url of Hipay's libs for Hosted Fields","Url of Hipay's libs for Hosted Fields"
+"Url of Hipay's libs integrity hash for Hosted Fields","Url of Hipay's libs integrity hash for Hosted Fields"
 "Use 3D Secure","Use 3D Secure"
 "Use Oneclick","Use Oneclick"
 "Vertical","Vertical"

@@ -362,6 +362,8 @@
 "Try to enable for configured 3ds rules","Demander l'activation pour les transactions défini par les règles 3DS (ci-dessous)"
 "Two Weeks","2 semaines"
 "Url of Hipay's javascript","Url de l'API HiPay "
+"Url of Hipay's libs for Hosted Fields","Url des librairies HiPay pour les champs hébergés"
+"Url of Hipay's libs integrity hash for Hosted Fields","Url du hash d'intégrité des librairies HiPay pour les champs hébergés"
 "Use 3D Secure","Activer 3DS"
 "Use Oneclick","Activer Oneclick"
 "Vertical","Vertical"
