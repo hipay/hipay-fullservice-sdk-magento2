@@ -934,6 +934,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <multibanco_order_expiration_time>3</multibanco_order_expiration_time>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>multibanco</payment_products>
@@ -958,6 +959,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <multibanco_order_expiration_time>3</multibanco_order_expiration_time>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
