@@ -2,6 +2,11 @@
 
 ## UNRELEASE
 
+- **Fix** : Improved synchronization between mini cart and checkout cart for PayPal.
+- **Fix** : Fixed PayPal environment switching (sandbox/production) per store view.
+- **Fix** : Apple Pay failure occurring during timeout responses scenarios.
+- **Fix** : Multibanco SIBS SPG integration -> Order API
+
 ## 1.27.6
 
 - **Fix** : Fixed payment product api store id
