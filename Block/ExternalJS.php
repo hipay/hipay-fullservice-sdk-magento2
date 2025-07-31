@@ -20,7 +20,6 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
 {
     protected const JS_SRC_CONFIG_FINGERPRINT = 'hipay/configurations/fingerprint_js_url';
     protected const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
-    protected const JS_SRC_CONFIG_HOSTED_FIELDS_INTEGRITY = 'hipay/configurations/sdk_js_integrity_url';
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -76,11 +75,13 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
      */
     public function getJsSrcHostedFieldsIntegrityUrl()
     {
-        return $this->_scopeConfig->getValue(
-            self::JS_SRC_CONFIG_HOSTED_FIELDS_INTEGRITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            null
-        );
+        $sdkUrl = $this->getJsSrcHostedFields();
+        if (empty($sdkUrl)) {
+            return '';
+        }
+        
+        // Replace .js with .integrity to generate the integrity URL
+        return str_replace('.js', '.integrity', $sdkUrl);
     }
 
     /**

@@ -90,7 +90,6 @@
                 <fingerprint_js_url>https://secure-gateway.hipay-tpp.com/gateway/toolbox/fingerprint
                 </fingerprint_js_url>
                 <sdk_js_url>https://libs.hipay.com/js/sdkjs.js</sdk_js_url>
-                <sdk_js_integrity_url>https://libs.hipay.com/js/sdkjs.integrity</sdk_js_integrity_url>
                 <basket_enabled>0</basket_enabled>
                 <currency_transaction>0</currency_transaction>
                 <send_notification_url>1</send_notification_url>

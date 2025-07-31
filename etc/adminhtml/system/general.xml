@@ -34,10 +34,6 @@
 				<label>Url of Hipay's libs for Hosted Fields </label>
 				<comment>Not to be modified.</comment>
 			</field>
-			<field id="sdk_js_integrity_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>Url of Hipay's libs integrity hash for Hosted Fields</label>
-				<comment>URL to fetch the Subresource Integrity hash for the SDK. Not to be modified.</comment>
-			</field>
 			<field id="basket_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
 				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				<label>Send cart</label>
