@@ -6,6 +6,7 @@
 - **Fix** : Fixed PayPal environment switching (sandbox/production) per store view.
 - **Fix** : Apple Pay failure occurring during timeout responses scenarios.
 - **Fix** : Multibanco SIBS SPG integration -> Order API
+- **Fix** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
 
 ## 1.27.6
 

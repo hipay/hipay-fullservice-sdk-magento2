@@ -1,6 +1,7 @@
 <?php
-$integrityHash = $block->getIntegrityHash();
-$sdkUrl = $block->getJsSrcHostedFields();
+$hostedFieldsSdk = $block->getJsSrcHostedFields();
+$sdkUrl = $hostedFieldsSdk['sdkUrl'];
+$integrityHash = $hostedFieldsSdk['integrityHash'];
 ?>
 <?php if ($integrityHash): ?>
 <script src="<?php echo $sdkUrl; ?>" 

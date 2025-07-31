@@ -55,47 +55,51 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return hosted fields URL
+     * Return hosted fields URL and integrity hash
      *
-     * @return string
+     * @return array
      */
     public function getJsSrcHostedFields()
     {
-        return $this->_scopeConfig->getValue(
+        $sdkUrl = $this->_scopeConfig->getValue(
             self::JS_SRC_CONFIG_HOSTED_FIELDS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
         );
-    }
-
-    /**
-     * Return hosted fields integrity URL
-     *
-     * @return string
-     */
-    public function getJsSrcHostedFieldsIntegrityUrl()
-    {
-        $sdkUrl = $this->getJsSrcHostedFields();
-        if (empty($sdkUrl)) {
-            return '';
+        
+        $integrityHash = null;
+        if (!empty($sdkUrl)) {
+            $integrityHash = $this->getIntegrityHash($sdkUrl);
         }
         
-        // Replace .js with .integrity to generate the integrity URL
-        return str_replace('.js', '.integrity', $sdkUrl);
+        return [
+            'sdkUrl' => $sdkUrl,
+            'integrityHash' => $integrityHash
+        ];
     }
 
     /**
      * Fetch integrity hash from HiPay server
      *
+     * @param string $sdkUrl The SDK URL to generate integrity URL from
      * @return string|null
      */
-    public function getIntegrityHash()
+    public function getIntegrityHash($sdkUrl = null)
     {
-        $integrityUrl = $this->getJsSrcHostedFieldsIntegrityUrl();
+        if ($sdkUrl === null) {
+            $sdkUrl = $this->_scopeConfig->getValue(
+                self::JS_SRC_CONFIG_HOSTED_FIELDS,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            );
+        }
         
-        if (empty($integrityUrl)) {
+        if (empty($sdkUrl)) {
             return null;
         }
+        
+        // Replace .js with .integrity to generate the integrity URL
+        $integrityUrl = str_replace('.js', '.integrity', $sdkUrl);
 
         try {
             $httpClient = new \Magento\Framework\HTTP\Client\Curl();
