@@ -743,8 +743,6 @@ class Config extends AbstractConfig implements ConfigurationInterface
         return $this->getOtherConfiguration('sdk_js_url');
     }
 
-
-
     public function getApiHTTPHeaderAccept()
     {
         return $this->_configSDK !== null ? $this->_configSDK->getApiHTTPHeaderAccept() : '';
