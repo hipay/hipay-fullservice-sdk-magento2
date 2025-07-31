@@ -38,7 +38,7 @@
 	<field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
 		   showInStore="0">
 		<label>Cancel pending order</label>
-		<comment>Cancel pending orders since 30 minutes.</comment>
+		<comment>Automatically cancel orders that remain pending for more than 2 days.</comment>
 		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 	</field>
 <!--	<field id="default_mapping_shipping_method" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">

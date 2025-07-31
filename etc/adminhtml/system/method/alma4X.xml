@@ -30,7 +30,7 @@
 	<field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
 		   showInStore="0">
 		<label>Cancel pending order</label>
-		<comment>Cancel pending orders since 3 days.</comment>
+		<comment>Automatically cancel orders that remain pending for more than 3 days.</comment>
 		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 	</field>
 	<include path="HiPay_FullserviceMagento::system/method/base_bottom_api.xml"/>
