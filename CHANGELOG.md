@@ -7,7 +7,7 @@
 - **Fix** : Apple Pay failure occurring during timeout responses scenarios.
 - **Fix** : Multibanco SIBS SPG integration -> Order API
 - **Fix** : Handle "on hold" orders during authorization status update (status 116)
-- **Fix** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
+- **Add** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
 
 ## 1.27.6
 
