@@ -35,12 +35,7 @@
 		<label>Merchant Promotion</label>
 		<comment>OPC provided by Oney</comment>
 	</field>
-	<field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
-		   showInStore="0">
-		<label>Cancel pending order</label>
-		<comment>Cancel pending orders since 30 minutes.</comment>
-		<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-	</field>
+    <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
 <!--	<field id="default_mapping_shipping_method" translate="label" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
 		<label>Default mapping shipping method</label>
 		<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay</source_model>

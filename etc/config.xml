@@ -123,6 +123,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
@@ -162,6 +163,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
@@ -194,6 +196,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>1440</cancellation_deadline>
                 <authentication_indicator>0</authentication_indicator>
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <one_click>
@@ -227,6 +230,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>1440</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <display_name>Your display name</display_name>
@@ -252,6 +256,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>sisal</payment_products>
@@ -275,6 +280,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <time_limit_to_pay>0.5</time_limit_to_pay>
@@ -312,6 +318,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>giropay</payment_products>
@@ -345,6 +352,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>bancontact</payment_products>
@@ -369,6 +377,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>ideal</payment_products>
@@ -393,6 +402,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <iframe_mode>0</iframe_mode>
@@ -428,6 +438,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>postfinance-card</payment_products>
@@ -452,6 +463,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>postfinance-efinance</payment_products>
@@ -481,6 +493,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>500</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>paypal</payment_products>
@@ -505,6 +518,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>mbway</payment_products>
@@ -528,6 +542,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>mbway</payment_products>
@@ -553,6 +568,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>przelewy24</payment_products>
@@ -578,6 +594,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>sdd</payment_products>
@@ -602,6 +619,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>sofort-uberweisung</payment_products>
@@ -626,6 +644,7 @@
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <display_card_owner>0</display_card_owner>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>klarna</payment_products>
@@ -654,6 +673,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>4320</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>alma-3x</payment_products>
@@ -682,6 +702,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>4320</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>alma-4x</payment_products>
@@ -710,6 +731,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>3xcb</payment_products>
@@ -737,6 +759,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>4xcb</payment_products>
@@ -763,6 +786,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>credit-long</payment_products>
@@ -789,6 +813,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>credit-long</payment_products>
@@ -815,6 +840,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>credit-long</payment_products>
@@ -841,6 +867,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>2880</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>credit-long</payment_products>
@@ -866,6 +893,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>bnpp-4xcb</payment_products>
@@ -889,6 +917,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>bnpp-3xcb</payment_products>
@@ -912,6 +941,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
                 <payment_products>mybank</payment_products>
@@ -934,6 +964,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <multibanco_order_expiration_time>3</multibanco_order_expiration_time>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
@@ -959,6 +990,7 @@
                 <order_status_payment_canceled>canceled</order_status_payment_canceled>
                 <hipay_status_validate_order>118</hipay_status_validate_order>
                 <cancel_pending_order>0</cancel_pending_order>
+                <cancellation_deadline>30</cancellation_deadline>
                 <multibanco_order_expiration_time>3</multibanco_order_expiration_time>
                 <re_add_to_cart>0</re_add_to_cart>
                 <restore_cart_on_back>0</restore_cart_on_back>
