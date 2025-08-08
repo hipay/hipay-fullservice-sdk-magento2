@@ -52,6 +52,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Providers\OneyConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_facilypay4X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay4X::HIPAY_METHOD_CODE</item>
+                <item name="hipay_facilypay3X" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Facilypay\Facilypay3X::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -98,6 +106,7 @@
                 <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
                 <item name="hipay_paypal_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\PaypalConfigProvider</item>
                 <item name="hipay_local_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider</item>
+                <item name="hipay_oney_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\OneyConfigProvider</item>
             </argument>
         </arguments>
     </type>
