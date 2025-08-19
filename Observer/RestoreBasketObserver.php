@@ -2,6 +2,7 @@
 
 namespace HiPay\FullserviceMagento\Observer;
 
+use HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session;
@@ -19,14 +20,22 @@ class RestoreBasketObserver implements ObserverInterface
      */
     private $hipayConfig;
 
+    /**
+     * @var ResponseNotFoundOrderRepositoryInterface
+     */
+    protected $notFoundOrderRepository;
+
     public function __construct(
-        Session $checkoutSession,
-        Config $hipayConfig
+        Session                                  $checkoutSession,
+        Config                                   $hipayConfig,
+        ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
     ) {
         $this->checkoutSession = $checkoutSession;
         $storeId = $this->checkoutSession->getQuote()->getStore()->getStoreId();
         $this->hipayConfig = $hipayConfig;
         $this->hipayConfig->setStoreId($storeId);
+        $this->notFoundOrderRepository = $notFoundOrderRepository;
+
     }
 
     public function execute(EventObserver $observer)
@@ -40,6 +49,7 @@ class RestoreBasketObserver implements ObserverInterface
             && !$this->hipayConfig->isNotificationCronActive()
             && $lastRealOrder->getData('state') === 'pending_payment'
             && $lastRealOrder->getData('status') === 'pending_payment'
+            && !$this->notFoundOrderRepository->isPendingOrderExist($lastRealOrder->getIncrementId())
         ) {
             $this->checkoutSession->restoreQuote();
         }

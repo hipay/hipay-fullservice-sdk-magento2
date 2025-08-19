@@ -22,9 +22,15 @@ use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
+use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Webapi\Exception as WebApiException;
+use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\FullserviceMagento\Model\Method\HostedMethod;
@@ -33,6 +39,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Api\OrderManagementInterface;
 use HiPay\FullserviceMagento\Model\OrderState as OrderState;
+use HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface;
 
 /**
  * Notify Class Model
@@ -131,6 +138,32 @@ class Notify
      */
     protected $orderState;
 
+    /**
+     * @var ResponseNotFoundOrderRepositoryInterface
+     */
+    protected $notFoundOrderRepository;
+
+
+    /**
+     * @param TransactionRepository $transactionRepository
+     * @param OrderFactory $orderFactory
+     * @param CollectionFactory $cardCollectionFactory
+     * @param OrderSender $orderSender
+     * @param FraudReviewSender $fraudReviewSender
+     * @param FraudDenySender $fraudDenySender
+     * @param Data $paymentHelper
+     * @param ResourceOrder $orderResource
+     * @param \Magento\Framework\DB\Transaction $_transactionDB
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param CreditmemoSender $creditmemoSender
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderLockManager $orderLockManager
+     * @param OrderState $orderState
+     * @param ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
+     * @param $params
+     * @throws LocalizedException
+     * @throws WebApiException
+     */
     public function __construct(
         TransactionRepository $transactionRepository,
         \Magento\Sales\Model\OrderFactory $orderFactory,
@@ -146,6 +179,7 @@ class Notify
         OrderManagementInterface $orderManagement,
         \HiPay\FullserviceMagento\Model\OrderLockManager $orderLockManager,
         OrderState $orderState,
+        ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -164,6 +198,7 @@ class Notify
         $this->orderManagement = $orderManagement;
         $this->orderLockManager = $orderLockManager;
         $this->orderState = $orderState;
+        $this->notFoundOrderRepository = $notFoundOrderRepository;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -173,6 +208,7 @@ class Notify
             $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
 
             if (!$this->_order->getId()) {
+                $this->savePendingOrderIfNeeded($params, $paymentHelper);
                 throw new WebApiException(
                     __(sprintf('Order ID not found: "%s".', $this->_transaction->getOrder()->getId())),
                     0,
@@ -246,6 +282,9 @@ class Notify
                         WebApiException::HTTP_BAD_REQUEST
                     );
                 }
+                if ($this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')) {
+                    $this->notFoundOrderRepository->deletePendingOrder((string)$this->_order->getIncrementId());
+                }
                 break;
             case TransactionStatus::CAPTURE_REQUESTED:
             case TransactionStatus::CAPTURED:
@@ -286,7 +325,9 @@ class Notify
                 ) {
                     $canProcess = false;
                 }
-
+                if ($this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')) {
+                    $this->notFoundOrderRepository->deletePendingOrder($this->_transaction->getOrder()->getId());
+                }
                 break;
             default:
                 $canProcess = true;
@@ -1144,5 +1185,20 @@ class Notify
             }
         }
         return false;
+    }
+
+    /**
+     * @param array $params
+     * @param Data $paymentHelper
+     * @return void
+     * @throws LocalizedException
+     */
+    private function savePendingOrderIfNeeded(array $params, \Magento\Payment\Helper\Data $paymentHelper): void
+    {
+        $methodInstance = $paymentHelper->getMethodInstance($params['response']['custom_data']['payment_code']);
+        if ($methodInstance->getConfigData('restore_cart_on_back')) {
+            $incrementId = $params['response']['order']['id'];
+            $this->notFoundOrderRepository->savePendingOrder($incrementId);
+        }
     }
 }
