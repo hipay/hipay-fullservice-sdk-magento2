@@ -106,7 +106,15 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
             $httpClient->get($integrityUrl);
             
             if ($httpClient->getStatus() === 200) {
-                return trim($httpClient->getBody());
+                $integrityHash = trim($httpClient->getBody());
+                
+                // Validate that it looks like a hash (starts with sha256-, sha384-, or sha512-)
+                if (!preg_match('/^sha(256|384|512)-[a-zA-Z0-9+\/=]+$/', $integrityHash)) {
+                    $this->logger->error('Invalid integrity hash format: ' . $integrityHash);
+                    return null;
+                }
+                
+                return $integrityHash;
             }
         } catch (\Exception $e) {
             // Log error but don't break the page
