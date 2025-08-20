@@ -33,7 +33,7 @@ include:
     GITHUB_API_TOKEN: $GITHUB_TOKEN
     GITLAB_API_TOKEN: $GITLAB_API_TOKEN
 
-    CUSTOM_REPOSITORIES: vcs https://gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git,vcs git@github.com:hipay/hipay-fullservice-sdk-php.git
+    CUSTOM_REPOSITORIES: vcs https://gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git
     CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME
     CUSTOM_MODULES: HiPay_FullserviceMagento
 
