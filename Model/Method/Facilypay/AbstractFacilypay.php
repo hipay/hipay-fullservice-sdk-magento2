@@ -24,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 class AbstractFacilypay extends AbstractMethodAPI
 {
-
     /**
      * Validate payment method information object
      *

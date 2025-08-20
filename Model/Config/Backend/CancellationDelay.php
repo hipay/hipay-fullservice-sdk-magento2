@@ -22,7 +22,6 @@ use Magento\Framework\Exception\ValidatorException;
 /**
  * Backend model to validate the cancellation delay value (in minutes).
  *
- * @author    Ibrahim Amara <iamara.ext@hipay.com>
  * @copyright Copyright (c) 2025 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -30,8 +29,8 @@ use Magento\Framework\Exception\ValidatorException;
 
 class CancellationDelay extends Value
 {
-    const MIN_VALUE = 30;
-    const MAX_VALUE = 10080;
+    public const MIN_VALUE = 30;
+    public const MAX_VALUE = 10080;
 
     /**
      * Validate the cancellation delay value.
@@ -44,17 +43,23 @@ class CancellationDelay extends Value
         $value = $this->getValue();
 
         if (!is_numeric($value)) {
-            throw new ValidatorException(__('Only numeric values are allowed for cancellation delay.'));
+            throw new ValidatorException(
+                __('Only numeric values are allowed for cancellation delay.')
+            );
         }
 
         $intValue = (int) $value;
 
         if ($intValue < self::MIN_VALUE) {
-            throw new ValidatorException(__('Minimum allowed value for cancellation delay is %1 minutes.', self::MIN_VALUE));
+            throw new ValidatorException(
+                __('Minimum allowed value for cancellation delay is %1 minutes.', self::MIN_VALUE)
+            );
         }
 
         if ($intValue > self::MAX_VALUE) {
-            throw new ValidatorException(__('Maximum allowed value for cancellation delay is %1 minutes (7 days).', self::MAX_VALUE));
+            throw new ValidatorException(
+                __('Maximum allowed value for cancellation delay is %1 minutes (7 days).', self::MAX_VALUE)
+            );
         }
 
         $this->setValue($intValue);

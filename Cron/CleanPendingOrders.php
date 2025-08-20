@@ -396,7 +396,7 @@ class CleanPendingOrders
      * Retrieve the configured cancellation delay.
      *
      * @param string $methodCode
-     * @param int $websiteId
+     * @param int    $websiteId
      * @return int
      */
     protected function getCancellationDelay(string $methodCode, int $websiteId)

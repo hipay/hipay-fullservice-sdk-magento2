@@ -27,7 +27,7 @@
 
     <field id="cancellation_deadline" translate="label comment" type="text" sortOrder="49.5" showInDefault="1" showInWebsite="1" showInStore="0">
         <backend_model>HiPay\FullserviceMagento\Model\Config\Backend\CancellationDelay</backend_model>
-        <validate>validate-number</validate>
+        <validate>validate-digits</validate>
         <label>Cancellation delay</label>
         <comment>In minutes. Minimum: 30. Maximum: 10080 (7 days).</comment>
     </field>
