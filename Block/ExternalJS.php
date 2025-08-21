@@ -22,6 +22,25 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
     protected const JS_SRC_CONFIG_HOSTED_FIELDS = 'hipay/configurations/sdk_js_url';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Psr\Log\LoggerInterface                         $logger
+     * @param array                                            $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Psr\Log\LoggerInterface $logger,
+        array $data = []
+    ) {
+        $this->logger = $logger;
+        parent::__construct($context, $data);
+    }
+
+    /**
      * Return figerprint URL
      *
      * @return string
@@ -36,16 +55,72 @@ class ExternalJS extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return hosted fields URL
+     * Return hosted fields URL and integrity hash
      *
-     * @return string
+     * @return array
      */
     public function getJsSrcHostedFields()
     {
-        return $this->_scopeConfig->getValue(
+        $sdkUrl = $this->_scopeConfig->getValue(
             self::JS_SRC_CONFIG_HOSTED_FIELDS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             null
         );
+        
+        $integrityHash = null;
+        if (!empty($sdkUrl)) {
+            $integrityHash = $this->getIntegrityHash($sdkUrl);
+        }
+        
+        return [
+            'sdkUrl' => $sdkUrl,
+            'integrityHash' => $integrityHash
+        ];
+    }
+
+    /**
+     * Fetch integrity hash from HiPay server
+     *
+     * @param string $sdkUrl The SDK URL to generate integrity URL from
+     * @return string|null
+     */
+    public function getIntegrityHash($sdkUrl = null)
+    {
+        if ($sdkUrl === null) {
+            $sdkUrl = $this->_scopeConfig->getValue(
+                self::JS_SRC_CONFIG_HOSTED_FIELDS,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                null
+            );
+        }
+        
+        if (empty($sdkUrl)) {
+            return null;
+        }
+        
+        // Replace .js with .integrity to generate the integrity URL
+        $integrityUrl = str_replace('.js', '.integrity', $sdkUrl);
+
+        try {
+            $httpClient = new \Magento\Framework\HTTP\Client\Curl();
+            $httpClient->get($integrityUrl);
+            
+            if ($httpClient->getStatus() === 200) {
+                $integrityHash = trim($httpClient->getBody());
+                
+                // Validate that it looks like a hash (starts with sha256-, sha384-, or sha512-)
+                if (!preg_match('/^sha(256|384|512)-[a-zA-Z0-9+\/=]+$/', $integrityHash)) {
+                    $this->logger->error('Invalid integrity hash format: ' . $integrityHash);
+                    return null;
+                }
+                
+                return $integrityHash;
+            }
+        } catch (\Exception $e) {
+            // Log error but don't break the page
+            $this->logger->error('Failed to fetch HiPay SDK integrity hash: ' . $e->getMessage());
+        }
+        
+        return null;
     }
 }
