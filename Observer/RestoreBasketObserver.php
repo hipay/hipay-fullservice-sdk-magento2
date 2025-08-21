@@ -7,6 +7,8 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Checkout\Model\Session;
 use HiPay\FullserviceMagento\Model\Config;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class RestoreBasketObserver implements ObserverInterface
 {
@@ -35,7 +37,6 @@ class RestoreBasketObserver implements ObserverInterface
         $this->hipayConfig = $hipayConfig;
         $this->hipayConfig->setStoreId($storeId);
         $this->notFoundOrderRepository = $notFoundOrderRepository;
-
     }
 
     public function execute(EventObserver $observer)

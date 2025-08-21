@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -25,8 +26,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 /**
  * ResponseNotFoundOrderRepository class
  *
- * @author    HiPay <support.tpp@hipay.com>
- * @copyright Copyright (c) 2018 - HiPay
+ * @copyright Copyright (c) 2025 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
@@ -47,24 +47,24 @@ class ResponseNotFoundOrderRepository implements ResponseNotFoundOrderRepository
      */
     private $dateTime;
 
-
     /**
-     * @param ResponseNotFoundOrderFactory $responseNotFoundOrderFactory
+     * @param ResponseNotFoundOrderFactory  $responseNotFoundOrderFactory
      * @param ResponseNotFoundOrderResource $responseNotFoundOrderResource
-     * @param DateTime $dateTime
+     * @param DateTime                      $dateTime
      */
     public function __construct(
         ResponseNotFoundOrderFactory  $responseNotFoundOrderFactory,
         ResponseNotFoundOrderResource $responseNotFoundOrderResource,
         DateTime                      $dateTime
-    )
-    {
+    ) {
         $this->responseNotFoundOrderFactory = $responseNotFoundOrderFactory;
         $this->responseNotFoundOrderResource = $responseNotFoundOrderResource;
         $this->dateTime = $dateTime;
     }
 
     /**
+     *  Save a HiPay order ID into pending orders
+     *
      * @param string $orderId
      * @return void
      * @throws AlreadyExistsException
@@ -80,6 +80,8 @@ class ResponseNotFoundOrderRepository implements ResponseNotFoundOrderRepository
     }
 
     /**
+     * Delete pending order by HiPay order ID
+     *
      * @param string $orderId
      * @return void
      * @throws \Exception
@@ -94,6 +96,8 @@ class ResponseNotFoundOrderRepository implements ResponseNotFoundOrderRepository
     }
 
     /**
+     * Check if pending order exists
+     *
      * @param string $orderId
      * @return bool
      */

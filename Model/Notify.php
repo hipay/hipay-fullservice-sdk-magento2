@@ -143,24 +143,24 @@ class Notify
      */
     protected $notFoundOrderRepository;
 
-
     /**
-     * @param TransactionRepository $transactionRepository
-     * @param OrderFactory $orderFactory
-     * @param CollectionFactory $cardCollectionFactory
-     * @param OrderSender $orderSender
-     * @param FraudReviewSender $fraudReviewSender
-     * @param FraudDenySender $fraudDenySender
-     * @param Data $paymentHelper
-     * @param ResourceOrder $orderResource
-     * @param \Magento\Framework\DB\Transaction $_transactionDB
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param CreditmemoSender $creditmemoSender
-     * @param OrderManagementInterface $orderManagement
-     * @param OrderLockManager $orderLockManager
-     * @param OrderState $orderState
+     * @param TransactionRepository                    $transactionRepository
+     * @param OrderFactory                             $orderFactory
+     * @param CollectionFactory                        $cardCollectionFactory
+     * @param OrderSender                              $orderSender
+     * @param FraudReviewSender                        $fraudReviewSender
+     * @param FraudDenySender                          $fraudDenySender
+     * @param Data                                     $paymentHelper
+     * @param ResourceOrder                            $orderResource
+     * @param \Magento\Framework\DB\Transaction        $_transactionDB
+     * @param PriceCurrencyInterface                   $priceCurrency
+     * @param CreditmemoSender                         $creditmemoSender
+     * @param OrderManagementInterface                 $orderManagement
+     * @param OrderLockManager                         $orderLockManager
+     * @param OrderState                               $orderState
      * @param ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
-     * @param $params
+     * @param array                                    $params
+     *
      * @throws LocalizedException
      * @throws WebApiException
      */
@@ -1188,8 +1188,10 @@ class Notify
     }
 
     /**
+     * Save pending order when payment method requires cart restoration.
+     *
      * @param array $params
-     * @param Data $paymentHelper
+     * @param Data  $paymentHelper
      * @return void
      * @throws LocalizedException
      */

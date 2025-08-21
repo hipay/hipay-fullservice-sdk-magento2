@@ -1,4 +1,5 @@
 <?php
+
 /**
  * HiPay Fullservice Magento
  *
@@ -12,6 +13,7 @@
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
+
 namespace HiPay\FullserviceMagento\Model\ResourceModel\Response\NotFound;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
@@ -19,8 +21,7 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 /**
  * ResponseNotFoundOrder Resource Model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
+ * @copyright Copyright (c) 2025 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
