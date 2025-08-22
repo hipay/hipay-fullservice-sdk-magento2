@@ -55,7 +55,7 @@ define([
                 selector: `hipay-container-oney-${self.getProductCode()}`,
                 template: 'auto',
                 request: {
-                    amount: self.safeToFixed(Number(quote.totals().base_grand_total)),
+                    amount: Number(quote.totals().base_grand_total),
                     currency: quote.totals().quote_currency_code
                 }
             };
@@ -63,7 +63,7 @@ define([
             // Update amount on cart total changes
             quote.totals.subscribe(function (totals) {
                 if (self.hipayHostedFields) {
-                    self.configHipay.request.amount = self.safeToFixed(Number(totals.base_grand_total));
+                    self.configHipay.request.amount = Number(totals.base_grand_total);
                     self.configHipay.request.currency = totals.quote_currency_code;
                 }
             });
@@ -90,19 +90,8 @@ define([
 
             self.hipayHostedFields = self.hipaySdk.create(self.paymentProductFees, self.configHipay);
 
-            self.hipayHostedFields.on('paymentAuthorized', function (response) {
-                self.paymentAuthorized(self, response);
-            });
-
             self.isPlaceOrderAllowed(true);
             return true;
-        },
-
-        paymentAuthorized: function (self, response) {
-            self.payment_product(response.payment_product);
-            self.browser_info(JSON.stringify(response.browser_info));
-            self.oney_order_id(response.orderID);
-            self.placeOrder(self.getData(), self.redirectAfterPlaceOrder);
         },
 
         setPlaceOrderHandler: function (handler) {
@@ -172,10 +161,6 @@ define([
 
         isActive: function () {
             return true;
-        },
-
-        safeToFixed: function (value) {
-            return Number(value).toFixed(2);
         }
     });
 });
