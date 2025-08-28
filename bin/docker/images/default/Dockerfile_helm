@@ -9,7 +9,7 @@ RUN apt update && apt upgrade -y && apt install curl git unzip php-dev gosu -y &
     # do not clean folder /tmp
     && apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
 
-COPY ./bin/docker/images/default/php-override.ini /opt/bitnami/php/etc/conf.d/php-override.ini
+COPY ./bin/docker/images/default/php-override_helm.ini /opt/bitnami/php/etc/conf.d/php-override.ini
 RUN echo "sendmail_path = /usr/bin/msmtp -t" > /opt/bitnami/php/etc/conf.d/sendmail.ini \
     && printf "host smtp\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc
 

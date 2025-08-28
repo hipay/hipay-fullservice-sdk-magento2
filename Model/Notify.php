@@ -23,6 +23,7 @@ use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
 use Magento\Framework\Webapi\Exception as WebApiException;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
@@ -69,7 +70,7 @@ class Notify
     protected $orderSender;
 
     /**
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $_order;
 
@@ -223,10 +224,12 @@ class Notify
             case TransactionStatus::AUTHORIZED:
                 // status : 116
                 if (
-                    $this->_order->getState() == \Magento\Sales\Model\Order::STATE_NEW
-                    || $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT
-                    || $this->_order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
-                    || in_array($this->_order->getStatus(), array(Config::STATUS_AUTHORIZATION_REQUESTED))
+                    in_array($this->_order->getState(), [
+                        Order::STATE_NEW,
+                        Order::STATE_PENDING_PAYMENT,
+                        Order::STATE_PAYMENT_REVIEW,
+                        Order::STATE_HOLDED
+                    ]) || $this->_order->getStatus() === Config::STATUS_AUTHORIZATION_REQUESTED
                 ) {
                     $canProcess = true;
                 } else {
@@ -710,8 +713,8 @@ class Notify
             ->setIsTransactionClosed(0)
             ->registerAuthorizationNotification((float)$this->_transaction->getAuthorizedAmount());
 
-        $this->_order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)->setStatus(
-            \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
+        $this->_order->setState(Order::STATE_PAYMENT_REVIEW)->setStatus(
+            Order::STATE_PAYMENT_REVIEW
         );
         $this->_doTransactionMessage("Transaction is fraud challenged. Waiting for accept or deny action.");
         $this->_order->save();
@@ -724,7 +727,7 @@ class Notify
      */
     protected function _doTransactionCaptureRequested()
     {
-        $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+        $this->_order->setState(Order::STATE_PROCESSING);
     }
 
     /**
@@ -889,7 +892,7 @@ class Notify
 
         //Set custom order status
         $this->_order->setStatus(Config::STATUS_AUTHORIZED);
-        $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+        $this->_order->setState(Order::STATE_PROCESSING);
 
         $this->_order->save();
     }
@@ -924,7 +927,7 @@ class Notify
         }
 
         $this->_order->setStatus($orderStatus);
-        $this->_order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING);
+        $this->_order->setState(Order::STATE_PROCESSING);
 
         $payment->registerCaptureNotification(
             $this->_transaction->getCapturedAmount(),
