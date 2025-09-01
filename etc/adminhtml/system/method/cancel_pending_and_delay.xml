@@ -30,5 +30,8 @@
         <validate>validate-digits</validate>
         <label>Cancellation delay</label>
         <comment>In minutes. Minimum: 30. Maximum: 10080 (7 days).</comment>
+        <depends>
+            <field id="cancel_pending_order">1</field>
+        </depends>
     </field>
 </include>
