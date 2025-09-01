@@ -2,13 +2,16 @@
 
 ## UNRELEASE
 
+- **Add** : Made the cancellation delay configurable per payment method.
+
+## 1.28.0
+
+- **Add** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
 - **Fix** : Improved synchronization between mini cart and checkout cart for PayPal.
 - **Fix** : Fixed PayPal environment switching (sandbox/production) per store view.
 - **Fix** : Apple Pay failure occurring during timeout responses scenarios.
 - **Fix** : Multibanco SIBS SPG integration -> Order API
 - **Fix** : Handle "on hold" orders during authorization status update (status 116)
-- **Add** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
-- **Add** : Made the cancellation delay configurable per payment method.
 
 ## 1.27.6
 
