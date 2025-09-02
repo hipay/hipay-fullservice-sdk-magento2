@@ -58,12 +58,7 @@
             <label>Period of validity of the payment page</label>
             <comment>In hours</comment>
         </field>
-        <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
-               showInStore="0">
-            <label>Cancel pending order</label>
-            <comment>Cancel orders stayed in pending because customer not validated payment</comment>
-            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
+        <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>
 </include>

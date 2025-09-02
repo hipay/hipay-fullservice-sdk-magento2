@@ -41,12 +41,7 @@
             <label>Button Color</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonColor</source_model>
         </field>
-        <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
-               showInStore="0">
-            <label>Cancel pending order</label>
-            <comment>Cancel pending orders since 1 day.</comment>
-            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
+        <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>
 </include>

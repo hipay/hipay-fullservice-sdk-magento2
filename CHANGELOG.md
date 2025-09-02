@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Add** : Made the cancellation delay configurable per payment method.
 - **Add** : Use JS SDK for Oney, add Oney widget & include oney.io domain in CSP
 
 ## 1.28.0

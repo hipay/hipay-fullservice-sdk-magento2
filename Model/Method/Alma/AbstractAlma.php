@@ -36,11 +36,6 @@ class AbstractAlma extends AbstractMethodAPI
     protected $_canUseInternal = false;
 
     /**
-     * @var int
-     */
-    public $overridePendingTimeout = 4320;
-
-    /**
      * Check whether payment method can be used
      *
      * @param CartInterface|null $quote
