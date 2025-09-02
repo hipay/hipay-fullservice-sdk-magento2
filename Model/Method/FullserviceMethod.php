@@ -186,11 +186,6 @@ abstract class FullserviceMethod extends AbstractMethod
     protected $_cardFactory;
 
     /**
-     * @var int
-     */
-    public $overridePendingTimeout = 30;
-
-    /**
      * @var \HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
      */
     protected $_cardCollectionFactory;

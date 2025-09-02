@@ -21,7 +21,7 @@
     <group id="hipay_sisal" translate="label" type="text" sortOrder="54" showInDefault="1" showInWebsite="1" showInStore="1">
         <label>HiPay Enterprise MOONEY Hosted</label>
         <comment></comment>
-        <!-- 
+        <!--
             Include tag import configuration from another file.
             base_top.xml contain configuration fields will be appear on top
             like enabled, title, order statues etc ...
@@ -50,13 +50,9 @@
         <field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Wrapper iFrame Style</label>
         </field>
-        <field id="cancel_pending_order" translate="label" type="select" sortOrder="49" showInDefault="1" showInWebsite="1"
-               showInStore="0">
-            <label>Cancel pending order</label>
-            <comment>Cancel pending orders since 30 minutes.</comment>
-            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-        </field>
-        <!-- 
+        <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
+
+        <!--
             Include tag import configuration from another file.
             base_bottom.xml contain configuration fields will be appear on bottom
             like test mode, debug, sort order etc ..

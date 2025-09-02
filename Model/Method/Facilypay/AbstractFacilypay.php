@@ -25,11 +25,6 @@ use Magento\Framework\Exception\LocalizedException;
 class AbstractFacilypay extends AbstractMethodAPI
 {
     /**
-     * @var int 48H
-     */
-    public $overridePendingTimeout = 2880;
-
-    /**
      * Validate payment method information object
      *
      * @return $this

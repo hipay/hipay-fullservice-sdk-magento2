@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Made the cancellation delay configurable per payment method.
+
 ## 1.28.0
 
 - **Add** : Enhanced SDK JavaScript security by implementing Subresource Integrity (SRI) with automatic integrity hash fetching
