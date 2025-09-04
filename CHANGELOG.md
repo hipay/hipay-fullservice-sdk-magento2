@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Add** : Made the cancellation delay configurable per payment method.
+- **Fix** : Improved RestoreBasketObserver to handle missing order during early HiPay notifications.
 
 ## 1.28.0
 

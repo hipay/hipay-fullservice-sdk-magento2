@@ -1,0 +1,13 @@
+{
+    "hipay_response_not_found_order": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HIPAY_RESPONSE_NOT_FOUND_ORDER_ORDER_ID": true
+        }
+    }
+}
