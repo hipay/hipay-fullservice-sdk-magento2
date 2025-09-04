@@ -202,6 +202,7 @@ class CleanPendingOrders
 
                 // Pre-fetch configuration values for HiPay payment methods
                 foreach ($hipayPaymentMethods as $code) {
+                    $this->logger->info('No HiPay payment methods found for store ' . $storeId);
                     $cancelPendingOrdersConfig[$code] = $this->_scopeConfig->getValue(
                         'payment/' . $code . '/cancel_pending_order',
                         ScopeInterface::SCOPE_WEBSITE,
@@ -307,10 +308,11 @@ class CleanPendingOrders
     {
         $orderCreationTimeIsCancellable = true;
 
-        $orderMethodInstance = $order->getPayment()->getMethodInstance();
+        $paymentCode = $order->getPayment()->getMethod();
+        $websiteId = $this->storeManager->getStore($order->getStoreId())->getWebsiteId();
+        $messageInterval = $this->getCancellationDelay($paymentCode, $websiteId);
 
-        if (isset($orderMethodInstance->overridePendingTimeout)) {
-            $messageInterval = $orderMethodInstance->overridePendingTimeout;
+        if ($messageInterval > 0) {
             $dateObject = $this->_dateTimeFactory->create();
             $gmtDate = $dateObject->gmtDate($dateFormat);
             $date = new DateTime($gmtDate);
@@ -388,5 +390,23 @@ class CleanPendingOrders
     protected function getGatewayManager($order)
     {
         return $this->_gatewayManagerFactory->create($order);
+    }
+
+    /**
+     * Retrieve the configured cancellation delay.
+     *
+     * @param string $methodCode
+     * @param int    $websiteId
+     * @return int
+     */
+    protected function getCancellationDelay(string $methodCode, int $websiteId)
+    {
+        $configPath = "payment/{$methodCode}/cancellation_deadline";
+
+        return (int) $this->_scopeConfig->getValue(
+            $configPath,
+            ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
     }
 }

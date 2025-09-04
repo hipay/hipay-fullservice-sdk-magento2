@@ -58,11 +58,6 @@ class HostedFieldsMethod extends CcMethod
     protected $_canUseInternal = false;
 
     /**
-     * @var int
-     */
-    public $overridePendingTimeout = 1440;
-
-    /**
      * Validate payment method information object
      *
      * @return                                       $this
