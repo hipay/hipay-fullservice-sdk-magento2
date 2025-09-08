@@ -216,7 +216,7 @@ define([
         var applePayConfig = {
           displayName: self.displayName,
           request: {
-            countryCode: quote.billingAddress().countryId,
+            countryCode: self.getCountryCodeWithFallback(),
             currencyCode: quote.totals().quote_currency_code,
             total: {
               label: self.displayName,
@@ -353,6 +353,8 @@ define([
           }
         };
       },
+
+
 
       /**
        * Get the pending URL for redirect
