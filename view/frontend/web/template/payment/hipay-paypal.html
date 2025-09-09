@@ -46,7 +46,7 @@
     </div>
     <div class="hipay-field-container">
       <div id="paypal-field" data-bind="visible: isAllTOCChecked() && isPayPalVisible()"></div>
-      <div class="errorValidation" data-bind="visible: isAllTOCChecked() && !isPayPalVisible()">
+      <div class="errorTOC" data-bind="visible: isAllTOCChecked() && !isPayPalVisible()">
         <span>
           <!-- ko i18n: 'Please complete your billing address, shipping address, and select a shipping method to continue with PayPal'-->
           <!-- /ko -->
