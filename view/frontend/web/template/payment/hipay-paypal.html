@@ -45,7 +45,7 @@
       <!--/ko-->
     </div>
     <div class="hipay-field-container">
-      <div id="paypal-field" data-bind="visible: isAllTOCChecked()"></div>
+      <div id="paypal-field" data-bind="visible: isAllTOCChecked() && isPayPalVisible()"></div>
     </div>
     <div class="checkout-agreements-block">
       <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">

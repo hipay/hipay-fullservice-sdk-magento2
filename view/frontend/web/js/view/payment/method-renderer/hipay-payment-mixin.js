@@ -17,8 +17,9 @@
 define([
   'jquery',
   'Magento_Checkout/js/model/quote',
-  'Magento_Checkout/js/model/full-screen-loader'
-], function ($, quote, fullScreenLoader) {
+  'Magento_Checkout/js/model/full-screen-loader',
+  'HiPay_FullserviceMagento/js/model/order-validator'
+], function ($, quote, fullScreenLoader, orderValidator) {
   'use strict';
 
   return function (target) {
@@ -57,23 +58,6 @@ define([
         });
       },
 
-      /**
-       * Handle mini cart changes by reloading the page
-       */
-      handleMiniCartChange: function () {
-        var self = this;
-
-        // Only proceed if this payment method is still active
-        if (!self.isPaymentMethodActive()) {
-          return;
-        }
-
-        // Show loading indicator before reload
-        fullScreenLoader.startLoader();
-
-        // Reload the page
-        window.location.reload();
-      },
 
       /**
        * Safe number formatting with proper rounding
@@ -101,14 +85,18 @@ define([
                'FR';
       },
 
+
       /**
-       * Get billing address with fallback to shipping address
-       * @returns {Object|null} Address object
+       * Validate order placement using custom validator
+       * @returns {Object} Validation result with canPlace and issues
        */
-      getAddressWithFallback: function () {
-        const addresses = [quote.billingAddress(), quote.shippingAddress()];
-        return addresses.find(addr => addr?.firstname && addr?.lastname) || null;
-      }
+      validateOrderPlacement: function () {
+        var self = this;
+        var validation = orderValidator.canPlaceOrder();
+        
+        return validation;
+      },
+
     });
   };
 });
