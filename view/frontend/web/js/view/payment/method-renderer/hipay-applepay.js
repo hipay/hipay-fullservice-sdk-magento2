@@ -82,7 +82,7 @@ define([
           )
         )
       ),
-      isApplePayVisible: ko.observable(false),
+      isApplePayVisibleToPay: ko.observable(false),
       allTOC: new Map(),
 
       initialize: function () {
@@ -353,9 +353,9 @@ define([
         var validation = self.validateOrderPlacement();
         
         if (validation.canPlace) {
-          self.isApplePayVisible(true);
+          self.isApplePayVisibleToPay(true);
         } else {
-          self.isApplePayVisible(false);
+          self.isApplePayVisibleToPay(false);
         }
         
         return validation;
