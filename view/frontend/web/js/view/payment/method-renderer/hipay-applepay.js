@@ -351,13 +351,13 @@ define([
       handleOrderValidation: function () {
         var self = this;
         var validation = self.validateOrderPlacement();
-        
+
         if (validation.canPlace) {
           self.isApplePayVisibleToPay(true);
         } else {
           self.isApplePayVisibleToPay(false);
         }
-        
+
         return validation;
       },
 
@@ -389,8 +389,6 @@ define([
           }
         };
       },
-
-
 
       /**
        * Get the pending URL for redirect

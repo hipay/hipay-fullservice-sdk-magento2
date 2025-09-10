@@ -366,15 +366,15 @@ define([
           quote.billingAddress.subscribe(function () {
             self.handleOrderValidation();
           });
-          
+
           quote.shippingAddress.subscribe(function () {
             self.handleOrderValidation();
           });
-          
+
           quote.paymentMethod.subscribe(function () {
             self.handleOrderValidation();
           });
-          
+
           quote.shippingMethod.subscribe(function () {
             self.handleOrderValidation();
           });
@@ -395,13 +395,13 @@ define([
         handleOrderValidation: function () {
           var self = this;
           var validation = self.validateOrderPlacement();
-          
+
           if (validation.canPlace) {
             self.isPayPalVisible(true);
           } else {
             self.isPayPalVisible(false);
           }
-          
+
           return validation;
         },
 
@@ -457,7 +457,7 @@ define([
       },
       isActive: function () {
         return true;
-      },
+      }
     });
   }
 });
