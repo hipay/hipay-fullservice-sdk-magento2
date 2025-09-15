@@ -132,6 +132,7 @@ build-test-2-1-10:
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
+      --force
       --cache=true
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile"
@@ -172,6 +173,7 @@ build:
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
+      --force
       --cache=true
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile_helm"
