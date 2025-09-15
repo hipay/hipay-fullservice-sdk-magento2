@@ -58,6 +58,23 @@ define([
         });
       },
 
+      /**
+       * Handle mini cart changes by reloading the page
+       */
+      handleMiniCartChange: function () {
+        var self = this;
+
+        // Only proceed if this payment method is still active
+        if (!self.isPaymentMethodActive()) {
+          return;
+        }
+
+        // Show loading indicator before reload
+        fullScreenLoader.startLoader();
+
+        // Reload the page to sync mini cart with checkout
+        window.location.reload();
+      },
 
       /**
        * Safe number formatting with proper rounding
