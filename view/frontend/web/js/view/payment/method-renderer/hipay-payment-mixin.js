@@ -17,8 +17,9 @@
 define([
   'jquery',
   'Magento_Checkout/js/model/quote',
-  'Magento_Checkout/js/model/full-screen-loader'
-], function ($, quote, fullScreenLoader) {
+  'Magento_Checkout/js/model/full-screen-loader',
+  'HiPay_FullserviceMagento/js/model/order-validator'
+], function ($, quote, fullScreenLoader, orderValidator) {
   'use strict';
 
   return function (target) {
@@ -71,7 +72,7 @@ define([
         // Show loading indicator before reload
         fullScreenLoader.startLoader();
 
-        // Reload the page
+        // Reload the page to sync mini cart with checkout
         window.location.reload();
       },
 
@@ -83,7 +84,36 @@ define([
         const correction = 1 / 10 ** (decimals + 2);
         const rounded = Math.round((value + correction) * factor) / factor;
         return rounded.toFixed(decimals);
-      }
+      },
+
+      /**
+       * Get country code with fallback logic
+       * Priority: billing address -> shipping address -> store default
+       * @returns {string} Country code
+       */
+      getCountryCodeWithFallback: function () {
+        var billingAddress = quote.billingAddress();
+        var shippingAddress = quote.shippingAddress();
+        
+        // Try billing address first, then shipping, then store default, then FR
+        return billingAddress?.countryId || 
+               shippingAddress?.countryId || 
+               window.checkoutConfig?.storeConfig?.defaultCountryId || 
+               'FR';
+      },
+
+
+      /**
+       * Validate order placement using custom validator
+       * @returns {Object} Validation result with canPlace and issues
+       */
+      validateOrderPlacement: function () {
+        var self = this;
+        var validation = orderValidator.canPlaceOrder();
+        
+        return validation;
+      },
+
     });
   };
 });

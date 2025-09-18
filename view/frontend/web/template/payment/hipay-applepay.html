@@ -48,8 +48,14 @@
       <div
         class="hipay-payment-request-button"
         id="hipay-apple-pay-button"
-        data-bind="visible: isAllTOCChecked()"
+        data-bind="visible: isAllTOCChecked() && isApplePayVisibleToPay()"
       ></div>
+      <div class="errorTOC" data-bind="visible: isAllTOCChecked() && !isApplePayVisibleToPay()">
+        <span>
+          <!-- ko i18n: 'Please complete your billing address, shipping address, and select a shipping method to continue with Apple Pay'-->
+          <!-- /ko -->
+        </span>
+      </div>
     </div>
     <div class="checkout-agreements-block">
       <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">

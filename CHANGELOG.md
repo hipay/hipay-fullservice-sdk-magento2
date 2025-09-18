@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.
+
 ## 1.29.0
 
 - **Add** : Made the cancellation delay configurable per payment method.

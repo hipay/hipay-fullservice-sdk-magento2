@@ -82,6 +82,7 @@ define([
           )
         )
       ),
+      isApplePayVisibleToPay: ko.observable(false),
       allTOC: new Map(),
 
       initialize: function () {
@@ -216,7 +217,7 @@ define([
         var applePayConfig = {
           displayName: self.displayName,
           request: {
-            countryCode: quote.billingAddress().countryId,
+            countryCode: self.getCountryCodeWithFallback(),
             currencyCode: quote.totals().quote_currency_code,
             total: {
               label: self.displayName,
@@ -320,9 +321,44 @@ define([
       },
 
       initObservable: function () {
-        this._super().observe(['creditCardToken', 'creditCardType', 'eci']);
+        var self = this;
+        self._super().observe(['creditCardToken', 'creditCardType', 'eci']);
 
-        return this;
+        // Subscribe to quote changes to validate order placement
+        quote.billingAddress.subscribe(function () {
+          self.handleOrderValidation();
+        });
+        quote.shippingAddress.subscribe(function () {
+          self.handleOrderValidation();
+        });
+        quote.paymentMethod.subscribe(function () {
+          self.handleOrderValidation();
+        });
+        quote.shippingMethod.subscribe(function () {
+          self.handleOrderValidation();
+        });
+
+        // Initial validation check
+        self.handleOrderValidation();
+
+        return self;
+      },
+
+      /**
+       * Handle order validation for Apple Pay
+       * @returns {Object} Validation result
+       */
+      handleOrderValidation: function () {
+        var self = this;
+        var validation = self.validateOrderPlacement();
+
+        if (validation.canPlace) {
+          self.isApplePayVisibleToPay(true);
+        } else {
+          self.isApplePayVisibleToPay(false);
+        }
+
+        return validation;
       },
 
       /**
