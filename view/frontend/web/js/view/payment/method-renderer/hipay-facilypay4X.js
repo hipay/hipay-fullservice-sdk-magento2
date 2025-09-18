@@ -14,21 +14,35 @@
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 define([
-  'jquery',
-  'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-hosted'
-], function ($, Component) {
-  'use strict';
-  return Component.extend({
-    defaults: {
-      template: 'HiPay_FullserviceMagento/payment/hipay-hosted',
-      redirectAfterPlaceOrder: false
-    },
+    'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-oney'
+], function (OneyAbstract) {
+    'use strict';
+    return OneyAbstract.extend({
+        defaults: {
+            afterPlaceOrderUrl: window.checkoutConfig.payment.hiPayFullservice.afterPlaceOrderUrl.hipay_facilypay4X,
+            env: window.checkoutConfig.payment.hipay_facilypay4X
+                ? window.checkoutConfig.payment.hipay_facilypay4X.env
+                : 'stage',
+            apiUsernameTokenJs: window.checkoutConfig.payment.hipay_facilypay4X
+                ? window.checkoutConfig.payment.hipay_facilypay4X.apiUsernameTokenJs
+                : '',
+            apiPasswordTokenJs: window.checkoutConfig.payment.hipay_facilypay4X
+                ? window.checkoutConfig.payment.hipay_facilypay4X.apiPasswordTokenJs
+                : '',
+            paymentProductFees: window.checkoutConfig.payment.hipay_facilypay4X
+                ? window.checkoutConfig.payment.hipay_facilypay4X.paymentProductFees
+                : '',
+            locale: window.checkoutConfig.payment.hiPayFullservice.locale
+                ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_facilypay4X
+                : 'fr_FR'
+        },
 
-    getCode: function () {
-      return 'hipay_facilypay4X';
-    },
-    isActive: function () {
-      return true;
-    }
-  });
+        getProductCode: function () {
+            return '4xcb';
+        },
+
+        getCode: function () {
+            return 'hipay_facilypay4X';
+        }
+    });
 });

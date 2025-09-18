@@ -10,38 +10,29 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright Copyright (c) 2016 - HiPay
+ * @copyright Copyright (c) 2025 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\ResourceModel\Response\NotFound\Order;
+
+use HiPay\FullserviceMagento\Model\ResourceModel\Response\NotFound\Order as ResourceModel;
+use HiPay\FullserviceMagento\Model\Response\NotFound\Order as Model;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 /**
- * Apple Pay Model payment method
+ * Response NotFound Order resource Collection
  *
  * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class ApplePay extends LocalHostedFields
+
+class Collection extends AbstractCollection
 {
-    public const HIPAY_METHOD_CODE = 'hipay_applepay';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    /**
-     * Is active
-     *
-     * @param  int|null $storeId
-     * @return bool
-     */
-    public function isActive($storeId = null)
+    protected function _construct()
     {
-        return $this->getConfigData('active', $storeId)
-            && $this->_hipayConfig->hasCredentials(false, true);
+        $this->_init(Model::class, ResourceModel::class);
     }
 }

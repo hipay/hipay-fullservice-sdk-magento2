@@ -8,6 +8,8 @@
                 <value id="iesnare" type="host">mpsnare.iesnare.com</value>
                 <value id="paypal" type="host">*.paypal.com</value>
                 <value id="google" type="host">*.googleapis.com</value>
+                <value id="oney-js" type="host">*.oney.io</value>
+                <value id="oney-staging-js" type="host">*.staging.oney.io</value>
             </values>
         </policy>
         <policy id="style-src">
@@ -30,6 +32,8 @@
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="iesnare" type="host">wss://mpsnare.iesnare.com</value>
                 <value id="google" type="host">*.googleapis.com</value>
+                <value id="oney-connect" type="host">*.oney.io</value>
+                <value id="oney-staging-connect" type="host">*.staging.oney.io</value>
             </values>
         </policy>
         <policy id="media-src">
@@ -44,6 +48,14 @@
             <values>
                 <value id="hipay" type="host">*.hipay.com</value>
                 <value id="google" type="host">*.googleapis.com</value>
+                <value id="oney-img" type="host">*.oney.io</value>
+                <value id="oney-staging-img" type="host">*.staging.oney.io</value>
+            </values>
+        </policy>
+        <policy id="font-src">
+            <values>
+                <value id="oney-font" type="host">*.oney.io</value>
+                <value id="oney-staging-font" type="host">*.staging.oney.io</value>
             </values>
         </policy>
     </policies>

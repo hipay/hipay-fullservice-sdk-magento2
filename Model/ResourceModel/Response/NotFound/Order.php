@@ -14,29 +14,22 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */
 
-namespace HiPay\FullserviceMagento\Model\Method;
+namespace HiPay\FullserviceMagento\Model\ResourceModel\Response\NotFound;
+
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Paypal payment method
+ * ResponseNotFoundOrder Resource Model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
+ * @copyright Copyright (c) 2025 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Paypal extends AbstractMethodAPI
+
+class Order extends AbstractDb
 {
-    public const HIPAY_METHOD_CODE = 'hipay_paypalapi';
-
-    /**
-     * @var string
-     */
-    protected static $_technicalCode = 'paypal';
-
-    /**
-     * @var string
-     */
-    protected $_code = self::HIPAY_METHOD_CODE;
-
-    protected $_additionalInformationKeys = ['paypal_order_id', 'browser_info'];
+    protected function _construct()
+    {
+        $this->_init('hipay_response_not_found_order', 'entity_id');
+    }
 }
