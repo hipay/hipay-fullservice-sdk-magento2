@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+## 1.29.0
+
 - **Add** : Made the cancellation delay configurable per payment method.
 - **Add** : Use JS SDK for Oney, add Oney widget & include oney.io domain in CSP
 - **Fix** : Improved RestoreBasketObserver to handle missing order during early HiPay notifications.
