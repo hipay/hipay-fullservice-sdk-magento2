@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.
+- **Fix** : Enhanced One-Click functionality by adding a layer of validation for hosted field payment method
 
 ## 1.29.0
 
