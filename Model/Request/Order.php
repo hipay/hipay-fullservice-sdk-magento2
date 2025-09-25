@@ -23,6 +23,7 @@ use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 use HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes;
+use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 
 /**
  * Order Request Object
@@ -369,7 +370,7 @@ class Order extends CommonRequest
 
         $oneClick = $this->_order->getPayment()->getAdditionalInformation('create_oneclick') == '1';
 
-        if ($oneClick) {
+        if ($oneClick && $this->_order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE) {
             $orderRequest->one_click = true;
         }
 
