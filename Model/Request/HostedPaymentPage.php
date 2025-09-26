@@ -56,6 +56,10 @@ class HostedPaymentPage extends Order
 
         $hppRequest->time_limit_to_pay = (int)($this->_config->getValue('time_limit_to_pay') * 3600);
 
+        if ($this->_order->getPayment()->getAdditionalInformation('create_oneclick')) {
+            $hppRequest->multi_use = 1;
+        }
+
         $hppRequest->display_cancel_button =
             $this->_config->getGeneraleValue('cancel_button', 'hipay_hosted_page_management');
 
