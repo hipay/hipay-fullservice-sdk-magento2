@@ -34,6 +34,7 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\FullserviceMagento\Model\Method\HostedMethod;
+use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -567,7 +568,8 @@ class Notify
 
     protected function _canSaveCc()
     {
-        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick')
+            && $this->_order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE;
     }
 
     /**

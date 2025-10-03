@@ -4,6 +4,7 @@
 
 - **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.
 - **Fix** : Handle manual capture notifications from Magento when HiPay response arrives before invoice creation, by generating the invoice with the operationId to avoid blocked orders.
+- **Fix** : Enhanced One-Click functionality by adding a layer of validation for hosted field payment method
 
 ## 1.29.0
 
