@@ -1,0 +1,57 @@
+upstream fastcgi_backend {
+  server magento-phpfpm:9000;
+}
+
+server {
+  listen 8000;
+  server_name localhost;
+
+  root /var/www/html/pub;
+  index index.php;
+
+  location / {
+    try_files $uri $uri/ /index.php?$args;
+  }
+
+  location ~* ^/static/(version\d*/)?(.*)$ {
+    # $2 = chemin de l'asset relatif à pub/static
+    try_files
+      /static/$1$2
+      /static/$2
+      /static.php?resource=$2&$args;
+    expires max;
+    add_header Cache-Control "public";
+  }
+
+  # ===== Media =====
+  location ~* ^/media/.*\.(?:jpg|jpeg|gif|png|svg|ico|bmp|webp|avif|mp4|pdf|zip)$ {
+    try_files $uri $uri/ /get.php?resource=$uri&$args;
+    expires max;
+    add_header Cache-Control "public";
+  }
+  location ^~ /media/ {
+    try_files $uri $uri/ /get.php?resource=$uri&$args;
+    expires max;
+    add_header Cache-Control "public";
+  }
+
+  # ===== PHP =====
+  location ~ \.php$ {
+    try_files $uri =404;
+    include        fastcgi_params;
+    fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    fastcgi_param  DOCUMENT_ROOT   $document_root;
+    fastcgi_pass   fastcgi_backend;
+    fastcgi_index  index.php;
+
+    fastcgi_buffer_size 128k;
+    fastcgi_buffers 4 256k;
+    fastcgi_busy_buffers_size 256k;
+    fastcgi_read_timeout 300s;
+  }
+
+  # Sécurité
+  location ~* (\.htaccess|\.git|composer\.(json|lock)|package\.json|gruntfile\.js|gulpfile\.js|phpunit\.xml)$ {
+    deny all;
+  }
+}
