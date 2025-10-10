@@ -34,6 +34,7 @@ use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\FullserviceMagento\Model\Method\HostedMethod;
+use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepository;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -288,21 +289,22 @@ class Notify
                 break;
             case TransactionStatus::CAPTURE_REQUESTED:
             case TransactionStatus::CAPTURED:
-                // if operation ID exists matching magento2, check invoice related to this order
-                // then, if invoice does not exist ~> refuse notif
+                // If an operation ID exists and matches the Magento manual capture format,
+                // check if an invoice is already linked to this order.
+                // If no invoice is found, create a new one and assign the operation ID.
                 $operationId = $this->_transaction->getOperation()
                     ? $this->_transaction->getOperation()->getId()
                     : null;
                 if (
                     $operationId
-                        && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
-                        && !$this->getInvoiceForTransactionId($this->_order, $operationId)
+                    && preg_match("/-" . Operation::CAPTURE . "-manual-/", $operationId)
                 ) {
-                    throw new WebApiException(
-                        __(sprintf('Invoice "%s" does not exist in database.', $operationId)),
-                        0,
-                        WebApiException::HTTP_BAD_REQUEST
-                    );
+                    $invoice = $this->getInvoiceForTransactionId($this->_order, $operationId);
+                    if (!$invoice) {
+                        $invoice = $this->_order->prepareInvoice()->register();
+                        $invoice->setTransactionId($operationId);
+                        $this->_order->addRelatedObject($invoice);
+                    }
                 }
 
                 // status : 118 - We check the 116 has been received before handling
@@ -566,7 +568,8 @@ class Notify
 
     protected function _canSaveCc()
     {
-        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick');
+        return $this->_order->getPayment()->getAdditionalInformation('create_oneclick')
+            && $this->_order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE;
     }
 
     /**

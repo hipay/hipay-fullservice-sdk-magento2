@@ -1,4 +1,4 @@
-FROM bitnami/magento-archived:latest
+FROM bitnamilegacy/magento-archived:latest
 
 ADD https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2.phar
 

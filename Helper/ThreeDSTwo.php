@@ -22,6 +22,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
+use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 
 /**
  * ThreeDS v2 Helper class
@@ -88,7 +89,10 @@ class ThreeDSTwo extends AbstractHelper
         $orders = $this->getCustomerOrder($customer, $store, $dateLimit);
 
         foreach ($orders as $order) {
-            if ($order->getPayment()->getAdditionalInformation("create_oneclick")) {
+            if (
+                $order->getPayment()->getAdditionalInformation("create_oneclick")
+                && $order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE
+            ) {
                 $count++;
             }
         }

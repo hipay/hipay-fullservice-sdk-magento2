@@ -16,7 +16,7 @@ stages:
 
 include:
   - project: 'pi-ecommerce/cms/cms-template-ci'
-    ref: '1.0.0'
+    ref: '1.1.0'
     file: 'release.yaml'
 
 #########################
@@ -71,9 +71,9 @@ include:
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: web
-    - name: docker.io/bitnami/mariadb:10.6
+    - name: docker.io/bitnamilegacy/mariadb:10.6
       alias: mariadb
-    - name: docker.io/bitnami/elasticsearch:7
+    - name: docker.io/bitnamilegacy/elasticsearch:7
       alias: elasticsearch
   artifacts:
     paths:

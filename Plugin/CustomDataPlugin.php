@@ -16,6 +16,7 @@
 namespace HiPay\FullserviceMagento\Plugin;
 
 use HiPay\FullserviceMagento\Model\Request\Order as Order;
+use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 
 class CustomDataPlugin
 {
@@ -51,8 +52,11 @@ class CustomDataPlugin
             $result['display_iframe'] = $payment->getMethodInstance()->getConfigData('iframe_mode');
         }
 
-        // Use OneClick
-        if ($payment->getAdditionalInformation('create_oneclick')) {
+        // Use OneClick - only for hosted fields payment method
+        if (
+            $result['payment_code'] === HostedFieldsMethod::HIPAY_METHOD_CODE
+            && $payment->getAdditionalInformation('create_oneclick')
+        ) {
             $result['payment_type'] = 'OneClick';
         }
         return $result;

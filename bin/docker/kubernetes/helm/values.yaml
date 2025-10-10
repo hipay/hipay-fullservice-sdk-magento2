@@ -1,7 +1,7 @@
-mysql_image: 'docker.io/bitnami/mariadb'
+mysql_image: 'docker.io/bitnamilegacy/mariadb'
 mysql_tag: '10.6'
 
-elastic_image: 'docker.io/bitnami/elasticsearch'
+elastic_image: 'docker.io/bitnamilegacy/elasticsearch'
 elastic_tag: '7'
 
 magento2_image: ''
