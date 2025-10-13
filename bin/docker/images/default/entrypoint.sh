@@ -77,7 +77,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
         mkdir -p $TMP_MAGENTO_DIR
         chown -R $MAGENTO_DIR_USER:$MAGENTO_DIR_USER $TMP_MAGENTO_DIR
 
-        su -s /bin/bash -c "composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4.8 $TMP_MAGENTO_DIR" $MAGENTO_DIR_USER
+        su -s /bin/bash -c "composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $TMP_MAGENTO_DIR" $MAGENTO_DIR_USER
 
         echo -e "${COLOR_SUCCESS} Copie des fichiers Magento vers $MAGENTO_ROOT...${NC}"
         rsync -a --remove-source-files $TMP_MAGENTO_DIR/ $MAGENTO_ROOT/
