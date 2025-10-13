@@ -16,7 +16,7 @@ stages:
 
 include:
   - project: 'pi-ecommerce/cms/cms-template-ci'
-    ref: '1.0.0'
+    ref: '1.1.0'
     file: 'release.yaml'
 
 #########################
