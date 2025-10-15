@@ -115,6 +115,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
    read -r -a CUSTOM_REPOSITORIES <<<"$CUSTOM_REPOSITORIES"
    read -r -a CUSTOM_PACKAGES <<<"$CUSTOM_PACKAGES"
    read -r -a CUSTOM_MODULES <<<"$CUSTOM_MODULES"
+   read -r -a HIPAY_PACKAGES <<<"$HIPAY_PACKAGES"
    IFS=$OLDIFS
 
    # Add custom repositories
@@ -172,6 +173,16 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
 
 
     echo -e "${COLOR_SUCCESS} Magento installé avec succès${NC}"
+
+
+   if [ ! ${#HIPAY_PACKAGES[*]} = 0 ]; then
+       cnt_package=$((${#HIPAY_PACKAGES[*]} - 1))
+       for i in $(seq 0 $cnt_package); do
+           package=$(echo ${HIPAY_PACKAGES[$i]} | sed 's/^[ \t]*//;s/[ \t]*$//')
+           printf "\nInstall package $package"
+           gosu $MAGENTO_DIR_USER composer require $package -n
+       done
+   fi
 
     echo -e "${COLOR_SUCCESS} Activation module HiPay...${NC}"
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && \
