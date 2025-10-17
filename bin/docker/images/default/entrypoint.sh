@@ -9,6 +9,7 @@ MAGENTO_DIR_USER=www-data
 HOST_UID="${HOST_UID:-1000}"
 HOST_GID="${HOST_GID:-1000}"
 NEED_SETUP_CONFIG=0
+MAGENTO_BASE_URL_SECURE_OPT=""
 
 
 export COMPOSER_MEMORY_LIMIT=-1
@@ -66,6 +67,51 @@ done
 
 if [ ! -f $MAGENTO_ROOT/app/etc/config.php ] && [ ! -f $MAGENTO_ROOT/app/etc/env.php ]; then
     NEED_SETUP_CONFIG="1"
+fi
+
+# ====================================================
+# NGROK integration
+# ====================================================
+if [ "${NGROK^^}" = "YES" ]; then
+    echo -e "${COLOR_SUCCESS} NGROK mode enabled — starting tunnel...${NC}"
+
+    if [ -n "${NGROK_AUTHTOKEN}" ]; then
+        rm -f /root/.config/ngrok/ngrok.yml
+        ngrok config add-authtoken "${NGROK_AUTHTOKEN}"
+    fi
+
+    TARGET_HOST="magento-app"
+    TARGET_PORT="8000"
+
+    echo -e "${COLOR_SUCCESS} Starting ngrok tunnel to ${TARGET_HOST}:${TARGET_PORT} ...${NC}"
+
+    nohup ngrok http http://${TARGET_HOST}:${TARGET_PORT} --log=stdout > /tmp/ngrok.log 2>&1 &
+
+    echo -e "${COLOR_SUCCESS} Waiting for ngrok tunnel to be ready...${NC}"
+
+    for i in $(seq 1 20); do
+        NGROK_URL=$(curl -s http://127.0.0.1:4040/api/tunnels 2>/dev/null | grep -o '"public_url":"https:[^"]*' | cut -d\" -f4)
+        if [ -n "$NGROK_URL" ]; then
+            break
+        fi
+        sleep 1
+    done
+
+    if [ -z "$NGROK_URL" ]; then
+        echo "Ngrok tunnel not found after 20s — fallback to localhost"
+        MAGENTO_BASE_URL="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
+        MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
+    else
+        echo -e "${COLOR_SUCCESS} Ngrok running at: $NGROK_URL${NC}"
+        MAGENTO_BASE_URL="${NGROK_URL}/"
+        MAGENTO_BASE_URL_SECURE="${NGROK_URL}/"
+        MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
+    fi
+
+else
+    echo -e "${COLOR_SUCCESS} NGROK disabled — using local URLs${NC}"
+    MAGENTO_BASE_URL="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
+    MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
 fi
 
 if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
@@ -148,28 +194,29 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
        done
    fi
 
-   gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && \
-       bin/magento setup:install \
-           --base-url=http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/ \
-           --use-secure=1 \
-           --use-secure-admin=1 \
-           --db-host=$MAGENTO_DATABASE_HOST \
-           --db-name=$MAGENTO_DATABASE_NAME \
-           --db-user=$MAGENTO_DATABASE_USER \
-           --db-password=$MAGENTO_DATABASE_PASSWORD \
-           --backend-frontname=admin \
-           --admin-firstname=Admin \
-           --admin-lastname=User \
-           --admin-email=$MAGENTO_EMAIL \
-           --admin-user=$MAGENTO_USERNAME \
-           --admin-password=$MAGENTO_PASSWORD \
-           --language=en_US \
-           --currency=EUR \
-           --timezone=Europe/Paris \
-           --use-rewrites=1 \
-           --search-engine=opensearch \
-           --opensearch-host=${OPENSEARCH_HOST} \
-           --opensearch-port=${OPENSEARCH_PORT_NUMBER}"
+    gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && \
+        bin/magento setup:install \
+            --base-url=${MAGENTO_BASE_URL} \
+            ${MAGENTO_BASE_URL_SECURE_OPT} \
+            --use-secure=1 \
+            --use-secure-admin=1 \
+            --db-host=$MAGENTO_DATABASE_HOST \
+            --db-name=$MAGENTO_DATABASE_NAME \
+            --db-user=$MAGENTO_DATABASE_USER \
+            --db-password=$MAGENTO_DATABASE_PASSWORD \
+            --backend-frontname=admin \
+            --admin-firstname=Admin \
+            --admin-lastname=User \
+            --admin-email=$MAGENTO_EMAIL \
+            --admin-user=$MAGENTO_USERNAME \
+            --admin-password=$MAGENTO_PASSWORD \
+            --language=en_US \
+            --currency=EUR \
+            --timezone=Europe/Paris \
+            --use-rewrites=1 \
+            --search-engine=opensearch \
+            --opensearch-host=${OPENSEARCH_HOST} \
+            --opensearch-port=${OPENSEARCH_PORT_NUMBER}"
 
 
     echo -e "${COLOR_SUCCESS} Magento installé avec succès${NC}"
@@ -302,7 +349,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
 
 fi
 
-echo -e "${COLOR_SUCCESS}🔧 Fix ownership (host user)${NC}"
+echo -e "${COLOR_SUCCESS} Fix ownership (host user)${NC}"
 getent group "$HOST_GID" >/dev/null 2>&1 || groupadd -g "$HOST_GID" hostgroup || true
 id -u "$HOST_UID" >/dev/null 2>&1 || useradd -u "$HOST_UID" -g "$HOST_GID" -M -s /usr/sbin/nologin hostuser || true
 
@@ -348,6 +395,10 @@ printf "${COLOR_SUCCESS}    |   PHP VERSION     : $(php -r 'echo PHP_VERSION;') 
 printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $(grep -Po '"version": "\K.*(?=")' $MAGENTO_ROOT/composer.json)   ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================                 ${NC}\n"
 
+if [ "${NGROK^^}" = "YES" ] && [ -n "${NGROK_URL}" ]; then
+  echo -e "${COLOR_SUCCESS} Ngrok public URL: ${NGROK_URL}${NC}"
+  echo -e "${COLOR_SUCCESS} Admin: ${NGROK_URL}/admin${NC}"
+fi
 echo -e "${COLOR_SUCCESS} Magento + HiPay prêt !${NC}"
 
 
