@@ -1,6 +1,7 @@
 # Changelog
 
 ## UNRELEASE
+- **Fix** : Cannot instantiate interface ResponseNotFoundOrderRepositoryInterface on running queue consumers from CLI
 
 ## 1.29.1
 

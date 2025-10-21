@@ -76,4 +76,6 @@
             <argument name="value" xsi:type="string">SAMEORIGIN</argument>
         </arguments>
     </type>
+    <preference for="HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface" type="HiPay\FullserviceMagento\Model\ResponseNotFoundOrderRepository"/>
+
 </config>
