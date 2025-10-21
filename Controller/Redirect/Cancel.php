@@ -17,6 +17,16 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use HiPay\FullserviceMagento\Model\Gateway\Factory;
+use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Session\Generic;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Cancel controller
@@ -31,41 +41,57 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
 class Cancel extends Fullservice
 {
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderRepositoryInterface
      */
-    private $orderFactory;
+    private $orderRepository;
 
     /**
-     * @var \Magento\Sales\Api\OrderManagementInterface
+     * @var OrderManagementInterface
      */
     private $orderManagement;
 
     /**
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @var Session
+     */
+    private $checkoutSession;
+
+    /**
      * Cancel constructor.
      *
-     * @param \Magento\Framework\App\Action\Context            $context
-     * @param \Magento\Customer\Model\Session                  $customerSession
-     * @param \Magento\Checkout\Model\Session                  $checkoutSession
-     * @param \Magento\Framework\Session\Generic               $hipaySession
-     * @param \Psr\Log\LoggerInterface                         $logger
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Sales\Model\OrderFactory                $orderFactory
-     * @param \Magento\Sales\Api\OrderManagementInterface      $orderManagement
+     * @param Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session $checkoutSession
+     * @param Generic $hipaySession
+     * @param LoggerInterface $logger
+     * @param Factory $gatewayManagerFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param OrderRepositoryInterface $orderRepository
+     * @param OrderManagementInterface $orderManagement
+     * @param Cart $cart
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        Context                         $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Session\Generic $hipaySession,
-        \Psr\Log\LoggerInterface $logger,
-        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Api\OrderManagementInterface $orderManagement
-    ) {
-        $this->orderFactory = $orderFactory;
+        Session                         $checkoutSession,
+        Generic                         $hipaySession,
+        LoggerInterface                 $logger,
+        Factory                         $gatewayManagerFactory,
+        JsonFactory                     $resultJsonFactory,
+        OrderRepositoryInterface        $orderRepository,
+        OrderManagementInterface        $orderManagement,
+        Cart                            $cart
+    )
+    {
+        $this->orderRepository = $orderRepository;
         $this->orderManagement = $orderManagement;
+        $this->checkoutSession = $checkoutSession;
+        $this->cart = $cart;
+
         parent::__construct(
             $context,
             $customerSession,
@@ -83,38 +109,38 @@ class Cancel extends Fullservice
      * */
     public function execute()
     {
-        $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
+        $lastOrderId = $this->checkoutSession->getLastOrderId();
+
         if ($lastOrderId) {
             /**
              * @var $order  \Magento\Sales\Model\Order
              */
-            $order = $this->orderFactory->create();
-            $order->load($lastOrderId);
+            $order = $this->orderRepository->get($lastOrderId);
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /**
-                 * @var $cart \Magento\Checkout\Model\Cart
+                 * @var $cart Cart
                  */
-                $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
+                $cart = $this->cart;
                 $items = $order->getItemsCollection();
                 try {
                     foreach ($items as $item) {
                         $cart->addOrderItem($item);
-
-                        $cart->save();
                     }
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-                        $this->messageManager->addNotice($e->getMessage());
+                    $cart->save();
+                } catch (LocalizedException $e) {
+                    if ($this->checkoutSession->getUseNotice(true)) {
+                        $this->messageManager->addNoticeMessage($e->getMessage());
                     } else {
-                        $this->messageManager->addError($e->getMessage());
+                        $this->messageManager->addErrorMessage($e->getMessage());
                     }
                 } catch (\Exception $e) {
-                    $this->messageManager->addException(
+                    $this->messageManager->addExceptionMessage(
                         $e,
                         __('We can\'t add this item to your shopping cart right now.')
                     );
                 }
             }
+
             $this->orderManagement->cancel($lastOrderId);
             $this->messageManager->addNoticeMessage(
                 __('Your order #%1 was canceled.', $order->getIncrementId())

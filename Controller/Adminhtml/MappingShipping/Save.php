@@ -16,8 +16,13 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
+use HiPay\FullserviceMagento\Model\MappingShipping\Factory;
 use Magento\Backend\App\Action;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Save Mapping Shipping
@@ -30,50 +35,62 @@ use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFacto
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @var \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_mappingShippingCollectionFactory;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
+     * @var Factory
      */
     private $mappingShippingFactory;
 
     /**
+     * @var Session
+     */
+    private $backendSession;
+
+    /**
      * Save constructor.
      *
-     * @param Action\Context                                          $context
-     * @param CollectionFactory                                       $mappingShippingCollectionFactory
-     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+     * @param Action\Context        $context
+     * @param CollectionFactory     $mappingShippingCollectionFactory
+     * @param Factory               $mappingShippingFactory
+     * @param Session               $backendSession
      */
     public function __construct(
         Action\Context $context,
         CollectionFactory $mappingShippingCollectionFactory,
-        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+        Factory $mappingShippingFactory,
+        Session $backendSession
     ) {
-        $this->mappingShippingFactory = $mappingShippingFactory;
-        parent::__construct($context);
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
+        $this->mappingShippingFactory = $mappingShippingFactory;
+        $this->backendSession = $backendSession;
+        parent::__construct($context);
     }
 
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
+
         /**
- * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+         * @var Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
+
         if ($data) {
             $model = $this->mappingShippingFactory->create();
             $id = $this->getRequest()->getParam('mapping_shipping_id');
+
             if ($id) {
                 $model->load($id);
             } else {
+                // Prevent duplicate mappings
                 if ($data['magento_shipping_code'] !== 'hipay_shipping_custom') {
                     $count = $this->_mappingShippingCollectionFactory->create()
                         ->addFieldToFilter('magento_shipping_code', $data['magento_shipping_code'])
@@ -104,6 +121,7 @@ class Save extends \Magento\Backend\App\Action
             }
 
             $model->setData($data);
+
             $this->_eventManager->dispatch(
                 'hipay_mappingshipping_prepare_save',
                 ['mappingshipping' => $model, 'request' => $this->getRequest()]
@@ -111,21 +129,24 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved this mapping shipping.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->messageManager->addSuccessMessage(__('You saved this mapping shipping.'));
+                $this->backendSession->setFormData(false);
+
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath(
                         '*/*/edit',
                         ['mapping_shipping_id' => $model->getId(), '_current' => true]
                     );
                 }
+
                 return $resultRedirect->setPath('*/*/');
-            } catch (\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+            } catch (LocalizedException|\RuntimeException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the mapping.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the mapping.')
+                );
             }
 
             $this->_getSession()->setFormData($data);

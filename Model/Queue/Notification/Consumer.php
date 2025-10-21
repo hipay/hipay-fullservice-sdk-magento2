@@ -16,9 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model\Queue\Notification;
 
+use HiPay\FullserviceMagento\Logger\HipayHandler;
 use HiPay\FullserviceMagento\Model\Notification;
 use HiPay\FullserviceMagento\Model\Notification\Factory;
-use Magento\Framework\ObjectManagerInterface;
+use HiPay\FullserviceMagento\Model\Notify;
+use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Framework\Logger\Monolog;
 
 /**
@@ -32,31 +34,41 @@ use Magento\Framework\Logger\Monolog;
 class Consumer
 {
     /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * @var Factory
      */
     protected $notificationFactory;
+
+    /**
+     * @var NotifyFactory
+     */
+    protected $notifyFactory;
 
     /**
      * @var Monolog
      */
     protected $logger;
 
+    /**
+     * @param Factory $notificationFactory
+     * @param NotifyFactory $notifyFactory
+     * @param Monolog $logger
+     */
     public function __construct(
-        ObjectManagerInterface $objectManager,
         Factory $notificationFactory,
+        NotifyFactory $notifyFactory,
         Monolog $logger
     ) {
-        $this->objectManager = $objectManager;
         $this->notificationFactory = $notificationFactory;
+        $this->notifyFactory = $notifyFactory;
         $this->logger = $logger;
-        $this->logger->pushHandler(\HiPay\FullserviceMagento\Logger\HipayHandler::getInstance());
+        $this->logger->pushHandler(HipayHandler::getInstance());
     }
 
+    /**
+     * @param string $id
+     * @return void
+     * @throws \Exception
+     */
     public function execute(string $id)
     {
         if ($id) {
@@ -69,9 +81,8 @@ class Consumer
             );
 
             try {
-                /** @var \HiPay\FullserviceMagento\Model\Notify */
-                $notify = $this->objectManager->create(
-                    '\HiPay\FullserviceMagento\Model\Notify',
+                /** @var Notify */
+                $notify = $this->notifyFactory->create(
                     ['params' => ['response' => json_decode($notification->getContent(), true)]]
                 );
                 $notify->processTransaction();

@@ -16,7 +16,20 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Order;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Backend\Model\Session;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Api\OrderManagementInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 /**
  * Controller to Accept and capture payment in pending review
@@ -29,6 +42,64 @@ use Magento\Framework\Exception\LocalizedException;
 class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
+     * @var Session
+     */
+    protected $backendSession;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * AcceptAndCapturePayment constructor.
+     *
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param FileFactory $fileFactory
+     * @param InlineInterface $translateInline
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
+     * @param OrderManagementInterface $orderManagement
+     * @param OrderRepositoryInterface $orderRepository
+     * @param LoggerInterface $logger
+     * @param Session $backendSession
+     */
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry,
+        FileFactory $fileFactory,
+        InlineInterface $translateInline,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
+        OrderManagementInterface $orderManagement,
+        OrderRepositoryInterface $orderRepository,
+        LoggerInterface $logger,
+        Session $backendSession
+    ) {
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $fileFactory,
+            $translateInline,
+            $resultPageFactory,
+            $resultJsonFactory,
+            $resultLayoutFactory,
+            $resultRawFactory,
+            $orderManagement,
+            $orderRepository,
+            $logger
+        );
+
+        $this->backendSession = $backendSession;
+        $this->logger = $logger;
+    }
+
+    /**
      * Manage payment state
      *
      * Accept and capture a payment that is in "review" state
@@ -38,46 +109,35 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
+
         try {
             /**
- * @var $order \Magento\Sales\Model\Order
-**/
+             * @var $order Order
+             **/
             $order = $this->_initOrder();
+
             if ($order) {
-                //1. Authorize the payment
                 $order->getPayment()->accept();
-                /**
- * @var $orderService \Magento\Sales\Model\Service\OrderService
-**/
-                $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
-                $orderService->setState(
-                    $order,
-                    \Magento\Sales\Model\Order::STATE_PROCESSING,
-                    \HiPay\FullserviceMagento\Model\Config::STATUS_AUTHORIZED,
-                    '',
-                    null,
-                    false
+
+                $this->messageManager->addSuccessMessage(__('The payment has been authorized.'));
+
+                $order->getPayment()->getMethodInstance()->capture(
+                    $order->getPayment(),
+                    $order->getBaseTotalDue()
                 );
 
-                $this->orderRepository->save($order);
+                $this->messageManager->addSuccessMessage( __('The payment has been captured too.'));
 
-                $message = __('The payment has been authorized.');
-                $this->messageManager->addSuccess($message);
-
-                $order->getPayment()->getMethodInstance()->capture($order->getPayment(), $order->getBaseTotalDue());
-
-                $message = __('The payment has been captured too.');
-                $this->messageManager->addSuccess($message);
-
-                $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
+                $this->backendSession->getCommentText(true);
             } else {
                 $resultRedirect->setPath('sales/*');
                 return $resultRedirect;
             }
+
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update the payment right now.'));
+            $this->messageManager->addErrorMessage(__('We can\'t update the payment right now.'));
             $this->logger->critical($e);
         }
         $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getEntityId()]);

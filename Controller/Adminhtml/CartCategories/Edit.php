@@ -16,7 +16,13 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
+use HiPay\FullserviceMagento\Model\CartCategories\Factory;
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\PageFactory;
 
 /**
  * Edit payment profile
@@ -31,51 +37,59 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
+     * @var Factory
      */
     private $cartCategoriesFactory;
 
     /**
+     * @var Session
+     */
+    private $backendSession;
+
+    /**
      * Edit constructor.
      *
-     * @param Action\Context                                         $context
-     * @param \Magento\Framework\View\Result\PageFactory             $resultPageFactory
-     * @param \Magento\Framework\Registry                            $registry
-     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+     * @param Action\Context    $context
+     * @param PageFactory       $resultPageFactory
+     * @param Registry          $registry
+     * @param Factory           $cartCategoriesFactory
+     * @param Session           $backendSession
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Registry $registry,
-        \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+        PageFactory $resultPageFactory,
+        Registry $registry,
+        Factory $cartCategoriesFactory,
+        Session $backendSession
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->_coreRegistry = $registry;
         $this->cartCategoriesFactory = $cartCategoriesFactory;
+        $this->backendSession = $backendSession;
         parent::__construct($context);
     }
 
     /**
      * Init actions
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     protected function _initAction()
     {
         // load layout, set active menu and breadcrumbs
         /**
- * @var \Magento\Backend\Model\View\Result\Page $resultPage
-*/
+         * @var Page $resultPage
+         */
         $resultPage = $this->resultPageFactory->create();
 
         $resultPage->setActiveMenu('HiPay_FullserviceMagento::hipay_cart_categories')
@@ -88,7 +102,7 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit Payment Profile page
      *
-     * @return                                  \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
+     * @return Page|Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
@@ -101,9 +115,9 @@ class Edit extends \Magento\Backend\App\Action
         if ($id) {
             $model->load($id);
             if (!$model->getId()) {
-                $this->messageManager->addError(__('This mapping no longer exists.'));
+                $this->messageManager->addErrorMessage(__('This mapping no longer exists.'));
                 /**
-                 * \Magento\Backend\Model\View\Result\Redirect $resultRedirect
+                 * @var Redirect $resultRedirect
                  */
                 $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -112,7 +126,7 @@ class Edit extends \Magento\Backend\App\Action
         }
 
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
+        $data = $this->backendSession->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -122,8 +136,8 @@ class Edit extends \Magento\Backend\App\Action
 
         // 5. Build edit form
         /**
- * @var \Magento\Backend\Model\View\Result\Page $resultPage
-*/
+         * @var Page $resultPage
+         */
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
             $id ? __('Edit Mapping Categories') : __('New Mapping Categories'),

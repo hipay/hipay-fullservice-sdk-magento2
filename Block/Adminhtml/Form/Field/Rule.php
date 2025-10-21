@@ -16,7 +16,10 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
+use HiPay\FullserviceMagento\Model\Rule\Factory;
+use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 /**
  * Block sortable checkboxes
@@ -29,13 +32,9 @@ use Magento\Config\Block\System\Config\Form\Field;
  */
 class Rule extends Field
 {
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManager;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory
+     * @var Factory $ruleFactory
      */
     private $ruleFactory;
 
@@ -44,20 +43,17 @@ class Rule extends Field
      *
      * Rule constructor.
      *
-     * @param \Magento\Backend\Block\Template\Context      $context
-     * @param \Magento\Framework\ObjectManagerInterface    $objectManager
-     * @param \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory
+     * @param Context      $context
+     * @param Factory $ruleFactory
      * @param array                                        $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \HiPay\FullserviceMagento\Model\Rule\Factory $ruleFactory,
+        Context $context,
+        Factory $ruleFactory,
         array $data = []
     ) {
 
         $this->ruleFactory = $ruleFactory;
-        $this->_objectManager = $objectManager;
 
         parent::__construct($context, $data);
 
@@ -74,10 +70,10 @@ class Rule extends Field
     /**
      * Retrieve element HTML markup
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $rule = $this->ruleFactory->create();
 
