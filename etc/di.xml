@@ -18,6 +18,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface" type="HiPay\FullserviceMagento\Model\ResponseNotFoundOrderRepository"/>
     <type name="Magento\Sales\Model\Order\Payment\State\CaptureCommand">
         <plugin name="hipay_capture" type="\HiPay\FullserviceMagento\Plugin\CaptureCommandPlugin" sortOrder="100" disabled="false"/>
     </type>
