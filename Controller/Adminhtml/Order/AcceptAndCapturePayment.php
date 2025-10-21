@@ -16,7 +16,9 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Order;
 
+use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order;
 
 /**
  * Controller to Accept and capture payment in pending review
@@ -33,33 +35,19 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * Accept and capture a payment that is in "review" state
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
         $resultRedirect = $this->resultRedirectFactory->create();
         try {
             /**
- * @var $order \Magento\Sales\Model\Order
-**/
+             * @var $order Order
+             **/
             $order = $this->_initOrder();
             if ($order) {
                 //1. Authorize the payment
                 $order->getPayment()->accept();
-                /**
- * @var $orderService \Magento\Sales\Model\Service\OrderService
-**/
-                $orderService = $this->_objectManager->create('Magento\Sales\Api\OrderManagementInterface');
-                $orderService->setState(
-                    $order,
-                    \Magento\Sales\Model\Order::STATE_PROCESSING,
-                    \HiPay\FullserviceMagento\Model\Config::STATUS_AUTHORIZED,
-                    '',
-                    null,
-                    false
-                );
-
-                $this->orderRepository->save($order);
 
                 $message = __('The payment has been authorized.');
                 $this->messageManager->addSuccess($message);

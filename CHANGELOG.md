@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Removed manual status update in “Accept and Capture Payment” to let HiPay handle status transitions.
+
 ## 1.29.1
 
 - **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.
