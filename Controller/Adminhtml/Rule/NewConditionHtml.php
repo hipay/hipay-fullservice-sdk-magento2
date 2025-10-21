@@ -16,7 +16,10 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Rule;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use HiPay\FullserviceMagento\Model\RuleFactory;
 
 /**
  * Add new condition html on rule edition
@@ -27,8 +30,27 @@ use Magento\Rule\Model\Condition\AbstractCondition;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class NewConditionHtml extends \Magento\Backend\App\Action
+class NewConditionHtml extends Action
 {
+    /**
+     * @var RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * NewConditionHtml constructor.
+     *
+     * @param Context     $context
+     * @param RuleFactory $ruleFactory
+     */
+    public function __construct(
+        Context $context,
+        RuleFactory $ruleFactory
+    ) {
+        parent::__construct($context);
+        $this->ruleFactory = $ruleFactory;
+    }
+
     /**
      * @return void
      */
@@ -55,7 +77,7 @@ class NewConditionHtml extends \Magento\Backend\App\Action
             )->setType(
                 $type
             )->setRule(
-                $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')
+                $this->ruleFactory->create()
             )->setPrefix(
                 'conditions'
             )

@@ -17,6 +17,16 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use HiPay\FullserviceMagento\Model\Gateway\Factory;
+use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Session\Generic;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 /**
  * Decline controller
@@ -31,33 +41,48 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
 class Decline extends Fullservice
 {
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderRepositoryInterface
      */
-    private $orderFactory;
+    private $orderRepository;
+
+    /**
+     * @var Cart
+     */
+    private $cart;
+
+    /**
+     * @var Session
+     */
+    private $checkoutSession;
 
     /**
      * Decline constructor.
      *
-     * @param \Magento\Framework\App\Action\Context            $context
-     * @param \Magento\Customer\Model\Session                  $customerSession
-     * @param \Magento\Checkout\Model\Session                  $checkoutSession
-     * @param \Magento\Framework\Session\Generic               $hipaySession
-     * @param \Psr\Log\LoggerInterface                         $logger
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Sales\Model\OrderFactory                $orderFactory
+     * @param Context                         $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Session                         $checkoutSession
+     * @param Generic                         $hipaySession
+     * @param LoggerInterface                 $logger
+     * @param Factory                         $gatewayManagerFactory
+     * @param JsonFactory                     $resultJsonFactory
+     * @param OrderRepositoryInterface        $orderRepository
+     * @param Cart                            $cart
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        Context                         $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\Session\Generic $hipaySession,
-        \Psr\Log\LoggerInterface $logger,
-        \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory
+        Session                         $checkoutSession,
+        Generic                         $hipaySession,
+        LoggerInterface                 $logger,
+        Factory                         $gatewayManagerFactory,
+        JsonFactory                     $resultJsonFactory,
+        OrderRepositoryInterface        $orderRepository,
+        Cart                            $cart
     ) {
-        $this->orderFactory = $orderFactory;
+        $this->orderRepository = $orderRepository;
+        $this->checkoutSession = $checkoutSession;
+        $this->cart = $cart;
+
         parent::__construct(
             $context,
             $customerSession,
@@ -75,34 +100,35 @@ class Decline extends Fullservice
      */
     public function execute()
     {
+        $lastOrderId = $this->checkoutSession->getLastOrderId();
 
-        $lastOrderId = $this->_getCheckoutSession()->getLastOrderId();
         if ($lastOrderId) {
             /**
- * @var $order  \Magento\Sales\Model\Order
-**/
-            $order = $this->orderFactory->create();
-            $order->load($lastOrderId);
+             * @var $order  Order
+             */
+            $order = $this->orderRepository->get($lastOrderId);
+
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /**
- * @var $cart \Magento\Checkout\Model\Cart
-**/
-                $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-                $items = $order->getItemsCollection();
+                 * @var $cart Cart
+                 */
+                $cart = $this->cart;
+                $items = $order->getAllVisibleItems();
+
                 try {
                     foreach ($items as $item) {
                         $cart->addOrderItem($item);
                     }
 
                     $cart->save();
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    if ($this->_objectManager->get('Magento\Checkout\Model\Session')->getUseNotice(true)) {
-                        $this->messageManager->addNotice($e->getMessage());
+                } catch (LocalizedException $e) {
+                    if ($this->checkoutSession->getUseNotice(true)) {
+                        $this->messageManager->addNoticeMessage($e->getMessage());
                     } else {
-                        $this->messageManager->addError($e->getMessage());
+                        $this->messageManager->addErrorMessage($e->getMessage());
                     }
                 } catch (\Exception $e) {
-                    $this->messageManager->addException(
+                    $this->messageManager->addExceptionMessage(
                         $e,
                         __('We can\'t add this item to your shopping cart right now.')
                     );
@@ -116,7 +142,7 @@ class Decline extends Fullservice
             return $this->resultRedirectFactory->create()->setPath('customer/account');
         }
 
-        $this->_checkoutSession->setErrorMessage(__('Your order was declined.'));
+        $this->checkoutSession->setErrorMessage(__('Your order was declined.'));
         $this->_redirect('checkout/onepage/failure');
     }
 }

@@ -16,8 +16,19 @@
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Backend;
 
+use HiPay\FullserviceMagento\Model\RuleFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\Message\Error;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\Validator\Exception;
 
 /**
  * Rule Backend Model
@@ -27,54 +38,46 @@ use Magento\Framework\Phrase;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Rule extends \Magento\Framework\App\Config\Value
+class Rule extends Value
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface $_objectManager
-     */
-    protected $_objectManager;
-
-    /**
-     *
-     * @var \Magento\Framework\App\RequestInterface $_request
+     * @var RequestInterface
      */
     protected $_request;
 
+    /**
+     * @var array|null
+     */
     protected $_ruleData = null;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\RuleFactory
+     * @var RuleFactory
      */
     private $ruleFactory;
 
     /**
-     * Rule constructor.
-     *
-     * @param \Magento\Framework\Model\Context                             $context
-     * @param \Magento\Framework\Registry                                  $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface           $config
-     * @param \Magento\Framework\App\Cache\TypeListInterface               $cacheTypeList
-     * @param \Magento\Framework\ObjectManagerInterface                    $objectManager
-     * @param \Magento\Framework\App\RequestInterface                      $httpRequest
-     * @param \HiPay\FullserviceMagento\Model\RuleFactory                  $ruleFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
-     * @param array                                                        $data
+     * @param Context               $context
+     * @param Registry              $registry
+     * @param ScopeConfigInterface  $config
+     * @param TypeListInterface     $cacheTypeList
+     * @param RequestInterface      $httpRequest
+     * @param RuleFactory           $ruleFactory
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\RequestInterface $httpRequest,
-        \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        Context              $context,
+        Registry             $registry,
+        ScopeConfigInterface $config,
+        TypeListInterface    $cacheTypeList,
+        RequestInterface     $httpRequest,
+        RuleFactory          $ruleFactory,
+        AbstractResource     $resource = null,
+        AbstractDb           $resourceCollection = null,
+        array                $data = []
     ) {
         $this->ruleFactory = $ruleFactory;
-        $this->_objectManager = $objectManager;
         $this->_request = $httpRequest;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
@@ -83,7 +86,7 @@ class Rule extends \Magento\Framework\App\Config\Value
      * Processing object before save data
      *
      * @return $this
-     * @throws \Magento\Framework\Validator\Exception
+     * @throws Exception
      */
     public function beforeSave()
     {
@@ -94,11 +97,11 @@ class Rule extends \Magento\Framework\App\Config\Value
         $rule->load($this->getValue());
 
         if ($errors = $rule->validateData(new DataObject($this->_getRuleData())) !== true) {
-            $exception = new \Magento\Framework\Validator\Exception(
+            $exception = new Exception(
                 new Phrase(implode(PHP_EOL, $errors))
             );
             foreach ($errors as $errorMessage) {
-                $exception->addMessage(new \Magento\Framework\Message\Error($errorMessage));
+                $exception->addMessage(new Error($errorMessage));
             }
             throw $exception;
         }
@@ -107,7 +110,6 @@ class Rule extends \Magento\Framework\App\Config\Value
         $rule->setConfigPath($this->_getConfigPath());
 
         $rule->loadPost($this->_getRuleData());
-
         $rule->save();
 
         $this->setValue($rule->getId());
@@ -117,7 +119,6 @@ class Rule extends \Magento\Framework\App\Config\Value
 
     protected function _afterload()
     {
-
         parent::_afterload();
 
         /**

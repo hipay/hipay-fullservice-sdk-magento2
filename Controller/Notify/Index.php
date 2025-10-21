@@ -18,10 +18,13 @@ namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use HiPay\FullserviceMagento\Model\Config;
 use HiPay\FullserviceMagento\Model\Notification\Factory;
+use HiPay\FullserviceMagento\Model\Notify;
+use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\Webapi\Exception as WebApiException;
 use Psr\Log\LoggerInterface;
 
@@ -58,11 +61,17 @@ class Index extends AppAction
      */
     private $_notificationFactory;
 
+    /**
+     * @var NotifyFactory
+     */
+    private $_notifyFactory;
+
     public function __construct(
         Context $context,
         Session $checkoutSession,
         Config $hipayConfig,
         Factory $notificationFactory,
+        NotifyFactory $notifyFactory,
         LoggerInterface $logger
     ) {
         parent::__construct($context);
@@ -73,6 +82,7 @@ class Index extends AppAction
         $this->_hipayConfig->setStoreId($storeId);
 
         $this->_notificationFactory = $notificationFactory;
+        $this->_notifyFactory = $notifyFactory;
         $this->_logger = $logger;
 
         if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
@@ -112,10 +122,9 @@ class Index extends AppAction
                 $reponseBody = 'Notification will be processed later';
             } else {
                 /**
-                 * @var \HiPay\FullserviceMagento\Model\Notify $notify
+                 * @var Notify $notify
                  **/
-                $notify = $this->_objectManager->create(
-                    '\HiPay\FullserviceMagento\Model\Notify',
+                $notify = $this->_notifyFactory->create(
                     ['params' => ['response' => $params]]
                 );
                 $notify->processTransaction();
@@ -138,7 +147,7 @@ class Index extends AppAction
     /**
      * Retrieve request object
      *
-     * @return \Magento\Framework\App\Request\Http
+     * @return HttpRequest
      */
     public function getRequest()
     {
@@ -148,7 +157,7 @@ class Index extends AppAction
     /**
      * Retrieve response object
      *
-     * @return \Magento\Framework\App\Response\Http
+     * @return Http
      */
     public function getResponse()
     {
