@@ -16,8 +16,9 @@
 
 namespace HiPay\FullserviceMagento\Model\Queue\CancelOrderApi;
 
-use Magento\Framework\ObjectManagerInterface;
+use HiPay\FullserviceMagento\Logger\HipayHandler;
 use Magento\Framework\Logger\Monolog;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrderApiPublisher;
@@ -32,11 +33,6 @@ use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrder
  */
 class Consumer
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
     /**
      * @var Monolog
      */
@@ -59,22 +55,19 @@ class Consumer
     protected $cancelOrderApiPublisher;
 
     /**
-     * @param ObjectManagerInterface   $objectManager
      * @param Monolog                  $logger
      * @param OrderRepositoryInterface $orderRepository
      * @param ManagerFactory           $gatewayManagerFactory
      * @param Publisher                $cancelOrderApiPublisher
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
         Monolog $logger,
         OrderRepositoryInterface $orderRepository,
         ManagerFactory $gatewayManagerFactory,
         CancelOrderApiPublisher $cancelOrderApiPublisher
     ) {
-        $this->objectManager = $objectManager;
         $this->logger = $logger;
-        $this->logger->pushHandler(\HiPay\FullserviceMagento\Logger\HipayHandler::getInstance());
+        $this->logger->pushHandler(HipayHandler::getInstance());
         $this->orderRepository = $orderRepository;
         $this->gatewayManagerFactory = $gatewayManagerFactory;
         $this->cancelOrderApiPublisher = $cancelOrderApiPublisher;
@@ -83,7 +76,7 @@ class Consumer
     /**
      * @param string $id
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Exception
      */
     public function execute(string $id)
     {
@@ -93,7 +86,9 @@ class Consumer
             );
 
             try {
-                /** @var $order */
+                /**
+                 * @var $order OrderInterface
+                 */
                 $order = $this->orderRepository->get((int) $id);
 
                 if (!empty($order)) {

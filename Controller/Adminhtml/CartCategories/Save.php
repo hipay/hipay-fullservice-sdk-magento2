@@ -16,7 +16,12 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
+use HiPay\FullserviceMagento\Model\CartCategories\Factory;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Session;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
  * Save Mapping category
@@ -29,35 +34,43 @@ use Magento\Backend\App\Action;
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
+     * @var Factory
      */
     private $cartCategoriesFactory;
 
     /**
+     * @var Session
+     */
+    private $backendSession;
+
+    /**
      * Save constructor.
      *
-     * @param Action\Context                                         $context
-     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+     * @param Context $context
+     * @param Factory $cartCategoriesFactory
+     * @param Session $backendSession
      */
     public function __construct(
-        Action\Context $context,
-        \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+        Context $context,
+        Factory $cartCategoriesFactory,
+        Session $backendSession
     ) {
         $this->cartCategoriesFactory = $cartCategoriesFactory;
+        $this->backendSession = $backendSession;
         parent::__construct($context);
     }
 
     /**
      * Save action
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
         /**
- * @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect
-*/
+         * @var Redirect $resultRedirect
+         */
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
             $model = $this->cartCategoriesFactory->create();
@@ -84,23 +97,29 @@ class Save extends \Magento\Backend\App\Action
 
             try {
                 $model->save();
-                $this->messageManager->addSuccess(__('You saved this mapping category.'));
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->messageManager->addSuccessMessage(__('You saved this mapping category.'));
+                $this->backendSession->setFormData(false);
+
                 if ($this->getRequest()->getParam('back')) {
                     return $resultRedirect->setPath('*/*/edit', ['mapping_id' => $model->getId(), '_current' => true]);
                 }
+
                 return $resultRedirect->setPath('*/*/');
-            } catch (\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\RuntimeException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the mapping.'));
+                $this->messageManager->addExceptionMessage(
+                    $e,
+                    __('Something went wrong while saving the mapping.')
+                );
             }
 
             $this->_getSession()->setFormData($data);
             return $resultRedirect->setPath('*/*/edit', ['profile_id' => $this->getRequest()->getParam('mapping_id')]);
         }
+
         return $resultRedirect->setPath('*/*/');
     }
 }
