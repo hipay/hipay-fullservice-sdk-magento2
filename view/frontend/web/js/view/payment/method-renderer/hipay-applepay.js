@@ -39,7 +39,7 @@ define([
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-applepay',
         creditCardToken: null,
-        creditCardType: 'cb',
+        creditCardType: null,
         instanceApplePay: null,
         totals: quote.totals,
         eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
