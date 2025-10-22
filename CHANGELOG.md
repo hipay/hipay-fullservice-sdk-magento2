@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed Apple Pay card brand detection using payment_product property
 - **Fix** : Removed manual status update in “Accept and Capture Payment” to let HiPay handle status transitions.
 
 ## 1.29.1
