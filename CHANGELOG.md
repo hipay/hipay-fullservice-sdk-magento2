@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed Apple Pay card brand detection using payment_product property
+
 ## 1.29.1
 
 - **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.

@@ -264,8 +264,7 @@ define([
         var body = $('body');
         self.creditCardToken(tokenHipay.token);
         self.creditCardType(
-          tokenHipay.brand.toLowerCase().replace(/ /g, '-') ||
-            self.creditCardType
+          tokenHipay.payment_product.toLowerCase().replace(/ /g, '-')
         );
 
         var deferred = $.Deferred();
