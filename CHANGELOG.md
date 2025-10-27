@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Fixed Apple Pay card brand detection using payment_product property
+- **Fix** : Fixed frontend scope for ResponseNotFoundOrderRepositoryInterface preference, thanks to [zfmaster](https://github.com/zfmaster) for issue [#170](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/170)
 
 ## 1.29.1
 
