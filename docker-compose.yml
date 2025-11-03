@@ -9,7 +9,7 @@ services:
       - ./web:/var/www/html:cached
 
       # nginx override
-      - ./bin/docker/images/default/nginx.conf.override:/etc/nginx/conf.d/default.conf
+      - ./bin/docker/images/default/conf/nginx/nginx.conf.override:/etc/nginx/conf.d/default.conf
 
       # sockets / certs
       - sockdata:/sock
@@ -57,8 +57,7 @@ services:
   db:
     image: mariadb:11.4
     container_name: magento-db
-    command:
-      --max_allowed_packet=64M
+    command: --max_allowed_packet=64M
       --optimizer_use_condition_selectivity=1
       --optimizer_switch="rowid_filter=off"
       --log_bin_trust_function_creators=1
@@ -78,7 +77,6 @@ services:
     container_name: magento-opensearch
     ports:
       - "9200:9200"
-      - "9300:9300"
     environment:
       - "discovery.type=single-node"
       - "cluster.routing.allocation.disk.threshold_enabled=false"
@@ -89,14 +87,18 @@ services:
         soft: -1
         hard: -1
     healthcheck:
-      test: [ "CMD-SHELL", "curl -sf http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=1s | grep -q '\"status\"'" ]
+      test:
+        [
+          "CMD-SHELL",
+          'curl -sf http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=1s | grep -q ''"status"''',
+        ]
       interval: 10s
       timeout: 5s
       retries: 60
       start_period: 30s
     volumes:
       - opensearchdata:/usr/share/opensearch/data
-      - ./bin/docker/images/default/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro
+      - ./bin/docker/images/default/conf/opensearch/opensearch.yml:/usr/share/opensearch/config/opensearch.yml:ro
 
   mailcatcher:
     image: sj26/mailcatcher:v0.10.0

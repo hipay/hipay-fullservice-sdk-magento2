@@ -33,7 +33,7 @@ fi
 if [ "$1" = 'init' ]; then
     if [ -f ./bin/docker/conf/development/auth.env ]; then
         docker compose down -v
-        sudo rm -Rf log/ src/pub/static src/var src/generated
+        sudo rm -Rf log/ src/pub/static src/var src/generated web/
         COMPOSE_HTTP_TIMEOUT=500 docker compose up -d --build
     else
         echo "Put your credentials in auth.env and hipay.env before start and update the docker-compose to link these files"

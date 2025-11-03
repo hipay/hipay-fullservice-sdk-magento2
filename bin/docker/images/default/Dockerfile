@@ -1,5 +1,8 @@
 FROM markoshust/magento-php:8.3-fpm-5
 
+ARG ENVIRONMENT=development
+ENV ENVIRONMENT=$ENVIRONMENT
+
 USER root
 
 ADD https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2.phar
@@ -16,21 +19,22 @@ RUN sed -i '/^\[www\]/,$d' /usr/local/etc/php-fpm.conf && \
     echo "include=/usr/local/etc/php-fpm.d/*.conf" >> /usr/local/etc/php-fpm.conf && \
     rm -f /usr/local/etc/php-fpm.d/*.conf
 
-RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
- && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list \
- && apt-get update && apt-get install -y ngrok
+RUN if [ "$ENVIRONMENT" = "development" ]; then \
+    curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+    && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list \
+    && apt-get update && apt-get install -y ngrok; \
+    fi
 
+COPY ./bin/docker/images/default/conf/php/php-fpm-www.conf /usr/local/etc/php-fpm.d/www.conf
 
-COPY ./bin/docker/images/default/php-fpm-www.conf /usr/local/etc/php-fpm.d/www.conf
-
-COPY ./bin/docker/images/default/php-override.ini /usr/local/etc/php/conf.d/php-override.ini
+COPY ./bin/docker/images/default/conf/php/${ENVIRONMENT}/php-override.ini /usr/local/etc/php/conf.d/php-override.ini
 COPY ./bin/docker/images/default/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY ./bin/docker/conf/development/auth.json /var/www/.composer/auth.json
 
 ENV COMPOSER_HOME=/var/www/.composer
 RUN install -d -m 775 -o www-data -g www-data /var/www/.composer /var/www/.composer/cache \
- && chown www-data:www-data /var/www/.composer/auth.json \
- && chmod 600 /var/www/.composer/auth.json
+    && chown www-data:www-data /var/www/.composer/auth.json \
+    && chmod 600 /var/www/.composer/auth.json
 
 
 RUN chown www-data:www-data /usr/local/bin/entrypoint.sh && \

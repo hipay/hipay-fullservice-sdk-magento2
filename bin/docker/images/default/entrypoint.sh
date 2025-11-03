@@ -303,7 +303,9 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set hipay/hipay_credentials_applepay_tokenjs/api_password_test '$HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST'"
 
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set hipay/hipay_credentials/hashing_algorithm_test 'SHA512'"
-    gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set hipay/configurations/send_notification_url 0"
+    if [ "$ENVIRONMENT" = "development" ]; then
+        gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set hipay/configurations/send_notification_url 0"
+    fi
 
 
     # =====================================================

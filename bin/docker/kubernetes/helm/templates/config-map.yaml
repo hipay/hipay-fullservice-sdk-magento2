@@ -7,28 +7,34 @@ metadata:
 data:
   # Magento env var
   MAGENTO_HOST: {{ .Values.magento2_url }}
+  HOST_UID: "1000"
+  HOST_GID: "1000"
   MAGENTO_EXTERNAL_HTTP_PORT_NUMBER: "80"
   MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER: "443"
-  MAGENTO_DATABASE_HOST: magento2-mysql-{{ .Release.Name }}
+  MAGENTO_DATABASE_HOST: magento2-mariadb-{{ .Release.Name }}
   MAGENTO_DATABASE_PORT_NUMBER: "3306"
-  MAGENTO_DATABASE_USER: bn_magento
-  MAGENTO_DATABASE_NAME: bitnami_magento
-  MAGENTO_DATABASE_PASSWORD: ""
+  MAGENTO_DATABASE_USER: magento
+  MAGENTO_DATABASE_NAME: magento
+  MAGENTO_DATABASE_PASSWORD: magento
   MAGENTO_USERNAME: demo
   MAGENTO_PASSWORD: hipay123
   MAGENTO_EMAIL: demo@hipay.com
   MAGENTO_MODE: developer
+  ALLOW_EMPTY_PASSWORD: "yes"
   MAGENTO_ENABLE_HTTPS: "yes"
   MAGENTO_ENABLE_ADMIN_HTTPS: "yes"
-  ELASTICSEARCH_HOST: magento2-elastic-{{ .Release.Name }}
-  ELASTICSEARCH_PORT_NUMBER: "9200"
-  MAGENTO_ELASTICSEARCH_USER: ""
-  MAGENTO_ELASTICSEARCH_PASSWORD: ""
+  MAGENTO_VERSION: {{ .Values.magento2_version }}
+  OPENSEARCH_HOST: magento2-opensearch-{{ .Release.Name }}
+  OPENSEARCH_PORT_NUMBER: "9200"
+  OPENSEARCH_ENABLED: "true"
+  OPENSEARCH_USER: admin
+  OPENSEARCH_PASSWORD: Hg7$9LpQz@32
   PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
-  MARIADB_DATABASE: bitnami_magento
-  MARIADB_USER: bn_magento
-  ALLOW_EMPTY_PASSWORD: "yes"
+  MARIADB_ROOT_PASSWORD: root
+  MARIADB_DATABASE: magento
+  MARIADB_USER: magento
+  MARIADB_PASSWORD: magento
   # Auth env var
   GITHUB_API_TOKEN: {{ .Values.github_api_token }}
   GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
@@ -48,11 +54,12 @@ data:
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git,vcs https://github.com/hipay/hipay-fullservice-sdk-magento2-multistore.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},hipay/module-multistores,giggsey/libphonenumber-for-php,juashyam/logviewer
-  CUSTOM_MODULES: HiPay_MultiStores,Juashyam_LogViewer
-  # Elastic Search env var
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth
+  HIPAY_PACKAGES: hipay/module-multistores
+  CUSTOM_MODULES: HiPay_MultiStores
+  # Opensearch env var
   keys: |
-    cluster.name=docker-cluster
     discovery.type=single-node
-    'ES_JAVA_OPTS=-Xms512m -Xmx512m'
-    http.port=9200
+    cluster.routing.allocation.disk.threshold_enabled=false
+    OPENSEARCH_INITIAL_ADMIN_PASSWORD=Hg7$9LpQz@32
+    OPENSEARCH_JAVA_OPTS=-Xms768m -Xmx768m

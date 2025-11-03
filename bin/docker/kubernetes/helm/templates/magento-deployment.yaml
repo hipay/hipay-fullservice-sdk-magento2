@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: magento2-web-service-{{ .Release.Name }}
+  namespace: default
+  labels:
+    cd-hipay: cron-delete
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      name: web
+      targetPort: 8000
+  selector:
+    app: magento2-web-{{ .Release.Name }}
+    tier: frontend-{{ .Release.Name }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute-tls-{{ .Release.Name }}
+  namespace: default
+  labels:
+    cd-hipay: cron-delete
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ .Values.magento2_url  }}`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: magento2-web-service-{{ .Release.Name }}
+          port: 80
+  tls:
+    certResolver: default
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingressroute-{{ .Release.Name }}
+  namespace: default
+  labels:
+    cd-hipay: cron-delete
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`{{ .Values.magento2_url  }}`)
+      kind: Rule
+      priority: 1
+      services:
+        - name: magento2-web-service-{{ .Release.Name }}
+          port: 80
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: magento2-web-configmap-{{ .Release.Name }}
+  labels:
+    app: magento2-web-{{ .Release.Name }}
+    cd-hipay: cron-delete
+data:
+  nginx.conf: |-
+    {{- .Files.Get "files/nginx/nginx.conf" | nindent 2 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magento2-web-{{ .Release.Name }}
+  labels:
+    app: magento2-web-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  selector:
+    matchLabels:
+      app: magento2-web-{{ .Release.Name }}
+      tier: frontend-{{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: magento2-web-{{ .Release.Name }}
+        tier: frontend-{{ .Release.Name }}
+        cd-hipay: cron-delete
+    spec:
+      containers:
+      - image: {{ .Values.nginx_image }}:{{ .Values.nginx_tag }}
+        imagePullPolicy: Always
+        name: nginx-{{ .Release.Name }}
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+        ports:
+          - containerPort: 8000
+            name: app
+        volumeMounts:
+          - name: nginx-config
+            mountPath: /etc/nginx/conf.d/default.conf
+            subPath: nginx.conf
+            readOnly: true
+          - name: sockdata
+            mountPath: /sock
+      - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
+        name: phpfpm-{{ .Release.Name }}
+        resources:
+          requests:
+            memory: "5G"
+            cpu: "1200m"
+            ephemeral-storage: "2Gi"
+        envFrom:
+          - configMapRef:
+              name: magento2-configmap-{{ .Release.Name }}
+        ports:
+          - containerPort: 9000
+            name: fastcgi
+        volumeMounts:
+          - name: sockdata
+            mountPath: /sock
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: magento2-web-configmap-{{ .Release.Name }}
+        - name: sockdata
+          emptyDir: {}
