@@ -19,22 +19,22 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_postfinanceefinanceapi" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
-	<label>HiPay Enterprise PostFinance E-Finance</label>
-	<comment></comment>
-	<!--
-		Include tag import configuration from another file.
-		base_top.xml contain configuration fields will be appear on top
-		like enabled, title, order statues etc ...
-	-->
-	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+    <label>HiPay Enterprise PostFinance E-Finance</label>
+    <comment></comment>
+    <!--
+        Include tag import configuration from another file.
+        base_top.xml contain configuration fields will be appear on top
+        like enabled, title, order statues etc ...
+    -->
+    <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
     <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
 
-	<!--
-		Include tag import configuration from another file.
-		base_bottom.xml contain configuration fields will be appear on bottom
-		like test mode, debug, sort order etc ..
-	-->
-	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+    <!--
+        Include tag import configuration from another file.
+        base_bottom.xml contain configuration fields will be appear on bottom
+        like test mode, debug, sort order etc ..
+    -->
+    <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
 
 </group>
 </include>

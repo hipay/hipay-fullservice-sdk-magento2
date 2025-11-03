@@ -16,10 +16,12 @@
 
 namespace HiPay\FullserviceMagento\Block\Hosted\Sisal;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Block hosted Sisal
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -47,12 +49,19 @@ class Info extends \Magento\Payment\Block\Info
         $this->_paymentConfig = $paymentConfig;
     }
 
+    /**
+     * Prepare specific payment information
+     *
+     * @param DataObject|array|null $transport
+     * @return DataObject
+     * @throws LocalizedException
+     */
     protected function _prepareSpecificInformation($transport = null)
     {
         $referenceToPay = $this->getInfo()->getAdditionalInformation('reference_to_pay');
         if (is_string($referenceToPay)) {
             $referenceToPay = json_decode($referenceToPay, true);
         }
-        return new \Magento\Framework\DataObject(["Payment Reference" => $referenceToPay['barCode']]);
+        return new DataObject(["Payment Reference" => $referenceToPay['barCode']]);
     }
 }

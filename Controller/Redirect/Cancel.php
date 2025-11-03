@@ -33,7 +33,6 @@ use Psr\Log\LoggerInterface;
  *
  * Used to redirect the customer when payment is cancelled
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -85,8 +84,7 @@ class Cancel extends Fullservice
         OrderRepositoryInterface        $orderRepository,
         OrderManagementInterface        $orderManagement,
         Cart                            $cart
-    )
-    {
+    ) {
         $this->orderRepository = $orderRepository;
         $this->orderManagement = $orderManagement;
         $this->checkoutSession = $checkoutSession;
@@ -104,7 +102,9 @@ class Cancel extends Fullservice
     }
 
     /**
-     * @return                                       void
+     * Cancel the last order, optionally re-add items to cart, and redirect to the cart page.
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * */
     public function execute()

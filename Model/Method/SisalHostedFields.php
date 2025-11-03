@@ -23,7 +23,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
 /**
  * Sisal Hosted Fields Model payment method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -35,7 +34,7 @@ class SisalHostedFields extends LocalHostedFields
     /**
      * @var string
      */
-    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Sisal\Info';
+    protected $_infoBlockType = \HiPay\FullserviceMagento\Block\Hosted\Sisal\Info::class;
 
     /**
      * @var string
@@ -54,6 +53,7 @@ class SisalHostedFields extends LocalHostedFields
 
     /**
      * Set pending state if transaction state if forwarding & get pending url
+     *
      * @param \HiPay\Fullservice\Gateway\Model\Transaction $response
      * @return string Redirect URL
      * @throws LocalizedException
@@ -71,6 +71,7 @@ class SisalHostedFields extends LocalHostedFields
 
     /**
      * Place order & set reference to pay information
+     *
      * @param \Magento\Payment\Model\InfoInterface $payment
      */
     public function place(\Magento\Payment\Model\InfoInterface $payment)

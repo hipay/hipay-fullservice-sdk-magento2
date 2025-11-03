@@ -19,10 +19,10 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_mybank" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="1" showInStore="1">
-	<label>HiPay Enterprise MyBank</label>
-	<comment></comment>
-	<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+    <label>HiPay Enterprise MyBank</label>
+    <comment></comment>
+    <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
     <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
-	<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+    <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
 </group>
 </include>

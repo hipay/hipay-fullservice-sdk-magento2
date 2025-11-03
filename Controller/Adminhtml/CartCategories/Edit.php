@@ -27,7 +27,6 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Edit payment profile
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -35,8 +34,6 @@ use Magento\Framework\View\Result\PageFactory;
 class Edit extends \Magento\Backend\App\Action
 {
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;

@@ -1,11 +1,22 @@
-<script type="text/javascript">
+<?php
+
+/**
+ * @var HipayConfig $block
+ * @var Escaper $escaper
+ */
+
+use HiPay\FullserviceMagento\Block\Adminhtml\HipayConfig;
+use Magento\Framework\Escaper;
+
+?>
+<script>
     require([], function () {
         window.hipayConfig = {
             getApiUsernameTokenJs:
-                '<?= $block->escapeHtml($block->getApiUsernameTokenJs()) ?>',
+                '<?= $escaper->escapeHtml($block->getApiUsernameTokenJs()) ?>',
             getApiPasswordTokenJs:
-                '<?= $block->escapeHtml($block->getApiPasswordTokenJs()) ?>',
-            getEnv: '<?= $block->escapeHtml($block->getEnv()) ?>'
+                '<?= $escaper->escapeHtml($block->getApiPasswordTokenJs()) ?>',
+            getEnv: '<?= $escaper->escapeHtml($block->getEnv()) ?>'
         }
     })
 </script>

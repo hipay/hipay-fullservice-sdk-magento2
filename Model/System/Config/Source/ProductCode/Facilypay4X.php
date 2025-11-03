@@ -21,7 +21,6 @@ use Magento\Framework\Data\OptionSourceInterface;
 /**
  * FacilY Pay 4X product code
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -36,8 +35,8 @@ class Facilypay4X implements OptionSourceInterface
     public function toOptionArray()
     {
         $options = [];
-        $options[] = array('label' => __('With fees'), 'value' => '4xcb');
-        $options[] = array('label' => __('Without fees'), 'value' => '4xcb-no-fees');
+        $options[] = ['label' => __('With fees'), 'value' => '4xcb'];
+        $options[] = ['label' => __('Without fees'), 'value' => '4xcb-no-fees'];
         return $options;
     }
 }

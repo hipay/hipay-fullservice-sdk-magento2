@@ -24,7 +24,6 @@ use HiPay\FullserviceMagento\Model\Card;
 /**
  * Class API PaymentMethod
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -40,12 +39,12 @@ class CcMethod extends FullserviceMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Cc\Form';
+    protected $_formBlockType = \HiPay\FullserviceMagento\Block\Cc\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Cc\Info';
+    protected $_infoBlockType = \HiPay\FullserviceMagento\Block\Cc\Info::class;
 
     /**
      * @var string
@@ -65,8 +64,6 @@ class CcMethod extends FullserviceMethod
     protected $_canUseInternal = false;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\Url
      */
     protected $urlBuilder;
@@ -228,8 +225,7 @@ class CcMethod extends FullserviceMethod
 
         if (in_array($info->getCcType(), $availableTypes)) {
             // Other credit card type number validation
-            if (
-                $this->validateCcNum($ccNumber)
+            if ($this->validateCcNum($ccNumber)
                 || (
                     $this->otherCcType($info->getCcType())
                     && $this->validateCcNumOther($ccNumber)
@@ -298,6 +294,8 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
+     * Check if CVV verification is enabled via the 'useccv' configuration field.
+     *
      * @return bool
      * @api
      */
@@ -311,6 +309,8 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
+     * Return a list of regular expressions used to validate CVV formats by card type.
+     *
      * @return array
      * @api
      */
@@ -331,6 +331,8 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
+     * Validate that the provided expiration date is not in the past.
+     *
      * @param  string $expYear
      * @param  string $expMonth
      * @return bool
@@ -338,8 +340,7 @@ class CcMethod extends FullserviceMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (
-            !$expYear
+        if (!$expYear
             || !$expMonth
             || (int)$date->format('Y') > $expYear
             || (
@@ -353,6 +354,8 @@ class CcMethod extends FullserviceMethod
     }
 
     /**
+     * Return true if the given card type equals 'OT' (Other).
+     *
      * @param  string $type
      * @return bool
      * @api

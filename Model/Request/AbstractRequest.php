@@ -17,6 +17,13 @@
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\UrlInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract Request Object
@@ -34,15 +41,11 @@ abstract class AbstractRequest implements RequestInterface
     protected $_customerSession;
 
     /**
-     * Customer ID
-     *
      * @var int $_customerId
      */
     protected $_customerId;
 
     /**
-     * Checkout data
-     *
      * @var \Magento\Checkout\Helper\Data $_checkoutData
      */
     protected $_checkoutData;
@@ -65,8 +68,6 @@ abstract class AbstractRequest implements RequestInterface
     protected $_config;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\Url $_urlBuilder
      */
     protected $_urlBuilder;
@@ -94,6 +95,18 @@ abstract class AbstractRequest implements RequestInterface
      */
     protected $_helper;
 
+    /**
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param UrlInterface $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param array $params
+     * @throws LocalizedException
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
@@ -103,7 +116,7 @@ abstract class AbstractRequest implements RequestInterface
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\UrlInterface $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
-        $params = []
+        array $params = []
     ) {
         $this->_logger = $logger;
         $this->_checkoutData = $checkoutData;
@@ -126,7 +139,7 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @see \HiPay\FullserviceMagento\Model\Request\RequestInterface::getRequestObject()
      */

@@ -16,10 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 /**
  * Rule Address Class
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -57,6 +58,9 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     protected $_localeDate;
 
+    /**
+     * @var mixed
+     */
     protected $methodCode = null;
 
     /**
@@ -257,6 +261,12 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         return parent::validate($address);
     }
 
+    /**
+     * Format the creation time of an object into a predefined hourly range string.
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return string
+     */
     protected function _getFormatCreatedAt($object)
     {
         $created_at = $object->getCreatedAt();
@@ -281,6 +291,12 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         return '';
     }
 
+    /**
+     * Set the method code
+     *
+     * @param mixed|string $methodCode
+     * @return $this
+     */
     public function setMethodCode($methodCode)
     {
         $this->methodCode = $methodCode;
@@ -288,6 +304,12 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
         return $this;
     }
 
+    /**
+     * Set the configuration path
+     *
+     * @param mixed $configPath
+     * @return $this
+     */
     public function setConfigPath($configPath)
     {
         $this->elementName = 'rule_' . $configPath;
@@ -296,6 +318,8 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Create and return a hidden form element for the condition type
+     *
      * @return AbstractElement
      */
     public function getTypeElement()
@@ -313,7 +337,9 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
-     * @return $this
+     * Create and return a select form element for the condition attribute.
+     *
+     * @return AbstractElement
      */
     public function getAttributeElement()
     {
@@ -333,7 +359,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                 'value_name' => $this->getAttributeName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
         $elt->setShowAsText(true);
         return $elt;
@@ -341,6 +367,7 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * Retrieve Condition Operator element Instance
+     *
      * If the operator value is empty - define first available operator value as default
      *
      * @return \Magento\Framework\Data\Form\Element\Select
@@ -367,13 +394,15 @@ class Address extends \Magento\Rule\Model\Condition\AbstractCondition
                 'value_name' => $this->getOperatorName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
 
     /**
-     * @return $this
+     * Create and return the form element used to input the condition value, with support for date formatting.
+     *
+     * @return AbstractElement
      */
     public function getValueElement()
     {

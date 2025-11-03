@@ -16,12 +16,13 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
 
+use Magento\Framework\Controller\Result\Redirect;
+
 /**
  * Accept controller
  *
  * Used to redirect the customer when payment is accepted
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -29,7 +30,9 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\Redirect;
 class Decline extends \Magento\Backend\App\Action
 {
     /**
-     * @return                                       $this
+     * Display a decline error message and redirect to the admin order overview page.
+     *
+     * @return Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

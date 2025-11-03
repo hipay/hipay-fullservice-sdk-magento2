@@ -16,10 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Hipay Cart categories data model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -29,13 +30,17 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class CartCategories extends \Magento\Framework\Model\AbstractModel
 {
+
     /**
      * Init resource model and id field
+     *
+     * @return void
+     * @throws LocalizedException
      */
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\CartCategories');
+        $this->_init(\HiPay\FullserviceMagento\Model\ResourceModel\CartCategories::class);
         $this->setIdFieldName('mapping_id');
     }
 }

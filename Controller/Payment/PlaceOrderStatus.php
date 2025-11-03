@@ -23,7 +23,6 @@ use HiPay\Fullservice\Enum\Transaction\TransactionState;
  *
  * Returns data from last customer's order
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2

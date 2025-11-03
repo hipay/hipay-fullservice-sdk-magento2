@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping;
 /**
  * Mapping Shipping  resource Collection
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -34,8 +33,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'HiPay\FullserviceMagento\Model\MappingShipping',
-            'HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping'
+            \HiPay\FullserviceMagento\Model\MappingShipping::class,
+            \HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping::class
         );
     }
 

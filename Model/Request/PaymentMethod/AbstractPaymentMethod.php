@@ -17,6 +17,15 @@
 namespace HiPay\FullserviceMagento\Model\Request\PaymentMethod;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract Payment Method Request Object
@@ -29,8 +38,6 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 abstract class AbstractPaymentMethod extends AbstractRequest
 {
     /**
-     * Order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
@@ -47,6 +54,19 @@ abstract class AbstractPaymentMethod extends AbstractRequest
      */
     protected $_quoteFactory;
 
+    /**
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param QuoteFactory $quoteFactory
+     * @param array $params
+     * @throws LocalizedException
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
@@ -57,7 +77,7 @@ abstract class AbstractPaymentMethod extends AbstractRequest
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,
@@ -85,7 +105,9 @@ abstract class AbstractPaymentMethod extends AbstractRequest
     }
 
     /**
-     * @return \Magento\Quote\Model\Quote
+     * Get Quote
+     *
+     * @return Quote
      */
     protected function getQuote()
     {

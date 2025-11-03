@@ -26,7 +26,6 @@ use Magento\Sales\Model\Order\Item;
 /**
  * Account info
  *
- * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -87,7 +86,7 @@ class MerchantRiskStatementFormatter extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return MerchantRiskStatement
      * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
@@ -113,6 +112,8 @@ class MerchantRiskStatementFormatter extends AbstractRequest
     }
 
     /**
+     * Determine purchase indicator based on item availability in the order.
+     *
      * @return int
      */
     protected function getPurchaseIndicator()
@@ -127,6 +128,8 @@ class MerchantRiskStatementFormatter extends AbstractRequest
     }
 
     /**
+     * Check if the current cart has already been ordered by the customer.
+     *
      * @return bool
      */
     protected function cartAlreadyOrdered()
@@ -135,6 +138,8 @@ class MerchantRiskStatementFormatter extends AbstractRequest
     }
 
     /**
+     * Determine shipping indicator based on order type and address history.
+     *
      * @return int
      */
     protected function getShippingIndicator()
@@ -155,6 +160,8 @@ class MerchantRiskStatementFormatter extends AbstractRequest
     }
 
     /**
+     * Retrieve store ID from current quote.
+     *
      * @return int
      */
     private function getStoreId()

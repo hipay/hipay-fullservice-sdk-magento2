@@ -19,16 +19,30 @@ namespace HiPay\FullserviceMagento\Model\Request;
 use HiPay\Fullservice\Enum\ThreeDSTwo\DeviceChannel;
 use HiPay\Fullservice\Gateway\Request\Order\OrderRequest;
 use HiPay\Fullservice\Enum\Customer\Gender;
+use HiPay\FullserviceMagento\Model\Cart\CartFactory;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest as CommonRequest;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 use HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\Header;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Magento\Framework\UrlInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Order Request Object
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -36,19 +50,18 @@ use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 class Order extends CommonRequest
 {
     /**
-     * Order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
 
     /**
-     * Payment Method
-     *
      * @var \HiPay\Fullservice\Request\AbstractRequest
      */
     protected $_paymentMethod;
 
+    /**
+     * @var string[]
+     */
     protected $_ccTypes = [
         'VI' => 'visa',
         'AE' => 'american-express',
@@ -62,6 +75,9 @@ class Order extends CommonRequest
         'bcmc' => 'bcmc'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $_cardPaymentMethod = [
         'hipay_hosted_fields',
         'hipay_hosted',
@@ -79,7 +95,7 @@ class Order extends CommonRequest
     protected $weeeHelper;
 
     /**
-     * @var
+     * @var CartFactory
      */
     protected $_cartFactory;
 
@@ -104,7 +120,7 @@ class Order extends CommonRequest
 
     /**
      *
-     * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @var GroupRepositoryInterface
      */
     protected $_groupRepositoryInterface;
 
@@ -130,14 +146,34 @@ class Order extends CommonRequest
     protected $expirationSource;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param UrlInterface $urlBuilder
+     * @param Url $frontendUrlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param CartFactory $cartFactory
+     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param ProductRepositoryInterface $productRepositoryInterface
+     * @param CollectionFactory $mappingCategoriesCollectionFactory
+     * @param CategoryFactory $categoryFactory
+     * @param CustomerRepositoryInterface $customerRepositoryInterface
+     * @param GroupRepositoryInterface $groupRepositoryInterface
+     * @param State $appState
+     * @param Header $httpHeader
+     * @param OrderExpirationTimes $expirationSource
+     * @param array $params
+     * @throws LocalizedException
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Checkout\Helper\Data $checkoutData,
-        \Magento\Customer\Model\Session $customerSession,
+        LoggerInterface $logger,
+        Data $checkoutData,
+        Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
@@ -149,12 +185,12 @@ class Order extends CommonRequest
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
         CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepositoryInterface,
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepositoryInterface,
+        CustomerRepositoryInterface $customerRepositoryInterface,
+        GroupRepositoryInterface $groupRepositoryInterface,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\HTTP\Header $httpHeader,
         OrderExpirationTimes $expirationSource,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,
@@ -193,8 +229,7 @@ class Order extends CommonRequest
             $this->_operation = $params['operation'];
         }
 
-        if (
-            isset($params['paymentMethod'])
+        if (isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];
@@ -205,6 +240,12 @@ class Order extends CommonRequest
         }
     }
 
+    /**
+     * Get HiPay credit card type
+     *
+     * @param string|null $mageCcType
+     * @return false|mixed|string
+     */
     protected function getCcTypeHipay($mageCcType)
     {
 
@@ -245,9 +286,9 @@ class Order extends CommonRequest
     }
 
     /**
-     *  Return payment product
+     * Return payment product
      *
-     *  If Payment requires specified option ( With Fees or without Fees return it otherwhise normal payment product)
+     * If Payment requires specified option ( With Fees or without Fees return it otherwhise normal payment product)
      *
      * @return string
      */
@@ -259,7 +300,10 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \HiPay\Fullservice\Gateway\Request\Order\OrderRequest
+     * Map order request data
+     *
+     * @return OrderRequest
+     * @throws LocalizedException
      */
     public function mapRequest()
     {
@@ -321,12 +365,12 @@ class Order extends CommonRequest
         $orderRequest->paymentMethod = $this->_paymentMethod;
 
         $orderRequest->customerBillingInfo = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\Info\BillingInfo',
+            \HiPay\FullserviceMagento\Model\Request\Info\BillingInfo::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
         $orderRequest->customerShippingInfo = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo',
+            \HiPay\FullserviceMagento\Model\Request\Info\ShippingInfo::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
@@ -380,30 +424,30 @@ class Order extends CommonRequest
     }
 
     /**
-     * Map 3DSv2 information
-     * Use Classes from PHP SDK
+     * Map 3DSv2 information , Use Classes from PHP SDK
      *
-     * @param $orderRequest
+     * @param OrderRequest $orderRequest
+     * @return void
      */
-    protected function mapThreeDsInformation(&$orderRequest)
+    protected function mapThreeDsInformation(OrderRequest &$orderRequest)
     {
         $orderRequest->account_info = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\AccountInfoFormatter',
+            \HiPay\FullserviceMagento\Model\Request\ThreeDS\AccountInfoFormatter::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
         $orderRequest->previous_auth_info = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\PreviousAuthInfoFormatter',
+            \HiPay\FullserviceMagento\Model\Request\ThreeDS\PreviousAuthInfoFormatter::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
         $orderRequest->merchant_risk_statement = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\MerchantRiskStatementFormatter',
+            \HiPay\FullserviceMagento\Model\Request\ThreeDS\MerchantRiskStatementFormatter::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
         $orderRequest->browser_info = $this->_requestFactory->create(
-            '\HiPay\FullserviceMagento\Model\Request\ThreeDS\BrowserInfoFormatter',
+            \HiPay\FullserviceMagento\Model\Request\ThreeDS\BrowserInfoFormatter::class,
             ['params' => ['order' => $this->_order, 'config' => $this->_config]]
         )->getRequestObject();
 
@@ -411,6 +455,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get device channel
+     *
      * @return int
      */
     public function getDeviceChannel()
@@ -440,7 +486,7 @@ class Order extends CommonRequest
         // Check if delivery method is required for the payment method
         if ($this->_config->isDeliveryMethodRequired($orderRequest->payment_product)) {
             $orderRequest->delivery_information = $this->_requestFactory->create(
-                '\HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo',
+                \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo::class,
                 ['params' => ['order' => $this->_order, 'config' => $this->_config]]
             )->getRequestObject();
         }
@@ -492,6 +538,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get order
+     *
      * @return \Magento\Sales\Model\Order|mixed
      */
     public function getOrder()
@@ -500,7 +548,9 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \Magento\Customer\Api\CustomerRepositoryInterface|\Magento\Sales\Model\Order
+     * Get customer repository interface
+     *
+     * @return CustomerRepositoryInterface|\Magento\Sales\Model\Order
      */
     public function getCustomerRepositoryInterface()
     {
@@ -508,7 +558,9 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \Magento\Customer\Api\CustomerRepositoryInterface|\Magento\Sales\Model\Order
+     * Get group repository interface
+     *
+     * @return GroupRepositoryInterface
      */
     public function getGroupRepositoryInterface()
     {
@@ -516,7 +568,9 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \Magento\Customer\Model\Session
+     * Get customer session
+     *
+     * @return Session
      */
     public function getCustomerSession()
     {
@@ -524,7 +578,9 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \Magento\Checkout\Helper\Data
+     * Get checkout data helper
+     *
+     * @return Data
      */
     public function getCheckoutData()
     {
@@ -532,7 +588,9 @@ class Order extends CommonRequest
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface
+     * Get logger
+     *
+     * @return LoggerInterface
      */
     public function getLogger()
     {
@@ -540,6 +598,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get checkout session
+     *
      * @return \Magento\Checkout\Model\Session
      */
     public function getCheckoutSession()
@@ -548,6 +608,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get payment method
+     *
      * @return \HiPay\Fullservice\Request\AbstractRequest
      */
     public function getPaymentMethod()
@@ -556,6 +618,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get credit card types
+     *
      * @return array
      */
     public function getCcTypes()
@@ -564,6 +628,8 @@ class Order extends CommonRequest
     }
 
     /**
+     * Get card payment methods
+     *
      * @return array
      */
     public function getCardPaymentMethod()

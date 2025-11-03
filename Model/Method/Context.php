@@ -16,13 +16,26 @@
 
 namespace HiPay\FullserviceMagento\Model\Method;
 
+use HiPay\FullserviceMagento\Model\CardFactory;
+use HiPay\FullserviceMagento\Model\Config\Factory;
+use HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender;
+use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as ManagerFactory;
 use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Url;
+use Magento\Payment\Helper\Data;
+use Magento\Payment\Model\Method\Logger;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Context for payments methods
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -36,33 +49,31 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_gatewayManagerFactory;
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\Url
      */
     public $urlBuilder;
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
+     * @var FraudAcceptSender $fraudAcceptSender
      */
     protected $fraudAcceptSender;
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender
+     * @var FraudDenySender $fraudDenySender
      */
     protected $fraudDenySender;
 
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $_checkoutSession;
 
     /**
      * Card  model Factory
      *
-     * @var \HiPay\FullserviceMagento\Model\CardFactory
+     * @var CardFactory
      */
     protected $_cardFactory;
 
@@ -72,9 +83,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     private $_cardCollectionFactory;
 
     /**
-     * Config factory
-     *
-     * @var \HiPay\FullserviceMagento\Model\Config\Factory $configFactor
+     * @var Factory $configFactor
      */
     protected $_configFactory;
 
@@ -92,13 +101,13 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      *
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory $_extensionFactory
+     * @var ExtensionAttributesFactory $_extensionFactory
      */
     protected $_extensionFactory;
 
     /**
      *
-     * @var \Magento\Framework\Api\AttributeValueFactory $customAttributeFactor
+     * @var AttributeValueFactory $customAttributeFactor
      */
     protected $_customAttributeFactor;
 
@@ -110,66 +119,66 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
 
     /**
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @var ScopeConfigInterface $scopeConfig
      */
     protected $_scopeConfig;
 
     /**
      *
-     * @var \Magento\Payment\Model\Method\Logger $logger
+     * @var Logger $logger
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var PriceCurrencyInterface
      */
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Context constructor.
      *
-     * @param \Magento\Framework\Model\Context                               $modelContext
-     * @param \Magento\Framework\Registry                                    $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory              $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory                   $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data                                   $paymentData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface             $scopeConfig
-     * @param \Magento\Payment\Model\Method\Logger                           $logger
-     * @param ManagerFactory                                                 $gatewayManagerFactory
-     * @param \Magento\Framework\Url                                         $urlBuilder
-     * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender   $fraudDenySender
-     * @param \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender
-     * @param \HiPay\FullserviceMagento\Model\Config\Factory                 $configFactory
-     * @param \Magento\Checkout\Model\Session                                $checkoutSession
-     * @param \HiPay\FullserviceMagento\Model\CardFactory                    $cardFactory
-     * @param CollectionFactory                                              $cardCollectionFactory
-     * @param \Magento\Framework\Pricing\PriceCurrencyInterface              $priceCurrency
-     * @param \Magento\Store\Model\StoreManagerInterface                     $storeManager
+     * @param \Magento\Framework\Model\Context $modelContext
+     * @param \Magento\Framework\Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data $paymentData
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Logger $logger
+     * @param ManagerFactory $gatewayManagerFactory
+     * @param \Magento\Framework\Url $urlBuilder
+     * @param FraudDenySender $fraudDenySender
+     * @param FraudAcceptSender $fraudAcceptSender
+     * @param Factory $configFactory
+     * @param Session $checkoutSession
+     * @param CardFactory $cardFactory
+     * @param CollectionFactory $cardCollectionFactory
+     * @param PriceCurrencyInterface $priceCurrency
+     * @param StoreManagerInterface $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $modelContext,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
-        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Payment\Model\Method\Logger $logger,
-        ManagerFactory $gatewayManagerFactory,
-        \Magento\Framework\Url $urlBuilder,
-        \HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender $fraudDenySender,
-        \HiPay\FullserviceMagento\Model\Email\Sender\FraudAcceptSender $fraudAcceptSender,
-        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
-        CollectionFactory $cardCollectionFactory,
-        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\Registry      $registry,
+        ExtensionAttributesFactory       $extensionFactory,
+        AttributeValueFactory            $customAttributeFactory,
+        \Magento\Payment\Helper\Data     $paymentData,
+        ScopeConfigInterface             $scopeConfig,
+        Logger                           $logger,
+        ManagerFactory                   $gatewayManagerFactory,
+        \Magento\Framework\Url           $urlBuilder,
+        FraudDenySender                  $fraudDenySender,
+        FraudAcceptSender                $fraudAcceptSender,
+        Factory                          $configFactory,
+        Session                          $checkoutSession,
+        CardFactory                      $cardFactory,
+        CollectionFactory                $cardCollectionFactory,
+        PriceCurrencyInterface           $priceCurrency,
+        StoreManagerInterface            $storeManager
     ) {
 
         //Abstract Method objects
@@ -194,86 +203,171 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
         $this->_storeManager = $storeManager;
     }
 
+    /**
+     * Get the gateway manager factory
+     *
+     * @return ManagerFactory
+     */
     public function getGatewayManagerFactory()
     {
         return $this->_gatewayManagerFactory;
     }
 
+    /**
+     * Get the URL builder
+     *
+     * @return Url
+     */
     public function getUrlBuilder()
     {
         return $this->urlBuilder;
     }
 
+    /**
+     * Get the sender used to accept fraud
+     *
+     * @return FraudAcceptSender
+     */
     public function getFraudAcceptSender()
     {
         return $this->fraudAcceptSender;
     }
 
+    /**
+     * Get the sender used to deny fraud
+     *
+     * @return FraudDenySender
+     */
     public function getFraudDenySender()
     {
         return $this->fraudDenySender;
     }
 
+    /**
+     * Get the current checkout session
+     *
+     * @return Session
+     */
     public function getCheckoutSession()
     {
         return $this->_checkoutSession;
     }
 
+    /**
+     * Get the card model factory
+     *
+     * @return CardFactory
+     */
     public function getCardFactory()
     {
         return $this->_cardFactory;
     }
 
+    /**
+     * Get the card collection factory
+     *
+     * @return CollectionFactory
+     */
     public function getCardCollectionFactory()
     {
         return $this->_cardCollectionFactory;
     }
 
+    /**
+     * Get the config factory
+     *
+     * @return Factory
+     */
     public function getConfigFactory()
     {
         return $this->_configFactory;
     }
 
+    /**
+     * Get the model context
+     *
+     * @return \Magento\Framework\Model\Context
+     */
     public function getModelContext()
     {
         return $this->_modelContext;
     }
 
+    /**
+     * Get the registry
+     *
+     * @return Registry
+     */
     public function getRegistry()
     {
         return $this->_registry;
     }
 
+    /**
+     * Get the extension attributes factory
+     *
+     * @return ExtensionAttributesFactory
+     */
     public function getExtensionFactory()
     {
         return $this->_extensionFactory;
     }
 
+    /**
+     * Get the custom attribute factory
+     *
+     * @return AttributeValueFactory
+     */
     public function getCustomAttributeFactor()
     {
         return $this->_customAttributeFactor;
     }
 
+    /**
+     * Get the payment data helper
+     *
+     * @return Data
+     */
     public function getPaymentData()
     {
         return $this->_paymentData;
     }
 
+    /**
+     * Get the scope config interface
+     *
+     * @return ScopeConfigInterface
+     */
     public function getScopeConfig()
     {
         return $this->_scopeConfig;
     }
 
+    /**
+     * Get the logger instance
+     *
+     * @return Logger
+     */
     public function getLogger()
     {
         return $this->_logger;
     }
 
+    /**
+     * Get the price currency
+     *
+     * @return PriceCurrencyInterface
+     */
     public function getPriceCurrency()
     {
         return $this->priceCurrency;
     }
 
+    /**
+     * Get the store manager interface.
+     *
+     * @return StoreManagerInterface
+     */
     public function getStoreManager()
     {
         return $this->_storeManager;

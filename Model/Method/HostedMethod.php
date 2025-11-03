@@ -18,11 +18,11 @@ namespace HiPay\FullserviceMagento\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Model\Order;
 
 /**
  * Class Hosted Payment Method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -38,12 +38,12 @@ class HostedMethod extends FullserviceMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Form';
+    protected $_formBlockType = \HiPay\FullserviceMagento\Block\Hosted\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Info';
+    protected $_infoBlockType = \HiPay\FullserviceMagento\Block\Hosted\Info::class;
 
     /**
      * @var string
@@ -86,6 +86,13 @@ class HostedMethod extends FullserviceMethod
         $stateObject->setIsNotified(false);
     }
 
+    /**
+     * Set the hosted payment page URL on the order payment, or place the order if a card token is present.
+     *
+     * @param Order $order
+     * @return void
+     * @throws LocalizedException
+     */
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
     {
         if ($order->getPayment()->getAdditionalInformation('card_token') != "") {

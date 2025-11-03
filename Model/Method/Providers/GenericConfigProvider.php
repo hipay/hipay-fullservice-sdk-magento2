@@ -33,7 +33,6 @@ use Psr\Log\LoggerInterface;
  * Class Generic config provider
  * Can be used by all payment method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -51,8 +50,6 @@ class GenericConfigProvider extends AbstractConfigProvider implements ConfigProv
     protected $methods = [];
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\Url
      */
     protected $urlBuilder;
@@ -138,7 +135,7 @@ class GenericConfigProvider extends AbstractConfigProvider implements ConfigProv
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -203,6 +200,11 @@ class GenericConfigProvider extends AbstractConfigProvider implements ConfigProv
         return $config;
     }
 
+    /**
+     * Retrieve the configuration value for displaying the card owner
+     *
+     * @return string|null
+     */
     protected function displayCardOwner()
     {
         return $this->_hipayConfig->getValue('display_card_owner');
@@ -228,6 +230,12 @@ class GenericConfigProvider extends AbstractConfigProvider implements ConfigProv
         return $this->_collection;
     }
 
+    /**
+     * Determine if one-click payment is allowed based on configuration
+     *
+     * @param string $methodCode
+     * @return bool
+     */
     protected function useOneclick($methodCode)
     {
         $allowUseOneclick = $this->_hipayConfig->getValue('allow_use_oneclick');
@@ -235,17 +243,36 @@ class GenericConfigProvider extends AbstractConfigProvider implements ConfigProv
         return (bool)$this->hipayHelper->useOneclick($allowUseOneclick);
     }
 
+    /**
+     * Get the maximum number of saved cards allowed
+     *
+     * @param string $methodCode
+     * @return int|string|null
+     */
     protected function getMaxSavedCardCount($methodCode)
     {
         $maxSavedCards = $this->_hipayConfig->getValue('one_click/max_saved_cards');
         return $maxSavedCards >= 1 ? $maxSavedCards : time();
     }
 
+    /**
+     * Check if iframe mode is enabled for the given payment method.
+     *
+     * @param string $methodCode
+     * @return bool
+     */
     protected function isIframeMode($methodCode)
     {
         return (bool)$this->_hipayConfig->getValue('iframe_mode');
     }
 
+    /**
+     * Retrieve a specific iframe display property from configuration
+     *
+     * @param string $methodCode
+     * @param string $prop
+     * @return string|null
+     */
     protected function getIframeProp($methodCode, $prop)
     {
         return $this->_hipayConfig->getValue('iframe_' . $prop);

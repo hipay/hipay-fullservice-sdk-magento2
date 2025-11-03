@@ -54,6 +54,8 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     }
 
     /**
+     * Set Hosted Url
+     *
      * @param \Magento\Sales\Model\Order $order
      */
     protected function _setHostedUrl(\Magento\Sales\Model\Order $order)
@@ -78,8 +80,8 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     /**
      * Get min and max amount by payment product
      *
-     * @param $total
-     * @param $technicalCode
+     * @param float $total
+     * @param string $technicalCode
      * @return bool
      */
     protected function getMinMaxByPaymentProduct($total, $technicalCode)

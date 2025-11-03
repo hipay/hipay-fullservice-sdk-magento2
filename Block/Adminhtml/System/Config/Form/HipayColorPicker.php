@@ -22,7 +22,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * ColorPicker for adminhtml field
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -30,6 +29,8 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class HipayColorPicker extends Field
 {
     /**
+     * Render HTML for the color picker input field in admin configuration
+     *
      * @param AbstractElement $element
      * @return string
      */

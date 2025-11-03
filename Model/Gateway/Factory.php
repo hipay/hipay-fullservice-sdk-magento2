@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 /**
  * Factory class for HiPay\FullserviceMagento\Model\Gateway\Manager
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -50,10 +49,10 @@ class Factory
      * @param  array                      $params
      * @return \HiPay\FullserviceMagento\Model\Gateway\Manager
      */
-    public function create($order, $params = array())
+    public function create($order, $params = [])
     {
         return $this->_objectManager->create(
-            '\HiPay\FullserviceMagento\Model\Gateway\Manager',
+            \HiPay\FullserviceMagento\Model\Gateway\Manager::class,
             ['params' => array_merge(['order' => $order], $params)]
         );
     }

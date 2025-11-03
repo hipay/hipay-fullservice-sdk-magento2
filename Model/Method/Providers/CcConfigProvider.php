@@ -21,6 +21,7 @@ use HiPay\FullserviceMagento\Model\Method\CcMethod;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 use HiPay\FullserviceMagento\Model\Method\Context;
 use HiPay\FullserviceMagento\Model\System\Config\Source\CcType;
+use Magento\Framework\Url;
 use Magento\Payment\Model\CcConfig;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Customer\Model\Session;
@@ -31,7 +32,6 @@ use Psr\Log\LoggerInterface;
  * Class CC config provider
  * Can bu used by all Cc API payment method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -52,9 +52,7 @@ class CcConfigProvider extends AbstractConfigProvider implements ConfigProviderI
     protected $ccConfig;
 
     /**
-     * Url Builder
-     *
-     * @var \Magento\Framework\Url
+     * @var Url
      */
     protected $urlBuilder;
 
@@ -124,7 +122,7 @@ class CcConfigProvider extends AbstractConfigProvider implements ConfigProviderI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {
@@ -271,6 +269,8 @@ class CcConfigProvider extends AbstractConfigProvider implements ConfigProviderI
     }
 
     /**
+     * Return true if CVV verification is enabled via the 'useccv' configuration value
+     *
      * @return bool
      * @api
      */

@@ -20,8 +20,10 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
 
-    <table name="hipay_response_not_found_order" resource="default" engine="innodb" comment="HiPay pending orders awaiting Magento order creation">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Primary Key"/>
+    <table name="hipay_response_not_found_order" resource="default" engine="innodb"
+           comment="HiPay pending orders awaiting Magento order creation">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"
+                comment="Primary Key"/>
         <column xsi:type="varchar" name="order_id" nullable="false" length="64" comment="HiPay Order ID"/>
         <column xsi:type="datetime" name="created_at" on_update="false" nullable="false" comment="Creation Time"/>
 
@@ -32,5 +34,99 @@
         <constraint xsi:type="unique" referenceId="HIPAY_RESPONSE_PENDING_ORDER_ORDER_ID_UNIQUE">
             <column name="order_id"/>
         </constraint>
+    </table>
+
+    <table name="hipay_rule" resource="default" engine="innodb" comment="HiPay Rule Table">
+        <column xsi:type="int" name="rule_id" identity="true" unsigned="true" nullable="false" comment="Rule Id"/>
+        <column xsi:type="varchar" name="method_code" nullable="false" length="60" comment="Method Code"/>
+        <column xsi:type="varchar" name="config_path" nullable="false" length="60" comment="Config Path"/>
+        <column xsi:type="text" name="conditions_serialized" nullable="true" comment="Conditions Serialized"/>
+        <column xsi:type="text" name="actions_serialized" nullable="true" comment="Actions Serialized"/>
+        <column xsi:type="text" name="product_ids" nullable="true" comment="Product Ids"/>
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" default="0" comment="Sort Order"/>
+        <column xsi:type="varchar" name="simple_action" length="32" nullable="true" comment="Simple Action"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="rule_id"/>
+        </constraint>
+    </table>
+
+    <table name="hipay_customer_card" resource="default" engine="innodb" comment="HiPay Customer Card Table">
+        <column xsi:type="int" name="card_id" identity="true" unsigned="true" nullable="false" comment="Card ID"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" comment="Customer ID"/>
+        <column xsi:type="varchar" name="name" length="100" nullable="false" comment="Card Name"/>
+        <column xsi:type="varchar" name="cc_type" length="150" nullable="false" comment="Card Type"/>
+        <column xsi:type="varchar" name="cc_exp_month" length="2" nullable="false" comment="Card Expiration Month"/>
+        <column xsi:type="varchar" name="cc_exp_year" length="4" nullable="false" comment="Card Expiration Year"/>
+        <column xsi:type="varchar" name="cc_owner" length="100" nullable="true" comment="Card Owner"/>
+        <column xsi:type="varchar" name="cc_number_enc" length="40" nullable="false" comment="Encrypted Card Number"/>
+        <column xsi:type="smallint" name="cc_status" nullable="false" comment="Card Status"/>
+        <column xsi:type="text" name="cc_token" nullable="false" comment="HiPay Token"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Creation Date"/>
+        <column xsi:type="boolean" name="authorized" nullable="false" default="1" comment="Is Card Authorized"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="card_id"/>
+        </constraint>
+    </table>
+
+    <table name="hipay_cart_mapping_shipping" resource="default" engine="innodb" comment="HiPay Cart Mapping Shipping">
+        <column xsi:type="int" name="mapping_shipping_id" identity="true" unsigned="true" nullable="false"
+                comment="Mapping Shipping Id"/>
+        <column xsi:type="varchar" name="magento_shipping_code" nullable="false" length="255" comment="Magento Shipping"/>
+        <column xsi:type="varchar" name="magento_shipping_code_custom" nullable="true" length="255"
+                comment="Magento Custom Shipping"/>
+        <column xsi:type="int" name="hipay_shipping_id" unsigned="true" nullable="true" comment="HiPay Shipping ID"/>
+        <column xsi:type="int" name="delay_preparation" unsigned="true" nullable="true" comment="Delay Preparation"/>
+        <column xsi:type="int" name="delay_delivery" unsigned="true" nullable="true" comment="Delay Delivery"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="mapping_shipping_id"/>
+        </constraint>
+    </table>
+
+    <table name="hipay_cart_mapping_categories" resource="default" engine="innodb"
+           comment="HiPay Cart Mapping Categories">
+        <column xsi:type="int" name="mapping_id" identity="true" unsigned="true" nullable="false" comment="Mapping Id"/>
+        <column xsi:type="int" name="category_magento_id" unsigned="true" nullable="false"
+                comment="Magento Category ID"/>
+        <column xsi:type="int" name="category_hipay_id" unsigned="true" nullable="true" comment="HiPay Category ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="mapping_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HIPAY_CATEGORY_MAGENTO_ID"
+                    table="hipay_cart_mapping_categories" column="category_magento_id"
+                    referenceTable="catalog_category_entity" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+    </table>
+
+    <table name="hipay_notification" resource="default" engine="innodb" comment="HiPay Notifications">
+        <column xsi:type="int" name="notification_id" identity="true" unsigned="true" nullable="false"
+                comment="Notification Id"/>
+        <column xsi:type="int" name="status" nullable="false" comment="HiPay Status Code"/>
+        <column xsi:type="varchar" name="order_id" length="100" nullable="false" comment="Order ID"/>
+        <column xsi:type="text" name="content" nullable="false" comment="Notification JSON Content"/>
+        <column xsi:type="datetime" name="hipay_created_at" nullable="false" comment="HiPay Creation Date"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Creation Date"/>
+        <column xsi:type="int" name="attempts" nullable="false" default="0" comment="Attempts Count"/>
+        <column xsi:type="varchar" name="state" length="50" nullable="false" default="created" comment="Notification State"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="notification_id"/>
+        </constraint>
+    </table>
+
+    <table name="hipay_sales_order" resource="default" engine="innodb" comment="HiPay Sales Order Table">
+        <column xsi:type="int" name="entity_id" identity="true" unsigned="true" nullable="false" comment="Entity ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" comment="Order ID"/>
+        <column xsi:type="boolean" name="is_locked" nullable="false" default="0" comment="Is Locked"/>
+        <column xsi:type="timestamp" name="locked_at" nullable="true" comment="Locked At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true"
+                comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HIPAY_ORDER_SALES"
+                    table="hipay_sales_order" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
     </table>
 </schema>

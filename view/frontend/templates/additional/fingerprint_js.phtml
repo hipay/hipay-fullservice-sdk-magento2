@@ -1,2 +1,10 @@
+<?php
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ *
+ * Template: Add external JS for fingerprint
+ */
+?>
 <!-- Add external js for fingerprint -->
-<script src="<?php echo $block->getJsSrcFingerprint();?>" type="text/javascript" charset="utf-8"></script>
+<script src="<?= $escaper->escapeUrl($block->getJsSrcFingerprint()); ?>" charset="utf-8"></script>

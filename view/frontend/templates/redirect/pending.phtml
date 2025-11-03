@@ -1,7 +1,6 @@
 <?php
-
-/*
- * HiPay fullservice SDK
+/**
+ * HiPay Fullservice SDK
  *
  * NOTICE OF LICENSE
  *
@@ -10,31 +9,40 @@
  * It is also available through the world-wide-web at this URL:
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * @copyright      Copyright (c) 2016 - HiPay
- * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @category   HiPay
+ * @package    HiPay_FullserviceMagento
+ * @copyright  Copyright (c) 2016 - HiPay
+ * @license    http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  *
- */
-
-// @codingStandardsIgnoreFile
-/**
  * @var \HiPay\FullserviceMagento\Block\Redirect\Pending $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
-<?php
-    echo $this
+
+<?= // Render external JS block safely
+ $block
         ->getLayout()
-        ->createBlock('HiPay\FullserviceMagento\Block\ExternalJS')
+        ->createBlock(\HiPay\FullserviceMagento\Block\ExternalJS::class)
         ->setTemplate('HiPay_FullserviceMagento::additional/external_js.phtml')
-        ->toHtml()
+        ->toHtml();
 ?>
+
 <div class="page-title">
-    <h1><?php /* @escapeNotVerified */ echo __('Your payment is in pending.') ?></h1>
+    <h1><?= $escaper->escapeHtml(__('Your payment is in pending.')) ?></h1>
 </div>
 
-<?php if ($block->getRealOrderId()) : ?><p>
-    <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
-<?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
-<?php if ($referenceToPay = $block->getReferenceToPay()) : ?>
+<?php if ($block->getRealOrderId()): ?>
+    <p>
+        <?= $escaper->escapeHtml(__('Order #')) ?>
+        <?= $escaper->escapeHtml($block->getRealOrderId()) ?>
+    </p>
+<?php endif; ?>
+
+<?php if ($error = $block->getErrorMessage()): ?>
+    <p><?= $escaper->escapeHtml($error) ?></p>
+<?php endif; ?>
+
+<?php if ($referenceToPay = $block->getReferenceToPay()): ?>
     <style>
         @media print {
             body * {
@@ -48,32 +56,59 @@
     </style>
     <div class="referenceContainer">
         <div id="referenceToPay"></div>
-        <button class="action primary checkout print" onclick="window.print()"><?php echo __("PRINT") ?></button>
+        <button
+                class="action primary checkout print"
+                type="button"
+                onclick="window.print()"
+        >
+            <?= $escaper->escapeHtml(__('PRINT')) ?>
+        </button>
     </div>
-    <script type="text/javascript">
-        var lang = '<?php echo $block->getLang() ?>';
+
+    <?php
+    $lang = $escaper->escapeJs($block->getLang());
+    $method = $escaper->escapeJs($referenceToPay['method']);
+    $reference = $escaper->escapeJs($referenceToPay['reference']);
+    $entity = isset($referenceToPay['entity']) ? $escaper->escapeJs($referenceToPay['entity']) : '';
+    $amount = isset($referenceToPay['amount']) ? $escaper->escapeJs($referenceToPay['amount']) : '';
+    $expirationDate = isset($referenceToPay['expirationDate'])
+            ? $escaper->escapeJs($referenceToPay['expirationDate'])
+            : '';
+    $barCode = isset($referenceToPay['barCode']) ? $escaper->escapeJs($referenceToPay['barCode']) : '';
+    ?>
+
+    <script>
+        var lang = '<?= /* @noEscape */ $lang ?>';
         var hipaySdk = new HiPay({
             username: 'hosted',
             password: 'hosted',
             environment: 'production',
             lang: lang.length > 2 ? lang.substr(0, 2) : 'en'
         });
-        <?php if($referenceToPay['method'] === 'multibanco') : ?>
-            hipaySdk.createReference('multibanco', {
-                selector: 'referenceToPay',
-                reference: '<?php echo $referenceToPay['reference'] ?>',
-                entity: '<?php echo $referenceToPay['entity'] ?>',
-                amount: '<?php echo $referenceToPay['amount'] ?>',
-                expirationDate: '<?php echo $referenceToPay['expirationDate'] ?>',
-            });
-        <?php else : ?>
-            hipaySdk.createReference('sisal', {
-                selector: 'referenceToPay',
-                reference: '<?php echo $referenceToPay['reference'] ?>',
-                barCode: '<?php echo $referenceToPay['barCode'] ?>'
-            });
-        <?php endif ?>
+
+        <?php if ($referenceToPay['method'] === 'multibanco'): ?>
+        hipaySdk.createReference('multibanco', {
+            selector: 'referenceToPay',
+            reference: '<?= /* @noEscape */ $reference ?>',
+            entity: '<?= /* @noEscape */ $entity ?>',
+            amount: '<?= /* @noEscape */ $amount ?>',
+            expirationDate: '<?= /* @noEscape */ $expirationDate ?>'
+        });
+        <?php else: ?>
+        hipaySdk.createReference('sisal', {
+            selector: 'referenceToPay',
+            reference: '<?= /* @noEscape */ $reference ?>',
+            barCode: '<?= /* @noEscape */ $barCode ?>'
+        });
+        <?php endif; ?>
     </script>
-<?php endif ?>
-<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?>
+<?php endif; ?>
+
+<p>
+    <?= $escaper->escapeHtml(
+        __(
+            'Click <a href="%1">here</a> to continue shopping.',
+            $escaper->escapeUrl($block->getContinueShoppingUrl())
+        )
+    ) ?>
 </p>

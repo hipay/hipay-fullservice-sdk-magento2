@@ -9,5 +9,92 @@
             "PRIMARY": true,
             "HIPAY_RESPONSE_NOT_FOUND_ORDER_ORDER_ID": true
         }
+    },
+    "hipay_rule": {
+        "column": {
+            "rule_id": true,
+            "method_code": true,
+            "config_path": true,
+            "conditions_serialized": true,
+            "actions_serialized": true,
+            "product_ids": true,
+            "sort_order": true,
+            "simple_action": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hipay_customer_card": {
+        "column": {
+            "card_id": true,
+            "customer_id": true,
+            "name": true,
+            "cc_type": true,
+            "cc_exp_month": true,
+            "cc_exp_year": true,
+            "cc_owner": true,
+            "cc_number_enc": true,
+            "cc_status": true,
+            "cc_token": true,
+            "created_at": true,
+            "authorized": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hipay_cart_mapping_shipping": {
+        "column": {
+            "mapping_shipping_id": true,
+            "magento_shipping_code": true,
+            "magento_shipping_code_custom": true,
+            "hipay_shipping_id": true,
+            "delay_preparation": true,
+            "delay_delivery": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hipay_cart_mapping_categories": {
+        "column": {
+            "mapping_id": true,
+            "category_magento_id": true,
+            "category_hipay_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_88AD1E5A160F752F5DCEB3331B1722F7": true
+        }
+    },
+    "hipay_notification": {
+        "column": {
+            "notification_id": true,
+            "status": true,
+            "order_id": true,
+            "content": true,
+            "hipay_created_at": true,
+            "created_at": true,
+            "attempts": true,
+            "state": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "hipay_sales_order": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "is_locked": true,
+            "locked_at": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "HIPAY_SALES_ORDER_ORDER_ID_SALES_ORDER_ENTITY_ID": true
+        }
     }
 }

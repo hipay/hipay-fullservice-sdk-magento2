@@ -174,6 +174,13 @@ abstract class AbstractConfig implements ConfigInterface
         $this->pathPattern = $pathPattern;
     }
 
+    /**
+     * Retrieve a configuration value from the specified group and store scope.
+     *
+     * @param string $key
+     * @param string $group
+     * @return mixed
+     */
     public function getGeneraleValue($key, $group = 'hipay_credentials')
     {
         return $this->_scopeConfig->getValue(
@@ -183,6 +190,15 @@ abstract class AbstractConfig implements ConfigInterface
         );
     }
 
+    /**
+     * Save a configuration value to the specified group and store scope
+     *
+     * @param string $key
+     * @param string|mixed|false $data
+     * @param string $group
+     * @param string $scope
+     * @return void
+     */
     public function setGeneralValue(
         $key,
         $data,
@@ -239,7 +255,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Map HiPay General Settings
      *
-     * @param  $fieldName
+     * @param  string $fieldName
      * @param  string $group
      * @return null|string
      */

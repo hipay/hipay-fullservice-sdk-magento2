@@ -21,7 +21,6 @@ use Magento\Sales\Model\Order\Email\Container\Container;
 /**
  * Class Identity Container for Hosted link sended to customer in payment MO/TO (admin)
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -38,6 +37,8 @@ class HostedPaymentLinkIdentity extends Container
     protected const XML_PATH_EMAIL_ENABLED = 'hipay/hosted_payment_link/enabled';
 
     /**
+     * Check if the email configuration is enabled
+     *
      * @return bool
      */
     public function isEnabled()

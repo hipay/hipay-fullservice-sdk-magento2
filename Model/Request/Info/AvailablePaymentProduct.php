@@ -20,36 +20,41 @@ use HiPay\Fullservice\Gateway\Request\Info\AvailablePaymentProductRequest as Ava
 use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Psr\Log\LoggerInterface;
 
-/**
- * Available Payment Product
- *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
- * @copyright Copyright (c) 2017 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 class AvailablePaymentProduct extends AbstractRequest
 {
     /**
-     *  Payment Product
-     *
      * @var array $operation
      */
     protected $payment_product;
 
     /**
-     *  With options
-     *
      * @var bool $operation
      */
     protected $with_options;
 
     /**
-     * {@inheritDoc}
-     *
+     * @inheritDoc
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param array $params
+     * @throws LocalizedException
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     *
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -60,7 +65,7 @@ class AvailablePaymentProduct extends AbstractRequest
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,

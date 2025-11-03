@@ -25,6 +25,8 @@ use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as WebApiException;
 use Psr\Log\LoggerInterface;
 
@@ -34,7 +36,6 @@ use Psr\Log\LoggerInterface;
  *
  * Is protected by secret passphare (See \HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver.php)
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -66,6 +67,16 @@ class Index extends AppAction
      */
     private $_notifyFactory;
 
+    /**
+     * @param Context $context
+     * @param Session $checkoutSession
+     * @param Config $hipayConfig
+     * @param Factory $notificationFactory
+     * @param NotifyFactory $notifyFactory
+     * @param LoggerInterface $logger
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function __construct(
         Context $context,
         Session $checkoutSession,
@@ -85,7 +96,7 @@ class Index extends AppAction
         $this->_notifyFactory = $notifyFactory;
         $this->_logger = $logger;
 
-        if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
+        if (interface_exists(\Magento\Framework\App\CsrfAwareActionInterface::class)) {
             $request = $this->getRequest();
             if ($request instanceof HttpRequest && $request->isPost()) {
                 $request->setParam('isAjax', true);
@@ -95,7 +106,9 @@ class Index extends AppAction
     }
 
     /**
-     * @return                                       void
+     * Process HiPay notification: either store it for cron or validate the transaction immediately.
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      **/
     public function execute()

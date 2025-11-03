@@ -16,10 +16,12 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Registry;
+
 /**
  * Admin Cart Categories edition
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -27,20 +29,18 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\Mappingshipping;
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry           $registry
-     * @param array                                 $data
+     * @param Context  $context
+     * @param Registry $registry
+     * @param array    $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -107,8 +107,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Getter of url for "Save and Continue" button
-     * tab_id will be replaced by desired by JS later
+     * Get URL for "Save and Continue" button (tab_id replaced by JS)
      *
      * @return string
      */

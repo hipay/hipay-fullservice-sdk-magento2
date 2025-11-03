@@ -16,10 +16,14 @@
 
 namespace HiPay\FullserviceMagento\Observer;
 
+use HiPay\FullserviceMagento\Helper\Data;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
+use Magento\Sales\Model\OrderFactory;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebApiException;
@@ -31,20 +35,22 @@ use Magento\Framework\Webapi\Exception as WebApiException;
  *
  * Redirections haven't checked because http params can be not present (Depend of TPP config)
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CheckHttpSignatureObserver implements ObserverInterface
 {
+    /**
+     * @var string[]
+     */
     protected $_actionsToCheck = [
         'hipay_notify_index'
     ];
 
     /**
      *
-     * @var \Magento\Sales\Model\OrderFactory $_orderFactory
+     * @var OrderFactory $_orderFactory
      */
     protected $_orderFactory;
 
@@ -61,29 +67,30 @@ class CheckHttpSignatureObserver implements ObserverInterface
     protected $_gatewayFactory;
 
     /**
-     * @var \HiPay\FullserviceMagento\Helper\Data
+     * @var Data
      */
     protected $_hipayHelper;
 
     /**
-     * @var \Psr\Log\LoggerInterface $logger
+     * @var LoggerInterface $logger
      */
     protected $_logger;
 
     /**
      * CheckHttpSignatureObserver constructor.
      *
-     * @param \Magento\Sales\Model\OrderFactory     $orderFactory
-     * @param ConfigFactory                         $configFactory
-     * @param GatewayFactory                        $gatewayFactory
-     * @param \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+     * @param OrderFactory $orderFactory
+     * @param ConfigFactory $configFactory
+     * @param GatewayFactory $gatewayFactory
+     * @param LoggerInterface $logger
+     * @param Data $hipayHelper
      */
     public function __construct(
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        ConfigFactory $configFactory,
-        GatewayFactory $gatewayFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper
+        OrderFactory    $orderFactory,
+        ConfigFactory   $configFactory,
+        GatewayFactory  $gatewayFactory,
+        LoggerInterface $logger,
+        Data            $hipayHelper
     ) {
         $this->_orderFactory = $orderFactory;
         $this->_configFactory = $configFactory;
@@ -139,9 +146,9 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
-                        array(
+                        [
                             'forceMoto' => (bool)$order->getPayment()->getAdditionalInformation('is_moto')
-                        )
+                        ]
                     );
 
                     try {
@@ -181,10 +188,12 @@ class CheckHttpSignatureObserver implements ObserverInterface
     }
 
     /**
-     * @param  \Magento\Framework\App\RequestInterface $request
+     * Extract the order ID from request parameters
+     *
+     * @param  RequestInterface $request
      * @return int|mixed
      */
-    protected function getOrderId(\Magento\Framework\App\RequestInterface $request)
+    protected function getOrderId(RequestInterface $request)
     {
         $orderId = 0;
         if ($request->getParam('orderid', 0)) { //Redirection case

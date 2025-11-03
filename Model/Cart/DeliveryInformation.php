@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Cart;
 /**
  * Delivery Information model
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -51,6 +50,8 @@ class DeliveryInformation
     private $_delivery_number;
 
     /**
+     * Get the delivery method
+     *
      * @return string
      */
     public function getDeliveryMethod()
@@ -59,6 +60,8 @@ class DeliveryInformation
     }
 
     /**
+     * Set the delivery method
+     *
      * @param  string $delivery_method
      * @return DeliveryInformation
      */
@@ -69,6 +72,8 @@ class DeliveryInformation
     }
 
     /**
+     * Get the delivery company
+     *
      * @return string
      */
     public function getDeliveryCompany()
@@ -77,6 +82,8 @@ class DeliveryInformation
     }
 
     /**
+     * Set the delivery company
+     *
      * @param  string $delivery_company
      * @return DeliveryInformation
      */
@@ -87,6 +94,8 @@ class DeliveryInformation
     }
 
     /**
+     * Get the delivery delay
+     *
      * @return string
      */
     public function getDeliveryDelay()
@@ -95,6 +104,8 @@ class DeliveryInformation
     }
 
     /**
+     * Set the delivery delay
+     *
      * @param  string $delivery_delay
      * @return DeliveryInformation
      */
@@ -105,6 +116,8 @@ class DeliveryInformation
     }
 
     /**
+     * Get the delivery number
+     *
      * @return string
      */
     public function getDeliveryNumber()
@@ -113,6 +126,8 @@ class DeliveryInformation
     }
 
     /**
+     * Set the delivery  number
+     *
      * @param  string $delivery_number
      * @return DeliveryInformation
      */

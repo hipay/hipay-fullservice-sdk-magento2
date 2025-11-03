@@ -16,10 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 
+use HiPay\Fullservice\Data\PaymentProduct\Collection;
+
 /**
  * Source model for available payment products
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -57,7 +58,7 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {
@@ -87,15 +88,15 @@ class PaymentProduct extends \Magento\Framework\DataObject implements \Magento\F
     /**
      * Payment products source getter
      *
-     * @param  null $categories
+     * @param  false|string[]|null $categories
      * @return \HiPay\Fullservice\Data\PaymentProduct[]
      */
     public function getPaymentProducts($categories = null)
     {
         /**
- * @var $collection \HiPay\Fullservice\Data\PaymentProduct[]
-*/
-        $collection = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItems($categories);
+         * @var $collection \HiPay\Fullservice\Data\PaymentProduct[]
+         */
+        $collection = Collection::getItems($categories);
 
         return $collection;
     }

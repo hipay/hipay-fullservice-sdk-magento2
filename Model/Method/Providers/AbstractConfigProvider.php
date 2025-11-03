@@ -77,7 +77,7 @@ abstract class AbstractConfigProvider
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->warning(get_class() . ' : Unable to resolve store ID from quote', [
+            $this->logger->warning(get_class($this) . ' : Unable to resolve store ID from quote', [
                 'exception' => $e->getMessage()
             ]);
         }
@@ -91,7 +91,7 @@ abstract class AbstractConfigProvider
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->warning(get_class() . ' : Unable to resolve store ID from store manager', [
+            $this->logger->warning(get_class($this) . ' : Unable to resolve store ID from store manager', [
                 'exception' => $e->getMessage()
             ]);
         }

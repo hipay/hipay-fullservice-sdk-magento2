@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model;
 /**
  * Hipay Card data model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -67,7 +66,7 @@ class Card extends \Magento\Framework\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\Card');
+        $this->_init(\HiPay\FullserviceMagento\Model\ResourceModel\Card::class);
         $this->setIdFieldName('card_id');
     }
 }

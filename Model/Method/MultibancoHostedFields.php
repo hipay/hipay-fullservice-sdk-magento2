@@ -19,11 +19,12 @@ namespace HiPay\FullserviceMagento\Model\Method;
 
 use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Model\InfoInterface;
 
 /**
  * Multibanco Hosted Fields Model payment method
  *
- * @author Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -35,7 +36,7 @@ class MultibancoHostedFields extends LocalHostedFields
     /**
      * @var string
      */
-    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Multibanco\Info';
+    protected $_infoBlockType = \HiPay\FullserviceMagento\Block\Hosted\Multibanco\Info::class;
 
     /**
      * @var string
@@ -54,6 +55,7 @@ class MultibancoHostedFields extends LocalHostedFields
 
     /**
      * Set pending state if transaction state if forwarding & get pending url
+     *
      * @param \HiPay\Fullservice\Gateway\Model\Transaction $response
      * @return string Redirect URL
      * @throws LocalizedException
@@ -71,7 +73,10 @@ class MultibancoHostedFields extends LocalHostedFields
 
     /**
      * Place order & set reference to pay information
-     * @param \Magento\Payment\Model\InfoInterface $payment
+     *
+     * @param InfoInterface $payment
+     * @return MultibancoHostedFields
+     * @throws LocalizedException
      */
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {

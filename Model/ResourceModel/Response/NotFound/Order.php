@@ -28,6 +28,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 class Order extends AbstractDb
 {
+    /**
+     * Initialize resource
+     *
+     * @return void
+     */
     protected function _construct()
     {
         $this->_init('hipay_response_not_found_order', 'entity_id');

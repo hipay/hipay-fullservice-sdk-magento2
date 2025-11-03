@@ -20,6 +20,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Backend\Model\Session;
 use Magento\Framework\Registry;
@@ -34,7 +35,6 @@ use Psr\Log\LoggerInterface;
 /**
  * Controller to Accept and capture payment in pending review
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -104,7 +104,7 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * Accept and capture a payment that is in "review" state
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @return Redirect
      */
     public function execute()
     {
@@ -126,7 +126,7 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                     $order->getBaseTotalDue()
                 );
 
-                $this->messageManager->addSuccessMessage( __('The payment has been captured too.'));
+                $this->messageManager->addSuccessMessage(__('The payment has been captured too.'));
 
                 $this->backendSession->getCommentText(true);
             } else {
@@ -145,6 +145,8 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
     }
 
     /**
+     * Is Allowed
+     *
      * @return bool
      */
     protected function _isAllowed()

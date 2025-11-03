@@ -16,17 +16,21 @@
 
 namespace HiPay\FullserviceMagento\Helper;
 
+use HiPay\FullserviceMagento\Model\Config;
+use HiPay\FullserviceMagento\Model\Gateway\Manager;
+use HiPay\FullserviceMagento\Model\RuleFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ResourceInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Customer\Model\Session;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Main Helper class
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -61,6 +65,14 @@ class Data extends AbstractHelper
      */
     protected $customerSession;
 
+    /**
+     * @param Context $context
+     * @param RuleFactory $ruleFactory
+     * @param ResourceInterface $moduleResource
+     * @param ProductMetadataInterface $productMetadata
+     * @param ModuleListInterface $moduleList
+     * @param Session $customerSession
+     */
     public function __construct(
         Context $context,
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
@@ -78,10 +90,11 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Determine the 3D Secure mode based on configuration and rule validation.
      *
-     * @param  bool                       $use3dSecure
-     * @param  int                        $config3dsRules
-     * @param  \Magento\Quote\Model\Quote $quote
+     * @param bool $use3dSecure
+     * @param int $config3dsRules
+     * @param \Magento\Quote\Model\Quote $quote
      * @return int
      */
     public function is3dSecure($use3dSecure, $config3dsRules, $quote = null)
@@ -118,6 +131,7 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Check if one-click payment is allowed for the current customer session.
      *
      * @param  bool $allowUseOneclick Method config Data
      * @return boolean
@@ -139,17 +153,19 @@ class Data extends AbstractHelper
             $version = $this->moduleResource->getDbVersion('HiPay_FullserviceMagento');
         }
 
-        $request = array(
+        $request = [
             'source' => 'CMS',
             'brand' => 'magento',
             'brand_version' => $this->productMetadata->getVersion(),
             'integration_version' => $version
-        );
+        ];
 
         return json_encode($request);
     }
 
     /**
+     * Check if the transaction should use the order currency based on store configuration.
+     *
      * @return bool
      */
     public function useOrderCurrency()
@@ -157,23 +173,25 @@ class Data extends AbstractHelper
 
         return (bool)$this->scopeConfig->getValue(
             'hipay/configurations/currency_transaction',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             null
         );
     }
 
     /**
-     * @param  \HiPay\FullserviceMagento\Model\Config          $config
-     * @param  \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient
-     * @param  $store
-     * @param  string                                          $scope
+     * Update the hash algorithm in configuration using gateway security settings
+     *
+     * @param Config $config
+     * @param Manager $gatewayClient
+     * @param StoreInterface $store
+     * @param string $scope
      * @return mixed
      */
     public function updateHashAlgorithm(
-        \HiPay\FullserviceMagento\Model\Config $config,
-        \HiPay\FullserviceMagento\Model\Gateway\Manager $gatewayClient,
-        $store,
-        $scope = \Magento\Store\Model\ScopeInterface::SCOPE_STORES
+        Config $config,
+        Manager $gatewayClient,
+        StoreInterface $store,
+        $scope = ScopeInterface::SCOPE_STORES
     ) {
         $hash = $gatewayClient->requestSecuritySettings();
         $config->setHashingAlgorithm($hash, $scope);
@@ -181,8 +199,14 @@ class Data extends AbstractHelper
         return $hash;
     }
 
+    /**
+     * Load and enrich version metadata from configuration.
+     *
+     * @param Config $config
+     * @return mixed|\stdClass|string
+     */
     public function readVersionDataFromConf(
-        \HiPay\FullserviceMagento\Model\Config $config
+        Config $config
     ) {
         $info = $config->getVersionInfo();
 
@@ -198,6 +222,8 @@ class Data extends AbstractHelper
     }
 
     /**
+     * Retrieve the current setup version of the HiPay extension.
+     *
      * @return string
      */
     public function getExtensionVersion()

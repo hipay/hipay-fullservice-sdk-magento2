@@ -16,8 +16,13 @@
 
 namespace HiPay\FullserviceMagento\Controller;
 
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action as AppAction;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Session\Generic;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract Fullservice controller
@@ -69,19 +74,13 @@ abstract class Fullservice extends AppAction
     protected $resultJsonFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context            $context
-     * @param \Magento\Customer\Model\Session                  $customerSession
-     * @param \Magento\Checkout\Model\Session                  $checkoutSession
-     * @param \Magento\Framework\Session\Generic               $hipaySession          ,
-     * @param \Magento\Framework\Url\Helper\Data               $urlHelper
-     * @param \HiPay\FullserviceMagento\Model\Checkout\Factory $checkoutFactory
-     * @param Factory                                          $requestfactory        ,
-     * @param \Psr\Log\LoggerInterface                         $logger
-     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory  $gatewayManagerFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * {@inheritDoc}
-     *
-     * @see \Magento\Backend\App\AbstractAction::__construct()
+     * @param Context $context
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param Generic $hipaySession
+     * @param LoggerInterface $logger
+     * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
+     * @param JsonFactory $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

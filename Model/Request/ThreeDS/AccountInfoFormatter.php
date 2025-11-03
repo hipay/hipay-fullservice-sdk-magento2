@@ -26,7 +26,6 @@ use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\AccountInfo\Customer as C
 
 /**
  *
- * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -89,7 +88,7 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return AccountInfo
      * @throws \Exception
@@ -108,6 +107,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Generate customer account info for 3DS2 based on session data.
+     *
      * @return CustomerInfo
      */
     protected function getCustomerInfo()
@@ -128,6 +129,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Generate purchase history info for 3DS2 based on customer order.
+     *
      * @return PurchaseInfo
      * @throws \Exception
      */
@@ -166,6 +169,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Generate payment info for 3DS2 including card enrollment date if recurring.
+     *
      * @return PaymentInfo
      */
     protected function getPaymentInfo()
@@ -185,6 +190,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Generate shipping info for 3DS2 including address usage date and name indicator.
+     *
      * @return ShippingInfo
      */
     protected function getShippingInfo()
@@ -209,6 +216,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Retrieve store ID from current quote.
+     *
      * @return int
      */
     private function getStoreId()
@@ -217,6 +226,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Retrieve card token from payment additional information
+     *
      * @return string|null
      */
     private function getCardToken()
@@ -225,6 +236,8 @@ class AccountInfoFormatter extends AbstractRequest
     }
 
     /**
+     * Retrieve customer address ID from shipping address.
+     *
      * @return int|null
      */
     private function getCustomerAddressId()

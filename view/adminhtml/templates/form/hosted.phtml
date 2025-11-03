@@ -19,19 +19,21 @@
 
 // @codingStandardsIgnoreFile
 /**
- * @var \HiPay\FullserviceMagento\Block\Cc\Hosted $block
+ * @var Form $block
+ * @var Escaper $escaper
  */
-$code = $block->escapeHtml($block->getMethodCode());
+
+use HiPay\FullserviceMagento\Block\Hosted\Form;
+use Magento\Framework\Escaper;
+
+$code = $escaper->escapeHtml($block->getMethodCode());
 ?>
-<fieldset class="fieldset payment items <?php /* @noEscape */
-echo $code; ?>"
-          id="payment_form_<?php /* @noEscape */
-          echo $code; ?>" style="display: none;">
-    <input type="hidden" name="payment[eci]" id="<?php /* @noEscape */
-    echo $code; ?>_eci" value="1"/>
-    <?php if ($block->isSendMailToCustomer()) : ?>
-        <?php echo $block->escapeHtml(__('An email with a payment link will be sent to the customer.')) ?>
-    <?php else : ?>
-        <?php echo $block->escapeHtml( __('You will be redirect to payment page after submit order.')) ?>
+<fieldset class="fieldset payment items <?= /* @noEscape */ $code; ?>"
+          id="payment_form_<?= /* @noEscape */ $code; ?>" style="display: none;">
+    <input type="hidden" name="payment[eci]" id="<?= /* @noEscape */ $code; ?>_eci" value="1"/>
+    <?php if ($block->isSendMailToCustomer()): ?>
+        <?= $escaper->escapeHtml(__('An email with a payment link will be sent to the customer.')) ?>
+    <?php else: ?>
+        <?= $escaper->escapeHtml(__('You will be redirect to payment page after submit order.')) ?>
     <?php endif; ?>
 </fieldset>

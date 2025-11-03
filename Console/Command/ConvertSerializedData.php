@@ -16,7 +16,10 @@
 
 namespace HiPay\FullserviceMagento\Console\Command;
 
+use HiPay\FullserviceMagento\Model\RuleFactory;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Serialize\SerializerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,12 +30,17 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConvertSerializedData extends Command
 {
+    /**
+     * @var InputInterface
+     */
     public $input;
+    /**
+     * @var OutputInterface
+     */
     public $output;
 
     /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\RuleFactory $_ruleFactory
+     * @var RuleFactory
      */
     protected $ruleFactory;
 
@@ -42,23 +50,38 @@ class ConvertSerializedData extends Command
     protected $productMetadata;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $state;
 
+    /**
+     * @var SerializerInterface
+     */
+    protected $serializer;
+
+    /**
+     * @param RuleFactory              $ruleFactory
+     * @param ProductMetadataInterface $productMetadata
+     * @param State                    $state
+     * @param SerializerInterface      $serializer
+     */
     public function __construct(
-        \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
+        RuleFactory $ruleFactory,
         ProductMetadataInterface $productMetadata,
-        \Magento\Framework\App\State $state
+        State $state,
+        SerializerInterface $serializer
     ) {
         parent::__construct();
         $this->ruleFactory = $ruleFactory;
         $this->productMetadata = $productMetadata;
         $this->state = $state;
+        $this->serializer = $serializer;
     }
 
     /**
      * Configure command
+     *
+     * @return void
      */
     protected function configure()
     {
@@ -68,33 +91,39 @@ class ConvertSerializedData extends Command
     }
 
     /**
-     * Convert data
-     * from serialized to JSON format
+     * Convert data from serialized to JSON format
      *
      * @param  InputInterface  $input
      * @param  OutputInterface $output
-     * @return int|null|void
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (version_compare($this->productMetadata->getVersion(), '2.2.0', '>')) {
             $this->state->setAreaCode('adminhtml');
             $collection = $this->ruleFactory->create()->getCollection();
             $dataSerialized = false;
+
             foreach ($collection as $item) {
-                $isSerializedConditions = $this->isSerialized($item->getData()["conditions_serialized"]);
-                $isSerializedActions = $this->isSerialized($item->getData()["actions_serialized"]);
+                $conditions = $item->getData('conditions_serialized');
+                $actions = $item->getData('actions_serialized');
+
+                $isSerializedConditions = $this->isSerialized($conditions);
+                $isSerializedActions = $this->isSerialized($actions);
+
                 if ($isSerializedConditions || $isSerializedActions) {
-                    $model = $this->ruleFactory->create();
-                    $model->load($item->getData()["rule_id"]);
+                    $model = $this->ruleFactory->create()->load($item->getId());
+
                     if ($isSerializedConditions) {
-                        $model->setConditionsSerialized(
-                            json_encode(unserialize($item->getData()["conditions_serialized"]))
-                        );
+                        $decodedConditions = $this->serializer->unserialize($conditions);
+                        $model->setConditionsSerialized(json_encode($decodedConditions));
                     }
+
                     if ($isSerializedActions) {
-                        $model->setActionsSerialized(json_encode(unserialize($item->getData()["actions_serialized"])));
+                        $decodedActions = $this->serializer->unserialize($actions);
+                        $model->setActionsSerialized(json_encode($decodedActions));
                     }
+
                     $model->save();
                     $dataSerialized = true;
                 }
@@ -102,20 +131,25 @@ class ConvertSerializedData extends Command
 
             if ($dataSerialized) {
                 $output->writeln("Conversion to Json is done.");
+            } else {
+                $output->writeln("No serialized data found to convert.");
             }
         } else {
-            $output->writeln("Your version of magento does not require data conversion.");
+            $output->writeln("Your version of Magento does not require data conversion.");
         }
+
+        return Command::SUCCESS;
     }
 
     /**
      * Check if value is serialized string
      *
      * @param  string $value
-     * @return boolean
+     * @return bool
      */
-    private function isSerialized($value)
+    private function isSerialized($value): bool
     {
-        return (bool)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
+        return is_string($value)
+            && (bool)preg_match('/^((s|i|d|b|a|O|C):|N;)/', $value);
     }
 }

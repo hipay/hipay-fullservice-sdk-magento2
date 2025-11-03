@@ -39,8 +39,6 @@ class OneyConfigProvider extends AbstractConfigProvider implements ConfigProvide
     protected $methods = [];
 
     /**
-     * Url Builder
-     *
      * @var Url
      */
     protected $urlBuilder;
@@ -106,7 +104,7 @@ class OneyConfigProvider extends AbstractConfigProvider implements ConfigProvide
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

@@ -17,12 +17,21 @@
 namespace HiPay\FullserviceMagento\Model\Request;
 
 use HiPay\Fullservice\Gateway\Request\Maintenance\MaintenanceRequest as MaintenanceRequest;
+use HiPay\FullserviceMagento\Model\Cart\CartFactory;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Psr\Log\LoggerInterface;
 
 /**
  * Maintenance Request Object
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -30,15 +39,11 @@ use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFac
 class Maintenance extends CommonRequest
 {
     /**
-     * Order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
 
     /**
-     * Payment Method
-     *
      * @var \HiPay\Fullservice\Request\AbstractRequest
      */
     protected $_paymentMethod;
@@ -61,7 +66,7 @@ class Maintenance extends CommonRequest
     protected $_operation;
 
     /**
-     * @var
+     * @var CartFactory
      */
     protected $_cartFactory;
 
@@ -71,9 +76,23 @@ class Maintenance extends CommonRequest
     protected $_productRepositoryInterface;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param CartFactory $cartFactory
+     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param ProductRepositoryInterface $productRepositoryInterface
+     * @param CollectionFactory $mappingCategoriesCollectionFactory
+     * @param CategoryFactory $categoryFactory
+     * @param array $params
+     * @throws LocalizedException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -89,7 +108,7 @@ class Maintenance extends CommonRequest
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
         CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,
@@ -125,8 +144,7 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (
-            isset($params['paymentMethod'])
+        if (isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

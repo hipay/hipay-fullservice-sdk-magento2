@@ -16,15 +16,23 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Hashing;
 
+use HiPay\Fullservice\Exception\ApiErrorException;
+use HiPay\Fullservice\Exception\RuntimeException;
+use HiPay\FullserviceMagento\Helper\Data;
+use HiPay\FullserviceMagento\Model\Config;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
 /**
  * Add new condition html on rule edition
  * Used for 3ds and oneclick in payment configuration
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -42,7 +50,7 @@ class Synchronize extends \Magento\Backend\App\Action
     protected $website;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,7 +67,7 @@ class Synchronize extends \Magento\Backend\App\Action
     protected $_gatewayFactory;
 
     /**
-     * @var \HiPay\FullserviceMagento\Helper\Data
+     * @var Data
      */
     protected $_hipayHelper;
 
@@ -68,13 +76,21 @@ class Synchronize extends \Magento\Backend\App\Action
      */
     protected $logger;
 
+    /**
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param ConfigFactory $configFactory
+     * @param GatewayFactory $gatewayFactory
+     * @param Data $hipayHelper
+     * @param LoggerInterface $logger
+     */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        ConfigFactory $configFactory,
-        GatewayFactory $gatewayFactory,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        LoggerInterface $logger
+        Context               $context,
+        StoreManagerInterface $storeManager,
+        ConfigFactory         $configFactory,
+        GatewayFactory        $gatewayFactory,
+        Data                  $hipayHelper,
+        LoggerInterface       $logger
     ) {
         $this->_storeManager = $storeManager;
         $this->_configFactory = $configFactory;
@@ -85,7 +101,11 @@ class Synchronize extends \Magento\Backend\App\Action
     }
 
     /**
+     * Synchronize hash algorithm for the current store and redirect to configuration
+     *
      * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function execute()
     {
@@ -95,40 +115,40 @@ class Synchronize extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $storeId
+     * Update hash algorithm for all configured platforms using store credentials.
+     *
+     * @param int $storeId
+     * @throws NoSuchEntityException
      */
-    protected function _updateHashAlgorithm($storeId)
+    protected function _updateHashAlgorithm(int $storeId)
     {
-        $platforms = array(
+        $platforms = [
             ConfigFactory::PRODUCTION,
             ConfigFactory::STAGE,
             ConfigFactory::PRODUCTION_MOTO,
             ConfigFactory::STAGE_MOTO,
             ConfigFactory::PRODUCTION_APPLEPAY,
             ConfigFactory::STAGE_APPLEPAY
-        );
+        ];
 
         $store = $this->_storeManager->getStore($storeId);
-        $scope = ('' !== $this->store) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORES : 'default';
+        $scope = ('' !== $this->store) ? ScopeInterface::SCOPE_STORES : 'default';
 
         foreach ($platforms as $platform) {
             /**
- * @var $config \HiPay\FullserviceMagento\Model\Config
-*/
+             * @var $config Config
+             */
             $config = $this->_configFactory->create(
-                array('params' => array('storeId' => $storeId, 'platform' => $platform))
+                ['params' => ['storeId' => $storeId, 'platform' => $platform]]
             );
             if ($config->hasCredentials()) {
                 $gatewayClient = $this->_gatewayFactory->create(
                     null,
-                    array('storeId' => $storeId, 'platform' => $platform)
+                    ['storeId' => $storeId, 'platform' => $platform]
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (
-                    \HiPay\Fullservice\Exception\RuntimeException |
-                    \HiPay\Fullservice\Exception\ApiErrorException $e
-                ) {
+                } catch (RuntimeException|ApiErrorException $e) {
                     $this->messageManager->addErrorMessage(
                         __(
                             "We can't synchronize at least one of the account ("
@@ -142,9 +162,11 @@ class Synchronize extends \Magento\Backend\App\Action
     }
 
     /**
-     *
+     * Resolve store ID from request parameters (store or website).
      *
      * @return int
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     protected function _getConfigScopeStoreId()
     {
@@ -160,18 +182,20 @@ class Synchronize extends \Magento\Backend\App\Action
     }
 
     /**
-     *  Redirect after action ( With current store configuration )
+     * Redirect after action ( With current store configuration )
+     *
+     * @return void
      */
     private function setRedirect()
     {
         $this->_redirect(
             'adminhtml/system_config/edit',
-            array(
+            [
                 '_secure' => true,
                 'section' => 'hipay',
                 'store' => $this->store,
                 'website' => $this->website
-            )
+            ]
         );
     }
 }

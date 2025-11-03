@@ -16,12 +16,15 @@
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition\Product;
 
+use HiPay\FullserviceMagento\Model\Rule\Condition\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Rule\Block\Editable;
+use Magento\Rule\Model\Condition\Context;
 
 /**
  * Product Combine Class
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -33,23 +36,26 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
      */
     protected $_ruleConditionProd;
 
+    /**
+     * @var mixed|string
+     */
     protected $methodCode = null;
 
     /**
      * Combine constructor.
      *
-     * @param \Magento\Rule\Model\Condition\Context                  $context
-     * @param \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct
-     * @param array                                                  $data
+     * @param Context $context
+     * @param Product $ruleConditionProduct
+     * @param array   $data
      */
     public function __construct(
-        \Magento\Rule\Model\Condition\Context $context,
-        \HiPay\FullserviceMagento\Model\Rule\Condition\Product $ruleConditionProduct,
+        Context $context,
+        Product $ruleConditionProduct,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_ruleConditionProd = $ruleConditionProduct;
-        $this->setType('HiPay\FullserviceMagento\Model\Rule\Condition\Product\Combine');
+        $this->setType(Combine::class);
     }
 
     /**
@@ -81,7 +87,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
             $conditions,
             [
                 [
-                    'value' => 'HiPay\FullserviceMagento\Model\Rule\Condition\Product\Combine',
+                    'value' => Combine::class,
                     'label' => __('Conditions Combination'),
                 ],
                 ['label' => __('Cart Item Attribute'), 'value' => $iAttributes],
@@ -105,6 +111,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         return $this;
     }
 
+    /**
+     * Set Method code
+     *
+     * @param mixed|string $methodCode
+     * @return $this
+     */
     public function setMethodCode($methodCode)
     {
         $this->methodCode = $methodCode;
@@ -112,6 +124,12 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
         return $this;
     }
 
+    /**
+     * Set config path
+     *
+     * @param mixed|string $configPath
+     * @return $this
+     */
     public function setConfigPath($configPath)
     {
         $this->elementName = 'rule_' . $configPath;
@@ -120,6 +138,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Get Type Element
+     *
      * @return AbstractElement
      */
     public function getTypeElement()
@@ -137,7 +157,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * @return $this
+     * Get Attribute Element
+     *
+     * @return AbstractElement
      */
     public function getAttributeElement()
     {
@@ -157,12 +179,13 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 'value_name' => $this->getAttributeName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(Editable::class)
         );
     }
 
     /**
      * Retrieve Condition Operator element Instance
+     *
      * If the operator value is empty - define first available operator value as default
      *
      * @return \Magento\Framework\Data\Form\Element\Select
@@ -189,13 +212,15 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 'value_name' => $this->getOperatorName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(Editable::class));
 
         return $element;
     }
 
     /**
-     * @return $this
+     * Get Value Element
+     *
+     * @return AbstractElement
      */
     public function getValueElement()
     {
@@ -222,7 +247,9 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
-     * @return $this
+     * Get New Child Element
+     *
+     * @return AbstractElement
      */
     public function getNewChildElement()
     {
@@ -235,11 +262,13 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 'value_name' => $this->getNewChildName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Newchild')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Newchild::class)
         );
     }
 
     /**
+     * As Html Recursive
+     *
      * @return string
      */
     public function asHtmlRecursive()
@@ -262,6 +291,8 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
     }
 
     /**
+     * Get Aggregator Element
+     *
      * @return object
      */
     public function getAggregatorElement()
@@ -282,7 +313,7 @@ class Combine extends \Magento\Rule\Model\Condition\Combine
                 'value_name' => $this->getAggregatorName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(Editable::class)
         );
     }
 }

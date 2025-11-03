@@ -22,7 +22,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Hosted Fields Payment Method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -38,12 +37,12 @@ class HostedFieldsMethod extends CcMethod
     /**
      * @var string
      */
-    protected $_formBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Form';
+    protected $_formBlockType = \HiPay\FullserviceMagento\Block\Hosted\Form::class;
 
     /**
      * @var string
      */
-    protected $_infoBlockType = 'HiPay\FullserviceMagento\Block\Hosted\Info';
+    protected $_infoBlockType = \HiPay\FullserviceMagento\Block\Hosted\Info::class;
 
     /**
      * @var string

@@ -24,7 +24,6 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
  * Used to redirect the customer when exception occur during the payment
  * Rarely used
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -32,7 +31,9 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
 class Exception extends Fullservice
 {
     /**
-     * @return                                       void
+     * Handle payment exception by setting an error message and redirecting to the cart page.
+     *
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * */
     public function execute()

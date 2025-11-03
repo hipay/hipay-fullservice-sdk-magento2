@@ -22,6 +22,7 @@ use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\Generic;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -33,7 +34,6 @@ use Psr\Log\LoggerInterface;
  *
  * Used to redirect the customer when payment is declined
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -56,8 +56,6 @@ class Decline extends Fullservice
     private $checkoutSession;
 
     /**
-     * Decline constructor.
-     *
      * @param Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param Session $checkoutSession
@@ -78,8 +76,7 @@ class Decline extends Fullservice
         JsonFactory                     $resultJsonFactory,
         OrderRepositoryInterface        $orderRepository,
         Cart                            $cart
-    )
-    {
+    ) {
         $this->orderRepository = $orderRepository;
         $this->checkoutSession = $checkoutSession;
         $this->cart = $cart;
@@ -96,7 +93,9 @@ class Decline extends Fullservice
     }
 
     /**
-     * @return                                       $this
+     * Handle declined payment: optionally re-add items to cart and redirect customer to failure page.
+     *
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()

@@ -1,14 +1,26 @@
 <?php
+/**
+ * HiPay Hosted Fields JS Template
+ *
+ * @var \HiPay\FullserviceMagento\Block\ExternalJS $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
 $hostedFieldsSdk = $block->getJsSrcHostedFields();
-$sdkUrl = $hostedFieldsSdk['sdkUrl'];
-$integrityHash = $hostedFieldsSdk['integrityHash'];
+$sdkUrl = $hostedFieldsSdk['sdkUrl'] ?? '';
+$integrityHash = $hostedFieldsSdk['integrityHash'] ?? '';
 ?>
+
 <?php if ($integrityHash): ?>
-<script src="<?php echo $sdkUrl; ?>" 
-        type="text/javascript" 
-        charset="utf-8" 
-        integrity="<?php echo $integrityHash; ?>" 
-        crossorigin="anonymous"></script>
+    <script
+            src="<?= $escaper->escapeUrl($sdkUrl); ?>"
+            charset="utf-8"
+            integrity="<?= $escaper->escapeHtmlAttr($integrityHash); ?>"
+            crossorigin="anonymous">
+    </script>
 <?php else: ?>
-<script src="<?php echo $sdkUrl; ?>" type="text/javascript" charset="utf-8"></script>
+    <script
+            src="<?= $escaper->escapeUrl($sdkUrl); ?>"
+            charset="utf-8">
+    </script>
 <?php endif; ?>

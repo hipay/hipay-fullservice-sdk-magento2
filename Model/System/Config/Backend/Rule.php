@@ -23,6 +23,7 @@ use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\Error;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
@@ -33,7 +34,6 @@ use Magento\Framework\Validator\Exception;
 /**
  * Rule Backend Model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -46,13 +46,15 @@ class Rule extends Value
      */
     protected $_request;
 
+    /**
+     * @var array|mixed|null
+     */
     protected $_ruleData = null;
 
     /**
      * @var RuleFactory
      */
     private $ruleFactory;
-
 
     /**
      * @param Context $context
@@ -75,8 +77,7 @@ class Rule extends Value
         AbstractResource            $resource = null,
         AbstractDb                  $resourceCollection = null,
         array                       $data = []
-    )
-    {
+    ) {
         $this->ruleFactory = $ruleFactory;
         $this->_request = $httpRequest;
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
@@ -86,7 +87,7 @@ class Rule extends Value
      * Processing object before save data
      *
      * @return $this
-     * @throws Exception
+     * @throws Exception|LocalizedException
      */
     public function beforeSave()
     {
@@ -117,6 +118,12 @@ class Rule extends Value
         return parent::beforeSave();
     }
 
+    /**
+     * Load and initialize rule model after config value is loaded
+     *
+     * @return $this|Rule
+     * @throws LocalizedException
+     */
     protected function _afterload()
     {
         parent::_afterload();
@@ -141,28 +148,48 @@ class Rule extends Value
         return $this;
     }
 
+    /**
+     * Extract method code from config path
+     *
+     * @return mixed|string
+     */
     protected function _getMethodCode()
     {
         list(, $group) = explode("/", $this->getData('path') ?: '');
         return $group;
     }
 
+    /**
+     * Return raw config path.
+     *
+     * @return array|mixed|null
+     */
     protected function _getConfigPath()
     {
         return $this->getData('path');
     }
 
+    /**
+     * Convert config path to field name format using underscores
+     *
+     * @return array|mixed|string|string[]|null
+     */
     protected function _getFieldName()
     {
         return str_replace("/", "_", $this->_getConfigPath());
     }
 
+    /**
+     * Retrieve rule conditions from POST data for current field
+     *
+     * @return array|mixed|null
+     */
     protected function _getRuleData()
     {
         if ($this->_ruleData === null) {
             $post = $this->_request->getPost();
 
-            $this->_ruleData = array();
+            $this->_ruleData = [];
             if (isset($post['rule_' . $this->_getFieldName()]['conditions'])) {
                 $this->_ruleData['conditions'] = $post['rule_' . $this->_getFieldName()]['conditions'];
             }

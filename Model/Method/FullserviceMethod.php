@@ -19,8 +19,10 @@ namespace HiPay\FullserviceMagento\Model\Method;
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Card;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\Data\PaymentInterface;
@@ -42,7 +44,6 @@ use Magento\Sales\Model\Order\Payment\Transaction\Repository as TransactionRepos
  */
 abstract class FullserviceMethod extends AbstractMethod
 {
-    protected const SLEEP_TIME = 5;
     /**
      * Payment Method feature
      *
@@ -193,11 +194,12 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * FullserviceMethod constructor.
      *
-     * @param TransactionRepository                                        $transactionRepository
-     * @param Method\Context                                               $context
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
-     * @param array                                                        $data
+     * @param TransactionRepository $transactionRepository
+     * @param Context $context
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     * @throws LocalizedException
      */
     public function __construct(
         TransactionRepository $transactionRepository,
@@ -230,7 +232,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->priceCurrency = $context->getPriceCurrency();
         $this->_storeManager = $context->getStoreManager();
 
-        $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
+        $this->_debugReplacePrivateDataKeys = ['token', 'cardtoken', 'card_number', 'cvc'];
 
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 
@@ -267,6 +269,13 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this;
     }
 
+    /**
+     * Assign additional information values from the given data object to the payment instance.
+     *
+     * @param DataObject $data
+     * @return $this
+     * @throws LocalizedException
+     */
     protected function _assignAdditionalInformation(\Magento\Framework\DataObject $data)
     {
         $info = $this->getInfoInstance();
@@ -279,6 +288,11 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this;
     }
 
+    /**
+     * Return the list of additional information keys
+     *
+     * @return string[]
+     */
     protected function getAdditionalInformationKeys()
     {
         return $this->_additionalInformationKeys;
@@ -317,8 +331,7 @@ abstract class FullserviceMethod extends AbstractMethod
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if (
-                (int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
                 !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;
@@ -359,10 +372,10 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Capture payment method
      *
-     * @param                                         \Magento\Framework\DataObject|InfoInterface $payment
-     * @param                                         float                                       $amount
-     * @return                                        $this
-     * @throws                                        \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param float $amount
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -388,6 +401,13 @@ abstract class FullserviceMethod extends AbstractMethod
         return $this;
     }
 
+    /**
+     * Perform a manual capture operation using the transaction reference, adjusting amount if currency differs.
+     *
+     * @param InfoInterface $payment
+     * @param float $amount
+     * @return void
+     */
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
         if ($this->isDifferentCurrency($payment)) {
@@ -402,6 +422,7 @@ abstract class FullserviceMethod extends AbstractMethod
     }
 
     /**
+     * Create and return a gateway manager
      *
      * @param  \Magento\Sales\Model\Order $order
      * @param  array                      $params
@@ -428,8 +449,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $redirectUrl = $successUrl;
         switch ($response->getState()) {
             case TransactionState::COMPLETED:
-                if (
-                    $response->getPaymentMethod() &&
+                if ($response->getPaymentMethod() &&
                     $response->getPaymentMethod()->getToken() &&
                     $this->_checkoutSession->getQuote()->getCustomerId()
                 ) {
@@ -476,6 +496,13 @@ abstract class FullserviceMethod extends AbstractMethod
         return $redirectUrl;
     }
 
+    /**
+     * Initiate a new transaction request and update order state, status, and redirect URL based on the response.
+     *
+     * @param InfoInterface $payment
+     * @return $this
+     * @throws LocalizedException
+     */
     public function place(\Magento\Payment\Model\InfoInterface $payment)
     {
         try {
@@ -521,10 +548,10 @@ abstract class FullserviceMethod extends AbstractMethod
     /**
      * Refund specified amount for payment
      *
-     * @param                                         \Magento\Framework\DataObject|InfoInterface $payment
-     * @param                                         float                                       $amount
-     * @return                                        $this
-     * @throws                                        \Magento\Framework\Exception\LocalizedException
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
+     * @param float $amount
+     * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -627,14 +654,8 @@ abstract class FullserviceMethod extends AbstractMethod
     }
 
     /**
-     * Wait for notification
-     */
-    protected function sleep()
-    {
-        sleep(self::SLEEP_TIME);
-    }
-
-    /**
+     * Determine if the transaction currency differs from the order's base currency but matches the order currency.
+     *
      * @param  InfoInterface $payment
      * @return float
      */

@@ -22,13 +22,17 @@ use HiPay\Fullservice\Enum\Transaction\ECI;
 /**
  * CardToken Payment Method Request Object
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class CardToken extends AbstractPaymentMethod
 {
+    /**
+     * Build and return a card token payment method request with authentication and ECI data.
+     *
+     * @return CardTokenPaymentMethod
+     */
     protected function mapRequest()
     {
         //Token can be empty

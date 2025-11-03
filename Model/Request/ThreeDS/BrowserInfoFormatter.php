@@ -16,12 +16,20 @@
 
 namespace HiPay\FullserviceMagento\Model\Request\ThreeDS;
 
+use HiPay\FullserviceMagento\Helper\ThreeDSTwo;
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 use HiPay\Fullservice\Gateway\Model\Request\ThreeDSTwo\BrowserInfo;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\UrlInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  *
- * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -39,19 +47,25 @@ class BrowserInfoFormatter extends AbstractRequest
     protected $_order;
 
     /**
+     * @var RequestInterface
+     */
+    protected $request;
+
+    /**
      * BrowserInfoFormatter constructor.
      *
-     * @param  \Psr\Log\LoggerInterface                             $logger
-     * @param  \Magento\Checkout\Helper\Data                        $checkoutData
-     * @param  \Magento\Customer\Model\Session                      $customerSession
-     * @param  \Magento\Checkout\Model\Session                      $checkoutSession
-     * @param  \Magento\Framework\Locale\ResolverInterface          $localeResolver
-     * @param  \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory
-     * @param  \Magento\Framework\UrlInterface                      $urlBuilder
-     * @param  \HiPay\FullserviceMagento\Helper\Data                $helper
-     * @param  \HiPay\FullserviceMagento\Helper\ThreeDSTwo          $threeDSHelper
-     * @param  array                                                $params
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param UrlInterface $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param ThreeDSTwo $threeDSHelper
+     * @param RequestInterface $request
+     * @param array $params
+     * @throws LocalizedException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -63,6 +77,7 @@ class BrowserInfoFormatter extends AbstractRequest
         \Magento\Framework\UrlInterface $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
         \HiPay\FullserviceMagento\Helper\ThreeDSTwo $threeDSHelper,
+        RequestInterface $request,
         $params = []
     ) {
         parent::__construct(
@@ -79,10 +94,11 @@ class BrowserInfoFormatter extends AbstractRequest
 
         $this->_threeDSHelper = $threeDSHelper;
         $this->_order = $params["order"];
+        $this->request = $request;
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return BrowserInfo
      * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
@@ -95,7 +111,7 @@ class BrowserInfoFormatter extends AbstractRequest
 
         $xForwardedFor = $this->_order->getXForwardedFor();
         $browserInfo->ipaddr = $xForwardedFor ? explode(',', $xForwardedFor)[0] : $this->_order->getRemoteIp();
-        $browserInfo->http_accept = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : null;
+        $browserInfo->http_accept = $this->request->getServer('HTTP_ACCEPT') ?: null;
         $browserInfo->javascript_enabled = true;
 
         if ($browserData !== null) {

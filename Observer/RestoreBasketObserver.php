@@ -27,6 +27,13 @@ class RestoreBasketObserver implements ObserverInterface
      */
     protected $notFoundOrderRepository;
 
+    /**
+     * @param Session $checkoutSession
+     * @param Config $hipayConfig
+     * @param ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function __construct(
         Session                                  $checkoutSession,
         Config                                   $hipayConfig,
@@ -39,13 +46,19 @@ class RestoreBasketObserver implements ObserverInterface
         $this->notFoundOrderRepository = $notFoundOrderRepository;
     }
 
+    /**
+     * Restore the customer's quote if the last order is pending payment and no notification has been received.
+     *
+     * @param EventObserver $observer
+     * @return true
+     * @throws LocalizedException
+     */
     public function execute(EventObserver $observer)
     {
 
         $lastRealOrder = $this->checkoutSession->getLastRealOrder();
 
-        if (
-            $lastRealOrder->getPayment()
+        if ($lastRealOrder->getPayment()
             && $lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
             && !$this->hipayConfig->isNotificationCronActive()
             && $lastRealOrder->getData('state') === 'pending_payment'

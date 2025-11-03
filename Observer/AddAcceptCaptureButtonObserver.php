@@ -25,7 +25,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
  * Add button "Accept and capture" in admin order view
  * When the order status is in pending review
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -33,8 +32,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class AddAcceptCaptureButtonObserver implements ObserverInterface
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -82,8 +79,7 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     {
         $controller = $observer->getControllerAction();
         if (($order = $this->getOrder($controller))) {
-            if (
-                (strpos($order->getPayment()->getMethod(), 'hipay') !== false)
+            if ((strpos($order->getPayment()->getMethod(), 'hipay') !== false)
                 && $order->canReviewPayment()
             ) {
 

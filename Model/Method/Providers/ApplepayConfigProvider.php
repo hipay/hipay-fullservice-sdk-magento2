@@ -26,14 +26,6 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Payment\Model\CcConfig;
 use Psr\Log\LoggerInterface;
 
-/**
- * Applepay config provider
- *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 class ApplepayConfigProvider extends AbstractConfigProvider implements ConfigProviderInterface
 {
     /**
@@ -47,8 +39,6 @@ class ApplepayConfigProvider extends AbstractConfigProvider implements ConfigPro
     protected $methods = [];
 
     /**
-     * Url Builder
-     *
      * @var \Magento\Framework\Url
      */
     protected $urlBuilder;
@@ -127,7 +117,7 @@ class ApplepayConfigProvider extends AbstractConfigProvider implements ConfigPro
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getConfig()
     {

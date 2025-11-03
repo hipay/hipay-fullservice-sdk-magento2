@@ -21,14 +21,15 @@ use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 class CustomDataPlugin
 {
     /**
-     *  Complete general getCustomData with HiPay'datas
+     * Complete general getCustomData with HiPay data
      *
-     * @see    \HiPay\FullserviceMagento\Helper\Data
-     * @param  \HiPay\FullserviceMagento\Model\Request\Order $subject
-     * @param  $result
+     * @param Order $subject
+     * @param array $result
      * @return array
+     *
+     * @see \HiPay\FullserviceMagento\Helper\Data
      */
-    public function afterGetCustomData(Order $subject, $result)
+    public function afterGetCustomData(Order $subject, array $result)
     {
         $order = $subject->getOrder();
         $payment = $order->getPayment();
@@ -53,8 +54,7 @@ class CustomDataPlugin
         }
 
         // Use OneClick - only for hosted fields payment method
-        if (
-            $result['payment_code'] === HostedFieldsMethod::HIPAY_METHOD_CODE
+        if ($result['payment_code'] === HostedFieldsMethod::HIPAY_METHOD_CODE
             && $payment->getAdditionalInformation('create_oneclick')
         ) {
             $result['payment_type'] = 'OneClick';

@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Model\Response\NotFound;
 
 use HiPay\FullserviceMagento\Model\ResourceModel;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 
 /**
@@ -36,6 +37,12 @@ class Order extends AbstractModel
     public const FIELD_ORDER_ID  = 'order_id';
     public const FIELD_CREATED_AT = 'created_at';
 
+    /**
+     *  Initialize resource
+     *
+     * @return void
+     * @throws LocalizedException
+     */
     protected function _construct()
     {
         $this->_init(ResourceModel\Response\NotFound\Order::class);

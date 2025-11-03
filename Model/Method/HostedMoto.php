@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
 /**
  * Hosted Mo/To Model payment method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -46,6 +45,8 @@ class HostedMoto extends HostedMethod
     protected $_canUseCheckout = false;
 
     /**
+     * Check if customer notification emails are enabled in the configuration.
+     *
      * @return null|string
      */
     public function isSendMailToCustomer()

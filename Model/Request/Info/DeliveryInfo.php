@@ -17,12 +17,20 @@
 namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\Fullservice\Gateway\Request\Info\DeliveryShippingInfoRequest;
+use HiPay\FullserviceMagento\Model\MappingShipping;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
+use HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Psr\Log\LoggerInterface;
 
 /**
  * Delivery info Request Object
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -35,23 +43,35 @@ class DeliveryInfo extends AbstractInfoRequest
     protected $_mappingShippingCollectionFactory;
 
     /**
-     *  A record frpm Mapping Between Hipay and Magento
+     * A record from Mapping Between Hipay and Magento
      *
-     * @var
+     * @var MappingShipping
      */
     protected $_mappingDelivery;
 
     /**
-     *  Collection of Shipping Methods from HiPay
+     * Collection of Shipping Methods from HiPay
      *
      * @var \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay
      */
     protected $_shippingMethodsHipay;
 
     /**
-     * {@inheritDoc}
-     *
+     * @inheritDoc
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param CollectionFactory $mappingShippingCollectionFactory
+     * @param ShippingMethodsHipay $shippingMethodsHipay
+     * @param array $params
+     * @throws LocalizedException
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     *
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -64,7 +84,7 @@ class DeliveryInfo extends AbstractInfoRequest
         \HiPay\FullserviceMagento\Helper\Data $helper,
         CollectionFactory $mappingShippingCollectionFactory,
         \HiPay\FullserviceMagento\Model\System\Config\Source\ShippingMethodsHipay $shippingMethodsHipay,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,
@@ -106,7 +126,7 @@ class DeliveryInfo extends AbstractInfoRequest
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      * @return \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo

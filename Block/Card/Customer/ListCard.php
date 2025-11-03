@@ -22,7 +22,6 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 /**
  * Customer Cards list block
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -102,7 +101,7 @@ class ListCard extends \Magento\Customer\Block\Account\Dashboard
     {
         if ($this->getReviews()) {
             $toolbar = $this->getLayout()->createBlock(
-                'Magento\Theme\Block\Html\Pager',
+                \Magento\Theme\Block\Html\Pager::class,
                 'hipay_customer_card_list.toolbar'
             )->setCollection(
                 $this->getCards()

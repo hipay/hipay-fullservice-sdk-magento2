@@ -18,6 +18,13 @@ namespace HiPay\FullserviceMagento\Model\Request\Info;
 
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
 use HiPay\Fullservice\Enum\Customer\Gender as HipayGender;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Url;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract Info Request Object
@@ -30,16 +37,25 @@ use HiPay\Fullservice\Enum\Customer\Gender as HipayGender;
 abstract class AbstractInfoRequest extends BaseRequest
 {
     /**
-     * Order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     *
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param Url $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param array $params
+     * @throws LocalizedException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -50,7 +66,7 @@ abstract class AbstractInfoRequest extends BaseRequest
         \HiPay\FullserviceMagento\Model\Request\Type\Factory $requestFactory,
         \Magento\Framework\Url $urlBuilder,
         \HiPay\FullserviceMagento\Helper\Data $helper,
-        $params = []
+        array $params = []
     ) {
 
         parent::__construct(
@@ -73,6 +89,8 @@ abstract class AbstractInfoRequest extends BaseRequest
     }
 
     /**
+     * Convert Magento gender value to Hipay gender code.
+     *
      * @param  int $magentoGender
      * @return string
      */

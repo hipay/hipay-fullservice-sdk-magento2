@@ -18,14 +18,26 @@ namespace HiPay\FullserviceMagento\Model\Gateway;
 
 use HiPay\Fullservice\Enum\Transaction\Operation;
 use HiPay\Fullservice\Gateway\Client\GatewayClient;
+use HiPay\Fullservice\Gateway\Model\AvailablePaymentProduct;
+use HiPay\Fullservice\Gateway\Model\HostedPaymentPage;
+use HiPay\Fullservice\Gateway\Model\Transaction;
+use HiPay\Fullservice\HTTP\ClientProvider;
 use HiPay\Fullservice\HTTP\SimpleHTTPClient;
+use HiPay\Fullservice\Request\AbstractRequest;
+use HiPay\Fullservice\Request\RequestInterface;
 use HiPay\Fullservice\Request\RequestSerializer;
+use HiPay\FullserviceMagento\Model\Config;
 use HiPay\FullserviceMagento\Model\Config\Factory as ConfigFactory;
 use HiPay\FullserviceMagento\Model\Request\Type\Factory as RequestFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Payment\Helper\Data;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\TransactionRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Psr\Log\LoggerInterface;
 
 /**
  * Gateway Manager Class
@@ -33,7 +45,6 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
  * HiPay Fullservice SDK is used by the manager
  * So, all api call are centralized here
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -46,9 +57,7 @@ class Manager
     protected const TRANSACTION_INCREMENT = 'increment_id';
 
     /**
-     * Order
-     *
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $_order;
 
@@ -102,6 +111,17 @@ class Manager
      */
     protected $_transactionRepositoryInterface;
 
+    /**
+     * @param RequestFactory $requestfactory
+     * @param ConfigFactory $configFactory
+     * @param Data $paymentHelper
+     * @param LoggerInterface $logger
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param TransactionRepositoryInterface $repository
+     * @param array $params
+     * @throws LocalizedException
+     */
     public function __construct(
         RequestFactory $requestfactory,
         ConfigFactory $configFactory,
@@ -110,7 +130,7 @@ class Manager
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         TransactionRepositoryInterface $repository,
-        $params = []
+        array $params = []
     ) {
         $this->_logger = $logger;
         $this->_configFactory = $configFactory;
@@ -120,30 +140,30 @@ class Manager
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_transactionRepositoryInterface = $repository;
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
+        if (isset($params['order']) && $params['order'] instanceof Order) {
             $this->_order = $params['order'];
             $methodCode = $this->_order->getPayment()->getMethod();
             $this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
             $storeId = $this->_order->getStoreId();
-            $params = array(
-                'params' => array(
+            $params = [
+                'params' => [
                     'methodCode' => $methodCode,
                     'storeId' => $storeId,
                     'order' => $this->_order,
                     'forceMoto' => (isset($params['forceMoto'])) ? $params['forceMoto'] : false
-                )
-            );
+                ]
+            ];
         } else {
             $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
             $platform = (isset($params['platform'])) ? $params['platform'] : false;
             $apiEnv = (isset($params['apiEnv'])) ? $params['apiEnv'] : false;
-            $params = array(
-                'params' => array(
+            $params = [
+                'params' => [
                     'storeId' => $storeId,
                     'platform' => $platform,
                     'apiEnv' => $apiEnv
-                )
-            );
+                ]
+            ];
         }
 
         $this->_config = $this->_configFactory->create($params);
@@ -153,7 +173,9 @@ class Manager
     }
 
     /**
-     * @return \HiPay\Fullservice\HTTP\ClientProvider
+     * Get Client Provider
+     *
+     * @return ClientProvider
      */
     public function getClientProvider()
     {
@@ -161,7 +183,9 @@ class Manager
     }
 
     /**
-     * @return \HiPay\FullserviceMagento\Model\Config
+     * Get Configuration
+     *
+     * @return Config
      */
     public function getConfiguration()
     {
@@ -169,7 +193,10 @@ class Manager
     }
 
     /**
+     * Request hosted payment page
      *
+     * @return HostedPaymentPage
+     * @throws \Exception
      */
     public function requestHostedPaymentPage()
     {
@@ -181,11 +208,11 @@ class Manager
         /**
          * @var $hpp \HiPay\Fullservice\Gateway\Request\Order\HostedPaymentPageRequest
         */
-        $hpp = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage', $params);
+        $hpp = $this->_getRequestObject(\HiPay\FullserviceMagento\Model\Request\HostedPaymentPage::class, $params);
         $this->_debug($this->_requestToArray($hpp));
 
         /**
-         * @var $hppModel \HiPay\Fullservice\Gateway\Model\HostedPaymentPage
+         * @var $hppModel HostedPaymentPage
         */
         try {
             $hppModel = $this->_gateway->requestHostedPaymentPage($hpp);
@@ -205,7 +232,10 @@ class Manager
     }
 
     /**
+     * Request New Order
      *
+     * @return Transaction
+     * @throws \Exception
      */
     public function requestNewOrder()
     {
@@ -213,7 +243,7 @@ class Manager
         $params['params']['operation'] = 'Authorization';
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
 
-        $orderRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Order', $params);
+        $orderRequest = $this->_getRequestObject(\HiPay\FullserviceMagento\Model\Request\Order::class, $params);
         $this->_debug($this->_requestToArray($orderRequest));
 
         //Request new order transaction
@@ -235,24 +265,29 @@ class Manager
     }
 
     /**
-     * @param  null $amount
+     * Request Operation Capture
+     *
+     * @param float|null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
-    public function requestOperationCapture($amount = null)
+    public function requestOperationCapture(float $amount = null)
     {
         return $this->_requestOperation(Operation::CAPTURE, $amount);
     }
 
     /**
-     * @param  null $amount
+     * Request Operation Refund
+     *
+     * @param float|null $amount
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
-    public function requestOperationRefund($amount = null)
+    public function requestOperationRefund(float $amount = null)
     {
         return $this->_requestOperation(Operation::REFUND, $amount);
     }
 
     /**
+     * Request Operation Cancel
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
@@ -262,6 +297,7 @@ class Manager
     }
 
     /**
+     * Request Operation Accept Challenge
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
@@ -271,6 +307,7 @@ class Manager
     }
 
     /**
+     * Request Operation Deny Challenge
      *
      * @return \HiPay\Fullservice\Gateway\Model\Operation
      */
@@ -279,11 +316,23 @@ class Manager
         return $this->_requestOperation(Operation::DENY_CHALLENGE);
     }
 
+    /**
+     * Request Order Transaction Information
+     *
+     * @param string $orderId
+     * @return array|Transaction[]|null
+     */
     public function requestOrderTransactionInformation($orderId)
     {
         return $this->_gateway->requestOrderTransactionInformation($orderId) ?? null;
     }
 
+    /**
+     * Get Transaction Reference
+     *
+     * @param Order $order
+     * @return string|null
+     */
     public function getTransactionReference($order)
     {
         return ($transactions = $this->requestOrderTransactionInformation($order->getIncrementId()))
@@ -292,6 +341,8 @@ class Manager
     }
 
     /**
+     * Request Security Settings
+     *
      * @return mixed
      */
     public function requestSecuritySettings()
@@ -300,12 +351,23 @@ class Manager
         return $securitySettings->getHashingAlgorithm();
     }
 
-    private function cleanTransactionValue($transactionReference)
+    /**
+     * Clean the Transaction Value
+     *
+     * @param string|null $transactionReference
+     * @return mixed|string
+     */
+    private function cleanTransactionValue(string $transactionReference)
     {
         list($tr) = explode("-", $transactionReference ?: '');
         return $tr;
     }
 
+    /**
+     * Get the Payment Method Request
+     *
+     * @return AbstractRequest|void
+     */
     protected function _getPaymentMethodRequest()
     {
         $className = $this->_methodInstance->getConfigData('payment_method');
@@ -315,24 +377,44 @@ class Manager
     }
 
     /**
-     * @param  \HiPay\Fullservice\Request\RequestInterface $request
+     * Convert the request object to an array
+     *
+     * @param  RequestInterface $request
      * @return array
      */
-    protected function _requestToArray(\HiPay\Fullservice\Request\RequestInterface $request)
+    protected function _requestToArray(RequestInterface $request)
     {
         return (new RequestSerializer($request))->toArray();
     }
 
+    /**
+     * Debug
+     *
+     * @param array $debugData
+     * @return void
+     */
     protected function _debug($debugData)
     {
         $this->_methodInstance->debugData($debugData);
     }
 
+    /**
+     * Get Payment
+     *
+     * @return false|float|DataObject|OrderPaymentInterface|mixed|null
+     */
     protected function _getPayment()
     {
         return $this->_order->getPayment();
     }
 
+    /**
+     * Get Request Object
+     *
+     * @param string $requestClassName
+     * @param array|null $params
+     * @return AbstractRequest
+     */
     protected function _getRequestObject($requestClassName, array $params = null)
     {
         if ($params === null) {
@@ -341,6 +423,11 @@ class Manager
         return $this->_requestFactory->create($requestClassName, $params)->getRequestObject();
     }
 
+    /**
+     * Get the Request Parameters
+     *
+     * @return array[]
+     */
     protected function _getRequestParameters()
     {
         return [
@@ -352,6 +439,7 @@ class Manager
     }
 
     /**
+     * Request Operation
      *
      * @param  string      $operationType
      * @param  float|null  $amount
@@ -380,7 +468,10 @@ class Manager
         $params['params']['operation'] = $operationType;
         $params['params']['paymentMethod'] = $this->_getPaymentMethodRequest();
 
-        $maintenanceRequest = $this->_getRequestObject('\HiPay\FullserviceMagento\Model\Request\Maintenance', $params);
+        $maintenanceRequest = $this->_getRequestObject(
+            \HiPay\FullserviceMagento\Model\Request\Maintenance::class,
+            $params
+        );
         $maintenanceRequest->operation_id = $operationId;
         $this->_debug($this->_requestToArray($maintenanceRequest));
 
@@ -394,6 +485,8 @@ class Manager
     }
 
     /**
+     * Count By Transactions Type
+     *
      * @param  int $transactionType
      * @param  int $paymentId
      * @return int
@@ -409,13 +502,20 @@ class Manager
         return $this->_transactionRepositoryInterface->getList($searchCriteria)->getTotalCount();
     }
 
+    /**
+     * Request Payment Product
+     *
+     * @param array $paymentProduct
+     * @param bool $withOptions
+     * @return array|AvailablePaymentProduct[]
+     */
     public function requestPaymentProduct($paymentProduct = [], $withOptions = false)
     {
         $params = $this->_getRequestParameters();
         $params['params']['payment_product'] = $paymentProduct;
         $params['params']['with_options'] = $withOptions;
         $paymentProductRequest = $this->_getRequestObject(
-            '\HiPay\FullserviceMagento\Model\Request\Info\AvailablePaymentProduct',
+            \HiPay\FullserviceMagento\Model\Request\Info\AvailablePaymentProduct::class,
             $params
         );
 

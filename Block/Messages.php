@@ -16,10 +16,16 @@
 
 namespace HiPay\FullserviceMagento\Block;
 
+use Magento\Customer\Model\Session;
+use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\Factory;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+use Magento\Framework\View\Element\Template\Context;
+
 /**
  * Hipay Fullservice messages block
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -28,28 +34,28 @@ class Messages extends \Magento\Framework\View\Element\Messages
 {
     /**
      *
-     * @var \Magento\Customer\Model\Session $customerSession
+     * @var Session $customerSession
      */
     protected $customerSession;
 
     /**
      * Messages constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context                        $context
-     * @param \Magento\Framework\Message\Factory                                      $messageFactory
-     * @param \Magento\Framework\Message\CollectionFactory                            $collectionFactory
-     * @param \Magento\Framework\Message\ManagerInterface                             $messageManager
-     * @param \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy
-     * @param \Magento\Customer\Model\Session                                         $customerSession
-     * @param array                                                                   $data
+     * @param Context                         $context
+     * @param Factory                         $messageFactory
+     * @param CollectionFactory               $collectionFactory
+     * @param ManagerInterface                $messageManager
+     * @param InterpretationStrategyInterface $interpretationStrategy
+     * @param Session                         $customerSession
+     * @param array                           $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Message\Factory $messageFactory,
-        \Magento\Framework\Message\CollectionFactory $collectionFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\View\Element\Message\InterpretationStrategyInterface $interpretationStrategy,
-        \Magento\Customer\Model\Session $customerSession,
+        Context $context,
+        Factory $messageFactory,
+        CollectionFactory $collectionFactory,
+        ManagerInterface $messageManager,
+        InterpretationStrategyInterface $interpretationStrategy,
+        Session $customerSession,
         array $data = []
     ) {
         parent::__construct(
@@ -64,6 +70,8 @@ class Messages extends \Magento\Framework\View\Element\Messages
     }
 
     /**
+     * Prepare layout and display HiPay MOTO transaction messages.
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -77,6 +85,11 @@ class Messages extends \Magento\Framework\View\Element\Messages
         return parent::_prepareLayout();
     }
 
+    /**
+     * Display success or error messages for MOTO transactions.
+     *
+     * @return void
+     */
     protected function validateMoto()
     {
 

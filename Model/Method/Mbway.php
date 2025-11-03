@@ -24,7 +24,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * MB Way payment method
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -43,6 +42,12 @@ class Mbway extends AbstractMethodAPI
      */
     protected $_code = self::HIPAY_METHOD_CODE;
 
+    /**
+     * Validate the billing phone number format for MB Way, enforcing Portuguese national rules.
+     *
+     * @return $this|Mbway
+     * @throws LocalizedException
+     */
     public function validate()
     {
         parent::validate();

@@ -22,6 +22,8 @@ use HiPay\FullserviceMagento\Model\ResourceModel\Notification\Collection;
 use HiPay\FullserviceMagento\Model\Queue\Notification\Publisher;
 use HiPay\FullserviceMagento\Model\Config;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
 use Magento\Framework\Logger\Monolog;
 
@@ -30,7 +32,6 @@ use Magento\Framework\Logger\Monolog;
  *
  * Used to process notifications via background process
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -67,6 +68,16 @@ class ProcessNotifications
      */
     protected $_checkoutSession;
 
+    /**
+     * @param Collection $notificationCollection
+     * @param Publisher $publisher
+     * @param Config $hipayConfig
+     * @param Session $checkoutSession
+     * @param ResourceOrder $orderResource
+     * @param Monolog $logger
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
     public function __construct(
         Collection $notificationCollection,
         Publisher $publisher,
@@ -86,6 +97,11 @@ class ProcessNotifications
         $this->_hipayConfig->setStoreId($storeId);
     }
 
+    /**
+     * Process pending HiPay notifications in priority order and dispatch them to the message queue.
+     *
+     * @return void
+     */
     public function execute()
     {
         $cronModeActivated = $this->_hipayConfig->isNotificationCronActive();
@@ -162,8 +178,7 @@ class ProcessNotifications
             // Inject notifications in progress in array if exists since 1 day
             $yesterday = new \DateTime('- 1 day');
             $notifications = array_filter($notifications, function (Notification $notification) use ($yesterday) {
-                if (
-                    $notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
+                if ($notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
                     || $notification->getCreatedAt() < $yesterday
                 ) {
                     return true;

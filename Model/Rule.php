@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model;
 /**
  * Hipay Rule data model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -88,7 +87,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('HiPay\FullserviceMagento\Model\ResourceModel\Rule');
+        $this->_init(\HiPay\FullserviceMagento\Model\ResourceModel\Rule::class);
         $this->setIdFieldName('rule_id');
     }
 
@@ -114,6 +113,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         return $this->_condProdCombineF->create();
     }
 
+    /**
+     * Generate a sanitized HTML ID by replacing slashes in the config path with underscores.
+     *
+     * @return array|string|string[]
+     */
     protected function _getHtmlId()
     {
         return str_replace("/", "_", $this->getConfigPath());

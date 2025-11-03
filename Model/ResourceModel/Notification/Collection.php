@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\ResourceModel\Notification;
 /**
  * Notification resource Collection
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -34,8 +33,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            'HiPay\FullserviceMagento\Model\Notification',
-            'HiPay\FullserviceMagento\Model\ResourceModel\Notification'
+            \HiPay\FullserviceMagento\Model\Notification::class,
+            \HiPay\FullserviceMagento\Model\ResourceModel\Notification::class
         );
     }
 

@@ -16,11 +16,19 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
 
+use DateTime;
+use HiPay\FullserviceMagento\Helper\Data;
+use HiPay\FullserviceMagento\Helper\Notification;
+use HiPay\FullserviceMagento\Model\Config;
+use HiPay\FullserviceMagento\Model\Config\Factory;
+use Magento\AdminNotification\Model\InboxFactory;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\HTTP\Client\Curl;
+
 /**
 /**
  * Update notification block
  *
- * @author    Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -34,27 +42,35 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 
     protected const MESSAGE_IDENTITY = 'HipPay Version Notification';
 
+    /**
+     * @var Session
+     */
     protected $_authSession;
 
     /**
-     * @var \HiPay\FullserviceMagento\Helper\Data $_helper
+     * @var Data $_helper
      */
     protected $_helper;
 
     /**
-     * @var \HiPay\FullserviceMagento\Helper\Notification $_notifHelper
+     * @var Notification $_notifHelper
      */
     protected $_notifHelper;
 
     /**
-     * @var \Magento\AdminNotification\Model\InboxFactory $_inbox
+     * @var InboxFactory $_inbox
      */
     protected $_inbox;
 
     /**
-     * @var \HiPay\FullserviceMagento\Model\Config
+     * @var Config
      */
     protected $_config;
+
+    /**
+     * @var Curl
+     */
+    protected $curl;
 
     /**
      * @var DateTime $lastGithubPoll Last time gitHub API was called
@@ -81,18 +97,28 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
      */
     private $readMeUrl;
 
+    /**
+     * @param Session      $authSession
+     * @param Data         $hipayHelper
+     * @param Notification $hipayNotificationHelper
+     * @param InboxFactory $inboxFactory
+     * @param Factory      $configFactory
+     * @param Curl         $curl
+     */
     public function __construct(
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \HiPay\FullserviceMagento\Helper\Data $hipayHelper,
-        \HiPay\FullserviceMagento\Helper\Notification $hipayNotificationHelper,
-        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
-        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+        Session      $authSession,
+        Data         $hipayHelper,
+        Notification $hipayNotificationHelper,
+        InboxFactory $inboxFactory,
+        Factory      $configFactory,
+        Curl         $curl
     ) {
         $this->_authSession = $authSession;
         $this->_helper = $hipayHelper;
         $this->_notifHelper = $hipayNotificationHelper;
         $this->_inbox = $inboxFactory;
         $this->_config = $configFactory->create();
+        $this->curl = $curl;
     }
 
     /**
@@ -115,14 +141,14 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
              *
              * Solution : max 1 call per hour
              */
-            $this->lastGithubPoll = \DateTime::createFromFormat(self::DATE_FORMAT, $lastResult->lastCall);
+            $this->lastGithubPoll = DateTime::createFromFormat(self::DATE_FORMAT, $lastResult->lastCall);
 
             // If not, setting default data with values not showing the block
         } else {
             $this->newVersion = $this->version;
-            $this->newVersionDate = \DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
+            $this->newVersionDate = DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
             $this->readMeUrl = "#";
-            $this->lastGithubPoll = \DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
+            $this->lastGithubPoll = DateTime::createFromFormat(self::DATE_FORMAT, "01/01/1990 00:00:00");
         }
     }
 
@@ -146,28 +172,36 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
         // We read info from the saved configuration first, to have values even if GitHub doesn't answer properly
         $this->readFromConf();
 
-        $curdate = new \DateTime();
+        $curdate = new DateTime();
 
         /*
          * PT1H => Interval of 1 hour
          * https://www.php.net/manual/en/dateinterval.construct.php
          */
         if ($this->lastGithubPoll->add(new \DateInterval("PT1H")) < $curdate) {
-            // Request GitHub with curl
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, self::HIPAY_GITHUB_MAGENTO2_LATEST);
+            // Request GitHub with Magento's HTTP Client
+            $this->curl->setTimeout(3);
+            $this->curl->addHeader('User-Agent', 'PHP');
+
             if ($githubToken = getenv('GITHUB_API_TOKEN')) {
-                curl_setopt($ch, CURLOPT_HEADER, 1);
-                curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                    'Authorization' => 'token ' . $githubToken
-                ]);
+                $this->curl->addHeader('Authorization', 'token ' . $githubToken);
             }
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'PHP');
-            $res = curl_exec($ch);
-            curl_close($ch);
-            $gitHubInfo = @json_decode($res ?: '');
+
+            try {
+                $this->curl->get(self::HIPAY_GITHUB_MAGENTO2_LATEST);
+                $res = $this->curl->getBody();
+            } catch (\Exception $e) {
+                $res = '';
+            }
+
+            // Decode JSON without error suppression
+            $gitHubInfo = null;
+            if ($res !== false && $res !== '') {
+                $gitHubInfo = json_decode($res);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $gitHubInfo = null;
+                }
+            }
 
             // If call is successful, reading from call
             if ($gitHubInfo) {
@@ -188,20 +222,19 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
 
         $message = __(
             "We advise you to update the extension if you wish to get the " .
-            "latest fixes and evolutions. " .
-            "To update the extension, please click here : "
+                "latest fixes and evolutions. " .
+                "To update the extension, please click here : "
         ) .  $this->readMeUrl;
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
-        $versionData[] = array(
+        $versionData[] = [
             'severity' => $this->getSeverity(),
             'date_added' => $this->newVersionDate,
             'title' => $title,
             'description' => $message,
             'url' => $this->readMeUrl,
-        );
+        ];
 
-        if (
-            $this->version != $this->newVersion
+        if ($this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
         ) {
             $this->_inbox->create()->parse(array_reverse($versionData));
@@ -210,8 +243,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
          * This will compare the currently installed version with the latest available one.
          * A message will appear after the login if the two are not matching.
          */
-        if (
-            $this->version != $this->newVersion
+        if ($this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
         ) {
             return true;
@@ -229,8 +261,8 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
     {
         $message = __(
             "We advise you to update the extension if you wish to get the " .
-            "latest fixes and evolutions. " .
-            "To update the extension, please click here : "
+                "latest fixes and evolutions. " .
+                "To update the extension, please click here : "
         ) . "<a href='" . $this->readMeUrl . "' target='_blank'>" . $this->readMeUrl . "</a>";
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
 

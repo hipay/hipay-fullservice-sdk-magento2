@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * Source model for Magento
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -74,29 +73,34 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
             $methods = $carrier->getAllowedMethods();
             foreach ($methods as $code => $method) {
                 if (is_object($method)) {
-                    $options[] = array(
+                    $options[] = [
                         'value' => $carrier->getId() . '_' . $code,
                         'label' => $carrier->getId() . ' - ' . $method->getText()
-                    );
+                    ];
                 } else {
                     if (!empty($method)) {
-                        $options[] = array(
+                        $options[] = [
                             'value' => $carrier->getId() . '_' . $code,
                             'label' => $carrier->getId() . ' - ' . $method
-                        );
+                        ];
                     }
                 }
             }
         }
 
-        $options[] = array(
+        $options[] = [
             'value' => 'hipay_shipping_custom',
             'label' => __('Custom shipping code')
-        );
+        ];
 
         return $options;
     }
 
+    /**
+     * Return active shipping carriers as value-label pairs
+     *
+     * @return array
+     */
     public function getCarriers()
     {
         $carriersArray = [];
@@ -107,10 +111,10 @@ class ShippingMethodsMagento implements \Magento\Framework\Option\ArrayInterface
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
 
-            $carriersArray[] = array(
+            $carriersArray[] = [
                 'label' => $carrierTitle,
                 'code' => $carrier->getId()
-            );
+            ];
         }
 
         return $carriersArray;

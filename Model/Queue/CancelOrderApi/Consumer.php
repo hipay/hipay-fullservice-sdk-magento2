@@ -26,7 +26,6 @@ use HiPay\FullserviceMagento\Model\Queue\CancelOrderApi\Publisher as CancelOrder
 /**
  * Queue consumer for HiPay Cancel Order Api
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -74,6 +73,8 @@ class Consumer
     }
 
     /**
+     * Cancel an order by ID using the gateway API
+     *
      * @param string $id
      * @return void
      * @throws \Exception

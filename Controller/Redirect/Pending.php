@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\View\Result\Page;
 
 /**
  * Pending controller
@@ -25,7 +26,6 @@ use Magento\Framework\Controller\ResultFactory;
  * Display pending reviex page
  * Redirection on this page occur when payment is in pending review (Challenge transaction)
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -33,7 +33,9 @@ use Magento\Framework\Controller\ResultFactory;
 class Pending extends Fullservice
 {
     /**
-     * @return                                       \Magento\Framework\View\Result\Page
+     * Display the pending review page after a challenge transaction
+     *
+     * @return Page
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -42,8 +44,8 @@ class Pending extends Fullservice
         $this->_checkoutSession->setErrorMessage('');
 
         /**
- * @var \Magento\Framework\View\Result\Page $resultPage
-*/
+         * @var Page $resultPage
+         */
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         return $resultPage;
     }

@@ -40,13 +40,18 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  *
  * Add invoice to payment info on capture to send real amount to the gateway (multi-currency)
  *
- * @author    HiPay <support.tpp@hipay.com>
  * @copyright Copyright (c) 2018 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class SalesOrderPaymentCaptureObserver implements ObserverInterface
 {
+    /**
+     * Attach the captured invoice to the payment transaction for gateway processing.
+     *
+     * @param EventObserver $observer
+     * @return void
+     */
     public function execute(EventObserver $observer)
     {
         $payment = $observer->getPayment();

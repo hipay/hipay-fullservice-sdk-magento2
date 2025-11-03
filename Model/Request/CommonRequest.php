@@ -16,6 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model\Request;
 
+use HiPay\FullserviceMagento\Model\Cart\CartFactory;
 use HiPay\FullserviceMagento\Model\Cart\DeliveryInformation;
 use HiPay\FullserviceMagento\Model\Config as HiPayConfig;
 use HiPay\FullserviceMagento\Model\Request\AbstractRequest as BaseRequest;
@@ -23,8 +24,18 @@ use HiPay\Fullservice\Gateway\Model\Cart\Cart as Cart;
 use HiPay\Fullservice\Gateway\Model\Cart\Item as Item;
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use HiPay\Fullservice\Enum\Transaction\Operation;
+use HiPay\FullserviceMagento\Model\Request\Type\Factory;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Setup\Exception;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Commmon Request Object
@@ -44,25 +55,24 @@ abstract class CommonRequest extends BaseRequest
     protected const DEFAULT_PRODUCT_CATEGORY = 1;
 
     /**
-     * Order
-     *
      * @var \Magento\Sales\Model\Order
      */
     protected $_order;
 
     /**
-     * Payment Method
-     *
      * @var \HiPay\Fullservice\Request\AbstractRequest
      */
     protected $_paymentMethod;
 
-    protected $_ccTypes = array(
+    /**
+     * @var string[]
+     */
+    protected $_ccTypes = [
         'VI' => 'visa',
         'AE' => 'american-express',
         'MC' => 'mastercard',
         'MI' => 'maestro'
-    );
+    ];
 
     /**
      * @var \HiPay\FullserviceMagento\Helper\Data
@@ -75,7 +85,7 @@ abstract class CommonRequest extends BaseRequest
     protected $weeeHelper;
 
     /**
-     * @var
+     * @var CartFactory
      */
     protected $_cartFactory;
 
@@ -85,7 +95,7 @@ abstract class CommonRequest extends BaseRequest
     protected $_productRepositoryInterface;
 
     /**
-     * @var
+     * @var CollectionFactory
      */
     protected $_mappingCategoriesCollectionFactory;
 
@@ -95,9 +105,23 @@ abstract class CommonRequest extends BaseRequest
     protected $_categoryFactory;
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
-     * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
+     * @param LoggerInterface $logger
+     * @param Data $checkoutData
+     * @param Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param ResolverInterface $localeResolver
+     * @param Factory $requestFactory
+     * @param UrlInterface $urlBuilder
+     * @param \HiPay\FullserviceMagento\Helper\Data $helper
+     * @param CartFactory $cartFactory
+     * @param \Magento\Weee\Helper\Data $weeeHelper
+     * @param ProductRepositoryInterface $productRepositoryInterface
+     * @param CollectionFactory $mappingCategoriesCollectionFactory
+     * @param CategoryFactory $categoryFactory
+     * @param array $params
+     * @throws LocalizedException
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
@@ -113,7 +137,7 @@ abstract class CommonRequest extends BaseRequest
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepositoryInterface,
         CollectionFactory $mappingCategoriesCollectionFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        $params = []
+        array $params = []
     ) {
         parent::__construct(
             $logger,
@@ -140,8 +164,7 @@ abstract class CommonRequest extends BaseRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (
-            isset($params['paymentMethod'])
+        if (isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];
@@ -166,7 +189,7 @@ abstract class CommonRequest extends BaseRequest
     /**
      *  Build an Cart Json
      *
-     * @param  null $operation
+     * @param  mixed|string|null $operation
      * @param  bool $useOrderCurrency
      * @return mixed
      * @throws \Exception
@@ -235,7 +258,7 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
-                    if (in_array($operation, array(Operation::REFUND, Operation::CAPTURE)) && $amount == 0) {
+                    if (in_array($operation, [Operation::REFUND, Operation::CAPTURE]) && $amount == 0) {
                         break;
                     }
                     $itemHipay = Item::buildItemTypeFees(
@@ -265,10 +288,10 @@ abstract class CommonRequest extends BaseRequest
     /**
      *  Get mapping from Magento category for Hipay compliance
      *
-     * @param  $product
+     * @param ProductInterface $product
      * @return int|null code category Hipay
      */
-    protected function getMappingCategory($product)
+    protected function getMappingCategory(ProductInterface $product)
     {
         $mapping_id = null;
         $categories = $product->getCategoryIds();

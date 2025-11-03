@@ -18,36 +18,36 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-	<group id="hipay_multibanco" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
-		<label>HiPay Enterprise Multibanco</label>
-		<comment></comment>
-		<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
-		<field id="time_limit_to_pay" translate="label" type="text" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>Period of validity of the payment page</label>
-			<comment>In hours</comment>
-		</field>
-		<field id="multibanco_order_expiration_time" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-			<label>Order expiration date</label>
-			<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes</source_model>
-		</field>
-		<!-- custom fields or override of hosted/Cc -->
-		<field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-			<label>Display hosted page in Iframe</label>
-			<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-		</field>
-		<field id="iframe_width" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>iFrame Width</label>
-		</field>
-		<field id="iframe_height" translate="label" type="text" sortOrder="104" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>iFrame Height</label>
-		</field>
-		<field id="iframe_style" translate="label" type="text" sortOrder="106" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>iFrame Style</label>
-		</field>
-		<field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>Wrapper iFrame Style</label>
-		</field>
+    <group id="hipay_multibanco" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+        <label>HiPay Enterprise Multibanco</label>
+        <comment></comment>
+        <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+        <field id="time_limit_to_pay" translate="label" type="text" sortOrder="77" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Period of validity of the payment page</label>
+            <comment>In hours</comment>
+        </field>
+        <field id="multibanco_order_expiration_time" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Order expiration date</label>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes</source_model>
+        </field>
+        <!-- custom fields or override of hosted/Cc -->
+        <field id="iframe_mode" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+            <label>Display hosted page in Iframe</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="iframe_width" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Width</label>
+        </field>
+        <field id="iframe_height" translate="label" type="text" sortOrder="104" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Height</label>
+        </field>
+        <field id="iframe_style" translate="label" type="text" sortOrder="106" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>iFrame Style</label>
+        </field>
+        <field id="iframe_wrapper_style" translate="label" type="text" sortOrder="108" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Wrapper iFrame Style</label>
+        </field>
         <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
-		<include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-	</group>
+        <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
+    </group>
 </include>

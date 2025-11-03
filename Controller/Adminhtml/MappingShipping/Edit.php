@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
 use HiPay\FullserviceMagento\Model\MappingShipping\Factory;
 use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Backend\Model\View\Result\Redirect;
@@ -27,16 +28,14 @@ use Magento\Framework\View\Result\PageFactory;
 /**
  * Edit Mappin Shipping
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Edit extends Action
 {
+
     /**
-     * Core registry
-     *
      * @var Registry
      */
     protected $_coreRegistry = null;
@@ -57,13 +56,11 @@ class Edit extends Action
     private $backendSession;
 
     /**
-     * Edit constructor.
-     *
-     * @param Action\Context    $context
-     * @param PageFactory   $resultPageFactory
-     * @param Registry  $registry
-     * @param Factory   $mappingShippingFactory
-     * @param Session   $backendSession
+     * @param Context     $context
+     * @param PageFactory $resultPageFactory
+     * @param Registry    $registry
+     * @param Factory     $mappingShippingFactory
+     * @param Session     $backendSession
      */
     public function __construct(
         Action\Context $context,

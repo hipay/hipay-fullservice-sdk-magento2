@@ -16,16 +16,20 @@
 
 namespace HiPay\FullserviceMagento\Model\Rule\Condition;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 /**
  * Product rule condition data model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 {
+    /**
+     * @var mixed
+     */
     protected $methodCode = null;
 
     /**
@@ -69,6 +73,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         return parent::validate($product);
     }
 
+    /**
+     * Set Method Code
+     *
+     * @param mixed $methodCode
+     * @return $this
+     */
     public function setMethodCode($methodCode)
     {
         $this->methodCode = $methodCode;
@@ -76,6 +86,12 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         return $this;
     }
 
+    /**
+     * Set Config Path
+     *
+     * @param mixed $configPath
+     * @return $this
+     */
     public function setConfigPath($configPath)
     {
         $this->elementName = 'rule_' . $configPath;
@@ -84,6 +100,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
+     * Create and return a hidden form element for the condition type
+     *
      * @return AbstractElement
      */
     public function getTypeElement()
@@ -101,7 +119,9 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
     }
 
     /**
-     * @return $this
+     * Create and return a select form element for the condition attribute
+     *
+     * @return AbstractElement
      */
     public function getAttributeElement()
     {
@@ -121,7 +141,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 'value_name' => $this->getAttributeName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
         $elt->setShowAsText(true);
         return $elt;
@@ -129,6 +149,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
 
     /**
      * Retrieve Condition Operator element Instance
+     *
      * If the operator value is empty - define first available operator value as default
      *
      * @return \Magento\Framework\Data\Form\Element\Select
@@ -155,13 +176,15 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 'value_name' => $this->getOperatorName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
 
     /**
-     * @return $this
+     * Create and return the form element used to input the condition value, with support for date formatting.
+     *
+     * @return AbstractElement
      */
     public function getValueElement()
     {

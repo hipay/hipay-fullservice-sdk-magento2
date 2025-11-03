@@ -23,7 +23,6 @@ use Magento\Directory\Model;
 /**
  * SDD Method
  *
- * @author                                           Kassim Belghait <kassim@sirateck.com>
  * @copyright                                        Copyright (c) 2016 - HiPay
  * @license                                          http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link                                             https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -120,7 +119,7 @@ class Sdd extends LocalHostedFields
 
         // Instantiate validators for the model
         $validatorIban = new \Laminas\Validator\Iban(
-            array('country_code' => $order->getBillingAddress()->getCountryId())
+            ['country_code' => $order->getBillingAddress()->getCountryId()]
         );
         $validatorEmpty = new \Laminas\Validator\NotEmpty();
 

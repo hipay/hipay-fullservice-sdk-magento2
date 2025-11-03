@@ -21,7 +21,6 @@ use HiPay\Fullservice\Gateway\Request\Info\CustomerBillingInfoRequest;
 /**
  * Billing info Request Object
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -39,7 +38,7 @@ class BillingInfo extends AbstractInfoRequest
     protected const KEY_LASTNAME = 'lastname';
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      *
      * @return CustomerBillingInfoRequest
      * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
@@ -86,10 +85,11 @@ class BillingInfo extends AbstractInfoRequest
     }
 
     /**
-     *  AMEX needs similar cardholder between tokenization and transaction
+     * AMEX needs similar cardholder between tokenization and transaction
      *
-     * @param $customerBillingInfo
+     * @param CustomerBillingInfoRequest $customerBillingInfo
      * @param BillingInfo $billingAddress
+     * @return void
      */
     private function mapCardHolder(&$customerBillingInfo, $billingAddress)
     {
@@ -100,11 +100,10 @@ class BillingInfo extends AbstractInfoRequest
         $firstName = $billingAddress->getFirstname();
         $lastName = $billingAddress->getLastname();
         $theoricCardHolder = $firstName . ' ' . $lastName;
-        if (
-            $cardOwner
+        if ($cardOwner
             && count($partsCardOwner) > 1
             && ( $ccType == 'AE' || $ccType == 'american-express')
-            && (self::stripAccents($theoricCardHolder) != self::stripAccents($cardOwner))
+            && ($this->stripAccents($theoricCardHolder) != $this->stripAccents($cardOwner))
         ) {
             $firstName = $this->extractPartOfCardHolder($cardOwner, self::KEY_FIRSTNAME);
             $lastName = $this->extractPartOfCardHolder($cardOwner, self::KEY_LASTNAME);
@@ -135,11 +134,12 @@ class BillingInfo extends AbstractInfoRequest
     }
 
     /**
+     * Remove accents from a UTF-8 string by character replacement.
      *
-     * @param  $str
+     * @param string $str
      * @return string
      */
-    private static function stripAccents($str)
+    private function stripAccents(string $str)
     {
         return strtr(
             mb_convert_encoding($str, 'UTF-8', 'ISO-8859-1'),

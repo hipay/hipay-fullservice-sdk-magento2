@@ -19,85 +19,106 @@ interface NotificationInterface
     public const STATE = 'state';
 
     /**
-     * Gets Notification ID
+     * Gets Notification ID.
+     *
      * @return int|null
      */
     public function getNotificationId();
 
     /**
-     * Sets Notification ID
+     * Sets Notification ID.
+     *
+     * @param int $notificationId
      * @return $this
      */
     public function setNotificationId($notificationId);
 
     /**
-     * Gets Status
+     * Gets Status.
+     *
      * @return string|null
      */
     public function getStatus();
 
     /**
-     * Sets Status
+     * Sets Status.
+     *
+     * @param string $status
      * @return $this
      */
     public function setStatus($status);
 
     /**
-     * Gets Content
+     * Gets Content.
+     *
      * @return string|null
      */
     public function getContent();
 
     /**
-     * Sets Content
+     * Sets Content.
+     *
+     * @param string $content
      * @return $this
      */
     public function setContent($content);
 
     /**
-     * Gets Hipay Created At
+     * Gets Hipay Created At.
+     *
      * @return \DateTime|null
      */
     public function getHipayCreatedAt();
 
     /**
-     * Sets Hipay Created At
+     * Sets Hipay Created At.
+     *
+     * @param \DateTime $hipayCreatedAt
      * @return $this
      */
     public function setHipayCreatedAt($hipayCreatedAt);
 
     /**
-     * Gets Created At
+     * Gets Created At.
+     *
      * @return \DateTime|null
      */
     public function getCreatedAt();
 
     /**
-     * Sets Created At
+     * Sets Created At.
+     *
+     * @param \DateTime $createdAt
      * @return $this
      */
     public function setCreatedAt($createdAt);
 
     /**
-     * Gets Attempts
+     * Gets Attempts.
+     *
      * @return int|null
      */
     public function getAttempts();
 
     /**
-     * Sets Attempts
+     * Sets Attempts.
+     *
+     * @param int $attempts
      * @return $this
      */
     public function setAttempts($attempts);
 
     /**
-     * Gets State
+     * Gets State.
+     *
      * @return string|null
      */
     public function getState();
 
     /**
-     * Sets State
+     * Sets State.
+     *
+     * @param string $state
      * @return $this
      */
     public function setState($state);

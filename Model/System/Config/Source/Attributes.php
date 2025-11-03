@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * Source model for available attributes
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -61,7 +60,7 @@ class Attributes extends \Magento\Framework\DataObject implements \Magento\Frame
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function toOptionArray()
     {

@@ -16,10 +16,13 @@
 
 namespace HiPay\FullserviceMagento\Block\Cc;
 
+use HiPay\FullserviceMagento\Model\Config\Factory;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Payment\Model\Config;
+
 /**
  * Block CC from
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -39,22 +42,22 @@ class Form extends \Magento\Payment\Block\Form\Cc
 
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Config\Factory $configFactory
+     * @var Factory $configFactory
      */
     protected $configFactory;
 
     /**
      * Form constructor.
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Payment\Model\Config                    $paymentConfig
-     * @param \HiPay\FullserviceMagento\Model\Config\Factory   $configFactory
-     * @param array                                            $data
+     * @param Context $context
+     * @param Config  $paymentConfig
+     * @param Factory $configFactory
+     * @param array   $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Payment\Model\Config $paymentConfig,
-        \HiPay\FullserviceMagento\Model\Config\Factory $configFactory,
+        Context $context,
+        Config $paymentConfig,
+        Factory $configFactory,
         array $data = []
     ) {
         parent::__construct($context, $paymentConfig, $data);
@@ -62,6 +65,8 @@ class Form extends \Magento\Payment\Block\Form\Cc
     }
 
     /**
+     * Retrieve HiPay configuration
+     *
      * @return \HiPay\FullserviceMagento\Model\Config
      */
     public function getConfig()
@@ -88,21 +93,41 @@ class Form extends \Magento\Payment\Block\Form\Cc
         return false;
     }
 
+    /**
+     * Get current API environment
+     *
+     * @return string|null
+     */
     public function getEnv()
     {
         return $this->getConfig()->getApiEnv();
     }
 
+    /**
+     * Get API username from configuration
+     *
+     * @return mixed|string
+     */
     public function getApiUsername()
     {
         return $this->getConfig()->getApiUsername();
     }
 
+    /**
+     * Get API password from configuration
+     *
+     * @return mixed|string
+     */
     public function getApiPassword()
     {
         return $this->getConfig()->getApiPassword();
     }
 
+    /**
+     * Get SDK JavaScript URL
+     *
+     * @return bool
+     */
     public function getSdkJsUrl()
     {
         return $this->getConfig()->getSdkJsUrl();

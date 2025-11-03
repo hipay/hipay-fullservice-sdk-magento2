@@ -17,61 +17,91 @@
  *
  */
 
-// @codingStandardsIgnoreFile
 /** @var \HiPay\FullserviceMagento\Block\Card\Customerr\ListCard $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
+
+
 <?php if ($block->getCards() && count($block->getCards())): ?>
     <div class="table-wrapper cards">
         <table class="data table table-cards" id="my-cards-table">
-            <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Credit cards') ?></caption>
+            <caption class="table-caption">
+                <?= $escaper->escapeHtml(__('Credit cards')) ?>
+            </caption>
             <thead>
-                <tr>
-                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card name') ?></th>
-                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Exp. Date') ?></th>
-                    <th scope="col" class="col item"><?php /* @escapeNotVerified */ echo __('Card Number') ?></th>
-
-                    <th scope="col" class="col actions">&nbsp;</th>
-                </tr>
+            <tr>
+                <th scope="col" class="col item">
+                    <?= $escaper->escapeHtml(__('Card name')) ?>
+                </th>
+                <th scope="col" class="col item">
+                    <?= $escaper->escapeHtml(__('Exp. Date')) ?>
+                </th>
+                <th scope="col" class="col item">
+                    <?= $escaper->escapeHtml(__('Card Number')) ?>
+                </th>
+                <th scope="col" class="col actions">&nbsp;</th>
+            </tr>
             </thead>
             <tbody>
-            	<?php /** @var $_card \HiPay\FullserviceMagento\Model\Card */  ?>
-                <?php foreach ($block->getCards() as $_card): ?>
+            <?php foreach ($block->getCards() as $_card): ?>
                 <tr>
-                    <td data-th="<?php echo $block->escapeHtml(__('Card name')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getName()) ?></td>
-  					<td data-th="<?php echo $block->escapeHtml(__('Exp. Date')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcExpMonth()) . "/" . $block->escapeHtml($_card->getCcExpYear())  ?></td>
-					<td data-th="<?php echo $block->escapeHtml(__('Card Number')) ?>" class="col item"><?php /* @escapeNotVerified */ echo $block->escapeHtml($_card->getCcNumberEnc()) ?></td>
-                    <td data-th="<?php echo $block->escapeHtml(__('Actions')) ?>" class="col actions">
-                        <a class="action delete remove" role="delete-card" href="#" data-card="<?php /* @escapeNotVerified */ echo $_card->getCardId() ?>" >
-                            <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
+                    <td data-th="<?= $escaper->escapeHtml(__('Card name')) ?>" class="col item">
+                        <?= $escaper->escapeHtml($_card->getName()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtml(__('Exp. Date')) ?>" class="col item">
+                        <?= $escaper->escapeHtml($_card->getCcExpMonth()) ?>
+                        /<?= $escaper->escapeHtml($_card->getCcExpYear()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtml(__('Card Number')) ?>" class="col item">
+                        <?= $escaper->escapeHtml($_card->getCcNumberEnc()) ?>
+                    </td>
+                    <td data-th="<?= $escaper->escapeHtml(__('Actions')) ?>" class="col actions">
+                        <a class="action delete remove" role="delete-card" href="#"
+                           data-card="<?= $escaper->escapeHtmlAttr($_card->getCardId()) ?>">
+                            <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
                         </a>
                     </td>
                 </tr>
-                <?php endforeach; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>
+
     <?php if ($block->getToolbarHtml()): ?>
         <div class="toolbar products-cards-toolbar bottom">
-            <?php echo $block->getToolbarHtml() ?>
+            <?= $escaper->escapeHtml($block->getToolbarHtml()) ?>
         </div>
     <?php endif; ?>
 <?php else: ?>
-    <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have recorded no cards.') ?></span></div>
+    <div class="message info empty">
+        <span><?= $escaper->escapeHtml(__('You have recorded no cards.')) ?></span>
+    </div>
 <?php endif; ?>
+
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>">
-            <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
+        <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>">
+            <span><?= $escaper->escapeHtml(__('Back')) ?></span>
         </a>
     </div>
 </div>
+
 <script type="text/x-magento-init">
     {
         ".page-main": {
             "card": {
                 "deleteCard": "table.table-cards a[role='delete-card']",
-                "deleteUrlPrefix": "<?php /* @escapeNotVerified */ echo $block->getDeleteCardLink() ?>id/"
-            }
+                "deleteUrlPrefix": "<?= $escaper->escapeJs($block->getDeleteCardLink()) ?>id/"
         }
     }
+}
+</script>
+    {
+        ".page-main": {
+            "card": {
+                "deleteCard": "table.table-cards a[role='delete-card']",
+                "deleteUrlPrefix": "<?= $escaper->escapeJs($block->getDeleteCardLink()) ?>id/"
+        }
+    }
+}
 </script>

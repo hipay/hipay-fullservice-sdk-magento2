@@ -16,6 +16,9 @@
 
 namespace HiPay\FullserviceMagento\Helper;
 
+use Magento\AdminNotification\Model\ResourceModel\Inbox\Collection;
+use Magento\AdminNotification\Model\ResourceModel\Inbox\CollectionFactory;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
@@ -23,7 +26,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Notification Helper class
  *
- * @author    Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -40,6 +42,11 @@ class Notification extends AbstractHelper
      */
     private $_session;
 
+    /**
+     * @param Context $context
+     * @param Session $session
+     * @param CollectionFactory $inboxFactory
+     */
     public function __construct(
         Context $context,
         \Magento\Customer\Model\Session $session,
@@ -53,38 +60,44 @@ class Notification extends AbstractHelper
     /**
      * Returns boolean on whether the notification has already been added to the inbox or not
      *
-     * @param  $data Notification data
+     * @param  array $data Notification data
      * @return bool
      */
-    public function isNotificationAlreadyAdded($data)
+    public function isNotificationAlreadyAdded(array $data)
     {
         /**
-         * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
+         * @var Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
         $notificationCollection->addFieldToSelect(['notification_id']);
-        $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
+        $notificationCollection->addFieldToFilter('url', ["eq" => $data['url']]);
 
         return $notificationCollection->count() > 0;
     }
 
-    public function isNotificationAlreadyRead($data)
+    /**
+     * Check if a notification with the given URL has already been read and removed.
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function isNotificationAlreadyRead(array $data)
     {
         /**
-         * @var \Magento\AdminNotification\Model\ResourceModel\Inbox\Collection $notificationCollection
+         * @var Collection $notificationCollection
          */
         $notificationCollection = $this->_inboxFactory->create();
         $notificationCollection->addFieldToSelect(['notification_id']);
-        $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
+        $notificationCollection->addFieldToFilter('url', ["eq" => $data['url']]);
         $notificationCollection->addFieldToFilter(
-            array(
+            [
                 'is_read',
                 'is_remove'
-            ),
-            array(
-                array("eq" => 1),
-                array("eq" => 1)
-            )
+            ],
+            [
+                ["eq" => 1],
+                ["eq" => 1]
+            ]
         );
 
         return $notificationCollection->count() > 0;

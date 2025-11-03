@@ -26,7 +26,6 @@ use HiPay\FullserviceMagento\Model\Config;
  *
  * Used to set custom state and status to the order
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -35,6 +34,7 @@ class OrderPaymentPlugin
 {
     /**
      * Run HiPay accept payment
+     *
      * Used to set custom status and state when order is accepted
      *
      * @param \Magento\Sales\Model\Order\Payment $subject
@@ -71,6 +71,7 @@ class OrderPaymentPlugin
 
     /**
      * Run HiPay deny payment
+     *
      * Used to set custom status and state when order is denied
      *
      * @param  Order\Payment $subject
@@ -96,6 +97,7 @@ class OrderPaymentPlugin
     }
 
     /**
+     * Determine if the given payment method code corresponds to a HiPay method.
      *
      * @param  string $method
      * @return bool

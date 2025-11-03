@@ -20,9 +20,9 @@
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
 <group id="hipay_hosted_fields" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>HiPay Enterprise Credit Card Hosted Fields</label>
-				<comment></comment>
-				<include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
+                <label>HiPay Enterprise Credit Card Hosted Fields</label>
+                <comment></comment>
+                <include path="HiPay_FullserviceMagento::system/method/base_top.xml"/>
                 <field id="payment_action" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <label>Capture</label>
                     <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\PaymentActions</source_model>
@@ -96,5 +96,5 @@
                 </field>
                 <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
                 <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
-			</group>
+            </group>
 </include>

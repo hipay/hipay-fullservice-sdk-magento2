@@ -4,11 +4,16 @@ namespace HiPay\FullserviceMagento\Model\Cart;
 
 use HiPay\Fullservice\Enum\Cart\TypeItems;
 use HiPay\Fullservice\Enum\Transaction\Operation;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Payment\Model\Cart\SalesModel\Factory;
+use Magento\Payment\Model\Cart\SalesModel\SalesModelInterface;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Order\Payment;
+use Magento\Weee\Helper\Data;
 
 /**
  * Cart model
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -28,7 +33,7 @@ class Cart extends \Magento\Payment\Model\Cart
     protected $_operation;
 
     /**
-     * @var string
+     * @var Payment
      */
     protected $_payment;
 
@@ -45,20 +50,20 @@ class Cart extends \Magento\Payment\Model\Cart
     protected $_areAmountsValid = false;
 
     /**
-     * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
-     * @param \Magento\Framework\Event\ManagerInterface      $eventManager
-     * @param \Magento\Quote\Api\Data\CartInterface          $salesModel
-     * @param \Magento\Weee\Helper\Data                      $weeeHelper
-     * @param string                                         $operation
-     * @param string                                         $payment
+     * @param Factory $salesModelFactory
+     * @param ManagerInterface $eventManager
+     * @param Data $weeeHelper
+     * @param SalesModelInterface $salesModel
+     * @param string $operation
+     * @param Payment $payment
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Weee\Helper\Data $weeeHelper,
-        $salesModel,
-        $operation,
-        $payment
+        SalesModelInterface $salesModel,
+        string $operation,
+        Payment $payment
     ) {
         $this->_eventManager = $eventManager;
         $this->_salesModel = $salesModelFactory->create($salesModel);
@@ -113,8 +118,7 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-        if (
-            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+        if ($this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
             || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
         ) {
             $this->_processShippingAndDiscountItems($useOrderCurrency);
@@ -130,8 +134,7 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
-        if (
-            $this->_operation != Operation::REFUND
+        if ($this->_operation != Operation::REFUND
             && $this->_operation != Operation::CAPTURE
             && $this->getDiscount()
         ) {
@@ -195,13 +198,12 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Add Shipping and fee Item
      *
-     * @param  string $name
-     * @param  float  $amount
-     * @param  string $reference
-     * @param  string $description
-     * @param  string $taxPercent
-     * @param  string $type
-     * @param  string $productId
+     * @param string $name
+     * @param float $amount
+     * @param string $reference
+     * @param string $description
+     * @param string $taxPercent
+     * @param string $type
      * @return void
      * @api
      */
@@ -328,8 +330,7 @@ class Cart extends \Magento\Payment\Model\Cart
                     break;
             }
 
-            if (
-                $this->_operation != null
+            if ($this->_operation != null
                 && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)
             ) {
                 $qty = (int)$originalItem->getData('qty');
@@ -351,13 +352,12 @@ class Cart extends \Magento\Payment\Model\Cart
 
             //HiPay needs total amount with 3 decimals to match the correct total amount within 1 cent
             /**
- * @see Magento\Weee\Block\Item\Price
-*/
+             * @see Magento\Weee\Block\Item\Price
+             */
             $itemTotalInclTax = $this->getTotalPrice($originalItem, $useOrderCurrency);
 
             // Need better precision and unit price with reel tax application
-            if (
-                $this->_operation != null
+            if ($this->_operation != null
                 && ($this->_operation == Operation::CAPTURE
                 || $this->_operation == Operation::REFUND)
             ) {
@@ -411,7 +411,9 @@ class Cart extends \Magento\Payment\Model\Cart
     }
 
     /**
-     * @param  $originalItem
+     * Calculate the total item price including tax
+     *
+     * @param  Item|\Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item $originalItem
      * @param  bool $useOrderCurrency
      * @return mixed
      */
@@ -435,16 +437,16 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Create item object from item data
      *
-     * @param  string         $name
-     * @param  int            $qty
-     * @param  float          $amount
-     * @param  float          $price
-     * @param  float          $sku
-     * @param  string         $description
-     * @param  float          $taxPercent
-     * @param  float discount
-     * @param  string type
-     * @param  string         $productId
+     * @param string $name
+     * @param int $qty
+     * @param float $amount
+     * @param float $price
+     * @param float $sku
+     * @param string $description
+     * @param float $taxPercent
+     * @param float $discount
+     * @param string $type
+     * @param string $productId
      * @return \Magento\Framework\DataObject
      */
     protected function _createItemHipayFromData(
@@ -494,11 +496,11 @@ class Cart extends \Magento\Payment\Model\Cart
      * - run shopping cart and estimate shipping
      * - go to PayPal
      *
-     * @param \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity
-     * @param bool                                                       $useOrderCurrency
+     * @param SalesModelInterface $salesEntity
+     * @param bool $useOrderCurrency
      */
     protected function _applyDiscountTaxCompensationWorkaround(
-        \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface $salesEntity,
+        SalesModelInterface $salesEntity,
         $useOrderCurrency = false
     ) {
         $dataContainer = $salesEntity->getTaxContainer();
@@ -514,8 +516,8 @@ class Cart extends \Magento\Payment\Model\Cart
     /**
      * Calculate unit price for one product and quantity ( Get better precision )
      *
-     * @param  $itemTotalInclTax
-     * @param  $qty
+     * @param  float|mixed|null $itemTotalInclTax
+     * @param  int $qty
      * @return float
      */
     private function returnUnitPrice($itemTotalInclTax, $qty)

@@ -16,6 +16,8 @@
 
 namespace HiPay\FullserviceMagento\Block\Redirect;
 
+use Magento\Framework\Exception\LocalizedException;
+
 class Pending extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -57,6 +59,7 @@ class Pending extends \Magento\Framework\View\Element\Template
 
     /**
      * Order ID
+     *
      * @return string
      */
     public function getRealOrderId()
@@ -75,7 +78,9 @@ class Pending extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Returns locale code language of store
+     *  Returns locale code language of store
+     *
+     * @return string
      */
     public function getLang()
     {
@@ -92,6 +97,12 @@ class Pending extends \Magento\Framework\View\Element\Template
         return $this->_urlBuilder->getUrl('checkout/cart');
     }
 
+    /**
+     * Retrieve payment reference details for the last order
+     *
+     * @return mixed|string[]|null
+     * @throws LocalizedException
+     */
     public function getReferenceToPay()
     {
         $lastOrderId = $this->_checkoutSession->getLastOrderId();

@@ -22,7 +22,6 @@ use Psr\Log\LoggerInterface;
 /**
  * Queue publisher for HiPay notifications
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -41,12 +40,22 @@ class Publisher
      */
     protected $logger;
 
+    /**
+     * @param PublisherInterface $publisher
+     * @param LoggerInterface $logger
+     */
     public function __construct(PublisherInterface $publisher, LoggerInterface $logger)
     {
         $this->publisher = $publisher;
         $this->logger = $logger;
     }
 
+    /**
+     *  Publish an order ID to the cancel order API queue topic
+     *
+     * @param string $id
+     * @return void
+     */
     public function execute(string $id)
     {
         if ($id) {

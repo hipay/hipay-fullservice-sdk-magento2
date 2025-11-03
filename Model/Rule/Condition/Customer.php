@@ -21,7 +21,6 @@ use Magento\Framework\Convert\DataObject;
 /**
  * Rule Customer Class
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -46,6 +45,9 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
      */
     protected $_orderFactory;
 
+    /**
+     * @var mixed|string|null
+     */
     protected $methodCode = null;
 
     /**
@@ -178,6 +180,8 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Compare billing and shipping addresses to determine if they differ
+     *
      * @param  \Magento\Quote\Model\Quote $quote
      * @return boolean $isDifferent
      */
@@ -190,11 +194,11 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
         $billingAddress = $quote->getBillingAddress();
         $shippingAddress = $quote->getShippingAddress();
-        $methods = array('getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId');
+        $methods = ['getStreetFull', 'getCity', 'getCountryId', 'getPostcode', 'getRegionId'];
 
         foreach ($methods as $method_name) {
-            $billingValue = call_user_func(array($billingAddress, $method_name));
-            $shippingValue = call_user_func(array($shippingAddress, $method_name));
+            $billingValue = $billingAddress->$method_name();
+            $shippingValue = $shippingAddress->$method_name();
             if ($billingValue != $shippingValue) {
                 $isDifferent = 1;
                 break;
@@ -204,6 +208,12 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
         return $isDifferent;
     }
 
+    /**
+     * Set the method code and store it in form data.
+     *
+     * @param mixed|string|null $methodCode
+     * @return $this
+     */
     public function setMethodCode($methodCode)
     {
         $this->methodCode = $methodCode;
@@ -211,6 +221,12 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
         return $this;
     }
 
+    /**
+     * Set the configuration path and generate the corresponding element name.
+     *
+     * @param mixed $configPath
+     * @return $this
+     */
     public function setConfigPath($configPath)
     {
         $this->elementName = 'rule_' . $configPath;
@@ -219,7 +235,9 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
-     * @return AbstractElement
+     * Create and return a hidden form element for the rule type.
+     *
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getTypeElement()
     {
@@ -236,6 +254,8 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
     }
 
     /**
+     * Create and return a select form element for the rule attribute.
+     *
      * @return $this
      */
     public function getAttributeElement()
@@ -256,7 +276,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
                 'value_name' => $this->getAttributeName()
             ]
         )->setRenderer(
-            $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
+            $this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class)
         );
         $elt->setShowAsText(true);
         return $elt;
@@ -264,6 +284,7 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
 
     /**
      * Retrieve Condition Operator element Instance
+     *
      * If the operator value is empty - define first available operator value as default
      *
      * @return \Magento\Framework\Data\Form\Element\Select
@@ -290,13 +311,15 @@ class Customer extends \Magento\Rule\Model\Condition\AbstractCondition
                 'value_name' => $this->getOperatorName()
             ]
         );
-        $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
+        $element->setRenderer($this->_layout->getBlockSingleton(\Magento\Rule\Block\Editable::class));
 
         return $element;
     }
 
     /**
-     * @return $this
+     * Create and return the form element used to input the rule value, with type-specific configuration.
+     *
+     * @return \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getValueElement()
     {

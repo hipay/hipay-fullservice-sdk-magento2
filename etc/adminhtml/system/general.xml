@@ -19,40 +19,40 @@
  */
 -->
 <include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
-		<group id="configurations" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-			<label>Others configurations</label>
-			<field id="fingerprint_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				<label>Device fingerprint active</label>
-				<comment>If yes then a call an external javascript is made on checkout page</comment>
-			</field>
-			<field id="fingerprint_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-            	<label>Url of Hipay's libs for FingerPrint</label>
+        <group id="configurations" translate="label comment" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Others configurations</label>
+            <field id="fingerprint_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <label>Device fingerprint active</label>
+                <comment>If yes then a call an external javascript is made on checkout page</comment>
+            </field>
+            <field id="fingerprint_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Url of Hipay's libs for FingerPrint</label>
                 <comment>Not to be modified. Please read our documentation : https://developer.hipay.com/getting-started/platform-hipay-enterprise/overview/#device-fingerprint-integration</comment>
             </field>
-			<field id="sdk_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<label>Url of Hipay's libs for Hosted Fields </label>
-				<comment>Not to be modified.</comment>
-			</field>
-			<field id="basket_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				<label>Send cart</label>
-				<comment>If yes, then customer's cart is sent with transaction</comment>
-			</field>
-			<field id="basket_attribute_ean" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Attributes</source_model>
-				<label>Ean attribute</label>
-				<comment>Select your custom attribute for ean support</comment>
-			</field>
-			<field id="currency_transaction" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				<label>Use order currency for transaction</label>
-				<comment> Only if payment method is in Sale mode.</comment>
-			</field>
-			<field id="send_notification_url" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
-				<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-				<label>Send Notification url</label>
-				<comment>If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.</comment>
-			</field>
-		</group>
+            <field id="sdk_js_url" translate="label comment" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Url of Hipay's libs for Hosted Fields </label>
+                <comment>Not to be modified.</comment>
+            </field>
+            <field id="basket_enabled" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <label>Send cart</label>
+                <comment>If yes, then customer's cart is sent with transaction</comment>
+            </field>
+            <field id="basket_attribute_ean" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\Attributes</source_model>
+                <label>Ean attribute</label>
+                <comment>Select your custom attribute for ean support</comment>
+            </field>
+            <field id="currency_transaction" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <label>Use order currency for transaction</label>
+                <comment> Only if payment method is in Sale mode.</comment>
+            </field>
+            <field id="send_notification_url" translate="label comment" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <label>Send Notification url</label>
+                <comment>If yes, then the URL of your site is sent during the payment and notifications will be sent to this URL. To use only for multi site.</comment>
+            </field>
+        </group>
 </include>

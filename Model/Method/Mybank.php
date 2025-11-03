@@ -31,6 +31,9 @@ class Mybank extends AbstractMethodAPI
      */
     protected static $_technicalCode = 'mybank';
 
+    /**
+     * @var string
+     */
     protected $_code = self::HIPAY_METHOD_CODE;
 
     /**
