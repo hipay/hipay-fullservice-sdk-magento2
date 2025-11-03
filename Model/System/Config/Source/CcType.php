@@ -119,7 +119,8 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
             if (in_array($code, $allowed) || empty($allowed)) {
                 if ($withCustomLabel && isset($this->_codeToLabel[$code])) {
                     $name = $this->_codeToLabel[$code];
-                } elseif (strpos(strtolower($name), "maestro") !== false
+                } elseif (
+                    strpos(strtolower($name), "maestro") !== false
                 ) {
                     //Special case due to wrong comparison in
                     // magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36

@@ -80,7 +80,7 @@ abstract class AbstractMethodAPI extends FullserviceMethod
     /**
      * Get min and max amount by payment product
      *
-     * @param float $total
+     * @param float  $total
      * @param string $technicalCode
      * @return bool
      */

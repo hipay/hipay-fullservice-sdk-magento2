@@ -143,22 +143,22 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Context constructor.
      *
      * @param \Magento\Framework\Model\Context $modelContext
-     * @param \Magento\Framework\Registry $registry
-     * @param ExtensionAttributesFactory $extensionFactory
-     * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param ScopeConfigInterface $scopeConfig
-     * @param Logger $logger
-     * @param ManagerFactory $gatewayManagerFactory
-     * @param \Magento\Framework\Url $urlBuilder
-     * @param FraudDenySender $fraudDenySender
-     * @param FraudAcceptSender $fraudAcceptSender
-     * @param Factory $configFactory
-     * @param Session $checkoutSession
-     * @param CardFactory $cardFactory
-     * @param CollectionFactory $cardCollectionFactory
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Registry      $registry
+     * @param ExtensionAttributesFactory       $extensionFactory
+     * @param AttributeValueFactory            $customAttributeFactory
+     * @param \Magento\Payment\Helper\Data     $paymentData
+     * @param ScopeConfigInterface             $scopeConfig
+     * @param Logger                           $logger
+     * @param ManagerFactory                   $gatewayManagerFactory
+     * @param \Magento\Framework\Url           $urlBuilder
+     * @param FraudDenySender                  $fraudDenySender
+     * @param FraudAcceptSender                $fraudAcceptSender
+     * @param Factory                          $configFactory
+     * @param Session                          $checkoutSession
+     * @param CardFactory                      $cardFactory
+     * @param CollectionFactory                $cardCollectionFactory
+     * @param PriceCurrencyInterface           $priceCurrency
+     * @param StoreManagerInterface            $storeManager
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(

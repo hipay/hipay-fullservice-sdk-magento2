@@ -40,10 +40,10 @@ class CaptureCommandPlugin
      * Used to set custom status and state when order is captured
      *
      * @param SalesOrder\Payment\State\CaptureCommand $subject
-     * @param callable $proceed
-     * @param OrderPaymentInterface $payment
-     * @param string|float $amount
-     * @param OrderInterface $order
+     * @param callable                                $proceed
+     * @param OrderPaymentInterface                   $payment
+     * @param string|float                            $amount
+     * @param OrderInterface                          $order
      * @return \Magento\Framework\Phrase|string
      */
     public function aroundExecute(

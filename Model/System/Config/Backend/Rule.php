@@ -57,15 +57,15 @@ class Rule extends Value
     private $ruleFactory;
 
     /**
-     * @param Context $context
-     * @param Registry $registry
-     * @param ScopeConfigInterface $config
-     * @param TypeListInterface $cacheTypeList
-     * @param RequestInterface $httpRequest
-     * @param RuleFactory $ruleFactory
+     * @param Context               $context
+     * @param Registry              $registry
+     * @param ScopeConfigInterface  $config
+     * @param TypeListInterface     $cacheTypeList
+     * @param RequestInterface      $httpRequest
+     * @param RuleFactory           $ruleFactory
      * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      */
     public function __construct(
         Context                     $context,

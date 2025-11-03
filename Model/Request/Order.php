@@ -148,26 +148,26 @@ class Order extends CommonRequest
     /**
      * @inheritDoc
      *
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param UrlInterface $urlBuilder
-     * @param Url $frontendUrlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param UrlInterface                          $urlBuilder
+     * @param Url                                   $frontendUrlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param CartFactory $cartFactory
-     * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param ProductRepositoryInterface $productRepositoryInterface
-     * @param CollectionFactory $mappingCategoriesCollectionFactory
-     * @param CategoryFactory $categoryFactory
-     * @param CustomerRepositoryInterface $customerRepositoryInterface
-     * @param GroupRepositoryInterface $groupRepositoryInterface
-     * @param State $appState
-     * @param Header $httpHeader
-     * @param OrderExpirationTimes $expirationSource
-     * @param array $params
+     * @param CartFactory                           $cartFactory
+     * @param \Magento\Weee\Helper\Data             $weeeHelper
+     * @param ProductRepositoryInterface            $productRepositoryInterface
+     * @param CollectionFactory                     $mappingCategoriesCollectionFactory
+     * @param CategoryFactory                       $categoryFactory
+     * @param CustomerRepositoryInterface           $customerRepositoryInterface
+     * @param GroupRepositoryInterface              $groupRepositoryInterface
+     * @param State                                 $appState
+     * @param Header                                $httpHeader
+     * @param OrderExpirationTimes                  $expirationSource
+     * @param array                                 $params
      * @throws LocalizedException
      */
     public function __construct(
@@ -229,7 +229,8 @@ class Order extends CommonRequest
             $this->_operation = $params['operation'];
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

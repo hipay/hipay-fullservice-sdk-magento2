@@ -56,11 +56,11 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit constructor.
      *
-     * @param Action\Context    $context
-     * @param PageFactory       $resultPageFactory
-     * @param Registry          $registry
-     * @param Factory           $cartCategoriesFactory
-     * @param Session           $backendSession
+     * @param Action\Context $context
+     * @param PageFactory    $resultPageFactory
+     * @param Registry       $registry
+     * @param Factory        $cartCategoriesFactory
+     * @param Session        $backendSession
      */
     public function __construct(
         Action\Context $context,

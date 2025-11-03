@@ -48,9 +48,9 @@ class Consumer
     protected $logger;
 
     /**
-     * @param Factory $notificationFactory
+     * @param Factory       $notificationFactory
      * @param NotifyFactory $notifyFactory
-     * @param Monolog $logger
+     * @param Monolog       $logger
      */
     public function __construct(
         Factory $notificationFactory,

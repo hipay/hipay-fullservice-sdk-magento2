@@ -79,11 +79,11 @@ class CheckHttpSignatureObserver implements ObserverInterface
     /**
      * CheckHttpSignatureObserver constructor.
      *
-     * @param OrderFactory $orderFactory
-     * @param ConfigFactory $configFactory
-     * @param GatewayFactory $gatewayFactory
+     * @param OrderFactory    $orderFactory
+     * @param ConfigFactory   $configFactory
+     * @param GatewayFactory  $gatewayFactory
      * @param LoggerInterface $logger
-     * @param Data $hipayHelper
+     * @param Data            $hipayHelper
      */
     public function __construct(
         OrderFactory    $orderFactory,

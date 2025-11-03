@@ -42,7 +42,7 @@ class Publisher
 
     /**
      * @param PublisherInterface $publisher
-     * @param LoggerInterface $logger
+     * @param LoggerInterface    $logger
      */
     public function __construct(PublisherInterface $publisher, LoggerInterface $logger)
     {

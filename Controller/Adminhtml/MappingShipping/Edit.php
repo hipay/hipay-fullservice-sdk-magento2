@@ -34,7 +34,6 @@ use Magento\Framework\View\Result\PageFactory;
  */
 class Edit extends Action
 {
-
     /**
      * @var Registry
      */

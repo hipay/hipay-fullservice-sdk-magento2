@@ -54,18 +54,18 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
     /**
      * AcceptAndCapturePayment constructor.
      *
-     * @param Context $context
-     * @param Registry $coreRegistry
-     * @param FileFactory $fileFactory
-     * @param InlineInterface $translateInline
-     * @param PageFactory $resultPageFactory
-     * @param JsonFactory $resultJsonFactory
-     * @param LayoutFactory $resultLayoutFactory
-     * @param RawFactory $resultRawFactory
+     * @param Context                  $context
+     * @param Registry                 $coreRegistry
+     * @param FileFactory              $fileFactory
+     * @param InlineInterface          $translateInline
+     * @param PageFactory              $resultPageFactory
+     * @param JsonFactory              $resultJsonFactory
+     * @param LayoutFactory            $resultLayoutFactory
+     * @param RawFactory               $resultRawFactory
      * @param OrderManagementInterface $orderManagement
      * @param OrderRepositoryInterface $orderRepository
-     * @param LoggerInterface $logger
-     * @param Session $backendSession
+     * @param LoggerInterface          $logger
+     * @param Session                  $backendSession
      */
     public function __construct(
         Context $context,
@@ -133,7 +133,6 @@ class AcceptAndCapturePayment extends \Magento\Sales\Controller\Adminhtml\Order
                 $resultRedirect->setPath('sales/*');
                 return $resultRedirect;
             }
-
         } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {

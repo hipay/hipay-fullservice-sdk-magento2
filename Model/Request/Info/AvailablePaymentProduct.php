@@ -43,15 +43,15 @@ class AvailablePaymentProduct extends AbstractRequest
 
     /**
      * @inheritDoc
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param Url $urlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param Url                                   $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param array $params
+     * @param array                                 $params
      * @throws LocalizedException
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      *

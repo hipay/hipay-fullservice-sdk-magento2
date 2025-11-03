@@ -88,7 +88,7 @@ class BillingInfo extends AbstractInfoRequest
      * AMEX needs similar cardholder between tokenization and transaction
      *
      * @param CustomerBillingInfoRequest $customerBillingInfo
-     * @param BillingInfo $billingAddress
+     * @param BillingInfo                $billingAddress
      * @return void
      */
     private function mapCardHolder(&$customerBillingInfo, $billingAddress)
@@ -100,7 +100,8 @@ class BillingInfo extends AbstractInfoRequest
         $firstName = $billingAddress->getFirstname();
         $lastName = $billingAddress->getLastname();
         $theoricCardHolder = $firstName . ' ' . $lastName;
-        if ($cardOwner
+        if (
+            $cardOwner
             && count($partsCardOwner) > 1
             && ( $ccType == 'AE' || $ccType == 'american-express')
             && ($this->stripAccents($theoricCardHolder) != $this->stripAccents($cardOwner))

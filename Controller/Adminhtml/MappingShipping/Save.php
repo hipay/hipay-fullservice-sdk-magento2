@@ -51,10 +51,10 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Save constructor.
      *
-     * @param Action\Context        $context
-     * @param CollectionFactory     $mappingShippingCollectionFactory
-     * @param Factory               $mappingShippingFactory
-     * @param Session               $backendSession
+     * @param Action\Context    $context
+     * @param CollectionFactory $mappingShippingCollectionFactory
+     * @param Factory           $mappingShippingFactory
+     * @param Session           $backendSession
      */
     public function __construct(
         Action\Context $context,
@@ -139,7 +139,7 @@ class Save extends \Magento\Backend\App\Action
                 }
 
                 return $resultRedirect->setPath('*/*/');
-            } catch (LocalizedException|\RuntimeException $e) {
+            } catch (LocalizedException | \RuntimeException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addExceptionMessage(

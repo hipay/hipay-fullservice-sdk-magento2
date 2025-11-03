@@ -62,16 +62,16 @@ class Cancel extends Fullservice
     /**
      * Cancel constructor.
      *
-     * @param Context $context
+     * @param Context                         $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param Session $checkoutSession
-     * @param Generic $hipaySession
-     * @param LoggerInterface $logger
-     * @param Factory $gatewayManagerFactory
-     * @param JsonFactory $resultJsonFactory
-     * @param OrderRepositoryInterface $orderRepository
-     * @param OrderManagementInterface $orderManagement
-     * @param Cart $cart
+     * @param Session                         $checkoutSession
+     * @param Generic                         $hipaySession
+     * @param LoggerInterface                 $logger
+     * @param Factory                         $gatewayManagerFactory
+     * @param JsonFactory                     $resultJsonFactory
+     * @param OrderRepositoryInterface        $orderRepository
+     * @param OrderManagementInterface        $orderManagement
+     * @param Cart                            $cart
      */
     public function __construct(
         Context                         $context,

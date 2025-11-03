@@ -37,7 +37,7 @@ class Accept extends \Magento\Backend\App\Action
     protected $orderFactory;
 
     /**
-     * @param Context $context
+     * @param Context      $context
      * @param OrderFactory $orderFactory
      */
     public function __construct(

@@ -56,9 +56,9 @@ class ThreeDSTwo extends AbstractHelper
     /**
      * ThreeDSTwo constructor.
      *
-     * @param Context $context
-     * @param Session $session
-     * @param CollectionFactory $orderCollectionFactory
+     * @param Context             $context
+     * @param Session             $session
+     * @param CollectionFactory   $orderCollectionFactory
      * @param SerializerInterface $serializer
      */
     public function __construct(
@@ -86,8 +86,8 @@ class ThreeDSTwo extends AbstractHelper
     /**
      * Retrieve all orders for a given customer and store.
      *
-     * @param int $customer
-     * @param int $store
+     * @param int            $customer
+     * @param int            $store
      * @param \DateTime|null $dateLimit
      * @return Collection
      */
@@ -124,8 +124,8 @@ class ThreeDSTwo extends AbstractHelper
     /**
      * Count customer orders for a given store and optional date limit.
      *
-     * @param int $customer
-     * @param int $store
+     * @param int            $customer
+     * @param int            $store
      * @param \DateTime|null $dateLimit
      * @return int
      */
@@ -138,8 +138,8 @@ class ThreeDSTwo extends AbstractHelper
     /**
      * Count one-click payment attempts by the customer.
      *
-     * @param int $customer
-     * @param int $store
+     * @param int            $customer
+     * @param int            $store
      * @param \DateTime|null $dateLimit
      * @return int
      */
@@ -149,7 +149,8 @@ class ThreeDSTwo extends AbstractHelper
         $orders = $this->getCustomerOrder($customer, $store, $dateLimit);
 
         foreach ($orders as $order) {
-            if ($order->getPayment()->getAdditionalInformation('create_oneclick')
+            if (
+                $order->getPayment()->getAdditionalInformation('create_oneclick')
                 && $order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE
             ) {
                 $count++;
@@ -230,8 +231,8 @@ class ThreeDSTwo extends AbstractHelper
      * Determine if the current order is a reorder.
      *
      * @param DataObject $currentOrder
-     * @param int $customer
-     * @param int $store
+     * @param int        $customer
+     * @param int        $store
      * @return int
      */
     public function isReordered($currentOrder, $customer, $store)

@@ -54,7 +54,8 @@ class CustomDataPlugin
         }
 
         // Use OneClick - only for hosted fields payment method
-        if ($result['payment_code'] === HostedFieldsMethod::HIPAY_METHOD_CODE
+        if (
+            $result['payment_code'] === HostedFieldsMethod::HIPAY_METHOD_CODE
             && $payment->getAdditionalInformation('create_oneclick')
         ) {
             $result['payment_type'] = 'OneClick';

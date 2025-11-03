@@ -107,20 +107,20 @@ abstract class CommonRequest extends BaseRequest
     /**
      * @inheritDoc
      *
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param UrlInterface $urlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param UrlInterface                          $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param CartFactory $cartFactory
-     * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param ProductRepositoryInterface $productRepositoryInterface
-     * @param CollectionFactory $mappingCategoriesCollectionFactory
-     * @param CategoryFactory $categoryFactory
-     * @param array $params
+     * @param CartFactory                           $cartFactory
+     * @param \Magento\Weee\Helper\Data             $weeeHelper
+     * @param ProductRepositoryInterface            $productRepositoryInterface
+     * @param CollectionFactory                     $mappingCategoriesCollectionFactory
+     * @param CategoryFactory                       $categoryFactory
+     * @param array                                 $params
      * @throws LocalizedException
      */
     public function __construct(
@@ -164,7 +164,8 @@ abstract class CommonRequest extends BaseRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];
@@ -190,7 +191,7 @@ abstract class CommonRequest extends BaseRequest
      *  Build an Cart Json
      *
      * @param  mixed|string|null $operation
-     * @param  bool $useOrderCurrency
+     * @param  bool              $useOrderCurrency
      * @return mixed
      * @throws \Exception
      */

@@ -109,14 +109,14 @@ class Config extends AbstractConfig implements ConfigurationInterface
     protected $_apiEnvStage;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param WriterInterface $configWriter
+     * @param ScopeConfigInterface  $scopeConfig
+     * @param WriterInterface       $configWriter
      * @param StoreManagerInterface $storeManager
-     * @param State $appState
-     * @param LoggerInterface $logger
-     * @param TypeListInterface $cacheTypeList
-     * @param Pool $cacheFrontendPool
-     * @param array $params
+     * @param State                 $appState
+     * @param LoggerInterface       $logger
+     * @param TypeListInterface     $cacheTypeList
+     * @param Pool                  $cacheFrontendPool
+     * @param array                 $params
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface    $scopeConfig,
@@ -608,7 +608,7 @@ class Config extends AbstractConfig implements ConfigurationInterface
     /**
      * Set hashing algorithm configuration for credentials
      *
-     * @param mixed $hash
+     * @param mixed  $hash
      * @param string $scope
      * @return void
      */

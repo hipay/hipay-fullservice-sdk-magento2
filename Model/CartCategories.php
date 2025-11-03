@@ -30,7 +30,6 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class CartCategories extends \Magento\Framework\Model\AbstractModel
 {
-
     /**
      * Init resource model and id field
      *

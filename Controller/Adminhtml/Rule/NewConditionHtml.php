@@ -39,7 +39,7 @@ class NewConditionHtml extends Action
     /**
      * NewConditionHtml constructor.
      *
-     * @param Context $context
+     * @param Context     $context
      * @param RuleFactory $ruleFactory
      */
     public function __construct(

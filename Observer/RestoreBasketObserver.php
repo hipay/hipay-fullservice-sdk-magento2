@@ -28,8 +28,8 @@ class RestoreBasketObserver implements ObserverInterface
     protected $notFoundOrderRepository;
 
     /**
-     * @param Session $checkoutSession
-     * @param Config $hipayConfig
+     * @param Session                                  $checkoutSession
+     * @param Config                                   $hipayConfig
      * @param ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
      * @throws LocalizedException
      * @throws NoSuchEntityException
@@ -58,7 +58,8 @@ class RestoreBasketObserver implements ObserverInterface
 
         $lastRealOrder = $this->checkoutSession->getLastRealOrder();
 
-        if ($lastRealOrder->getPayment()
+        if (
+            $lastRealOrder->getPayment()
             && $lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
             && !$this->hipayConfig->isNotificationCronActive()
             && $lastRealOrder->getData('state') === 'pending_payment'

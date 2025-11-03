@@ -66,12 +66,12 @@ class Data extends AbstractHelper
     protected $customerSession;
 
     /**
-     * @param Context $context
-     * @param RuleFactory $ruleFactory
-     * @param ResourceInterface $moduleResource
+     * @param Context                  $context
+     * @param RuleFactory              $ruleFactory
+     * @param ResourceInterface        $moduleResource
      * @param ProductMetadataInterface $productMetadata
-     * @param ModuleListInterface $moduleList
-     * @param Session $customerSession
+     * @param ModuleListInterface      $moduleList
+     * @param Session                  $customerSession
      */
     public function __construct(
         Context $context,
@@ -92,8 +92,8 @@ class Data extends AbstractHelper
     /**
      * Determine the 3D Secure mode based on configuration and rule validation.
      *
-     * @param bool $use3dSecure
-     * @param int $config3dsRules
+     * @param bool                       $use3dSecure
+     * @param int                        $config3dsRules
      * @param \Magento\Quote\Model\Quote $quote
      * @return int
      */
@@ -181,10 +181,10 @@ class Data extends AbstractHelper
     /**
      * Update the hash algorithm in configuration using gateway security settings
      *
-     * @param Config $config
-     * @param Manager $gatewayClient
+     * @param Config         $config
+     * @param Manager        $gatewayClient
      * @param StoreInterface $store
-     * @param string $scope
+     * @param string         $scope
      * @return mixed
      */
     public function updateHashAlgorithm(

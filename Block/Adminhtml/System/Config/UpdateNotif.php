@@ -234,7 +234,8 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             'url' => $this->readMeUrl,
         ];
 
-        if ($this->version != $this->newVersion
+        if (
+            $this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
         ) {
             $this->_inbox->create()->parse(array_reverse($versionData));
@@ -243,7 +244,8 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
          * This will compare the currently installed version with the latest available one.
          * A message will appear after the login if the two are not matching.
          */
-        if ($this->version != $this->newVersion
+        if (
+            $this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
         ) {
             return true;

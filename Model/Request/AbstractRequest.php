@@ -96,15 +96,15 @@ abstract class AbstractRequest implements RequestInterface
     protected $_helper;
 
     /**
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param UrlInterface $urlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param UrlInterface                          $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param array $params
+     * @param array                                 $params
      * @throws LocalizedException
      */
     public function __construct(

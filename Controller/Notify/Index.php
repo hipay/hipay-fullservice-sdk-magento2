@@ -68,11 +68,11 @@ class Index extends AppAction
     private $_notifyFactory;
 
     /**
-     * @param Context $context
-     * @param Session $checkoutSession
-     * @param Config $hipayConfig
-     * @param Factory $notificationFactory
-     * @param NotifyFactory $notifyFactory
+     * @param Context         $context
+     * @param Session         $checkoutSession
+     * @param Config          $hipayConfig
+     * @param Factory         $notificationFactory
+     * @param NotifyFactory   $notifyFactory
      * @param LoggerInterface $logger
      * @throws LocalizedException
      * @throws NoSuchEntityException

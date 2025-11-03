@@ -58,9 +58,9 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
 
     /**
      * @param HostedPaymentLinkSender $paymenLinkSender
-     * @param ResponseFactory $responseFactory
-     * @param ResponseInterface $response
-     * @param ActionFlag $actionFlag
+     * @param ResponseFactory         $responseFactory
+     * @param ResponseInterface       $response
+     * @param ActionFlag              $actionFlag
      */
     public function __construct(
         HostedPaymentLinkSender $paymenLinkSender,

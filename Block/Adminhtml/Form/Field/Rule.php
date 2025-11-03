@@ -31,7 +31,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  */
 class Rule extends Field
 {
-
     /**
      * @var Factory $ruleFactory
      */

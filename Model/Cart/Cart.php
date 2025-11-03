@@ -50,12 +50,12 @@ class Cart extends \Magento\Payment\Model\Cart
     protected $_areAmountsValid = false;
 
     /**
-     * @param Factory $salesModelFactory
-     * @param ManagerInterface $eventManager
-     * @param Data $weeeHelper
+     * @param Factory             $salesModelFactory
+     * @param ManagerInterface    $eventManager
+     * @param Data                $weeeHelper
      * @param SalesModelInterface $salesModel
-     * @param string $operation
-     * @param Payment $payment
+     * @param string              $operation
+     * @param Payment             $payment
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
@@ -118,7 +118,8 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-        if ($this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+        if (
+            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
             || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
         ) {
             $this->_processShippingAndDiscountItems($useOrderCurrency);
@@ -134,7 +135,8 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
-        if ($this->_operation != Operation::REFUND
+        if (
+            $this->_operation != Operation::REFUND
             && $this->_operation != Operation::CAPTURE
             && $this->getDiscount()
         ) {
@@ -199,7 +201,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * Add Shipping and fee Item
      *
      * @param string $name
-     * @param float $amount
+     * @param float  $amount
      * @param string $reference
      * @param string $description
      * @param string $taxPercent
@@ -330,7 +332,8 @@ class Cart extends \Magento\Payment\Model\Cart
                     break;
             }
 
-            if ($this->_operation != null
+            if (
+                $this->_operation != null
                 && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)
             ) {
                 $qty = (int)$originalItem->getData('qty');
@@ -357,7 +360,8 @@ class Cart extends \Magento\Payment\Model\Cart
             $itemTotalInclTax = $this->getTotalPrice($originalItem, $useOrderCurrency);
 
             // Need better precision and unit price with reel tax application
-            if ($this->_operation != null
+            if (
+                $this->_operation != null
                 && ($this->_operation == Operation::CAPTURE
                 || $this->_operation == Operation::REFUND)
             ) {
@@ -414,7 +418,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * Calculate the total item price including tax
      *
      * @param  Item|\Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item $originalItem
-     * @param  bool $useOrderCurrency
+     * @param  bool                                                                                    $useOrderCurrency
      * @return mixed
      */
     private function getTotalPrice($originalItem, $useOrderCurrency = false)
@@ -438,13 +442,13 @@ class Cart extends \Magento\Payment\Model\Cart
      * Create item object from item data
      *
      * @param string $name
-     * @param int $qty
-     * @param float $amount
-     * @param float $price
-     * @param float $sku
+     * @param int    $qty
+     * @param float  $amount
+     * @param float  $price
+     * @param float  $sku
      * @param string $description
-     * @param float $taxPercent
-     * @param float $discount
+     * @param float  $taxPercent
+     * @param float  $discount
      * @param string $type
      * @param string $productId
      * @return \Magento\Framework\DataObject
@@ -497,7 +501,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * - go to PayPal
      *
      * @param SalesModelInterface $salesEntity
-     * @param bool $useOrderCurrency
+     * @param bool                $useOrderCurrency
      */
     protected function _applyDiscountTaxCompensationWorkaround(
         SalesModelInterface $salesEntity,
@@ -517,7 +521,7 @@ class Cart extends \Magento\Payment\Model\Cart
      * Calculate unit price for one product and quantity ( Get better precision )
      *
      * @param  float|mixed|null $itemTotalInclTax
-     * @param  int $qty
+     * @param  int              $qty
      * @return float
      */
     private function returnUnitPrice($itemTotalInclTax, $qty)

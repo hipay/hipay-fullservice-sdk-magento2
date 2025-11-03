@@ -43,8 +43,8 @@ class Notification extends AbstractHelper
     private $_session;
 
     /**
-     * @param Context $context
-     * @param Session $session
+     * @param Context           $context
+     * @param Session           $session
      * @param CollectionFactory $inboxFactory
      */
     public function __construct(

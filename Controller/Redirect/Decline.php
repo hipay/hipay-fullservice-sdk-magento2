@@ -56,15 +56,15 @@ class Decline extends Fullservice
     private $checkoutSession;
 
     /**
-     * @param Context $context
+     * @param Context                         $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param Session $checkoutSession
-     * @param Generic $hipaySession
-     * @param LoggerInterface $logger
-     * @param Factory $gatewayManagerFactory
-     * @param JsonFactory $resultJsonFactory
-     * @param OrderRepositoryInterface $orderRepository
-     * @param Cart $cart
+     * @param Session                         $checkoutSession
+     * @param Generic                         $hipaySession
+     * @param LoggerInterface                 $logger
+     * @param Factory                         $gatewayManagerFactory
+     * @param JsonFactory                     $resultJsonFactory
+     * @param OrderRepositoryInterface        $orderRepository
+     * @param Cart                            $cart
      */
     public function __construct(
         Context                         $context,

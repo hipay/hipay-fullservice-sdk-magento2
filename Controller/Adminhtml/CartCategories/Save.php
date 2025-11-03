@@ -45,9 +45,9 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Save constructor.
      *
-     * @param Context   $context
-     * @param Factory   $cartCategoriesFactory
-     * @param Session   $backendSession
+     * @param Context $context
+     * @param Factory $cartCategoriesFactory
+     * @param Session $backendSession
      */
     public function __construct(
         Context $context,

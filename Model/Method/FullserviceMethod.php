@@ -195,10 +195,10 @@ abstract class FullserviceMethod extends AbstractMethod
      * FullserviceMethod constructor.
      *
      * @param TransactionRepository $transactionRepository
-     * @param Context $context
+     * @param Context               $context
      * @param AbstractResource|null $resource
-     * @param AbstractDb|null $resourceCollection
-     * @param array $data
+     * @param AbstractDb|null       $resourceCollection
+     * @param array                 $data
      * @throws LocalizedException
      */
     public function __construct(
@@ -331,7 +331,8 @@ abstract class FullserviceMethod extends AbstractMethod
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+            if (
+                (int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
                 !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;
@@ -373,7 +374,7 @@ abstract class FullserviceMethod extends AbstractMethod
      * Capture payment method
      *
      * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
+     * @param float                                       $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
@@ -405,7 +406,7 @@ abstract class FullserviceMethod extends AbstractMethod
      * Perform a manual capture operation using the transaction reference, adjusting amount if currency differs.
      *
      * @param InfoInterface $payment
-     * @param float $amount
+     * @param float         $amount
      * @return void
      */
     protected function manualCapture(\Magento\Payment\Model\InfoInterface $payment, $amount)
@@ -449,7 +450,8 @@ abstract class FullserviceMethod extends AbstractMethod
         $redirectUrl = $successUrl;
         switch ($response->getState()) {
             case TransactionState::COMPLETED:
-                if ($response->getPaymentMethod() &&
+                if (
+                    $response->getPaymentMethod() &&
                     $response->getPaymentMethod()->getToken() &&
                     $this->_checkoutSession->getQuote()->getCustomerId()
                 ) {
@@ -549,7 +551,7 @@ abstract class FullserviceMethod extends AbstractMethod
      * Refund specified amount for payment
      *
      * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
+     * @param float                                       $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api

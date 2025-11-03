@@ -193,10 +193,10 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Save a configuration value to the specified group and store scope
      *
-     * @param string $key
+     * @param string             $key
      * @param string|mixed|false $data
-     * @param string $group
-     * @param string $scope
+     * @param string             $group
+     * @param string             $scope
      * @return void
      */
     public function setGeneralValue(

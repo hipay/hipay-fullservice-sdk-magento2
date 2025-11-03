@@ -74,13 +74,13 @@ abstract class Fullservice extends AppAction
     protected $resultJsonFactory;
 
     /**
-     * @param Context $context
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param Generic $hipaySession
-     * @param LoggerInterface $logger
+     * @param Context                                         $context
+     * @param Session                                         $customerSession
+     * @param \Magento\Checkout\Model\Session                 $checkoutSession
+     * @param Generic                                         $hipaySession
+     * @param LoggerInterface                                 $logger
      * @param \HiPay\FullserviceMagento\Model\Gateway\Factory $gatewayManagerFactory
-     * @param JsonFactory $resultJsonFactory
+     * @param JsonFactory                                     $resultJsonFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

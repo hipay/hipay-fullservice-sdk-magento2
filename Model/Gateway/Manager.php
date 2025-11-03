@@ -112,14 +112,14 @@ class Manager
     protected $_transactionRepositoryInterface;
 
     /**
-     * @param RequestFactory $requestfactory
-     * @param ConfigFactory $configFactory
-     * @param Data $paymentHelper
-     * @param LoggerInterface $logger
-     * @param FilterBuilder $filterBuilder
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestFactory                 $requestfactory
+     * @param ConfigFactory                  $configFactory
+     * @param Data                           $paymentHelper
+     * @param LoggerInterface                $logger
+     * @param FilterBuilder                  $filterBuilder
+     * @param SearchCriteriaBuilder          $searchCriteriaBuilder
      * @param TransactionRepositoryInterface $repository
-     * @param array $params
+     * @param array                          $params
      * @throws LocalizedException
      */
     public function __construct(
@@ -411,7 +411,7 @@ class Manager
     /**
      * Get Request Object
      *
-     * @param string $requestClassName
+     * @param string     $requestClassName
      * @param array|null $params
      * @return AbstractRequest
      */
@@ -506,7 +506,7 @@ class Manager
      * Request Payment Product
      *
      * @param array $paymentProduct
-     * @param bool $withOptions
+     * @param bool  $withOptions
      * @return array|AvailablePaymentProduct[]
      */
     public function requestPaymentProduct($paymentProduct = [], $withOptions = false)

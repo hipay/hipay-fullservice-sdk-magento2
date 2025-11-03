@@ -58,17 +58,17 @@ class DeliveryInfo extends AbstractInfoRequest
 
     /**
      * @inheritDoc
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param Url $urlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param Url                                   $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param CollectionFactory $mappingShippingCollectionFactory
-     * @param ShippingMethodsHipay $shippingMethodsHipay
-     * @param array $params
+     * @param CollectionFactory                     $mappingShippingCollectionFactory
+     * @param ShippingMethodsHipay                  $shippingMethodsHipay
+     * @param array                                 $params
      * @throws LocalizedException
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
      *

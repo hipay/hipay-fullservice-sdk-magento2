@@ -77,12 +77,12 @@ class Synchronize extends \Magento\Backend\App\Action
     protected $logger;
 
     /**
-     * @param Context $context
+     * @param Context               $context
      * @param StoreManagerInterface $storeManager
-     * @param ConfigFactory $configFactory
-     * @param GatewayFactory $gatewayFactory
-     * @param Data $hipayHelper
-     * @param LoggerInterface $logger
+     * @param ConfigFactory         $configFactory
+     * @param GatewayFactory        $gatewayFactory
+     * @param Data                  $hipayHelper
+     * @param LoggerInterface       $logger
      */
     public function __construct(
         Context               $context,
@@ -148,7 +148,7 @@ class Synchronize extends \Magento\Backend\App\Action
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (RuntimeException|ApiErrorException $e) {
+                } catch (RuntimeException | ApiErrorException $e) {
                     $this->messageManager->addErrorMessage(
                         __(
                             "We can't synchronize at least one of the account ("

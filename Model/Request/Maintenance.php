@@ -78,20 +78,20 @@ class Maintenance extends CommonRequest
     /**
      * @inheritDoc
      *
-     * @param LoggerInterface $logger
-     * @param Data $checkoutData
-     * @param Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param ResolverInterface $localeResolver
-     * @param Factory $requestFactory
-     * @param Url $urlBuilder
+     * @param LoggerInterface                       $logger
+     * @param Data                                  $checkoutData
+     * @param Session                               $customerSession
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param ResolverInterface                     $localeResolver
+     * @param Factory                               $requestFactory
+     * @param Url                                   $urlBuilder
      * @param \HiPay\FullserviceMagento\Helper\Data $helper
-     * @param CartFactory $cartFactory
-     * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param ProductRepositoryInterface $productRepositoryInterface
-     * @param CollectionFactory $mappingCategoriesCollectionFactory
-     * @param CategoryFactory $categoryFactory
-     * @param array $params
+     * @param CartFactory                           $cartFactory
+     * @param \Magento\Weee\Helper\Data             $weeeHelper
+     * @param ProductRepositoryInterface            $productRepositoryInterface
+     * @param CollectionFactory                     $mappingCategoriesCollectionFactory
+     * @param CategoryFactory                       $categoryFactory
+     * @param array                                 $params
      * @throws LocalizedException
      */
     public function __construct(
@@ -144,7 +144,8 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

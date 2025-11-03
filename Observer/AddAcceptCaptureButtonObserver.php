@@ -79,7 +79,8 @@ class AddAcceptCaptureButtonObserver implements ObserverInterface
     {
         $controller = $observer->getControllerAction();
         if (($order = $this->getOrder($controller))) {
-            if ((strpos($order->getPayment()->getMethod(), 'hipay') !== false)
+            if (
+                (strpos($order->getPayment()->getMethod(), 'hipay') !== false)
                 && $order->canReviewPayment()
             ) {
 
