@@ -112,9 +112,11 @@ else
     echo -e "${COLOR_SUCCESS} NGROK disabled — using local URLs${NC}"
     MAGENTO_BASE_URL="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
     if [ "$MAGENTO_ENABLE_HTTPS" = "yes" ]; then
+        echo -e "${COLOR_SUCCESS} HTTPS enabled${NC}"
         MAGENTO_BASE_URL_SECURE="https://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER}/"
         MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
     else
+        echo -e "${COLOR_SUCCESS} HTTPS disabled${NC}"
         MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
     fi
 fi
@@ -199,6 +201,9 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
        done
    fi
 
+    echo -e "${COLOR_SUCCESS} Installing Magento...${NC}"
+    echo -e "${COLOR_SUCCESS} Base URL: ${MAGENTO_BASE_URL}${NC}"
+    echo -e "${COLOR_SUCCESS} Base URL secure: ${MAGENTO_BASE_URL_SECURE}${NC}"
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && \
         bin/magento setup:install \
             --base-url=${MAGENTO_BASE_URL} \
@@ -390,13 +395,19 @@ fi
 gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && \
       bin/magento cache:flush"
 
+URL_FRONT="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}"
+URL_BACK="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/admin"
+if [ "$MAGENTO_ENABLE_HTTPS" = "yes" ]; then
+    URL_FRONT="https://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER}"
+    URL_BACK="https://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER}/admin"
+fi
 printf "${COLOR_SUCCESS}                                                                                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |======================================================================                 ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
 printf "${COLOR_SUCCESS}    |               DOCKER MAGENTO TO HIPAY ${ENVIRONMENT} IS UP                            ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL FRONT       : http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}       ${NC}\n"
-printf "${COLOR_SUCCESS}    |   URL BACK        : http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/admin ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL FRONT       : ${URL_FRONT}                                                      ${NC}\n"
+printf "${COLOR_SUCCESS}    |   URL BACK        : ${URL_BACK}                                                       ${NC}\n"
 printf "${COLOR_SUCCESS}    |                                                                                       ${NC}\n"
 printf "${COLOR_SUCCESS}    |   PHP VERSION     : $(php -r 'echo PHP_VERSION;')                                     ${NC}\n"
 printf "${COLOR_SUCCESS}    |   MAGENTO VERSION : $(grep -Po '"version": "\K.*(?=")' $MAGENTO_ROOT/composer.json)   ${NC}\n"
