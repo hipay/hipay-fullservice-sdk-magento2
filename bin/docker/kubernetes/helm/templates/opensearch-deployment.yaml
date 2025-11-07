@@ -36,7 +36,7 @@ metadata:
     cd-hipay: cron-delete
 data:
   opensearch.yml: |-
-    {{- .Files.Get "files/opensearch/opensearch.yml" | nindent 2 }}
+    {{- .Files.Get "files/opensearch/opensearch.yml" | nindent 4 }}
 ---
 apiVersion: apps/v1
 kind: Deployment

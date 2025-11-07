@@ -62,7 +62,7 @@ metadata:
     cd-hipay: cron-delete
 data:
   nginx.conf: |-
-    {{- .Files.Get "files/nginx/nginx.conf" | nindent 2 }}
+    {{- .Files.Get "files/nginx/nginx.conf" | nindent 4 }}
 ---
 apiVersion: apps/v1
 kind: Deployment
