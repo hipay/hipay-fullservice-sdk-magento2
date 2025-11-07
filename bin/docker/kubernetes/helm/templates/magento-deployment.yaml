@@ -26,7 +26,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`{{ .Values.magento2_url  }}`)
+    - match: Host(`{{ .Values.magento2_url }}`)
       kind: Rule
       priority: 1
       services:
@@ -46,7 +46,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: Host(`{{ .Values.magento2_url  }}`)
+    - match: Host(`{{ .Values.magento2_url }}`)
       kind: Rule
       priority: 1
       services:
@@ -85,6 +85,12 @@ spec:
         tier: frontend-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: magento2-web-configmap-{{ .Release.Name }}
+        - name: sockdata
+          emptyDir: {}
       containers:
       - image: {{ .Values.nginx_image }}:{{ .Values.nginx_tag }}
         imagePullPolicy: Always
@@ -119,9 +125,3 @@ spec:
         volumeMounts:
           - name: sockdata
             mountPath: /sock
-      volumes:
-        - name: nginx-config
-          configMap:
-            name: magento2-web-configmap-{{ .Release.Name }}
-        - name: sockdata
-          emptyDir: {}
