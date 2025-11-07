@@ -54,7 +54,7 @@ spec:
         args:
           - "--max_allowed_packet=64M"
           - "--optimizer_use_condition_selectivity=1"
-          - "--optimizer_switch=\"rowid_filter=off\""
+          - "--optimizer_switch=rowid_filter=off"
           - "--log_bin_trust_function_creators=1"
         resources:
           requests:
