@@ -15,9 +15,7 @@ data:
   MAGENTO_DATABASE_PORT_NUMBER: "3306"
   MAGENTO_DATABASE_USER: magento
   MAGENTO_DATABASE_NAME: magento
-  MAGENTO_DATABASE_PASSWORD: magento
   MAGENTO_USERNAME: demo
-  MAGENTO_PASSWORD: hipay123
   MAGENTO_EMAIL: demo@hipay.com
   MAGENTO_MODE: developer
   ALLOW_EMPTY_PASSWORD: "yes"
@@ -31,26 +29,14 @@ data:
   OPENSEARCH_PASSWORD: Hg7$9LpQz@32
   PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
-  MARIADB_ROOT_PASSWORD: root
   MARIADB_DATABASE: magento
   MARIADB_USER: magento
-  MARIADB_PASSWORD: magento
   # Auth env var
   GITHUB_API_TOKEN: {{ .Values.github_api_token }}
   GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
   # HiPay env var
   ENVIRONMENT: production
   ACTIVE_METHODS: hipay_hosted,hipay_hostedmoto,hipay_hosted_fields,hipay_applepay,hipay_sisal_hosted_fields,hipay_sisal,hipay_giropay,hipay_bancontact_hosted_fields,hipay_ideal_hosted_fields,hipay_ideal,hipay_mbway_hosted_fields,hipay_mbway,hipay_multibanco_hosted_fields,hipay_multibanco,hipay_postfinancecardapi,hipay_postfinanceefinanceapi,hipay_paypalapi,hipay_przelewy24api,hipay_sofortapi,hipay_sdd,hipay_mybank,hipay_klarna_hosted_fields,hipay_alma3X,hipay_alma4X,hipay_facilypay3X,hipay_facilypay4X,hipay_creditlong,hipay_creditlong_opc2,hipay_creditlong_opc3,hipay_creditlong_opc4,hipay_bnpp4X,hipay_bnpp3X
-  HIPAY_API_USER_TEST: {{ .Values.hipay_api_user_test }}
-  HIPAY_API_PASSWORD_TEST: {{ .Values.hipay_api_password_test }}
-  HIPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_secret_passphrase_test }}
-  HIPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_tokenjs_username_test }}
-  HIPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_tokenjs_publickey_test }}
-  HIPAY_APPLEPAY_USERNAME_TEST: {{ .Values.hipay_applepay_username_test }}
-  HIPAY_APPLEPAY_PASSWORD_TEST: {{ .Values.hipay_applepay_password_test }}
-  HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_applepay_secret_passphrase_test }}
-  HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_applepay_tokenjs_username_test }}
-  HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git,vcs https://github.com/hipay/hipay-fullservice-sdk-magento2-multistore.git
@@ -61,5 +47,36 @@ data:
   keys: |
     discovery.type=single-node
     cluster.routing.allocation.disk.threshold_enabled=false
-    OPENSEARCH_INITIAL_ADMIN_PASSWORD=Hg7$9LpQz@32
     OPENSEARCH_JAVA_OPTS=-Xms768m -Xmx768m
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: magento2-secrets-{{ .Release.Name }}
+  labels:
+    cd-hipay: cron-delete
+type: Opaque
+stringData:
+  # Magento env var
+  MAGENTO_DATABASE_PASSWORD: magento
+  MAGENTO_PASSWORD: hipay123
+  # MariaDB env var
+  MARIADB_ROOT_PASSWORD: root
+  MARIADB_PASSWORD: magento
+  # Auth env var
+  GITHUB_API_TOKEN: {{ .Values.github_api_token }}
+  GITLAB_API_TOKEN: {{ .Values.gitlab_api_token }}
+  # Opensearch env var
+  OPENSEARCH_PASSWORD: Hg7$9LpQz@32
+  OPENSEARCH_INITIAL_ADMIN_PASSWORD: Hg7$9LpQz@32
+  # HiPay env var
+  HIPAY_API_USER_TEST: {{ .Values.hipay_api_user_test }}
+  HIPAY_API_PASSWORD_TEST: {{ .Values.hipay_api_password_test }}
+  HIPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_secret_passphrase_test }}
+  HIPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_tokenjs_username_test }}
+  HIPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_tokenjs_publickey_test }}
+  HIPAY_APPLEPAY_USERNAME_TEST: {{ .Values.hipay_applepay_username_test }}
+  HIPAY_APPLEPAY_PASSWORD_TEST: {{ .Values.hipay_applepay_password_test }}
+  HIPAY_APPLEPAY_SECRET_PASSPHRASE_TEST: {{ .Values.hipay_applepay_secret_passphrase_test }}
+  HIPAY_APPLEPAY_TOKENJS_USERNAME_TEST: {{ .Values.hipay_applepay_tokenjs_username_test }}
+  HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_TEST: {{ .Values.hipay_applepay_tokenjs_publickey_test }}

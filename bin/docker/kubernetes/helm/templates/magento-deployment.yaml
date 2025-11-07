@@ -119,6 +119,8 @@ spec:
         envFrom:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
+          - secretRef:
+              name: magento2-secrets-{{ .Release.Name }}
         ports:
           - containerPort: 9000
             name: fastcgi

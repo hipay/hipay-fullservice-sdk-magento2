@@ -69,6 +69,8 @@ spec:
         envFrom:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
+          - secretRef:
+              name: magento2-secrets-{{ .Release.Name }}
         ports:
           - containerPort: 9200
             name: opensearch
@@ -85,4 +87,4 @@ spec:
             claimName: opensearch-pv-claim-{{ .Release.Name }}
         - name: opensearch-config
           configMap:
-            name: opensearch-config-{{ .Release.Name }}
+            name: magento2-opensearch-configmap-{{ .Release.Name }}

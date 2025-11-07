@@ -80,7 +80,6 @@ services:
     environment:
       - "discovery.type=single-node"
       - "cluster.routing.allocation.disk.threshold_enabled=false"
-      - "OPENSEARCH_INITIAL_ADMIN_PASSWORD=Hg7$9LpQz@32"
       - "OPENSEARCH_JAVA_OPTS=-Xms768m -Xmx768m"
     ulimits:
       memlock:
