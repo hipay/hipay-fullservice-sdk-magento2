@@ -91,6 +91,8 @@ spec:
             name: magento2-web-configmap-{{ .Release.Name }}
         - name: sockdata
           emptyDir: {}
+        - name: magento-code
+          emptyDir: {}
       containers:
       - image: {{ .Values.nginx_image }}:{{ .Values.nginx_tag }}
         imagePullPolicy: Always
@@ -109,6 +111,8 @@ spec:
             readOnly: true
           - name: sockdata
             mountPath: /sock
+          - name: magento-code
+            mountPath: /var/www/html
       - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
         name: phpfpm-{{ .Release.Name }}
         resources:
@@ -127,3 +131,5 @@ spec:
         volumeMounts:
           - name: sockdata
             mountPath: /sock
+          - name: magento-code
+            mountPath: /var/www/html
