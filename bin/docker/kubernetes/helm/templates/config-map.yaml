@@ -26,7 +26,6 @@ data:
   OPENSEARCH_PORT_NUMBER: "9200"
   OPENSEARCH_ENABLED: "true"
   OPENSEARCH_USER: admin
-  OPENSEARCH_PASSWORD: Hg7$9LpQz@32
   PHP_ENABLE_OPCACHE: "false"
   # MariaDB env var
   MARIADB_DATABASE: magento
@@ -44,10 +43,7 @@ data:
   HIPAY_PACKAGES: hipay/module-multistores
   CUSTOM_MODULES: HiPay_MultiStores
   # Opensearch env var
-  keys: |
-    discovery.type=single-node
-    cluster.routing.allocation.disk.threshold_enabled=false
-    OPENSEARCH_JAVA_OPTS=-Xms768m -Xmx768m
+  OPENSEARCH_JAVA_OPTS: -Xms768m -Xmx768m
 ---
 apiVersion: v1
 kind: Secret

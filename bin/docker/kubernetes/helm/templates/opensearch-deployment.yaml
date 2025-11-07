@@ -59,6 +59,9 @@ spec:
         tier: opensearch-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
       containers:
       - image: {{ .Values.opensearch_image }}:{{ .Values.opensearch_tag }}
         name: opensearch-{{ .Release.Name }}

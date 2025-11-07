@@ -78,9 +78,7 @@ services:
     ports:
       - "9200:9200"
     environment:
-      - "discovery.type=single-node"
-      - "cluster.routing.allocation.disk.threshold_enabled=false"
-      - "OPENSEARCH_JAVA_OPTS=-Xms768m -Xmx768m"
+      OPENSEARCH_JAVA_OPTS: -Xms768m -Xmx768m
     ulimits:
       memlock:
         soft: -1
