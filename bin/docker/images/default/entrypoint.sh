@@ -111,7 +111,12 @@ if [ "${NGROK^^}" = "YES" ]; then
 else
     echo -e "${COLOR_SUCCESS} NGROK disabled — using local URLs${NC}"
     MAGENTO_BASE_URL="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
-    MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
+    if [ "$MAGENTO_ENABLE_HTTPS" = "yes" ]; then
+        MAGENTO_BASE_URL_SECURE="https://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER}/"
+        MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
+    else
+        MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
+    fi
 fi
 
 if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
