@@ -13,7 +13,12 @@ RUN apt-get update && apt-get upgrade -y && \
     chmod +x /usr/local/bin/n98-magerun2.phar && \
     echo "sendmail_path = /usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini && \
     printf "host smtp\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+    apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
+
+# Do not clean folder /tmp in production environment
+RUN if [ "$ENVIRONMENT" = "development" ]; then \
+    rm -rf /tmp/*; \
+    fi
 
 RUN sed -i '/^\[www\]/,$d' /usr/local/etc/php-fpm.conf && \
     echo "include=/usr/local/etc/php-fpm.d/*.conf" >> /usr/local/etc/php-fpm.conf && \
