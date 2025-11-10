@@ -122,7 +122,7 @@ else
 fi
 
 if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
-    echo -e "${COLOR_SUCCESS} Installing Magento...${NC}"
+    echo -e "${COLOR_SUCCESS} Creating Magento project...${NC}"
 
     if [ ! -f "$MAGENTO_ROOT/composer.json" ] || ! grep -q '"name": *"magento/project-' "$MAGENTO_ROOT/composer.json"; then
 
