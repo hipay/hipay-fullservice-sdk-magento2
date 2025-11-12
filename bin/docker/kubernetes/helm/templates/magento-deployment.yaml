@@ -85,11 +85,6 @@ spec:
         tier: frontend-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
-      securityContext:
-        # magento user is 33 (www-data)
-        runAsUser: 33
-        runAsGroup: 33
-        fsGroup: 33
       volumes:
         - name: nginx-config
           configMap:
@@ -97,8 +92,6 @@ spec:
         - name: sockdata
           emptyDir: {}
         - name: magento-code
-          emptyDir: {}
-        - name: nginx-cache
           emptyDir: {}
       containers:
       - image: {{ .Values.nginx_image }}:{{ .Values.nginx_tag }}
@@ -120,10 +113,13 @@ spec:
             mountPath: /sock
           - name: magento-code
             mountPath: /var/www/html
-          - name: nginx-cache
-            mountPath: /var/cache/nginx
       - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
         name: phpfpm-{{ .Release.Name }}
+        securityContext:
+          # magento user is 33 (www-data)
+          runAsUser: 33
+          runAsGroup: 33
+          fsGroup: 33
         resources:
           requests:
             memory: "5G"
