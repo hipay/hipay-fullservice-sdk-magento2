@@ -130,7 +130,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
     if [ ! -f "$MAGENTO_ROOT/composer.json" ] || ! grep -q '"name": *"magento/project-' "$MAGENTO_ROOT/composer.json"; then
 
         echo -e "${COLOR_SUCCESS}Installation dans $TMP_MAGENTO_DIR...${NC}"
-        su -s /bin/bash -c "composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $TMP_MAGENTO_DIR" $MAGENTO_DIR_USER
+        gosu $MAGENTO_DIR_USER bash -lc "composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $TMP_MAGENTO_DIR"
 
         echo -e "${COLOR_SUCCESS} Copie des fichiers Magento vers $MAGENTO_ROOT...${NC}"
         rsync -a --remove-source-files $TMP_MAGENTO_DIR/ $MAGENTO_ROOT/
@@ -150,7 +150,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
 
     rm -f "$MAGENTO_ROOT/app/etc/config.php"
 
-    su -s /bin/bash -c "chmod +x $MAGENTO_ROOT/bin/magento" $MAGENTO_DIR_USER
+    gosu $MAGENTO_DIR_USER bash -lc "chmod +x $MAGENTO_ROOT/bin/magento"
 
    #==========================================
    # VCS AUTHENTICATION
