@@ -85,8 +85,6 @@ spec:
         tier: frontend-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
-      securityContext:
-        fsGroup: 33
       volumes:
         - name: nginx-config
           configMap:
@@ -117,10 +115,6 @@ spec:
             mountPath: /var/www/html
       - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
         name: phpfpm-{{ .Release.Name }}
-        securityContext:
-          # magento user is 33 (www-data)
-          runAsUser: 33
-          runAsGroup: 33
         resources:
           requests:
             memory: "5G"
