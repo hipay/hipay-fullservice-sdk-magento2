@@ -33,7 +33,6 @@ RUN if [ "$ENVIRONMENT" = "development" ]; then \
 COPY ./bin/docker/images/default/conf/php/php-fpm-www.conf /usr/local/etc/php-fpm.d/www.conf
 
 COPY ./bin/docker/images/default/conf/php/${ENVIRONMENT}/php-override.ini /usr/local/etc/php/conf.d/php-override.ini
-COPY ./bin/docker/images/default/entrypoint.sh /usr/local/bin/entrypoint.sh
 COPY ./bin/docker/conf/development/auth.json /var/www/.composer/auth.json
 
 ENV COMPOSER_HOME=/var/www/.composer
@@ -41,14 +40,15 @@ RUN install -d -m 775 -o www-data -g www-data /var/www/.composer /var/www/.compo
     && chown www-data:www-data /var/www/.composer/auth.json \
     && chmod 600 /var/www/.composer/auth.json
 
-
-RUN chown www-data:www-data /usr/local/bin/entrypoint.sh \
-    && chmod +x /usr/local/bin/entrypoint.sh
-
 WORKDIR /var/www/html
 
 RUN mkdir -p /var/www/html-magento \
     && chown -R www-data:www-data /var/www/html-magento
+
+COPY ./bin/docker/images/default/entrypoint.sh /usr/local/bin/entrypoint.sh
+
+RUN chown www-data:www-data /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
