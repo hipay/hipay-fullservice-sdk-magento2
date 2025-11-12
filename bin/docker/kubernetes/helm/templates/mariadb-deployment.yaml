@@ -52,6 +52,22 @@ spec:
         tier: mariadb-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
+      initContainers:
+        - name: wait-for-pvc
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for PVC..."
+              while [ ! -d /var/lib/mysql ]; do
+                echo "PVC not ready yet..."
+                sleep 2
+              done
+              echo "PVC is ready!"
+          volumeMounts:
+            - name: mariadb-persistent-storage-{{ .Release.Name }}
+              mountPath: /var/lib/mysql
       containers:
       - image: {{ .Values.mariadb_image }}:{{ .Values.mariadb_tag }}
         name: mariadb-{{ .Release.Name }}

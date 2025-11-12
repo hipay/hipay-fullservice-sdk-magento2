@@ -66,6 +66,22 @@ spec:
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: wait-for-pvc
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for PVC..."
+              while [ ! -d /usr/share/opensearch/data ]; do
+                echo "PVC not ready yet..."
+                sleep 2
+              done
+              echo "PVC is ready!"
+          volumeMounts:
+            - name: opensearch-persistent-storage-{{ .Release.Name }}
+              mountPath: /usr/share/opensearch/data
       containers:
       - image: {{ .Values.opensearch_image }}:{{ .Values.opensearch_tag }}
         name: opensearch-{{ .Release.Name }}
