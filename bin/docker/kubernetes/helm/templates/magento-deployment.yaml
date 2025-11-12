@@ -98,6 +98,8 @@ spec:
           emptyDir: {}
         - name: magento-code
           emptyDir: {}
+        - name: nginx-cache
+          emptyDir: {}
       containers:
       - image: {{ .Values.nginx_image }}:{{ .Values.nginx_tag }}
         imagePullPolicy: Always
@@ -118,6 +120,8 @@ spec:
             mountPath: /sock
           - name: magento-code
             mountPath: /var/www/html
+          - name: nginx-cache
+            mountPath: /var/cache/nginx
       - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
         name: phpfpm-{{ .Release.Name }}
         resources:
