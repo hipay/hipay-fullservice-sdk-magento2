@@ -115,13 +115,6 @@ spec:
             mountPath: /var/www/html
       - image: {{ .Values.magento2_image }}:{{ .Values.magento2_tag }}
         name: phpfpm-{{ .Release.Name }}
-        initContainers:
-          - name: fix-ownership
-            image: busybox
-            command: ["sh", "-c", "chown -R 33:33 /var/www/html"]
-            volumeMounts:
-              - name: magento-code
-                mountPath: /var/www/html
         securityContext:
           # magento user is 33 (www-data)
           runAsUser: 33

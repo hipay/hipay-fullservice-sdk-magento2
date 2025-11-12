@@ -128,9 +128,6 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
     if [ ! -f "$MAGENTO_ROOT/composer.json" ] || ! grep -q '"name": *"magento/project-' "$MAGENTO_ROOT/composer.json"; then
 
         echo -e "${COLOR_SUCCESS}Installation dans $TMP_MAGENTO_DIR...${NC}"
-        mkdir -p $TMP_MAGENTO_DIR
-        chown -R $MAGENTO_DIR_USER:$MAGENTO_DIR_USER $TMP_MAGENTO_DIR
-
         su -s /bin/bash -c "composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=$MAGENTO_VERSION $TMP_MAGENTO_DIR" $MAGENTO_DIR_USER
 
         echo -e "${COLOR_SUCCESS} Copie des fichiers Magento vers $MAGENTO_ROOT...${NC}"

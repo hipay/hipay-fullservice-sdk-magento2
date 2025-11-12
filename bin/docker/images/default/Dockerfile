@@ -42,10 +42,13 @@ RUN install -d -m 775 -o www-data -g www-data /var/www/.composer /var/www/.compo
     && chmod 600 /var/www/.composer/auth.json
 
 
-RUN chown www-data:www-data /usr/local/bin/entrypoint.sh && \
-    chmod +x /usr/local/bin/entrypoint.sh
+RUN chown www-data:www-data /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /var/www/html
+
+RUN mkdir -p /var/www/html-magento \
+    && chown -R www-data:www-data /var/www/html-magento
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["php-fpm"]
