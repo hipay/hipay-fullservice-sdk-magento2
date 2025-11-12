@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "whoami: $(whoami)"
+
 COLOR_SUCCESS='\033[0;32m'
 NC='\033[0m'
 MAGENTO_ROOT=/var/www/html
