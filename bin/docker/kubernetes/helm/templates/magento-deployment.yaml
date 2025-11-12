@@ -85,6 +85,8 @@ spec:
         tier: frontend-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
+      securityContext:
+        fsGroup: 33
       volumes:
         - name: nginx-config
           configMap:
@@ -119,7 +121,6 @@ spec:
           # magento user is 33 (www-data)
           runAsUser: 33
           runAsGroup: 33
-          fsGroup: 33
         resources:
           requests:
             memory: "5G"
