@@ -139,13 +139,15 @@ build-test-2-1-10:
   stage: build-test
   image:
     name: gcr.io/kaniko-project/executor:v1.6.0-debug
+  variables:
+    KANIKO_CACHE: 'true'
   script:
     - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --force
-      --cache=true
+      --cache=${KANIKO_CACHE}
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile"
       --destination "$REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}"
@@ -180,13 +182,15 @@ build:
       when: on_success
     - if: $CI_PIPELINE_SOURCE == "push"
       when: manual
+  variables:
+    KANIKO_CACHE: 'true'
   script:
     - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --force
-      --cache=true
+      --cache=${KANIKO_CACHE}
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile"
       --build-arg ENVIRONMENT=production
