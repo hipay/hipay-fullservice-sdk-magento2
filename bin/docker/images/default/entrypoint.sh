@@ -6,6 +6,7 @@ NC='\033[0m'
 MAGENTO_ROOT=/var/www/html
 TMP_MAGENTO_DIR=/var/www/html-magento
 MAGENTO_DIR_USER=www-data
+WWW_DATA_ID=33
 HOST_UID="${HOST_UID:-1000}"
 HOST_GID="${HOST_GID:-1000}"
 NEED_SETUP_CONFIG=0
@@ -361,11 +362,17 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
 
 fi
 
-echo -e "${COLOR_SUCCESS} Fix ownership (host user)${NC}"
-getent group "$HOST_GID" >/dev/null 2>&1 || groupadd -g "$HOST_GID" hostgroup || true
-id -u "$HOST_UID" >/dev/null 2>&1 || useradd -u "$HOST_UID" -g "$HOST_GID" -M -s /usr/sbin/nologin hostuser || true
+if [ "$HOST_UID" != "$WWW_DATA_ID" ] || [ "$HOST_GID" != "$WWW_DATA_ID" ]; then
+    echo -e "${COLOR_SUCCESS} Fix ownership (host user $HOST_UID:$HOST_GID)${NC}"
+    getent group "$HOST_GID" >/dev/null 2>&1 || groupadd -g "$HOST_GID" hostgroup || true
+    id -u "$HOST_UID" >/dev/null 2>&1 || useradd -u "$HOST_UID" -g "$HOST_GID" -M -s /usr/sbin/nologin hostuser || true
 
-chown -R "$HOST_UID:$HOST_GID" "$MAGENTO_ROOT"
+    chown -R "$HOST_UID:$HOST_GID" "$MAGENTO_ROOT"
+fi
+
+if [ "$ENVIRONMENT" = "production" ]; then
+    mkdir -p "$MAGENTO_ROOT/var/session"
+fi
 
 RUNTIME_DIRS=(
   "$MAGENTO_ROOT/var"

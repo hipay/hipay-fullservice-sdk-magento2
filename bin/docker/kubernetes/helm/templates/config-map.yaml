@@ -7,8 +7,8 @@ metadata:
 data:
   # Magento env var
   MAGENTO_HOST: {{ .Values.magento2_url }}
-  HOST_UID: "1000"
-  HOST_GID: "1000"
+  HOST_UID: "33"
+  HOST_GID: "33"
   MAGENTO_EXTERNAL_HTTP_PORT_NUMBER: "80"
   MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER: "443"
   MAGENTO_DATABASE_HOST: magento2-mariadb-{{ .Release.Name }}
