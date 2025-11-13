@@ -72,6 +72,17 @@ if [ ! -f $MAGENTO_ROOT/app/etc/config.php ] && [ ! -f $MAGENTO_ROOT/app/etc/env
     NEED_SETUP_CONFIG="1"
 fi
 
+#==========================================
+# XDebug
+#==========================================
+if [[ "$XDEBUG_ENABLED" = "1" ]]; then
+    echo "Configuring XDebug..."
+    xdebugFile=/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+    echo "xdebug.mode=debug" >>$xdebugFile
+    echo "xdebug.idekey=PHPSTORM" >>$xdebugFile
+    echo "xdebug.start_with_request=yes" >>$xdebugFile
+fi
+
 # ====================================================
 # NGROK integration
 # ====================================================

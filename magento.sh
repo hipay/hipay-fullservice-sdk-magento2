@@ -41,7 +41,7 @@ if [ "$1" = 'init' ]; then
 
 elif [ "$1" = 'kill' ]; then
     docker compose down -v
-    sudo rm -Rf log/ src/pub/static src/var src/generated
+    sudo rm -Rf log/ src/pub/static src/var src/generated web/
 
 elif [ "$1" = 'restart' ]; then
     docker compose stop
