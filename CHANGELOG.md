@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Improved detection of checkout agreement checkboxes for Apple Pay and PayPal payment methods.
+
 ## 1.29.2
 
 - **Fix** : Fixed Apple Pay card brand detection using payment_product property

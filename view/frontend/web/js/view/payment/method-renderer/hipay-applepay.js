@@ -176,6 +176,13 @@ define([
             var results = document.querySelectorAll(
               "input[id*='agreement_hipay_applepay']"
             );
+
+            if (results.length === 0) {
+                  results = document.querySelectorAll(
+                      '.checkout-agreements input[type="checkbox"][id*="agreement"]'
+                  );
+            }
+
             var agreements =
               window.checkoutConfig.checkoutAgreements.agreements;
             agreements = agreements.filter((input) => input.mode == '1');
