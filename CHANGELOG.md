@@ -2,11 +2,12 @@
 
 ## UNRELEASE
 
+- **Fix** : Removed the "Accept and Capture Payment" button and controller, relying on Magento's native "Accept Payment" action instead.
+
 ## 1.29.2
 
 - **Fix** : Fixed Apple Pay card brand detection using payment_product property
 - **Fix** : Fixed frontend scope for ResponseNotFoundOrderRepositoryInterface preference, thanks to [zfmaster](https://github.com/zfmaster) for issue [#170](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/170)
-- **Fix** : Removed manual status update in “Accept and Capture Payment” to let HiPay handle status transitions.
 
 ## 1.29.1
 
