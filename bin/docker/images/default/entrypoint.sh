@@ -122,16 +122,21 @@ if [ "${NGROK^^}" = "YES" ]; then
         MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
     fi
 
+elif [ "$ENVIRONMENT" = "production" ]; then
+    echo -e "${COLOR_SUCCESS} Production environment detected${NC}"
+    MAGENTO_BASE_URL="http://${MAGENTO_HOST}/"
+    MAGENTO_BASE_URL_SECURE="https://${MAGENTO_HOST}/"
+    MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
 else
     echo -e "${COLOR_SUCCESS} NGROK disabled — using local URLs${NC}"
-    MAGENTO_BASE_URL="http://${MAGENTO_HOST}/"
+    MAGENTO_BASE_URL="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
     if [ "$MAGENTO_ENABLE_HTTPS" = "yes" ]; then
         echo -e "${COLOR_SUCCESS} HTTPS enabled${NC}"
-        MAGENTO_BASE_URL_SECURE="https://${MAGENTO_HOST}/"
+        MAGENTO_BASE_URL_SECURE="https://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER}/"
         MAGENTO_BASE_URL_SECURE_OPT="--base-url-secure=${MAGENTO_BASE_URL_SECURE}"
     else
         echo -e "${COLOR_SUCCESS} HTTPS disabled${NC}"
-        MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}/"
+        MAGENTO_BASE_URL_SECURE="http://${MAGENTO_HOST}:${MAGENTO_EXTERNAL_HTTP_PORT_NUMBER}/"
     fi
 fi
 
@@ -154,7 +159,7 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
         find $MAGENTO_ROOT -type d -exec chmod 755 {} \;
         find $MAGENTO_ROOT -type f -exec chmod 644 {} \;
     else
-        echo -e "${COLOR_SUCCESS} Magento déjà présent, on continue...${NC}"
+        echo -e "${COLOR_SUCCESS} Magento project already exists, keep going...${NC}"
     fi
 
     echo -e "${COLOR_SUCCESS} Running setup:install...${NC}"
