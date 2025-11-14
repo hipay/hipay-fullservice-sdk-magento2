@@ -39,7 +39,7 @@ define([
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-applepay',
         creditCardToken: null,
-        creditCardType: 'cb',
+        creditCardType: null,
         instanceApplePay: null,
         totals: quote.totals,
         eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
@@ -264,8 +264,7 @@ define([
         var body = $('body');
         self.creditCardToken(tokenHipay.token);
         self.creditCardType(
-          tokenHipay.brand.toLowerCase().replace(/ /g, '-') ||
-            self.creditCardType
+          tokenHipay.payment_product.toLowerCase().replace(/ /g, '-')
         );
 
         var deferred = $.Deferred();
