@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: magento2-opensearch-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  ports:
+    - port: 9200
+  selector:
+    app: magento2-{{ .Release.Name }}
+    tier: opensearch-{{ .Release.Name }}
+  clusterIP: None
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: opensearch-pv-claim-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: magento2-opensearch-configmap-{{ .Release.Name }}
+  labels:
+    app: magento2-opensearch-{{ .Release.Name }}
+    cd-hipay: cron-delete
+data:
+  opensearch.yml: |-
+    {{- .Files.Get "files/opensearch/opensearch.yml" | nindent 4 }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: magento2-opensearch-{{ .Release.Name }}
+  labels:
+    app: magento2-{{ .Release.Name }}
+    cd-hipay: cron-delete
+spec:
+  selector:
+    matchLabels:
+      app: magento2-{{ .Release.Name }}
+      tier: opensearch-{{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: magento2-{{ .Release.Name }}
+        tier: opensearch-{{ .Release.Name }}
+        cd-hipay: cron-delete
+    spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+      containers:
+      - image: {{ .Values.opensearch_image }}:{{ .Values.opensearch_tag }}
+        name: opensearch-{{ .Release.Name }}
+        resources:
+          requests:
+            memory: "2.5G"
+            cpu: "1000m"
+        envFrom:
+          - configMapRef:
+              name: magento2-configmap-{{ .Release.Name }}
+          - secretRef:
+              name: magento2-secrets-{{ .Release.Name }}
+        ports:
+          - containerPort: 9200
+            name: opensearch
+        volumeMounts:
+          - name: opensearch-persistent-storage-{{ .Release.Name }}
+            mountPath: /usr/share/opensearch/data
+          - name: opensearch-config
+            mountPath: /usr/share/opensearch/config/opensearch.yml
+            subPath: opensearch.yml
+            readOnly: true
+      volumes:
+        - name: opensearch-persistent-storage-{{ .Release.Name }}
+          persistentVolumeClaim:
+            claimName: opensearch-pv-claim-{{ .Release.Name }}
+        - name: opensearch-config
+          configMap:
+            name: magento2-opensearch-configmap-{{ .Release.Name }}
