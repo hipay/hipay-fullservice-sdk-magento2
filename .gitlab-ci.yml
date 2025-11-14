@@ -239,8 +239,6 @@ deploy2recette:
       --set hipay_applepay_tokenjs_publickey_test="$HIPAY_APPLEPAY_TOKENJS_PUBLICKEY_RE7"
       --set pi_data_url="$PI_CI_DATA_URL"
       --set branch="$BRANCH"
-      --wait
-      --timeout 5m
   allow_failure: true
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
