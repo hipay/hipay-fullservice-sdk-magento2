@@ -1,0 +1,10 @@
+plugins.security.disabled: true
+
+network.host: 0.0.0.0
+http.host: 0.0.0.0
+transport.host: 0.0.0.0
+
+discovery.type: single-node
+cluster.routing.allocation.disk.threshold_enabled: false
+http.port: 9200
+transport.port: 9300
