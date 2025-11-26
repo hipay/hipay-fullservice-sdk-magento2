@@ -1,22 +1,22 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: magento2-elastic-{{ .Release.Name }}
+  name: magento2-mariadb-{{ .Release.Name }}
   labels:
     app: magento2-{{ .Release.Name }}
     cd-hipay: cron-delete
 spec:
   ports:
-    - port: 9200
+    - port: 3306
   selector:
     app: magento2-{{ .Release.Name }}
-    tier: elastic-{{ .Release.Name }}
+    tier: mariadb-{{ .Release.Name }}
   clusterIP: None
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: elastic-pv-claim-{{ .Release.Name }}
+  name: mariadb-pv-claim-{{ .Release.Name }}
   labels:
     app: magento2-{{ .Release.Name }}
     cd-hipay: cron-delete
@@ -30,7 +30,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: magento2-elastic-{{ .Release.Name }}
+  name: magento2-mariadb-{{ .Release.Name }}
   labels:
     app: magento2-{{ .Release.Name }}
     cd-hipay: cron-delete
@@ -38,19 +38,24 @@ spec:
   selector:
     matchLabels:
       app: magento2-{{ .Release.Name }}
-      tier: elastic-{{ .Release.Name }}
+      tier: mariadb-{{ .Release.Name }}
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
         app: magento2-{{ .Release.Name }}
-        tier: elastic-{{ .Release.Name }}
+        tier: mariadb-{{ .Release.Name }}
         cd-hipay: cron-delete
     spec:
       containers:
-      - image: {{ .Values.elastic_image }}:{{ .Values.elastic_tag }}
-        name: elastic-{{ .Release.Name }}
+      - image: {{ .Values.mariadb_image }}:{{ .Values.mariadb_tag }}
+        name: mariadb-{{ .Release.Name }}
+        args:
+          - "--max_allowed_packet=64M"
+          - "--optimizer_use_condition_selectivity=1"
+          - "--optimizer_switch=rowid_filter=off"
+          - "--log_bin_trust_function_creators=1"
         resources:
           requests:
             memory: "2.5G"
@@ -58,10 +63,16 @@ spec:
         envFrom:
           - configMapRef:
               name: magento2-configmap-{{ .Release.Name }}
+          - secretRef:
+              name: magento2-secrets-{{ .Release.Name }}
         ports:
-          - containerPort: 9200
-            name: elastic
+          - containerPort: 3306
+            name: mariadb
+        volumeMounts:
+          - name: mariadb-persistent-storage-{{ .Release.Name }}
+            mountPath: /var/lib/mysql
+            subPath: mariadb
       volumes:
-        - name: elastic-persistent-storage-{{ .Release.Name }}
+        - name: mariadb-persistent-storage-{{ .Release.Name }}
           persistentVolumeClaim:
-            claimName: elastic-pv-claim-{{ .Release.Name }}
+            claimName: mariadb-pv-claim-{{ .Release.Name }}
