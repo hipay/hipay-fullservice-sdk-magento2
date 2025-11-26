@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Removed the "Accept and Capture Payment" button and controller, relying on Magento's native "Accept Payment" action instead.
+
 ## 1.29.2
 
 - **Fix** : Fixed Apple Pay card brand detection using payment_product property
