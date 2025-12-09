@@ -12,7 +12,7 @@ RUN apt-get update && apt-get upgrade -y && \
     docker-php-ext-install ftp && \
     chmod +x /usr/local/bin/n98-magerun2.phar && \
     echo "sendmail_path = /usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini && \
-    printf "host smtp\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc && \
+    printf "host mailcatcher\nport 1025\ntls off\nfrom pi-ecommerce@hipay.com" > /etc/msmtprc && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /var/tmp/*
 
 # Do not clean folder /tmp in production environment

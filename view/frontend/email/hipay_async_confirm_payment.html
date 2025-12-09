@@ -1,0 +1,148 @@
+<!--
+/**
+ * HiPay Fullservice Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @author Kassim Belghait <kassim@sirateck.com>
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ *
+ */
+-->
+<!--@subject {{trans "Confirm your payment to validate your order #%order_number" order_number=$order.increment_id}} @-->
+<!--@vars {
+"var order.increment_id": "Order ID",
+"var customer_name": "Customer Name",
+"var referenceToPay": "HiPay Reference Data",
+"layout handle=\"sales_email_order_items\" order=$order area=\"frontend\"": "Order Items Grid",
+"var formattedBillingAddress|raw": "Billing Address",
+"var formattedShippingAddress|raw": "Shipping Address",
+"var order.shipping_description": "Shipping Description",
+"var payment_method_title": "Payment Method",
+"var created_at_formatted": "Formatted Order Date",
+"var order_id": "Order Database ID",
+"var order_data.is_not_virtual": "Is Not Virtual (Shipping Condition)",
+"var store": "Store Information Object"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "Hi %customer_name," customer_name=$customer_name}}</p>
+            <p>
+                {{trans "Thanks for your order. It's on hold until the payment is processed."}}
+            </p>
+        </td>
+    </tr>
+
+
+    <tr class="email-information">
+        <td>
+            {{depend referenceToPay.isMultibanco}}
+            <table align="center" width="100%" style="margin: 20px 0; text-align: center; padding: 20px;">
+                <tr>
+                    <td align="center">
+                        <p><img src="{{var referenceToPay.logo}}" alt="Multibanco Logo" width="120"/></p>
+
+                        <table style="margin: 20px auto; text-align: left; border-collapse: collapse;">
+                            <tr>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;"><strong>{{trans "Entity"}}:</strong></td>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;">{{var referenceToPay.entity}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;"><strong>{{trans "Reference"}}:</strong></td>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;">{{var referenceToPay.reference}}</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;"><strong>{{trans "Amount"}}:</strong></td>
+                                <td style="padding: 8px 15px; border-bottom: 1px solid #ddd;">{{var referenceToPay.amount}} €</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px 15px;"><strong>{{trans "Expiration Date"}}:</strong></td>
+                                <td style="padding: 8px 15px;">{{var referenceToPay.expirationDate}}</td>
+                            </tr>
+                        </table>
+
+                        <p style="margin: 20px 0; font-style: italic; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            {{trans "To pay a Multibanco Reference on your e-banking or on an ATM, choose 'payments' then 'services'."}}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+
+            {{depend referenceToPay.isMooney}}
+            <table align="center" width="100%" style="margin: 20px 0; text-align: center; padding: 20px;">
+                <tr>
+                    <td align="center">
+                        <p><img src="{{var referenceToPay.logo}}" alt="Mooney/SisalPay Logo" width="120"/></p>
+                        <p><strong>{{trans "HiPay ID"}}:</strong> {{var referenceToPay.reference}}</p>
+
+                        {{if referenceToPay.barcode_image}}
+                        <p style="margin: 15px 0;">
+                            <img src="{{var referenceToPay.barcode_image}}" alt="Payment Barcode" width="300"/>
+                        </p>
+                        <p><strong>{{var referenceToPay.barCode}}</strong> </p>
+                        {{/if}}
+
+                        <p style="margin: 20px 0; font-style: italic; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                            {{trans "You have chosen cash payment with Mooney."}}<br/>
+                            {{trans "The operation will have an additional cost of €2.00 as a collection fee to be paid at the cash desk."}}<br/>
+                            {{trans "You will receive an e-mail summarising your purchase, in which you will find the modalities for making the cash payment at Mooney points."}}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+
+            <tr class="order-summary">
+                <td>
+                    <h1>
+                        {{trans "Your Order #"}}{{var order.increment_id}}
+                        <span class="no-link">({{var created_at_formatted}})</span>
+                    </h1>
+                </td>
+            </tr>
+            {{layout handle="sales_email_order_items" order_id=$order_id area="frontend"}}
+
+            <table style="margin-top: 30px; width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 50%; padding: 10px; vertical-align: top;">
+                        <h3>{{trans "Billing Information"}}</h3>
+                        <p>{{var formattedBillingAddress|raw}}</p>
+                    </td>
+                    {{depend order_data.is_not_virtual}}
+                    <td style="width: 50%; padding: 10px; vertical-align: top;">
+                        <h3>{{trans "Shipping Information"}}</h3>
+                        {{var formattedShippingAddress|raw}}
+                    </td>
+                    {{/depend}}
+                </tr>
+                <tr>
+                    <td style="width: 50%; padding: 10px; vertical-align: top;">
+                        <h3>{{trans "Payment Method"}}</h3>
+                        <p>{{var payment_method_title}}</p>
+                    </td>
+                    {{depend order_data.is_not_virtual}}
+                    <td style="width: 50%; padding: 10px; vertical-align: top;">
+                        <h3>{{trans "Shipping Method"}}</h3>
+                        <p>{{var order.shipping_description}}</p>
+                    </td>
+                    {{/depend}}
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

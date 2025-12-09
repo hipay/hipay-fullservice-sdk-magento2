@@ -79,6 +79,12 @@
                 <identity>sales</identity>
                 <copy_method>bcc</copy_method>
             </fraud_payment_accept>
+            <async_confirm_payment_email>
+                <enabled>1</enabled>
+                <template>hipay_async_confirm_payment_email_template</template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </async_confirm_payment_email>
             <hosted_payment_link>
                 <enabled>1</enabled>
                 <template>hipay_hosted_payment_link_template</template>
