@@ -28,6 +28,7 @@ use Magento\Sales\Model\Order\Email\SenderBuilderFactory;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Pricing\Helper\Data as PriceHelper;
 
 /**
  * HiPay Asynchronous Confirm Payment Email Sender
@@ -66,6 +67,8 @@ class AsyncConfirmPaymentSender extends Sender
      */
     protected $timezone;
 
+    protected $priceHelper;
+
     /**
      * @param Template                    $templateContainer
      * @param AsyncConfirmPaymentIdentity $identityContainer
@@ -74,6 +77,7 @@ class AsyncConfirmPaymentSender extends Sender
      * @param Renderer                    $addressRenderer
      * @param AssetRepository             $assetRepo
      * @param TimezoneInterface           $timezone
+     * @param PriceHelper                 $priceHelper
      */
     public function __construct(
         Template $templateContainer,
@@ -82,12 +86,14 @@ class AsyncConfirmPaymentSender extends Sender
         LoggerInterface $logger,
         Renderer $addressRenderer,
         AssetRepository $assetRepo,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        PriceHelper $priceHelper
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->assetRepo = $assetRepo;
         $this->logger = $logger;
         $this->timezone = $timezone;
+        $this->priceHelper = $priceHelper;
     }
 
     /**
@@ -106,7 +112,7 @@ class AsyncConfirmPaymentSender extends Sender
             ? $referenceToPay
             : (json_decode((string)$referenceToPay, true) ?: []);
 
-        $this->referenceToPay = $this->prepareReferenceToPay($method, $referenceToPay);
+        $this->referenceToPay = $this->prepareReferenceToPay($method, $referenceToPay, $order);
 
         $this->prepareTemplate($order);
 
@@ -155,16 +161,17 @@ class AsyncConfirmPaymentSender extends Sender
      *
      * @param string $method
      * @param array  $referenceToPay
+     * @param Order  $order
      * @return array
      * @throws LocalizedException
      */
-    protected function prepareReferenceToPay(string $method, array $referenceToPay): array
+    protected function prepareReferenceToPay(string $method, array $referenceToPay, Order $order): array
     {
         $referenceToPay['isMultibanco'] = in_array($method, self::MULTIBANCO_METHODS, true);
         $referenceToPay['isMooney'] = in_array($method, self::MOONEY_METHODS, true);
 
         if ($referenceToPay['isMultibanco']) {
-            $referenceToPay = $this->prepareMultibancoData($referenceToPay);
+            $referenceToPay = $this->prepareMultibancoData($referenceToPay, $order);
         } elseif ($referenceToPay['isMooney']) {
             $referenceToPay = $this->prepareMooneyData($referenceToPay);
         }
@@ -176,12 +183,19 @@ class AsyncConfirmPaymentSender extends Sender
      * Enrich Multibanco reference data
      *
      * @param array $referenceToPay
+     * @param Order $order
      * @return array
      * @throws LocalizedException
      */
-    private function prepareMultibancoData(array $referenceToPay): array
+    private function prepareMultibancoData(array $referenceToPay, Order $order): array
     {
         $referenceToPay['logo'] = $this->getImageUrl('multibanco.png');
+        $referenceToPay['formatted_amount'] = $this->priceHelper->currencyByStore(
+            $referenceToPay['amount'],
+            $order->getStore(),
+            true,
+            false
+        );
         $referenceToPay['barcode_image'] = '';
         return $referenceToPay;
     }
