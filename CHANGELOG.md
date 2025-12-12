@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed duplicate entries showing in Mapping Categories and Mapping Shipping grids.
 - **Fix** : Improved detection of checkout agreement checkboxes for Apple Pay and PayPal payment methods.
 - **Fix** : Removed the "Accept and Capture Payment" button and controller, relying on Magento's native "Accept Payment" action instead.
 
