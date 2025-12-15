@@ -185,17 +185,22 @@ class AsyncConfirmPaymentSender extends Sender
      * @param array $referenceToPay
      * @param Order $order
      * @return array
-     * @throws LocalizedException
+     * @throws LocalizedException|\DateMalformedStringException
      */
     private function prepareMultibancoData(array $referenceToPay, Order $order): array
     {
         $referenceToPay['logo'] = $this->getImageUrl('multibanco.png');
+
+        $date = new \DateTime($referenceToPay['expirationDate']);
+        $referenceToPay['formatted_expiration_date'] = $date->format('m/d/Y');
+
         $referenceToPay['formatted_amount'] = $this->priceHelper->currencyByStore(
             $referenceToPay['amount'],
             $order->getStore(),
             true,
             false
         );
+
         $referenceToPay['barcode_image'] = '';
         return $referenceToPay;
     }

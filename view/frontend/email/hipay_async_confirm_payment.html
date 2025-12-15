@@ -33,7 +33,13 @@
             <table align="center" width="100%" style="margin: 20px 0; text-align: center; padding: 20px;">
                 <tr>
                     <td align="center">
-                        <p><img src="{{var referenceToPay.logo}}" alt="Multibanco Logo" width="120"/></p>
+                        <p>
+                            <img
+                                src="{{var referenceToPay.logo}}"
+                                alt="Multibanco Logo"
+                                style="max-width:120px; height:auto; display:block; margin:0 auto;"
+                            />
+                        </p>
 
                         <table style="margin: 20px auto; text-align: left; border-collapse: collapse;">
                             <tr>
@@ -50,7 +56,7 @@
                             </tr>
                             <tr>
                                 <td style="padding: 8px 15px;"><strong>{{trans "Expiration Date"}}:</strong></td>
-                                <td style="padding: 8px 15px;">{{var referenceToPay.expirationDate}}</td>
+                                <td style="padding: 8px 15px;">{{var referenceToPay.formatted_expiration_date}}</td>
                             </tr>
                         </table>
 
