@@ -39,7 +39,7 @@ data:
   PI_DATA_URL: {{ .Values.pi_data_url }}
   # Modules env var
   CUSTOM_REPOSITORIES: vcs https://github.com/hipay/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git,vcs https://github.com/hipay/hipay-fullservice-sdk-magento2-multistore.git
-  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth
+  CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:{{ .Values.branch }},giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth,picqer/php-barcode-generator
   HIPAY_PACKAGES: hipay/module-multistores
   CUSTOM_MODULES: HiPay_MultiStores
   # Opensearch env var

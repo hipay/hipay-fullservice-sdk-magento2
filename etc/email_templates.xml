@@ -22,4 +22,5 @@
     <template id="hipay_fraud_payment_deny_template" label="Fraud Payment Deny" file="hipay_fraud_payment_deny.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
     <template id="hipay_fraud_payment_accept_template" label="Fraud Payment Accepted" file="hipay_fraud_payment_accept.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
     <template id="hipay_hosted_payment_link_template" label="Hosted payment link" file="hipay_hosted_payment_link.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
+    <template id="hipay_async_confirm_payment_email_template" label="HiPay - Confirm Payment Email (Multibanco and Mooney)" file="hipay_async_confirm_payment.html" type="html" module="HiPay_FullserviceMagento" area="frontend"/>
 </config>

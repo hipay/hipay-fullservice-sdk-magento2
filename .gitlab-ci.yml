@@ -36,7 +36,7 @@ include:
     GITLAB_API_TOKEN: $GITLAB_API_TOKEN
 
     CUSTOM_REPOSITORIES: vcs https://gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git
-    CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME,hipay/hipay-fullservice-sdk-php,giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth
+    CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME,hipay/hipay-fullservice-sdk-php,giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth,picqer/php-barcode-generator
     HIPAY_PACKAGES: hipay/module-multistores
     CUSTOM_MODULES: HiPay_FullserviceMagento,HiPay_MultiStores
 

@@ -91,4 +91,30 @@
                 <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
             </field>
 		</group>
+        <group id="async_confirm_payment_email" translate="label comment" type="text" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Confirm payment email for Multibanco and Mooney</label>
+            <field id="enabled" translate="label" type="select" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Enabled</label>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+            </field>
+
+            <field id="identity" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Sender Identity</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+            </field>
+
+            <field id="template" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Email Template</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+            </field>
+
+            <field id="copy_to" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Send Copy To</label>
+                <comment>Separate email addresses with commas.</comment>
+            </field>
+            <field id="copy_method" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Copy Method</label>
+                <source_model>Magento\Config\Model\Config\Source\Email\Method</source_model>
+            </field>
+        </group>
 </include>
