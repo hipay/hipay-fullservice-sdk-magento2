@@ -8,7 +8,7 @@ USER root
 ADD https://files.magerun.net/n98-magerun2.phar /usr/local/bin/n98-magerun2.phar
 
 RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y msmtp gosu && \
+    apt-get install -y msmtp gosu cron && \
     docker-php-ext-install ftp && \
     chmod +x /usr/local/bin/n98-magerun2.phar && \
     echo "sendmail_path = /usr/bin/msmtp -t" > /usr/local/etc/php/conf.d/sendmail.ini && \

@@ -441,5 +441,50 @@ if [ "${NGROK^^}" = "YES" ] && [ -n "${NGROK_URL}" ]; then
 fi
 echo -e "${COLOR_SUCCESS} Magento + HiPay prêt !${NC}"
 
+# ====================================================
+# MAGENTO CRON CONFIGURATION
+# ====================================================
+echo -e "${COLOR_SUCCESS} Configuring Magento cron...${NC}"
+mkdir -p "$MAGENTO_ROOT/var/log"
+chown -R $MAGENTO_DIR_USER:$MAGENTO_DIR_USER "$MAGENTO_ROOT/var/log"
+chmod -R 775 "$MAGENTO_ROOT/var/log"
+
+CRON_LOG_FILE="$MAGENTO_ROOT/var/log/magento.cron.log"
+touch "$CRON_LOG_FILE"
+chown $MAGENTO_DIR_USER:$MAGENTO_DIR_USER "$CRON_LOG_FILE"
+chmod 664 "$CRON_LOG_FILE"
+
+PHP_BIN=$(which php)
+if [ -z "$PHP_BIN" ]; then
+    PHP_BIN="/usr/local/bin/php"
+fi
+
+CRON_FILE="/etc/cron.d/magento"
+echo "* * * * * $MAGENTO_DIR_USER cd $MAGENTO_ROOT && $PHP_BIN bin/magento cron:run 2>&1 | grep -v \"Ran jobs by schedule\" >> $CRON_LOG_FILE" > "$CRON_FILE"
+chmod 0644 "$CRON_FILE"
+
+mkdir -p /var/spool/cron/crontabs
+chmod 755 /var/spool/cron/crontabs
+
+echo -e "${COLOR_SUCCESS} Starting cron service...${NC}"
+if ! service cron start 2>/dev/null; then
+    echo -e "${COLOR_SUCCESS} Starting cron daemon directly...${NC}"
+    cron
+fi
+
+sleep 2
+if pgrep -x cron > /dev/null || pgrep -x crond > /dev/null; then
+    echo -e "${COLOR_SUCCESS} Cron service is running${NC}"
+    echo -e "${COLOR_SUCCESS} Cron configuration:${NC}"
+    cat "$CRON_FILE"
+else
+    echo -e "${COLOR_SUCCESS} Warning: Cron service may not be running properly${NC}"
+    echo -e "${COLOR_SUCCESS} Starting cron in background as fallback...${NC}"
+    cron
+fi
+
+echo -e "${COLOR_SUCCESS} Magento cron configured and started${NC}"
+echo -e "${COLOR_SUCCESS} Cron log file: $CRON_LOG_FILE${NC}"
+echo -e "${COLOR_SUCCESS} To check cron logs: tail -f $CRON_LOG_FILE${NC}"
 
 exec php-fpm -F
