@@ -22,6 +22,7 @@ use HiPay\Fullservice\Gateway\Mapper\TransactionMapper;
 use HiPay\Fullservice\Enum\Transaction\TransactionStatus;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudReviewSender;
 use HiPay\FullserviceMagento\Model\Email\Sender\FraudDenySender;
+use HiPay\FullserviceMagento\Model\Email\Sender\AsyncConfirmPaymentSender;
 use HiPay\FullserviceMagento\Model\ResourceModel\Card\CollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -55,6 +56,16 @@ use HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface;
  */
 class Notify
 {
+    /**
+     * HiPay asynchronous payment methods (require sending instructions).
+     */
+    private const ASYNC_METHODS = [
+        'hipay_multibanco',
+        'hipay_multibanco_hosted_fields',
+        'hipay_sisal',
+        'hipay_sisal_hosted_fields',
+    ];
+
     /**
      *
      * @var \Magento\Sales\Model\OrderFactory $_orderFactory
@@ -145,6 +156,11 @@ class Notify
     protected $notFoundOrderRepository;
 
     /**
+     * @var AsyncConfirmPaymentSender
+     */
+    protected $asyncConfirmPaymentSender;
+
+    /**
      * @param TransactionRepository                    $transactionRepository
      * @param OrderFactory                             $orderFactory
      * @param CollectionFactory                        $cardCollectionFactory
@@ -160,6 +176,7 @@ class Notify
      * @param OrderLockManager                         $orderLockManager
      * @param OrderState                               $orderState
      * @param ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository
+     * @param AsyncConfirmPaymentSender                $asyncConfirmPaymentSender
      * @param array                                    $params
      *
      * @throws LocalizedException
@@ -181,6 +198,7 @@ class Notify
         \HiPay\FullserviceMagento\Model\OrderLockManager $orderLockManager,
         OrderState $orderState,
         ResponseNotFoundOrderRepositoryInterface $notFoundOrderRepository,
+        AsyncConfirmPaymentSender $asyncConfirmPaymentSender,
         $params = []
     ) {
         $this->_orderFactory = $orderFactory;
@@ -200,6 +218,7 @@ class Notify
         $this->orderLockManager = $orderLockManager;
         $this->orderState = $orderState;
         $this->notFoundOrderRepository = $notFoundOrderRepository;
+        $this->asyncConfirmPaymentSender = $asyncConfirmPaymentSender;
 
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
@@ -396,6 +415,17 @@ class Notify
                     $this->_doTransactionAuthorizedAndPending();
                     break;
                 case TransactionStatus::AUTHORIZATION_REQUESTED:
+                    $referenceToPay = $this->_transaction->getReferenceToPay();
+
+                    if (
+                        $this->isAsyncPaymentEligible(
+                            $this->_order->getPayment()->getMethod(),
+                            $this->_order->getState()
+                        )
+                        && !empty($referenceToPay)
+                    ) {
+                        $this->asyncConfirmPaymentSender->send($this->_order, $referenceToPay);
+                    }
                     // status : 142
                     $this->_changeStatus(Config::STATUS_AUTHORIZATION_REQUESTED);
                     break;
@@ -1205,5 +1235,18 @@ class Notify
             $incrementId = $params['response']['order']['id'];
             $this->notFoundOrderRepository->savePendingOrder($incrementId);
         }
+    }
+
+    /**
+     * Determine if order and method are eligible for async email.
+     *
+     * @param string $method
+     * @param string $state
+     * @return bool
+     */
+    private function isAsyncPaymentEligible(string $method, string $state): bool
+    {
+        return in_array($method, self::ASYNC_METHODS, true)
+            && in_array($state, [Order::STATE_PENDING_PAYMENT, Order::STATE_NEW], true);
     }
 }
