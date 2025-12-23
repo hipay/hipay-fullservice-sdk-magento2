@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+## 1.30.0
+
 - **Fix** : Restricted the Alma payment method to France only.
 - **Add** : Added configurable email to send Multibanco and Mooney/SisalPay payment instructions when HiPay sends a notification.
 - **Fix** : Fixed duplicate entries showing in Mapping Categories and Mapping Shipping grids.
