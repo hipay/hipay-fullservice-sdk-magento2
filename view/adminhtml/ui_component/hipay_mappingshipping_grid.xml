@@ -33,23 +33,20 @@
             </item>
         </item>
     </argument>
-    <dataSource name="hipay_mappingshipping_grid_data_source">
-        <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">hipay_mappingshipping_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">mapping_shipping_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                </item>
-            </argument>
-        </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
+    <dataSource name="hipay_mappingshipping_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">mapping_shipping_id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+
+        <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="hipay_mappingshipping_grid_data_source">
+            <settings>
+                <requestFieldName>mapping_shipping_id</requestFieldName>
+                <primaryFieldName>mapping_shipping_id</primaryFieldName>
+            </settings>
+        </dataProvider>
     </dataSource>
     <container name="listing_top">
         <argument name="data" xsi:type="array">

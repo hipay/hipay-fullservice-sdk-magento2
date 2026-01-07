@@ -79,6 +79,12 @@
                 <identity>sales</identity>
                 <copy_method>bcc</copy_method>
             </fraud_payment_accept>
+            <async_confirm_payment_email>
+                <enabled>1</enabled>
+                <template>hipay_async_confirm_payment_email_template</template>
+                <identity>sales</identity>
+                <copy_method>bcc</copy_method>
+            </async_confirm_payment_email>
             <hosted_payment_link>
                 <enabled>1</enabled>
                 <template>hipay_hosted_payment_link_template</template>
@@ -682,7 +688,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>1</allowspecific>
                 <allowed_currencies>EUR</allowed_currencies>
-                <specificcountry>FR,DE,IT,BE,LUX,NL,IE,AT,PT,ES</specificcountry>
+                <specificcountry>FR</specificcountry>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
@@ -711,7 +717,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>1</allowspecific>
                 <allowed_currencies>EUR</allowed_currencies>
-                <specificcountry>FR,DE,IT,BE,LUX,NL,IE,AT,PT,ES</specificcountry>
+                <specificcountry>FR</specificcountry>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>

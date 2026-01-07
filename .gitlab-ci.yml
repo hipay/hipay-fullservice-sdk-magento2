@@ -3,6 +3,7 @@ image: $REGISTRY_CI/gitlab-ci-base:buster
 variables:
   DOCKER_HOST: tcp://localhost:2375/
   DOCKER_DRIVER: overlay2
+  MAGENTO_VERSION: 2.4.8-p2
   GIT_DEPTH: 10
   RELEASE_NAME: ${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}
 
@@ -26,31 +27,40 @@ include:
 .test_template: &test_definition
   allow_failure: false
   variables:
-    ALLOW_EMPTY_PASSWORD: yes
-    MARIADB_USER: bn_magento
-    MARIADB_DATABASE: bitnami_magento
+    MARIADB_ROOT_PASSWORD: root
+    MARIADB_DATABASE: magento
+    MARIADB_USER: magento
+    MARIADB_PASSWORD: magento
 
     GITHUB_API_TOKEN: $GITHUB_TOKEN
     GITLAB_API_TOKEN: $GITLAB_API_TOKEN
 
     CUSTOM_REPOSITORIES: vcs https://gitlab.hipay.org/pi-ecommerce/hipay-fullservice-sdk-magento2.git,vcs https://github.com/hipay/hipay-fullservice-sdk-php.git
-    CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME
-    CUSTOM_MODULES: HiPay_FullserviceMagento
+    CUSTOM_PACKAGES: hipay/hipay-fullservice-sdk-magento2:dev-$CI_COMMIT_REF_NAME,hipay/hipay-fullservice-sdk-php,giggsey/libphonenumber-for-php,mmustafaydogan/module-log-viewer:dev-main,markshust/magento2-module-disabletwofactorauth,picqer/php-barcode-generator
+    HIPAY_PACKAGES: hipay/module-multistores
+    CUSTOM_MODULES: HiPay_FullserviceMagento,HiPay_MultiStores
 
+    HOST_UID: '1000'
+    HOST_GID: '1000'
     MAGENTO_HOST: 127.0.0.1
     MAGENTO_EXTERNAL_HTTP_PORT_NUMBER: 8096
     MAGENTO_EXTERNAL_HTTPS_PORT_NUMBER: 8096
-    MAGENTO_DATABASE_HOST: mariadb
+    MAGENTO_VERSION: $MAGENTO_VERSION
+    MAGENTO_DATABASE_HOST: db
     MAGENTO_DATABASE_PORT_NUMBER: 3306
-    MAGENTO_DATABASE_USER: bn_magento
-    MAGENTO_DATABASE_NAME: bitnami_magento
+    MAGENTO_DATABASE_USER: magento
+    MAGENTO_DATABASE_PASSWORD: magento
+    MAGENTO_DATABASE_NAME: magento
     MAGENTO_USERNAME: demo
     MAGENTO_PASSWORD: hipay123
-    MAGENTO_EMAIL: demo@hipaycom
+    MAGENTO_EMAIL: demo@hipay.com
     MAGENTO_MODE: developer
-    ELASTICSEARCH_HOST: elasticsearch
-    ELASTICSEARCH_PORT_NUMBER: 9200
-    PHP_ENABLE_OPCACHE: false
+    ALLOW_EMPTY_PASSWORD: yes
+    OPENSEARCH_HOST: opensearch
+    OPENSEARCH_PORT_NUMBER: 9200
+    OPENSEARCH_ENABLED: true
+    OPENSEARCH_USER: admin
+    OPENSEARCH_PASSWORD: Hg7$9LpQz@32
 
     ENVIRONMENT: stage
     HIPAY_API_USER_TEST: $HIPAY_API_USER_TEST
@@ -70,11 +80,13 @@ include:
 
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
-      alias: web
-    - name: docker.io/bitnamilegacy/mariadb:10.6
-      alias: mariadb
-    - name: docker.io/bitnamilegacy/elasticsearch:7
-      alias: elasticsearch
+      alias: phpfpm
+    - name: docker.io/mariadb:11.4
+      alias: db
+    - name: docker.io/markoshust/magento-opensearch:2.5-1
+      alias: opensearch
+    - name: docker.io/markoshust/magento-nginx:1.24-0
+      alias: app
   artifacts:
     paths:
       - bin/tests/errors
@@ -127,13 +139,15 @@ build-test-2-1-10:
   stage: build-test
   image:
     name: gcr.io/kaniko-project/executor:v1.6.0-debug
+  variables:
+    KANIKO_CACHE: 'true'
   script:
     - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --force
-      --cache=true
+      --cache=${KANIKO_CACHE}
       --context "dir://${CI_PROJECT_DIR}"
       --dockerfile "./bin/docker/images/default/Dockerfile"
       --destination "$REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}"
@@ -168,15 +182,18 @@ build:
       when: on_success
     - if: $CI_PIPELINE_SOURCE == "push"
       when: manual
+  variables:
+    KANIKO_CACHE: 'true'
   script:
     - cp bin/docker/conf/development/auth.json.sample bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PUBLIC_KEY>|$MAGE_ACCOUNT_PUBLIC_KEY|" bin/docker/conf/development/auth.json
     - sed -i "s|<MAGE_ACCOUNT_PRIVATE_KEY>|$MAGE_ACCOUNT_PRIVATE_KEY|" bin/docker/conf/development/auth.json
     - /kaniko/executor
       --force
-      --cache=true
+      --cache=${KANIKO_CACHE}
       --context "dir://${CI_PROJECT_DIR}"
-      --dockerfile "./bin/docker/images/default/Dockerfile_helm"
+      --dockerfile "./bin/docker/images/default/Dockerfile"
+      --build-arg ENVIRONMENT=production
       --destination "${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web:${CI_COMMIT_REF_SLUG}"
   tags:
     - small
@@ -204,6 +221,7 @@ deploy2recette:
     - >
       helm install $RELEASE_NAME ./bin/docker/kubernetes/helm/
       --namespace default
+      --set magento2_version="$MAGENTO_VERSION"
       --set magento2_image="${REGISTRY_CD}/${DOCKER_STACK}-${DOCKER_SERVICE}-web"
       --set magento2_tag="${CI_COMMIT_REF_SLUG}"
       --set magento2_url="${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}.${URL_CD}"

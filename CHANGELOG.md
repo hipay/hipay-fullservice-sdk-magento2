@@ -2,6 +2,19 @@
 
 ## UNRELEASE
 
+## 1.30.0
+
+- **Fix** : Restricted the Alma payment method to France only.
+- **Add** : Added configurable email to send Multibanco and Mooney/SisalPay payment instructions when HiPay sends a notification.
+- **Fix** : Fixed duplicate entries showing in Mapping Categories and Mapping Shipping grids.
+- **Fix** : Improved detection of checkout agreement checkboxes for Apple Pay and PayPal payment methods.
+- **Fix** : Removed the "Accept and Capture Payment" button and controller, relying on Magento's native "Accept Payment" action instead.
+
+## 1.29.2
+
+- **Fix** : Fixed Apple Pay card brand detection using payment_product property
+- **Fix** : Fixed frontend scope for ResponseNotFoundOrderRepositoryInterface preference, thanks to [zfmaster](https://github.com/zfmaster) for issue [#170](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/170)
+
 ## 1.29.1
 
 - **Fix** : Enhanced payment method validation with smart button visibility control for PayPal and Apple Pay.

@@ -39,7 +39,7 @@ define([
       defaults: {
         template: 'HiPay_FullserviceMagento/payment/hipay-applepay',
         creditCardToken: null,
-        creditCardType: 'cb',
+        creditCardType: null,
         instanceApplePay: null,
         totals: quote.totals,
         eci: window.checkoutConfig.payment.hiPayFullservice.defaultEci,
@@ -176,6 +176,13 @@ define([
             var results = document.querySelectorAll(
               "input[id*='agreement_hipay_applepay']"
             );
+
+            if (results.length === 0) {
+                  results = document.querySelectorAll(
+                      '.checkout-agreements input[type="checkbox"][id*="agreement"]'
+                  );
+            }
+
             var agreements =
               window.checkoutConfig.checkoutAgreements.agreements;
             agreements = agreements.filter((input) => input.mode == '1');
@@ -264,8 +271,7 @@ define([
         var body = $('body');
         self.creditCardToken(tokenHipay.token);
         self.creditCardType(
-          tokenHipay.brand.toLowerCase().replace(/ /g, '-') ||
-            self.creditCardType
+          tokenHipay.payment_product.toLowerCase().replace(/ /g, '-')
         );
 
         var deferred = $.Deferred();

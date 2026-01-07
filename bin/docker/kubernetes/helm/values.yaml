@@ -1,8 +1,13 @@
-mysql_image: 'docker.io/bitnamilegacy/mariadb'
-mysql_tag: '10.6'
+magento2_version: ''
 
-elastic_image: 'docker.io/bitnamilegacy/elasticsearch'
-elastic_tag: '7'
+nginx_image: 'docker.io/markoshust/magento-nginx'
+nginx_tag: '1.24-0'
+
+mariadb_image: 'docker.io/mariadb'
+mariadb_tag: '11.4'
+
+opensearch_image: 'docker.io/markoshust/magento-opensearch'
+opensearch_tag: '2.5-1'
 
 magento2_image: ''
 magento2_tag: ''
