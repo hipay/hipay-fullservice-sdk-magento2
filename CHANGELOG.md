@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Improved PayPal availability checks to prevent unnecessary API calls and errors.
+
 ## 1.30.0
 
 - **Fix** : Restricted the Alma payment method to France only.

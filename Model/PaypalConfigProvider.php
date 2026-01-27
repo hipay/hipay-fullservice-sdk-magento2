@@ -16,6 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Model;
 
+use HiPay\FullserviceMagento\Model\Method\Paypal;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use HiPay\FullserviceMagento\Model\Gateway\Manager as GatewayClient;
 use HiPay\FullserviceMagento\Model\Gateway\Factory as GatewayManagerFactory;
@@ -107,6 +108,12 @@ class PaypalConfigProvider implements ConfigProviderInterface
     {
         try {
             $storeId = $storeId ?? $this->_storeManager->getStore()->getId();
+            $this->_hipayConfig->setStoreId($storeId);
+            $this->_hipayConfig->setMethodCode(Paypal::HIPAY_METHOD_CODE);
+            if (!$this->_hipayConfig->isPaymentMethodActive()) {
+                return false;
+            }
+
             $gatewayClient = $this->_gatewayManagerFactory->create(
                 null,
                 [
@@ -116,10 +123,17 @@ class PaypalConfigProvider implements ConfigProviderInterface
             );
             $paymentProduct = $gatewayClient->requestPaymentProduct('paypal', true);
 
-            if (!empty($paymentProduct[0]->getOptions())) {
-                $options = $paymentProduct[0]->getOptions();
-                return $options['providerArchitectureVersion'] === 'v1' && !empty($options['payerId']);
+            $options = (
+                is_array($paymentProduct)
+                && !empty($paymentProduct[0])
+            ) ? $paymentProduct[0]->getOptions() : null;
+
+            if (!is_array($options)) {
+                return false;
             }
+
+            return ($options['providerArchitectureVersion'] ?? null) === 'v1'
+                && !empty($options['payerId']);
         } catch (Exception $e) {
             $this->_logger->critical($e->getMessage());
         }
