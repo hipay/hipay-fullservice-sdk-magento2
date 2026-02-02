@@ -423,3 +423,8 @@
 "90 days","90 days"
 "Please complete your billing address, shipping address, and select a shipping method to continue with PayPal","Please complete your billing address, shipping address, and select a shipping method to continue with PayPal"
 "Please complete your billing address, shipping address, and select a shipping method to continue with Apple Pay","Please complete your billing address, shipping address, and select a shipping method to continue with Apple Pay"
+"Invalid delivery address. Please check or correct the following fields:","Invalid delivery address. Please check or correct the following fields:"
+"address","address"
+"postal code","postal code"
+"city","city"
+"country","country"

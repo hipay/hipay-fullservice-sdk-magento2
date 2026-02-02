@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Enforced sending a validated Magento shipping address to PayPal V2 to prevent address changes on PayPal.
+
 ## 1.30.0
 
 - **Fix** : Restricted the Alma payment method to France only.
