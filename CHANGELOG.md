@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed compatibility with php 8.4 and 8.5
 - **Add** : Enforced sending a validated Magento shipping address to PayPal V2 to prevent address changes on PayPal.
 
 ## 1.30.0

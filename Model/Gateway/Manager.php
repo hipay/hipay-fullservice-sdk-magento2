@@ -333,7 +333,7 @@ class Manager
         return $this->_order->getPayment();
     }
 
-    protected function _getRequestObject($requestClassName, array $params = null)
+    protected function _getRequestObject($requestClassName, ?array $params = null)
     {
         if ($params === null) {
             $params = $this->_getRequestParameters();
