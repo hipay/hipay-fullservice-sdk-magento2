@@ -39,7 +39,7 @@ class Logger extends LoggerMagento
      * @param  bool|null  $forceDebug
      * @return void
      */
-    public function debug(array $data, array $maskKeys = null, $forceDebug = null)
+    public function debug(array $data, ?array $maskKeys = null, $forceDebug = null)
     {
         $maskKeys = $maskKeys !== null ? $maskKeys : $this->getDebugReplaceFields();
         $debugOn = $forceDebug !== null ? $forceDebug : $this->isDebugOn();

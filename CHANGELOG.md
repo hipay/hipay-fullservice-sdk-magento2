@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed compatibility with php 8.4 and 8.5
 - **Fix** : Improved PayPal availability checks to prevent unnecessary API calls and errors.
 
 ## 1.30.0
