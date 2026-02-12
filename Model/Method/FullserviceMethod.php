@@ -202,8 +202,8 @@ abstract class FullserviceMethod extends AbstractMethod
     public function __construct(
         TransactionRepository $transactionRepository,
         \HiPay\FullserviceMagento\Model\Method\Context $context,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct(

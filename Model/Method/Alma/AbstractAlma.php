@@ -41,7 +41,7 @@ class AbstractAlma extends AbstractMethodAPI
      * @param CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
+    public function isAvailable(?\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         // First check parent rules (from HiPay)
         $isAvailable = parent::isAvailable($quote);

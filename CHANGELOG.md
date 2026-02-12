@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed compatibility with php 8.4 and 8.5
+
 ## 1.30.0
 
 - **Fix** : Restricted the Alma payment method to France only.
