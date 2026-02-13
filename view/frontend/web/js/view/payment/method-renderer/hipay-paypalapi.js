@@ -89,6 +89,9 @@ define([
         ),
         isPayPalVisible: ko.observable(false),
         allTOC: new Map(),
+        isPaypalAddressValid: ko.observable(null),
+        paypalAddressInvalidFields: ko.observableArray([]),
+        _hipayUnhandledRejectionInstalled: false,
 
         initTOCEvents: function () {
           var self = this;
@@ -148,6 +151,144 @@ define([
               }
             }
           });
+        },
+
+        /**
+         * Build the customerShippingInformation object from the Magento shipping address.
+         */
+        buildCustomerShippingInformation: function () {
+              var addr = quote.shippingAddress && quote.shippingAddress();
+              if (!addr) return null;
+
+              var street0 = '';
+              var street1 = '';
+
+              if (addr.street) {
+                  if (Array.isArray(addr.street)) {
+                      street0 = addr.street[0] || '';
+                      street1 = addr.street[1] || '';
+                  } else {
+                      street0 = addr.street || '';
+                  }
+              }
+
+            return {
+                firstname: String(addr.firstname || ''),
+                lastname: String(addr.lastname || ''),
+                zipCode: addr.postcode ? String(addr.postcode) : '',
+                city: addr.city ? String(addr.city) : '',
+                country: String(addr.countryId || addr.country_id || ''),
+                streetaddress: String(street0 || ''),
+                streetaddress2: String(street1 || '')
+            };
+        },
+
+        /**
+         * Check whether a value is null, undefined, or an empty string.
+         */
+        isEmptyValue: function (v) {
+              return v === null || v === undefined || String(v).trim() === '';
+        },
+
+        /**
+         * Validate shipping address fields before calling the HiPay SDK.
+         */
+        validateShippingAddressOrShowError: function (shippingAddress) {
+            var self = this;
+            shippingAddress = shippingAddress || {};
+
+            var required = ['zipCode', 'city', 'country', 'streetaddress'];
+            var missing = [];
+
+            required.forEach(function (key) {
+                if (self.isEmptyValue(shippingAddress[key])) {
+                    missing.push(key);
+                }
+            });
+
+            if (!missing.length) {
+                return true;
+            }
+
+            self.handlePaypalAddressCreateError({
+                message: 'HIPAY_CREATE_INVALID_OPTION_VALUE: ' + missing
+                    .map(function (f) {
+                        return 'request.customerShippingInformation.' + f;
+                    })
+                    .join(', ')
+            });
+
+            return false;
+        },
+
+        /**
+         * Parse a HiPay create() error and extract invalid shipping address fields.
+         */
+        parseHipayCreateError: function (err) {
+          var msg = (err && err.message) ? err.message : String(err || '');
+          var fields = [];
+
+          if (msg.indexOf('customerShippingInformation') !== -1) {
+              if (/customerShippingInformation\.?zipCode/.test(msg)) fields.push('postcode');
+              if (/customerShippingInformation\.?city/.test(msg)) fields.push('city');
+              if (/customerShippingInformation\.?country/.test(msg)) fields.push('country');
+              if (/customerShippingInformation\.?streetaddress/.test(msg)) fields.push('address');
+          }
+
+          return {
+              message: msg,
+              fields: Array.from(new Set(fields))
+          };
+        },
+
+        /**
+         * Destroy the current PayPal HiPay instance and clean the DOM container.
+         */
+        resetPaypalInstance: function () {
+
+            if (this.hipayHostedFields && typeof this.hipayHostedFields.destroy === 'function') {
+                try {
+                    this.hipayHostedFields.destroy();
+                } catch (e) {
+                }
+            }
+
+            this.hipayHostedFields = null;
+
+            var el = document.getElementById('paypal-field');
+            if (el) el.innerHTML = '';
+        },
+
+        /**
+         * Intercept HiPay SDK create() errors triggered via unhandled promise rejections.
+         */
+        installHipayCreateErrorInterceptor: function () {
+          var self = this;
+
+          if (self._hipayUnhandledRejectionInstalled) return;
+          self._hipayUnhandledRejectionInstalled = true;
+
+          window.addEventListener('unhandledrejection', function (event) {
+            var reason = event && event.reason;
+            var msg = reason && reason.message ? reason.message : '';
+
+            if (msg && msg.indexOf('HIPAY_CREATE_') !== -1) {
+                event.preventDefault();
+                self.handlePaypalAddressCreateError(reason);
+            }
+          });
+        },
+
+        /**
+         * Handle HiPay create() address errors and update UI state accordingly.
+         */
+        handlePaypalAddressCreateError: function (err) {
+          var parsed = this.parseHipayCreateError(err);
+
+          this.isPaypalAddressValid(false);
+          this.paypalAddressInvalidFields(parsed.fields);
+
+          this.resetPaypalInstance();
         },
 
         /**
@@ -273,6 +414,7 @@ define([
         initialize: function () {
           var self = this;
           self._super();
+          self.installHipayCreateErrorInterceptor();
 
           self.configHipay = {
             template: 'auto',
@@ -314,23 +456,55 @@ define([
         initHostedFields: function () {
           var self = this;
 
-          self.hipaySdk = new HiPay({
-            username: self.apiUsernameTokenJs,
-            password: self.apiPasswordTokenJs,
-            environment: self.env,
-            lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
-          });
+          if (self.hipayHostedFields) {
+              return true;
+          }
 
-          self.hipayHostedFields = self.hipaySdk.create(
-            'paypal',
-            self.configHipay
-          );
+          self.isPaypalAddressValid(null);
+          self.paypalAddressInvalidFields([]);
 
-          self.hipayHostedFields.on('paymentAuthorized', function (token) {
-            self.paymentAuthorized(self, token);
-          });
+          if (!self.hipaySdk) {
+              self.hipaySdk = new HiPay({
+                  username: self.apiUsernameTokenJs,
+                  password: self.apiPasswordTokenJs,
+                  environment: self.env,
+                  lang: self.locale.length > 2 ? self.locale.substr(0, 2) : 'en'
+                });
+          }
 
-          self.isPlaceOrderAllowed(true);
+          if (!quote.isVirtual()) {
+              var shippingAddress = self.buildCustomerShippingInformation();
+
+              if (!self.validateShippingAddressOrShowError(shippingAddress)) {
+                  return true;
+              }
+              self.configHipay.request.customerShippingInformation = shippingAddress;
+          } else if (self.configHipay.request.customerShippingInformation) {
+              // Avoid stale shipping info for virtual quotes
+              delete self.configHipay.request.customerShippingInformation;
+          }
+
+          var created;
+          try {
+              created = self.hipaySdk.create('paypal', self.configHipay);
+          } catch (e) {
+              self.handlePaypalAddressCreateError(e);
+              return true;
+          }
+
+          Promise.resolve(created)
+              .then(function (instance) {
+                  self.hipayHostedFields = instance;
+
+                  self.hipayHostedFields.on('paymentAuthorized', function (token) {
+                      self.paymentAuthorized(self, token);
+                  });
+
+                  self.isPlaceOrderAllowed(true);
+              })
+              .catch(function (e) {
+                  self.handlePaypalAddressCreateError(e);
+              });
 
           return true;
         },
@@ -384,6 +558,12 @@ define([
 
           quote.shippingMethod.subscribe(function () {
             self.handleOrderValidation();
+          });
+
+          quote.shippingAddress.subscribe(function () {
+                self.isPaypalAddressValid(null);
+                self.paypalAddressInvalidFields([]);
+                self.resetPaypalInstance();
           });
 
           // Initial validation check
