@@ -45,8 +45,26 @@
       <!--/ko-->
     </div>
     <div class="hipay-field-container">
-      <div id="paypal-field" data-bind="visible: isAllTOCChecked() && isPayPalVisible()"></div>
-      <div class="errorTOC" data-bind="visible: isAllTOCChecked() && !isPayPalVisible()">
+        <div class="errorTOC" data-bind="visible: isPaypalAddressValid() === false">
+          <span>
+            <!-- ko i18n: 'Invalid delivery address. Please check or correct the following fields:' --><!-- /ko -->
+
+              <!-- ko if: paypalAddressInvalidFields().length -->
+              <strong>
+                <!-- ko foreach: paypalAddressInvalidFields() -->
+                  <span>
+                    <!-- ko if: $data === 'address' --><!-- ko i18n: 'address' --><!-- /ko --><!-- /ko -->
+                      <!-- ko if: $data === 'postcode' --><!-- ko i18n: 'postal code' --><!-- /ko --><!-- /ko -->
+                      <!-- ko if: $data === 'city' --><!-- ko i18n: 'city' --><!-- /ko --><!-- /ko -->
+                      <!-- ko if: $data === 'country' --><!-- ko i18n: 'country' --><!-- /ko --><!-- /ko -->
+                  </span><!-- ko if: ($index() < $parent.paypalAddressInvalidFields().length - 1) -->, <!-- /ko -->
+                  <!-- /ko -->
+              </strong>
+              <!-- /ko -->
+          </span>
+        </div>
+        <div id="paypal-field" data-bind="visible: isAllTOCChecked() && isPayPalVisible() && isPaypalAddressValid() !== false"></div>
+      <div class="errorTOC" data-bind="visible: isAllTOCChecked() && !isPayPalVisible() && isPaypalAddressValid() !== false">
         <span>
           <!-- ko i18n: 'Please complete your billing address, shipping address, and select a shipping method to continue with PayPal'-->
           <!-- /ko -->
@@ -54,7 +72,7 @@
       </div>
     </div>
     <div class="checkout-agreements-block">
-      <div class="errorTOC" data-bind="visible: !isAllTOCChecked()">
+      <div class="errorTOC" data-bind="visible: !isAllTOCChecked() && isPaypalAddressValid() !== false">
         <span>
           <!-- ko i18n: 'Please agree with the terms of conditions below'-->
           <!-- /ko -->
