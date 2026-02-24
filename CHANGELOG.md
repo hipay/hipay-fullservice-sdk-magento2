@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Resolved PHP 8.4 deprecated warnings (implicit nullable parameters) and upgraded Docker environment to PHP 8.4.6.
+
 ## 1.31.0
 
 - **Fix** : Fixed compatibility with php 8.4 and 8.5

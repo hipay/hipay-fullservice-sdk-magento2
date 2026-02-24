@@ -1,4 +1,4 @@
-FROM markoshust/magento-php:8.3-fpm-5
+FROM markoshust/magento-php:8.4-fpm-0
 
 ARG ENVIRONMENT=development
 ENV ENVIRONMENT=$ENVIRONMENT
