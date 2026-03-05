@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Updated picqer/php-barcode-generator constraint to ^3.2 to avoid dependency conflicts.
+
 ## 1.31.0
 
 - **Fix** : Fixed compatibility with php 8.4 and 8.5
