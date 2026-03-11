@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Updated picqer/php-barcode-generator constraint to ^3.2 to avoid dependency conflicts.
+- **Fix** : Prevent duplicate AUTHORIZED (116) notifications from returning an error when the order is already authorized.
 
 ## 1.31.0
 
