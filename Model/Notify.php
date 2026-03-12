@@ -321,7 +321,10 @@ class Notify
                         );
                     }
                 }
-                if ($this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')) {
+                if (
+                    !$this->skipNotification
+                    && $this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
+                ) {
                     $this->notFoundOrderRepository->deletePendingOrder((string)$this->_order->getIncrementId());
                 }
                 break;
