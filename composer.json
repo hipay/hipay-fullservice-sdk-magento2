@@ -9,7 +9,7 @@
   "require": {
     "hipay/hipay-fullservice-sdk-php": "^2.22.0",
     "giggsey/libphonenumber-for-php": "^9.0.18",
-    "picqer/php-barcode-generator": "2.0.1"
+    "picqer/php-barcode-generator": "^3.2"
   },
   "scripts": {
     "post-install-cmd": [
