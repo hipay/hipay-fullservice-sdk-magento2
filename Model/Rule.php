@@ -73,8 +73,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \HiPay\FullserviceMagento\Model\Rule\Condition\CombineFactory $condCombineFactory,
         \HiPay\FullserviceMagento\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_condCombineFactory = $condCombineFactory;

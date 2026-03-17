@@ -69,8 +69,8 @@ class Rule extends \Magento\Framework\App\Config\Value
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\RequestInterface $httpRequest,
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->ruleFactory = $ruleFactory;
