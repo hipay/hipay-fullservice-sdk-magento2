@@ -67,6 +67,19 @@ class Notify
     ];
 
     /**
+     * Indicates whether the current notification should be skipped.
+     *
+     * @var bool
+     */
+    protected $skipNotification = false;
+
+    /**
+     * Custom response message returned to HiPay.
+     *
+     * @var string|null
+     */
+    protected $responseMessage = null;
+    /**
      *
      * @var \Magento\Sales\Model\OrderFactory $_orderFactory
      */
@@ -290,19 +303,28 @@ class Notify
                     $canProcess = true;
                 } else {
                     $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
-                    throw new WebApiException(
-                        __(
-                            'Cannot process transaction for order "%1". State: "%2". Status: "%3". Status history : %4',
-                            $this->_transaction->getOrder()->getId(),
-                            $this->_order->getState(),
-                            $this->_order->getStatus(),
-                            is_array($savedStatues) ? implode(' - ', array_keys($savedStatues)) : ''
-                        ),
-                        0,
-                        WebApiException::HTTP_BAD_REQUEST
-                    );
+                    if (is_array($savedStatues) && isset($savedStatues[TransactionStatus::AUTHORIZED])) {
+                        $canProcess = true;
+                        $this->skipNotification = true;
+                    } else {
+                        throw new WebApiException(
+                            __(
+                                'Cannot process transaction for order "%1". '
+                                . 'State: "%2". Status: "%3". Status history: %4',
+                                $this->_transaction->getOrder()->getId(),
+                                $this->_order->getState(),
+                                $this->_order->getStatus(),
+                                is_array($savedStatues) ? implode(' - ', array_keys($savedStatues)) : ''
+                            ),
+                            0,
+                            WebApiException::HTTP_BAD_REQUEST
+                        );
+                    }
                 }
-                if ($this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')) {
+                if (
+                    !$this->skipNotification
+                    && $this->_order->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
+                ) {
                     $this->notFoundOrderRepository->deletePendingOrder((string)$this->_order->getIncrementId());
                 }
                 break;
@@ -368,6 +390,19 @@ class Notify
                     $this->_transaction->getOrder()->getId()
                 ))
             );
+        }
+
+        if ($this->skipNotification) {
+            $this->_doTransactionMessage(
+                __('Notification skipped: order "%1" was already authorized.', $this->_transaction->getOrder()->getId())
+            );
+
+            $this->responseMessage = (string)__(
+                'Order "%1" was already authorized.',
+                $this->_transaction->getOrder()->getId()
+            );
+
+            return $this;
         }
 
         if ($this->orderLockManager->isLocked($this->_order)) {
@@ -1248,5 +1283,15 @@ class Notify
     {
         return in_array($method, self::ASYNC_METHODS, true)
             && in_array($state, [Order::STATE_PENDING_PAYMENT, Order::STATE_NEW], true);
+    }
+
+    /**
+     * Return the custom response message sent back to HiPay.
+     *
+     * @return string|null
+     */
+    public function getResponseMessage(): ?string
+    {
+        return $this->responseMessage;
     }
 }

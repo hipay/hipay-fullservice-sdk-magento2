@@ -428,3 +428,4 @@
 "postal code","code postal"
 "city","ville"
 "country","pays"
+"Notification skipped: order ""%1"" was already authorized.","Notification ignorée : la commande ""%1"" a déjà été autorisée."
