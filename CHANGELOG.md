@@ -5,6 +5,7 @@
 - **Fix** : Updated picqer/php-barcode-generator constraint to ^3.2 to avoid dependency conflicts.
 - **Fix** : Prevent duplicate AUTHORIZED (116) notifications from returning an error when the order is already authorized.
 - **Fix** : Resolved PHP 8.4 deprecated warnings (implicit nullable parameters) and upgraded Docker environment to PHP 8.4.6.
+- **Fix** : Fixed saved card number wrapping on narrow containers
 
 ## 1.31.0
 

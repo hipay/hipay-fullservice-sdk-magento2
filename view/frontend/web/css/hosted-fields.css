@@ -12,7 +12,7 @@
 }
 
 #hipay-container-hosted-fields {
-  width: 500px;
+  width: 520px;
   padding: 20px;
   display: inline-block;
   border: 1px solid #ddd;
@@ -28,7 +28,7 @@
 
 @media screen and (max-width: 768px) {
   #hipay-container-hosted-fields {
-    max-width: 500px;
+    max-width: 320px;
     width: auto;
     display: block;
   }
