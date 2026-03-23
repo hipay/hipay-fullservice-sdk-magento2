@@ -119,6 +119,9 @@ class Index extends AppAction
                     ['params' => ['response' => $params]]
                 );
                 $notify->processTransaction();
+                if ($notify->getResponseMessage()) {
+                    $reponseBody = $notify->getResponseMessage();
+                }
             }
         } catch (WebApiException $e) {
             $this->_logger->warning($e);
