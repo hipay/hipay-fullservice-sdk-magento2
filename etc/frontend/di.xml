@@ -30,6 +30,7 @@
         <arguments>
             <argument name="methodCodes" xsi:type="array">
                 <item name="hipay_bancontact_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\BancontactHostedFields::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bancomatpay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\BancomatPayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_mbway_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MbwayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_multibanco_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\MultibancoHostedFields::HIPAY_METHOD_CODE</item>
@@ -72,6 +73,7 @@
                 <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sofortapi" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SofortApi::HIPAY_METHOD_CODE</item>
                 <item name="hipay_bancontact_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\BancontactHostedFields::HIPAY_METHOD_CODE</item>
+                <item name="hipay_bancomatpay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\BancomatPayHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ideal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDealHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_ideal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\IDeal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_giropay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Giropay::HIPAY_METHOD_CODE</item>

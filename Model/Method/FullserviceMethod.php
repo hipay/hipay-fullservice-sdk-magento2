@@ -422,7 +422,7 @@ abstract class FullserviceMethod extends AbstractMethod
     protected function processResponse($response)
     {
         $successUrl = $this->urlBuilder->getUrl('hipay/redirect/accept', ['_secure' => true]);
-        $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
+        $pendingUrl = $this->getPendingRedirectUrl();
         $forwardUrl = $response->getForwardUrl();
         $failUrl = $this->urlBuilder->getUrl('hipay/redirect/decline', ['_secure' => true]);
         $redirectUrl = $successUrl;
@@ -503,7 +503,7 @@ abstract class FullserviceMethod extends AbstractMethod
                 $payment->getOrder()->setStatus($this->getConfigData('order_status'));
 
                 // Set pending URL
-                $pendingUrl = $this->urlBuilder->getUrl('hipay/redirect/pending', ['_secure' => true]);
+                $pendingUrl = $this->getPendingRedirectUrl();
                 $payment->setAdditionalInformation('redirectUrl', $pendingUrl);
 
                 return $this;
@@ -516,6 +516,16 @@ abstract class FullserviceMethod extends AbstractMethod
         }
 
         return $this;
+    }
+
+    public function getPendingRedirectPath()
+    {
+        return 'hipay/redirect/pending';
+    }
+
+    public function getPendingRedirectUrl()
+    {
+        return $this->urlBuilder->getUrl($this->getPendingRedirectPath(), ['_secure' => true]);
     }
 
     /**

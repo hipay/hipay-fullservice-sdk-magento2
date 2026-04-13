@@ -1,6 +1,7 @@
 # Changelog
 
 ## UNRELEASE
+- **Add** : Added Bancomat Pay payment method
 
 ## 1.31.1
 

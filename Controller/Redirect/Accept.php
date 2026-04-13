@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use HiPay\FullserviceMagento\Model\Method\BancomatPayHostedFields;
 
 /**
  * Accept controller
@@ -31,7 +32,7 @@ use HiPay\FullserviceMagento\Controller\Fullservice;
 class Accept extends Fullservice
 {
     /**
-     * @return                                       $this
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
@@ -42,6 +43,22 @@ class Accept extends Fullservice
             $this->_customerSession->setAccept(true);
             return $this->resultRedirectFactory->create()->setPath('customer/account');
         }
+
+        $order = $this->_getCheckoutSession()->getLastRealOrder();
+        if (
+            $order
+            && $order->getId()
+            && $order->getPayment()
+            && $order->getPayment()->getMethod() === BancomatPayHostedFields::HIPAY_METHOD_CODE
+        ) {
+            $this->_getCheckoutSession()
+                ->setLastQuoteId($order->getQuoteId())
+                ->setLastSuccessQuoteId($order->getQuoteId())
+                ->setLastOrderId($order->getId())
+                ->setLastRealOrderId($order->getIncrementId())
+                ->setLastOrderStatus($order->getStatus());
+        }
+
         return $this->resultRedirectFactory->create()->setPath('checkout/onepage/success');
     }
 }
