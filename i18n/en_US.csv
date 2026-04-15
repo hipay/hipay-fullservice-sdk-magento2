@@ -429,3 +429,5 @@
 "city","city"
 "country","country"
 "Notification skipped: order ""%1"" was already authorized.","Notification skipped: order ""%1"" was already authorized."
+"Refund refused received, but order has no creditmemos.","Refund refused received, but order has no creditmemos."
+"Refund refused received without operation ID. Multiple open creditmemos were found. Automatic cancellation was skipped.","Refund refused received without operation ID. Multiple open creditmemos were found. Automatic cancellation was skipped."

@@ -858,29 +858,67 @@ class Notify
     {
         $this->_changeStatus(Config::STATUS_REFUND_REFUSED, 'Refund Refused.');
 
-        if ($this->_order->hasCreditmemos()) {
-            foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
-                if (
-                    $creditmemo->getState() == \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN
-                    && $this->_transaction->getOperation()->getId() == $creditmemo->getTransactionId()
-                ) {
-                    $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
-                    $this->resetOrderRefund($creditmemo);
-                    $this->resetInvoiceRefund($creditmemo);
+        if (!$this->_order->hasCreditmemos()) {
+            $this->_doTransactionMessage('Refund refused received, but order has no creditmemos.');
+            return;
+        }
 
-                    if ($creditmemo->getInvoice()) {
-                        $this->_transactionDB->addObject($creditmemo->getInvoice());
-                    }
+        $operation = $this->_transaction->getOperation();
+        $operationId = $operation ? $operation->getId() : null;
+        $openCreditmemos = [];
 
-                    $this->_transactionDB->addObject($creditmemo)
-                        ->addObject($this->_order);
+        foreach ($this->_order->getCreditmemosCollection() as $creditmemo) {
+            if ($creditmemo->getState() != \Magento\Sales\Model\Order\Creditmemo::STATE_OPEN) {
+                continue;
+            }
 
-                    $this->_transactionDB->save();
+            $openCreditmemos[] = $creditmemo;
 
-                    break;
-                }
+            if ($operationId && $creditmemo->getTransactionId() === $operationId) {
+                $this->cancelRefundRefusedCreditmemo($creditmemo);
+                return;
             }
         }
+
+        $openCreditmemoCount = count($openCreditmemos);
+
+        if (!$operationId && $openCreditmemoCount === 1) {
+            $this->cancelRefundRefusedCreditmemo($openCreditmemos[0]);
+            return;
+        }
+
+        if (!$operationId && $openCreditmemoCount > 1) {
+            $this->_doTransactionMessage(
+                __(
+                    'Refund refused received without operation ID. '
+                    . 'Multiple open creditmemos were found. '
+                    . 'Automatic cancellation was skipped.'
+                )
+            );
+            return;
+        }
+    }
+
+    /**
+     * Cancel the refused refund creditmemo and restore refunded amounts.
+     *
+     * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
+     * @return void
+     */
+    protected function cancelRefundRefusedCreditmemo(\Magento\Sales\Model\Order\Creditmemo $creditmemo): void
+    {
+        $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_CANCELED);
+        $this->resetOrderRefund($creditmemo);
+        $this->resetInvoiceRefund($creditmemo);
+
+        if ($creditmemo->getInvoice()) {
+            $this->_transactionDB->addObject($creditmemo->getInvoice());
+        }
+
+        $this->_transactionDB->addObject($creditmemo)
+            ->addObject($this->_order);
+
+        $this->_transactionDB->save();
     }
 
     /**
