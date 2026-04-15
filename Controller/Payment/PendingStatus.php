@@ -27,8 +27,10 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
      */
     public function execute()
     {
+        $resultJson = $this->resultJsonFactory->create();
+        $declineUrl = $this->_url->getUrl('hipay/redirect/decline', ['_secure' => true]);
+
         try {
-            $resultJson = $this->resultJsonFactory->create();
             $order = $this->_getCheckoutSession()->getLastRealOrder();
 
             if (!$order->getId()) {
@@ -43,7 +45,6 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
             $orderState = (string) $order->getState();
             $pendingUrl = $this->_url->getUrl('hipay/redirect/pendingpolling', ['_secure' => true]);
             $successUrl = $this->_url->getUrl('hipay/redirect/accept', ['_secure' => true]);
-            $declineUrl = $this->_url->getUrl('hipay/redirect/decline', ['_secure' => true]);
             $refusedStatus = (string) $payment->getMethodInstance()->getConfigData('order_status_payment_refused');
             $canceledStatus = (string) $payment->getMethodInstance()->getConfigData('order_status_payment_canceled');
             $redirectUrl = $payment->getAdditionalInformation('redirectUrl') ?: $pendingUrl;
@@ -106,6 +107,10 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $e,
                 $e->getMessage()
             );
+            return $resultJson->setData([
+                'redirectUrl' => $declineUrl,
+                'statusOK' => false
+            ]);
         } catch (\Exception $e) {
             $this->logger->addDebug($e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -113,6 +118,10 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
                 $e,
                 __('We can\'t place the order.')
             );
+            return $resultJson->setData([
+                'redirectUrl' => $declineUrl,
+                'statusOK' => false
+            ]);
         }
     }
 }
