@@ -45,7 +45,7 @@ class BancomatPayHostedFields extends LocalHostedFields
     protected $_additionalInformationKeys = ['phone', 'browser_info', 'cc_type'];
 
     /**
-     * @param string $action
+     * @param string                               $action
      * @param \Magento\Payment\Model\InfoInterface $payment
      *
      * @return void
@@ -90,7 +90,6 @@ class BancomatPayHostedFields extends LocalHostedFields
         );
 
         try {
-
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneNumberUtil->parse(
                 (string) $order->getPayment()->getAdditionalInformation('phone'),

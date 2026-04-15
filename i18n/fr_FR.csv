@@ -430,3 +430,5 @@
 "city","ville"
 "country","pays"
 "Notification skipped: order ""%1"" was already authorized.","Notification ignorée : la commande ""%1"" a déjà été autorisée."
+"Refund refused received, but order has no creditmemos.","Remboursement refusé reçu, mais la commande ne contient aucun avoir."
+"Refund refused received without operation ID. Multiple open creditmemos were found. Automatic cancellation was skipped.","Remboursement refusé reçu sans identifiant d'opération. Plusieurs avoirs ouverts ont été trouvés. L'annulation automatique a été ignorée."
