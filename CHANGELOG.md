@@ -2,6 +2,10 @@
 
 ## UNRELEASE
 
+## 1.31.2
+
+- **Fix** : Improved REFUND_REFUSED (165) handling when no operation ID is provided.
+
 ## 1.31.1
 
 - **Fix** : Updated picqer/php-barcode-generator constraint to ^3.2 to avoid dependency conflicts.
