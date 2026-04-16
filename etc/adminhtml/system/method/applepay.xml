@@ -41,6 +41,17 @@
             <label>Button Color</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonColor</source_model>
         </field>
+        <field id="multi_browser" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1">
+            <label>Activer Apple Pay multi-browser</label>
+            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+        </field>
+        <field id="display_mode" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1">
+            <label>Mode d'affichage</label>
+            <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\DisplayMode</source_model>
+            <depends>
+                <field id="multi_browser">1</field>
+            </depends>
+        </field>
         <include path="HiPay_FullserviceMagento::system/method/cancel_pending_and_delay.xml"/>
         <include path="HiPay_FullserviceMagento::system/method/base_bottom.xml"/>
     </group>

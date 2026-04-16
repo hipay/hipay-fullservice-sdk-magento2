@@ -58,14 +58,28 @@ define([
         apiPasswordTokenJs: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.apiPasswordTokenJs
           : '',
-        merchantId: window.checkoutConfig.payment.hipay_applepay.merchant_id,
-        displayName: window.checkoutConfig.payment.hipay_applepay.display_name,
+        merchantId: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.merchant_id
+          : '',
+        displayName: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.display_name
+          : '',
         buttonType: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.button_type
           : 'plain',
         buttonColor: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.button_color
           : 'black',
+        multiBrowserEnabled: window.checkoutConfig.payment.hipay_applepay
+          ? (
+              window.checkoutConfig.payment.hipay_applepay
+                .multi_browser_enabled ||
+              window.checkoutConfig.payment.hipay_applepay.multi_browser
+            )
+          : '0',
+        displayMode: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.display_mode
+          : 'popup',
         locale: window.checkoutConfig.payment.hiPayFullservice.locale
           ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
           : 'en_us'
@@ -115,6 +129,14 @@ define([
         return canMakeApplePay();
       },
 
+      isMultiBrowserEnabled: function () {
+        return (
+          this.multiBrowserEnabled === true ||
+          this.multiBrowserEnabled === 1 ||
+          this.multiBrowserEnabled === '1'
+        );
+      },
+
       checkApplePayAllowed: function () {
         var self = this;
 
@@ -124,6 +146,10 @@ define([
 
         if (!self.displayName) {
           return Promise.resolve(false);
+        }
+
+        if (self.isMultiBrowserEnabled()) {
+          return Promise.resolve(self.initApplePayField(self));
         }
 
         if (self.merchantId) {
@@ -223,6 +249,7 @@ define([
 
         var applePayConfig = {
           displayName: self.displayName,
+          merchantIdentifier: self.merchantId,
           request: {
             countryCode: self.getCountryCodeWithFallback(),
             currencyCode: quote.totals().quote_currency_code,
@@ -237,6 +264,10 @@ define([
             color: self.buttonColor
           }
         };
+
+        if (self.isMultiBrowserEnabled()) {
+          applePayConfig.displayMode = self.displayMode;
+        }
 
         self.instanceApplePay = hipaySdk.create(
           'paymentRequestButton',
@@ -263,8 +294,32 @@ define([
             self.paymentAuthorized(self, token);
           });
 
+          self.instanceApplePay.on('paymentUnauthorized', function (error) {
+            self.handlePaymentFailure(error);
+          });
+
+          self.instanceApplePay.on('cancel', function () {
+            self.handlePaymentCancellation();
+          });
+
           return true;
         }
+      },
+
+      handlePaymentCancellation: function () {
+        $('body').loader('hide');
+      },
+
+      handlePaymentFailure: function (error) {
+        var message =
+          error && error.message
+            ? error.message
+            : $.mage.__('Apple Pay payment could not be completed.');
+
+        $('body').loader('hide');
+        this.messageContainer.addErrorMessage({
+          message: message
+        });
       },
 
       paymentAuthorized: function (self, tokenHipay) {
@@ -293,6 +348,8 @@ define([
                   }
                   if (response.redirectUrl) {
                     $.mage.redirect(response.redirectUrl);
+                  } else if (response.statusOK !== true) {
+                    self.handlePaymentFailure();
                   }
                 } else {
                   try {
