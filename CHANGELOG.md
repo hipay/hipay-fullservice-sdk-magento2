@@ -1,7 +1,11 @@
 # Changelog
 
 ## UNRELEASE
+
 - **Add** : Added Bancomat Pay payment method
+
+## 1.31.2
+
 - **Fix** : Improved REFUND_REFUSED (165) handling when no operation ID is provided.
 
 ## 1.31.1
