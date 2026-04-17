@@ -149,7 +149,6 @@ class ApplepayConfigProvider extends AbstractConfigProvider implements ConfigPro
                                 'button_type' => $this->hipayConfig->getValue('button_type'),
                                 'button_color' => $this->hipayConfig->getValue('button_color'),
                                 'multi_browser' => $this->hipayConfig->getValue('multi_browser'),
-                                'multi_browser_enabled' => $this->hipayConfig->getValue('multi_browser'),
                                 'display_mode' => $this->hipayConfig->getValue('display_mode'),
                             ],
                         ],

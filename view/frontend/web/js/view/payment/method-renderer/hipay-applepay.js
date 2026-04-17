@@ -70,13 +70,9 @@ define([
         buttonColor: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.button_color
           : 'black',
-        multiBrowserEnabled: window.checkoutConfig.payment.hipay_applepay
-          ? (
-              window.checkoutConfig.payment.hipay_applepay
-                .multi_browser_enabled ||
-              window.checkoutConfig.payment.hipay_applepay.multi_browser
-            )
-          : '0',
+        multiBrowser: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.multi_browser === '1'
+          : false,
         displayMode: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.display_mode
           : 'popup',
@@ -129,12 +125,8 @@ define([
         return canMakeApplePay();
       },
 
-      isMultiBrowserEnabled: function () {
-        return (
-          this.multiBrowserEnabled === true ||
-          this.multiBrowserEnabled === 1 ||
-          this.multiBrowserEnabled === '1'
-        );
+      isMultiBrowserActive: function () {
+        return this.multiBrowser;
       },
 
       checkApplePayAllowed: function () {
@@ -148,7 +140,7 @@ define([
           return Promise.resolve(false);
         }
 
-        if (self.isMultiBrowserEnabled()) {
+        if (self.isMultiBrowserActive()) {
           return Promise.resolve(self.initApplePayField(self));
         }
 
@@ -250,6 +242,8 @@ define([
         var applePayConfig = {
           displayName: self.displayName,
           merchantIdentifier: self.merchantId,
+          multiBrowsers: self.isMultiBrowserActive(),
+          displayMode: self.displayMode,
           request: {
             countryCode: self.getCountryCodeWithFallback(),
             currencyCode: quote.totals().quote_currency_code,
@@ -264,10 +258,6 @@ define([
             color: self.buttonColor
           }
         };
-
-        if (self.isMultiBrowserEnabled()) {
-          applePayConfig.displayMode = self.displayMode;
-        }
 
         self.instanceApplePay = hipaySdk.create(
           'paymentRequestButton',

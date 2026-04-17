@@ -42,11 +42,11 @@
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\ButtonColor</source_model>
         </field>
         <field id="multi_browser" translate="label" type="select" sortOrder="35" showInDefault="1" showInWebsite="1">
-            <label>Activer Apple Pay multi-browser</label>
+            <label>Apple Pay multi-browser</label>
             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
         </field>
         <field id="display_mode" translate="label" type="select" sortOrder="36" showInDefault="1" showInWebsite="1">
-            <label>Mode d'affichage</label>
+            <label>Display mode</label>
             <source_model>HiPay\FullserviceMagento\Model\System\Config\Source\ApplePay\DisplayMode</source_model>
             <depends>
                 <field id="multi_browser">1</field>
