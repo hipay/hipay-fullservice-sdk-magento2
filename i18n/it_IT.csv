@@ -431,3 +431,4 @@
 "Notification skipped: order ""%1"" was already authorized.","Notifica ignorata: l'ordine ""%1"" è già stato autorizzato."
 "Refund refused received, but order has no creditmemos.","Rimborso rifiutato ricevuto, ma l'ordine non contiene note di credito."
 "Refund refused received without operation ID. Multiple open creditmemos were found. Automatic cancellation was skipped.","Rimborso rifiutato ricevuto senza ID operazione. Sono state trovate più note di credito aperte. L'annullamento automatico è stato ignorato."
+"Apple Pay payment could not be completed.","Il pagamento Apple Pay non puo essere completato."

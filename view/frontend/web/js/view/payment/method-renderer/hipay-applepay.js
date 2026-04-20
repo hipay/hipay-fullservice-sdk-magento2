@@ -58,12 +58,8 @@ define([
         apiPasswordTokenJs: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.apiPasswordTokenJs
           : '',
-        merchantId: window.checkoutConfig.payment.hipay_applepay
-          ? window.checkoutConfig.payment.hipay_applepay.merchant_id
-          : '',
-        displayName: window.checkoutConfig.payment.hipay_applepay
-          ? window.checkoutConfig.payment.hipay_applepay.display_name
-          : '',
+        merchantId: window.checkoutConfig.payment.hipay_applepay.merchant_id,
+        displayName: window.checkoutConfig.payment.hipay_applepay.display_name,
         buttonType: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.button_type
           : 'plain',
@@ -241,7 +237,6 @@ define([
 
         var applePayConfig = {
           displayName: self.displayName,
-          merchantIdentifier: self.merchantId,
           multiBrowsers: self.isMultiBrowserActive(),
           displayMode: self.displayMode,
           request: {
@@ -338,8 +333,6 @@ define([
                   }
                   if (response.redirectUrl) {
                     $.mage.redirect(response.redirectUrl);
-                  } else if (response.statusOK !== true) {
-                    self.handlePaymentFailure();
                   }
                 } else {
                   try {
