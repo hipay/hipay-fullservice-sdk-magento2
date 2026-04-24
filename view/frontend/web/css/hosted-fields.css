@@ -28,7 +28,7 @@
 
 @media screen and (max-width: 768px) {
   #hipay-container-hosted-fields {
-    max-width: 520px;
+    max-width: 550px;
     width: auto;
     display: block;
   }
