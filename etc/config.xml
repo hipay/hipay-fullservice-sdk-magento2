@@ -242,7 +242,7 @@
                 <display_name>Your display name</display_name>
                 <button_type>plain</button_type>
                 <button_color>black</button_color>
-                <multi_browser>1</multi_browser>
+                <multi_browser>0</multi_browser>
                 <display_mode>popup</display_mode>
                 <payment_products>cb</payment_products>
                 <payment_products_categories></payment_products_categories>
