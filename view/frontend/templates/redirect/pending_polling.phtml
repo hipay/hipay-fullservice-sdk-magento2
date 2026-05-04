@@ -1,0 +1,78 @@
+<?php
+
+/*
+ * HiPay fullservice SDK
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Apache 2.0 Licence
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * @copyright      Copyright (c) 2016 - HiPay
+ * @license        http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ *
+ */
+
+// @codingStandardsIgnoreFile
+/**
+ * @var \HiPay\FullserviceMagento\Block\Redirect\PendingPolling $block
+ */
+?>
+<?php
+    echo $this
+        ->getLayout()
+        ->createBlock('HiPay\FullserviceMagento\Block\ExternalJS')
+        ->setTemplate('HiPay_FullserviceMagento::additional/external_js.phtml')
+        ->toHtml()
+?>
+<div class="page-title">
+    <h1><?php /* @escapeNotVerified */ echo __('Your payment is in pending.') ?></h1>
+</div>
+
+<?php if ($block->getRealOrderId()) : ?><p>
+    <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
+<?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
+<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?>
+</p>
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        var attempts = 0;
+        var maxAttempts = <?php echo (int) $block->getPollingMaxAttempts(); ?>;
+        var pendingUrl = '<?php echo $block->escapeUrl($block->getPendingUrl()); ?>';
+        var declineUrl = '<?php echo $block->escapeUrl($block->getDeclineUrl()); ?>';
+        var placeOrderStatusUrl = '<?php echo $block->escapeUrl($block->getPlaceOrderStatusUrl()); ?>';
+
+        function redirectToFailure() {
+            clearInterval(interval);
+            window.location.assign(declineUrl);
+        }
+
+        var interval = setInterval(function () {
+            attempts++;
+
+            $.get(placeOrderStatusUrl)
+                .done(function (response) {
+                    if (
+                        response &&
+                        response.redirectUrl &&
+                        response.redirectUrl !== pendingUrl
+                    ) {
+                        clearInterval(interval);
+                        window.location.assign(response.redirectUrl);
+                        return;
+                    }
+
+                    if (attempts >= maxAttempts) {
+                        redirectToFailure();
+                    }
+                })
+                .fail(function () {
+                    if (attempts >= maxAttempts) {
+                        redirectToFailure();
+                    }
+                });
+        }, <?php echo (int) $block->getPollingInterval(); ?>);
+    });
+</script>

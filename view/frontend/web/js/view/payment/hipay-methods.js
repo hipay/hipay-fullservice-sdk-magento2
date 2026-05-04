@@ -66,6 +66,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bancontact-hosted-fields'
     },
     {
+      type: 'hipay_bancomatpay_hosted_fields',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-bancomatpay-hosted-fields'
+    },
+    {
       type: 'hipay_ideal_hosted_fields',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-ideal-hosted-fields'
