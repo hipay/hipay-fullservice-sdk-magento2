@@ -2,8 +2,10 @@
 
 ## UNRELEASE
 
+## 1.32.0
+
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
-- **Add** : Added Bancomat Pay payment method
+- **Add** : Added Bancomat Pay payment method.
 - **Add** : Added Apple Pay multi-browser configuration and checkout support with popup/modal display modes.
 
 ## 1.31.2
