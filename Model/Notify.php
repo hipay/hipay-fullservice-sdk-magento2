@@ -645,12 +645,13 @@ class Notify
     protected function _saveCc()
     {
         if ($this->_canSaveCc()) {
-            $token = $this->_transaction->getPaymentMethod()->getToken();
 
-            /**
-             * @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod
-             */
+            /** @var $paymentMethod \HiPay\Fullservice\Gateway\Model\PaymentMethod */
             $paymentMethod = $this->_transaction->getPaymentMethod();
+
+            if ($paymentMethod === null) {
+                return false;
+            }
 
             try {
                 $cardCollection = $this->_cardCollectionFactory->create();
