@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Added Bizum Pay payment method.
+
 ## 1.32.0
 
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
