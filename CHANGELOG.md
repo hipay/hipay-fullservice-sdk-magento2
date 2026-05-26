@@ -2,6 +2,9 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
+- **Fix** : Added supported Apple Pay payment products (`visa`, `mastercard`, `cb`, `maestro`).
+
 ## 1.32.0
 
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
