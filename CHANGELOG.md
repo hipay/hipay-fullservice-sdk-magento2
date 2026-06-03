@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed saved card number wrapping on narrow containers
+
 ## 1.32.0
 
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
