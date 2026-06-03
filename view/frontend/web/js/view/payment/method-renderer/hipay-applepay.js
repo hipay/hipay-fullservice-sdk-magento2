@@ -66,6 +66,12 @@ define([
         buttonColor: window.checkoutConfig.payment.hipay_applepay
           ? window.checkoutConfig.payment.hipay_applepay.button_color
           : 'black',
+        multiBrowser: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.multi_browser === '1'
+          : false,
+        displayMode: window.checkoutConfig.payment.hipay_applepay
+          ? window.checkoutConfig.payment.hipay_applepay.display_mode
+          : 'popup',
         locale: window.checkoutConfig.payment.hiPayFullservice.locale
           ? window.checkoutConfig.payment.hiPayFullservice.locale.hipay_applepay
           : 'en_us'
@@ -115,6 +121,10 @@ define([
         return canMakeApplePay();
       },
 
+      isMultiBrowserActive: function () {
+        return this.multiBrowser;
+      },
+
       checkApplePayAllowed: function () {
         var self = this;
 
@@ -124,6 +134,10 @@ define([
 
         if (!self.displayName) {
           return Promise.resolve(false);
+        }
+
+        if (self.isMultiBrowserActive()) {
+          return Promise.resolve(self.initApplePayField(self));
         }
 
         if (self.merchantId) {
@@ -223,6 +237,8 @@ define([
 
         var applePayConfig = {
           displayName: self.displayName,
+          multiBrowsers: self.isMultiBrowserActive(),
+          displayMode: self.displayMode,
           request: {
             countryCode: self.getCountryCodeWithFallback(),
             currencyCode: quote.totals().quote_currency_code,
@@ -263,8 +279,32 @@ define([
             self.paymentAuthorized(self, token);
           });
 
+          self.instanceApplePay.on('paymentUnauthorized', function (error) {
+            self.handlePaymentFailure(error);
+          });
+
+          self.instanceApplePay.on('cancel', function () {
+            self.handlePaymentCancellation();
+          });
+
           return true;
         }
+      },
+
+      handlePaymentCancellation: function () {
+        $('body').loader('hide');
+      },
+
+      handlePaymentFailure: function (error) {
+        var message =
+          error && error.message
+            ? error.message
+            : $.mage.__('Apple Pay payment could not be completed.');
+
+        $('body').loader('hide');
+        this.messageContainer.addErrorMessage({
+          message: message
+        });
       },
 
       paymentAuthorized: function (self, tokenHipay) {

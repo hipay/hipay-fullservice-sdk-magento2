@@ -309,7 +309,10 @@ class Order extends CommonRequest
 
         // URL callback
         $orderRequest->accept_url = $this->_urlBuilder->getUrl('hipay/redirect/accept', $redirectParams);
-        $orderRequest->pending_url = $this->_urlBuilder->getUrl('hipay/redirect/pending', $redirectParams);
+        $orderRequest->pending_url = $this->_urlBuilder->getUrl(
+            $this->_order->getPayment()->getMethodInstance()->getPendingRedirectPath(),
+            $redirectParams
+        );
         $orderRequest->decline_url = $this->_urlBuilder->getUrl('hipay/redirect/decline', $redirectParams);
         $orderRequest->cancel_url = $this->_urlBuilder->getUrl('hipay/redirect/cancel', $redirectParams);
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);

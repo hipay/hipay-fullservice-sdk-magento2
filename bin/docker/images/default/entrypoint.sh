@@ -358,6 +358,8 @@ if [ "$NEED_SETUP_CONFIG" -eq 1 ]; then
     printf "\n${COLOR_SUCCESS} ======================================= ${NC}\n"
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set currency/options/base EUR"
     gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set currency/options/default EUR"
+    gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set admin/security/admin_account_sharing 1"
+    gosu $MAGENTO_DIR_USER bash -lc "cd $MAGENTO_ROOT && bin/magento config:set admin/security/session_lifetime 31536000"
 
     printf "${COLOR_SUCCESS} Default currency set to EUR${NC}\n"
 
