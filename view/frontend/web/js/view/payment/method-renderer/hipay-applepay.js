@@ -94,18 +94,29 @@ define([
       initialize: function () {
         var self = this;
         self._super();
-        self
-          .checkApplePayAllowed()
-          .then((result) => {
-            self.isApplePayAllowed(result);
-          })
-          .catch((error) => {
-            console.warn('Error checking Apple Pay availability:', error);
-            self.isApplePayAllowed(false);
-          });
 
         // Initialize mini cart listeners (from mixin)
         self.initMiniCartListener();
+      },
+
+      onApplePayButtonRendered: function () {
+        var self = this;
+
+        if (self._applePayInitStarted || self.instanceApplePay) {
+          return;
+        }
+
+        self._applePayInitStarted = true;
+
+        self
+          .checkApplePayAllowed()
+          .then(function (result) {
+            self.isApplePayAllowed(result);
+          })
+          .catch(function (error) {
+            console.warn('Error checking Apple Pay availability:', error);
+            self.isApplePayAllowed(false);
+          });
       },
 
       initHostedFields: function (self) {

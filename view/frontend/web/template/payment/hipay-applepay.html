@@ -48,7 +48,7 @@
       <div
         class="hipay-payment-request-button"
         id="hipay-apple-pay-button"
-        data-bind="visible: isAllTOCChecked() && isApplePayVisibleToPay()"
+        data-bind="visible: isAllTOCChecked() && isApplePayVisibleToPay(), afterRender: onApplePayButtonRendered"
       ></div>
       <div class="errorTOC" data-bind="visible: isAllTOCChecked() && !isApplePayVisibleToPay()">
         <span>
