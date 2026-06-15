@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Fixed missing invoice email sending after capture notification from HiPay.
+- **Fix** : Fixed saved card number wrapping on narrow containers
 
 ## 1.32.0
 
