@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Add** : Added Bizum Pay payment method.
 - **Fix** : Fixed missing invoice email sending after capture notification from HiPay.
 - **Fix** : Fixed saved card number wrapping on narrow containers
 
