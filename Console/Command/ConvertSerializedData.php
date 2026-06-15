@@ -75,7 +75,7 @@ class ConvertSerializedData extends Command
      * @param  OutputInterface $output
      * @return int|null|void
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (version_compare($this->productMetadata->getVersion(), '2.2.0', '>')) {
             $this->state->setAreaCode('adminhtml');
@@ -106,6 +106,8 @@ class ConvertSerializedData extends Command
         } else {
             $output->writeln("Your version of magento does not require data conversion.");
         }
+
+        return Command::SUCCESS;
     }
 
     /**

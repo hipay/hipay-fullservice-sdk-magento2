@@ -1,13 +1,13 @@
 magento2_version: ''
 
 nginx_image: 'docker.io/markoshust/magento-nginx'
-nginx_tag: '1.24-0'
+nginx_tag: '1.28-0'
 
 mariadb_image: 'docker.io/mariadb'
-mariadb_tag: '11.4'
+mariadb_tag: '11.8'
 
 opensearch_image: 'docker.io/markoshust/magento-opensearch'
-opensearch_tag: '2.5-1'
+opensearch_tag: '3-0'
 
 magento2_image: ''
 magento2_tag: ''

@@ -228,11 +228,11 @@ class CcConfigProvider extends AbstractConfigProvider implements ConfigProviderI
                 );
                 $placeholder = $this->assetSource->findRelativeSourceFilePath($asset);
                 if ($placeholder) {
-                    list($width, $height) = getimagesizefromstring($asset->getSourceFile());
+                    $size = getimagesize($asset->getSourceFile());
                     $icons[$code] = [
                         'url' => $asset->getUrl(),
-                        'width' => $width,
-                        'height' => $height
+                        'width' => $size ? $size[0] : 0,
+                        'height' => $size ? $size[1] : 0
                     ];
                 }
             }
