@@ -17,7 +17,6 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
-use HiPay\FullserviceMagento\Model\Method\BancomatPayHostedFields;
 
 /**
  * Accept controller
@@ -49,7 +48,7 @@ class Accept extends Fullservice
             $order
             && $order->getId()
             && $order->getPayment()
-            && $order->getPayment()->getMethod() === BancomatPayHostedFields::HIPAY_METHOD_CODE
+            && $order->getPayment()->getMethodInstance()->usesPendingPolling()
         ) {
             $this->_getCheckoutSession()
                 ->setLastQuoteId($order->getQuoteId())

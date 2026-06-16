@@ -23,16 +23,16 @@ use libphonenumber\PhoneNumberUtil;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Bancomat Pay Hosted Fields Model payment method
+ * Bizum Hosted Fields Model payment method
  */
-class BancomatPayHostedFields extends LocalHostedFields
+class BizumHostedFields extends LocalHostedFields
 {
-    public const HIPAY_METHOD_CODE = 'hipay_bancomatpay_hosted_fields';
+    public const HIPAY_METHOD_CODE = 'hipay_bizum_hosted_fields';
 
     /**
      * @var string
      */
-    protected static $_technicalCode = 'bancomatpay';
+    protected static $_technicalCode = 'bizum';
 
     /**
      * @var string
@@ -83,14 +83,14 @@ class BancomatPayHostedFields extends LocalHostedFields
         }
 
         $localizedException = new LocalizedException(
-            __('The phone number must be a valid Italian phone number.')
+            __('The phone number must be a valid Spanish phone number.')
         );
 
         try {
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneNumberUtil->parse(
                 (string) $order->getPayment()->getAdditionalInformation('phone'),
-                'IT'
+                'ES'
             );
 
             if (!$phoneNumberUtil->isValidNumber($phoneNumber)) {
