@@ -2,6 +2,10 @@
 
 ## UNRELEASE
 
+## 1.32.1
+
+- **Fix** : Fixed Delayed ApplePay instance creation
+
 ## 1.32.0
 
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
