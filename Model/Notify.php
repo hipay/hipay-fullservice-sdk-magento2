@@ -30,6 +30,7 @@ use Magento\Framework\Webapi\Exception as WebApiException;
 use Magento\Payment\Helper\Data;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order as ResourceOrder;
@@ -149,6 +150,11 @@ class Notify
     protected $creditmemoSender;
 
     /**
+     * @var InvoiceSender
+     */
+    protected $invoiceSender;
+
+    /**
      * @var \Magento\Sales\Api\OrderManagementInterface
      */
     protected $orderManagement;
@@ -185,6 +191,7 @@ class Notify
      * @param \Magento\Framework\DB\Transaction        $_transactionDB
      * @param PriceCurrencyInterface                   $priceCurrency
      * @param CreditmemoSender                         $creditmemoSender
+     * @param InvoiceSender                            $invoiceSender
      * @param OrderManagementInterface                 $orderManagement
      * @param OrderLockManager                         $orderLockManager
      * @param OrderState                               $orderState
@@ -207,6 +214,7 @@ class Notify
         \Magento\Framework\DB\Transaction $_transactionDB,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Order\Email\Sender\CreditmemoSender $creditmemoSender,
+        InvoiceSender $invoiceSender,
         OrderManagementInterface $orderManagement,
         \HiPay\FullserviceMagento\Model\OrderLockManager $orderLockManager,
         OrderState $orderState,
@@ -226,6 +234,7 @@ class Notify
         $this->transactionRepository = $transactionRepository;
 
         $this->creditmemoSender = $creditmemoSender;
+        $this->invoiceSender = $invoiceSender;
 
         $this->orderManagement = $orderManagement;
         $this->orderLockManager = $orderLockManager;
@@ -1106,6 +1115,10 @@ class Notify
         }
 
         $this->_order->save();
+
+        if ($invoice) {
+            $this->invoiceSender->send($invoice);
+        }
 
         if ($invoice && !$this->_order->getEmailSent()) {
             $this->orderSender->send($this->_order);
