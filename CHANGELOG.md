@@ -8,6 +8,10 @@
 - **Fix** : Fixed missing invoice email sending after capture notification from HiPay.
 - **Fix** : Fixed saved card number wrapping on narrow containers
 
+## 1.32.1
+
+- **Fix** : Fixed Delayed ApplePay instance creation
+
 ## 1.32.0
 
 - **Fix** : Fixed fatal error when saving OneClick card without payment method data in notification.
