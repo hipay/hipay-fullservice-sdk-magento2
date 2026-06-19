@@ -22,6 +22,7 @@
     <field id="min_order_total" translate="label" type="text" sortOrder="210" showInDefault="1" showInWebsite="1"
            showInStore="0">
         <label>Minimum Order Total</label>
+        <backend_model>HiPay\FullserviceMagento\Model\Config\Backend\MinOrderTotal</backend_model>
         <validate>validate-number validate-greater-than-zero</validate>
     </field>
     <field id="max_order_total" translate="label" type="text" sortOrder="220" showInDefault="1" showInWebsite="1"

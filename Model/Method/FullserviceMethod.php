@@ -523,6 +523,11 @@ abstract class FullserviceMethod extends AbstractMethod
         return 'hipay/redirect/pending';
     }
 
+    public function usesPendingPolling(): bool
+    {
+        return false;
+    }
+
     public function getPendingRedirectUrl()
     {
         return $this->urlBuilder->getUrl($this->getPendingRedirectPath(), ['_secure' => true]);
