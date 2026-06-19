@@ -86,7 +86,7 @@ class UpgradeData implements UpgradeDataInterface
         if (version_compare($context->getVersion(), '1.32.1', '<')) {
             $connection = $setup->getConnection();
             $configTable = $setup->getTable('core_config_data');
-            $applePayPaymentProducts = 'american-express,visa,mastercard,cb,maestro,bcmc';
+            $applePayPaymentProducts = 'visa,mastercard,cb,maestro';
 
             $connection->update(
                 $configTable,
