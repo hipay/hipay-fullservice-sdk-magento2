@@ -3,7 +3,7 @@ image: $REGISTRY_CI/gitlab-ci-base:buster
 variables:
   DOCKER_HOST: tcp://localhost:2375/
   DOCKER_DRIVER: overlay2
-  MAGENTO_VERSION: 2.4.8-p2
+  MAGENTO_VERSION: 2.4.9
   GIT_DEPTH: 10
   RELEASE_NAME: ${DOCKER_STACK}-${DOCKER_SERVICE}-${CI_COMMIT_REF_SLUG}
 
