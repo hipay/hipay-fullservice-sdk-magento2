@@ -18,7 +18,6 @@ namespace HiPay\FullserviceMagento\Controller\Payment;
 
 use HiPay\Fullservice\Enum\Transaction\TransactionState;
 use HiPay\FullserviceMagento\Model\Config;
-use HiPay\FullserviceMagento\Model\Method\BancomatPayHostedFields;
 
 class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
 {
@@ -40,7 +39,6 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
             }
 
             $payment = $order->getPayment();
-            $methodCode = (string) $payment->getMethod();
             $orderStatus = (string) $order->getStatus();
             $orderState = (string) $order->getState();
             $pendingUrl = $this->_url->getUrl('hipay/redirect/pendingpolling', ['_secure' => true]);
@@ -49,11 +47,9 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
             $canceledStatus = (string) $payment->getMethodInstance()->getConfigData('order_status_payment_canceled');
             $redirectUrl = $payment->getAdditionalInformation('redirectUrl') ?: $pendingUrl;
             $statusOK = false;
+            $isPollingMethod = $payment->getMethodInstance()->usesPendingPolling();
 
-            if (
-                $methodCode === BancomatPayHostedFields::HIPAY_METHOD_CODE
-                && $orderStatus === Config::STATUS_AUTHORIZATION_REQUESTED
-            ) {
+            if ($isPollingMethod && $orderStatus === Config::STATUS_AUTHORIZATION_REQUESTED) {
                 $redirectUrl = $successUrl;
                 $statusOK = true;
             } elseif (

@@ -2,6 +2,14 @@
 
 ## UNRELEASE
 
+## 1.33.0
+
+- **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
+- **Fix** : Added supported Apple Pay payment products (`visa`, `mastercard`, `cb`, `maestro`).
+- **Add** : Added Bizum Pay payment method.
+- **Fix** : Fixed missing invoice email sending after capture notification from HiPay.
+- **Fix** : Fixed saved card number wrapping on narrow containers
+
 ## 1.32.1
 
 - **Fix** : Fixed Delayed ApplePay instance creation

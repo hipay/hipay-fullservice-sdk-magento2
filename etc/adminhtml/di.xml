@@ -1,5 +1,13 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="HiPay\FullserviceMagento\Model\Config\Backend\MinOrderTotal">
+        <arguments>
+            <argument name="minimums" xsi:type="array">
+                <item name="payment/hipay_bizum_hosted_fields/min_order_total" xsi:type="number">0.5</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Notification\MessageList">
         <arguments>
             <argument name="messages" xsi:type="array">

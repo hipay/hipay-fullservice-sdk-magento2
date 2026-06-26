@@ -83,6 +83,65 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '1.33.0', '<')) {
+            $connection = $setup->getConnection();
+            $configTable = $setup->getTable('core_config_data');
+            $applePayPaymentProducts = 'visa,mastercard,cb,maestro';
+
+            $connection->update(
+                $configTable,
+                ['value' => '1'],
+                ['path = ?' => 'payment/hipay_applepay/is_multi_payment_products']
+            );
+
+            $existingConfig = $connection->fetchOne(
+                $connection->select()
+                    ->from($configTable, ['config_id'])
+                    ->where('path = ?', 'payment/hipay_applepay/is_multi_payment_products')
+                    ->limit(1)
+            );
+
+            if (!$existingConfig) {
+                $connection->insert(
+                    $configTable,
+                    [
+                        'scope' => 'default',
+                        'scope_id' => 0,
+                        'path' => 'payment/hipay_applepay/is_multi_payment_products',
+                        'value' => '1'
+                    ]
+                );
+            }
+
+            $connection->update(
+                $configTable,
+                ['value' => $applePayPaymentProducts],
+                [
+                    'path = ?' => 'payment/hipay_applepay/payment_products',
+                    'value = ?' => 'cb'
+                ]
+            );
+
+            $existingPaymentProducts = $connection->fetchOne(
+                $connection->select()
+                    ->from($configTable, ['config_id'])
+                    ->where('path = ?', 'payment/hipay_applepay/payment_products')
+                    ->limit(1)
+            );
+
+            if (!$existingPaymentProducts) {
+                $connection->insert(
+                    $configTable,
+                    [
+                        'scope' => 'default',
+                        'scope_id' => 0,
+                        'path' => 'payment/hipay_applepay/payment_products',
+                        'value' => $applePayPaymentProducts
+                    ]
+                );
+            }
+        }
+
         $setup->endSetup();
     }
 }
