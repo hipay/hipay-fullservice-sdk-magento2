@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+## 1.33.0
+
 - **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
 - **Fix** : Added supported Apple Pay payment products (`visa`, `mastercard`, `cb`, `maestro`).
 - **Add** : Added Bizum Pay payment method.

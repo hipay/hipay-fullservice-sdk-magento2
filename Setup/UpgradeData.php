@@ -83,7 +83,7 @@ class UpgradeData implements UpgradeDataInterface
             );
         }
 
-        if (version_compare($context->getVersion(), '1.32.1', '<')) {
+        if (version_compare($context->getVersion(), '1.33.0', '<')) {
             $connection = $setup->getConnection();
             $configTable = $setup->getTable('core_config_data');
             $applePayPaymentProducts = 'visa,mastercard,cb,maestro';
