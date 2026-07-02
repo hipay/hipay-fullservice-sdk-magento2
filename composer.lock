@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f784d6873964cf28c83def07b80cbd9",
+    "content-hash": "1ee583c83eb1a99e3c411c26dd96c34d",
     "packages": [
         {
             "name": "brick/math",
@@ -201,16 +201,16 @@
         },
         {
             "name": "hipay/hipay-fullservice-sdk-php",
-            "version": "2.24.0",
+            "version": "2.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hipay/hipay-fullservice-sdk-php.git",
-                "reference": "e28e8f4d9c59cf703a8114bb675cedb4e72bbbdb"
+                "reference": "52e1381fadcdcbfdc1fdd57ba7a3b6c7c3a9f282"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hipay/hipay-fullservice-sdk-php/zipball/e28e8f4d9c59cf703a8114bb675cedb4e72bbbdb",
-                "reference": "e28e8f4d9c59cf703a8114bb675cedb4e72bbbdb",
+                "url": "https://api.github.com/repos/hipay/hipay-fullservice-sdk-php/zipball/52e1381fadcdcbfdc1fdd57ba7a3b6c7c3a9f282",
+                "reference": "52e1381fadcdcbfdc1fdd57ba7a3b6c7c3a9f282",
                 "shasum": ""
             },
             "require": {
@@ -224,7 +224,7 @@
                 "friendsofphp/php-cs-fixer": "^3.2",
                 "phpcompatibility/php-compatibility": "^9.3",
                 "phpstan/phpstan": "0.*",
-                "phpunit/phpunit": "^9.6",
+                "phpunit/phpunit": "9.6",
                 "vlucas/phpdotenv": "^4.2.1",
                 "yoast/phpunit-polyfills": "^1.0"
             },
@@ -255,9 +255,9 @@
             "support": {
                 "email": "support.tpp@hipay.com",
                 "issues": "https://github.com/hipay/hipay-fullservice-sdk-php/issues",
-                "source": "https://github.com/hipay/hipay-fullservice-sdk-php/tree/2.24.0"
+                "source": "https://github.com/hipay/hipay-fullservice-sdk-php/tree/2.22.0"
             },
-            "time": "2026-06-26T14:33:49+00:00"
+            "time": "2026-02-18T09:07:08+00:00"
         },
         {
             "name": "picqer/php-barcode-generator",
