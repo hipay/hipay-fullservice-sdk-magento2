@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":preserveSemverRanges",
+    ":separateMinorPatch",
+    "local>common/toolbox/renovatebot//config/default.json",
+    "local>common/toolbox/renovatebot//config/presets/composer.json#feature/PI-6065",
+    "local>pi-ecommerce/cms/cms-template-ci//renovate-preset-composer.json#feature/PI-6065"
+  ],
+  "packageRules": [
+    {
+      "description": "Magento module Composer dependencies (excluding HiPay SDK, handled by CMS preset)",
+      "matchManagers": ["composer"],
+      "matchFileNames": ["composer.json"],
+      "matchDepNames": [
+        "giggsey/libphonenumber-for-php",
+        "picqer/php-barcode-generator"
+      ],
+      "groupName": "Magento module Composer deps",
+      "automerge": false
+    },
+    {
+      "description": "CI tools (PHPCS)",
+      "matchManagers": ["composer"],
+      "matchFileNames": ["ci-tools/phpcs/composer.json"],
+      "groupName": "CI tools (PHPCS)",
+      "automerge": false
+    }
+  ]
+}
