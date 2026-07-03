@@ -3,7 +3,7 @@
   "extends": [
     "config:recommended",
     ":preserveSemverRanges",
-    ":separateMinorPatch",
+    ":separatePatchReleases",
     "local>common/toolbox/renovatebot//config/default.json",
     "local>common/toolbox/renovatebot//config/presets/composer.json#feature/PI-6065",
     "local>pi-ecommerce/cms/cms-template-ci//renovate-preset-composer.json#feature/PI-6065"
