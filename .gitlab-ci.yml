@@ -85,7 +85,7 @@ include:
       alias: db
     - name: docker.io/markoshust/magento-opensearch:2.5-1
       alias: opensearch
-    - name: docker.io/markoshust/magento-nginx:1.24-0
+    - name: docker.io/markoshust/magento-nginx:1.28-0
       alias: app
   artifacts:
     paths:
