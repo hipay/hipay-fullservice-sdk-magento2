@@ -138,7 +138,7 @@ code-quality:
 build-test-2-1-10:
   stage: build-test
   image:
-    name: gcr.io/kaniko-project/executor:v1.6.0-debug
+    name: gcr.io/kaniko-project/executor:v1.24.0-debug
   variables:
     KANIKO_CACHE: 'true'
   script:
@@ -175,7 +175,7 @@ build:
   <<: *login-to-registry
   stage: build
   image:
-    name: gcr.io/kaniko-project/executor:v1.6.0-debug
+    name: gcr.io/kaniko-project/executor:v1.24.0-debug
   needs: []
   rules:
     - if: $ONLY_DEPLOY
