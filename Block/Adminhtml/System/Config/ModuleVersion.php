@@ -34,7 +34,7 @@ class ModuleVersion extends Field
     /**
      * @var Data
      */
-    private Data $helper;
+    private $helper;
 
     /**
      * @param Context $context

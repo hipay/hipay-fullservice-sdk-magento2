@@ -37,6 +37,7 @@ Thumbs.db
 data/
 /web/
 vendor/
+composer.lock
 .vagrant
 .idea
 .vscode
