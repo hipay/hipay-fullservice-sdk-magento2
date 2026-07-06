@@ -55,7 +55,7 @@ services:
       - ./bin/docker/conf/development/module.env
 
   db:
-    image: mariadb:11.4
+    image: mariadb:11.8
     container_name: magento-db
     command: --max_allowed_packet=64M
       --optimizer_use_condition_selectivity=1
