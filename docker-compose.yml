@@ -1,6 +1,6 @@
 services:
   app:
-    image: markoshust/magento-nginx:1.24-0
+    image: markoshust/magento-nginx:1.28-0
     container_name: magento-app
     ports:
       - "8096:8000"
