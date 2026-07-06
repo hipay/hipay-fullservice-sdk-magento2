@@ -81,7 +81,7 @@ include:
   services:
     - name: $REGISTRY_CI/test-jobs-${DOCKER_STACK}-${DOCKER_SERVICE}_web:${CI_COMMIT_REF_SLUG}
       alias: phpfpm
-    - name: docker.io/mariadb:11.4
+    - name: docker.io/mariadb:12.3
       alias: db
     - name: docker.io/markoshust/magento-opensearch:2.5-1
       alias: opensearch
