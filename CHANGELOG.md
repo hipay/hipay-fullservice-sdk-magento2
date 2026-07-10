@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed Multibanco confirmation email: expiration date format (d/m/Y) and rendering crash when a reference key was undefined.
+
 ## 1.33.0
 
 - **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
