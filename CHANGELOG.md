@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Restricted the MBWay payment method to the EUR currency only.
+
 ## 1.33.0
 
 - **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
