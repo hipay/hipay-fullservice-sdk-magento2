@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Added EUR currency to the Przelewy24 payment method (in addition to PLN).
+
 ## 1.33.0
 
 - **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.
