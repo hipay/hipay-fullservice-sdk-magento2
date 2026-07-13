@@ -133,52 +133,66 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
-        if ($params) {
-            if (isset($params['methodCode'])) {
-                $method = $params['methodCode'];
-                $this->setMethod($method);
-            }
-            if (isset($params['storeId'])) {
-                $storeId = $params['storeId'];
-                $this->setStoreId($storeId);
-            }
 
-            if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-                $this->setOrder($params['order']);
-            }
+        $this->initializeParams($params);
+        $this->initializeSdk();
+    }
 
-            if (isset($params['apiEnv'])) {
-                $this->_apiEnvStage = $this->getGeneraleValue('api_environment', 'hipay_api_environment')
-                    == ConfigSDK::API_ENV_STAGE;
-            }
+    /**
+     * Initialise les paramètres facultatifs passés au constructeur.
+     *
+     * @param array $params
+     * @return void
+     */
+    protected function initializeParams(array $params): void
+    {
+        if (!empty($params['methodCode'])) {
+            $this->setMethod($params['methodCode']);
         }
 
-        $this->_forceMoto = isset($params['forceMoto']) ? $params['forceMoto'] : false;
-        $this->_forceStage = isset($params['forceStage']) ? $params['forceStage'] : false;
-        $this->_isApplePay = isset($params['isApplePay']) ? $params['isApplePay'] :
-            $this->getMethodCode() === ApplePay::HIPAY_METHOD_CODE;
+        if (!empty($params['storeId'])) {
+            $this->setStoreId($params['storeId']);
+        }
 
-        $apiUsername = $this->getApiUsername();
-        $apiPassword = $this->getApiPassword();
+        if (!empty($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
+            $this->setOrder($params['order']);
+        }
+
+        if (!empty($params['apiEnv'])) {
+            $this->_apiEnvStage = $this->getGeneraleValue('api_environment', 'hipay_api_environment') === ConfigSDK::API_ENV_STAGE;
+        }
+
+        $this->_forceMoto = $params['forceMoto'] ?? false;
+        $this->_forceStage = $params['forceStage'] ?? false;
+        $this->_isApplePay = $params['isApplePay'] ?? $this->getMethodCode() === ApplePay::HIPAY_METHOD_CODE;
+    }
+
+    /**
+     * Initialise la configuration SDK HiPay.
+     *
+     * @return void
+     */
+    protected function initializeSdk(): void
+    {
         try {
-            $env = $this->_apiEnvStage === true ? ConfigSDK::API_ENV_STAGE : $this->getApiEnv();
-            if ($env == null) {
-                $env = ($this->_forceStage) ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
+            $env = $this->_apiEnvStage ? ConfigSDK::API_ENV_STAGE : $this->getApiEnv();
+            if ($env === null) {
+                $env = $this->_forceStage ? ConfigSDK::API_ENV_STAGE : ConfigSDK::API_ENV_PRODUCTION;
             }
-            $this->_configSDK = new ConfigSDK(
-                [
-                    'apiUsername' => $apiUsername,
-                    'apiPassword' => $apiPassword,
-                    'apiEnv' => $env,
-                    'apiHTTPHeaderAccept' => 'application/json',
-                    'proxy' => $this->getProxy(),
-                    'hostedPageV2' => true
-                ]
-            );
+
+            $this->_configSDK = new ConfigSDK([
+                'apiUsername' => $this->getApiUsername(),
+                'apiPassword' => $this->getApiPassword(),
+                'apiEnv' => $env,
+                'apiHTTPHeaderAccept' => 'application/json',
+                'proxy' => $this->getProxy(),
+                'hostedPageV2' => true
+            ]);
         } catch (\Exception $e) {
             $this->_configSDK = null;
         }
     }
+
 
     /**
      * Check if we must to use MO/TO credentials

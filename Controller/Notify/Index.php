@@ -96,6 +96,16 @@ class Index extends AppAction
         $this->_notifyFactory = $notifyFactory;
         $this->_logger = $logger;
 
+        $this->handleCsrfValidation();
+    }
+
+    /**
+     * Handle CSRF validation for POST requests
+     *
+     * @return void
+     */
+    private function handleCsrfValidation()
+    {
         if (interface_exists(\Magento\Framework\App\CsrfAwareActionInterface::class)) {
             $request = $this->getRequest();
             if ($request instanceof HttpRequest && $request->isPost()) {

@@ -50,39 +50,49 @@ class Cart extends \Magento\Payment\Model\Cart
     protected $_areAmountsValid = false;
 
     /**
-     * @param Factory             $salesModelFactory
-     * @param ManagerInterface    $eventManager
-     * @param Data                $weeeHelper
-     * @param SalesModelInterface $salesModel
-     * @param string              $operation
-     * @param Payment             $payment
+     * @param \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory
+     * @param \Magento\Framework\Event\ManagerInterface      $eventManager
+     * @param \Magento\Quote\Api\Data\CartInterface          $salesModel
+     * @param \Magento\Weee\Helper\Data                      $weeeHelper
+     * @param string                                         $operation
+     * @param string                                         $payment
      */
     public function __construct(
         \Magento\Payment\Model\Cart\SalesModel\Factory $salesModelFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Weee\Helper\Data $weeeHelper,
-        SalesModelInterface $salesModel,
-        string $operation,
-        Payment $payment
+        $salesModel,
+        $operation,
+        $payment
     ) {
         $this->_eventManager = $eventManager;
         $this->_salesModel = $salesModelFactory->create($salesModel);
         $this->weeeHelper = $weeeHelper;
         $this->_operation = $operation;
         $this->_payment = $payment;
-        $this->_model = $this->_salesModel;
-
-        if ($this->_operation == Operation::REFUND) {
-            $this->_model = $this->_payment->getCreditMemo();
-        } else {
-            if ($this->_operation == Operation::CAPTURE) {
-                if ($this->_payment->getOrder()->hasInvoices()) {
-                    $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
-                }
-            }
-        }
+        $this->_model = $this->resolveSalesModel($operation, $payment);
 
         $this->_resetAmounts();
+    }
+
+    /**
+     * Determines which sales model to use based on the operation type.
+     *
+     * @param string  $operation Operation type (e.g. capture, refund)
+     * @param Payment $payment   Payment object
+     * @return mixed             Invoice, credit memo, or default sales model
+     */
+    protected function resolveSalesModel(string $operation, Payment $payment)
+    {
+        if ($operation === Operation::REFUND) {
+            return $payment->getCreditMemo();
+        }
+
+        if ($operation === Operation::CAPTURE && $payment->getOrder()->hasInvoices()) {
+            return $payment->getOrder()->getInvoiceCollection()->getLastItem();
+        }
+
+        return $this->_salesModel;
     }
 
     /**

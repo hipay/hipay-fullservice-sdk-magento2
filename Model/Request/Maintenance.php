@@ -76,8 +76,6 @@ class Maintenance extends CommonRequest
     protected $_productRepositoryInterface;
 
     /**
-     * @inheritDoc
-     *
      * @param LoggerInterface                       $logger
      * @param Data                                  $checkoutData
      * @param Session                               $customerSession
@@ -128,32 +126,24 @@ class Maintenance extends CommonRequest
         );
 
         $this->helper = $helper;
-        $this->_cartFactory = $cartFactory;
-        $this->weeeHelper = $weeeHelper;
-        $this->_productRepositoryInterface = $productRepositoryInterface;
+        $this->helper->validateInstance(
+            $params['order'] ?? null,
+            \Magento\Sales\Model\Order::class,
+            'Order instance is required.'
+        );
+        $this->_order = $params['order'];
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
+        if (empty($params['operation'])) {
+            throw new LocalizedException(__('Operation is required.'));
         }
+        $this->_operation = $params['operation'];
 
-        if (isset($params['operation'])) {
-            $this->_operation = $params['operation'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
-        }
-
-        if (
-            isset($params['paymentMethod'])
-            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
-        ) {
-            $this->_paymentMethod = $params['paymentMethod'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Object Request PaymentMethod instance is required.')
-            );
-        }
+        $this->helper->validateInstance(
+            $params['paymentMethod'] ?? null,
+            AbstractRequest::class,
+            'PaymentMethod request instance is required.'
+        );
+        $this->_paymentMethod = $params['paymentMethod'];
     }
 
     /**

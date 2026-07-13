@@ -25,6 +25,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Url;
 use Psr\Log\LoggerInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Abstract Info Request Object
@@ -81,11 +82,13 @@ abstract class AbstractInfoRequest extends BaseRequest
             $params
         );
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException('Order instance is required.');
-        }
+        $helper->validateInstance(
+            $params['order'] ?? null,
+            Order::class,
+            __('Order instance is required.')
+        );
+
+        $this->_order = $params['order'];
     }
 
     /**

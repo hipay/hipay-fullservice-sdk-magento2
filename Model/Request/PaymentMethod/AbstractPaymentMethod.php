@@ -25,6 +25,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Url;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\QuoteFactory;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,7 +39,7 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractPaymentMethod extends AbstractRequest
 {
     /**
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $_order;
 
@@ -93,14 +94,17 @@ abstract class AbstractPaymentMethod extends AbstractRequest
 
         $this->_quoteFactory = $quoteFactory;
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-            if ($this->_order->getQuote() === null) {
-                $this->_quote = $this->_quoteFactory->create();
-                $this->_quote->load($this->_order->getQuoteId());
-            }
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
+        $helper->validateInstance(
+            $params['order'] ?? null,
+            Order::class,
+            'Order instance is required.'
+        );
+        $this->_order = $params['order'];
+
+        $this->_quote = $this->_order->getQuote();
+
+        if ($this->_quote === null) {
+            $this->_quote = $this->_quoteFactory->create()->load($this->_order->getQuoteId());
         }
     }
 

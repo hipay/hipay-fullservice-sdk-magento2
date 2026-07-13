@@ -200,33 +200,44 @@ class Notify
         $this->orderState = $orderState;
         $this->notFoundOrderRepository = $notFoundOrderRepository;
 
-        if (isset($params['response']) && is_array($params['response'])) {
-            $incrementId = $params['response']['order']['id'];
+        $this->initializeTransactionContext($params, $paymentHelper);
+    }
 
-            $this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
+    /**
+     * Initialize transaction and order context from response data.
+     *
+     * @param array $params
+     * @param Data $paymentHelper
+     * @throws LocalizedException
+     * @throws WebApiException
+     */
+    protected function initializeTransactionContext(array $params, Data $paymentHelper): void
+    {
+        if (!isset($params['response']) || !is_array($params['response'])) {
+            throw new LocalizedException(__('Posted data response as array is required.'));
+        }
 
-            $this->_order = $this->_orderFactory->create()->loadByIncrementId($this->_transaction->getOrder()->getId());
+        $this->_transaction = (new TransactionMapper($params['response']))->getModelObjectMapped();
+        $orderId = $this->_transaction->getOrder()->getId();
 
-            if (!$this->_order->getId()) {
-                $this->savePendingOrderIfNeeded($params, $paymentHelper);
-                throw new WebApiException(
-                    __(sprintf('Order ID not found: "%s".', $this->_transaction->getOrder()->getId())),
-                    0,
-                    WebApiException::HTTP_NOT_FOUND
-                );
-            }
+        $this->_order = $this->_orderFactory->create()->loadByIncrementId($orderId);
 
-            //Retieve method model
-            $this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
-
-            //Debug transaction notification if debug enabled
-            $this->_methodInstance->debugData($this->_transaction->toArray());
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Posted data response as array is required.')
+        if (!$this->_order->getId()) {
+            $this->savePendingOrderIfNeeded($params, $paymentHelper);
+            throw new WebApiException(
+                __("Order ID not found: \"%1\".", $orderId),
+                0,
+                WebApiException::HTTP_NOT_FOUND
             );
         }
+
+        $this->_methodInstance = $paymentHelper->getMethodInstance($this->_order->getPayment()->getMethod());
+
+        if ($this->_methodInstance) {
+            $this->_methodInstance->debugData($this->_transaction->toArray());
+        }
     }
+
 
     /**
      * Determine whether the current transaction can be processed based on its status and order state.

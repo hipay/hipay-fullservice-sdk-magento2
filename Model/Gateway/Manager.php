@@ -140,36 +140,44 @@ class Manager
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_transactionRepositoryInterface = $repository;
 
-        if (isset($params['order']) && $params['order'] instanceof Order) {
+        $this->initializeContext($params, $paymentHelper);
+    }
+
+    /**
+     * Initialise la configuration, la commande et le client HiPay.
+     *
+     * @param array $params
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function initializeContext(array $params, \Magento\Payment\Helper\Data $paymentHelper): void
+    {
+        if (!empty($params['order']) && $params['order'] instanceof Order) {
             $this->_order = $params['order'];
             $methodCode = $this->_order->getPayment()->getMethod();
             $this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
-            $storeId = $this->_order->getStoreId();
+
             $params = [
                 'params' => [
                     'methodCode' => $methodCode,
-                    'storeId' => $storeId,
+                    'storeId' => $this->_order->getStoreId(),
                     'order' => $this->_order,
-                    'forceMoto' => (isset($params['forceMoto'])) ? $params['forceMoto'] : false
+                    'forceMoto' => $params['forceMoto'] ?? false
                 ]
             ];
         } else {
-            $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
-            $platform = (isset($params['platform'])) ? $params['platform'] : false;
-            $apiEnv = (isset($params['apiEnv'])) ? $params['apiEnv'] : false;
             $params = [
                 'params' => [
-                    'storeId' => $storeId,
-                    'platform' => $platform,
-                    'apiEnv' => $apiEnv
+                    'storeId' => $params['storeId'] ?? false,
+                    'platform' => $params['platform'] ?? false,
+                    'apiEnv' => $params['apiEnv'] ?? false
                 ]
             ];
         }
 
         $this->_config = $this->_configFactory->create($params);
-
-        $clientProvider = new SimpleHTTPClient($this->_config);
-        $this->_gateway = new GatewayClient($clientProvider);
+        $this->_gateway = new GatewayClient(new SimpleHTTPClient($this->_config));
     }
 
     /**

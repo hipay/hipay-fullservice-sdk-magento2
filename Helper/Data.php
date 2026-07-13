@@ -22,6 +22,7 @@ use HiPay\FullserviceMagento\Model\RuleFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Module\ResourceInterface;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Customer\Model\Session;
@@ -229,5 +230,20 @@ class Data extends AbstractHelper
     public function getExtensionVersion()
     {
         return $this->moduleList->getOne(self::MODULE_NAME)['setup_version'];
+    }
+
+    /**
+     * Validate that a parameter is an instance of the expected class.
+     *
+     * @param mixed  $instance
+     * @param string $expectedClass
+     * @param string|\Magento\Framework\Phrase $errorMessage
+     * @throws LocalizedException
+     */
+    public function validateInstance($instance, string $expectedClass, $errorMessage): void
+    {
+        if (!$instance instanceof $expectedClass) {
+            throw new LocalizedException(__($errorMessage));
+        }
     }
 }

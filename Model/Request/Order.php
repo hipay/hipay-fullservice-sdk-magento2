@@ -219,26 +219,23 @@ class Order extends CommonRequest
         $this->_httpHeader = $httpHeader;
         $this->expirationSource = $expirationSource;
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
-        }
+        $this->helper->validateInstance(
+            $params['order'] ?? null,
+            \Magento\Sales\Model\Order::class,
+            'Order instance is required.'
+        );
+        $this->_order = $params['order'];
 
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
         }
 
-        if (
-            isset($params['paymentMethod'])
-            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
-        ) {
-            $this->_paymentMethod = $params['paymentMethod'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Object Request PaymentMethod instance is required.')
-            );
-        }
+        $this->helper->validateInstance(
+            $params['paymentMethod'] ?? null,
+            \HiPay\Fullservice\Request\AbstractRequest::class,
+            'PaymentMethod request instance is required.'
+        );
+        $this->_paymentMethod = $params['paymentMethod'];
     }
 
     /**

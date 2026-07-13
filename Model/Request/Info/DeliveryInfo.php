@@ -26,6 +26,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Url;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -98,38 +99,69 @@ class DeliveryInfo extends AbstractInfoRequest
             $params
         );
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
-        }
-        $this->_shippingMethodsHipay = $shippingMethodsHipay;
-
-        // Load Mapping Shipping Method if shipping method exist
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;
+        $this->_shippingMethodsHipay = $shippingMethodsHipay;
+        $helper->validateInstance(
+            $params['order'] ?? null,
+            Order::class,
+            __('Order instance is required.')
+        );
+
+        $this->_order = $params['order'];
+
+        $this->_mappingDelivery = $this->resolveMappingDelivery($this->_order);
+    }
+
+    /**
+     * Validate and return the order instance from params.
+     *
+     * @param array $params
+     * @return \Magento\Sales\Model\Order
+     * @throws LocalizedException
+     */
+    protected function validateOrder(array $params): \Magento\Sales\Model\Order
+    {
+        $this->helper->validateInstance(
+            $params['order'] ?? null,
+            \Magento\Sales\Model\Order::class,
+            'Order instance is required.'
+        );
+        return $params['order'];
+    }
+
+    /**
+     * Resolve the shipping mapping based on the order's shipping method.
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return MappingShipping|\Magento\Framework\DataObject|null
+     */
+    protected function resolveMappingDelivery(\Magento\Sales\Model\Order $order)
+    {
         if ($this->_order->getShippingMethod()) {
             $collection = $this->_mappingShippingCollectionFactory->create()
                 ->addFieldToFilter('magento_shipping_code', $this->_order->getShippingMethod())
                 ->load();
 
             if ($collection->getItems()) {
-                $this->_mappingDelivery = $collection->getFirstItem();
+                return $collection->getFirstItem();
             } else {
                 $collectionCustom = $this->_mappingShippingCollectionFactory->create()
                     ->addFieldToFilter('magento_shipping_code_custom', $this->_order->getShippingMethod())
                     ->load();
                 if ($collectionCustom->getItems()) {
-                    $this->_mappingDelivery = $collectionCustom->getFirstItem();
+                    return $collectionCustom->getFirstItem();
                 }
             }
         }
+        return $this->_mappingDelivery;
     }
+
 
     /**
      * @inheritDoc
      *
-     * @see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
-     * @return \HiPay\FullserviceMagento\Model\Request\Info\DeliveryInfo
+     * @return DeliveryShippingInfoRequest|DeliveryInfo
+     *@see    \HiPay\FullserviceMagento\Model\Request\AbstractRequest::mapRequest()
      */
     protected function mapRequest()
     {
@@ -142,7 +174,7 @@ class DeliveryInfo extends AbstractInfoRequest
     /**
      * According the mapping, provide a approximated date delivery
      *
-     * @return date format YYYY-MM-DD
+     * @return date|string
      */
     public function calculateEstimatedDate()
     {

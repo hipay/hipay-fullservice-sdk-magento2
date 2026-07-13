@@ -131,11 +131,13 @@ abstract class AbstractRequest implements RequestInterface
 
         $this->_customerId = $this->_customerSession->getCustomerId();
 
-        if (isset($params['config']) && $params['config'] instanceof HiPayConfig) {
-            $this->_config = $params['config'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Config instance is required.'));
-        }
+        $this->_helper->validateInstance(
+            $params['config'] ?? null,
+            HiPayConfig::class,
+            __('Config instance is required.')
+        );
+
+        $this->_config = $params['config'];
     }
 
     /**

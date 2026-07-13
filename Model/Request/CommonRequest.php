@@ -158,22 +158,20 @@ abstract class CommonRequest extends BaseRequest
         $this->_mappingCategoriesCollectionFactory = $mappingCategoriesCollectionFactory;
         $this->_categoryFactory = $categoryFactory;
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
-        }
+        $this->_order = $params['order'] ?? null;
+        $this->_paymentMethod = $params['paymentMethod'] ?? null;
 
-        if (
-            isset($params['paymentMethod'])
-            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
-        ) {
-            $this->_paymentMethod = $params['paymentMethod'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Object Request PaymentMethod instance is required.')
-            );
-        }
+        $this->helper->validateInstance(
+            $this->_order,
+            \Magento\Sales\Model\Order::class,
+            'Order instance is required.'
+        );
+
+        $this->helper->validateInstance(
+            $this->_paymentMethod,
+            \HiPay\Fullservice\Request\AbstractRequest::class,
+            'Object Request PaymentMethod instance is required.'
+        );
     }
 
     /**
