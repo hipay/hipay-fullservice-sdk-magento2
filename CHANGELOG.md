@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed the Apple Pay "White outline" button style sending an invalid value (`white-with-line`) instead of the Apple-supported `white-outline`.
+
 ## 1.33.0
 
 - **Fix** : Fixed Apple Pay sending a static `payment_product` (`cb`) instead of the card brand returned by tokenization, causing "acquirer not found" for non-CB cards.

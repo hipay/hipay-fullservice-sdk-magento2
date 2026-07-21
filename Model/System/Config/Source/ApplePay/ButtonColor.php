@@ -28,7 +28,7 @@ class ButtonColor implements \Magento\Framework\Option\ArrayInterface
 {
     protected const BLACK = 'black';
     protected const WHITE = 'white';
-    protected const WHITE_WITH_LINE = 'white-with-line';
+    protected const WHITE_OUTLINE = 'white-outline';
 
     /**
      * Options getter
@@ -40,7 +40,7 @@ class ButtonColor implements \Magento\Framework\Option\ArrayInterface
         return [
             ['value' => self::BLACK, 'label' => __('Black')],
             ['value' => self::WHITE, 'label' => __('White')],
-            ['value' => self::WHITE_WITH_LINE, 'label' => __('White with line')],
+            ['value' => self::WHITE_OUTLINE, 'label' => __('White outline')],
         ];
     }
 }
