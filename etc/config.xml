@@ -586,6 +586,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>1</allowspecific>
                 <specificcountry>PT</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
@@ -611,6 +612,7 @@
                 <allow_use_oneclick>0</allow_use_oneclick>
                 <allowspecific>1</allowspecific>
                 <specificcountry>PT</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
