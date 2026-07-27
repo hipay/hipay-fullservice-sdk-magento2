@@ -191,8 +191,11 @@ class AsyncConfirmPaymentSender extends Sender
     {
         $referenceToPay['logo'] = $this->getImageUrl('multibanco.png');
 
+        $referenceToPay['entity'] = $referenceToPay['entity'] ?? '';
+        $referenceToPay['reference'] = $referenceToPay['reference'] ?? '';
+
         $date = new \DateTime($referenceToPay['expirationDate']);
-        $referenceToPay['formatted_expiration_date'] = $date->format('m/d/Y');
+        $referenceToPay['formatted_expiration_date'] = $date->format('d/m/Y');
 
         $referenceToPay['formatted_amount'] = $this->priceHelper->currencyByStore(
             $referenceToPay['amount'],
