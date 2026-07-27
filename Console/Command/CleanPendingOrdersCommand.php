@@ -82,7 +82,7 @@ class CleanPendingOrdersCommand extends Command
      * @return int
      * @throws LocalizedException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->_state->setAreaCode(Area::AREA_FRONTEND);
         $areaModel = $this->_areaList->getArea($this->_state->getAreaCode());
@@ -92,6 +92,7 @@ class CleanPendingOrdersCommand extends Command
 
         $this->cleanPendingOrders->execute();
         $output->writeln('<info>Pending orders cleaned successfully.</info>');
-        return 1;
+
+        return Command::SUCCESS;
     }
 }
