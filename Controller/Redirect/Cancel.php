@@ -23,6 +23,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -111,11 +112,17 @@ class Cancel extends Fullservice
         $lastOrderId = $this->checkoutSession->getLastOrderId();
 
         if ($lastOrderId) {
-            /**
-             * @var $order  \Magento\Sales\Model\Order
-             */
-            $order = $this->orderRepository->get($lastOrderId);
-            if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
+            try {
+                /**
+                 * @var $order  \Magento\Sales\Model\Order
+                 */
+                $order = $this->orderRepository->get($lastOrderId);
+            } catch (NoSuchEntityException $e) {
+                $this->_redirect('checkout/cart');
+                return;
+            }
+
+            if ((bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /**
                  * @var $cart Cart
                  */

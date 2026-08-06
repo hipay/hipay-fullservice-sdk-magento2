@@ -23,6 +23,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -103,10 +104,14 @@ class Decline extends Fullservice
         $lastOrderId = $this->checkoutSession->getLastOrderId();
 
         if ($lastOrderId) {
-            /**
-             * @var $order  Order
-             */
-            $order = $this->orderRepository->get($lastOrderId);
+            try {
+                /**
+                 * @var $order  Order
+                 */
+                $order = $this->orderRepository->get($lastOrderId);
+            } catch (NoSuchEntityException $e) {
+                $order = null;
+            }
 
             if ($order && (bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /**
