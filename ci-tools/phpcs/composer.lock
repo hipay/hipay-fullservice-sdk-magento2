@@ -1,203 +1,203 @@
 {
-  "_readme": [
-    "This file locks the dependencies of your project to a known state",
-    "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-    "This file is @generated automatically"
-  ],
-  "content-hash": "1a9da694191580c15dbbbe788ae99c7c",
-  "packages": [],
-  "packages-dev": [
-    {
-      "name": "magento/magento-coding-standard",
-      "version": "6",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/magento/magento-coding-standard.git",
-        "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
-        "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
-        "shasum": ""
-      },
-      "require": {
-        "php": ">=5.6.0",
-        "squizlabs/php_codesniffer": "^3.5",
-        "webonyx/graphql-php": ">=0.12.6 <1.0"
-      },
-      "require-dev": {
-        "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
-      },
-      "type": "phpcodesniffer-standard",
-      "autoload": {
-        "classmap": [
-          "PHP_CodeSniffer/Tokenizers/"
-        ],
-        "psr-4": {
-          "Magento2\\": "Magento2/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-      ],
-      "description": "A set of Magento specific PHP CodeSniffer rules.",
-      "support": {
-        "issues": "https://github.com/magento/magento-coding-standard/issues",
-        "source": "https://github.com/magento/magento-coding-standard/tree/v6"
-      },
-      "time": "2020-12-03T14:41:54+00:00"
-    },
-    {
-      "name": "squizlabs/php_codesniffer",
-      "version": "3.13.5",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
-        "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-        "reference": "0ca86845ce43291e8f5692c7356fccf3bcf02bf4",
-        "shasum": ""
-      },
-      "require": {
-        "ext-simplexml": "*",
-        "ext-tokenizer": "*",
-        "ext-xmlwriter": "*",
-        "php": ">=5.4.0"
-      },
-      "require-dev": {
-        "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4"
-      },
-      "bin": [
-        "bin/phpcbf",
-        "bin/phpcs"
-      ],
-      "type": "library",
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "BSD-3-Clause"
-      ],
-      "authors": [
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "1a9da694191580c15dbbbe788ae99c7c",
+    "packages": [],
+    "packages-dev": [
         {
-          "name": "Greg Sherwood",
-          "role": "Former lead"
+            "name": "magento/magento-coding-standard",
+            "version": "6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/magento/magento-coding-standard.git",
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0",
+                "squizlabs/php_codesniffer": "^3.5",
+                "webonyx/graphql-php": ">=0.12.6 <1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
+            },
+            "type": "phpcodesniffer-standard",
+            "autoload": {
+                "classmap": [
+                    "PHP_CodeSniffer/Tokenizers/"
+                ],
+                "psr-4": {
+                    "Magento2\\": "Magento2/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "A set of Magento specific PHP CodeSniffer rules.",
+            "support": {
+                "issues": "https://github.com/magento/magento-coding-standard/issues",
+                "source": "https://github.com/magento/magento-coding-standard/tree/v6"
+            },
+            "time": "2020-12-03T14:41:54+00:00"
         },
         {
-          "name": "Juliette Reinders Folmer",
-          "role": "Current lead"
+            "name": "squizlabs/php_codesniffer",
+            "version": "3.13.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPCSStandards/PHP_CodeSniffer.git",
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHP_CodeSniffer/zipball/4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
+                "reference": "4c378e1a528ea066890fc2397cbdd2f94eb2fc91",
+                "shasum": ""
+            },
+            "require": {
+                "ext-simplexml": "*",
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0 || ^8.0 || ^9.3.4"
+            },
+            "bin": [
+                "bin/phpcbf",
+                "bin/phpcs"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "Former lead"
+                },
+                {
+                    "name": "Juliette Reinders Folmer",
+                    "role": "Current lead"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer/graphs/contributors"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
+            "keywords": [
+                "phpcs",
+                "standards",
+                "static analysis"
+            ],
+            "support": {
+                "issues": "https://github.com/PHPCSStandards/PHP_CodeSniffer/issues",
+                "security": "https://github.com/PHPCSStandards/PHP_CodeSniffer/security/policy",
+                "source": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
+                "wiki": "https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/PHPCSStandards",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/jrfnl",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/php_codesniffer",
+                    "type": "open_collective"
+                },
+                {
+                    "url": "https://thanks.dev/u/gh/phpcsstandards",
+                    "type": "thanks_dev"
+                }
+            ],
+            "time": "2026-08-06T00:17:32+00:00"
         },
         {
-          "name": "Contributors",
-          "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer/graphs/contributors"
+            "name": "webonyx/graphql-php",
+            "version": "v0.13.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webonyx/graphql-php.git",
+                "reference": "d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3",
+                "reference": "d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": "^7.1||^8.0"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^6.0",
+                "phpbench/phpbench": "^0.14.0",
+                "phpstan/phpstan": "^0.11.4",
+                "phpstan/phpstan-phpunit": "^0.11.0",
+                "phpstan/phpstan-strict-rules": "^0.11.0",
+                "phpunit/phpcov": "^5.0",
+                "phpunit/phpunit": "^7.2",
+                "psr/http-message": "^1.0",
+                "react/promise": "2.*"
+            },
+            "suggest": {
+                "psr/http-message": "To use standard GraphQL server",
+                "react/promise": "To leverage async resolving on React PHP platform"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GraphQL\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP port of GraphQL reference implementation",
+            "homepage": "https://github.com/webonyx/graphql-php",
+            "keywords": [
+                "api",
+                "graphql"
+            ],
+            "support": {
+                "issues": "https://github.com/webonyx/graphql-php/issues",
+                "source": "https://github.com/webonyx/graphql-php/tree/0.13.x"
+            },
+            "funding": [
+                {
+                    "url": "https://opencollective.com/webonyx-graphql-php",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-07-02T05:49:25+00:00"
         }
-      ],
-      "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-      "homepage": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
-      "keywords": [
-        "phpcs",
-        "standards",
-        "static analysis"
-      ],
-      "support": {
-        "issues": "https://github.com/PHPCSStandards/PHP_CodeSniffer/issues",
-        "security": "https://github.com/PHPCSStandards/PHP_CodeSniffer/security/policy",
-        "source": "https://github.com/PHPCSStandards/PHP_CodeSniffer",
-        "wiki": "https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki"
-      },
-      "funding": [
-        {
-          "url": "https://github.com/PHPCSStandards",
-          "type": "github"
-        },
-        {
-          "url": "https://github.com/jrfnl",
-          "type": "github"
-        },
-        {
-          "url": "https://opencollective.com/php_codesniffer",
-          "type": "open_collective"
-        },
-        {
-          "url": "https://thanks.dev/u/gh/phpcsstandards",
-          "type": "thanks_dev"
-        }
-      ],
-      "time": "2025-11-04T16:30:35+00:00"
-    },
-    {
-      "name": "webonyx/graphql-php",
-      "version": "v0.13.9",
-      "source": {
-        "type": "git",
-        "url": "https://github.com/webonyx/graphql-php.git",
-        "reference": "d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3"
-      },
-      "dist": {
-        "type": "zip",
-        "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3",
-        "reference": "d9a94fddcad0a35d4bced212b8a44ad1bc59bdf3",
-        "shasum": ""
-      },
-      "require": {
-        "ext-json": "*",
-        "ext-mbstring": "*",
-        "php": "^7.1||^8.0"
-      },
-      "require-dev": {
-        "doctrine/coding-standard": "^6.0",
-        "phpbench/phpbench": "^0.14.0",
-        "phpstan/phpstan": "^0.11.4",
-        "phpstan/phpstan-phpunit": "^0.11.0",
-        "phpstan/phpstan-strict-rules": "^0.11.0",
-        "phpunit/phpcov": "^5.0",
-        "phpunit/phpunit": "^7.2",
-        "psr/http-message": "^1.0",
-        "react/promise": "2.*"
-      },
-      "suggest": {
-        "psr/http-message": "To use standard GraphQL server",
-        "react/promise": "To leverage async resolving on React PHP platform"
-      },
-      "type": "library",
-      "autoload": {
-        "psr-4": {
-          "GraphQL\\": "src/"
-        }
-      },
-      "notification-url": "https://packagist.org/downloads/",
-      "license": [
-        "MIT"
-      ],
-      "description": "A PHP port of GraphQL reference implementation",
-      "homepage": "https://github.com/webonyx/graphql-php",
-      "keywords": [
-        "api",
-        "graphql"
-      ],
-      "support": {
-        "issues": "https://github.com/webonyx/graphql-php/issues",
-        "source": "https://github.com/webonyx/graphql-php/tree/0.13.x"
-      },
-      "funding": [
-        {
-          "url": "https://opencollective.com/webonyx-graphql-php",
-          "type": "open_collective"
-        }
-      ],
-      "time": "2020-07-02T05:49:25+00:00"
-    }
-  ],
-  "aliases": [],
-  "minimum-stability": "stable",
-  "stability-flags": {},
-  "prefer-stable": false,
-  "prefer-lowest": false,
-  "platform": {},
-  "platform-dev": {},
-  "plugin-api-version": "2.6.0"
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {},
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }
