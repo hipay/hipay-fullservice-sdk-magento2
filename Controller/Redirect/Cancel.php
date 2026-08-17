@@ -127,7 +127,7 @@ class Cancel extends Fullservice
                  * @var $cart Cart
                  */
                 $cart = $this->cart;
-                $items = $order->getItemsCollection();
+                $items = $order->getAllVisibleItems();
                 try {
                     foreach ($items as $item) {
                         $cart->addOrderItem($item);

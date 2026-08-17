@@ -18,6 +18,7 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\Rule;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
 use HiPay\FullserviceMagento\Model\RuleFactory;
 
@@ -38,17 +39,25 @@ class NewConditionHtml extends Action
     private $ruleFactory;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * NewConditionHtml constructor.
      *
-     * @param Context     $context
-     * @param RuleFactory $ruleFactory
+     * @param Context                $context
+     * @param RuleFactory            $ruleFactory
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         Context $context,
-        RuleFactory $ruleFactory
+        RuleFactory $ruleFactory,
+        ObjectManagerInterface $objectManager
     ) {
         parent::__construct($context);
         $this->ruleFactory = $ruleFactory;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -70,7 +79,7 @@ class NewConditionHtml extends Action
             $field = substr($customId, (strpos($customId, $m2 . '_') + strlen($m2 . '_')));
             $configPath = implode('/', array($section, $methodCode, $field));
 
-            $model = $this->_objectManager->create(
+            $model = $this->objectManager->create(
                 $type
             )->setId(
                 str_replace('_' . $customId, "", $id)
