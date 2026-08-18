@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Replaced direct ObjectManager usages with constructor dependency injection in controllers and consumers.
 - **Fix** : Fixed the Apple Pay "White outline" button style sending an invalid value (`white-with-line`) instead of the Apple-supported `white-outline`.
 - **Add** : Added EUR currency to the Przelewy24 payment method (in addition to PLN).
 - **Fix** : Restricted the MBWay payment method to the EUR currency only.
