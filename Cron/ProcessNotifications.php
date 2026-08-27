@@ -30,7 +30,6 @@ use Magento\Framework\Logger\Monolog;
  *
  * Used to process notifications via background process
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -162,8 +161,7 @@ class ProcessNotifications
             // Inject notifications in progress in array if exists since 1 day
             $yesterday = new \DateTime('- 1 day');
             $notifications = array_filter($notifications, function (Notification $notification) use ($yesterday) {
-                if (
-                    $notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
+                if ($notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
                     || $notification->getCreatedAt() < $yesterday
                 ) {
                     return true;

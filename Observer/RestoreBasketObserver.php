@@ -44,8 +44,7 @@ class RestoreBasketObserver implements ObserverInterface
 
         $lastRealOrder = $this->checkoutSession->getLastRealOrder();
 
-        if (
-            $lastRealOrder->getPayment()
+        if ($lastRealOrder->getPayment()
             && $lastRealOrder->getPayment()->getMethodInstance()->getConfigData('restore_cart_on_back')
             && !$this->hipayConfig->isNotificationCronActive()
             && $lastRealOrder->getData('state') === 'pending_payment'

@@ -33,7 +33,6 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
  * HiPay Fullservice SDK is used by the manager
  * So, all api call are centralized here
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -125,25 +124,25 @@ class Manager
             $methodCode = $this->_order->getPayment()->getMethod();
             $this->_methodInstance = $paymentHelper->getMethodInstance($methodCode);
             $storeId = $this->_order->getStoreId();
-            $params = array(
-                'params' => array(
+            $params = [
+                'params' => [
                     'methodCode' => $methodCode,
                     'storeId' => $storeId,
                     'order' => $this->_order,
                     'forceMoto' => (isset($params['forceMoto'])) ? $params['forceMoto'] : false
-                )
-            );
+                ]
+            ];
         } else {
             $storeId = (isset($params['storeId'])) ? $params['storeId'] : false;
             $platform = (isset($params['platform'])) ? $params['platform'] : false;
             $apiEnv = (isset($params['apiEnv'])) ? $params['apiEnv'] : false;
-            $params = array(
-                'params' => array(
+            $params = [
+                'params' => [
                     'storeId' => $storeId,
                     'platform' => $platform,
                     'apiEnv' => $apiEnv
-                )
-            );
+                ]
+            ];
         }
 
         $this->_config = $this->_configFactory->create($params);

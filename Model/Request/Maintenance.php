@@ -22,7 +22,6 @@ use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFac
 /**
  * Maintenance Request Object
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -125,8 +124,7 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (
-            isset($params['paymentMethod'])
+        if (isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

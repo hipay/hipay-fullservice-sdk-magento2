@@ -15,4 +15,9 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Sales\Controller\Adminhtml\Order\Create\Save">
+        <plugin name="hipay_hostedmoto_redirect"
+                type="HiPay\FullserviceMagento\Plugin\Adminhtml\OrderCreateSavePlugin"/>
+    </type>
 </config>

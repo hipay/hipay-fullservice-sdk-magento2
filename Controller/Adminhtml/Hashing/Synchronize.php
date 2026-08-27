@@ -24,7 +24,6 @@ use Psr\Log\LoggerInterface;
  * Add new condition html on rule edition
  * Used for 3ds and oneclick in payment configuration
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -99,14 +98,14 @@ class Synchronize extends \Magento\Backend\App\Action
      */
     protected function _updateHashAlgorithm($storeId)
     {
-        $platforms = array(
+        $platforms = [
             ConfigFactory::PRODUCTION,
             ConfigFactory::STAGE,
             ConfigFactory::PRODUCTION_MOTO,
             ConfigFactory::STAGE_MOTO,
             ConfigFactory::PRODUCTION_APPLEPAY,
             ConfigFactory::STAGE_APPLEPAY
-        );
+        ];
 
         $store = $this->_storeManager->getStore($storeId);
         $scope = ('' !== $this->store) ? \Magento\Store\Model\ScopeInterface::SCOPE_STORES : 'default';
@@ -116,17 +115,16 @@ class Synchronize extends \Magento\Backend\App\Action
  * @var $config \HiPay\FullserviceMagento\Model\Config
 */
             $config = $this->_configFactory->create(
-                array('params' => array('storeId' => $storeId, 'platform' => $platform))
+                ['params' => ['storeId' => $storeId, 'platform' => $platform]]
             );
             if ($config->hasCredentials()) {
                 $gatewayClient = $this->_gatewayFactory->create(
                     null,
-                    array('storeId' => $storeId, 'platform' => $platform)
+                    ['storeId' => $storeId, 'platform' => $platform]
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (
-                    \HiPay\Fullservice\Exception\RuntimeException |
+                } catch (\HiPay\Fullservice\Exception\RuntimeException |
                     \HiPay\Fullservice\Exception\ApiErrorException $e
                 ) {
                     $this->messageManager->addErrorMessage(
@@ -166,12 +164,12 @@ class Synchronize extends \Magento\Backend\App\Action
     {
         $this->_redirect(
             'adminhtml/system_config/edit',
-            array(
+            [
                 '_secure' => true,
                 'section' => 'hipay',
                 'store' => $this->store,
                 'website' => $this->website
-            )
+            ]
         );
     }
 }

@@ -28,7 +28,6 @@ use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 /**
  * Order Request Object
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -193,8 +192,7 @@ class Order extends CommonRequest
             $this->_operation = $params['operation'];
         }
 
-        if (
-            isset($params['paymentMethod'])
+        if (isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

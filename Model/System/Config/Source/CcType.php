@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * CcType source model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -111,8 +110,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
             if (in_array($code, $allowed) || empty($allowed)) {
                 if ($withCustomLabel && isset($this->_codeToLabel[$code])) {
                     $name = $this->_codeToLabel[$code];
-                } elseif (
-                    strpos(strtolower($name), "maestro") !== false
+                } elseif (strpos(strtolower($name), "maestro") !== false
                 ) {
                     //Special case due to wrong comparison in
                     // magento/module-payment/view/frontend/web/js/model/credit-card-validation/validator.js Line 36
@@ -129,7 +127,7 @@ class CcType extends \Magento\Framework\DataObject implements \Magento\Framework
             }
         }
 
-        $ordered = array();
+        $ordered = [];
 
         if ($this->getPath()) {
             list($section_locale, $method, $field) = explode("/", $this->getPath() ?: '');

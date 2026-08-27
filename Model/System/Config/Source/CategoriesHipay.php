@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * Source model for Categories Hipay
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -36,7 +35,7 @@ class CategoriesHipay implements \Magento\Framework\Option\ArrayInterface
         $collection = \HiPay\Fullservice\Data\Category\Collection::getItems();
         $options = [];
         foreach ($collection as $category) {
-            $options[] = array('value' => $category->getCode(), 'label' => $category->getName());
+            $options[] = ['value' => $category->getCode(), 'label' => $category->getName()];
         }
         return $options;
     }

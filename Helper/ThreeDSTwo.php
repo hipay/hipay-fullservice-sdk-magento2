@@ -20,6 +20,7 @@ use HiPay\Fullservice\Enum\ThreeDSTwo\ReorderIndicator;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use HiPay\Fullservice\Enum\Transaction\ECI;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
@@ -27,7 +28,6 @@ use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
 /**
  * ThreeDS v2 Helper class
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -41,14 +41,21 @@ class ThreeDSTwo extends AbstractHelper
 
     protected $_session;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
     public function __construct(
         Context $context,
         \Magento\Customer\Model\Session $session,
-        CollectionFactory $orderCollectionFactory
+        CollectionFactory $orderCollectionFactory,
+        SerializerInterface $serializer
     ) {
         parent::__construct($context);
         $this->_session = $session;
         $this->_orderCollectionFactory = $orderCollectionFactory;
+        $this->serializer = $serializer;
     }
 
     public function isCustomerLoggedIn()
@@ -89,8 +96,7 @@ class ThreeDSTwo extends AbstractHelper
         $orders = $this->getCustomerOrder($customer, $store, $dateLimit);
 
         foreach ($orders as $order) {
-            if (
-                $order->getPayment()->getAdditionalInformation("create_oneclick")
+            if ($order->getPayment()->getAdditionalInformation("create_oneclick")
                 && $order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE
             ) {
                 $count++;
@@ -199,8 +205,8 @@ class ThreeDSTwo extends AbstractHelper
 
     private function serializeAddress($address)
     {
-        return serialize(
-            array(
+        return $this->serializer->serialize(
+            [
                 'firstname' => $address->getFirstname(),
                 'lastname' => $address->getLastname(),
                 'street' => $address->getStreet(),
@@ -208,7 +214,7 @@ class ThreeDSTwo extends AbstractHelper
                 'postcode' => $address->getPostcode(),
                 'country' => $address->getCountryId(),
                 'company' => $address->getCompany(),
-            )
+            ]
         );
     }
 
@@ -226,7 +232,7 @@ class ThreeDSTwo extends AbstractHelper
             ->join(
                 ['soa' => $orderCollection->getTable('sales_order_address')],
                 'main_table.entity_id = soa.parent_id',
-                array('customer_address_id')
+                ['customer_address_id']
             )
             ->where('soa.customer_address_id = ?', $addressId)
             ->where('soa.address_type = ?', 'shipping');

@@ -23,13 +23,6 @@ use HiPay\FullserviceMagento\Model\Response\NotFound\OrderFactory as ResponseNot
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
-/**
- * ResponseNotFoundOrderRepository class
- *
- * @copyright Copyright (c) 2025 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 class ResponseNotFoundOrderRepository implements ResponseNotFoundOrderRepositoryInterface
 {
     /**

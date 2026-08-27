@@ -16,15 +16,19 @@
 
 namespace HiPay\FullserviceMagento\Observer;
 
+use HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender;
+use HiPay\FullserviceMagento\Model\HostedMotoRedirect;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Sales\Model\Order;
 
 /**
  * HiPay module observer
  *
- * Send Hosted page link to the customer when order was created in Admin (payment Mo/To)
+ * When an order is created in Admin (MO/TO payment): either send the hosted
+ * page link to the customer by email, or hand the hosted page URL to the
+ * order-create controller plugin so it redirects the admin to HiPay.
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -33,45 +37,51 @@ class SendHostedPaymentLinkObserver implements ObserverInterface
 {
     /**
      *
-     * @var \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender ;
+     * @var HostedPaymentLinkSender $paymenLinkSender ;
      */
     protected $paymenLinkSender;
 
-    protected $responseFactory;
+    /**
+     * @var HostedMotoRedirect
+     */
+    protected $hostedMotoRedirect;
 
     /**
-     * SendHostedPaymentLinkObserver constructor.
-     *
-     * @param \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender
+     * @param HostedPaymentLinkSender $paymenLinkSender
+     * @param HostedMotoRedirect      $hostedMotoRedirect
      */
     public function __construct(
-        \HiPay\FullserviceMagento\Model\Email\Sender\HostedPaymentLinkSender $paymenLinkSender,
-        \Magento\Framework\App\ResponseFactory $responseFactory
+        HostedPaymentLinkSender $paymenLinkSender,
+        HostedMotoRedirect $hostedMotoRedirect
     ) {
         $this->paymenLinkSender = $paymenLinkSender;
-        $this->responseFactory = $responseFactory;
+        $this->hostedMotoRedirect = $hostedMotoRedirect;
     }
 
     /**
-     * Send email with payment link to the customer
+     * Send the payment link by email, or store the hosted page URL for redirect.
      *
      * @param  EventObserver $observer
      * @return $this
      */
     public function execute(EventObserver $observer)
     {
-
         /**
-         * @var $order \Magento\Sales\Model\Order
-        */
+         * @var $order Order
+         */
         $order = $observer->getEvent()->getData('order');
         $url = $order->getPayment()->getAdditionalInformation('redirectUrl');
 
         if ($url && (strpos($order->getPayment()->getMethod(), 'hipay_hostedmoto') !== false)) {
-            if (!$order->getPayment()->getData('method_instance')->isSendMailToCustomer()) {
-                $this->responseFactory->create()->setRedirect($url)->sendResponse(); //Redirect to HiPay hosted page
-                die(); //This will stop execution and redirect to specific page
+            $methodInstance = $order->getPayment()->getData('method_instance');
+
+            if ($methodInstance && !$methodInstance->isSendMailToCustomer()) {
+                // Hand the URL to the order-create plugin, which returns the redirect.
+                $this->hostedMotoRedirect->setUrl($url);
+
+                return $this;
             }
+
             $this->paymenLinkSender->send($order);
         }
 

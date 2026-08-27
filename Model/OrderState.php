@@ -18,14 +18,6 @@ namespace HiPay\FullserviceMagento\Model;
 
 use Magento\Framework\App\ResourceConnection;
 
-/**
- * Order State class
- *
- * @author    Kassim Belghait <kassim@sirateck.com>
- * @copyright Copyright (c) 2016 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 class OrderState
 {
     public const TABLE_SALES_ORDER_STATUS_STATE = 'sales_order_status_state';

@@ -21,7 +21,6 @@ use Magento\Sales\Model\Order\Email\Container\Container;
 /**
  * HiPay Async Confirm Payment Identity Container
  *
- * @author    Kassim Belghait
  * @copyright Copyright (c)
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  */

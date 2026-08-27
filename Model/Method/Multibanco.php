@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Method;
 /**
  * Multibanco Model payment method
  *
- * @author    Jean-Baptiste Louvet <jlouvet@hipay.com>
  * @copyright Copyright (c) 2020 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2

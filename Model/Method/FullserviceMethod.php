@@ -230,7 +230,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->priceCurrency = $context->getPriceCurrency();
         $this->_storeManager = $context->getStoreManager();
 
-        $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
+        $this->_debugReplacePrivateDataKeys = ['token', 'cardtoken', 'card_number', 'cvc'];
 
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 
@@ -317,8 +317,7 @@ abstract class FullserviceMethod extends AbstractMethod
             'hipay_current_order'
         );
         if ($currentOrder) {
-            if (
-                (int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
+            if ((int)$currentOrder->getPayment()->getAdditionalInformation('last_status')
                 !== TransactionStatus::AUTHORIZED_AND_PENDING
             ) {
                 $orderCanReview = false;
@@ -428,8 +427,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $redirectUrl = $successUrl;
         switch ($response->getState()) {
             case TransactionState::COMPLETED:
-                if (
-                    $response->getPaymentMethod() &&
+                if ($response->getPaymentMethod() &&
                     $response->getPaymentMethod()->getToken() &&
                     $this->_checkoutSession->getQuote()->getCustomerId()
                 ) {

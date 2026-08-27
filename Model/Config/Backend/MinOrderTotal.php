@@ -64,8 +64,7 @@ class MinOrderTotal extends Value
     {
         $min = (float) ($this->minimums[$this->getPath()] ?? 0.0);
 
-        if (
-            $min > 0 && $this->getValue() !== '' && $this->getValue() !== null
+        if ($min > 0 && $this->getValue() !== '' && $this->getValue() !== null
             && (float) $this->getValue() < $min
         ) {
             throw new ValidatorException(

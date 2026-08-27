@@ -20,7 +20,6 @@ namespace HiPay\FullserviceMagento\Block\Adminhtml\System\Config;
 /**
  * Update notification block
  *
- * @author    Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -166,7 +165,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             curl_setopt($ch, CURLOPT_TIMEOUT, 3);
             curl_setopt($ch, CURLOPT_USERAGENT, 'PHP');
             $res = curl_exec($ch);
-            $gitHubInfo = @json_decode($res ?: '');
+            $gitHubInfo = json_decode($res ?: '');
 
             // If call is successful, reading from call
             if ($gitHubInfo) {
@@ -191,16 +190,15 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
             "To update the extension, please click here : "
         ) .  $this->readMeUrl;
         $title = __("HiPay Enterprise %1 available", $this->newVersion);
-        $versionData[] = array(
+        $versionData[] = [
             'severity' => $this->getSeverity(),
             'date_added' => $this->newVersionDate,
             'title' => $title,
             'description' => $message,
             'url' => $this->readMeUrl,
-        );
+        ];
 
-        if (
-            $this->version != $this->newVersion
+        if ($this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyAdded($versionData[0])
         ) {
             $this->_inbox->create()->parse(array_reverse($versionData));
@@ -209,8 +207,7 @@ class UpdateNotif implements \Magento\Framework\Notification\MessageInterface
          * This will compare the currently installed version with the latest available one.
          * A message will appear after the login if the two are not matching.
          */
-        if (
-            $this->version != $this->newVersion
+        if ($this->version != $this->newVersion
             && !$this->_notifHelper->isNotificationAlreadyRead($versionData[0])
         ) {
             return true;

@@ -8,7 +8,6 @@ use HiPay\Fullservice\Enum\Transaction\Operation;
 /**
  * Cart model
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -113,8 +112,7 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _calculateCustomItemsSubtotal($useOrderCurrency = false)
     {
-        if (
-            $this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
+        if ($this->_salesModel->getTaxContainer()->getShippingInvoiced() == null
             || $this->_salesModel->getTaxContainer()->getShippingRefunded() > 0
         ) {
             $this->_processShippingAndDiscountItems($useOrderCurrency);
@@ -130,8 +128,7 @@ class Cart extends \Magento\Payment\Model\Cart
      */
     protected function _processShippingAndDiscountItems($useOrderCurrency = false)
     {
-        if (
-            $this->_operation != Operation::REFUND
+        if ($this->_operation != Operation::REFUND
             && $this->_operation != Operation::CAPTURE
             && $this->getDiscount()
         ) {
@@ -328,8 +325,7 @@ class Cart extends \Magento\Payment\Model\Cart
                     break;
             }
 
-            if (
-                $this->_operation != null
+            if ($this->_operation != null
                 && ($this->_operation == Operation::CAPTURE || $this->_operation == Operation::REFUND)
             ) {
                 $qty = (int)$originalItem->getData('qty');
@@ -356,8 +352,7 @@ class Cart extends \Magento\Payment\Model\Cart
             $itemTotalInclTax = $this->getTotalPrice($originalItem, $useOrderCurrency);
 
             // Need better precision and unit price with reel tax application
-            if (
-                $this->_operation != null
+            if ($this->_operation != null
                 && ($this->_operation == Operation::CAPTURE
                 || $this->_operation == Operation::REFUND)
             ) {
