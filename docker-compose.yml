@@ -1,6 +1,6 @@
 services:
   app:
-    image: markoshust/magento-nginx:1.24-0
+    image: markoshust/magento-nginx:1.28-0
     container_name: magento-app
     ports:
       - "8096:8000"
@@ -55,7 +55,7 @@ services:
       - ./bin/docker/conf/development/module.env
 
   db:
-    image: mariadb:11.4
+    image: mariadb:11.8
     container_name: magento-db
     command: --max_allowed_packet=64M
       --optimizer_use_condition_selectivity=1
@@ -72,7 +72,7 @@ services:
       - dbdata:/var/lib/mysql
 
   opensearch:
-    image: markoshust/magento-opensearch:2.5-1
+    image: markoshust/magento-opensearch:3
     platform: linux/amd64
     container_name: magento-opensearch
     ports:

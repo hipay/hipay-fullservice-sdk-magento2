@@ -16,7 +16,11 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\Rule;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use HiPay\FullserviceMagento\Model\RuleFactory;
 
 /**
  * Add new condition html on rule edition
@@ -27,8 +31,35 @@ use Magento\Rule\Model\Condition\AbstractCondition;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class NewConditionHtml extends \Magento\Backend\App\Action
+class NewConditionHtml extends Action
 {
+    /**
+     * @var RuleFactory
+     */
+    private $ruleFactory;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * NewConditionHtml constructor.
+     *
+     * @param Context                $context
+     * @param RuleFactory            $ruleFactory
+     * @param ObjectManagerInterface $objectManager
+     */
+    public function __construct(
+        Context $context,
+        RuleFactory $ruleFactory,
+        ObjectManagerInterface $objectManager
+    ) {
+        parent::__construct($context);
+        $this->ruleFactory = $ruleFactory;
+        $this->objectManager = $objectManager;
+    }
+
     /**
      * @return void
      */
@@ -48,14 +79,14 @@ class NewConditionHtml extends \Magento\Backend\App\Action
             $field = substr($customId, (strpos($customId, $m2 . '_') + strlen($m2 . '_')));
             $configPath = implode('/', array($section, $methodCode, $field));
 
-            $model = $this->_objectManager->create(
+            $model = $this->objectManager->create(
                 $type
             )->setId(
                 str_replace('_' . $customId, "", $id)
             )->setType(
                 $type
             )->setRule(
-                $this->_objectManager->create('HiPay\FullserviceMagento\Model\Rule')
+                $this->ruleFactory->create()
             )->setPrefix(
                 'conditions'
             )

@@ -503,11 +503,11 @@ class Cart extends \Magento\Payment\Model\Cart
     ) {
         $dataContainer = $salesEntity->getTaxContainer();
         if ($useOrderCurrency) {
-            $this->addTax((double)$dataContainer->getDiscountTaxCompensationAmount());
-            $this->addTax((double)$dataContainer->getShippingDiscountTaxCompensationAmnt());
+            $this->addTax((float)$dataContainer->getDiscountTaxCompensationAmount());
+            $this->addTax((float)$dataContainer->getShippingDiscountTaxCompensationAmnt());
         } else {
-            $this->addTax((double)$dataContainer->getBaseDiscountTaxCompensationAmount());
-            $this->addTax((double)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
+            $this->addTax((float)$dataContainer->getBaseDiscountTaxCompensationAmount());
+            $this->addTax((float)$dataContainer->getBaseShippingDiscountTaxCompensationAmnt());
         }
     }
 
