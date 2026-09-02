@@ -19,7 +19,11 @@
 
 $_element = $block->getElement()
 ?>
-<input type="hidden" value="<?= $escaper->escapeHtmlAttr($_element->getRule()->getId()) ?>" name="<?= $escaper->escapeHtmlAttr($_element->getName()) ?>" />
+<input
+    type="hidden"
+    value="<?= $escaper->escapeHtmlAttr($_element->getRule()->getId()) ?>"
+    name="<?= $escaper->escapeHtmlAttr($_element->getName()) ?>"
+/>
 <div class="rule-tree">
     <fieldset
             id="<?= $_element->getHtmlId() ?>"

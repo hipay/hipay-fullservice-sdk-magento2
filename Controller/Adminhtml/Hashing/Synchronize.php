@@ -124,7 +124,8 @@ class Synchronize extends \Magento\Backend\App\Action
                 );
                 try {
                     $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $store, $scope);
-                } catch (\HiPay\Fullservice\Exception\RuntimeException |
+                } catch (
+                    \HiPay\Fullservice\Exception\RuntimeException |
                     \HiPay\Fullservice\Exception\ApiErrorException $e
                 ) {
                     $this->messageManager->addErrorMessage(

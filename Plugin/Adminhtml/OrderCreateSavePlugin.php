@@ -22,13 +22,11 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Create\Save;
 
 /**
- * Redirect the admin to the HiPay hosted page after a MO/TO order is placed.
+ * Redirect admin to the HiPay hosted page after a MO/TO order is placed
  *
- * Replaces the legacy die()-based redirect in SendHostedPaymentLinkObserver:
- * the observer stores the hosted page URL, this after-plugin returns the
- * corresponding redirect result instead of the default order-view redirect.
- *
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class OrderCreateSavePlugin
 {
@@ -57,8 +55,8 @@ class OrderCreateSavePlugin
     /**
      * Return the HiPay hosted page redirect when the placed order requires it.
      *
-     * @param  Save             $subject
-     * @param  ResultInterface  $result
+     * @param  Save            $subject
+     * @param  ResultInterface $result
      * @return ResultInterface
      */
     public function afterExecute(Save $subject, ResultInterface $result)

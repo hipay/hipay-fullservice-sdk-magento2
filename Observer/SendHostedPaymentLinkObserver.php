@@ -25,9 +25,7 @@ use Magento\Sales\Model\Order;
 /**
  * HiPay module observer
  *
- * When an order is created in Admin (MO/TO payment): either send the hosted
- * page link to the customer by email, or hand the hosted page URL to the
- * order-create controller plugin so it redirects the admin to HiPay.
+ * Send the hosted page link by email, or hand the URL to the order-create plugin for redirect (payment Mo/To)
  *
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence

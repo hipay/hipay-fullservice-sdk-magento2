@@ -161,7 +161,8 @@ class ProcessNotifications
             // Inject notifications in progress in array if exists since 1 day
             $yesterday = new \DateTime('- 1 day');
             $notifications = array_filter($notifications, function (Notification $notification) use ($yesterday) {
-                if ($notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
+                if (
+                    $notification->getState() !== Notification::NOTIFICATION_STATE_IN_PROGRESS
                     || $notification->getCreatedAt() < $yesterday
                 ) {
                     return true;

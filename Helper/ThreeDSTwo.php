@@ -96,7 +96,8 @@ class ThreeDSTwo extends AbstractHelper
         $orders = $this->getCustomerOrder($customer, $store, $dateLimit);
 
         foreach ($orders as $order) {
-            if ($order->getPayment()->getAdditionalInformation("create_oneclick")
+            if (
+                $order->getPayment()->getAdditionalInformation("create_oneclick")
                 && $order->getPayment()->getMethod() === HostedFieldsMethod::HIPAY_METHOD_CODE
             ) {
                 $count++;

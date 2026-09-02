@@ -43,7 +43,8 @@ class Accept extends Fullservice
         }
 
         $order = $this->_getCheckoutSession()->getLastRealOrder();
-        if ($order
+        if (
+            $order
             && $order->getId()
             && $order->getPayment()
             && $order->getPayment()->getMethodInstance()->usesPendingPolling()

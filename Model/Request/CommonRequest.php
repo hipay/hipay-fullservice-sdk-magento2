@@ -140,7 +140,8 @@ abstract class CommonRequest extends BaseRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

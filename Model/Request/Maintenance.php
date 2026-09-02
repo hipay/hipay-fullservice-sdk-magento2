@@ -124,7 +124,8 @@ class Maintenance extends CommonRequest
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
         }
 
-        if (isset($params['paymentMethod'])
+        if (
+            isset($params['paymentMethod'])
             && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
         ) {
             $this->_paymentMethod = $params['paymentMethod'];

@@ -52,31 +52,34 @@ class PendingStatus extends \HiPay\FullserviceMagento\Controller\Fullservice
             if ($isPollingMethod && $orderStatus === Config::STATUS_AUTHORIZATION_REQUESTED) {
                 $redirectUrl = $successUrl;
                 $statusOK = true;
-            } elseif (in_array(
-                $orderState,
-                [
+            } elseif (
+                in_array(
+                    $orderState,
+                    [
                         \Magento\Sales\Model\Order::STATE_PROCESSING,
                         \Magento\Sales\Model\Order::STATE_COMPLETE
                     ],
-                true
-            )
+                    true
+                )
             ) {
                 $redirectUrl = $successUrl;
                 $statusOK = true;
-            } elseif ($orderState === \Magento\Sales\Model\Order::STATE_CANCELED
+            } elseif (
+                $orderState === \Magento\Sales\Model\Order::STATE_CANCELED
                 || $orderStatus === $refusedStatus
                 || $orderStatus === $canceledStatus
             ) {
                 $redirectUrl = $declineUrl;
-            } elseif (in_array(
-                $orderStatus,
-                [
+            } elseif (
+                in_array(
+                    $orderStatus,
+                    [
                         Config::STATUS_AUTHORIZATION_REQUESTED,
                         Config::STATUS_AUTHORIZED_PENDING,
                         (string) $payment->getMethodInstance()->getConfigData('order_status')
                     ],
-                true
-            )
+                    true
+                )
                 || in_array(
                     $payment->getAdditionalInformation('status'),
                     [

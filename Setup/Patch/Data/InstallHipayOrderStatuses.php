@@ -22,13 +22,11 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Sales\Model\Order;
 
 /**
- * Install HiPay custom order statuses and their state mappings.
+ * Install HiPay custom order statuses and their state mappings
  *
- * Replaces the legacy Setup/InstallData.php and the 1.10.3 block of
- * Setup/UpgradeData.php. Idempotent: existing installs already carrying these
- * statuses are left untouched.
- *
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class InstallHipayOrderStatuses implements DataPatchInterface
 {
@@ -46,7 +44,7 @@ class InstallHipayOrderStatuses implements DataPatchInterface
     }
 
     /**
-     * Final set of HiPay statuses with their default order state.
+     * HiPay statuses with their default order state
      *
      * @return array
      */
@@ -54,8 +52,14 @@ class InstallHipayOrderStatuses implements DataPatchInterface
     {
         return [
             Config::STATUS_AUTHORIZED => ['label' => 'Authorized', 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_AUTHORIZED_PENDING => ['label' => 'Authorized and pending', 'state' => Order::STATE_PAYMENT_REVIEW],
-            Config::STATUS_AUTHORIZATION_REQUESTED => ['label' => 'Authorization requested', 'state' => Order::STATE_PENDING_PAYMENT],
+            Config::STATUS_AUTHORIZED_PENDING => [
+                'label' => 'Authorized and pending',
+                'state' => Order::STATE_PAYMENT_REVIEW,
+            ],
+            Config::STATUS_AUTHORIZATION_REQUESTED => [
+                'label' => 'Authorization requested',
+                'state' => Order::STATE_PENDING_PAYMENT,
+            ],
             Config::STATUS_CAPTURE_REQUESTED => ['label' => 'Capture requested', 'state' => Order::STATE_PROCESSING],
             Config::STATUS_CAPTURE_REFUSED => ['label' => 'Capture refused', 'state' => Order::STATE_PROCESSING],
             Config::STATUS_PARTIALLY_CAPTURED => ['label' => 'Partially captured', 'state' => Order::STATE_PROCESSING],
@@ -63,13 +67,16 @@ class InstallHipayOrderStatuses implements DataPatchInterface
             Config::STATUS_REFUNDED => ['label' => 'Refunded', 'state' => Order::STATE_PROCESSING],
             Config::STATUS_REFUND_REFUSED => ['label' => 'Refund refused', 'state' => Order::STATE_PROCESSING],
             Config::STATUS_PARTIALLY_REFUNDED => ['label' => 'Partially refunded', 'state' => Order::STATE_PROCESSING],
-            Config::STATUS_AUTHENTICATION_REQUESTED => ['label' => 'Authentication requested', 'state' => Order::STATE_PENDING_PAYMENT],
+            Config::STATUS_AUTHENTICATION_REQUESTED => [
+                'label' => 'Authentication requested',
+                'state' => Order::STATE_PENDING_PAYMENT,
+            ],
             Config::STATUS_EXPIRED => ['label' => 'Authorization Expired', 'state' => Order::STATE_HOLDED],
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function apply()
     {
@@ -105,7 +112,7 @@ class InstallHipayOrderStatuses implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getDependencies()
     {
@@ -113,7 +120,7 @@ class InstallHipayOrderStatuses implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAliases()
     {

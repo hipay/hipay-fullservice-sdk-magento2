@@ -22,14 +22,11 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Enable multi payment products for Apple Pay and migrate the legacy "cb"
- * value to the supported products list.
+ * Enable Apple Pay multi payment products and migrate the legacy "cb" value
  *
- * Replaces the 1.33.0 block of Setup/UpgradeData.php. Brand new installs rely
- * on the defaults declared in etc/config.xml; this patch only migrates existing
- * merchant configuration.
- *
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class UpdateApplePayPaymentProducts implements DataPatchInterface
 {
@@ -44,15 +41,11 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     private const PATH_PAYMENT_PRODUCTS = 'payment/hipay_applepay/payment_products';
 
     /**
-     * Legacy single value to migrate from.
-     *
      * @var string
      */
     private const LEGACY_PAYMENT_PRODUCTS = 'cb';
 
     /**
-     * Supported Apple Pay payment products.
-     *
      * @var string
      */
     private const SUPPORTED_PAYMENT_PRODUCTS = 'visa,mastercard,cb,maestro';
@@ -80,7 +73,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function apply()
     {
@@ -95,8 +88,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * Enable multi payment products on every configured scope, or seed the
-     * default scope when no configuration row exists yet.
+     * Enable multi payment products on every configured scope, or seed the default
      *
      * @return void
      */
@@ -115,8 +107,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * Migrate the legacy "cb" value to the supported products list on every
-     * configured scope, or seed the default scope when no row exists yet.
+     * Migrate the legacy "cb" value to the supported products list
      *
      * @return void
      */
@@ -142,8 +133,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * Fetch the scopes holding a configuration row for the given path
-     * (optionally filtered by an exact current value).
+     * Fetch the scopes holding a config row for the given path
      *
      * @param  string      $path
      * @param  string|null $value
@@ -164,7 +154,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * Whether at least one configuration row exists for the given path.
+     * Whether at least one config row exists for the given path
      *
      * @param  string $path
      * @return bool
@@ -181,7 +171,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getDependencies()
     {
@@ -189,7 +179,7 @@ class UpdateApplePayPaymentProducts implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAliases()
     {

@@ -227,7 +227,8 @@ class CcMethod extends FullserviceMethod
 
         if (in_array($info->getCcType(), $availableTypes)) {
             // Other credit card type number validation
-            if ($this->validateCcNum($ccNumber)
+            if (
+                $this->validateCcNum($ccNumber)
                 || (
                     $this->otherCcType($info->getCcType())
                     && $this->validateCcNumOther($ccNumber)
@@ -336,7 +337,8 @@ class CcMethod extends FullserviceMethod
     protected function _validateExpDate($expYear, $expMonth)
     {
         $date = new \DateTime();
-        if (!$expYear
+        if (
+            !$expYear
             || !$expMonth
             || (int)$date->format('Y') > $expYear
             || (

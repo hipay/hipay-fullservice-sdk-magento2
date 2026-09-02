@@ -17,13 +17,11 @@
 namespace HiPay\FullserviceMagento\Model;
 
 /**
- * Request-scoped holder for the MO/TO hosted page redirect URL.
+ * Holder for the MO/TO hosted page redirect URL.
  *
- * The order-placement observer stores the HiPay hosted page URL here, and the
- * admin order-create controller plugin reads it to return the redirect. Shared
- * (singleton) within a request, so both see the same instance.
- *
- * @link https://github.com/hipay/hipay-fullservice-sdk-magento2
+ * @copyright Copyright (c) 2016 - HiPay
+ * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
+ * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
 class HostedMotoRedirect
 {
@@ -33,8 +31,7 @@ class HostedMotoRedirect
     private $url;
 
     /**
-     * @param  string|null $url
-     * @return void
+     * @param string|null $url
      */
     public function setUrl($url)
     {
