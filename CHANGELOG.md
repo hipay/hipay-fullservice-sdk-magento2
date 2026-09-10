@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed order status regression caused by out-of-order HiPay notifications (Authorization Requested / Refund Requested).
+
 ## 1.34.0
 
 - **Fix** : Replaced direct ObjectManager usages with constructor dependency injection in controllers and consumers.
