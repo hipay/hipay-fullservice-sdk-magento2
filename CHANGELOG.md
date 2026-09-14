@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Made the payment method Title a required field in the configuration (empty value no longer accepted).
+
 ## 1.34.0
 
 - **Fix** : Replaced direct ObjectManager usages with constructor dependency injection in controllers and consumers.
