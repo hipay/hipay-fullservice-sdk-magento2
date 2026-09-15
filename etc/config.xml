@@ -1009,7 +1009,8 @@
                 <payment_products>mybank</payment_products>
                 <payment_products_categories></payment_products_categories>
                 <allowspecific>1</allowspecific>
-                <specificcountry>IT</specificcountry>
+                <specificcountry>IT,BE,PT,ES</specificcountry>
+                <allowed_currencies>EUR</allowed_currencies>
                 <debug>0</debug>
                 <env>stage</env>
                 <group>hipay</group>
