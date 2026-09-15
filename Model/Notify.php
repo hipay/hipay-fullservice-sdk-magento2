@@ -381,6 +381,32 @@ class Notify
                     $this->notFoundOrderRepository->deletePendingOrder($this->_transaction->getOrder()->getId());
                 }
                 break;
+            case TransactionStatus::AUTHORIZATION_REQUESTED:
+                // status : 142 - ignore if the order is already authorized/captured (received out of order)
+                $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+                $savedStatues = is_array($savedStatues) ? $savedStatues : [];
+                if (
+                    isset($savedStatues[TransactionStatus::AUTHORIZED])
+                    || isset($savedStatues[TransactionStatus::CAPTURE_REQUESTED])
+                    || isset($savedStatues[TransactionStatus::CAPTURED])
+                    || isset($savedStatues[TransactionStatus::PARTIALLY_CAPTURED])
+                ) {
+                    $this->skipNotification = true;
+                }
+                $canProcess = true;
+                break;
+            case TransactionStatus::REFUND_REQUESTED:
+                // status : 124 - ignore if a refund was already processed (avoid status regression)
+                $savedStatues = $this->_order->getPayment()->getAdditionalInformation('saved_statues');
+                $savedStatues = is_array($savedStatues) ? $savedStatues : [];
+                if (
+                    isset($savedStatues[TransactionStatus::REFUNDED])
+                    || isset($savedStatues[TransactionStatus::PARTIALLY_REFUNDED])
+                ) {
+                    $this->skipNotification = true;
+                }
+                $canProcess = true;
+                break;
             default:
                 $canProcess = true;
                 break;
@@ -403,12 +429,17 @@ class Notify
 
         if ($this->skipNotification) {
             $this->_doTransactionMessage(
-                __('Notification skipped: order "%1" was already authorized.', $this->_transaction->getOrder()->getId())
+                __(
+                    'Notification skipped: order "%1" already at a more advanced status (HiPay status %2 ignored).',
+                    $this->_transaction->getOrder()->getId(),
+                    $this->_transaction->getStatus()
+                )
             );
 
             $this->responseMessage = (string)__(
-                'Order "%1" was already authorized.',
-                $this->_transaction->getOrder()->getId()
+                'Notification skipped: order "%1" already at a more advanced status (HiPay status %2 ignored).',
+                $this->_transaction->getOrder()->getId(),
+                $this->_transaction->getStatus()
             );
 
             return $this;
