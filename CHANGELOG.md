@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Add** : Made the payment method Title a required field in the configuration (empty value no longer accepted).
 - **Fix** : Fixed order status regression caused by out-of-order HiPay notifications (Authorization Requested / Refund Requested).
 - **Add** : Added EUR currency and extended country availability (BE, PT, ES) to the MyBank payment method.
 - **Fix** : Fixed HiPay notification cron processing on multi-store configurations.
