@@ -20,6 +20,7 @@ define([
   'Magento_Checkout/js/view/payment/default',
   'Magento_Checkout/js/model/quote',
   'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-payment-mixin',
+  'HiPay_FullserviceMagento/js/model/toc-agreements-tracker',
   'domReady!'
 ], function (
   $,
@@ -27,7 +28,8 @@ define([
   ko,
   ComponentDefault,
   quote,
-  hipayPaymentMixin
+  hipayPaymentMixin,
+  tocTracker
 ) {
   'use strict';
 
@@ -88,69 +90,16 @@ define([
           )
         ),
         isPayPalVisible: ko.observable(false),
-        allTOC: new Map(),
         isPaypalAddressValid: ko.observable(null),
         paypalAddressInvalidFields: ko.observableArray([]),
         _hipayUnhandledRejectionInstalled: false,
 
         initTOCEvents: function () {
-          var self = this;
-
-          $(document).ready(function () {
-            if (window.checkoutConfig.checkoutAgreements.isEnabled) {
-              var observer = new MutationObserver(function (mutations) {
-                mutations.forEach(function (mutation) {
-                  if (
-                    mutation.type === 'childList' &&
-                    mutation.addedNodes.length
-                  ) {
-                    initPaypalEvents();
-                  }
-                });
-              });
-              observer.observe(document.body, {
-                childList: true,
-                subtree: true
-              });
-            }
-
-            function initPaypalEvents() {
-              var results = document.querySelectorAll(
-                "input[id*='agreement_hipay_paypal']"
-              );
-
-              if (results.length === 0) {
-                    results = document.querySelectorAll(
-                        '.checkout-agreements input[type="checkbox"][id*="agreement"]'
-                    );
-              }
-
-              var agreements =
-                window.checkoutConfig.checkoutAgreements.agreements;
-              agreements = agreements.filter((input) => input.mode == '1');
-              if (results?.length == agreements.length) {
-                results.forEach(function (input, index) {
-                  self.allTOC.set(index, false);
-                  input.addEventListener('change', function (event) {
-                    self.allTOC.set(index, event.target.checked);
-                    updateTOCState();
-                  });
-                });
-                observer.takeRecords();
-              }
-            }
-
-            function updateTOCState() {
-              var noChecked = [...self.allTOC.values()].filter(
-                (value) => value == false
-              );
-              if (noChecked.length > 0) {
-                self.isAllTOCChecked(false);
-              } else {
-                self.isAllTOCChecked(true);
-              }
-            }
-          });
+          tocTracker.register(
+            "input[id*='agreement_hipay_paypal']",
+            '.checkout-agreements input[type="checkbox"][id*="agreement"]',
+            this.isAllTOCChecked
+          );
         },
 
         /**
