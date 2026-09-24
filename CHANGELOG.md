@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Updated the Przelewy24 (P24) payment method name to "Blik / Przelewy24".
+
 ## 1.34.1
 
 - **Add** : Made the payment method Title a required field in the configuration (empty value no longer accepted).
