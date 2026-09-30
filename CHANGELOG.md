@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Removed redundant custom factory classes in favor of Magento auto-generated factories, and cleaned up unused ones.
+
 ## 1.34.1
 
 - **Add** : Made the payment method Title a required field in the configuration (empty value no longer accepted).
