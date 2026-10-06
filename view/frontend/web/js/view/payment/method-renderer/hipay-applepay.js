@@ -82,14 +82,7 @@ define([
       placeOrderHandler: null,
       validateHandler: null,
       isApplePayAllowed: ko.observable(true),
-      isAllTOCChecked: ko.observable(
-        !(
-          window.checkoutConfig.checkoutAgreements.isEnabled &&
-          window.checkoutConfig.checkoutAgreements.agreements.some(
-            (input) => input.mode == '1'
-          )
-        )
-      ),
+      isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
       isApplePayVisibleToPay: ko.observable(false),
 
       initialize: function () {

@@ -2,7 +2,7 @@
 
 ## UNRELEASE
 
-- **Fix** : Improved checkout performance by replacing the per-payment-method MutationObservers watching the agreement checkboxes with a single shared event-delegation handler, thanks to [ElTeteDBit](https://github.com/ElTeteDBit) for issue [#174](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/174)
+- **Fix** : Improved checkout performance by replacing the agreement checkboxes and Hosted Fields saved-cards MutationObservers with event-delegation handlers, and made the terms and conditions check more robust (duplicated agreement blocks and missing agreements configuration), thanks to [ElTeteDBit](https://github.com/ElTeteDBit) for issue [#174](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/174)
 
 ## 1.34.1
 

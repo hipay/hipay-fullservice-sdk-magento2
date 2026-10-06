@@ -81,14 +81,7 @@ define([
             : 'en_us'
         },
         isPlaceOrderAllowed: ko.observable(false),
-        isAllTOCChecked: ko.observable(
-          !(
-            window.checkoutConfig.checkoutAgreements.isEnabled &&
-            window.checkoutConfig.checkoutAgreements.agreements.some(
-              (input) => input.mode == '1'
-            )
-          )
-        ),
+        isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
         isPayPalVisible: ko.observable(false),
         isPaypalAddressValid: ko.observable(null),
         paypalAddressInvalidFields: ko.observableArray([]),

@@ -18,15 +18,23 @@ define(['jquery'], function ($) {
   var entries = [];
   var bound = false;
 
-  // number of mandatory agreements declared in config
+  function agreementsConfig() {
+    return (window.checkoutConfig && window.checkoutConfig.checkoutAgreements) || {};
+  }
+
   function requiredCount() {
-    var agreements = window.checkoutConfig.checkoutAgreements.agreements || [];
-    return agreements.filter(function (agreement) {
+    var config = agreementsConfig();
+
+    if (!config.isEnabled) {
+      return 0;
+    }
+
+    return (config.agreements || []).filter(function (agreement) {
       return agreement.mode == '1';
     }).length;
   }
 
-  // hipay per-method checkbox first, fallback to the standard agreements
+  // HiPay per-method checkbox first, fallback to the standard agreements
   function resolveBoxes(entry) {
     var boxes = document.querySelectorAll(entry.specific);
 
@@ -37,20 +45,28 @@ define(['jquery'], function ($) {
     return boxes;
   }
 
-  // compute the checked state for a single registered renderer
+  function isVisible(box) {
+    return $(box.closest('.checkout-agreement') || box.parentElement).is(':visible');
+  }
+
   function computeEntry(entry, required) {
-    var boxes = resolveBoxes(entry);
+    var boxes = Array.prototype.slice.call(resolveBoxes(entry));
+
+    // Duplicated agreements block: only visible boxes count
+    if (boxes.length > required) {
+      boxes = boxes.filter(isVisible);
+    }
+
     var allChecked =
       boxes.length > 0 &&
-      boxes.length === required &&
-      Array.prototype.every.call(boxes, function (box) {
+      boxes.length >= required &&
+      boxes.every(function (box) {
         return box.checked;
       });
 
     entry.observable(allChecked);
   }
 
-  // recompute every registered renderer (on a real change event)
   function recompute() {
     var required = requiredCount();
 
@@ -60,12 +76,11 @@ define(['jquery'], function ($) {
   }
 
   return {
-    // register a renderer: track its agreements and update its isAllTOCChecked
-    register: function (specificSelector, fallbackSelector, observable) {
-      if (!window.checkoutConfig.checkoutAgreements.isEnabled) {
-        return;
-      }
+    hasMandatoryAgreements: function () {
+      return requiredCount() > 0;
+    },
 
+    register: function (specificSelector, fallbackSelector, observable) {
       if (requiredCount() === 0) {
         return;
       }
@@ -82,12 +97,12 @@ define(['jquery'], function ($) {
         };
         entries.push(entry);
       } else {
-        // component re-initialized: point to the live observable
+        // Component re-initialized: use the live observable
         entry.fallback = fallbackSelector || null;
         entry.observable = observable;
       }
 
-      // single delegated listener, bound once for all renderers
+      // Single delegated listener for all renderers
       if (!bound) {
         bound = true;
         $(document).on(
@@ -97,7 +112,6 @@ define(['jquery'], function ($) {
         );
       }
 
-      // only compute the entry we just registered, not all of them
       computeEntry(entry, requiredCount());
     }
   };

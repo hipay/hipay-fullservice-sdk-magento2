@@ -50,16 +50,7 @@ define([
         : 'en_us'
     },
     isPlaceOrderAllowed: ko.observable(false),
-    isAllTOCChecked: ko.observable(
-      !(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-        window.checkoutConfig.checkoutAgreements.agreements.some(function (
-          agreement
-        ) {
-          return agreement.mode == '1';
-        })
-      )
-    ),
+    isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
     isPhoneNumberValid: ko.observable(false),
     hasPhoneInteraction: ko.observable(false),
 
@@ -76,14 +67,7 @@ define([
     },
 
     hasMandatoryAgreements: function () {
-      return Boolean(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-          window.checkoutConfig.checkoutAgreements.agreements.some(function (
-            agreement
-          ) {
-            return agreement.mode == '1';
-          })
-      );
+      return tocTracker.hasMandatoryAgreements();
     },
 
     initHostedFields: function () {

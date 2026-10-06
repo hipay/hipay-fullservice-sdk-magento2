@@ -44,7 +44,7 @@ define([
         }
       });
 
-      self.setupSavedCardsObserver();
+      self.bindSavedCardsEvents();
 
       self.hipaySdk.injectBaseStylesheet();
 
@@ -168,14 +168,7 @@ define([
     configHipay: null,
     hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
-    isAllTOCChecked: ko.observable(
-      !(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-        window.checkoutConfig.checkoutAgreements.agreements.some(
-          (input) => input.mode == '1'
-        )
-      )
-    ),
+    isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
 
     /**
      * @param {Function} handler
@@ -273,52 +266,21 @@ define([
       self.initTOCEvents();
     },
 
-    setupSavedCardsObserver: function () {
-      var self = this;
-      var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          if (mutation.addedNodes.length) {
-            var savedCardsContainer =
-              document.getElementById('hipay-saved-cards');
-            if (
-              savedCardsContainer &&
-              savedCardsContainer.querySelector('.saved-card')
-            ) {
-              self.bindSavedCardsEvents();
-            }
-          }
-        });
-      });
-
-      // Start observing the document with the configured parameters
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    },
-
     bindSavedCardsEvents: function () {
       var self = this;
 
-      $('#hipay-saved-cards .saved-card').each(function () {
-        $(this)
-          .off('click')
-          .on('click', function () {
-            var $checkbox = $(this).find('input[type="checkbox"]');
+      $(document)
+        .off('click.hipaySavedCards', '#hipay-saved-cards .saved-card')
+        .on('click.hipaySavedCards', '#hipay-saved-cards .saved-card', function () {
+          var $checkbox = $(this).find('input[type="checkbox"]');
 
-            // Uncheck other checkboxes
-            $('.saved-card input[type="checkbox"]')
-              .not($checkbox)
-              .prop('checked', false);
+          // Uncheck other checkboxes
+          $('.saved-card input[type="checkbox"]')
+            .not($checkbox)
+            .prop('checked', false);
 
-            if ($checkbox.is(':checked')) {
-              // When a saved card is selected:
-              self.selectedCard($checkbox.attr('id'));
-            } else {
-              self.selectedCard($checkbox.attr('id'));
-            }
-          });
-      });
+          self.selectedCard($checkbox.attr('id'));
+        });
     },
 
     /**
