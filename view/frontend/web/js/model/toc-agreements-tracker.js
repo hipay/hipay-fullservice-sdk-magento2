@@ -36,10 +36,13 @@ define(['jquery'], function ($) {
 
   // HiPay per-method checkbox first, fallback to the standard agreements
   function resolveBoxes(entry) {
-    var boxes = document.querySelectorAll(entry.specific);
+    var boxes = Array.prototype.slice.call(document.querySelectorAll(entry.specific));
 
     if (boxes.length === 0 && entry.fallback) {
-      boxes = document.querySelectorAll(entry.fallback);
+      boxes = Array.prototype.slice.call(document.querySelectorAll(entry.fallback))
+        .filter(function (box) {
+          return !box.closest('.payment-method');
+        });
     }
 
     return boxes;
@@ -50,7 +53,7 @@ define(['jquery'], function ($) {
   }
 
   function computeEntry(entry, required) {
-    var boxes = Array.prototype.slice.call(resolveBoxes(entry));
+    var boxes = resolveBoxes(entry);
 
     // Duplicated agreements block: only visible boxes count
     if (boxes.length > required) {
