@@ -22,14 +22,6 @@ use HiPay\FullserviceMagento\Model\Request\AbstractRequest;
 use HiPay\FullserviceMagento\Model\Request\CommonRequest;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFactory;
 
-/**
- * Available Payment Product
- *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
- * @copyright Copyright (c) 2017 - HiPay
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
- * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
- */
 class AvailablePaymentProduct extends AbstractRequest
 {
     /**

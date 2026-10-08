@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed coding standard (PHPCS) compliance and migrated to declarative schema and data patches.
 - **Fix** : Removed redundant custom factory classes in favor of Magento auto-generated factories, and cleaned up unused ones.
 
 ## 1.34.1

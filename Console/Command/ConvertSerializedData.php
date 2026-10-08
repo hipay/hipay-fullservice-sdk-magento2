@@ -17,6 +17,7 @@
 namespace HiPay\FullserviceMagento\Console\Command;
 
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Serialize\Serializer\Serialize;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -46,15 +47,22 @@ class ConvertSerializedData extends Command
      */
     protected $state;
 
+    /**
+     * @var Serialize
+     */
+    private $serialize;
+
     public function __construct(
         \HiPay\FullserviceMagento\Model\RuleFactory $ruleFactory,
         ProductMetadataInterface $productMetadata,
-        \Magento\Framework\App\State $state
+        \Magento\Framework\App\State $state,
+        Serialize $serialize
     ) {
         parent::__construct();
         $this->ruleFactory = $ruleFactory;
         $this->productMetadata = $productMetadata;
         $this->state = $state;
+        $this->serialize = $serialize;
     }
 
     /**
@@ -89,11 +97,13 @@ class ConvertSerializedData extends Command
                     $model->load($item->getData()["rule_id"]);
                     if ($isSerializedConditions) {
                         $model->setConditionsSerialized(
-                            json_encode(unserialize($item->getData()["conditions_serialized"]))
+                            json_encode($this->serialize->unserialize($item->getData()["conditions_serialized"]))
                         );
                     }
                     if ($isSerializedActions) {
-                        $model->setActionsSerialized(json_encode(unserialize($item->getData()["actions_serialized"])));
+                        $model->setActionsSerialized(
+                            json_encode($this->serialize->unserialize($item->getData()["actions_serialized"]))
+                        );
                     }
                     $model->save();
                     $dataSerialized = true;

@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\Config;
 /**
  * Factory class for payment config
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -53,7 +52,7 @@ class Factory
     /**
      * @var array
      */
-    protected $_config = array();
+    protected $_config = [];
 
     /**
      * Factory constructor
@@ -63,34 +62,34 @@ class Factory
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {
         $this->_objectManager = $objectManager;
-        $this->_config = array(
-            self::PRODUCTION => array(
+        $this->_config = [
+            self::PRODUCTION => [
                 'forceMoto' => false,
                 'forceStage' => false
-            ),
-            self::PRODUCTION_MOTO => array(
+            ],
+            self::PRODUCTION_MOTO => [
                 'forceMoto' => true,
                 'forceStage' => false
-            ),
-            self::PRODUCTION_APPLEPAY => array(
+            ],
+            self::PRODUCTION_APPLEPAY => [
                 'forceMoto' => false,
                 'forceStage' => false,
                 'isApplePay' => true
-            ),
-            self::STAGE => array(
+            ],
+            self::STAGE => [
                 'forceMoto' => false,
                 'forceStage' => true
-            ),
-            self::STAGE_MOTO => array(
+            ],
+            self::STAGE_MOTO => [
                 'forceMoto' => true,
                 'forceStage' => true
-            ),
-            self::STAGE_APPLEPAY => array(
+            ],
+            self::STAGE_APPLEPAY => [
                 'forceMoto' => false,
                 'forceStage' => true,
                 'isApplePay' => true
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -113,6 +112,6 @@ class Factory
      */
     protected function _getPlatformConfig($platform)
     {
-        return (isset($this->_config[$platform])) ? $this->_config[$platform] : array();
+        return (isset($this->_config[$platform])) ? $this->_config[$platform] : [];
     }
 }

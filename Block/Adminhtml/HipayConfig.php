@@ -27,7 +27,6 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * This class handles configuration related to HiPay integration in Magento 2 admin panel.
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2

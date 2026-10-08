@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model\System\Config\Source;
 /**
  * Source model for Categories Magento
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -68,10 +67,10 @@ class CategoriesMagento implements \Magento\Framework\Option\ArrayInterface
             $collection = $this->getCategoryTree($storeId, $rootId);
 
             foreach ($collection as $category) {
-                $options[] = array(
+                $options[] = [
                     'value' => $category->getId(),
                     'label' =>  $category->getName() . ' (' . $store->getName() . ')'
-                );
+                ];
             }
         }
 
