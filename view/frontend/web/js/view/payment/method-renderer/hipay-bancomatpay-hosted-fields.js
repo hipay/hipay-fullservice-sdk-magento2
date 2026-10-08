@@ -16,8 +16,9 @@ define([
   'ko',
   'jquery',
   'Magento_Checkout/js/view/payment/default',
-  'Magento_Checkout/js/model/full-screen-loader'
-], function (ko, $, Component, fullScreenLoader) {
+  'Magento_Checkout/js/model/full-screen-loader',
+  'HiPay_FullserviceMagento/js/model/toc-agreements-tracker'
+], function (ko, $, Component, fullScreenLoader, tocTracker) {
   'use strict';
 
   return Component.extend({
@@ -49,19 +50,9 @@ define([
         : 'en_us'
     },
     isPlaceOrderAllowed: ko.observable(false),
-    isAllTOCChecked: ko.observable(
-      !(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-        window.checkoutConfig.checkoutAgreements.agreements.some(function (
-          agreement
-        ) {
-          return agreement.mode == '1';
-        })
-      )
-    ),
+    isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
     isPhoneNumberValid: ko.observable(false),
     hasPhoneInteraction: ko.observable(false),
-    allTOC: new Map(),
 
     initialize: function () {
       var self = this;
@@ -76,14 +67,7 @@ define([
     },
 
     hasMandatoryAgreements: function () {
-      return Boolean(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-          window.checkoutConfig.checkoutAgreements.agreements.some(function (
-            agreement
-          ) {
-            return agreement.mode == '1';
-          })
-      );
+      return tocTracker.hasMandatoryAgreements();
     },
 
     initHostedFields: function () {
@@ -142,66 +126,11 @@ define([
     },
 
     initTOCEvents: function () {
-      var self = this;
-
-      $(document).ready(function () {
-        if (!self.hasMandatoryAgreements()) {
-          return;
-        }
-
-        var observer = new MutationObserver(function (mutations) {
-          mutations.forEach(function (mutation) {
-            if (mutation.type === 'childList' && mutation.addedNodes.length) {
-              initBancomatPayEvents();
-            }
-          });
-        });
-
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true
-        });
-
-        function initBancomatPayEvents() {
-          var results = document.querySelectorAll(
-            "input[id*='agreement_hipay_bancomatpay']"
-          );
-
-          if (results.length === 0) {
-            results = document.querySelectorAll(
-              '.checkout-agreements input[type="checkbox"][id*="agreement"]'
-            );
-          }
-
-          var agreements = window.checkoutConfig.checkoutAgreements.agreements;
-          agreements = agreements.filter(function (agreement) {
-            return agreement.mode == '1';
-          });
-
-          if (results.length && results.length === agreements.length) {
-            results.forEach(function (input, index) {
-              self.allTOC.set(index, input.checked);
-              input.addEventListener('change', function (event) {
-                self.allTOC.set(index, event.target.checked);
-                updateTOCState();
-              });
-            });
-
-            updateTOCState();
-            observer.takeRecords();
-          }
-        }
-
-        function updateTOCState() {
-          var allChecked = Array.from(self.allTOC.values()).every(function (
-            value
-          ) {
-            return value === true;
-          });
-
-          self.isAllTOCChecked(allChecked);
-        }
-      });
+      tocTracker.register(
+        "input[id*='agreement_hipay_bancomatpay']",
+        '.checkout-agreements input[type="checkbox"][id*="agreement"]',
+        this.isAllTOCChecked
+      );
     },
 
     updatePhoneFieldState: function (data, markInteraction) {
