@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
-use HiPay\FullserviceMagento\Model\Rule\Factory;
+use HiPay\FullserviceMagento\Model\RuleFactory;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -32,7 +32,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class Rule extends Field
 {
     /**
-     * @var Factory $ruleFactory
+     * @var RuleFactory $ruleFactory
      */
     private $ruleFactory;
 
@@ -41,13 +41,13 @@ class Rule extends Field
      *
      * Rule constructor.
      *
-     * @param Context $context
-     * @param Factory $ruleFactory
-     * @param array   $data
+     * @param Context     $context
+     * @param RuleFactory $ruleFactory
+     * @param array       $data
      */
     public function __construct(
         Context $context,
-        Factory $ruleFactory,
+        RuleFactory $ruleFactory,
         array $data = []
     ) {
 

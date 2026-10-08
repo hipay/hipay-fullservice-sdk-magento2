@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
-use HiPay\FullserviceMagento\Model\CartCategories\Factory;
+use HiPay\FullserviceMagento\Model\CartCategoriesFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Page;
@@ -46,7 +46,7 @@ class Edit extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
-     * @var Factory
+     * @var CartCategoriesFactory
      */
     private $cartCategoriesFactory;
 
@@ -58,17 +58,17 @@ class Edit extends \Magento\Backend\App\Action
     /**
      * Edit constructor.
      *
-     * @param Action\Context $context
-     * @param PageFactory    $resultPageFactory
-     * @param Registry       $registry
-     * @param Factory        $cartCategoriesFactory
-     * @param Session        $backendSession
+     * @param Action\Context        $context
+     * @param PageFactory           $resultPageFactory
+     * @param Registry              $registry
+     * @param CartCategoriesFactory $cartCategoriesFactory
+     * @param Session               $backendSession
      */
     public function __construct(
         Action\Context $context,
         PageFactory $resultPageFactory,
         Registry $registry,
-        Factory $cartCategoriesFactory,
+        CartCategoriesFactory $cartCategoriesFactory,
         Session $backendSession
     ) {
         $this->resultPageFactory = $resultPageFactory;

@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use HiPay\FullserviceMagento\Model\Config;
-use HiPay\FullserviceMagento\Model\Notification\Factory;
+use HiPay\FullserviceMagento\Model\NotificationFactory;
 use HiPay\FullserviceMagento\Model\Notify;
 use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Checkout\Model\Session;
@@ -56,7 +56,7 @@ class Index extends AppAction
     protected $_logger;
 
     /**
-     * @var Factory
+     * @var NotificationFactory
      */
     private $_notificationFactory;
 
@@ -69,7 +69,7 @@ class Index extends AppAction
         Context $context,
         Session $checkoutSession,
         Config $hipayConfig,
-        Factory $notificationFactory,
+        NotificationFactory $notificationFactory,
         NotifyFactory $notifyFactory,
         LoggerInterface $logger
     ) {

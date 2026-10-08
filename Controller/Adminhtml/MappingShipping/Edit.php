@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
-use HiPay\FullserviceMagento\Model\MappingShipping\Factory;
+use HiPay\FullserviceMagento\Model\MappingShippingFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\Model\Session;
 use Magento\Backend\Model\View\Result\Page;
@@ -46,7 +46,7 @@ class Edit extends Action
     protected $resultPageFactory;
 
     /**
-     * @var Factory
+     * @var MappingShippingFactory
      */
     private $mappingShippingFactory;
 
@@ -58,17 +58,17 @@ class Edit extends Action
     /**
      * Edit constructor.
      *
-     * @param Action\Context $context
-     * @param PageFactory    $resultPageFactory
-     * @param Registry       $registry
-     * @param Factory        $mappingShippingFactory
-     * @param Session        $backendSession
+     * @param Action\Context         $context
+     * @param PageFactory            $resultPageFactory
+     * @param Registry               $registry
+     * @param MappingShippingFactory $mappingShippingFactory
+     * @param Session                $backendSession
      */
     public function __construct(
         Action\Context $context,
         PageFactory $resultPageFactory,
         Registry $registry,
-        Factory $mappingShippingFactory,
+        MappingShippingFactory $mappingShippingFactory,
         Session $backendSession
     ) {
         $this->resultPageFactory = $resultPageFactory;

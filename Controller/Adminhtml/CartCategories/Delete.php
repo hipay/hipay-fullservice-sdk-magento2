@@ -28,19 +28,19 @@ use Magento\Backend\App\Action;
 class Delete extends \Magento\Backend\App\Action
 {
     /**
-     * @var \HiPay\FullserviceMagento\Model\CartCategories\Factory
+     * @var \HiPay\FullserviceMagento\Model\CartCategoriesFactory
      */
     private $cartCategoriesFactory;
 
     /**
      * Delete constructor.
      *
-     * @param Action\Context                                         $context
-     * @param \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+     * @param Action\Context                                        $context
+     * @param \HiPay\FullserviceMagento\Model\CartCategoriesFactory $cartCategoriesFactory
      */
     public function __construct(
         Action\Context $context,
-        \HiPay\FullserviceMagento\Model\CartCategories\Factory $cartCategoriesFactory
+        \HiPay\FullserviceMagento\Model\CartCategoriesFactory $cartCategoriesFactory
     ) {
         $this->cartCategoriesFactory = $cartCategoriesFactory;
         parent::__construct($context);
