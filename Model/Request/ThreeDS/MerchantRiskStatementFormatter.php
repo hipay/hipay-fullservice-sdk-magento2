@@ -26,7 +26,6 @@ use Magento\Sales\Model\Order\Item;
 /**
  * Account info
  *
- * @author    HiPay <support@hipay.com>
  * @copyright Copyright (c) 2019 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2

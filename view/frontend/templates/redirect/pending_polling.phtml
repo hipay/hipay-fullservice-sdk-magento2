@@ -20,29 +20,28 @@
  * @var \HiPay\FullserviceMagento\Block\Redirect\PendingPolling $block
  */
 ?>
-<?php
-    echo $this
+<?=  $block
         ->getLayout()
         ->createBlock('HiPay\FullserviceMagento\Block\ExternalJS')
         ->setTemplate('HiPay_FullserviceMagento::additional/external_js.phtml')
         ->toHtml()
 ?>
 <div class="page-title">
-    <h1><?php /* @escapeNotVerified */ echo __('Your payment is in pending.') ?></h1>
+    <h1><?= /* @escapeNotVerified */ __('Your payment is in pending.') ?></h1>
 </div>
 
-<?php if ($block->getRealOrderId()) : ?><p>
-    <?php /* @escapeNotVerified */ echo __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
-<?php if ($error = $block->getErrorMessage()) : ?><p><?php /* @escapeNotVerified */ echo $error ?></p><?php endif ?>
-<p><?php /* @escapeNotVerified */ echo __('Click <a href="%1">here</a> to continue shopping.', $block->escapeUrl($block->getContinueShoppingUrl())) ?>
+<?php if ($block->getRealOrderId()): ?><p>
+    <?= /* @escapeNotVerified */ __('Order #') . $block->getRealOrderId() ?></p><?php endif ?>
+<?php if ($error = $block->getErrorMessage()): ?><p><?= /* @escapeNotVerified */ $error ?></p><?php endif ?>
+<p><?= /* @escapeNotVerified */ __('Click <a href="%1">here</a> to continue shopping.', $escaper->escapeUrl($block->getContinueShoppingUrl())) ?>
 </p>
 <script type="text/javascript">
     require(['jquery'], function ($) {
         var attempts = 0;
-        var maxAttempts = <?php echo (int) $block->getPollingMaxAttempts(); ?>;
-        var pendingUrl = '<?php echo $block->escapeUrl($block->getPendingUrl()); ?>';
-        var declineUrl = '<?php echo $block->escapeUrl($block->getDeclineUrl()); ?>';
-        var placeOrderStatusUrl = '<?php echo $block->escapeUrl($block->getPlaceOrderStatusUrl()); ?>';
+        var maxAttempts = <?= (int) $block->getPollingMaxAttempts(); ?>;
+        var pendingUrl = '<?= $escaper->escapeUrl($block->getPendingUrl()); ?>';
+        var declineUrl = '<?= $escaper->escapeUrl($block->getDeclineUrl()); ?>';
+        var placeOrderStatusUrl = '<?= $escaper->escapeUrl($block->getPlaceOrderStatusUrl()); ?>';
 
         function redirectToFailure() {
             clearInterval(interval);
@@ -73,6 +72,6 @@
                         redirectToFailure();
                     }
                 });
-        }, <?php echo (int) $block->getPollingInterval(); ?>);
+        }, <?= (int) $block->getPollingInterval(); ?>);
     });
 </script>
