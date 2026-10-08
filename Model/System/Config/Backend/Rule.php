@@ -33,7 +33,6 @@ use Magento\Framework\Validator\Exception;
 /**
  * Rule Backend Model
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -162,7 +161,7 @@ class Rule extends Value
         if ($this->_ruleData === null) {
             $post = $this->_request->getPost();
 
-            $this->_ruleData = array();
+            $this->_ruleData = [];
             if (isset($post['rule_' . $this->_getFieldName()]['conditions'])) {
                 $this->_ruleData['conditions'] = $post['rule_' . $this->_getFieldName()]['conditions'];
             }

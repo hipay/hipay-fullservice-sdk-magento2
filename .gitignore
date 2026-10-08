@@ -34,7 +34,7 @@ Thumbs.db
 
 #Third party#
 #############
-data/
+/data/
 /web/
 vendor/
 composer.lock

@@ -26,7 +26,6 @@ use HiPay\FullserviceMagento\Model\RuleFactory;
  * Add new condition html on rule edition
  * Used for 3ds and oneclick in payment configuration
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -68,7 +67,7 @@ class NewConditionHtml extends Action
         $id = $this->getRequest()->getParam('id');
 
         $html = '';
-        $marker = array();
+        $marker = [];
 
         if (preg_match('/_([a-z0-9_]*)--/', $id, $marker)) {
             $customId = $marker[1];
@@ -77,7 +76,7 @@ class NewConditionHtml extends Action
             list($section, $m1, $m2) = explode('_', $customId ?: '');
             $methodCode = $m1 . '_' . $m2;
             $field = substr($customId, (strpos($customId, $m2 . '_') + strlen($m2 . '_')));
-            $configPath = implode('/', array($section, $methodCode, $field));
+            $configPath = implode('/', [$section, $methodCode, $field]);
 
             $model = $this->objectManager->create(
                 $type

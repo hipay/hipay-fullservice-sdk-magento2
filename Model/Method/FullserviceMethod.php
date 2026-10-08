@@ -230,7 +230,7 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->priceCurrency = $context->getPriceCurrency();
         $this->_storeManager = $context->getStoreManager();
 
-        $this->_debugReplacePrivateDataKeys = array('token', 'cardtoken', 'card_number', 'cvc');
+        $this->_debugReplacePrivateDataKeys = ['token', 'cardtoken', 'card_number', 'cvc'];
 
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 

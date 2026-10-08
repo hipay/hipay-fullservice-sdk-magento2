@@ -2,10 +2,10 @@
     require([], function () {
         window.hipayConfig = {
             getApiUsernameTokenJs:
-                '<?= $block->escapeHtml($block->getApiUsernameTokenJs()) ?>',
+                '<?= $escaper->escapeHtml($block->getApiUsernameTokenJs()) ?>',
             getApiPasswordTokenJs:
-                '<?= $block->escapeHtml($block->getApiPasswordTokenJs()) ?>',
-            getEnv: '<?= $block->escapeHtml($block->getEnv()) ?>'
+                '<?= $escaper->escapeHtml($block->getApiPasswordTokenJs()) ?>',
+            getEnv: '<?= $escaper->escapeHtml($block->getEnv()) ?>'
         }
     })
 </script>

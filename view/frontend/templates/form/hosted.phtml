@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * HiPay Fullservice Magento
  *
@@ -20,11 +20,11 @@
 /**
  * @var \Magento\Payment\Block\Transparent\Form $block
  */
-$code = $block->escapeHtml($block->getMethodCode());
+$code = $escaper->escapeHtml($block->getMethodCode());
 ?>
-<fieldset class="fieldset payment items <?php /* @noEscape */ echo $code; ?>"
-          id="payment_form_<?php /* @noEscape */ echo $code; ?>" style="display: none;">
+<fieldset class="fieldset payment items <?= /* @noEscape */ $code; ?>"
+          id="payment_form_<?= /* @noEscape */ $code; ?>" style="display: none;">
           
-          <?php echo $block->escapeHtml( __('You will be redirect to payment page after submit order.')) ?>
+          <?= $escaper->escapeHtml(__('You will be redirect to payment page after submit order.')) ?>
           
 </fieldset>

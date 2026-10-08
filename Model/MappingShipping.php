@@ -19,7 +19,6 @@ namespace HiPay\FullserviceMagento\Model;
 /**
  * Hipay Shipping map data model
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -29,34 +28,6 @@ namespace HiPay\FullserviceMagento\Model;
  */
 class MappingShipping extends \Magento\Framework\Model\AbstractModel
 {
-    /**
-     *
-     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory
-     */
-    protected $typeFactory;
-
-    /**
-     * MappingShipping constructor.
-     *
-     * @param \Magento\Framework\Model\Context                             $context
-     * @param \Magento\Framework\Registry                                  $registry
-     * @param MappingShipping\Type\Factory                                 $typeFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null           $resourceCollection
-     * @param array                                                        $data
-     */
-    public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \HiPay\FullserviceMagento\Model\MappingShipping\Type\Factory $typeFactory,
-        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
-    ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->typeFactory = $typeFactory;
-    }
-
     /**
      * Init resource model and id field
      */
