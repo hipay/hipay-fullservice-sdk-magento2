@@ -86,7 +86,10 @@ class PreviousAuthInfoFormatter extends AbstractRequest
         $previousAuthInfo = new PreviousAuthInfo();
 
         if ($this->_threeDSHelper->isCustomerLoggedIn()) {
-            $lastOrder = $this->_threeDSHelper->getCustomerLatestOrder($this->_customerId, $this->getStoreId());
+            $lastOrder = $this->_threeDSHelper->getCustomerLatestOrder(
+                $this->_customerSession->getCustomerId(),
+                $this->getStoreId()
+            );
             if ($lastOrder->getPayment()) {
                 $previousAuthInfo->transaction_reference = $lastOrder->getPayment()->getCcTransId();
             }

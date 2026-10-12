@@ -76,14 +76,29 @@ class Index extends AppAction
         parent::__construct($context);
 
         $this->_checkoutSession = $checkoutSession;
-        $storeId = $this->_checkoutSession->getQuote()->getStore()->getStoreId();
         $this->_hipayConfig = $hipayConfig;
-        $this->_hipayConfig->setStoreId($storeId);
-
         $this->_notificationFactory = $notificationFactory;
         $this->_notifyFactory = $notifyFactory;
         $this->_logger = $logger;
 
+        $this->initStoreFromCheckoutSession();
+        $this->allowNotificationWithoutFormKey();
+    }
+
+    /**
+     * Set the config store from the current checkout session quote
+     */
+    private function initStoreFromCheckoutSession()
+    {
+        $storeId = $this->_checkoutSession->getQuote()->getStore()->getStoreId();
+        $this->_hipayConfig->setStoreId($storeId);
+    }
+
+    /**
+     * Flag the HiPay POST notification as ajax so the form key (CSRF) check is skipped
+     */
+    private function allowNotificationWithoutFormKey()
+    {
         if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
             $request = $this->getRequest();
             if ($request instanceof HttpRequest && $request->isPost()) {

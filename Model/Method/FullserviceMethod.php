@@ -223,7 +223,6 @@ abstract class FullserviceMethod extends AbstractMethod
         $this->urlBuilder = $context->getUrlBuilder();
         $this->fraudAcceptSender = $context->getFraudAcceptSender();
         $this->fraudDenySender = $context->getFraudDenySender();
-        $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['methodCode' => $this->getCode()]]);
         $this->_checkoutSession = $context->getCheckoutSession();
         $this->_cardFactory = $context->getCardFactory();
         $this->_cardCollectionFactory = $context->getCardCollectionFactory();
@@ -232,6 +231,25 @@ abstract class FullserviceMethod extends AbstractMethod
 
         $this->_debugReplacePrivateDataKeys = ['token', 'cardtoken', 'card_number', 'cvc'];
 
+        $this->initHipayConfig($context);
+        $this->initSdkCapabilities();
+    }
+
+    /**
+     * Create the HiPay config for this payment method
+     *
+     * @param \HiPay\FullserviceMagento\Model\Method\Context $context
+     */
+    private function initHipayConfig(\HiPay\FullserviceMagento\Model\Method\Context $context)
+    {
+        $this->_hipayConfig = $context->getConfigFactory()->create(['params' => ['methodCode' => $this->getCode()]]);
+    }
+
+    /**
+     * Override capture/refund capabilities with the SDK payment product config
+     */
+    private function initSdkCapabilities()
+    {
         $sdkConfig = \HiPay\Fullservice\Data\PaymentProduct\Collection::getItem(static::$_technicalCode);
 
         if ($sdkConfig) {

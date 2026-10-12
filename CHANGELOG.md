@@ -6,6 +6,7 @@
 - **Fix** : Removed redundant custom factory classes in favor of Magento auto-generated factories, and cleaned up unused ones.
 - **Fix** : Improved checkout performance by replacing the agreement checkboxes and Hosted Fields saved-cards MutationObservers with event-delegation handlers, and made the terms and conditions check more robust (duplicated agreement blocks and missing agreements configuration), thanks to [ElTeteDBit](https://github.com/ElTeteDBit) for issue [#174](https://github.com/hipay/hipay-fullservice-sdk-magento2/issues/174)
 - **Add** : Updated the Przelewy24 (P24) payment method name to "Blik / Przelewy24".
+- **Fix** : Refactored constructors containing business logic: logic moved to dedicated methods for readability, deferred loading where safely possible, and duplicated initializations removed.
 
 ## 1.34.1
 

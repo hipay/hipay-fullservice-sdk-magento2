@@ -68,7 +68,7 @@ abstract class AbstractInfoRequest extends BaseRequest
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
         } else {
-            throw new \Magento\Framework\Exception\LocalizedException('Order instance is required.');
+            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
     }
 

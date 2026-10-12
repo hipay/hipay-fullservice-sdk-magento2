@@ -173,34 +173,13 @@ class Order extends CommonRequest
         );
         $this->frontendUrlBuilder = $frontendUrlBuilder;
         $this->appState = $appState;
-        $this->helper = $helper;
-        $this->_cartFactory = $cartFactory;
-        $this->weeeHelper = $weeeHelper;
-        $this->_productRepositoryInterface = $productRepositoryInterface;
         $this->_customerRepositoryInterface = $customerRepositoryInterface;
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
         $this->_httpHeader = $httpHeader;
         $this->expirationSource = $expirationSource;
 
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
-        }
-
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
-        }
-
-        if (
-            isset($params['paymentMethod'])
-            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
-        ) {
-            $this->_paymentMethod = $params['paymentMethod'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Object Request PaymentMethod instance is required.')
-            );
         }
     }
 
@@ -290,7 +269,7 @@ class Order extends CommonRequest
             $orderRequest->tax = (float)$this->_order->getBaseTaxAmount();
         }
 
-        $orderRequest->cid = $this->_customerId;
+        $orderRequest->cid = $this->_customerSession->getCustomerId();
         $xForwardedFor = $this->_order->getXForwardedFor();
         $orderRequest->ipaddr = $xForwardedFor ? explode(',', $xForwardedFor)[0] : $this->_order->getRemoteIp();
         $orderRequest->language = $this->_localeResolver->getLocale();

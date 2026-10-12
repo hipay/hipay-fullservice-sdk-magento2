@@ -123,6 +123,18 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_storeManager = $storeManager;
         $this->appState = $appState;
         $this->logger = $logger;
+
+        $this->initFromParams($params);
+        $this->initConfigSDK();
+    }
+
+    /**
+     * Init method, store, order and flags from the given params
+     *
+     * @param array $params
+     */
+    private function initFromParams($params)
+    {
         if ($params) {
             if (isset($params['methodCode'])) {
                 $method = $params['methodCode'];
@@ -147,7 +159,13 @@ class Config extends AbstractConfig implements ConfigurationInterface
         $this->_forceStage = isset($params['forceStage']) ? $params['forceStage'] : false;
         $this->_isApplePay = isset($params['isApplePay']) ? $params['isApplePay'] :
         $this->getMethodCode() === ApplePay::HIPAY_METHOD_CODE;
+    }
 
+    /**
+     * Build the HiPay SDK configuration from the current credentials and environment
+     */
+    private function initConfigSDK()
+    {
         $apiUsername = $this->getApiUsername();
         $apiPassword = $this->getApiPassword();
         try {

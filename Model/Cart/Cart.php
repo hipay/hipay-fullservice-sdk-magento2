@@ -64,19 +64,28 @@ class Cart extends \Magento\Payment\Model\Cart
         $this->weeeHelper = $weeeHelper;
         $this->_operation = $operation;
         $this->_payment = $payment;
-        $this->_model = $this->_salesModel;
 
-        if ($this->_operation == Operation::REFUND) {
-            $this->_model = $this->_payment->getCreditMemo();
-        } else {
-            if ($this->_operation == Operation::CAPTURE) {
-                if ($this->_payment->getOrder()->hasInvoices()) {
-                    $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
-                }
+        $this->_resetAmounts();
+    }
+
+    /**
+     * Get the sales model used to build the cart for the current operation
+     *
+     * @return mixed
+     */
+    private function getModel()
+    {
+        if ($this->_model === null) {
+            if ($this->_operation == Operation::REFUND) {
+                $this->_model = $this->_payment->getCreditMemo();
+            } elseif ($this->_operation == Operation::CAPTURE && $this->_payment->getOrder()->hasInvoices()) {
+                $this->_model = $this->_payment->getOrder()->getInvoiceCollection()->getLastItem();
+            } else {
+                $this->_model = $this->_salesModel;
             }
         }
 
-        $this->_resetAmounts();
+        return $this->_model;
     }
 
     /**
@@ -154,26 +163,26 @@ class Cart extends \Magento\Payment\Model\Cart
         $base_shipping = 0;
         $tax_rate = 0;
         if (!empty($this->_salesModel->getDataUsingMethod('shipping_method'))) {
-            $shippingAmount = (float)$this->_model->getDataUsingMethod('base_shipping_incl_tax');
+            $shippingAmount = (float)$this->getModel()->getDataUsingMethod('base_shipping_incl_tax');
             if ($useOrderCurrency) {
-                $shippingAmount = (float)$this->_model->getDataUsingMethod('shipping_incl_tax');
+                $shippingAmount = (float)$this->getModel()->getDataUsingMethod('shipping_incl_tax');
             }
             if ($shippingAmount > 0) {
                 $base_shipping = round($shippingAmount, 3);
                 if ($useOrderCurrency) {
                     $tax_rate = round(
-                        $this->_model->getDataUsingMethod(
+                        $this->getModel()->getDataUsingMethod(
                             'shipping_tax_amount'
-                        ) / $this->_model->getDataUsingMethod(
+                        ) / $this->getModel()->getDataUsingMethod(
                             'shipping_incl_tax'
                         ) * 100,
                         2
                     );
                 } else {
                     $tax_rate = round(
-                        $this->_model->getDataUsingMethod(
+                        $this->getModel()->getDataUsingMethod(
                             'base_shipping_tax_amount'
-                        ) / $this->_model->getDataUsingMethod(
+                        ) / $this->getModel()->getDataUsingMethod(
                             'base_shipping_incl_tax'
                         ) * 100,
                         2
@@ -228,9 +237,9 @@ class Cart extends \Magento\Payment\Model\Cart
     {
         $this->_areAmountsValid = true;
         if ($useOrderCurrency) {
-            $referenceAmount = $this->_model->getDataUsingMethod('grand_total');
+            $referenceAmount = $this->getModel()->getDataUsingMethod('grand_total');
         } else {
-            $referenceAmount = $this->_model->getDataUsingMethod('base_grand_total');
+            $referenceAmount = $this->getModel()->getDataUsingMethod('base_grand_total');
         }
         $itemsSubtotal = 0;
         foreach ($this->_salesModelItems as $item) {
@@ -300,17 +309,17 @@ class Cart extends \Magento\Payment\Model\Cart
     protected function _importItemsFromSalesModel($useOrderCurrency = false)
     {
         $this->_salesModelItems = [];
-        $items = $this->_model->getAllItems();
+        $items = $this->getModel()->getAllItems();
         if ($useOrderCurrency) {
-            $totalTax = $this->_model->getDataUsingMethod('tax_amount');
-            $totalSubTotal = $this->_model->getDataUsingMethod('subtotal');
-            $totalDiscount = $this->_model->getDataUsingMethod('discount_amount');
-            $totalShipping = $this->_model->getDataUsingMethod('shipping_incl_tax');
+            $totalTax = $this->getModel()->getDataUsingMethod('tax_amount');
+            $totalSubTotal = $this->getModel()->getDataUsingMethod('subtotal');
+            $totalDiscount = $this->getModel()->getDataUsingMethod('discount_amount');
+            $totalShipping = $this->getModel()->getDataUsingMethod('shipping_incl_tax');
         } else {
-            $totalTax = $this->_model->getBaseTaxAmount();
-            $totalSubTotal = $this->_model->getBaseSubtotal();
-            $totalDiscount = $this->_model->getBaseDiscountAmount();
-            $totalShipping = $this->_model->getDataUsingMethod('base_shipping_incl_tax');
+            $totalTax = $this->getModel()->getBaseTaxAmount();
+            $totalSubTotal = $this->getModel()->getBaseSubtotal();
+            $totalDiscount = $this->getModel()->getBaseDiscountAmount();
+            $totalShipping = $this->getModel()->getDataUsingMethod('base_shipping_incl_tax');
         }
 
         foreach ($items as $item) {

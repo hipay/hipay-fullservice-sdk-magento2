@@ -116,8 +116,6 @@ abstract class AbstractRequest implements RequestInterface
         $this->_customerSession = isset($params['session'])
         && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 
-        $this->_customerId = $this->_customerSession->getCustomerId();
-
         if (isset($params['config']) && $params['config'] instanceof HiPayConfig) {
             $this->_config = $params['config'];
         } else {

@@ -130,7 +130,11 @@ class MerchantRiskStatementFormatter extends AbstractRequest
      */
     protected function cartAlreadyOrdered()
     {
-        return $this->_threeDSHelper->isReordered($this->_order, $this->_customerId, $this->getStoreId());
+        return $this->_threeDSHelper->isReordered(
+            $this->_order,
+            $this->_customerSession->getCustomerId(),
+            $this->getStoreId()
+        );
     }
 
     /**

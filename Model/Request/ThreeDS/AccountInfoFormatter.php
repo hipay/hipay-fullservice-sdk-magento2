@@ -140,22 +140,22 @@ class AccountInfoFormatter extends AbstractRequest
             $oneYearAgo = new \DateTime('1 years ago');
 
             $purchaseInfo->count = $this->_threeDSHelper->getNbCustomerOrder(
-                $this->_customerId,
+                $this->_customerSession->getCustomerId(),
                 $this->getStoreId(),
                 $sixMonthAgo
             );
             $purchaseInfo->payment_attempts_24h = $this->_threeDSHelper->getNbCustomerOrder(
-                $this->_customerId,
+                $this->_customerSession->getCustomerId(),
                 $this->getStoreId(),
                 $twentyFourHoursAgo
             );
             $purchaseInfo->payment_attempts_1y = $this->_threeDSHelper->getNbCustomerOrder(
-                $this->_customerId,
+                $this->_customerSession->getCustomerId(),
                 $this->getStoreId(),
                 $oneYearAgo
             );
             $purchaseInfo->card_stored_24h = $this->_threeDSHelper->getNbOneclickAttempt(
-                $this->_customerId,
+                $this->_customerSession->getCustomerId(),
                 $this->getStoreId(),
                 $twentyFourHoursAgo
             );
@@ -193,7 +193,7 @@ class AccountInfoFormatter extends AbstractRequest
         if ($this->_threeDSHelper->isCustomerLoggedIn()) {
             $shippingInfo->shipping_used_date = $this->_threeDSHelper->getDateAddressFirstUsed(
                 $this->getCustomerAddressId(),
-                $this->_customerId,
+                $this->_customerSession->getCustomerId(),
                 $this->getStoreId()
             );
 

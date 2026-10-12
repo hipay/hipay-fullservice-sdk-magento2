@@ -107,32 +107,10 @@ class Maintenance extends CommonRequest
             $params
         );
 
-        $this->helper = $helper;
-        $this->_cartFactory = $cartFactory;
-        $this->weeeHelper = $weeeHelper;
-        $this->_productRepositoryInterface = $productRepositoryInterface;
-
-        if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $params['order'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
-        }
-
         if (isset($params['operation'])) {
             $this->_operation = $params['operation'];
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Operation  is required.'));
-        }
-
-        if (
-            isset($params['paymentMethod'])
-            && $params['paymentMethod'] instanceof \HiPay\Fullservice\Request\AbstractRequest
-        ) {
-            $this->_paymentMethod = $params['paymentMethod'];
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Object Request PaymentMethod instance is required.')
-            );
         }
     }
 

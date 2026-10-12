@@ -119,6 +119,18 @@ class Manager
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_transactionRepositoryInterface = $repository;
 
+        $this->initConfig($params, $paymentHelper);
+        $this->initGatewayClient();
+    }
+
+    /**
+     * Init order, payment method and HiPay config from the given params
+     *
+     * @param array                        $params
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     */
+    private function initConfig($params, \Magento\Payment\Helper\Data $paymentHelper)
+    {
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
             $methodCode = $this->_order->getPayment()->getMethod();
@@ -146,7 +158,13 @@ class Manager
         }
 
         $this->_config = $this->_configFactory->create($params);
+    }
 
+    /**
+     * Build the HiPay SDK gateway client from the current config
+     */
+    private function initGatewayClient()
+    {
         $clientProvider = new SimpleHTTPClient($this->_config);
         $this->_gateway = new GatewayClient($clientProvider);
     }

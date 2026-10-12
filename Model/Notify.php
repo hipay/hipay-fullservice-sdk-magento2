@@ -241,6 +241,20 @@ class Notify
         $this->notFoundOrderRepository = $notFoundOrderRepository;
         $this->asyncConfirmPaymentSender = $asyncConfirmPaymentSender;
 
+        $this->initFromResponse($params, $paymentHelper);
+    }
+
+    /**
+     * Load transaction, order and method instance from the notification response
+     *
+     * @param array                        $params
+     * @param \Magento\Payment\Helper\Data $paymentHelper
+     *
+     * @throws LocalizedException
+     * @throws WebApiException
+     */
+    private function initFromResponse($params, \Magento\Payment\Helper\Data $paymentHelper)
+    {
         if (isset($params['response']) && is_array($params['response'])) {
             $incrementId = $params['response']['order']['id'];
 

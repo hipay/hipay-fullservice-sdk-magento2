@@ -47,6 +47,11 @@ abstract class AbstractPaymentMethod extends AbstractRequest
      */
     protected $_quoteFactory;
 
+    /**
+     * @var bool
+     */
+    private $quoteLoaded = false;
+
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Helper\Data $checkoutData,
@@ -75,10 +80,6 @@ abstract class AbstractPaymentMethod extends AbstractRequest
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
-            if ($this->_order->getQuote() === null) {
-                $this->_quote = $this->_quoteFactory->create();
-                $this->_quote->load($this->_order->getQuoteId());
-            }
         } else {
             throw new \Magento\Framework\Exception\LocalizedException(__('Order instance is required.'));
         }
@@ -89,6 +90,14 @@ abstract class AbstractPaymentMethod extends AbstractRequest
      */
     protected function getQuote()
     {
+        if (!$this->quoteLoaded) {
+            $this->quoteLoaded = true;
+            if ($this->_order->getQuote() === null) {
+                $this->_quote = $this->_quoteFactory->create();
+                $this->_quote->load($this->_order->getQuoteId());
+            }
+        }
+
         return $this->_quote;
     }
 }
