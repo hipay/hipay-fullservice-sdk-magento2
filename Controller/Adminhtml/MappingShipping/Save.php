@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\MappingShipping;
 
-use HiPay\FullserviceMagento\Model\MappingShipping\Factory;
+use HiPay\FullserviceMagento\Model\MappingShippingFactory;
 use Magento\Backend\App\Action;
 use HiPay\FullserviceMagento\Model\ResourceModel\MappingShipping\CollectionFactory;
 use Magento\Backend\Model\Session;
@@ -27,7 +27,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Save Mapping Shipping
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -40,7 +39,7 @@ class Save extends \Magento\Backend\App\Action
     protected $_mappingShippingCollectionFactory;
 
     /**
-     * @var Factory
+     * @var MappingShippingFactory
      */
     private $mappingShippingFactory;
 
@@ -52,15 +51,15 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Save constructor.
      *
-     * @param Action\Context    $context
-     * @param CollectionFactory $mappingShippingCollectionFactory
-     * @param Factory           $mappingShippingFactory
-     * @param Session           $backendSession
+     * @param Action\Context         $context
+     * @param CollectionFactory      $mappingShippingCollectionFactory
+     * @param MappingShippingFactory $mappingShippingFactory
+     * @param Session                $backendSession
      */
     public function __construct(
         Action\Context $context,
         CollectionFactory $mappingShippingCollectionFactory,
-        Factory $mappingShippingFactory,
+        MappingShippingFactory $mappingShippingFactory,
         Session $backendSession
     ) {
         $this->_mappingShippingCollectionFactory = $mappingShippingCollectionFactory;

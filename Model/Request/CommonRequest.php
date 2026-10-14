@@ -57,12 +57,12 @@ abstract class CommonRequest extends BaseRequest
      */
     protected $_paymentMethod;
 
-    protected $_ccTypes = array(
+    protected $_ccTypes = [
         'VI' => 'visa',
         'AE' => 'american-express',
         'MC' => 'mastercard',
         'MI' => 'maestro'
-    );
+    ];
 
     /**
      * @var \HiPay\FullserviceMagento\Helper\Data
@@ -235,7 +235,7 @@ abstract class CommonRequest extends BaseRequest
                     $itemHipay->setProductCategory(self::DEFAULT_PRODUCT_CATEGORY);
                     break;
                 case TypeItems::FEE:
-                    if (in_array($operation, array(Operation::REFUND, Operation::CAPTURE)) && $amount == 0) {
+                    if (in_array($operation, [Operation::REFUND, Operation::CAPTURE]) && $amount == 0) {
                         break;
                     }
                     $itemHipay = Item::buildItemTypeFees(

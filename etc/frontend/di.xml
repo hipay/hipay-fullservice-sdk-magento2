@@ -140,7 +140,7 @@
         <arguments>
             <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session</argument>
             <argument name="hipayConfig" xsi:type="object">HiPay\FullserviceMagento\Model\Config</argument>
-            <argument name="notificationFactory" xsi:type="object">HiPay\FullserviceMagento\Model\Notification\Factory</argument>
+            <argument name="notificationFactory" xsi:type="object">HiPay\FullserviceMagento\Model\NotificationFactory</argument>
             <argument name="logger" xsi:type="object">HipayLogger</argument>
         </arguments>
     </type>

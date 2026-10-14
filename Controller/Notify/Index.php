@@ -17,7 +17,7 @@
 namespace HiPay\FullserviceMagento\Controller\Notify;
 
 use HiPay\FullserviceMagento\Model\Config;
-use HiPay\FullserviceMagento\Model\Notification\Factory;
+use HiPay\FullserviceMagento\Model\NotificationFactory;
 use HiPay\FullserviceMagento\Model\Notify;
 use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Checkout\Model\Session;
@@ -34,7 +34,6 @@ use Psr\Log\LoggerInterface;
  *
  * Is protected by secret passphare (See \HiPay\FullserviceMagento\Observer\CheckHttpSignatureObserver.php)
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -57,7 +56,7 @@ class Index extends AppAction
     protected $_logger;
 
     /**
-     * @var Factory
+     * @var NotificationFactory
      */
     private $_notificationFactory;
 
@@ -70,7 +69,7 @@ class Index extends AppAction
         Context $context,
         Session $checkoutSession,
         Config $hipayConfig,
-        Factory $notificationFactory,
+        NotificationFactory $notificationFactory,
         NotifyFactory $notifyFactory,
         LoggerInterface $logger
     ) {

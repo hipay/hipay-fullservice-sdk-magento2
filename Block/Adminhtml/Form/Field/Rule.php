@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Block\Adminhtml\Form\Field;
 
-use HiPay\FullserviceMagento\Model\Rule\Factory;
+use HiPay\FullserviceMagento\Model\RuleFactory;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
@@ -25,7 +25,6 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * Block sortable checkboxes
  * used for 3ds and oneclick on payment methods configuration
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -33,7 +32,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 class Rule extends Field
 {
     /**
-     * @var Factory $ruleFactory
+     * @var RuleFactory $ruleFactory
      */
     private $ruleFactory;
 
@@ -42,13 +41,13 @@ class Rule extends Field
      *
      * Rule constructor.
      *
-     * @param Context $context
-     * @param Factory $ruleFactory
-     * @param array   $data
+     * @param Context     $context
+     * @param RuleFactory $ruleFactory
+     * @param array       $data
      */
     public function __construct(
         Context $context,
-        Factory $ruleFactory,
+        RuleFactory $ruleFactory,
         array $data = []
     ) {
 

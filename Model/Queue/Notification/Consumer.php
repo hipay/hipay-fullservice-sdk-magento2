@@ -18,7 +18,7 @@ namespace HiPay\FullserviceMagento\Model\Queue\Notification;
 
 use HiPay\FullserviceMagento\Logger\HipayHandler;
 use HiPay\FullserviceMagento\Model\Notification;
-use HiPay\FullserviceMagento\Model\Notification\Factory;
+use HiPay\FullserviceMagento\Model\NotificationFactory;
 use HiPay\FullserviceMagento\Model\Notify;
 use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Framework\Logger\Monolog;
@@ -26,7 +26,6 @@ use Magento\Framework\Logger\Monolog;
 /**
  * Queue consumer for HiPay notifications
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -34,7 +33,7 @@ use Magento\Framework\Logger\Monolog;
 class Consumer
 {
     /**
-     * @var Factory
+     * @var NotificationFactory
      */
     protected $notificationFactory;
 
@@ -49,12 +48,12 @@ class Consumer
     protected $logger;
 
     /**
-     * @param Factory       $notificationFactory
-     * @param NotifyFactory $notifyFactory
-     * @param Monolog       $logger
+     * @param NotificationFactory $notificationFactory
+     * @param NotifyFactory       $notifyFactory
+     * @param Monolog             $logger
      */
     public function __construct(
-        Factory $notificationFactory,
+        NotificationFactory $notificationFactory,
         NotifyFactory $notifyFactory,
         Monolog $logger
     ) {

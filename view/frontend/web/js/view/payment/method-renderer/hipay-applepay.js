@@ -21,7 +21,8 @@ define([
   'Magento_Checkout/js/action/place-order',
   'Magento_Checkout/js/model/quote',
   'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-payment-mixin',
-  'mage/storage'
+  'mage/storage',
+  'HiPay_FullserviceMagento/js/model/toc-agreements-tracker'
 ], function (
   ko,
   $,
@@ -29,7 +30,8 @@ define([
   placeOrderAction,
   quote,
   hipayPaymentMixin,
-  storage
+  storage,
+  tocTracker
 ) {
   'use strict';
 
@@ -80,16 +82,8 @@ define([
       placeOrderHandler: null,
       validateHandler: null,
       isApplePayAllowed: ko.observable(true),
-      isAllTOCChecked: ko.observable(
-        !(
-          window.checkoutConfig.checkoutAgreements.isEnabled &&
-          window.checkoutConfig.checkoutAgreements.agreements.some(
-            (input) => input.mode == '1'
-          )
-        )
-      ),
+      isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
       isApplePayVisibleToPay: ko.observable(false),
-      allTOC: new Map(),
 
       initialize: function () {
         var self = this;
@@ -180,60 +174,11 @@ define([
       },
 
       initTOCEvents: function () {
-        var self = this;
-
-        $(document).ready(function () {
-          if (window.checkoutConfig.checkoutAgreements.isEnabled) {
-            var observer = new MutationObserver(function (mutations) {
-              mutations.forEach(function (mutation) {
-                if (
-                  mutation.type === 'childList' &&
-                  mutation.addedNodes.length
-                ) {
-                  initApplePayEvents();
-                }
-              });
-            });
-            observer.observe(document.body, { childList: true, subtree: true });
-          }
-
-          function initApplePayEvents() {
-            var results = document.querySelectorAll(
-              "input[id*='agreement_hipay_applepay']"
-            );
-
-            if (results.length === 0) {
-                  results = document.querySelectorAll(
-                      '.checkout-agreements input[type="checkbox"][id*="agreement"]'
-                  );
-            }
-
-            var agreements =
-              window.checkoutConfig.checkoutAgreements.agreements;
-            agreements = agreements.filter((input) => input.mode == '1');
-            if (results.length && results.length == agreements.length) {
-              results.forEach(function (input, index) {
-                self.allTOC.set(index, false);
-                input.addEventListener('change', function (event) {
-                  self.allTOC.set(index, event.target.checked);
-                  updateTOCState();
-                });
-              });
-              observer.takeRecords();
-            }
-          }
-
-          function updateTOCState() {
-            var noChecked = [...self.allTOC.values()].filter(
-              (value) => value == false
-            );
-            if (noChecked.length > 0) {
-              self.isAllTOCChecked(false);
-            } else {
-              self.isAllTOCChecked(true);
-            }
-          }
-        });
+        tocTracker.register(
+          "input[id*='agreement_hipay_applepay']",
+          '.checkout-agreements input[type="checkbox"][id*="agreement"]',
+          this.isAllTOCChecked
+        );
       },
 
       initApplePayField: function (self, hipaySdk) {

@@ -20,8 +20,9 @@ define([
   'HiPay_FullserviceMagento/js/view/payment/cc-form',
   'Magento_Checkout/js/model/full-screen-loader',
   'Magento_Checkout/js/model/quote',
+  'HiPay_FullserviceMagento/js/model/toc-agreements-tracker',
   'domReady!'
-], function (ko, $, Component, fullScreenLoader, quote) {
+], function (ko, $, Component, fullScreenLoader, quote, tocTracker) {
   'use strict';
 
   return Component.extend({
@@ -43,7 +44,7 @@ define([
         }
       });
 
-      self.setupSavedCardsObserver();
+      self.bindSavedCardsEvents();
 
       self.hipaySdk.injectBaseStylesheet();
 
@@ -167,15 +168,7 @@ define([
     configHipay: null,
     hipayHFstatus: false,
     isPlaceOrderAllowed: ko.observable(false),
-    isAllTOCChecked: ko.observable(
-      !(
-        window.checkoutConfig.checkoutAgreements.isEnabled &&
-        window.checkoutConfig.checkoutAgreements.agreements.some(
-          (input) => input.mode == '1'
-        )
-      )
-    ),
-    allTOC: new Map(),
+    isAllTOCChecked: ko.observable(!tocTracker.hasMandatoryAgreements()),
 
     /**
      * @param {Function} handler
@@ -185,49 +178,11 @@ define([
     },
 
     initTOCEvents: function () {
-      var self = this;
-
-      $(document).ready(function () {
-        if (window.checkoutConfig.checkoutAgreements.isEnabled) {
-          var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) {
-              if (mutation.type === 'childList' && mutation.addedNodes.length) {
-                initHostedFieldsEvents();
-              }
-            });
-          });
-          observer.observe(document.body, { childList: true, subtree: true });
-        }
-
-        function initHostedFieldsEvents() {
-          var results = document.querySelectorAll(
-            "input[id*='agreement_hipay_hosted_fields']"
-          );
-          var agreements = window.checkoutConfig.checkoutAgreements.agreements;
-          agreements = agreements.filter((input) => input.mode == '1');
-          if (results.length && results.length == agreements.length) {
-            results.forEach(function (input, index) {
-              self.allTOC.set(index, false);
-              input.addEventListener('change', function (event) {
-                self.allTOC.set(index, event.target.checked);
-                updateTOCState();
-              });
-            });
-            observer.takeRecords();
-          }
-        }
-
-        function updateTOCState() {
-          var noChecked = [...self.allTOC.values()].filter(
-            (value) => value == false
-          );
-          if (noChecked.length > 0) {
-            self.isAllTOCChecked(false);
-          } else {
-            self.isAllTOCChecked(true);
-          }
-        }
-      });
+      tocTracker.register(
+        "input[id*='agreement_hipay_hosted_fields']",
+        '.checkout-agreements input[type="checkbox"][id*="agreement"]',
+        this.isAllTOCChecked
+      );
     },
 
     initialize: function () {
@@ -311,52 +266,21 @@ define([
       self.initTOCEvents();
     },
 
-    setupSavedCardsObserver: function () {
-      var self = this;
-      var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-          if (mutation.addedNodes.length) {
-            var savedCardsContainer =
-              document.getElementById('hipay-saved-cards');
-            if (
-              savedCardsContainer &&
-              savedCardsContainer.querySelector('.saved-card')
-            ) {
-              self.bindSavedCardsEvents();
-            }
-          }
-        });
-      });
-
-      // Start observing the document with the configured parameters
-      observer.observe(document.body, {
-        childList: true,
-        subtree: true
-      });
-    },
-
     bindSavedCardsEvents: function () {
       var self = this;
 
-      $('#hipay-saved-cards .saved-card').each(function () {
-        $(this)
-          .off('click')
-          .on('click', function () {
-            var $checkbox = $(this).find('input[type="checkbox"]');
+      $(document)
+        .off('click.hipaySavedCards', '#hipay-saved-cards .saved-card')
+        .on('click.hipaySavedCards', '#hipay-saved-cards .saved-card', function () {
+          var $checkbox = $(this).find('input[type="checkbox"]');
 
-            // Uncheck other checkboxes
-            $('.saved-card input[type="checkbox"]')
-              .not($checkbox)
-              .prop('checked', false);
+          // Uncheck other checkboxes
+          $('.saved-card input[type="checkbox"]')
+            .not($checkbox)
+            .prop('checked', false);
 
-            if ($checkbox.is(':checked')) {
-              // When a saved card is selected:
-              self.selectedCard($checkbox.attr('id'));
-            } else {
-              self.selectedCard($checkbox.attr('id'));
-            }
-          });
-      });
+          self.selectedCard($checkbox.attr('id'));
+        });
     },
 
     /**

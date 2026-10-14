@@ -21,7 +21,6 @@ use Magento\Backend\App\Action;
 /**
  * Delete payment profile
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -29,19 +28,19 @@ use Magento\Backend\App\Action;
 class Delete extends \Magento\Backend\App\Action
 {
     /**
-     * @var \HiPay\FullserviceMagento\Model\MappingShipping\Factory
+     * @var \HiPay\FullserviceMagento\Model\MappingShippingFactory
      */
     private $mappingShippingFactory;
 
     /**
      * Delete constructor.
      *
-     * @param Action\Context                                          $context
-     * @param \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+     * @param Action\Context                                         $context
+     * @param \HiPay\FullserviceMagento\Model\MappingShippingFactory $mappingShippingFactory
      */
     public function __construct(
         Action\Context $context,
-        \HiPay\FullserviceMagento\Model\MappingShipping\Factory $mappingShippingFactory
+        \HiPay\FullserviceMagento\Model\MappingShippingFactory $mappingShippingFactory
     ) {
         $this->mappingShippingFactory = $mappingShippingFactory;
         parent::__construct($context);

@@ -50,7 +50,6 @@ use HiPay\FullserviceMagento\Api\ResponseNotFoundOrderRepositoryInterface;
  * Proceed all notifications
  * In construct method Order Model is loaded and Transation Model (SDK) is created
  *
- * @author    Kassim Belghait <kassim@sirateck.com>
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -280,7 +279,7 @@ class Notify
                 if (
                     in_array(
                         $this->_order->getStatus(),
-                        array(Config::STATUS_AUTHORIZED, Config::STATUS_AUTHORIZATION_REQUESTED)
+                        [Config::STATUS_AUTHORIZED, Config::STATUS_AUTHORIZATION_REQUESTED]
                     )
                 ) {
                     $canProcess = true;
@@ -555,7 +554,7 @@ class Notify
                             ->getConfigData('hipay_status_validate_order')
                         == 117
                         && (int)$this->_transaction->getStatus() == 118
-                        && !in_array(strtolower($this->_order->getPayment()->getCcType()), array('amex', 'ae'))
+                        && !in_array(strtolower($this->_order->getPayment()->getCcType()), ['amex', 'ae'])
                     ) {
                         break;
                     }
@@ -1026,7 +1025,7 @@ class Notify
         if (
             in_array(
                 $this->_transaction->getStatus(),
-                array(TransactionStatus::CANCELLED, TransactionStatus::EXPIRED)
+                [TransactionStatus::CANCELLED, TransactionStatus::EXPIRED]
             )
         ) {
             $orderStatus = $this->_order->getPayment()->getMethodInstance()->getConfigData(

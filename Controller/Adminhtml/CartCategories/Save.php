@@ -16,7 +16,7 @@
 
 namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 
-use HiPay\FullserviceMagento\Model\CartCategories\Factory;
+use HiPay\FullserviceMagento\Model\CartCategoriesFactory;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Session;
@@ -26,7 +26,6 @@ use Magento\Framework\Controller\ResultInterface;
 /**
  * Save Mapping category
  *
- * @author    Aymeric Berthelot <aberthelot@hipay.com>
  * @copyright Copyright (c) 2017 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -34,7 +33,7 @@ use Magento\Framework\Controller\ResultInterface;
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @var Factory
+     * @var CartCategoriesFactory
      */
     private $cartCategoriesFactory;
 
@@ -46,13 +45,13 @@ class Save extends \Magento\Backend\App\Action
     /**
      * Save constructor.
      *
-     * @param Context $context
-     * @param Factory $cartCategoriesFactory
-     * @param Session $backendSession
+     * @param Context               $context
+     * @param CartCategoriesFactory $cartCategoriesFactory
+     * @param Session               $backendSession
      */
     public function __construct(
         Context $context,
-        Factory $cartCategoriesFactory,
+        CartCategoriesFactory $cartCategoriesFactory,
         Session $backendSession
     ) {
         $this->cartCategoriesFactory = $cartCategoriesFactory;

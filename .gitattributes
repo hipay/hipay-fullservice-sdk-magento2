@@ -1,0 +1,12 @@
+/.dockerignore              export-ignore
+/.github                    export-ignore
+/.gitignore                 export-ignore
+/.gitlab-ci.yml             export-ignore
+/.prettierignore            export-ignore
+/.gitattributes             export-ignore
+/bin                        export-ignore
+/ci-tools                   export-ignore
+/docker-compose.yml         export-ignore
+/magento.sh                 export-ignore
+/renovate.json              export-ignore
+/sonar-project.properties   export-ignore

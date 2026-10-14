@@ -621,7 +621,7 @@
                 <model>HiPay\FullserviceMagento\Model\Method\Przelewy24Api</model>
                 <payment_method>HiPay\FullserviceMagento\Model\Request\PaymentMethod\CardToken</payment_method>
                 <active>0</active>
-                <title>Hipay Enterprise Przelewy24</title>
+                <title>Hipay Enterprise Blik / Przelewy24</title>
                 <payment_action>Sale</payment_action>
                 <order_status>pending</order_status>
                 <order_status_payment_accepted>processing</order_status_payment_accepted>

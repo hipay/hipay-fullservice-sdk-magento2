@@ -23,7 +23,6 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Notification Helper class
  *
- * @author    Hipay
  * @copyright Copyright (c) 2016 - HiPay
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
@@ -63,7 +62,7 @@ class Notification extends AbstractHelper
          */
         $notificationCollection = $this->_inboxFactory->create();
         $notificationCollection->addFieldToSelect(['notification_id']);
-        $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
+        $notificationCollection->addFieldToFilter('url', ["eq" => $data['url']]);
 
         return $notificationCollection->count() > 0;
     }
@@ -75,16 +74,16 @@ class Notification extends AbstractHelper
          */
         $notificationCollection = $this->_inboxFactory->create();
         $notificationCollection->addFieldToSelect(['notification_id']);
-        $notificationCollection->addFieldToFilter('url', array("eq" => $data['url']));
+        $notificationCollection->addFieldToFilter('url', ["eq" => $data['url']]);
         $notificationCollection->addFieldToFilter(
-            array(
+            [
                 'is_read',
                 'is_remove'
-            ),
-            array(
-                array("eq" => 1),
-                array("eq" => 1)
-            )
+            ],
+            [
+                ["eq" => 1],
+                ["eq" => 1]
+            ]
         );
 
         return $notificationCollection->count() > 0;
