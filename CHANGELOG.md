@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Oney phone number validation now checks that the number matches the billing country (FR, IT, BE, PT).
+
 ## 1.35.0
 
 - **Fix** : Fixed coding standard (PHPCS) compliance and migrated to declarative schema and data patches.
