@@ -36,6 +36,11 @@ define([
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-applepay'
     },
     {
+      type: 'hipay_googlepay',
+      component:
+        'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-googlepay'
+    },
+    {
       type: 'hipay_sisal_hosted_fields',
       component:
         'HiPay_FullserviceMagento/js/view/payment/method-renderer/hipay-sisal-hosted-fields'

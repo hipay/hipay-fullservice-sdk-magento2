@@ -36,6 +36,9 @@
         <method name="hipay_applepay">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="hipay_googlepay">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <!-- Local method -->
         <method name="hipay_sisal_hosted_fields">
             <allow_multiple_address>0</allow_multiple_address>

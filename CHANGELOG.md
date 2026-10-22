@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Add** : Added Google Pay payment method.
+
 ## 1.35.0
 
 - **Fix** : Fixed coding standard (PHPCS) compliance and migrated to declarative schema and data patches.

@@ -87,6 +87,20 @@ define([
       },
 
       /**
+       * Amount and currency consistent with the order request sent to HiPay
+       */
+      getTransactionAmount: function (totals) {
+        var useOrderCurrency = window.checkoutConfig.payment.hiPayFullservice.useOrderCurrency;
+        var currencyCode = useOrderCurrency ? totals.quote_currency_code : totals.base_currency_code;
+        var amount = useOrderCurrency ? totals.grand_total : totals.base_grand_total;
+
+        return {
+          amount: this.safeToFixed(Number(amount)),
+          currencyCode: currencyCode
+        };
+      },
+
+      /**
        * Get country code with fallback logic
        * Priority: billing address -> shipping address -> store default
        * @returns {string} Country code
