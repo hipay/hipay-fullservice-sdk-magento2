@@ -3,6 +3,7 @@
 ## UNRELEASE
 
 - **Add** : Added Google Pay payment method.
+- **Fix** : Oney phone number validation now checks that the number matches the billing country (FR, IT, BE, PT).
 
 ## 1.35.0
 
