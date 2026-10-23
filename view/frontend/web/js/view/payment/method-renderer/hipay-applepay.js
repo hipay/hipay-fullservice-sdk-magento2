@@ -191,16 +191,18 @@ define([
           return;
         }
 
+        var transaction = self.getTransactionAmount(quote.totals());
+
         var applePayConfig = {
           displayName: self.displayName,
           multiBrowsers: self.isMultiBrowserActive(),
           displayMode: self.displayMode,
           request: {
             countryCode: self.getCountryCodeWithFallback(),
-            currencyCode: quote.totals().quote_currency_code,
+            currencyCode: transaction.currencyCode,
             total: {
               label: self.displayName,
-              amount: self.safeToFixed(Number(quote.totals().base_grand_total))
+              amount: transaction.amount
             }
           },
           selector: 'hipay-apple-pay-button',
@@ -221,12 +223,13 @@ define([
           canMakeApplePay(true);
 
           self.totals.subscribe(function (newValue) {
+            var transaction = self.getTransactionAmount(newValue);
             if (
-              applePayConfig.request.total.amount != newValue.base_grand_total
+              applePayConfig.request.total.amount !== transaction.amount ||
+              applePayConfig.request.currencyCode !== transaction.currencyCode
             ) {
-              applePayConfig.request.total.amount = self.safeToFixed(
-                Number(newValue.base_grand_total)
-              );
+              applePayConfig.request.total.amount = transaction.amount;
+              applePayConfig.request.currencyCode = transaction.currencyCode;
               self.instanceApplePay.update(applePayConfig);
             }
           });
