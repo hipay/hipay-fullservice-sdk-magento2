@@ -54,6 +54,9 @@ class AbstractFacilypay extends AbstractMethodAPI
             case 'BE':
                 $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a Belgian');
                 break;
+            case 'PT':
+                $phoneExceptionMessage = sprintf($phoneExceptionMessage, 'a Portuguese');
+                break;
         }
 
         $localizedException = new LocalizedException(__($phoneExceptionMessage));
@@ -61,7 +64,7 @@ class AbstractFacilypay extends AbstractMethodAPI
             $phoneNumberUtil = PhoneNumberUtil::getInstance();
             $phoneNumber = $phoneNumberUtil->parse($billingAddress->getTelephone(), $country);
 
-            if (!$phoneNumberUtil->isValidNumber($phoneNumber)) {
+            if (!$phoneNumberUtil->isValidNumberForRegion($phoneNumber, $country)) {
                 throw $localizedException;
             }
 
