@@ -2,6 +2,12 @@
 
 ## UNRELEASE
 
+## 1.36.0
+
+- **Add** : Added Google Pay payment method.
+- **Fix** : Oney phone number validation now checks that the number matches the billing country (FR, IT, BE, PT).
+- **Fix** : Fixed PayPal and Apple Pay amount and currency to follow the "Use order currency for transaction" setting.
+
 ## 1.35.0
 
 - **Fix** : Fixed coding standard (PHPCS) compliance and migrated to declarative schema and data patches.

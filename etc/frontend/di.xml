@@ -47,6 +47,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="HiPay\FullserviceMagento\Model\Method\Providers\GooglepayConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="hipay_googlepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\GooglePay::HIPAY_METHOD_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="HiPay\FullserviceMagento\Model\Method\Providers\PaypalConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
@@ -69,6 +76,7 @@
                 <item name="hipay_hostedmoto" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedMoto::HIPAY_METHOD_CODE</item>
                 <item name="hipay_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod::HIPAY_METHOD_CODE</item>
                 <item name="hipay_applepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\ApplePay::HIPAY_METHOD_CODE</item>
+                <item name="hipay_googlepay" xsi:type="const">HiPay\FullserviceMagento\Model\Method\GooglePay::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal_hosted_fields" xsi:type="const">HiPay\FullserviceMagento\Model\Method\SisalHostedFields::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sisal" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sisal::HIPAY_METHOD_CODE</item>
                 <item name="hipay_sdd" xsi:type="const">HiPay\FullserviceMagento\Model\Method\Sdd::HIPAY_METHOD_CODE</item>
@@ -108,6 +116,7 @@
                 <item name="hipay_fullservice_generic_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\GenericConfigProvider</item>
                 <item name="hipay_cc_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\CcConfigProvider</item>
                 <item name="hipay_applepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\ApplepayConfigProvider</item>
+                <item name="hipay_googlepay_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\GooglepayConfigProvider</item>
                 <item name="hipay_paypal_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\PaypalConfigProvider</item>
                 <item name="hipay_local_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\LocalConfigProvider</item>
                 <item name="hipay_oney_config_provider" xsi:type="object">HiPay\FullserviceMagento\Model\Method\Providers\OneyConfigProvider</item>
