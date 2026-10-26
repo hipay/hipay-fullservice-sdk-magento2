@@ -323,11 +323,9 @@ define([
           // Update PayPal amount with current totals
           var currentTotals = quote.totals();
           if (currentTotals && self.hipayHostedFields) {
-            self.configHipay.request.amount = self.safeToFixed(
-              Number(currentTotals.base_grand_total)
-            );
-            self.configHipay.request.currency =
-              currentTotals.quote_currency_code;
+            var transaction = self.getTransactionAmount(currentTotals);
+            self.configHipay.request.amount = transaction.amount;
+            self.configHipay.request.currency = transaction.currencyCode;
           }
         },
 
@@ -345,11 +343,9 @@ define([
           // Update PayPal amount with current totals
           var currentTotals = quote.totals();
           if (currentTotals && self.hipayHostedFields) {
-            self.configHipay.request.amount = self.safeToFixed(
-              Number(currentTotals.base_grand_total)
-            );
-            self.configHipay.request.currency =
-              currentTotals.quote_currency_code;
+            var transaction = self.getTransactionAmount(currentTotals);
+            self.configHipay.request.amount = transaction.amount;
+            self.configHipay.request.currency = transaction.currencyCode;
           }
         },
 
@@ -357,6 +353,8 @@ define([
           var self = this;
           self._super();
           self.installHipayCreateErrorInterceptor();
+
+          var transaction = self.getTransactionAmount(quote.totals());
 
           self.configHipay = {
             template: 'auto',
@@ -369,17 +367,17 @@ define([
               label: self.buttonLabel
             },
             request: {
-              amount: self.safeToFixed(Number(quote.totals().base_grand_total)),
-              currency: quote.totals().quote_currency_code,
+              amount: transaction.amount,
+              currency: transaction.currencyCode,
               locale: this.convertToUpperCaseAfterUnderscore(self.locale)
             }
           };
 
           quote.totals.subscribe(function (totals) {
             if (self.hipayHostedFields) {
-              self.configHipay.request.amount = self.safeToFixed(
-                Number(totals.base_grand_total)
-              );
+              var transaction = self.getTransactionAmount(totals);
+              self.configHipay.request.amount = transaction.amount;
+              self.configHipay.request.currency = transaction.currencyCode;
             }
           });
 
