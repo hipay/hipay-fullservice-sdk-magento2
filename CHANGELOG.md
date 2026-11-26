@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Strengthened the validation of HiPay server-to-server notifications (signature verification and error responses).
+
 ## 1.36.0
 
 - **Add** : Added Google Pay payment method.
