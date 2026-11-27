@@ -24,6 +24,7 @@ use HiPay\FullserviceMagento\Model\ResourceModel\MappingCategories\CollectionFac
 use HiPay\Fullservice\Enum\Transaction\ECI;
 use HiPay\FullserviceMagento\Model\System\Config\Source\OrderExpirationTimes;
 use HiPay\FullserviceMagento\Model\Method\HostedFieldsMethod;
+use HiPay\FullserviceMagento\Model\RedirectToken;
 
 /**
  * Order Request Object
@@ -130,6 +131,11 @@ class Order extends CommonRequest
     protected $expirationSource;
 
     /**
+     * @var RedirectToken
+     */
+    protected $redirectToken;
+
+    /**
      * {@inheritDoc}
      *
      * @see \HiPay\FullserviceMagento\Model\Request\AbstractRequest::__construct()
@@ -154,6 +160,7 @@ class Order extends CommonRequest
         \Magento\Framework\App\State $appState,
         \Magento\Framework\HTTP\Header $httpHeader,
         OrderExpirationTimes $expirationSource,
+        RedirectToken $redirectToken,
         $params = []
     ) {
         parent::__construct(
@@ -182,6 +189,7 @@ class Order extends CommonRequest
         $this->_groupRepositoryInterface = $groupRepositoryInterface;
         $this->_httpHeader = $httpHeader;
         $this->expirationSource = $expirationSource;
+        $this->redirectToken = $redirectToken;
 
         if (isset($params['order']) && $params['order'] instanceof \Magento\Sales\Model\Order) {
             $this->_order = $params['order'];
@@ -314,7 +322,10 @@ class Order extends CommonRequest
             $redirectParams
         );
         $orderRequest->decline_url = $this->_urlBuilder->getUrl('hipay/redirect/decline', $redirectParams);
-        $orderRequest->cancel_url = $this->_urlBuilder->getUrl('hipay/redirect/cancel', $redirectParams);
+        $orderRequest->cancel_url = $this->_urlBuilder->getUrl(
+            'hipay/redirect/cancel',
+            $redirectParams + [RedirectToken::PARAM => $this->redirectToken->generate($this->_order)]
+        );
         $orderRequest->exception_url = $this->_urlBuilder->getUrl('hipay/redirect/exception', $redirectParams);
 
         if ($this->_config->isSendingNotifyUrl()) {

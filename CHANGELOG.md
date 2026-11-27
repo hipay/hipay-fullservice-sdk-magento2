@@ -1,6 +1,12 @@
 # Changelog
 
-## UNRELEASE
+## 1.36.1
+
+- **Fix** : Aligned back-office permissions on HiPay admin actions
+- **Fix** : Refined payment rule condition handling in the back-office
+- **Fix** : Improved cancel redirect handling
+- **Fix** : Improved server-to-server notification processing
+- **Fix** : Updated saved card deletion flow
 
 ## 1.36.0
 

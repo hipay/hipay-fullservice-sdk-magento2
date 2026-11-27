@@ -28,6 +28,11 @@ use Magento\Framework\Controller\ResultFactory;
 class Grid extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_mapping_shipping';
+
+    /**
      * Order grid
      *
      * @return \Magento\Framework\View\Result\Layout

@@ -20,6 +20,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Rule\Model\Condition\AbstractCondition;
+use Magento\Rule\Model\Condition\ConditionInterface;
 use HiPay\FullserviceMagento\Model\RuleFactory;
 
 /**
@@ -32,6 +33,14 @@ use HiPay\FullserviceMagento\Model\RuleFactory;
  */
 class NewConditionHtml extends Action
 {
+    /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     *
+     * The rule field this endpoint feeds is rendered in the payment-methods configuration section,
+     * which Magento gates with this same resource.
+     */
+    public const ADMIN_RESOURCE = 'Magento_Payment::payment';
+
     /**
      * @var RuleFactory
      */
@@ -77,6 +86,11 @@ class NewConditionHtml extends Action
             $methodCode = $m1 . '_' . $m2;
             $field = substr($customId, (strpos($customId, $m2 . '_') + strlen($m2 . '_')));
             $configPath = implode('/', [$section, $methodCode, $field]);
+
+            if (!is_a($type, ConditionInterface::class, true)) {
+                $this->getResponse()->setBody('');
+                return;
+            }
 
             $model = $this->objectManager->create(
                 $type

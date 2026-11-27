@@ -28,6 +28,11 @@ use Magento\Backend\App\Action;
 class Delete extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_cart_categories';
+
+    /**
      * @var \HiPay\FullserviceMagento\Model\CartCategoriesFactory
      */
     private $cartCategoriesFactory;
