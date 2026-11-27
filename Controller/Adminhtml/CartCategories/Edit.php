@@ -34,6 +34,11 @@ use Magento\Framework\View\Result\PageFactory;
 class Edit extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_cart_categories';
+
+    /**
      * Core registry
      *
      * @var Registry

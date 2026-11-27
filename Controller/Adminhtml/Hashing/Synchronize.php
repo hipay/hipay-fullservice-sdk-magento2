@@ -31,6 +31,11 @@ use Psr\Log\LoggerInterface;
 class Synchronize extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay';
+
+    /**
      * @var string
      */
     protected $store;

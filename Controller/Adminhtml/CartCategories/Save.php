@@ -33,6 +33,11 @@ use Magento\Framework\Controller\ResultInterface;
 class Save extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_cart_categories';
+
+    /**
      * @var CartCategoriesFactory
      */
     private $cartCategoriesFactory;

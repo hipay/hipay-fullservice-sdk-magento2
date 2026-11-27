@@ -28,6 +28,11 @@ use Magento\Framework\Controller\ResultFactory;
 class Index extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_cart_categories';
+
+    /**
      *  Cart categories Management Grid
      * {@inheritDoc}
      *
@@ -43,15 +48,5 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->getConfig()->getTitle()->prepend(__('Mapping Categories'));
 
         return $resultPage;
-    }
-
-    /**
-     * Check the permission to run it
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
     }
 }

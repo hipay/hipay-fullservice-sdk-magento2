@@ -40,6 +40,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
+        <aclResource>HiPay_FullserviceMagento::hipay_mapping_shipping</aclResource>
 
         <dataProvider class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider" name="hipay_mappingshipping_grid_data_source">
             <settings>

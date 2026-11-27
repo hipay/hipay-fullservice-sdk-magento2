@@ -28,6 +28,11 @@ use Magento\Backend\App\Action;
 class Delete extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_mapping_shipping';
+
+    /**
      * @var \HiPay\FullserviceMagento\Model\MappingShippingFactory
      */
     private $mappingShippingFactory;

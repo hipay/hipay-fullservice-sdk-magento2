@@ -26,6 +26,11 @@ namespace HiPay\FullserviceMagento\Controller\Adminhtml\CartCategories;
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
+     * ACL resource checked by Magento\Backend\App\AbstractAction::dispatch() before execute().
+     */
+    public const ADMIN_RESOURCE = 'HiPay_FullserviceMagento::hipay_cart_categories';
+
+    /**
      * @var \Magento\Backend\Model\View\Result\Forward
      */
     protected $resultForwardFactory;
@@ -54,15 +59,5 @@ class NewAction extends \Magento\Backend\App\Action
 */
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('edit');
-    }
-
-    /**
-     * Check the permission to run it
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('HiPay_FullserviceMagento::hipay_cart_categories');
     }
 }

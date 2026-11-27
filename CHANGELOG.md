@@ -2,6 +2,9 @@
 
 ## UNRELEASE
 
+- **Fix** : Fixed the HiPay mapping admin actions not checking their ACL resource: a back-office role without the HiPay rights could save, delete, edit and list the shipping and cart-category mappings, and the hashing synchronization button required no HiPay right.
+- **Fix** : Updated HiPay PHP SDK to 2.24.2, which hardens the notification signature verification.
+
 ## 1.36.0
 
 - **Add** : Added Google Pay payment method.
