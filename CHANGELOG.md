@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Strengthened the validation of the cancel redirect controller.
+
 ## 1.36.0
 
 - **Add** : Added Google Pay payment method.

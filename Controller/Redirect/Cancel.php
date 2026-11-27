@@ -17,16 +17,20 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use HiPay\FullserviceMagento\Model\RedirectToken;
 use HiPay\FullserviceMagento\Model\Gateway\Factory;
+use HiPay\FullserviceMagento\Model\Method\FullserviceMethod;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -38,7 +42,7 @@ use Psr\Log\LoggerInterface;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Cancel extends Fullservice
+class Cancel extends Fullservice implements HttpGetActionInterface
 {
     /**
      * @var OrderRepositoryInterface
@@ -61,6 +65,11 @@ class Cancel extends Fullservice
     private $checkoutSession;
 
     /**
+     * @var RedirectToken
+     */
+    private $redirectToken;
+
+    /**
      * Cancel constructor.
      *
      * @param Context                         $context
@@ -73,6 +82,7 @@ class Cancel extends Fullservice
      * @param OrderRepositoryInterface        $orderRepository
      * @param OrderManagementInterface        $orderManagement
      * @param Cart                            $cart
+     * @param RedirectToken                   $redirectToken
      */
     public function __construct(
         Context                         $context,
@@ -84,12 +94,14 @@ class Cancel extends Fullservice
         JsonFactory                     $resultJsonFactory,
         OrderRepositoryInterface        $orderRepository,
         OrderManagementInterface        $orderManagement,
-        Cart                            $cart
+        Cart                            $cart,
+        RedirectToken                   $redirectToken
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderManagement = $orderManagement;
         $this->checkoutSession = $checkoutSession;
         $this->cart = $cart;
+        $this->redirectToken = $redirectToken;
 
         parent::__construct(
             $context,
@@ -103,6 +115,8 @@ class Cancel extends Fullservice
     }
 
     /**
+     * Cancel the last order when the customer cancels the payment on HiPay
+     *
      * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * */
@@ -117,6 +131,15 @@ class Cancel extends Fullservice
                  */
                 $order = $this->orderRepository->get($lastOrderId);
             } catch (NoSuchEntityException $e) {
+                $this->_redirect('checkout/cart');
+                return;
+            }
+
+            if (!$this->canCancel($order)) {
+                $this->logger->warning(
+                    'HiPay cancel redirect refused.',
+                    ['order_id' => $order->getIncrementId(), 'state' => $order->getState()]
+                );
                 $this->_redirect('checkout/cart');
                 return;
             }
@@ -153,5 +176,19 @@ class Cancel extends Fullservice
         }
 
         $this->_redirect('checkout/cart');
+    }
+
+    /**
+     * Only a pending HiPay order with a valid cancel token can be canceled
+     *
+     * @param  Order $order
+     * @return bool
+     */
+    private function canCancel(Order $order)
+    {
+        return $this->redirectToken->isValid($order, $this->getRequest()->getParam(RedirectToken::PARAM))
+            && in_array($order->getState(), [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT], true)
+            && $order->canCancel()
+            && $order->getPayment()->getMethodInstance() instanceof FullserviceMethod;
     }
 }
