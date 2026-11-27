@@ -135,7 +135,21 @@ class CheckHttpSignatureObserver implements ObserverInterface
                 );
                 $secretPassphrase = $config->getSecretPassphrase();
                 $hash = $config->getHashingAlgorithm();
-                if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+
+                // A notification is signed by the X-Allopass-Signature header over the raw POST body.
+                // Both are passed explicitly so the check never falls back to the request's query string,
+                // whatever version of the HiPay PHP SDK the host project happens to resolve.
+                $signature = (string)$request->getHeader('X-Allopass-Signature');
+                $payload = (string)file_get_contents('php://input');
+
+                if (
+                    !\HiPay\Fullservice\Helper\Signature::isValidHttpSignature(
+                        $secretPassphrase,
+                        $hash,
+                        $signature,
+                        $payload
+                    )
+                ) {
                     $gatewayClient = $this->_gatewayFactory->create(
                         $order,
                         [
@@ -151,7 +165,14 @@ class CheckHttpSignatureObserver implements ObserverInterface
                             $e
                         );
                     }
-                    if (!\HiPay\Fullservice\Helper\Signature::isValidHttpSignature($secretPassphrase, $hash)) {
+                    if (
+                        !\HiPay\Fullservice\Helper\Signature::isValidHttpSignature(
+                            $secretPassphrase,
+                            $hash,
+                            $signature,
+                            $payload
+                        )
+                    ) {
                         $controller->getActionFlag()->set(
                             '',
                             \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,

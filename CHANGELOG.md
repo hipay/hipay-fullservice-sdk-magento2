@@ -3,7 +3,7 @@
 ## UNRELEASE
 
 - **Fix** : Fixed the HiPay mapping admin actions not checking their ACL resource: a back-office role without the HiPay rights could save, delete, edit and list the shipping and cart-category mappings, and the hashing synchronization button required no HiPay right.
-- **Fix** : Updated HiPay PHP SDK to 2.24.2, which hardens the notification signature verification.
+- **Fix** : Updated HiPay PHP SDK to 2.24.2, which hardens the notification signature verification, and the notification check now passes the signature header and the raw body explicitly.
 
 ## 1.36.0
 
