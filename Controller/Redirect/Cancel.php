@@ -17,7 +17,9 @@
 namespace HiPay\FullserviceMagento\Controller\Redirect;
 
 use HiPay\FullserviceMagento\Controller\Fullservice;
+use HiPay\FullserviceMagento\Model\RedirectToken;
 use HiPay\FullserviceMagento\Model\Gateway\Factory;
+use HiPay\FullserviceMagento\Model\Method\FullserviceMethod;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
@@ -27,6 +29,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -61,6 +64,11 @@ class Cancel extends Fullservice
     private $checkoutSession;
 
     /**
+     * @var RedirectToken
+     */
+    private $redirectToken;
+
+    /**
      * Cancel constructor.
      *
      * @param Context                         $context
@@ -73,6 +81,7 @@ class Cancel extends Fullservice
      * @param OrderRepositoryInterface        $orderRepository
      * @param OrderManagementInterface        $orderManagement
      * @param Cart                            $cart
+     * @param RedirectToken                   $redirectToken
      */
     public function __construct(
         Context                         $context,
@@ -84,12 +93,14 @@ class Cancel extends Fullservice
         JsonFactory                     $resultJsonFactory,
         OrderRepositoryInterface        $orderRepository,
         OrderManagementInterface        $orderManagement,
-        Cart                            $cart
+        Cart                            $cart,
+        RedirectToken                   $redirectToken
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderManagement = $orderManagement;
         $this->checkoutSession = $checkoutSession;
         $this->cart = $cart;
+        $this->redirectToken = $redirectToken;
 
         parent::__construct(
             $context,
@@ -103,6 +114,8 @@ class Cancel extends Fullservice
     }
 
     /**
+     * Cancel the last order when the customer cancels the payment on HiPay
+     *
      * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * */
@@ -146,12 +159,36 @@ class Cancel extends Fullservice
                 }
             }
 
-            $this->orderManagement->cancel($lastOrderId);
+            if ($this->canCancel($order)) {
+                $this->orderManagement->cancel($lastOrderId);
+            } elseif ($order->getState() !== Order::STATE_CANCELED) {
+                $this->logger->warning(
+                    'HiPay cancel redirect refused.',
+                    ['order_id' => $order->getIncrementId(), 'state' => $order->getState()]
+                );
+                $this->_redirect('checkout/cart');
+                return;
+            }
+
             $this->messageManager->addNoticeMessage(
                 __('Your order #%1 was canceled.', $order->getIncrementId())
             );
         }
 
         $this->_redirect('checkout/cart');
+    }
+
+    /**
+     * Only a pending HiPay order with a valid cancel token can be canceled
+     *
+     * @param  Order $order
+     * @return bool
+     */
+    private function canCancel(Order $order)
+    {
+        return $this->redirectToken->isValid($order, $this->getRequest()->getParam(RedirectToken::PARAM))
+            && in_array($order->getState(), [Order::STATE_NEW, Order::STATE_PENDING_PAYMENT], true)
+            && $order->canCancel()
+            && $order->getPayment()->getMethodInstance() instanceof FullserviceMethod;
     }
 }
