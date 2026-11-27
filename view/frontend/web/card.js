@@ -18,6 +18,7 @@
 define([
   'jquery',
   'Magento_Ui/js/modal/confirm',
+  'mage/dataPost',
   'jquery/ui',
   'mage/translate'
 ], function ($, confirm) {
@@ -63,14 +64,16 @@ define([
         content: this.options.deleteConfirmMessage,
         actions: {
           confirm: function () {
-            if (typeof $(e.target).parent().data('card') !== 'undefined') {
-              window.location =
-                self.options.deleteUrlPrefix +
-                $(e.target).parent().data('card');
-            } else {
-              window.location =
-                self.options.deleteUrlPrefix + $(e.target).data('card');
+            var cardId = $(e.target).parent().data('card');
+
+            if (typeof cardId === 'undefined') {
+              cardId = $(e.target).data('card');
             }
+
+            $.mage.dataPost().postData({
+              action: self.options.deleteUrlPrefix + cardId,
+              data: {}
+            });
           }
         }
       });

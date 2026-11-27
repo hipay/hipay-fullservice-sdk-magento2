@@ -2,6 +2,8 @@
 
 ## UNRELEASE
 
+- **Fix** : Saved card deletion now uses a POST request protected by the form key.
+
 ## 1.36.0
 
 - **Add** : Added Google Pay payment method.
