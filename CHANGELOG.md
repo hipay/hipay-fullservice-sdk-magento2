@@ -4,6 +4,7 @@
 
 - **Fix** : Strengthened the validation of the cancel redirect controller.
 - **Fix** : Improved the security of HiPay server-to-server notifications (signature verification and error responses).
+- **Fix** : Saved card deletion now uses a POST request protected by the form key.
 
 ## 1.36.0
 

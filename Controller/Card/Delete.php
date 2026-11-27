@@ -17,9 +17,11 @@
 namespace HiPay\FullserviceMagento\Controller\Card;
 
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use HiPay\FullserviceMagento\Controller\Card\Customer as CustomerController;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 
 /**
  * Delete registered card
@@ -28,7 +30,7 @@ use Magento\Framework\Controller\ResultFactory;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Delete extends CustomerController
+class Delete extends CustomerController implements HttpPostActionInterface
 {
     /**
      *
@@ -37,26 +39,38 @@ class Delete extends CustomerController
     protected $cardFactory;
 
     /**
+     * @var FormKeyValidator
+     */
+    private $formKeyValidator;
+
+    /**
      * @param \Magento\Framework\App\Action\Context       $context
      * @param \Magento\Customer\Model\Session             $customerSession
-     * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory     ,
+     * @param \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
+     * @param FormKeyValidator                            $formKeyValidator
      */
     public function __construct(
         Context $context,
         CustomerSession $customerSession,
-        \HiPay\FullserviceMagento\Model\CardFactory $cardFactory
+        \HiPay\FullserviceMagento\Model\CardFactory $cardFactory,
+        FormKeyValidator $formKeyValidator
     ) {
         parent::__construct($context, $customerSession);
         $this->cardFactory = $cardFactory;
+        $this->formKeyValidator = $formKeyValidator;
     }
 
     /**
-     * Render review details
+     * Delete the customer card once the form key is valid
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('hipay/card');
+        }
+
         /**
          * @var $card \HiPay\FullserviceMagento\Model\Card
          */
