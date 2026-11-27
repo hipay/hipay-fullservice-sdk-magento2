@@ -2,9 +2,11 @@
 
 ## UNRELEASE
 
-- **Fix** : Strengthened the validation of the cancel redirect controller.
-- **Fix** : Improved the security of HiPay server-to-server notifications (signature verification and error responses).
-- **Fix** : Saved card deletion now uses a POST request protected by the form key.
+- **Fix** : Aligned back-office permissions on HiPay admin actions
+- **Fix** : Refined payment rule condition handling in the back-office
+- **Fix** : Improved cancel redirect handling
+- **Fix** : Improved server-to-server notification processing
+- **Fix** : Updated saved card deletion flow
 
 ## 1.36.0
 
