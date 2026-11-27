@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASE
+## 1.36.1
 
 - **Fix** : Aligned back-office permissions on HiPay admin actions
 - **Fix** : Refined payment rule condition handling in the back-office
