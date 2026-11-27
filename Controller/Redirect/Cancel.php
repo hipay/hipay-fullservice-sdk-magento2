@@ -23,7 +23,6 @@ use HiPay\FullserviceMagento\Model\Method\FullserviceMethod;
 use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -42,7 +41,7 @@ use Psr\Log\LoggerInterface;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Cancel extends Fullservice implements HttpGetActionInterface
+class Cancel extends Fullservice
 {
     /**
      * @var OrderRepositoryInterface
@@ -135,15 +134,6 @@ class Cancel extends Fullservice implements HttpGetActionInterface
                 return;
             }
 
-            if (!$this->canCancel($order)) {
-                $this->logger->warning(
-                    'HiPay cancel redirect refused.',
-                    ['order_id' => $order->getIncrementId(), 'state' => $order->getState()]
-                );
-                $this->_redirect('checkout/cart');
-                return;
-            }
-
             if ((bool)$order->getPayment()->getMethodInstance()->getConfigData('re_add_to_cart')) {
                 /**
                  * @var $cart Cart
@@ -169,7 +159,17 @@ class Cancel extends Fullservice implements HttpGetActionInterface
                 }
             }
 
-            $this->orderManagement->cancel($lastOrderId);
+            if ($this->canCancel($order)) {
+                $this->orderManagement->cancel($lastOrderId);
+            } elseif ($order->getState() !== Order::STATE_CANCELED) {
+                $this->logger->warning(
+                    'HiPay cancel redirect refused.',
+                    ['order_id' => $order->getIncrementId(), 'state' => $order->getState()]
+                );
+                $this->_redirect('checkout/cart');
+                return;
+            }
+
             $this->messageManager->addNoticeMessage(
                 __('Your order #%1 was canceled.', $order->getIncrementId())
             );
