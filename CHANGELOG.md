@@ -2,6 +2,7 @@
 
 ## UNRELEASE
 
+- **Fix** : Strengthened the validation of the cancel redirect controller.
 - **Fix** : Improved the security of HiPay server-to-server notifications (signature verification and error responses).
 
 ## 1.36.0
