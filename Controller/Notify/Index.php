@@ -23,7 +23,10 @@ use HiPay\FullserviceMagento\Model\NotifyFactory;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Webapi\Exception as WebApiException;
 use Psr\Log\LoggerInterface;
@@ -38,7 +41,7 @@ use Psr\Log\LoggerInterface;
  * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache 2.0 Licence
  * @link      https://github.com/hipay/hipay-fullservice-sdk-magento2
  */
-class Index extends AppAction
+class Index extends AppAction implements CsrfAwareActionInterface
 {
     /**
      * @var Session
@@ -65,6 +68,16 @@ class Index extends AppAction
      */
     private $_notifyFactory;
 
+    /**
+     * Index constructor.
+     *
+     * @param Context             $context
+     * @param Session             $checkoutSession
+     * @param Config              $hipayConfig
+     * @param NotificationFactory $notificationFactory
+     * @param NotifyFactory       $notifyFactory
+     * @param LoggerInterface     $logger
+     */
     public function __construct(
         Context $context,
         Session $checkoutSession,
@@ -83,17 +96,33 @@ class Index extends AppAction
         $this->_notificationFactory = $notificationFactory;
         $this->_notifyFactory = $notifyFactory;
         $this->_logger = $logger;
-
-        if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
-            $request = $this->getRequest();
-            if ($request instanceof HttpRequest && $request->isPost()) {
-                $request->setParam('isAjax', true);
-                $request->getHeaders()->addHeaderLine('X_REQUESTED_WITH', 'XMLHttpRequest');
-            }
-        }
     }
 
     /**
+     * Server to server call, no form key: protected by the HiPay signature
+     *
+     * @param  RequestInterface $request
+     * @return InvalidRequestException|null
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * Skip the form key check, the signature is checked by the observer
+     *
+     * @param  RequestInterface $request
+     * @return bool|null
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
+
+    /**
+     * Process the HiPay notification, or save it for the cron when the cron mode is enabled
+     *
      * @return                                       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      **/
@@ -134,13 +163,13 @@ class Index extends AppAction
         } catch (WebApiException $e) {
             $this->_logger->warning($e);
 
-            $this->getResponse()->setStatusHeader($e->getHttpCode());
+            $this->getResponse()->setHttpResponseCode($e->getHttpCode());
             $this->getResponse()->setBody($e->getMessage())->sendResponse();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
 
-            $this->getResponse()->setStatusHeader(400, '1.1', $e->getMessage());
-            $this->getResponse()->setBody($e->getTraceAsString())->sendResponse();
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody('Error while processing the notification.')->sendResponse();
         }
 
         $this->getResponse()->setBody($reponseBody)->sendResponse();
