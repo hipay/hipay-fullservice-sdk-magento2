@@ -159,22 +159,33 @@ class CheckHttpSignatureObserver implements ObserverInterface
                         'HiPay notification rejected: secret passphrase is not configured for store '
                         . $order->getStoreId()
                     );
+                    $this->setPlainResponse($controller, 'Wrong Secret Signature!', 500);
+                    return $this;
                 }
 
-                if ($secretPassphrase === '' || $signature === '') {
+                if ($signature === '') {
                     $this->rejectSignature($controller, $order);
                     return $this;
                 }
 
                 $hash = $config->getHashingAlgorithm();
                 if (!Signature::isValidHttpSignature($secretPassphrase, $hash, $signature, $payload)) {
-                    $hash = $this->syncHashAlgorithm($config, $order, $hash, $secretPassphrase, $signature, $payload);
+                    $newHash = $this->syncHashAlgorithm(
+                        $config,
+                        $order,
+                        $hash,
+                        $secretPassphrase,
+                        $signature,
+                        $payload
+                    );
 
-                    if (!Signature::isValidHttpSignature($secretPassphrase, $hash, $signature, $payload)) {
+                    if (strtoupper((string) $newHash) === strtoupper((string) $hash)) {
+                        $this->rejectSignature($controller, $order);
+                    } elseif (!Signature::isValidHttpSignature($secretPassphrase, $newHash, $signature, $payload)) {
                         $this->rejectSignature($controller, $order);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 $this->_logger->critical($e);
                 $this->setPlainResponse($controller, 'Exception during check signature.', 500);
             }
@@ -214,12 +225,16 @@ class CheckHttpSignatureObserver implements ObserverInterface
         try {
             $newHash = $this->_hipayHelper->updateHashAlgorithm($config, $gatewayClient, $order->getStore());
         } catch (\Exception $e) {
-            $this->_cache->save('1', $cacheKey, [], self::HASH_SYNC_LOCK_LIFETIME);
             throw new LocalizedException(__('Error with retry hashing configuration .'), $e);
         }
 
         if (strtoupper((string) $newHash) === strtoupper((string) $hash)) {
-            $this->_cache->save('1', $cacheKey, [], self::HASH_SYNC_LOCK_LIFETIME);
+            $this->_cache->save(
+                '1',
+                $cacheKey,
+                [\Magento\Framework\App\Config::CACHE_TAG],
+                self::HASH_SYNC_LOCK_LIFETIME
+            );
         }
 
         return $newHash;

@@ -163,12 +163,12 @@ class Index extends AppAction implements CsrfAwareActionInterface
         } catch (WebApiException $e) {
             $this->_logger->warning($e);
 
-            $this->getResponse()->setStatusHeader($e->getHttpCode());
+            $this->getResponse()->setHttpResponseCode($e->getHttpCode());
             $this->getResponse()->setBody($e->getMessage())->sendResponse();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->_logger->critical($e);
 
-            $this->getResponse()->setStatusHeader(400);
+            $this->getResponse()->setHttpResponseCode(400);
             $this->getResponse()->setBody('Error while processing the notification.')->sendResponse();
         }
 
